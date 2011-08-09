@@ -171,13 +171,13 @@ unsigned int Fl_Environment_Choice::value() {
 
 fltk3::DoubleWindow *workspace_panel=(fltk3::DoubleWindow *)0;
 
-fltk3::Input *pName=(fltk3::Input *)0;
+fltk3::Input *pWidgetName=(fltk3::Input *)0;
 
 Fl_Environment_Choice *pEnv=(Fl_Environment_Choice *)0;
 
 static void cb_OK(fltk3::Button*, void*) {
   if (wks_name) free(wks_name);
-wks_name = strdup(pName->value());
+wks_name = strdup(pWidgetName->value());
 wks_env = pEnv->value();
 workspace_panel->hide();
 }
@@ -185,12 +185,12 @@ workspace_panel->hide();
 fltk3::DoubleWindow* show_workspace_panel() {
   if (!workspace_panel) {
     { workspace_panel = new fltk3::DoubleWindow(274, 173, "Workspace Properties");
-      { pName = new fltk3::Input(85, 15, 170, 25, "Name:");
-        pName->tooltip("name of the target - this will be used in the IDEs and as a general reference\
+      { pWidgetName = new fltk3::Input(85, 15, 170, 25, "Name:");
+        pWidgetName->tooltip("name of the target - this will be used in the IDEs and as a general reference\
 .");
-        pName->labelsize(12);
-        pName->textsize(12);
-      } // fltk3::Input* pName
+        pWidgetName->labelsize(12);
+        pWidgetName->textsize(12);
+      } // fltk3::Input* pWidgetName
       { fltk3::Box* o = new fltk3::Box(10, 50, 288, 2, "Create Build Enviroments for:");
         o->box(fltk3::THIN_DOWN_FRAME);
         o->labelsize(12);
@@ -216,9 +216,9 @@ fltk3::DoubleWindow* show_workspace_panel() {
     } // fltk3::DoubleWindow* workspace_panel
       }
       if (wks_name) 
-        pName->value(wks_name);
+        pWidgetName->value(wks_name);
       else
-        pName->value("unnamed workspace");
+        pWidgetName->value("unnamed workspace");
       if (wks_env)  
         pEnv->value(wks_env);  
       else

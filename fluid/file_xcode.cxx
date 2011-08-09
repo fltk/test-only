@@ -36,33 +36,30 @@
 #include "Fl_Type.h"
 #include "../fltk3/filename.h"
 
-/*
- 
- typedef enum {
- FL_FILE_DEFAULT = 0x8000,
- FL_FILE_UNKNOWN = 0,
- FL_FILE_C_SOURCE, FL_FILE_C_HEADER,
- FL_FILE_CPP_SOURCE, FL_FILE_CPP_HEADER,
- FL_FILE_OBJC_SOURCE, FL_FILE_OBJC_HEADER,
- FL_FILE_TEXT, FL_FILE_TEXT_SCRIPT
- } FileType;
 
-lastKnownFileType  or  explicitFileType
- sourcecode.c.c
- sourcecode.c.h
- sourcecode.cpp.cpp
- sourcecode.cpp.objcpp
- sourcecode.cpp.h
- sourcecode.fluid (=text)
- text
- text.script.sh
- 
- wrapper.framework
- wrapper.application
- "compiled.mach-o.dylib"
- 
- */
+static const char *Xcode4_BuildFileInSources = "Xcode4_BuildFileInSources";
+static const char *Xcode4_BuildFileInHeaders = "Xcode4_BuildFileInHeaders";
+static const char *Xcode4_BuildFileInFrameworks = "Xcode4_BuildFileInFrameworks";
+static const char *Xcode4_FileRef = "Xcode4_FileRef";
+static const char *Xcode4_FluidBuildRule = "Xcode4_FluidBuildRule";
+static const char *Xcode4_ContainerItemProxy = "Xcode4_ContainerItemProxy";
+static const char *Xcode4_Target = "Xcode4_Target";
+static const char *Xcode4_Root = "Xcode4_Root";
+static const char *Xcode4_TargetDependency = "Xcode4_TargetDependency";
+static const char *Xcode4_DebugBuildConfiguration = "Xcode4_DebugBuildConfiguration";
+static const char *Xcode4_ReleaseBuildConfiguration = "Xcode4_ReleaseBuildConfiguration";
+static const char *Xcode4_BuildConfigurationList = "Xcode4_BuildConfigurationList";
+static const char *Xcode4_ResourcesBuildPhase = "Xcode4_ResourcesBuildPhase";
+static const char *Xcode4_HeadersBuildPhase = "Xcode4_HeadersBuildPhase";
+static const char *Xcode4_SourcesBuildPhase = "Xcode4_SourcesBuildPhase";
+static const char *Xcode4_FrameworksBuildPhase = "Xcode4_FrameworksBuildPhase";
+static const char *Xcode4_ProductFileReference = "Xcode4_ProductFileReference";
+static const char *Xcode4_Group = "Xcode4_Group";
+static const char *Xcode4_CopyFilesBuildPhase = "Xcode4_CopyFilesBuildPhase";
+static const char *Xcode4_BuildFileInCopyFiles = "Xcode4_BuildFileInCopyFiles";
+static const char *Xcode4_ProductsGroup = "Xcode4_ProductsGroup";
 
+static Fl_Workspace_Type *workspace;
 
 // ------------ file conversion ------------------------------------------------
 
@@ -132,6 +129,7 @@ static const char *xcode4_location(unsigned int fl) {
   };
   rootObject = 4BF1A7FFEACF5F31B4127482 /* Project object */;
 }
+
 #endif
 
 
@@ -143,19 +141,91 @@ static const char *xcode4_location(unsigned int fl) {
 // This section contains a list of every file that is required to build the 
 // Workspace.
 static int writeBuildFileReferences(FILE *out, Fl_Target_Type *tgt) {
-  Fl_File_Type *f;
-  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->builds_in(FL_ENV_XC4)) {
-      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
-      char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-      fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
-              PBXBuildFile, 
-              f->filename_name(), 
-              tgt->parent->name(),
-              PBXFileRef, 
-              f->filename_name());
+  
+  Fl_File_Type *file;
+  Fl_Target_Dependency_Type *dep;
+  
+  // --- in Sources
+  for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->file_is_code()) {
+      char BuildFileInSource[32]; strcpy(BuildFileInSource, file->get_UUID_Xcode(Xcode4_BuildFileInSources));
+      char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_FileRef));
+      fprintf(out, "\t\t%s /* %s in Sources */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
+              BuildFileInSource, 
+              file->filename_name(), 
+              FileRef, 
+              file->filename_name());
     }
   }
+
+  // --- in Headers
+  for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->file_is_header()) {
+      char BuildFileInHeaders[32]; strcpy(BuildFileInHeaders, file->get_UUID_Xcode(Xcode4_BuildFileInHeaders));
+      char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_FileRef));
+      fprintf(out, "\t\t%s /* %s in Headers */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
+              BuildFileInHeaders,
+              file->filename_name(), 
+              FileRef, 
+              file->filename_name());
+    }
+  }
+
+  // --- in Frameworks
+  for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->file_is_framework()) {
+      char BuildFileInFrameworks[32]; strcpy(BuildFileInFrameworks, file->get_UUID_Xcode(Xcode4_BuildFileInFrameworks));
+      char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_FileRef));
+      fprintf(out, "\t\t%s /* %s in Frameworks */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
+              BuildFileInFrameworks,
+              file->filename_name(), 
+              FileRef, 
+              file->filename_name());
+    }
+  }
+  for (dep = Fl_Target_Dependency_Type::first_dependency(tgt); dep; dep = dep->next_dependency(tgt)) {
+    Fl_Target_Type *file = Fl_Target_Type::find(dep->name());
+    if (file && file->is_lib_target()) {
+      char BuildFileInFrameworks[32]; strcpy(BuildFileInFrameworks, dep->get_UUID_Xcode(Xcode4_BuildFileInFrameworks));
+      char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_ProductFileReference));
+      fprintf(out, "\t\t%s /* %s.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = %s /* %s.framework */; };\n", 
+              BuildFileInFrameworks,
+              file->name(), 
+              FileRef, 
+              file->name());
+    } else {
+      printf("Unresoved target dependency from \"%s\" to \"%s\"\n", tgt->name(), dep->name());
+    }
+  }
+  
+  // --- in Resources
+  // TODO: not yet implemented
+  
+  // --- in CopyFiles
+  for (dep = Fl_Target_Dependency_Type::first_dependency(tgt); dep; dep = dep->next_dependency(tgt)) {
+    Fl_Target_Type *file = Fl_Target_Type::find(dep->name());
+    if (file && file->is_lib_target()) {
+      char BuildFileInCopyFiles[32]; strcpy(BuildFileInCopyFiles, dep->get_UUID_Xcode(Xcode4_BuildFileInCopyFiles));
+      char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_ProductFileReference));
+      fprintf(out, "\t\t%s /* %s.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = %s /* %s.framework */; };\n", 
+              BuildFileInCopyFiles,
+              file->name(), 
+              FileRef, 
+              file->name());
+    } else {
+      printf("Unresoved target dependency from \"%s\" to \"%s\"\n", tgt->name(), dep->name());
+    }
+  }
+  
+  return 0;
+}
+
+static int writeBuildFileSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXBuildFile section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeBuildFileReferences(out, tgt);
+  }
+  fprintf(out, "/* End PBXBuildFile section */\n");
   return 0;
 }
 
@@ -165,7 +235,7 @@ static int writeBuildFileReferences(FILE *out, Fl_Target_Type *tgt) {
 // Create new custom build rules. We currently support .fl files with Fluid.
 static int writeFluidBuildRule(FILE *out, Fl_Target_Type *tgt) {
   
-  char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
+  char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode(Xcode4_FluidBuildRule));
   
   fprintf(out, "\t\t%s /* PBXBuildRule */ = {\n", FluidBuildRule);
   fprintf(out, "\t\t\tisa = PBXBuildRule;\n");
@@ -183,19 +253,101 @@ static int writeFluidBuildRule(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+static int writeBuildRuleSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXBuildRule section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeFluidBuildRule(out, tgt);
+  }
+  fprintf(out, "/* End PBXBuildRule section */\n");
+  return 0;
+}
+
 
 /* Begin PBXContainerItemProxy section */
 
-// TODO: write those
+static int writeContainerItemProxy(FILE *out, Fl_Target_Type *tgt) {
+  Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
+  for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
+    Fl_Target_Type *dep = Fl_Target_Type::find(tgt_dep->name());
+    if (dep) {
+      Fl_Workspace_Type *wsp = (Fl_Workspace_Type*)Fl_Type::first;
+      
+      char Root[32]; strcpy(Root, wsp->get_UUID_Xcode(Xcode4_Root));
+      char ContainerItemProxy[32]; strcpy(ContainerItemProxy, tgt_dep->get_UUID_Xcode(Xcode4_ContainerItemProxy));
+      char DepTarget[32]; strcpy(DepTarget, dep->get_UUID_Xcode(Xcode4_Target));
+      
+      fprintf(out, "\t\t%s /* PBXContainerItemProxy */ = {\n", ContainerItemProxy);
+      fprintf(out, "\t\t\tisa = PBXContainerItemProxy;\n");
+      fprintf(out, "\t\t\tcontainerPortal = %s /* Project object */;\n", Root);
+      fprintf(out, "\t\t\tproxyType = 1;\n");
+      fprintf(out, "\t\t\tremoteGlobalIDString = %s;\n", DepTarget);
+      fprintf(out, "\t\t\tremoteInfo = %s;\n", dep->name());
+      fprintf(out, "\t\t};\n");
+      
+    } else {
+      printf("Unresoved target dependency to \"%s\"\n", tgt_dep->name());
+    }
+  }
+  return 0;
+}
+
+static int writeContainerItemProxySection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXContainerItemProxy section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeContainerItemProxy(out, tgt);
+  }
+  fprintf(out, "/* End PBXContainerItemProxy section */\n");
+  return 0;
+}
 
 
 /* Begin PBXCopyFilesBuildPhase section */
 
-// TODO: write those
-
 // This section lists all kinds or resourced that will be copied into the 
 // application bundles. Usually, we want to copy the fltk frameworks into the
 // bundle so that users do not need to install FLTK to use and application.
+static int writeCopyFilesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
+  
+  // get the required keys
+  char CopyFilesBuildPhase[32]; strcpy(CopyFilesBuildPhase, tgt->get_UUID_Xcode(Xcode4_CopyFilesBuildPhase));
+  
+  // write a list of all source files
+  fprintf(out, "\t\t%s /* CopyFiles */ = {\n", CopyFilesBuildPhase);
+  fprintf(out, "\t\t\tisa = PBXCopyFilesBuildPhase;\n");
+  fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
+  fprintf(out, "\t\t\tdstPath = \"\";\n");
+  fprintf(out, "\t\t\tdstSubfolderSpec = 10;\n");
+  fprintf(out, "\t\t\tfiles = (\n");
+  
+  Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
+  for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
+    Fl_Target_Type *dep = Fl_Target_Type::find(tgt_dep->name());
+    if (dep && dep->is_lib_target()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, tgt_dep->get_UUID_Xcode(Xcode4_BuildFileInCopyFiles));
+      fprintf(out, "\t\t\t\t%s /* %s in CopyFiles */,\n", 
+              PBXBuildFile, 
+              dep->name());
+    } else {
+      printf("Unresoved target dependency to \"%s\"\n", tgt_dep->name());
+    }
+  }
+  
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
+  fprintf(out, "\t\t};\n");
+
+  return 0;
+}
+
+static int writeCopyFilesBuildPhaseSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXCopyFilesBuildPhase section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_app_target())
+      writeCopyFilesBuildPhase(out, tgt);
+  }
+  fprintf(out, "/* End PBXCopyFilesBuildPhasey section */\n");
+  return 0;
+}
 
 
 /* Begin PBXFileReference section */
@@ -203,12 +355,12 @@ static int writeFluidBuildRule(FILE *out, Fl_Target_Type *tgt) {
 // This section describes every file that is referenced or generated.
 static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
   
-  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
+  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode(Xcode4_ProductFileReference));
   
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
     if (f->lists_in(FL_ENV_XC4)) {
-      char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+      char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode(Xcode4_FileRef));
       fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; %s; name = %s; path = %s%s; sourceTree = %s; };\n", 
               PBXFileRef,
               f->filename_name(), 
@@ -222,7 +374,7 @@ static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
   if (tgt->is_lib_target()) {
     fprintf(out, "\t\t%s /* %s.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = %s.framework; sourceTree = BUILT_PRODUCTS_DIR; };\n", ProductReference, tgt->name(), tgt->name());
   } else if (tgt->is_app_target()) {
-    // TODO: B2F3E15BD31ADBA58ECD50C4 /* Fluid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fluid.app; sourceTree = BUILT_PRODUCTS_DIR; };
+    fprintf(out, "\t\t%s /* %s.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = %s.app; sourceTree = BUILT_PRODUCTS_DIR; };\n", ProductReference, tgt->name(), tgt->name());
   }
   // we also need a file reference for the end produkt, for example:
   // B2F3E15BD31ADBA58ECD50C4 /* Fluid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fluid.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -235,6 +387,15 @@ static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+static int writeFileReferenceSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXFileReference section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeFileReferences(out, tgt);
+  }
+  fprintf(out, "/* End PBXFileReference section */\n");
+  return 0;
+}
+
 
 /* Begin PBXFrameworksBuildPhase section */
 
@@ -242,27 +403,52 @@ static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
 // copy a framework into a target!
 static int writeFrameworksBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   
-  char FrameworksBuildPhase[32]; strcpy(FrameworksBuildPhase, tgt->get_UUID_Xcode("Xcode4_FrameworksBuildPhase"));
+  char FrameworksBuildPhase[32]; strcpy(FrameworksBuildPhase, tgt->get_UUID_Xcode(Xcode4_FrameworksBuildPhase));
   
   fprintf(out, "\t\t%s /* Frameworks */ = {\n", FrameworksBuildPhase);
   fprintf(out, "\t\t\tisa = PBXFrameworksBuildPhase;\n");
   fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
   fprintf(out, "\t\t\tfiles = (\n");
+  
+  // write all system dependencies
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->builds_in(FL_ENV_XC4) && f->file_is_framework()) {
-      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+    if (f->file_is_framework()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode(Xcode4_BuildFileInFrameworks));
       fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
               PBXBuildFile, 
               f->filename_name(), 
               "Frameworks");
-      // FIXME: C96290C21274D0CF007D3CFE /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9628FFD1274D0B3007D3CFE /* Cocoa.framework */; };
-      // FIXME: C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
     }
   }
+  
+  // write all workspace dependencies
+  Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
+  for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
+    Fl_Target_Type *dep = Fl_Target_Type::find(tgt_dep->name());
+    if (dep && dep->is_lib_target()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, tgt_dep->get_UUID_Xcode(Xcode4_BuildFileInFrameworks));
+      fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+              PBXBuildFile, 
+              dep->name(), 
+              "Frameworks");        
+    } else {
+      printf("Unresoved target dependency to \"%s\"\n", tgt_dep->name());
+    }
+  }
+  
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
   fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+static int writeFrameworksBuildPhaseSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXFrameworksBuildPhase section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeFrameworksBuildPhase(out, tgt);
+  }
+  fprintf(out, "/* End PBXFrameworksBuildPhase section */\n");
   return 0;
 }
 
@@ -273,12 +459,12 @@ static int writeFrameworksBuildPhase(FILE *out, Fl_Target_Type *tgt) {
 // in the Xcode interface.
 //  - t can be a target or a group.
 static int writeGroup(FILE *out, Fl_Tool_Type *t) {
-  char Group[32]; strcpy(Group, t->get_UUID_Xcode("Xcode4_PBXGroup"));
+  char Group[32]; strcpy(Group, t->get_UUID_Xcode(Xcode4_Group));
   int tlev1 = t->level+1;
   Fl_Tool_Type *t1;
 
   for (t1 = (Fl_Tool_Type*)t->next; t1 && t1->level>=tlev1; t1 = (Fl_Tool_Type*)t1->next) {
-    if (t1->level==tlev1 && t1->is_folder()) {
+    if (t1->level==tlev1 && (t1->is_folder() || t1->is_target() || t1->is_category())) {
       Fl_Folder_Type *folder = (Fl_Folder_Type*)t1;
       writeGroup(out, folder);
     }
@@ -289,22 +475,56 @@ static int writeGroup(FILE *out, Fl_Tool_Type *t) {
   fprintf(out, "\t\t\tchildren = (\n");
   for (t1 = (Fl_Tool_Type*)t->next; t1 && t1->level>=tlev1; t1 = (Fl_Tool_Type*)t1->next) {
     if (t1->level==tlev1) {
-      if (t1->is_folder() || t1->is_target()) {
+      if (t1->is_folder() || t1->is_target() || t1->is_category()) {
         Fl_Tool_Type *folder = (Fl_Tool_Type*)t1;
-        char Group[32]; strcpy(Group, folder->get_UUID_Xcode("Xcode4_PBXGroup"));
+        char Group[32]; strcpy(Group, folder->get_UUID_Xcode(Xcode4_Group));
         fprintf(out, "\t\t\t\t%s /* %s */,\n", Group, folder->name());
       } if (t1->lists_in(FL_ENV_XC4) && t1->is_file()) {
-        char PBXFileRef[32]; strcpy(PBXFileRef, t1->get_UUID_Xcode("Xcode4_PBXFileRef"));
+        char PBXFileRef[32]; strcpy(PBXFileRef, t1->get_UUID_Xcode(Xcode4_FileRef));
         Fl_File_Type *f = (Fl_File_Type*)t1;
         fprintf(out, "\t\t\t\t%s /* %s */,\n", PBXFileRef, f->filename_name());
       }
     }
+  }
+  if (t==workspace) {
+    char ProductsGroup[32]; strcpy(ProductsGroup, t->get_UUID_Xcode(Xcode4_ProductsGroup));
+    fprintf(out, "\t\t\t\t%s /* %s */,\n", ProductsGroup, "Products");
   }
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\tname = %s;\n", t->name());
   fprintf(out, "\t\t\tsourceTree = \"<group>\";\n");
   fprintf(out, "\t\t};\n");
 
+  return 0;
+}
+
+static int writeProductsGroup(FILE *out, Fl_Target_Type *tgt) {
+  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode(Xcode4_ProductFileReference));
+  fprintf(out, "\t\t\t\t%s /* %s.app or .framework */,\n", ProductReference, tgt->name());
+  return 0;
+}
+
+static int writeProductsGroup(FILE *out) {
+  char ProductsGroup[32]; strcpy(ProductsGroup, workspace->get_UUID_Xcode(Xcode4_ProductsGroup));
+  
+  fprintf(out, "\t\t%s /* Products */ = {\n", ProductsGroup);
+  fprintf(out, "\t\t\tisa = PBXGroup;\n");
+  fprintf(out, "\t\t\tchildren = (\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeProductsGroup(out, tgt);
+  }
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tname = Products;\n");
+  fprintf(out, "\t\t\tsourceTree = \"<group>\";\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+static int writeGroupSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXGroup section */\n");
+  writeProductsGroup(out);
+  writeGroup(out, workspace);
+  fprintf(out, "/* End PBXGroup section */\n");
   return 0;
 }
 
@@ -315,7 +535,7 @@ static int writeGroup(FILE *out, Fl_Tool_Type *t) {
 // types do not need to include any Headers.
 static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   
-  char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
+  char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode(Xcode4_HeadersBuildPhase));
   
   fprintf(out, "\t\t%s /* Headers */ = {\n", HeadersBuildPhase);
   fprintf(out, "\t\t\tisa = PBXHeadersBuildPhase;\n");
@@ -324,7 +544,7 @@ static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
     if (f->builds_in(FL_ENV_XC4) && f->file_is_header()) {
-      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode(Xcode4_BuildFileInHeaders));
       fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
               PBXBuildFile, 
               f->filename_name(), 
@@ -337,6 +557,16 @@ static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+static int writeHeadersBuildPhaseSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXHeadersBuildPhase section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target())
+      writeHeadersBuildPhase(out, tgt);
+  }
+  fprintf(out, "/* End PBXHeadersBuildPhase section */\n");
+  return 0;
+}
+
 
 /* Begin PBXNativeTarget section */
 
@@ -344,39 +574,62 @@ static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
 static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   // currently we still have a bunch of fixed UUIDs in here!
   
-  char Target[32]; strcpy(Target, tgt->get_UUID_Xcode("Xcode4_Target"));
-  char buildConfigurationList[32]; strcpy(buildConfigurationList, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
-  char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
-  char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
-  char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_SourcesBuildPhase"));
-  char FrameworksBuildPhase[32]; strcpy(FrameworksBuildPhase, tgt->get_UUID_Xcode("Xcode4_FrameworksBuildPhase"));
-  char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
-  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
+  char Target[32]; strcpy(Target, tgt->get_UUID_Xcode(Xcode4_Target));
+  char buildConfigurationList[32]; strcpy(buildConfigurationList, tgt->get_UUID_Xcode(Xcode4_BuildConfigurationList));
+  char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode(Xcode4_ResourcesBuildPhase));
+  char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode(Xcode4_SourcesBuildPhase));
+  char FrameworksBuildPhase[32]; strcpy(FrameworksBuildPhase, tgt->get_UUID_Xcode(Xcode4_FrameworksBuildPhase));
+  char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode(Xcode4_FluidBuildRule));
+  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode(Xcode4_ProductFileReference));
   
-  fprintf(out, "\t\t%s /* %s */ = {\n",Target ,tgt->name());     // FIXME: use generated key
+  fprintf(out, "\t\t%s /* %s */ = {\n",Target ,tgt->name());
   fprintf(out, "\t\t\tisa = PBXNativeTarget;\n");
-  fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;", buildConfigurationList, tgt->name());
+  fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;\n", buildConfigurationList, tgt->name());
   fprintf(out, "\t\t\tbuildPhases = (\n");
   fprintf(out, "\t\t\t\t%s /* Resources */,\n", ResourcesBuildPhase);
-  fprintf(out, "\t\t\t\t%s /* Headers */,\n", HeadersBuildPhase);
+  if (tgt->is_lib_target()) {
+    char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode(Xcode4_HeadersBuildPhase));
+    fprintf(out, "\t\t\t\t%s /* Headers */,\n", HeadersBuildPhase);
+  }
   fprintf(out, "\t\t\t\t%s /* Sources */,\n", SourcesBuildPhase);
   fprintf(out, "\t\t\t\t%s /* Frameworks */,\n", FrameworksBuildPhase);
-  // Relative to developer directory (the Xcode4 way):
-  // C933C2D913EEF82400E12C6E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-  // Relative to SDK (the Xcode3 way):
-  // C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+  if (tgt->is_app_target()) {
+    char CopyFilesBuildPhase[32]; strcpy(CopyFilesBuildPhase, tgt->get_UUID_Xcode(Xcode4_CopyFilesBuildPhase));
+    fprintf(out, "\t\t\t\t%s /* CopyFiles */,\n", CopyFilesBuildPhase);
+  }
   fprintf(out, "\t\t\t);\n");
-  fprintf(out, "\t\tbuildRules = (\n");
+  fprintf(out, "\t\t\tbuildRules = (\n");
   fprintf(out, "\t\t\t\t%s /* PBXBuildRule */,\n", FluidBuildRule);
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\tdependencies = (\n");
+
+  Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
+  for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
+    char TargetDependency[32]; strcpy(TargetDependency, tgt_dep->get_UUID_Xcode(Xcode4_TargetDependency));
+    fprintf(out, "\t\t\t\t%s /* %s */,\n", TargetDependency, tgt_dep->name());
+  }
+  
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\tname = %s;\n", tgt->name());
   fprintf(out, "\t\t\tproductName = %s;\n", tgt->name());
-  fprintf(out, "\t\t\tproductReference = %s /* %s.framework */;\n", ProductReference, tgt->name()); // FIXME: .framework or .app
-  fprintf(out, "\t\t\tproductType = \"com.apple.product-type.framework\";\n");
+  if (tgt->is_lib_target()) {
+    fprintf(out, "\t\t\tproductReference = %s /* %s.framework */;\n", ProductReference, tgt->name()); // FIXME: .framework or .app
+    fprintf(out, "\t\t\tproductType = \"com.apple.product-type.framework\";\n");
+  } else if (tgt->is_app_target()) {
+    fprintf(out, "\t\t\tproductReference = %s /* %s.app */;\n", ProductReference, tgt->name()); // FIXME: .framework or .app
+    fprintf(out, "\t\t\tproductType = \"com.apple.product-type.application\";\n");
+  }
   fprintf(out, "\t\t};\n");
   
+  return 0;
+}
+
+static int writeNativeTargetSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXNativeTarget section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeNativeTarget(out, tgt);
+  }
+  fprintf(out, "/* End PBXNativeTarget section */\n");
   return 0;
 }
 
@@ -385,8 +638,45 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
 
 // This section contains a few basic setting and a list of all targets.
 static int writeProjectTarget(FILE *out, Fl_Target_Type *tgt) {
-  char Target[32]; strcpy(Target, tgt->get_UUID_Xcode("Xcode4_Target"));
+  char Target[32]; strcpy(Target, tgt->get_UUID_Xcode(Xcode4_Target));
   fprintf(out, "\t\t\t\t%s /* %s */,\n", Target, tgt->name());
+  return 0;
+}
+
+static int writeProjectSection(FILE *out) {
+  
+  char Root[32]; strcpy(Root, workspace->get_UUID_Xcode(Xcode4_Root));
+  char Group[32]; strcpy(Group, workspace->get_UUID_Xcode(Xcode4_Group));
+  char ProductsGroup[32]; strcpy(ProductsGroup, workspace->get_UUID_Xcode(Xcode4_ProductsGroup));
+  char BuildConfigurationList[32]; strcpy(BuildConfigurationList, workspace->get_UUID_Xcode(Xcode4_BuildConfigurationList));
+
+  fprintf(out, "\n/* Begin PBXProject section */\n");
+  fprintf(out, "\t\t%s /* Project object */ = {\n", Root);
+  fprintf(out, "\t\t\tisa = PBXProject;\n");
+  fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXProject \"%s\" */;\n", BuildConfigurationList, workspace->name());
+  fprintf(out, "\t\t\tcompatibilityVersion = \"Xcode 3.0\";\n");
+  fprintf(out, "\t\t\tdevelopmentRegion = English;\n");
+  fprintf(out, "\t\t\thasScannedForEncodings = 0;\n");
+  fprintf(out, "\t\t\tknownRegions = (\n");
+  fprintf(out, "\t\t\t\tEnglish,\n");
+  fprintf(out, "\t\t\t\tJapanese,\n");
+  fprintf(out, "\t\t\t\tFrench,\n");
+  fprintf(out, "\t\t\t\tGerman,\n");
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tmainGroup = %s;\n", Group);
+  fprintf(out, "\t\t\tproductRefGroup = %s /* Products */;\n", ProductsGroup);
+  fprintf(out, "\t\t\tprojectDirPath = \"\";\n");
+  fprintf(out, "\t\t\tprojectRoot = \"\";\n");
+  fprintf(out, "\t\t\ttargets = (\n");
+  
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeProjectTarget(out, tgt);
+  }
+  
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t};\n");
+  fprintf(out, "/* End PBXProject section */\n");
+  
   return 0;
 }
 
@@ -395,7 +685,8 @@ static int writeProjectTarget(FILE *out, Fl_Target_Type *tgt) {
 
 // This section writes a list of references to Buil Files of type source.
 // Resources are all files that are not in Sources or Headers (i.e. icons, etc.)
-static int writeResourcesBuildPhase(FILE *out, const char *key, const char *productName) {
+static int writeResourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
+  char key[32]; strcpy(key, tgt->get_UUID_Xcode(Xcode4_ResourcesBuildPhase));
   fprintf(out, "\t\t%s /* Resources */ = {\n", key);
   fprintf(out, "\t\t\tisa = PBXResourcesBuildPhase;\n");
   fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
@@ -403,6 +694,16 @@ static int writeResourcesBuildPhase(FILE *out, const char *key, const char *prod
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
   fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+static int writeResourcesBuildPhaseSection(FILE *out) {
+  // FIXME:
+  fprintf(out, "\n/* Begin PBXResourcesBuildPhase section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeResourcesBuildPhase(out, tgt);
+  }
+  fprintf(out, "/* End PBXResourcesBuildPhase section */\n");
   return 0;
 }
 
@@ -414,7 +715,7 @@ static int writeResourcesBuildPhase(FILE *out, const char *key, const char *prod
 static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   
   // get the required keys
-  char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_SourcesBuildPhase"));
+  char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode(Xcode4_SourcesBuildPhase));
   
   // write a list of all source files
   fprintf(out, "\t\t%s /* Sources */ = {\n", SourcesBuildPhase);
@@ -424,11 +725,10 @@ static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
     if (f->builds_in(FL_ENV_XC4) && f->file_is_code()) {
-      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
-      fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode(Xcode4_BuildFileInSources));
+      fprintf(out, "\t\t\t\t%s /* %s in Sources */,\n", 
               PBXBuildFile, 
-              f->filename_name(), 
-              f->parent->name());
+              f->filename_name());
     }
   }
   fprintf(out, "\t\t\t);\n");
@@ -437,10 +737,51 @@ static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+static int writeSourcesBuildPhaseSection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXSourcesBuildPhase section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeSourcesBuildPhase(out, tgt);
+  }
+  fprintf(out, "/* End PBXSourcesBuildPhase section */\n");
+  return 0;
+}
+
 
 /* Begin PBXTargetDependency section */
 
-// TODO: write those
+static int writeTargetDependency(FILE *out, Fl_Target_Type *tgt) {
+  Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
+  for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
+    Fl_Target_Type *dep = Fl_Target_Type::find(tgt_dep->name());
+    if (dep) {
+      Fl_Workspace_Type *wsp = (Fl_Workspace_Type*)Fl_Type::first;
+      
+      char Root[32]; strcpy(Root, wsp->get_UUID_Xcode(Xcode4_Root));
+      char ContainerItemProxy[32]; strcpy(ContainerItemProxy, wsp->get_UUID_Xcode(Xcode4_ContainerItemProxy));
+      char TargetDependency[32]; strcpy(TargetDependency, tgt_dep->get_UUID_Xcode(Xcode4_TargetDependency));
+      char DepTarget[32]; strcpy(DepTarget, dep->get_UUID_Xcode(Xcode4_Target));
+      
+      fprintf(out, "\t\t%s /* PBXTargetDependency */ = {\n", TargetDependency);
+      fprintf(out, "\t\t\tisa = PBXTargetDependency;\n");
+      fprintf(out, "\t\t\ttarget = %s /* %s */;\n", DepTarget, dep->name());
+      fprintf(out, "\t\t\ttargetProxy = %s /* PBXContainerItemProxy */;\n", ContainerItemProxy);
+      fprintf(out, "\t\t};\n");
+      
+    } else {
+      printf("Unresoved target dependency to \"%s\"\n", tgt_dep->name());
+    }
+  }
+  return 0;
+}
+
+static int writeTargetDependencySection(FILE *out) {
+  fprintf(out, "\n/* Begin PBXTargetDependency section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeTargetDependency(out, tgt);
+  }
+  fprintf(out, "/* End PBXTargetDependency section */\n");
+  return 0;
+}
 
 
 /* Begin XCBuildConfiguration section */
@@ -451,8 +792,8 @@ static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
 static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   
   // get the required keys
-  char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode("Xcode4_DebugBuildConfiguration"));
-  char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode("Xcode4_ReleaseBuildConfiguration"));
+  char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode(Xcode4_DebugBuildConfiguration));
+  char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode(Xcode4_ReleaseBuildConfiguration));
 
   // Write the Debug Build Configuration
   fprintf(out, "\t\t%s /* Debug */ = {\n", debugKey);
@@ -478,7 +819,7 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\t\t../../png,\n");
   fprintf(out, "\t\t\t\t\t../../jpeg,\n");
   fprintf(out, "\t\t\t\t);\n");
-  fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/fltk-Info.plist\";\n");
+  fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/%s-Info.plist\";\n", tgt->name());
   fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
   fprintf(out, "\t\t\t\tOTHER_LDFLAGS = \"\";\n");
   fprintf(out, "\t\t\t\tPRODUCT_NAME = \"%s\";\n", tgt->name());
@@ -514,7 +855,7 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\t\t../../png,\n");
   fprintf(out, "\t\t\t\t\t../../jpeg,\n");
   fprintf(out, "\t\t\t\t);\n");
-  fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/fltk-Info.plist\";\n");
+  fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/%s-Info.plist\";\n", tgt->name());
   fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
   fprintf(out, "\t\t\t\tOTHER_LDFLAGS = \"\";\n");
   fprintf(out, "\t\t\t\tPRODUCT_NAME = \"%s\";\n", tgt->name());
@@ -531,6 +872,52 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+static int writeBuildConfigurations(FILE *out, Fl_Workspace_Type *wsp) {
+  
+  // get the required keys
+  char debugKey[32]; strcpy(debugKey, wsp->get_UUID_Xcode(Xcode4_DebugBuildConfiguration));
+  char releaseKey[32]; strcpy(releaseKey, wsp->get_UUID_Xcode(Xcode4_ReleaseBuildConfiguration));
+  
+  fprintf(out, "\t\t%s /* Debug */ = {\n", debugKey);
+  fprintf(out, "\t\t\tisa = XCBuildConfiguration;\n");
+  fprintf(out, "\t\t\tbuildSettings = {\n");
+  fprintf(out, "\t\t\t\tARCHS = \"$(NATIVE_ARCH_ACTUAL)\";\n");
+  fprintf(out, "\t\t\t\tGCC_C_LANGUAGE_STANDARD = gnu99;\n");
+  fprintf(out, "\t\t\t\tGCC_OPTIMIZATION_LEVEL = 0;\n");
+  fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_RETURN_TYPE = YES;\n");
+  fprintf(out, "\t\t\t\tGCC_WARN_UNUSED_VARIABLE = YES;\n");
+  fprintf(out, "\t\t\t\tONLY_ACTIVE_ARCH = YES;\n");
+  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
+  fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk\";\n");
+  fprintf(out, "\t\t\t};\n");
+  fprintf(out, "\t\t\tname = Debug;\n");
+  fprintf(out, "\t\t};\n");
+  
+  fprintf(out, "\t\t%s /* Release */ = {\n", releaseKey);
+  fprintf(out, "\t\t\tisa = XCBuildConfiguration;\n");
+  fprintf(out, "\t\t\tbuildSettings = {\n");
+  fprintf(out, "\t\t\t\tARCHS = \"$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)\";\n");
+  fprintf(out, "\t\t\t\tARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = \"x86_64 i386 ppc\";\n");
+  fprintf(out, "\t\t\t\tGCC_C_LANGUAGE_STANDARD = gnu99;\n");
+  fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_RETURN_TYPE = YES;\n");
+  fprintf(out, "\t\t\t\tGCC_WARN_UNUSED_VARIABLE = YES;\n");
+  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
+  fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk\";\n");
+  fprintf(out, "\t\t\t};\n");
+  fprintf(out, "\t\t\tname = Release;\n");
+  fprintf(out, "\t\t};\n");
+}
+
+static int writeBuildConfigurationSection(FILE *out) {
+  fprintf(out, "\n/* Begin XCBuildConfiguration section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeBuildConfigurations(out, tgt);
+  }
+  writeBuildConfigurations(out, workspace);
+  fprintf(out, "/* End XCBuildConfiguration section */\n");
+  return 0;
+}
+
 
 /* Begin XCConfigurationList section */
 
@@ -540,9 +927,9 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
 static int writeBuildConfigurationList(FILE *out, Fl_Target_Type *tgt) {
   
   // get the required keys
-  char listKey[32]; strcpy(listKey, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
-  char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode("Xcode4_DebugBuildConfiguration"));
-  char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode("Xcode4_ReleaseBuildConfiguration"));
+  char listKey[32]; strcpy(listKey, tgt->get_UUID_Xcode(Xcode4_BuildConfigurationList));
+  char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode(Xcode4_DebugBuildConfiguration));
+  char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode(Xcode4_ReleaseBuildConfiguration));
   
   // write the section for this target
   fprintf(out, "\t\t%s /* Build configuration list for PBXNativeTarget \"%s\" */ = {\n", listKey, tgt->name());
@@ -557,12 +944,90 @@ static int writeBuildConfigurationList(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+static int writeBuildConfigurationList(FILE *out, Fl_Workspace_Type *wsp) {
+  
+  // get the required keys
+  char listKey[32]; strcpy(listKey, wsp->get_UUID_Xcode(Xcode4_BuildConfigurationList));
+  char debugKey[32]; strcpy(debugKey, wsp->get_UUID_Xcode(Xcode4_DebugBuildConfiguration));
+  char releaseKey[32]; strcpy(releaseKey, wsp->get_UUID_Xcode(Xcode4_ReleaseBuildConfiguration));
+  
+  // write the section for this target
+  fprintf(out, "\t\t%s /* Build configuration list for PBXNativeTarget \"%s\" */ = {\n", listKey, wsp->name());
+  fprintf(out, "\t\t\tisa = XCConfigurationList;\n");
+  fprintf(out, "\t\t\tbuildConfigurations = (\n");
+  fprintf(out, "\t\t\t\t%s /* Debug */,\n", debugKey);
+  fprintf(out, "\t\t\t\t%s /* Release */,\n", releaseKey);
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tdefaultConfigurationIsVisible = 0;\n");
+  fprintf(out, "\t\t\tdefaultConfigurationName = Debug;\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+static int writeConfigurationListSection(FILE *out) {
+  fprintf(out, "\n/* Begin XCConfigurationList section */\n");
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    writeBuildConfigurationList(out, tgt);
+  }
+  writeBuildConfigurationList(out, workspace);
+  fprintf(out, "/* End XCConfigurationList section */\n");
+  return 0;
+}
 
 
 // ------------ file writers dispatch-------------------------------------------
 
 
 int write_fltk_ide_xcode4() {
+  
+  workspace = (Fl_Workspace_Type*)Fl_Type::first;
+  
+#if 1
+  
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/Xcode4/FLTK.xcodeproj/project.pbxproj");
+  FILE *out = fopen(buf, "wb");
+  
+  fprintf(out, "\n");
+  
+  fprintf(out, "// !$*UTF8*$!\n");
+  fprintf(out, "{\n");
+  fprintf(out, "\tarchiveVersion = 1;\n");
+  fprintf(out, "\tclasses = {\n");
+  fprintf(out, "\t};\n");
+  fprintf(out, "\tobjectVersion = 44;\n");
+  fprintf(out, "\tobjects = {\n");
+
+  writeBuildFileSection(out);
+  writeBuildRuleSection(out);
+  writeContainerItemProxySection(out);
+  writeCopyFilesBuildPhaseSection(out);
+  writeFileReferenceSection(out);
+  writeFrameworksBuildPhaseSection(out);
+  writeGroupSection(out);
+  writeHeadersBuildPhaseSection(out);
+  writeNativeTargetSection(out);
+  writeProjectSection(out);
+  writeResourcesBuildPhaseSection(out);
+  writeSourcesBuildPhaseSection(out);
+  writeTargetDependencySection(out);
+  writeBuildConfigurationSection(out);
+  writeConfigurationListSection(out);
+  
+  char Root[32]; strcpy(Root, workspace->get_UUID_Xcode(Xcode4_Root));
+  
+  fprintf(out, "\t};\n");
+  fprintf(out, "\trootObject = %s /* Project object */;\n", Root);
+  fprintf(out, "}\n");
+
+  fclose(out);
+  
+#else
+  
   // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .
   // When done, everything will likely be integrated into the executable to make one compact package.
   char buf[2048], base_dir[2048], tgt_base[2048];
@@ -609,9 +1074,17 @@ int write_fltk_ide_xcode4() {
           // set the filepath for the default target. 
           strcpy(tgt_base, base_dir);
           hash = strchr(hash, ';')+1;
-      } else if (strncmp(hash, "#BuildFileReferences(", 21)==0) {
+        } else if (strncmp(hash, "#BuildFileReferences(", 21)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')'); // keep tgt local
           writeBuildFileReferences(out, tgt);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#ContainerItemProxy(", 20)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+20, ')');
+          writeContainerItemProxy(out, tgt);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#TargetDependency(", 18)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+18, ')');
+          writeTargetDependency(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#FileReferences(", 16)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+16, ')');
@@ -622,7 +1095,7 @@ int write_fltk_ide_xcode4() {
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->lists_in(FL_ENV_XC4) && f->file_is_header()) {
-              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode(Xcode4_FileRef));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
                       f->filename_name());
@@ -634,7 +1107,7 @@ int write_fltk_ide_xcode4() {
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->lists_in(FL_ENV_XC4) && f->file_is_code()) {
-              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode(Xcode4_FileRef));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
                       f->filename_name());
@@ -646,7 +1119,7 @@ int write_fltk_ide_xcode4() {
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->lists_in(FL_ENV_XC4) && f->file_is_framework()) {
-              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode(Xcode4_FileRef));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
                       f->filename_name());
@@ -657,14 +1130,22 @@ int write_fltk_ide_xcode4() {
           Fl_Tool_Type *tgt = Fl_Target_Type::find(hash+13, ')');
           writeGroup(out, tgt);
           hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#ProductsGroup(", 15)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+15, ')');
+          writeProductsGroup(out, tgt);
+          hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#TargetGroupRef(", 16)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+16, ')');
-          char Group[32]; strcpy(Group, tgt->get_UUID_Xcode("Xcode4_PBXGroup"));
+          char Group[32]; strcpy(Group, tgt->get_UUID_Xcode(Xcode4_Group));
           fprintf(out, "\t\t\t\t%s /* %s */,\n", Group, tgt->name());
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#HeadersBuildPhase(", 19)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+19, ')');
           writeHeadersBuildPhase(out, tgt);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CopyFilesBuildPhase(", 21)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')');
+          writeCopyFilesBuildPhase(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#SourcesBuildPhase(", 19)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+19, ')');
@@ -675,7 +1156,7 @@ int write_fltk_ide_xcode4() {
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->builds_in(FL_ENV_XC4) && f->file_is_code()) {
-              char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+              char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode(Xcode4_BuildFileInSources));
               fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
                       PBXBuildFile, 
                       f->filename_name(), 
@@ -693,8 +1174,7 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#ResourcesBuildPhase(", 21)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')');
-          char key[32]; strcpy(key, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
-          writeResourcesBuildPhase(out, key, tgt->name());
+          writeResourcesBuildPhase(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#FrameworksBuildPhase(", 22)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+22, ')');
@@ -724,6 +1204,8 @@ int write_fltk_ide_xcode4() {
   
   fclose(in);
   fclose(out);
+  
+#endif
   
   return 0;
 }

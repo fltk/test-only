@@ -1343,6 +1343,26 @@ Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
   return 0;
 }
 
+Fl_Target_Type *Fl_Target_Type::first_target(Fl_Type *base) {
+  Fl_Type *src = base->next;
+  while (src && src->level>base->level) {
+    if (src->is_target()) 
+      return (Fl_Target_Type*)src;
+    src = src->next;
+  }
+  return 0;
+}
+
+Fl_Target_Type *Fl_Target_Type::next_target(Fl_Type *base) {
+  Fl_Type *src = this->next;
+  while (src && src->level>base->level) {
+    if (src->is_target()) 
+      return (Fl_Target_Type*)src;
+    src = src->next;
+  }
+  return 0;
+}
+
 
 // ------------ Application Target ---------------------------------------------
 
@@ -1508,6 +1528,26 @@ Fl_File_Type *Fl_File_Type::next_file(Fl_Type *base) {
   while (src && src->level>base->level) {
     if (src->is_file()) 
       return (Fl_File_Type*)src;
+    src = src->next;
+  }
+  return 0;
+}
+
+Fl_Target_Dependency_Type *Fl_Target_Dependency_Type::first_dependency(Fl_Type *base) {
+  Fl_Type *src = base->next;
+  while (src && src->level>base->level) {
+    if (src->is_target_dependency()) 
+      return (Fl_Target_Dependency_Type*)src;
+    src = src->next;
+  }
+  return 0;
+}
+
+Fl_Target_Dependency_Type *Fl_Target_Dependency_Type::next_dependency(Fl_Type *base) {
+  Fl_Type *src = this->next;
+  while (src && src->level>base->level) {
+    if (src->is_target_dependency()) 
+      return (Fl_Target_Dependency_Type*)src;
     src = src->next;
   }
   return 0;

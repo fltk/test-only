@@ -60,7 +60,7 @@ public:
 #include <fltk3/DoubleWindow.h>
 extern fltk3::DoubleWindow *workspace_panel;
 #include <fltk3/Input.h>
-extern fltk3::Input *pName;
+extern fltk3::Input *pWidgetName;
 #include <fltk3/Box.h>
 extern Fl_Environment_Choice *pEnv;
 #include <fltk3/Button.h>

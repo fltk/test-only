@@ -199,6 +199,7 @@ public:
   virtual int is_category() const { return 0; }
   virtual int is_tool() const { return 0; }
   virtual int is_workspace() const { return 0; }
+  virtual int is_target_dependency() const { return 0; }
 
   virtual int pixmapID() { return 0; }
 
@@ -269,6 +270,8 @@ public:
   virtual int is_target_dependency() const { return 1; }
   virtual int pixmapID() { return 59; }
   virtual void open();
+  static Fl_Target_Dependency_Type *first_dependency(Fl_Type *base);
+  Fl_Target_Dependency_Type *next_dependency(Fl_Type *base);
 };
 extern Fl_Target_Dependency_Type Fl_Target_Dependency_type;
 
@@ -282,9 +285,10 @@ public:
   const char *type_name() { return "target"; }
   Fl_Type *make();
   virtual int is_parent() const { return 1; }
-  virtual int is_target() const { return 1; }
-  
+  virtual int is_target() const { return 1; }  
   static Fl_Target_Type *find(const char *name, char end=0);
+  static Fl_Target_Type *first_target(Fl_Type *base);
+  Fl_Target_Type *next_target(Fl_Type *base);
 };
 extern Fl_Target_Type Fl_Target_type;
 
