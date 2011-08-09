@@ -1025,8 +1025,8 @@ void print_menu_cb(fltk3::Widget *, void *) {
       fltk3::draw(buffer, width - (int)fltk3::width(buffer), fontsize);
       
       // find a good size for printing
-      fltk3::Widget *w = windows[winpage]->o;
-      int ww = w->w(), hh = w->h();
+      fltk3::Window *w = (fltk3::Window*)windows[winpage]->o;
+      int ww = w->decorated_w(), hh = w->decorated_h();
       double sx = (0.95*width)/ww;
       double sy = (0.95*(height-30))/hh;
       double scale = (sx<sy)?sx:sy;
@@ -1038,11 +1038,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
       p->origin(0.5*(width-ww), 30/scale);
       
       // draw the widget
-      p->print_widget(w);
-      
-      // reset stuff (probably not needed)
-      p->scale(1.0, 1.0);
-      p->origin(0.0, 0.0);
+      p->print_window(w);
       
       // flush the page out
       p->end_page();
