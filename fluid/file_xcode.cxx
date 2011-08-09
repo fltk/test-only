@@ -907,6 +907,8 @@ static int writeBuildConfigurations(FILE *out, Fl_Workspace_Type *wsp) {
   fprintf(out, "\t\t\t};\n");
   fprintf(out, "\t\t\tname = Release;\n");
   fprintf(out, "\t\t};\n");
+  
+  return  0;
 }
 
 static int writeBuildConfigurationSection(FILE *out) {

@@ -261,7 +261,7 @@ Function {show_workspace_panel()} {open
         callback {if (wks_name) free(wks_name);
 wks_name = strdup(wName->value());
 wks_env = pEnv->value();
-workspace_panel->hide();} selected
+workspace_panel->hide();}
         xywh {160 130 95 25} labelsize 12
       }
     }
@@ -299,18 +299,43 @@ Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
 Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
-    label {File Properties} open
-    xywh {908 321 291 245} type Double labelsize 11 align 80 resizable hotspot
-    code0 {o->size_range(o->w(), o->h());}
+    label {File Properties} open selected
+    xywh {858 255 420 454} type Double labelsize 11 align 80 resizable hotspot
+    code0 {o->size_range(300, 200);}
     class Fl_Panel non_modal visible
   } {
     {fltk3::Group} {} {
-      label {File Name:}
       callback {Fl_Panel::propagate_load} open
-      xywh {75 15 309 20} labelsize 12 align 4
+      xywh {10 420 400 25} labelsize 11
     } {
-      {fltk3::Input} {} {
+      {fltk3::Box} {} {
+        xywh {10 420 290 25} labelsize 11 resizable
+      }
+      {fltk3::Button} {} {
+        label Close
         callback {if (v == Fl_Panel::LOAD) {
+  } else {
+    file_panel_set_cb(0, 0);
+    the_file_panel->hide();
+  }}
+        xywh {300 420 110 25}
+      }
+    }
+    {fltk3::ScrollGroup} {} {
+      callback {Fl_Panel::propagate_load} open
+      xywh {10 10 400 400} box FLAT_BOX color 50 resizable
+    } {
+      {fltk3::PackedGroup} {} {
+        callback {Fl_Panel::propagate_load} open
+        xywh {10 10 400 400} resizable
+      } {
+        {fltk3::Group} {} {
+          callback {Fl_Panel::propagate_load} open
+          xywh {10 10 400 30} labelsize 12 align 4
+        } {
+          {fltk3::Input} {} {
+            label {File Name }
+            callback {if (v == Fl_Panel::LOAD) {
     static char buf[1024];
     if (Fl_Panel::numselected != 1) {
       o->static_value("<Multiple Values>");
@@ -328,58 +353,21 @@ Function {make_file_panel()} {open
       if (o->changed()) set_modflag(1);
     }
   }}
-        tooltip {The label text for the widget.
-Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 resizable
-      }
-    }
-    {fltk3::MenuButton} {} {
-      label {Build in:}
-      callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_file()->build_env());
-  } else {
-    int mod = 0;
-    unsigned int e = o->value();
-    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
-      if (t->selected && t->is_file()) {
-        if (((Fl_File_Type*)t)->build_env() != e) {
-          ((Fl_File_Type*)t)->build_env(e);
-          mod = 1;
+            tooltip {name and path of the file} xywh {110 15 290 20} labelsize 12 when 1 textsize 12 resizable
+          }
         }
-      }
-    }
-    if (mod) set_modflag(1);
-  }} open
-      xywh {75 45 170 25} box FLAT_BOX labelsize 12 align 4
-      class Fl_Environment_Choice
-    } {}
-    {fltk3::MenuButton} {} {
-      label {List in:}
-      callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_file()->list_env());
-  } else {
-    int mod = 0;
-    unsigned int e = o->value();
-    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
-      if (t->selected && t->is_file()) {
-        if (((Fl_File_Type*)t)->list_env() != e) {
-          ((Fl_File_Type*)t)->list_env(e);
-          mod = 1;
-        }
-      }
-    }
-    if (mod) set_modflag(1);
-  }} open
-      xywh {75 75 170 25} box FLAT_BOX labelsize 12 align 4
-      class Fl_Environment_Choice
-    } {}
-    {fltk3::Group} {} {
-      label {File Type:}
-      callback {Fl_Panel::propagate_load} open
-      xywh {75 105 170 20} labelsize 12 align 4
-    } {
-      {fltk3::MenuButton} {} {
-        label Unknown
-        callback {if (v == Fl_Panel::LOAD) {
+        {fltk3::Group} {} {
+          callback {Fl_Panel::propagate_load} open
+          xywh {10 40 400 30}
+        } {
+          {fltk3::Group} {} {
+            label {File Type }
+            callback {Fl_Panel::propagate_load} open
+            xywh {110 45 200 20} labelsize 12 align 4
+          } {
+            {fltk3::MenuButton} {} {
+              label Unknown
+              callback {if (v == Fl_Panel::LOAD) {
   } else {
     int mod = 0;
     const fltk3::MenuItem *mi = o->mvalue();
@@ -416,78 +404,83 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
         }
       }
       o->copy_label(buf);} open
-        xywh {75 105 170 20} labelsize 12
-      } {
-        MenuItem {} {
-          label Default
-          user_data FL_FILE_EXPLICIT user_data_type long
-          xywh {10 10 31 20} labelsize 12 divider
+              xywh {110 45 200 20} labelsize 12
+            } {
+              MenuItem {} {
+                label Default
+                user_data FL_FILE_EXPLICIT user_data_type long
+                xywh {15 15 31 20} labelsize 12 divider
+              }
+              MenuItem {} {
+                label {C Source Code}
+                user_data FL_FILE_C_SOURCE user_data_type long
+                xywh {5 5 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {C Header}
+                user_data FL_FILE_C_HEADER user_data_type long
+                xywh {15 15 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {C++ Source Code}
+                user_data FL_FILE_CPP_SOURCE user_data_type long
+                xywh {25 25 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {C++ Header}
+                user_data FL_FILE_CPP_HEADER user_data_type long
+                xywh {35 35 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {ObjectiveC Source}
+                user_data FL_FILE_OBJC_SOURCE user_data_type long
+                xywh {45 45 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {ObjectiveC Header}
+                user_data FL_FILE_OBJC_HEADER user_data_type long
+                xywh {55 55 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label Text
+                user_data FL_FILE_TEXT user_data_type long
+                xywh {65 65 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {Shell Script}
+                user_data FL_FILE_TEXT_SCRIPT user_data_type long
+                xywh {75 75 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {OS X Framework}
+                user_data FL_FILE_FRAMEWORK user_data_type long
+                xywh {85 85 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {Fluid UI Design}
+                user_data FL_FILE_FLUID_UI user_data_type long
+                xywh {95 95 31 20} labelsize 12 divider
+              }
+              MenuItem {} {
+                label Unknown
+                user_data FL_FILE_UNKNOWN user_data_type long
+                xywh {85 85 31 20} labelsize 12
+              }
+            }
+          }
         }
-        MenuItem {} {
-          label {C Source Code}
-          user_data FL_FILE_C_SOURCE user_data_type long
-          xywh {0 0 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {C Header}
-          user_data FL_FILE_C_HEADER user_data_type long
-          xywh {10 10 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {C++ Source Code}
-          user_data FL_FILE_CPP_SOURCE user_data_type long
-          xywh {20 20 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {C++ Header}
-          user_data FL_FILE_CPP_HEADER user_data_type long
-          xywh {30 30 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {ObjectiveC Source}
-          user_data FL_FILE_OBJC_SOURCE user_data_type long
-          xywh {40 40 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {ObjectiveC Header}
-          user_data FL_FILE_OBJC_HEADER user_data_type long
-          xywh {50 50 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label Text
-          user_data FL_FILE_TEXT user_data_type long
-          xywh {60 60 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {Shell Script}
-          user_data FL_FILE_TEXT_SCRIPT user_data_type long
-          xywh {70 70 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {OS X Framework}
-          user_data FL_FILE_FRAMEWORK user_data_type long
-          xywh {80 80 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {Fluid UI Design}
-          user_data FL_FILE_FLUID_UI user_data_type long
-          xywh {90 90 31 20} labelsize 12 divider
-        }
-        MenuItem {} {
-          label Unknown
-          user_data FL_FILE_UNKNOWN user_data_type long
-          xywh {80 80 31 20} labelsize 12
-        }
-      }
-    }
-    {fltk3::Group} {} {
-      label {Location:}
-      callback {Fl_Panel::propagate_load} open
-      xywh {75 130 170 20} labelsize 12 align 4
-    } {
-      {fltk3::MenuButton} {} {
-        label {Relative to Workspace}
-        callback {if (v == Fl_Panel::LOAD) {
+        {fltk3::Group} {} {
+          callback {Fl_Panel::propagate_load} open
+          xywh {10 70 400 30} labelsize 12 align 4
+        } {
+          {fltk3::Group} {} {
+            label {Location }
+            callback {Fl_Panel::propagate_load} open
+            xywh {110 75 200 20} labelsize 12 align 4
+          } {
+            {fltk3::MenuButton} {} {
+              label {Relative to Workspace}
+              callback {if (v == Fl_Panel::LOAD) {
   /*...*/
   } else {
     int mod = 0;
@@ -512,45 +505,81 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
         break;
       }
     }} open
-        xywh {75 130 170 20} labelsize 12
-      } {
-        MenuItem {} {
-          label {Relative to Workspace}
-          user_data FL_LOCATION_WORKSPACE user_data_type long
-          xywh {20 20 31 20} labelsize 12
+              xywh {110 75 200 20} labelsize 12
+            } {
+              MenuItem {} {
+                label {Relative to Workspace}
+                user_data FL_LOCATION_WORKSPACE user_data_type long
+                xywh {25 25 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {Absolute Path}
+                user_data FL_LOCATION_ABSOLUTE user_data_type long
+                xywh {15 15 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {Relative to IDE}
+                user_data FL_LOCATION_IDE user_data_type long
+                tooltip {Xcode: relative to Developer Directory, used for Frameworks} xywh {25 25 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label {Relative to SDK}
+                user_data FL_LOCATION_SDK user_data_type long
+                xywh {35 35 31 20} labelsize 12
+              }
+            }
+          }
         }
-        MenuItem {} {
-          label {Absolute Path}
-          user_data FL_LOCATION_ABSOLUTE user_data_type long
-          xywh {10 10 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {Relative to IDE}
-          user_data FL_LOCATION_IDE user_data_type long
-          tooltip {Xcode: relative to Developer Directory, used for Frameworks} xywh {20 20 31 20} labelsize 12
-        }
-        MenuItem {} {
-          label {Relative to SDK}
-          user_data FL_LOCATION_SDK user_data_type long
-          xywh {30 30 31 20} labelsize 12
+        {fltk3::Group} {} {
+          callback {Fl_Panel::propagate_load} open
+          xywh {10 105 400 30}
+        } {
+          {fltk3::MenuButton} {} {
+            label {Build in:}
+            callback {if (v == Fl_Panel::LOAD) {
+    o->value(Fl_Panel::current_file()->build_env());
+  } else {
+    int mod = 0;
+    unsigned int e = o->value();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->build_env() != e) {
+          ((Fl_File_Type*)t)->build_env(e);
+          mod = 1;
         }
       }
     }
-    {fltk3::Group} {} {
-      callback {Fl_Panel::propagate_load} open
-      xywh {9 195 261 25} labelsize 11
-    } {
-      {fltk3::Box} {} {
-        xywh {9 195 166 25} labelsize 11 resizable
-      }
-      {fltk3::ReturnButton} {} {
-        label Close
-        callback {if (v == Fl_Panel::LOAD) {
+    if (mod) set_modflag(1);
+  }} open
+            xywh {110 107 200 26} box FLAT_BOX labelsize 12 align 4
+            class Fl_Environment_Choice
+          } {}
+        }
+        {fltk3::Group} {} {
+          callback {Fl_Panel::propagate_load} open
+          xywh {10 140 400 30}
+        } {
+          {fltk3::MenuButton} {} {
+            label {List in:}
+            callback {if (v == Fl_Panel::LOAD) {
+    o->value(Fl_Panel::current_file()->list_env());
   } else {
-    file_panel_set_cb(0, 0);
-    the_file_panel->hide();
-  }}
-        xywh {175 195 94 25} labelsize 12
+    int mod = 0;
+    unsigned int e = o->value();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->list_env() != e) {
+          ((Fl_File_Type*)t)->list_env(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }} open
+            xywh {110 142 200 25} box FLAT_BOX labelsize 12 align 4
+            class Fl_Environment_Choice
+          } {}
+        }
       }
     }
   }

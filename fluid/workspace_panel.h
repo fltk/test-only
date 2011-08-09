@@ -66,7 +66,8 @@ extern Fl_Environment_Choice *pEnv;
 #include <fltk3/Button.h>
 fltk3::DoubleWindow* show_workspace_panel();
 void file_panel_set_cb(fltk3::Widget*, void *v);
-#include <fltk3/ReturnButton.h>
+#include <fltk3/ScrollGroup.h>
+#include <fltk3/PackedGroup.h>
 Fl_Panel* make_file_panel();
 extern fltk3::MenuItem menu_Unknown[];
 extern fltk3::MenuItem menu_Relative[];
