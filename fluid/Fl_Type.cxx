@@ -1323,7 +1323,6 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
-// throws a null exception!
 Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
   // find a partial string, if 'end' is set to a character
   char buf[2048];
@@ -1339,7 +1338,6 @@ Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
       return (Fl_Target_Type*)tgt;
     tgt = tgt->next;
   }
-  throw "Target not found";
   return 0;
 }
 
@@ -1465,6 +1463,8 @@ void Fl_File_Type::set_default_type() {
         filetype(FL_FILE_OBJC_SOURCE);
       } else if (strcmp(ext, ".framework")==0) {
         filetype(FL_FILE_FRAMEWORK);
+      } else if (strcmp(ext, ".fl")==0) {
+        filetype(FL_FILE_FLUID_UI);
       }
     }
   }
@@ -1579,6 +1579,10 @@ char Fl_File_Type::file_is_objc_header() {
 
 char Fl_File_Type::file_is_framework() {
   return (pFileType==FL_FILE_FRAMEWORK);
+}
+
+char Fl_File_Type::file_is_fluid_ui() {
+  return (pFileType==FL_FILE_FLUID_UI);
 }
 
 char Fl_File_Type::file_is_code() {

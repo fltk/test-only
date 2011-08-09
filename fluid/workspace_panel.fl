@@ -244,7 +244,7 @@ Function {show_workspace_panel()} {open
       label {Workspace Properties} open
       xywh {832 211 274 173} type Double modal visible
     } {
-      {fltk3::Input} pName {
+      {fltk3::Input} wName {
         label {Name:}
         tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {85 15 170 25} labelsize 12 textsize 12
       }
@@ -259,17 +259,17 @@ Function {show_workspace_panel()} {open
       {fltk3::Button} {} {
         label OK
         callback {if (wks_name) free(wks_name);
-wks_name = strdup(pName->value());
+wks_name = strdup(wName->value());
 wks_env = pEnv->value();
-workspace_panel->hide();}
+workspace_panel->hide();} selected
         xywh {160 130 95 25} labelsize 12
       }
     }
   }
   code {if (wks_name) 
-  pName->value(wks_name);
+  wName->value(wks_name);
 else
-  pName->value("unnamed workspace");
+  wName->value("unnamed workspace");
 if (wks_env)  
   pEnv->value(wks_env);  
 else
@@ -465,8 +465,13 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
         }
         MenuItem {} {
           label {OS X Framework}
-          user_data FL_FILE_FRAMEWORK user_data_type long selected
+          user_data FL_FILE_FRAMEWORK user_data_type long
           xywh {80 80 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {Fluid UI Design}
+          user_data FL_FILE_FLUID_UI user_data_type long
+          xywh {90 90 31 20} labelsize 12 divider
         }
         MenuItem {} {
           label Unknown

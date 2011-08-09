@@ -171,13 +171,13 @@ unsigned int Fl_Environment_Choice::value() {
 
 fltk3::DoubleWindow *workspace_panel=(fltk3::DoubleWindow *)0;
 
-fltk3::Input *pWidgetName=(fltk3::Input *)0;
+fltk3::Input *wName=(fltk3::Input *)0;
 
 Fl_Environment_Choice *pEnv=(Fl_Environment_Choice *)0;
 
 static void cb_OK(fltk3::Button*, void*) {
   if (wks_name) free(wks_name);
-wks_name = strdup(pWidgetName->value());
+wks_name = strdup(wName->value());
 wks_env = pEnv->value();
 workspace_panel->hide();
 }
@@ -185,12 +185,12 @@ workspace_panel->hide();
 fltk3::DoubleWindow* show_workspace_panel() {
   if (!workspace_panel) {
     { workspace_panel = new fltk3::DoubleWindow(274, 173, "Workspace Properties");
-      { pWidgetName = new fltk3::Input(85, 15, 170, 25, "Name:");
-        pWidgetName->tooltip("name of the target - this will be used in the IDEs and as a general reference\
+      { wName = new fltk3::Input(85, 15, 170, 25, "Name:");
+        wName->tooltip("name of the target - this will be used in the IDEs and as a general reference\
 .");
-        pWidgetName->labelsize(12);
-        pWidgetName->textsize(12);
-      } // fltk3::Input* pWidgetName
+        wName->labelsize(12);
+        wName->textsize(12);
+      } // fltk3::Input* wName
       { fltk3::Box* o = new fltk3::Box(10, 50, 288, 2, "Create Build Enviroments for:");
         o->box(fltk3::THIN_DOWN_FRAME);
         o->labelsize(12);
@@ -216,9 +216,9 @@ fltk3::DoubleWindow* show_workspace_panel() {
     } // fltk3::DoubleWindow* workspace_panel
       }
       if (wks_name) 
-        pWidgetName->value(wks_name);
+        wName->value(wks_name);
       else
-        pWidgetName->value("unnamed workspace");
+        wName->value("unnamed workspace");
       if (wks_env)  
         pEnv->value(wks_env);  
       else
@@ -351,6 +351,7 @@ fltk3::MenuItem menu_Unknown[] = {
  {"Text", 0,  0, (void*)(FL_FILE_TEXT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Shell Script", 0,  0, (void*)(FL_FILE_TEXT_SCRIPT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"OS X Framework", 0,  0, (void*)(FL_FILE_FRAMEWORK), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Fluid UI Design", 0,  0, (void*)(FL_FILE_FLUID_UI), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Unknown", 0,  0, (void*)(FL_FILE_UNKNOWN), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0}
 };

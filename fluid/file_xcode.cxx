@@ -84,6 +84,7 @@ static const char *xcode4_type(unsigned int ft) {
     case FL_FILE_TEXT:         strcat(buf, "text"); break;
     case FL_FILE_TEXT_SCRIPT:  strcat(buf, "text.script.sh"); break;
     case FL_FILE_FRAMEWORK:    strcat(buf, "wrapper.framework"); break;
+    case FL_FILE_FLUID_UI:     strcat(buf, "text"); break;
     default:                   strcat(buf, "text"); break;
   }
   return buf;
@@ -147,7 +148,7 @@ static int writeBuildFileReferences(FILE *out, Fl_Target_Type *tgt) {
   
   // --- in Sources
   for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
-    if (file->file_is_code()) {
+    if (file->file_is_code() || file->file_is_fluid_ui()) {
       char BuildFileInSource[32]; strcpy(BuildFileInSource, file->get_UUID_Xcode(Xcode4_BuildFileInSources));
       char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_FileRef));
       fprintf(out, "\t\t%s /* %s in Sources */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
@@ -724,7 +725,7 @@ static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tfiles = (\n");
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->builds_in(FL_ENV_XC4) && f->file_is_code()) {
+    if (f->builds_in(FL_ENV_XC4) && (f->file_is_code() || f->file_is_fluid_ui())) {
       char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode(Xcode4_BuildFileInSources));
       fprintf(out, "\t\t\t\t%s /* %s in Sources */,\n", 
               PBXBuildFile, 
@@ -1106,7 +1107,7 @@ int write_fltk_ide_xcode4() {
           Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->lists_in(FL_ENV_XC4) && f->file_is_code()) {
+            if (f->lists_in(FL_ENV_XC4) && (f->file_is_code() || f->file_is_fluid_ui()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode(Xcode4_FileRef));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
