@@ -662,7 +662,9 @@ const char* i18n_file = "";
 const char* i18n_set = "";
 char i18n_program[FLTK3_PATH_MAX] = "";
 
-void write_cb(fltk3::Widget *, void *) {
+extern void write_makefiles_cb(fltk3::Widget *, void *);
+  
+void write_code_cb(fltk3::Widget *, void *) {
   if (!filename) {
     save_cb(0,0);
     if (!filename) return;
@@ -696,6 +698,14 @@ void write_cb(fltk3::Widget *, void *) {
     } else if (completion_button->value()) {
       fltk3::message("Wrote %s", cname);
     }
+  }
+}
+
+void write_cb(fltk3::Widget *o, void *v) {
+  if (project_is_workspace()) {
+    write_makefiles_cb(o, v);
+  } else {
+    write_code_cb(0, v);
   }
 }
 
@@ -946,37 +956,92 @@ extern int write_fltk_ide_visualc2008();
 extern int write_fltk_ide_visualc2010();
 
 void write_makefiles_cb(fltk3::Widget*, void*) {
+  int ret;
+  if (!project_is_workspace()) {
+    fltk3::message("Write Build Environments:\n\n"
+                   "This project is not a Workspace!");
+    return;
+  }
   // make sure that our workspace file has a proper file name and path
   if (!filename) {
-    save_cb(0, 0);
-    if (!filename)
+    if (completion_button->value()) {
+      ret = fltk3::choice("Write Build Environments:\n\n"
+                          "This Workspace must be saved before\n"
+                          "Build Environments can be created!",
+                          "Cancel", "Save Project", 0L);
+      if (ret==0)
+        return;
+      save_cb(0, 0);
+      if (!filename)
+        return;
+    }
+  }
+  
+  Fl_Workspace_Type *workspace = (Fl_Workspace_Type*)Fl_Type::first;
+  int env = workspace->build_env();
+  if (env==0) {
+    fltk3::message("Write Build Environments:\n\n"
+                   "No Build Environments were selected!\n"
+                   "Double-click the Workspace [FL] item to select\n"
+                   "Build Environments.");
+    return;
+  }
+  
+  if (completion_button->value()) {
+    ret = fltk3::choice("Write Build Environments:\n\n"
+                        "You are about to create the following Build Environments:\n"
+                        "%s%s%s%s%s%s", "Cancel", "Continue", 0,
+                        workspace->builds_in(FL_ENV_MAKE)?" - Autoconf/Makefile\n":"",
+                        workspace->builds_in(FL_ENV_CMAKE)?" - CMake\n":"",
+                        workspace->builds_in(FL_ENV_VC6)?" - VisualC 6\n":"",
+                        workspace->builds_in(FL_ENV_VC2008)?" - VisualC 2008\n":"",
+                        workspace->builds_in(FL_ENV_VC2010)?" - VisualC 2010\n":"",
+                        workspace->builds_in(FL_ENV_XC4)?" - Xcode 4\n":"");
+    if (ret==0) 
       return;
   }
+  
+  // TODO: progress indicator
   // TODO: we need to collect error messages and output them
-  if ((wks_env&FL_ENV_MAKE) && write_fltk_makefiles()) {
+  if (workspace->builds_in(FL_ENV_MAKE) && write_fltk_makefiles()) {
     int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if ((wks_env&FL_ENV_CMAKE) && write_fltk_cmake()) {
+  if (workspace->builds_in(FL_ENV_CMAKE) && write_fltk_cmake()) {
     int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if ((wks_env&FL_ENV_XC4) && write_fltk_ide_xcode4()) {
+  if (workspace->builds_in(FL_ENV_XC4) && write_fltk_ide_xcode4()) {
     int v = fltk3::choice("Error writing Xcode 4 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if ((wks_env&FL_ENV_VC6) && write_fltk_ide_visualc6()) {
+  if (workspace->builds_in(FL_ENV_VC6) && write_fltk_ide_visualc6()) {
     int v = fltk3::choice("Error writing VisualC 6 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if ((wks_env&FL_ENV_VC2008) && write_fltk_ide_visualc2008()) {
+  if (workspace->builds_in(FL_ENV_VC2008) && write_fltk_ide_visualc2008()) {
     int v = fltk3::choice("Error writing VisualC 2008 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if ((wks_env&FL_ENV_VC2010) && write_fltk_ide_visualc2010()) {
+  if (workspace->builds_in(FL_ENV_VC2010) && write_fltk_ide_visualc2010()) {
     int v = fltk3::choice("Error writing VisualC 2010 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
+  if (completion_button->value()) {
+    fltk3::message("Wrote all slected build environemtes.");
+  }
+  // FIXME: allow for compiel-only. See below.
+  /*
+  if (compile_only) {
+    if (!x) {fprintf(stderr,"%s : %s\n",cname,strerror(errno)); exit(1);}
+  } else {
+    if (!x) {
+      fltk3::message("Can't write %s: %s", cname, strerror(errno));
+    } else if (completion_button->value()) {
+      fltk3::message("Wrote %s", cname);
+    }
+  }
+   */
 }
 
 
@@ -1058,11 +1123,6 @@ void convert_1_to_3_cb(fltk3::Widget *, void *);
 void convert_2_to_3_cb(fltk3::Widget *, void *);
 void write_makefiles_cb(fltk3::Widget *, void *);
 
-extern fltk3::DoubleWindow* show_workspace_panel();
-void workspace_settings_cb(fltk3::Widget*, void*) {
-  show_workspace_panel();
-}
-
 fltk3::MenuItem Main_Menu[] = {
 {"&File",0,0,0,fltk3::SUBMENU},
   {"&New...", fltk3::COMMAND+'n', new_cb, 0},
@@ -1074,7 +1134,7 @@ fltk3::MenuItem Main_Menu[] = {
   {"Save &Template...", 0, save_template_cb},
   {"&Revert...", 0, revert_cb, 0, fltk3::MENU_DIVIDER},
   {"&Print...", fltk3::COMMAND+'p', print_menu_cb},
-  {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_cb, 0},
+  {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_code_cb, 0},
   {"&Write Strings...", fltk3::COMMAND+fltk3::SHIFT+'w', write_strings_cb, 0, fltk3::MENU_DIVIDER},
   {relative_history[0], fltk3::COMMAND+'0', open_history_cb, absolute_history[0]},
   {relative_history[1], fltk3::COMMAND+'1', open_history_cb, absolute_history[1]},
@@ -1147,16 +1207,12 @@ fltk3::MenuItem Main_Menu[] = {
 {"&Shell",0,0,0,fltk3::SUBMENU},
   {"Execute &Command...",fltk3::ALT+'x',(fltk3::Callback *)show_shell_window},
   {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command,0,fltk3::MENU_DIVIDER},
-  {"Workspace",0,0,0,fltk3::SUBMENU},
-    {"Write Makefile",fltk3::COMMAND+'m',write_makefiles_cb},
-    {"Settings...",0,workspace_settings_cb},
-    {0},
   {"Build Application",fltk3::COMMAND+'b',(fltk3::Callback *)0L},
   {"Run Application",fltk3::COMMAND+'r',(fltk3::Callback *)0L},
-  {"Convert", 0, 0, 0, fltk3::SUBMENU},
-    {"FLTK 1 to 3", 0, convert_1_to_3_cb},
-    {"FLTK 2 to 3", 0, convert_2_to_3_cb},
-    {0},
+  //{"Convert", 0, 0, 0, fltk3::SUBMENU},
+  //  {"FLTK 1 to 3", 0, convert_1_to_3_cb},
+  //  {"FLTK 2 to 3", 0, convert_2_to_3_cb},
+  //  {0},
   {0},
 {"&Help",0,0,0,fltk3::SUBMENU},
   {"&Rapid development with FLUID...",0,help_cb},
@@ -1727,8 +1783,9 @@ void set_modflag(int mf) {
   }
 
   // Enable/disable the Save menu item...
-  if (modflag) save_item->activate();
-  else save_item->deactivate();
+  // TODO: this is disable while developing until we are certain that the modflag is set wherever needed
+  //  if (modflag) save_item->activate();
+  //  else save_item->deactivate();
 }
 
 ////////////////////////////////////////////////////////////////

@@ -34,6 +34,21 @@
 //     http://www.fltk.org/str.php
 //
 
+/*
+ 
+ Fl_Type
+ +- Fl_Tool_Type
+ |  +- Fl_Workspace_Type
+ |  +- Fl_Target_Dependency_Type
+ |  +- Fl_Target_Type
+ |  |  +- Fl_App_Target
+ |  |  +- Fl_Lib_Target
+ |  +- Fl_File_Type
+ |  +- Fl_Folder_Type (is_folder, is_category)
+ :  
+ 
+ */
+
 #ifndef FLUID_TYPE_H
 #define FLUID_TYPE_H
 
@@ -46,9 +61,6 @@
 #include <fltk3/draw.h>
 
 void set_modflag(int mf);
-
-extern unsigned int wks_env;
-extern char *wks_name;
 
 enum { 
   FL_ENV_NONE=0, 
@@ -1114,8 +1126,9 @@ public:
   static void *const LOAD;
   static int numselected;
   static Fl_Type *current;
-  static Fl_Widget_Type *current_widget() { return (Fl_Widget_Type*)current; }
-  static Fl_File_Type *current_file() { return (Fl_File_Type*)current; }
+  static Fl_Widget_Type *current_widget() { return current->is_widget()?(Fl_Widget_Type*)current:0L; }
+  static Fl_File_Type *current_file() { return current->is_file()?(Fl_File_Type*)current:0L; }
+  static Fl_Tool_Type *current_tool() { return current->is_tool()?(Fl_File_Type*)current:0L; }
   static void propagate_load(fltk3::Group* g, void* v=LOAD);
 };
 

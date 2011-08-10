@@ -199,11 +199,7 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &lib_target_pixmap, &workspace_pixmap, &dependency_pixmap};                                         /* 57..59 */
 
 extern int show_comments;
-
-////////////////////////////////////////////////////////////////
-
-unsigned int wks_env = FL_ENV_ALL;
-char *wks_name = 0L;
+extern Fl_Panel *the_file_panel;
 
 ////////////////////////////////////////////////////////////////
 
@@ -1274,10 +1270,9 @@ Fl_Type *Fl_Workspace_Type::make() {
 }
 
 void Fl_Workspace_Type::open() {
-  const char *lName = fltk3::input("Enter a name for the workspace", name());
-  if (lName) {
-    name(lName);
-  }
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  the_file_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_file_panel->show();
 }
 
 
@@ -1307,10 +1302,9 @@ Fl_Type *Fl_Target_Dependency_Type::make() {
 }
 
 void Fl_Target_Dependency_Type::open() {
-  const char *lName = fltk3::input("Enter a name for the target dependency", name());
-  if (lName) {
-    name(lName);
-  }
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  the_file_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_file_panel->show();
 }
 
 
@@ -1384,10 +1378,9 @@ Fl_Type *Fl_App_Target_Type::make() {
 }
 
 void Fl_App_Target_Type::open() {
-  const char *lName = fltk3::input("Enter a name for the application", name());
-  if (lName) {
-    name(lName);
-  }
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  the_file_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_file_panel->show();
 }
 
 // ------------ Library Target -------------------------------------------------
@@ -1413,15 +1406,13 @@ Fl_Type *Fl_Lib_Target_Type::make() {
 }
 
 void Fl_Lib_Target_Type::open() {
-  const char *lName = fltk3::input("Enter a name for the library", name());
-  if (lName) {
-    name(lName);
-  }
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  the_file_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_file_panel->show();
 }
 
 // ------------ Generic File ---------------------------------------------------
 
-extern Fl_Panel *the_file_panel;
 Fl_File_Type Fl_File_type;
 
 Fl_Type *Fl_File_Type::make() {
@@ -1617,7 +1608,7 @@ const char *Fl_File_Type::filename_relative(const char *fnbase, const char *tgtb
 
 void Fl_File_Type::open() {
   if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_file);
+  the_file_panel->load(&Fl_Type::is_tool);
   if (Fl_Panel::numselected) the_file_panel->show();
 }
 
@@ -1644,10 +1635,9 @@ Fl_Type *Fl_Folder_Type::make() {
 }
 
 void Fl_Folder_Type::open() {
-  const char *lName = fltk3::input("Enter a name for the folder", name());
-  if (lName) {
-    name(lName);
-  }
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  the_file_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_file_panel->show();
 }
 
 // ------------ Panel Base Class -----------------------------------------------

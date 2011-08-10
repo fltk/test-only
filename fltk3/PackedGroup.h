@@ -84,6 +84,8 @@ namespace fltk3 {
     void spacing(int i) {spacing_ = i;}
     /** Same as fltk3::Group::type() */
     uchar horizontal() const {return type();}
+    /** Recalculate the size of this widget and reposition all children. */
+    void layout();
   };
   
 }

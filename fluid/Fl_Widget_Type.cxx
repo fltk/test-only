@@ -1891,13 +1891,15 @@ void selection_changed(Fl_Type *p) {
   check_redraw_corresponding_parent(p);
   redraw_overlays();
   // load the panel with the new settings:
-  if (p && the_panel && the_panel->visible()) {
+  if (p && p->is_widget() && the_panel && the_panel->visible()) {
     the_panel->load(&Fl_Type::is_widget);
     if (the_file_panel) the_file_panel->hide();
-  }
-  if (p && the_file_panel && the_file_panel->visible()) {
-    the_file_panel->load(&Fl_Type::is_file);
+  } else if (p && p->is_tool() && the_file_panel && the_file_panel->visible()) {
+    the_file_panel->load(&Fl_Type::is_tool);
     if (the_panel) the_panel->hide();
+  } else {
+    if (the_panel) the_panel->hide();
+    if (the_file_panel) the_file_panel->hide();
   }
   // update the source viewer to show the code for the selected object
   update_sourceview_position();

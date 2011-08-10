@@ -1,9 +1,7 @@
 # data file for the Fltk User Interface Designer (fluid)
 version 3.0000 
 header_name {.h} 
-code_name {.cxx} 
-wks_name FLTK 
-wks_env 64
+code_name {.cxx}
 workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
@@ -12,6 +10,7 @@ workspace FLTK {open
   uuid_Xcode4_ContainerItemProxy {7DB77C01-F47B-42CE-883F-5CD221F15472}
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
+  build_env 64
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -1488,7 +1487,7 @@ workspace FLTK {open
           list_env 64
           filename_and_path {src/Fl_Native_File_Chooser_MAC.mm}
         }
-        file_ref {Fl_Quartz_Printer.mm} {
+        file_ref {Fl_Quartz_Printer.mm} {selected
           uuid_Xcode4_BuildFile {982B3E9E-7B79-4E84-A10F-7270A2EB17A5}
           uuid_Xcode4_FileRef {10A048C4-1F53-4215-8F9A-E8829C9F77EA}
           uuid_Xcode4_BuildFileInSources {B7920395-B4B5-480F-BB30-14BE46AA357D}
@@ -4330,7 +4329,7 @@ workspace FLTK {open
       uuid_Xcode4_DebugBuildConfiguration {6F972745-D600-4ADA-AB19-ED9C538E504C}
       uuid_Xcode4_ReleaseBuildConfiguration {73753145-1E68-48F9-8D70-2CEDA9800F23}
     } {
-      file_ref {curve.cxx} {selected
+      file_ref {curve.cxx} {
         uuid_Xcode4_BuildFileInSources {836E1D98-69DD-40A3-A962-62117FED160D}
         uuid_Xcode4_FileRef {FE2E2FF8-0822-4842-B4B2-B204AD098B77}
         filename_and_path {test/curve.cxx}

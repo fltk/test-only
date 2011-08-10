@@ -1,9 +1,7 @@
 # data file for the Fltk User Interface Designer (fluid)
 version 3.0000 
 header_name {.h} 
-code_name {.cxx} 
-wks_name FLTK 
-wks_env 1
+code_name {.cxx}
 comment {//
 // "$Id$"
 //
@@ -52,15 +50,15 @@ decl {extern fltk3::Pixmap menu_multi_pixmap;} {public global
 decl {extern fltk3::Pixmap menu_all_pixmap;} {public global
 } 
 
-widget_class Fl_Environment_Choice {open
-  xywh {820 144 170 25} type Double
+widget_class Fl_Environment_Choice {
+  xywh {820 144 200 26} type Double
   class {fltk3::Group} visible position_relative
 } {
   decl {unsigned int pEnv;} {protected local
   }
   {fltk3::MenuButton} pEnvMenu {
     label {- unknown -} open
-    xywh {0 0 170 25} labelsize 9 align 192
+    xywh {0 0 200 26} labelsize 9 align 192
   } {
     MenuItem pMenuAll {
       label {All Environments}
@@ -178,7 +176,7 @@ while (mi->label()) {
     mi++;
   }
 }} {}
-  Function {update_all()} {open protected return_type void
+  Function {update_all()} {protected return_type void
   } {
     code {// now update all menus
 unsigned int e = pEnv;
@@ -224,7 +222,7 @@ if (pEnv==FL_ENV_ALL) {
 }} {}
   }
   Function {value(unsigned int v)} {
-    comment {Set the environment flags} open return_type void
+    comment {Set the environment flags} return_type void
   } {
     code {pEnv = v;
 update_all();} {}
@@ -234,47 +232,6 @@ update_all();} {}
   } {
     code {return pEnv;} {}
   }
-} 
-
-Function {show_workspace_panel()} {open
-} {
-  codeblock {if (!workspace_panel)} {open
-  } {
-    {fltk3::Window} workspace_panel {
-      label {Workspace Properties} open
-      xywh {832 211 274 173} type Double modal visible
-    } {
-      {fltk3::Input} wName {
-        label {Name:}
-        tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {85 15 170 25} labelsize 12 textsize 12
-      }
-      {fltk3::Box} {} {
-        label {Create Build Enviroments for:}
-        xywh {10 50 288 2} box THIN_DOWN_FRAME labelsize 12 align 6
-      }
-      {fltk3::MenuButton} pEnv {open
-        xywh {85 71 170 40} box FLAT_BOX
-        class Fl_Environment_Choice
-      } {}
-      {fltk3::Button} {} {
-        label OK
-        callback {if (wks_name) free(wks_name);
-wks_name = strdup(wName->value());
-wks_env = pEnv->value();
-workspace_panel->hide();}
-        xywh {160 130 95 25} labelsize 12
-      }
-    }
-  }
-  code {if (wks_name) 
-  wName->value(wks_name);
-else
-  wName->value("unnamed workspace");
-if (wks_env)  
-  pEnv->value(wks_env);  
-else
-  pEnv->value(FL_ENV_ALL);
-workspace_panel->show();} {}
 } 
 
 decl {extern Fl_Panel *the_file_panel;} {private global
@@ -299,71 +256,119 @@ Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
 Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
-    label {File Properties} open selected
-    xywh {858 255 420 454} type Double labelsize 11 align 80 resizable hotspot
-    code0 {o->size_range(300, 200);}
+    label {File Properties} open
+    xywh {618 264 420 454} type Double labelsize 11 align 80 resizable hotspot
     class Fl_Panel non_modal visible
   } {
-    {fltk3::Group} {} {
-      callback {Fl_Panel::propagate_load} open
-      xywh {10 420 400 25} labelsize 11
-    } {
-      {fltk3::Box} {} {
-        xywh {10 420 290 25} labelsize 11 resizable
-      }
-      {fltk3::Button} {} {
-        label Close
-        callback {if (v == Fl_Panel::LOAD) {
-  } else {
-    file_panel_set_cb(0, 0);
-    the_file_panel->hide();
-  }}
-        xywh {300 420 110 25}
-      }
-    }
-    {fltk3::ScrollGroup} {} {
+    {fltk3::ScrollGroup} pScrollGroup {
       callback {Fl_Panel::propagate_load} open
       xywh {10 10 400 400} box FLAT_BOX color 50 resizable
     } {
       {fltk3::PackedGroup} {} {
-        callback {Fl_Panel::propagate_load} open
+        callback {if (v == Fl_Panel::LOAD) {
+  int i, n = o->children();
+  for (i=0; i<n; i++) {
+    o->child(i)->hide();
+  }
+  Fl_Panel::propagate_load(o, v);
+  o->layout();
+  // TODO: if the window grows taller than the screen height,
+  // we can use the pScrollGroup to keep the entire panell accesible.
+  o->window()->size(o->window()->w(), o->y()+o->h()+15+25+10);
+  pScrollGroup->resize(o->x(), o->y(), o->w(), o->h());
+  pCloseGroup->resize(o->x(), o->y()+o->h()+15, o->w(), pCloseGroup->h());
+  o->window()->init_sizes();
+  
+  static char buf[1024];
+  if (Fl_Panel::numselected != 1)
+    sprintf(buf, "Workspace Properties (%d items)", Fl_Panel::numselected);
+  else
+    sprintf(buf, "%s Properties", Fl_Panel::current_file()->name());
+  the_file_panel->label(buf);
+}} open
         xywh {10 10 400 400} resizable
       } {
         {fltk3::Group} {} {
-          callback {Fl_Panel::propagate_load} open
+          callback {if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && !t->is_file()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+}} open
           xywh {10 10 400 30} labelsize 12 align 4
+        } {
+          {fltk3::Input} {} {
+            label {Name }
+            callback {if (v == Fl_Panel::LOAD) {
+    if (Fl_Panel::numselected != 1 || Fl_Panel::current==0) {
+      o->static_value("<Multiple Values>");
+      o->deactivate();
+    } else {
+      o->static_value(Fl_Panel::current->name());
+      o->activate();
+    }
+  } else {
+    if (Fl_Panel::numselected == 1) {
+      Fl_Panel::current->name(o->value());
+      if (o->changed()) set_modflag(1);
+    }
+  }} selected
+            tooltip {name and path of the file} xywh {110 15 290 20} labelsize 12 when 1 textsize 12 resizable
+          }
+        }
+        {fltk3::Group} {} {
+          callback {if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_file()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+}} open
+          xywh {10 40 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {File Name }
             callback {if (v == Fl_Panel::LOAD) {
-    static char buf[1024];
-    if (Fl_Panel::numselected != 1) {
+    if (Fl_Panel::numselected != 1 || Fl_Panel::current_file()==0L) {
       o->static_value("<Multiple Values>");
       o->deactivate();
-      sprintf(buf, "File Properties (%d files)", Fl_Panel::numselected);
     } else {
       o->static_value(Fl_Panel::current_file()->filename());
       o->activate();
-      sprintf(buf, "%s Properties", Fl_Panel::current_file()->name());
     }
-    the_file_panel->label(buf);
   } else {
     if (Fl_Panel::numselected == 1) {
       Fl_Panel::current_file()->filename(o->value());
       if (o->changed()) set_modflag(1);
     }
   }}
-            tooltip {name and path of the file} xywh {110 15 290 20} labelsize 12 when 1 textsize 12 resizable
+            tooltip {name and path of the file} xywh {110 45 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
-          callback {Fl_Panel::propagate_load} open
-          xywh {10 40 400 30}
+          callback {if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_file()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+}} open
+          xywh {10 70 400 30}
         } {
           {fltk3::Group} {} {
             label {File Type }
             callback {Fl_Panel::propagate_load} open
-            xywh {110 45 200 20} labelsize 12 align 4
+            xywh {110 75 200 20} labelsize 12 align 4
           } {
             {fltk3::MenuButton} {} {
               label Unknown
@@ -404,7 +409,7 @@ Function {make_file_panel()} {open
         }
       }
       o->copy_label(buf);} open
-              xywh {110 45 200 20} labelsize 12
+              xywh {110 75 200 20} labelsize 12
             } {
               MenuItem {} {
                 label Default
@@ -470,13 +475,22 @@ Function {make_file_panel()} {open
           }
         }
         {fltk3::Group} {} {
-          callback {Fl_Panel::propagate_load} open
-          xywh {10 70 400 30} labelsize 12 align 4
+          callback {if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_file()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+}} open
+          xywh {10 100 400 30} labelsize 12 align 4
         } {
           {fltk3::Group} {} {
             label {Location }
             callback {Fl_Panel::propagate_load} open
-            xywh {110 75 200 20} labelsize 12 align 4
+            xywh {110 105 200 20} labelsize 12 align 4
           } {
             {fltk3::MenuButton} {} {
               label {Relative to Workspace}
@@ -496,7 +510,7 @@ Function {make_file_panel()} {open
     }
     if (mod) set_modflag(1);
   }
-      // FIXME: we should show <multiple values> is required
+      // FIXME: we should show <multiple values> if required
     unsigned int fl = Fl_Panel::current_file()->location();
     for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
       if (!mi->label()) break;
@@ -505,7 +519,7 @@ Function {make_file_panel()} {open
         break;
       }
     }} open
-              xywh {110 75 200 20} labelsize 12
+              xywh {110 105 200 20} labelsize 12
             } {
               MenuItem {} {
                 label {Relative to Workspace}
@@ -531,55 +545,90 @@ Function {make_file_panel()} {open
           }
         }
         {fltk3::Group} {} {
-          callback {Fl_Panel::propagate_load} open
-          xywh {10 105 400 30}
+          callback {if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_tool() && !t->is_folder() && !t->is_category()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+}} open
+          xywh {10 135 400 30}
         } {
           {fltk3::MenuButton} {} {
-            label {Build in:}
+            label {Build in }
             callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_file()->build_env());
+    o->value(Fl_Panel::current_tool()->build_env());
   } else {
     int mod = 0;
     unsigned int e = o->value();
     for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
-      if (t->selected && t->is_file()) {
-        if (((Fl_File_Type*)t)->build_env() != e) {
-          ((Fl_File_Type*)t)->build_env(e);
+      if (t->selected && t->is_tool()) {
+        if (((Fl_Tool_Type*)t)->build_env() != e) {
+          ((Fl_Tool_Type*)t)->build_env(e);
           mod = 1;
         }
       }
     }
     if (mod) set_modflag(1);
   }} open
-            xywh {110 107 200 26} box FLAT_BOX labelsize 12 align 4
+            xywh {110 137 200 26} box FLAT_BOX labelsize 12 align 4
             class Fl_Environment_Choice
           } {}
         }
         {fltk3::Group} {} {
-          callback {Fl_Panel::propagate_load} open
-          xywh {10 140 400 30}
+          callback {if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && (t->is_file() || t->is_folder() || t->is_category())) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+}} open
+          xywh {10 170 400 30}
         } {
           {fltk3::MenuButton} {} {
-            label {List in:}
+            label {List in }
             callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_file()->list_env());
+    o->value(Fl_Panel::current_tool()->list_env());
   } else {
     int mod = 0;
     unsigned int e = o->value();
     for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
-      if (t->selected && t->is_file()) {
-        if (((Fl_File_Type*)t)->list_env() != e) {
-          ((Fl_File_Type*)t)->list_env(e);
+      if (t->selected && t->is_tool()) {
+        if (((Fl_Tool_Type*)t)->list_env() != e) {
+          ((Fl_Tool_Type*)t)->list_env(e);
           mod = 1;
         }
       }
     }
     if (mod) set_modflag(1);
   }} open
-            xywh {110 142 200 25} box FLAT_BOX labelsize 12 align 4
+            xywh {110 172 200 25} box FLAT_BOX labelsize 12 align 4
             class Fl_Environment_Choice
           } {}
         }
+      }
+    }
+    {fltk3::Group} pCloseGroup {
+      callback {Fl_Panel::propagate_load} open
+      xywh {10 420 400 25} labelsize 11
+    } {
+      {fltk3::Box} {} {
+        xywh {10 420 290 25} labelsize 11 resizable
+      }
+      {fltk3::Button} {} {
+        label Close
+        callback {if (v == Fl_Panel::LOAD) {
+  } else {
+    file_panel_set_cb(0, 0);
+    the_file_panel->hide();
+  }}
+        xywh {300 420 110 25}
       }
     }
   }

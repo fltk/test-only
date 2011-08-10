@@ -57,17 +57,14 @@ public:
   void value(unsigned int v);
   unsigned int value();
 };
-#include <fltk3/DoubleWindow.h>
-extern fltk3::DoubleWindow *workspace_panel;
-#include <fltk3/Input.h>
-extern fltk3::Input *wName;
-#include <fltk3/Box.h>
-extern Fl_Environment_Choice *pEnv;
-#include <fltk3/Button.h>
-fltk3::DoubleWindow* show_workspace_panel();
 void file_panel_set_cb(fltk3::Widget*, void *v);
 #include <fltk3/ScrollGroup.h>
+extern fltk3::ScrollGroup *pScrollGroup;
 #include <fltk3/PackedGroup.h>
+#include <fltk3/Input.h>
+extern fltk3::Group *pCloseGroup;
+#include <fltk3/Box.h>
+#include <fltk3/Button.h>
 Fl_Panel* make_file_panel();
 extern fltk3::MenuItem menu_Unknown[];
 extern fltk3::MenuItem menu_Relative[];

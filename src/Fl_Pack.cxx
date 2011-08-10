@@ -51,6 +51,34 @@ fltk3::PackedGroup::PackedGroup(int X, int Y, int W, int H,const char *l)
   // type(VERTICAL); // already set like this
 }
 
+// calculate the height and width of this widget.
+// FIXME: do not move any children. "draw()" does that for now.
+void fltk3::PackedGroup::layout() {
+  //int tx = x()+fltk3::box_dx(box());
+  //int ty = y()+fltk3::box_dy(box());
+  int tw = w()-fltk3::box_dw(box());
+  int th = h()-fltk3::box_dh(box());
+  int rw, rh;
+  if (horizontal()) {
+    rw = -spacing_;
+    rh = th;    
+    for (int i = children(); i--;)
+      if (child(i)->visible()) {
+        if (child(i) != this->resizable()) rw += child(i)->w();
+        rw += spacing_;
+      }
+  } else {
+    rw = tw;
+    rh = -spacing_;    
+    for (int i = children(); i--;)
+      if (child(i)->visible()) {
+        if (child(i) != this->resizable()) rh += child(i)->h();
+        rh += spacing_;
+      }
+  }
+  size(rw+fltk3::box_dw(box()), rh+fltk3::box_dh(box()));
+}
+
 void fltk3::PackedGroup::draw() {
   FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int tx = x()+fltk3::box_dx(box());
