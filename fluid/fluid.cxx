@@ -1134,7 +1134,7 @@ fltk3::MenuItem Main_Menu[] = {
   {"Save &Template...", 0, save_template_cb},
   {"&Revert...", 0, revert_cb, 0, fltk3::MENU_DIVIDER},
   {"&Print...", fltk3::COMMAND+'p', print_menu_cb},
-  {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_code_cb, 0},
+  {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_cb, 0},
   {"&Write Strings...", fltk3::COMMAND+fltk3::SHIFT+'w', write_strings_cb, 0, fltk3::MENU_DIVIDER},
   {relative_history[0], fltk3::COMMAND+'0', open_history_cb, absolute_history[0]},
   {relative_history[1], fltk3::COMMAND+'1', open_history_cb, absolute_history[1]},
@@ -1550,7 +1550,7 @@ static bool prepare_shell_command(const char * &command)  { // common pre-shell 
   }
   if (shell_writecode_button->value()) {
     compile_only = 1;
-    write_cb(0, 0);
+    write_code_cb(0, 0);
     compile_only = 0;
   }
   if (shell_writemsgs_button->value()) {

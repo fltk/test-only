@@ -303,25 +303,29 @@ static void cb_Unknown(fltk3::MenuButton* o, void* v) {
     }
     if (mod) set_modflag(1);
   }
-      char buf[64];
-      unsigned int ft = Fl_Panel::current_file()->filetype();
-      if (ft&FL_FILE_EXPLICIT) {
-        strcpy(buf, "explicit - ");
-      } else {
-        strcpy(buf, "default - ");
+  
+  char buf[64];
+  Fl_File_Type *ff = Fl_Panel::current_file();
+  if (ff) {
+    unsigned int ft = ff->filetype();
+    if (ft&FL_FILE_EXPLICIT) {
+      strcpy(buf, "explicit - ");
+    } else {
+      strcpy(buf, "default - ");
+    }
+    ft = ft & 0x7fff;
+    for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+      if (!mi->label()) {
+        strcat(buf, "<unknown>");
+        break;
       }
-      ft = ft & 0x7fff;
-      for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
-        if (!mi->label()) {
-          strcat(buf, "<unknown>");
-          break;
-        }
-        if (mi->argument()==ft) {
-          strcat(buf, mi->label());
-          break;
-        }
+      if (mi->argument()==ft) {
+        strcat(buf, mi->label());
+        break;
       }
-      o->copy_label(buf);
+    }
+    o->copy_label(buf);
+  };
 }
 
 fltk3::MenuItem menu_Unknown[] = {
@@ -370,15 +374,19 @@ static void cb_Relative(fltk3::MenuButton* o, void* v) {
     }
     if (mod) set_modflag(1);
   }
-      // FIXME: we should show <multiple values> if required
-    unsigned int fl = Fl_Panel::current_file()->location();
+
+  // FIXME: we should show <multiple values> if required
+  Fl_File_Type *ff = Fl_Panel::current_file();
+  if (ff) {
+    unsigned int fl =ff->location();
     for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
       if (!mi->label()) break;
       if (mi->argument()==fl) {
         o->label(mi->label());
         break;
       }
-    };
+    }
+  };
 }
 
 fltk3::MenuItem menu_Relative[] = {
