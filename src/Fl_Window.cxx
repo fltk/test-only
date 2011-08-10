@@ -117,23 +117,36 @@ void fltk3::Window::draw() {
 #ifdef __APPLE_QUARTZ__
   // on OS X, windows have no frame. To resize a window, we drag the lower right
   // corner. This code draws a little ribbed triangle for dragging.
-  extern CGContextRef fl_gc;
-  if (fl_gc && !parent() && resizable() && (!size_range_set || minh!=maxh || minw!=maxw)) {
-    int dx = fltk3::box_dw(box())-fltk3::box_dx(box());
-    int dy = fltk3::box_dh(box())-fltk3::box_dy(box());
-    if (dx<=0) dx = 1;
-    if (dy<=0) dy = 1;
-    int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
-    fltk3::Color c[4] = {
-      color(),
-      fltk3::color_average(color(), fltk3::WHITE, 0.7f),
-      fltk3::color_average(color(), fltk3::BLACK, 0.6f),
-      fltk3::color_average(color(), fltk3::BLACK, 0.8f),
-    };
-    int i;
-    for (i=dx; i<12; i++) {
-      fltk3::color(c[i&3]);
-      fltk3::line(x1--, y1, x2, y2--);
+  // Starting with 10.7, OS X windows have a hidden frame and the corner is no longer needed
+  static signed char showCorner = -1;
+  if (showCorner==-1) {
+    SInt32 majorVersion, minorVersion;
+    Gestalt(gestaltSystemVersionMajor, &majorVersion);
+    Gestalt(gestaltSystemVersionMinor, &minorVersion);
+    showCorner = 1;
+    if (majorVersion>10 || (majorVersion==10 && minorVersion>=7)) {
+      showCorner = 0;
+    }
+  }
+  if (showCorner==1) {
+    extern CGContextRef fl_gc;
+    if (fl_gc && !parent() && resizable() && (!size_range_set || minh!=maxh || minw!=maxw)) {
+      int dx = fltk3::box_dw(box())-fltk3::box_dx(box());
+      int dy = fltk3::box_dh(box())-fltk3::box_dy(box());
+      if (dx<=0) dx = 1;
+      if (dy<=0) dy = 1;
+      int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
+      fltk3::Color c[4] = {
+        color(),
+        fltk3::color_average(color(), fltk3::WHITE, 0.7f),
+        fltk3::color_average(color(), fltk3::BLACK, 0.6f),
+        fltk3::color_average(color(), fltk3::BLACK, 0.8f),
+      };
+      int i;
+      for (i=dx; i<12; i++) {
+        fltk3::color(c[i&3]);
+        fltk3::line(x1--, y1, x2, y2--);
+      }
     }
   }
 #endif
