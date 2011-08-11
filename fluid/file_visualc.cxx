@@ -63,9 +63,9 @@ static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
   
   Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
   for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
-    fprintf(out, "Begin Project Dependency\r\n");
-    fprintf(out, "Project_Dep_Name %s\r\n", tgt_dep->name());
-    fprintf(out, "End Project Dependency\r\n");
+    fprintf(out, "    Begin Project Dependency\r\n");
+    fprintf(out, "    Project_Dep_Name %s\r\n", tgt_dep->name());
+    fprintf(out, "    End Project Dependency\r\n");
   }
   fprintf(out, "}}}\r\n\r\n");
   fprintf(out, "###############################################################################\r\n");
@@ -75,14 +75,13 @@ static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
 
 
 static int write_dsw_file(FILE *out, Fl_Workspace_Type *workspace) {
-// FIXME: we are not generating code to build the dll's yet!  
   // file header
   fprintf(out, "Microsoft Developer Studio Workspace File, Format Version 6.00\r\n");
   fprintf(out, "# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!\r\n");
   fprintf(out, "\r\n");
   fprintf(out, "###############################################################################\r\n");
   fprintf(out, "\r\n");
-  
+  // target entries
   for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_VC6)) {
       write_dsw_entry(out, tgt, tgt->name());
@@ -94,6 +93,191 @@ static int write_dsw_file(FILE *out, Fl_Workspace_Type *workspace) {
       }
     }
   }
+  return 0;
+}
+
+
+static int write_dsp_file(FILE *out, Fl_Target_Type *tgt) {
+  // FIXME: we are not generating code to build the dll's yet!  
+  fprintf(out, "# Microsoft Developer Studio Project File - Name=\"%s\" - Package Owner=<4>\r\n", tgt->name());
+  fprintf(out, "# Microsoft Developer Studio Generated Build File, Format Version 6.00\r\n");
+  fprintf(out, "# ** DO NOT EDIT **\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# TARGTYPE \"Win32 (x86) Application\" 0x0101\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "CFG=%s - Win32 Debug\r\n", tgt->name());
+  fprintf(out, "!MESSAGE This is not a valid makefile. To build this project using NMAKE,\r\n");
+  fprintf(out, "!MESSAGE use the Export Makefile command and run\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\".\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE You can specify a configuration when running NMAKE\r\n");
+  fprintf(out, "!MESSAGE by defining the macro CFG on the command line. For example:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\" CFG=\"%s - Win32 Debug\"\r\n", tgt->name(), tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE Possible choices for configuration are:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE \"%s - Win32 Release\" (based on \"Win32 (x86) Application\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \"%s - Win32 Debug\" (based on \"Win32 (x86) Application\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Project\r\n");
+  fprintf(out, "# PROP AllowPerConfigDependencies 0\r\n");
+  fprintf(out, "# PROP Scc_ProjName \"\"\r\n");
+  fprintf(out, "# PROP Scc_LocalPath \"\"\r\n");
+  fprintf(out, "CPP=cl.exe\r\n");
+  fprintf(out, "MTL=midl.exe\r\n");
+  fprintf(out, "RSC=rc.exe\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!IF  \"$(CFG)\" == \"%s - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP Output_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+// TODO: add library dependencies here!
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
+  fprintf(out, "# ADD RSC /l 0x409 /d \"NDEBUG\"\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LINK32=link.exe\r\n");
+  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386\r\n");
+
+  fprintf(out, "# ADD LINK32 ");
+  for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
+    if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC6)) {
+      if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
+        fprintf(out, "%s ", t->name());
+      } else if (t->is_target_dependency()) {
+        Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
+        if (dep && dep->is_lib_target()) {
+          fprintf(out, "%s.lib ", t->name());
+        }
+      }
+    }
+  }
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../test/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->name());
+  
+  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:yes\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!ELSEIF  \"$(CFG)\" == \"%s - Win32 Debug\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP Output_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
+  fprintf(out, "# ADD RSC /l 0x409 /d \"_DEBUG\"\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LINK32=link.exe\r\n");
+  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\r\n");
+  
+  fprintf(out, "# ADD LINK32 ");
+  for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
+    if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC6)) {
+      if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
+        fprintf(out, "%s ", t->name());
+      } else if (t->is_target_dependency()) {
+        Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
+        if (dep && dep->is_lib_target()) {
+          fprintf(out, "%sd.lib ", t->name());
+        }
+      }
+    }
+  }
+  // FIXME: output path must not be "test"
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../test/%sd.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->name());
+  
+  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!ENDIF \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Target\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Name \"%s - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "# Name \"%s - Win32 Debug\"\r\n", tgt->name());
+  
+  for (Fl_File_Type *file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->builds_in(FL_ENV_VC6)) {
+      if (file->file_is_fluid_ui()) {
+        char cxxName[2048], flPath[2048];
+        strcpy(cxxName, file->filename());
+        fltk3::filename_setext(cxxName, 2048, ".cxx");
+        strcpy(flPath, file->filename());
+        *((char*)fltk3::filename_name(flPath)) = 0; // keep only the path
+        fprintf(out, "# Begin Source File\r\n");
+        fprintf(out, "\r\n");
+        fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(cxxName));
+        fprintf(out, "# End Source File\r\n");
+        fprintf(out, "# Begin Source File\r\n");
+        fprintf(out, "\r\n");
+        fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(file->filename()));
+        fprintf(out, "\r\n");
+        fprintf(out, "!IF  \"$(CFG)\" == \"%s - Win32 Release\"\r\n", tgt->name());
+        fprintf(out, "\r\n");
+        fprintf(out, "# Begin Custom Build - Create .cxx and .h file with fluid\r\n");
+        fprintf(out, "InputPath=..\\..\\%s\r\n", DOS_path(file->filename()));
+        fprintf(out, "\r\n");
+        fprintf(out, "\"..\\..\\%s\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\r\n", DOS_path(cxxName));
+        fprintf(out, "\tpushd ..\\..\\%s \r\n", DOS_path(flPath));
+        fprintf(out, "\t..\\fluid\\fluid -c %s\r\n", file->filename_name());
+        fprintf(out, "\tpopd \r\n");
+        fprintf(out, "\t\r\n");
+        fprintf(out, "# End Custom Build\r\n");
+        fprintf(out, "\r\n");
+        fprintf(out, "!ELSEIF  \"$(CFG)\" == \"%s - Win32 Debug\"\r\n", tgt->name());
+        fprintf(out, "\r\n");
+        fprintf(out, "# Begin Custom Build - Create .cxx and .h file with fluidd\r\n");
+        fprintf(out, "InputPath=..\\..\\%s\r\n", DOS_path(file->filename()));
+        fprintf(out, "\r\n");
+        fprintf(out, "\"..\\..\\%s\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\r\n", DOS_path(cxxName));
+        fprintf(out, "\tpushd ..\\..\\%s \r\n", DOS_path(flPath));
+        fprintf(out, "\t..\\fluid\\fluidd -c %s \r\n", file->filename_name());
+        fprintf(out, "\tpopd \r\n");
+        fprintf(out, "\t\r\n");
+        fprintf(out, "# End Custom Build\r\n");
+        fprintf(out, "\r\n");
+        fprintf(out, "!ENDIF \r\n");
+        fprintf(out, "\r\n");
+        fprintf(out, "# End Source File\r\n");
+      } else if (file->file_is_code()) {
+        fprintf(out, "# Begin Source File\r\n");
+        fprintf(out, "\r\n");
+        fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(file->filename()));
+        fprintf(out, "# End Source File\r\n");
+      }
+    }
+  }
+  
+  fprintf(out, "# End Target\r\n");
+  fprintf(out, "# End Project\r\n");
+  
   return 0;
 }
 
@@ -110,14 +294,26 @@ int write_fltk_ide_visualc6() {
   strcpy(tgt_base, base_dir);
   strcpy(buf, base_dir);
 
+  // write workspace file (.dsw)
   strcat(buf, "ide/VisualC6/fltk.dsw");
 // FIXME: use workspace->name();  
   FILE *out = fopen(buf, "wb");
   write_dsw_file(out, workspace);
   fclose(out);
   
+  // write project files (.dsp)
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->builds_in(FL_ENV_VC6)) {
+      sprintf(buf, "%side/VisualC6/%s.dsp", base_dir, tgt->name());
+      out = fopen(buf, "wb");
+      write_dsp_file(out, tgt);
+      fclose(out);
+    }
+  }
   
   //+++
+  // TODO: write static and dynamic library project files
+  // The code below fixes Fluid and fltk.lib for now.
   
   // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
   // When done, everything will likely be integrated into the executable to make one compact package.

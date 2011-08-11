@@ -339,6 +339,7 @@ fltk3::MenuItem menu_Unknown[] = {
  {"Text", 0,  0, (void*)(FL_FILE_TEXT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Shell Script", 0,  0, (void*)(FL_FILE_TEXT_SCRIPT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"OS X Framework", 0,  0, (void*)(FL_FILE_FRAMEWORK), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Library", 0,  0, (void*)(FL_FILE_LIBRARY), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Fluid UI Design", 0,  0, (void*)(FL_FILE_FLUID_UI), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Unknown", 0,  0, (void*)(FL_FILE_UNKNOWN), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0}

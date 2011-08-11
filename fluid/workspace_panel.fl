@@ -285,7 +285,7 @@ Function {make_file_panel()} {open
   else
     sprintf(buf, "%s Properties", Fl_Panel::current->name());
   the_file_panel->label(buf);
-}} open selected
+}} open
         xywh {10 10 400 400} resizable
       } {
         {fltk3::Group} {} {
@@ -464,6 +464,11 @@ Function {make_file_panel()} {open
                 label {OS X Framework}
                 user_data FL_FILE_FRAMEWORK user_data_type long
                 xywh {85 85 31 20} labelsize 12
+              }
+              MenuItem {} {
+                label Library
+                user_data FL_FILE_LIBRARY user_data_type long selected
+                xywh {95 95 31 20} labelsize 12
               }
               MenuItem {} {
                 label {Fluid UI Design}

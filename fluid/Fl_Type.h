@@ -80,7 +80,8 @@ typedef enum {
   FL_FILE_CPP_SOURCE, FL_FILE_CPP_HEADER,
   FL_FILE_OBJC_SOURCE, FL_FILE_OBJC_HEADER,
   FL_FILE_TEXT, FL_FILE_TEXT_SCRIPT,
-  FL_FILE_FRAMEWORK, FL_FILE_FLUID_UI
+  FL_FILE_FRAMEWORK, FL_FILE_FLUID_UI,
+  FL_FILE_LIBRARY
 } FileType;
 
 typedef enum {
@@ -373,6 +374,7 @@ public:
   char file_is_cplusplus_code();
   char file_is_cplusplus_header();
   char file_is_framework();
+  char file_is_library();
   char file_is_fluid_ui();
   char file_is_code();
   char file_is_header();

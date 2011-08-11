@@ -1456,6 +1456,8 @@ void Fl_File_Type::set_default_type() {
         filetype(FL_FILE_FRAMEWORK);
       } else if (strcmp(ext, ".fl")==0) {
         filetype(FL_FILE_FLUID_UI);
+      } else if (strcmp(ext, ".lib")==0) {
+        filetype(FL_FILE_LIBRARY);
       }
     }
   }
@@ -1570,6 +1572,10 @@ char Fl_File_Type::file_is_objc_header() {
 
 char Fl_File_Type::file_is_framework() {
   return (pFileType==FL_FILE_FRAMEWORK);
+}
+
+char Fl_File_Type::file_is_library() {
+  return (pFileType==FL_FILE_LIBRARY);
 }
 
 char Fl_File_Type::file_is_fluid_ui() {
