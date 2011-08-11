@@ -169,7 +169,7 @@ static int write_dsp_file(FILE *out, Fl_Target_Type *tgt) {
       }
     }
   }
-  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../test/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->name());
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->target_path(), tgt->name());
   
   fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:yes\r\n");
   fprintf(out, "\r\n");
@@ -211,8 +211,7 @@ static int write_dsp_file(FILE *out, Fl_Target_Type *tgt) {
       }
     }
   }
-  // FIXME: output path must not be "test"
-  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../test/%sd.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->name());
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%sd.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->target_path(), tgt->name());
   
   fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
   fprintf(out, "\r\n");

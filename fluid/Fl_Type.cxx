@@ -1355,6 +1355,36 @@ Fl_Target_Type *Fl_Target_Type::next_target(Fl_Type *base) {
   return 0;
 }
 
+void Fl_Target_Type::target_path(const char *path) {
+  if (pTargetPath) {
+    free(pTargetPath);
+    pTargetPath = 0L;
+  }
+  if (path) {
+    pTargetPath = strdup(path);
+  } else {
+    pTargetPath = strdup("");
+  }
+}
+
+char Fl_Target_Type::read_property(const char *c) {
+  if (!strcmp(c,"target_path")) {
+    target_path(read_word());
+  } else {
+    return Fl_Tool_Type::read_property(c);
+  }
+  return 1;
+}
+
+void Fl_Target_Type::write_properties() {
+  Fl_Tool_Type::write_properties();
+  if (target_path() && *target_path()) {
+    write_indent(level+1);
+    write_string("target_path");
+    write_word(target_path());
+  }
+}
+
 
 // ------------ Application Target ---------------------------------------------
 

@@ -289,11 +289,15 @@ public:
 extern Fl_Target_Dependency_Type Fl_Target_Dependency_type;
 
 class Fl_Target_Type : public Fl_Tool_Type {
+  char *pTargetPath;
 public:
   Fl_Target_Type() :
-  Fl_Tool_Type() {
+  Fl_Tool_Type(),
+  pTargetPath(0) {
+    pTargetPath = strdup("");
   }
   ~Fl_Target_Type() {
+    if (pTargetPath) free(pTargetPath);
   }
   const char *type_name() { return "target"; }
   Fl_Type *make();
@@ -302,6 +306,10 @@ public:
   static Fl_Target_Type *find(const char *name, char end=0);
   static Fl_Target_Type *first_target(Fl_Type *base);
   Fl_Target_Type *next_target(Fl_Type *base);
+  void target_path(const char *path);
+  const char *target_path() { return pTargetPath; }
+  void write_properties();
+  char read_property(const char *);
 };
 extern Fl_Target_Type Fl_Target_type;
 
