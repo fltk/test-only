@@ -56,16 +56,77 @@ const char *DOS_path(const char *filename) {
 
 // ------------ VisualC 6 ------------------------------------------------------
 
+static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
+  fprintf(out, "Project: \"%s\"=\".\%s.dsp\" - Package Owner=<4>\r\n\r\n", tgt->name(), tgt->name());
+  fprintf(out, "Package=<5>\r\n{{{\r\n}}}\r\n\r\n");
+  fprintf(out, "Package=<4>\r\n{{{\r\n");
+  
+  Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
+  for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
+    fprintf(out, "Begin Project Dependency\r\n");
+    fprintf(out, "Project_Dep_Name %s\r\n", tgt_dep->name());
+    fprintf(out, "End Project Dependency\r\n");
+  }
+  fprintf(out, "}}}\r\n\r\n");
+  fprintf(out, "###############################################################################\r\n");
+  fprintf(out, "\r\n");
+  return 0;
+}
+
+
+static int write_dsw_file(FILE *out, Fl_Workspace_Type *workspace) {
+// FIXME: we are not generating code to build the dll's yet!  
+  // file header
+  fprintf(out, "Microsoft Developer Studio Workspace File, Format Version 6.00\r\n");
+  fprintf(out, "# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "###############################################################################\r\n");
+  fprintf(out, "\r\n");
+  
+  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->builds_in(FL_ENV_VC6)) {
+      write_dsw_entry(out, tgt, tgt->name());
+      if (tgt->is_lib_target()) {
+        char buf[80];
+        strcpy(buf, tgt->name());
+        strcat(buf, "dll");
+        write_dsw_entry(out, tgt, buf);
+      }
+    }
+  }
+  return 0;
+}
+
+
 int write_fltk_ide_visualc6() {
-  // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
-  // When done, everything will likely be integrated into the executable to make one compact package.
+  
+  Fl_Workspace_Type *workspace = (Fl_Workspace_Type*)Fl_Type::first;
+  
+  workspace = (Fl_Workspace_Type*)Fl_Type::first;
+  
   char buf[2048], base_dir[2048], tgt_base[2048];
   strcpy(base_dir, filename);
   *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
   strcpy(tgt_base, base_dir);
   strcpy(buf, base_dir);
+
+  strcat(buf, "ide/VisualC6/fltk.dsw");
+// FIXME: use workspace->name();  
+  FILE *out = fopen(buf, "wb");
+  write_dsw_file(out, workspace);
+  fclose(out);
+  
+  
+  //+++
+  
+  // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
+  // When done, everything will likely be integrated into the executable to make one compact package.
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
   strcat(buf, "ide/templates/VisualC6.tmpl");
-  FILE *out = stdout;
+  out = stdout;
   FILE *in = fopen(buf, "rb");
   
   for (;;) {

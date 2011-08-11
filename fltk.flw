@@ -10,7 +10,7 @@ workspace FLTK {open selected
   uuid_Xcode4_ContainerItemProxy {7DB77C01-F47B-42CE-883F-5CD221F15472}
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
-  build_env 64
+  build_env 4
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
