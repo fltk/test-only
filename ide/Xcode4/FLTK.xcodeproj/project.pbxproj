@@ -24,7 +24,9 @@
 		D719FB0AB75C88BEA02F7959 /* file.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9E8495FA110AAD01A53EA61 /* file.cxx */; };
 		D491A3BE8AB1F6509AC987B9 /* file_cmake.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C610271CF5AC9FE97D070C83 /* file_cmake.cxx */; };
 		3FAA34C0BFA47881999528A7 /* file_make.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AA03064178C5288F12B116BF /* file_make.cxx */; };
-		02C472514913E9C713C30460 /* file_visualc.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3897A14BB49964A43BEC9F0E /* file_visualc.cxx */; };
+		D23CCE7A20C65D179702D9DB /* file_visualc_6.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 86DB409A0E66AEA4212D8905 /* file_visualc_6.cxx */; };
+		D3CCB5E03B77C45759C469E8 /* file_visualc_2008.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1B4AC73D10FB821DF56598F7 /* file_visualc_2008.cxx */; };
+		1BB7A5BDAFA0BDA8A87FBA6A /* file_visualc_2010.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 2AFB60F3ADAD2478D8A7F74A /* file_visualc_2010.cxx */; };
 		554CA518D3F63B715126D6FB /* file_xcode.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */; };
 		257A1C728189ABB5B9F0D09D /* fluid.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 248C3EC8AF823D7C4B50DD4D /* fluid.cxx */; };
 		AB0644D484D0D451FEA107B7 /* function_panel.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 0279DE51526CE67E6C8790BE /* function_panel.cxx */; };
@@ -3768,7 +3770,9 @@
 		C9E8495FA110AAD01A53EA61 /* file.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file.cxx; path = ../../fluid/file.cxx; sourceTree = SOURCE_ROOT; };
 		C610271CF5AC9FE97D070C83 /* file_cmake.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_cmake.cxx; path = ../../fluid/file_cmake.cxx; sourceTree = SOURCE_ROOT; };
 		AA03064178C5288F12B116BF /* file_make.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_make.cxx; path = ../../fluid/file_make.cxx; sourceTree = SOURCE_ROOT; };
-		3897A14BB49964A43BEC9F0E /* file_visualc.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc.cxx; path = ../../fluid/file_visualc.cxx; sourceTree = SOURCE_ROOT; };
+		86DB409A0E66AEA4212D8905 /* file_visualc_6.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc_6.cxx; path = ../../fluid/file_visualc_6.cxx; sourceTree = SOURCE_ROOT; };
+		1B4AC73D10FB821DF56598F7 /* file_visualc_2008.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc_2008.cxx; path = ../../fluid/file_visualc_2008.cxx; sourceTree = SOURCE_ROOT; };
+		2AFB60F3ADAD2478D8A7F74A /* file_visualc_2010.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc_2010.cxx; path = ../../fluid/file_visualc_2010.cxx; sourceTree = SOURCE_ROOT; };
 		8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_xcode.cxx; path = ../../fluid/file_xcode.cxx; sourceTree = SOURCE_ROOT; };
 		248C3EC8AF823D7C4B50DD4D /* fluid.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fluid.cxx; path = ../../fluid/fluid.cxx; sourceTree = SOURCE_ROOT; };
 		0279DE51526CE67E6C8790BE /* function_panel.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = function_panel.cxx; path = ../../fluid/function_panel.cxx; sourceTree = SOURCE_ROOT; };
@@ -5132,7 +5136,9 @@
 				C9E8495FA110AAD01A53EA61 /* file.cxx */,
 				C610271CF5AC9FE97D070C83 /* file_cmake.cxx */,
 				AA03064178C5288F12B116BF /* file_make.cxx */,
-				3897A14BB49964A43BEC9F0E /* file_visualc.cxx */,
+				86DB409A0E66AEA4212D8905 /* file_visualc_6.cxx */,
+				1B4AC73D10FB821DF56598F7 /* file_visualc_2008.cxx */,
+				2AFB60F3ADAD2478D8A7F74A /* file_visualc_2010.cxx */,
 				8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */,
 				248C3EC8AF823D7C4B50DD4D /* fluid.cxx */,
 				0279DE51526CE67E6C8790BE /* function_panel.cxx */,
@@ -8884,7 +8890,9 @@
 				D719FB0AB75C88BEA02F7959 /* file.cxx in Sources */,
 				D491A3BE8AB1F6509AC987B9 /* file_cmake.cxx in Sources */,
 				3FAA34C0BFA47881999528A7 /* file_make.cxx in Sources */,
-				02C472514913E9C713C30460 /* file_visualc.cxx in Sources */,
+				D23CCE7A20C65D179702D9DB /* file_visualc_6.cxx in Sources */,
+				D3CCB5E03B77C45759C469E8 /* file_visualc_2008.cxx in Sources */,
+				1BB7A5BDAFA0BDA8A87FBA6A /* file_visualc_2010.cxx in Sources */,
 				554CA518D3F63B715126D6FB /* file_xcode.cxx in Sources */,
 				257A1C728189ABB5B9F0D09D /* fluid.cxx in Sources */,
 				AB0644D484D0D451FEA107B7 /* function_panel.cxx in Sources */,

@@ -155,7 +155,15 @@ SOURCE=..\..\fluid\file_make.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\fluid\file_visualc.cxx
+SOURCE=..\..\fluid\file_visualc_6.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_visualc_2008.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_visualc_2010.cxx
 # End Source File
 # Begin Source File
 

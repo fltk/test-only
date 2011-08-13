@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -10,12 +10,12 @@ workspace FLTK {open
   uuid_Xcode4_ContainerItemProxy {7DB77C01-F47B-42CE-883F-5CD221F15472}
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
-  build_env 4
+  build_env 8
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
   } {
-    app_target Fluid {
+    app_target Fluid {open
       uuid_Xcode4_ProductReference {FD9750B2-CA9C-4856-A516-E56BD9B2E805}
       uuid_Xcode4_ProductFileReference {4616D958-4FAE-4BE9-921B-A868F80B6CC7}
       uuid_Xcode4_FluidBuildRule {30FE3F00-9876-4AE4-9F6E-35B6B4CAA24E}
@@ -211,11 +211,23 @@ workspace FLTK {open
           uuid_Xcode4_BuildFileInSources {3FAA34C0-FA28-458C-BD14-C595999528A7}
           filename_and_path {fluid/file_make.cxx}
         }
-        file_ref {file_visualc.cxx} {
-          uuid_Xcode4_BuildFile {90165E96-B379-4CFB-9443-96A69D1138FF}
-          uuid_Xcode4_FileRef {3897A14B-FF80-4B19-905F-F4FB3BEC9F0E}
-          uuid_Xcode4_BuildFileInSources {02C47251-0AB9-43AA-853B-6CFC13C30460}
-          filename_and_path {fluid/file_visualc.cxx}
+        file_ref {file_visualc_6.cxx} {
+          uuid_Xcode4_BuildFile {00FA8741-3E56-44B5-9C6B-ED13272A89A1}
+          uuid_Xcode4_FileRef {86DB409A-4C29-424F-88F8-265C212D8905}
+          uuid_Xcode4_BuildFileInSources {D23CCE7A-60B5-4073-B6EE-EBF99702D9DB}
+          filename_and_path {fluid/file_visualc_6.cxx}
+        }
+        file_ref {file_visualc_2008.cxx} {
+          uuid_Xcode4_BuildFile {31F375E6-6DD1-41E6-998C-32289D6BC4D4}
+          uuid_Xcode4_FileRef {1B4AC73D-575C-47A7-BA87-389AF56598F7}
+          uuid_Xcode4_BuildFileInSources {D3CCB5E0-7126-4A51-B541-711659C469E8}
+          filename_and_path {fluid/file_visualc_2008.cxx}
+        }
+        file_ref {file_visualc_2010.cxx} {
+          uuid_Xcode4_BuildFile {993876C5-6992-4540-AC3E-D364FF83B9CE}
+          uuid_Xcode4_FileRef {2AFB60F3-EC0E-41A3-A13F-8547D8A7F74A}
+          uuid_Xcode4_BuildFileInSources {1BB7A5BD-E62F-498F-A658-1BF0A87FBA6A}
+          filename_and_path {fluid/file_visualc_2010.cxx}
         }
         file_ref {file_xcode.cxx} {
           uuid_Xcode4_BuildFile {6274DFA2-A0BB-41B1-A445-DA19DDBEA45B}
@@ -299,7 +311,7 @@ workspace FLTK {open
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk {
+    lib_target fltk {open
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -2434,7 +2446,7 @@ workspace FLTK {open
         }
       }
     }
-    lib_target fltk_gl {selected
+    lib_target fltk_gl {
       uuid_Xcode4_FluidBuildRule {C15C877E-5712-4AB2-B7BE-7B8A5F1D6F49}
       uuid_Xcode4_ProductFileReference {47405B55-C42D-4839-B6BF-F6B5BA410AF3}
       uuid_Xcode4_FrameworksBuildPhase {A02CA389-C019-4CB2-82B7-1CC18C255A72}
