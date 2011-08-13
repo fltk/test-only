@@ -569,7 +569,7 @@ public:
       }
         return 1;
     }
-    return fltk3::Output::handle(event);
+    return Output::handle(event);
   }
 };
 
