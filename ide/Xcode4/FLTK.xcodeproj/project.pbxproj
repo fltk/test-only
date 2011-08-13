@@ -736,7 +736,7 @@
 		CAB0D222B95AB6F8DEAE45EE /* tree.fl in Sources */ = {isa = PBXBuildFile; fileRef = E9B5625C22065F6CEB01C66B /* tree.fl */; };
 		6B9AB514F0990571B372ECB8 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
 		1660BF6E655A293DC55FF987 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
-		0A2539485AC0DF8E4CEBF5E9 /* unittest.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 143A77C09457279E591D16A5 /* unittest.cxx */; };
+		0A2539485AC0DF8E4CEBF5E9 /* unittests.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 143A77C09457279E591D16A5 /* unittests.cxx */; };
 		5BB075199FE0113E2B541AA2 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
 		60B535BE71F96E7184B317A3 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
 		CCD7DA9225092CB5581CA30B /* utf8.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 24A75B71F9CEE81BB809B54D /* utf8.cxx */; };
@@ -4337,8 +4337,8 @@
 		43EB8333CCBE3ECAD95F5010 /* tiled_image.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tiled_image.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9B5625C22065F6CEB01C66B /* tree.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tree.fl; path = ../../test/tree.fl; sourceTree = SOURCE_ROOT; };
 		6F373E7C0026231BA8636E50 /* tree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tree.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		143A77C09457279E591D16A5 /* unittest.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unittest.cxx; path = ../../test/unittest.cxx; sourceTree = SOURCE_ROOT; };
-		38131626DB570762BE632A2A /* unittest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unittest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		143A77C09457279E591D16A5 /* unittests.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unittests.cxx; path = ../../test/unittests.cxx; sourceTree = SOURCE_ROOT; };
+		38131626DB570762BE632A2A /* unittests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unittests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A75B71F9CEE81BB809B54D /* utf8.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utf8.cxx; path = ../../test/utf8.cxx; sourceTree = SOURCE_ROOT; };
 		E3A581295196504551F65B80 /* utf8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = utf8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C3E04CD4812A22D33320C59 /* valuators.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = valuators.fl; path = ../../test/valuators.fl; sourceTree = SOURCE_ROOT; };
@@ -5090,7 +5090,7 @@
 				E235E3CF65AC1F0FBB1014A8 /* tile.app */,
 				43EB8333CCBE3ECAD95F5010 /* tiled_image.app */,
 				6F373E7C0026231BA8636E50 /* tree.app */,
-				38131626DB570762BE632A2A /* unittest.app */,
+				38131626DB570762BE632A2A /* unittests.app */,
 				E3A581295196504551F65B80 /* utf8.app */,
 				F67F39FF8C416A255A6BC345 /* valuators.app */,
 			);
@@ -6296,12 +6296,12 @@
 			name = tree;
 			sourceTree = "<group>";
 		};
-		E1A29313A805742046015CAD /* unittest */ = {
+		E1A29313A805742046015CAD /* unittests */ = {
 			isa = PBXGroup;
 			children = (
-				143A77C09457279E591D16A5 /* unittest.cxx */,
+				143A77C09457279E591D16A5 /* unittests.cxx */,
 			);
-			name = unittest;
+			name = unittests;
 			sourceTree = "<group>";
 		};
 		DAC0E895503428BC79409E4C /* utf8 */ = {
@@ -6389,7 +6389,7 @@
 				B9A55694FA103FD3363F715A /* tile */,
 				BE99CCB3D218EFB5D11A9F24 /* tiled_image */,
 				6AB41A5FD0469024CD5925EF /* tree */,
-				E1A29313A805742046015CAD /* unittest */,
+				E1A29313A805742046015CAD /* unittests */,
 				DAC0E895503428BC79409E4C /* utf8 */,
 				E00432CA5C8C0EB9F94086AC /* valuators */,
 			);
@@ -8173,9 +8173,9 @@
 			productReference = 6F373E7C0026231BA8636E50 /* tree.app */;
 			productType = "com.apple.product-type.application";
 		};
-		84A89E69F9A04372F7F78B62 /* unittest */ = {
+		84A89E69F9A04372F7F78B62 /* unittests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F10E99E5602AD0CC307386AE /* Build configuration list for PBXNativeTarget "unittest" */;
+			buildConfigurationList = F10E99E5602AD0CC307386AE /* Build configuration list for PBXNativeTarget "unittests" */;
 			buildPhases = (
 				647F7AE75D32FD5228E63F44 /* Resources */,
 				E86F31F6A749AD4B6AA797FB /* Sources */,
@@ -8188,9 +8188,9 @@
 			dependencies = (
 				5DD1E960CD4239B8C29F17D6 /* fltk */,
 			);
-			name = unittest;
-			productName = unittest;
-			productReference = 38131626DB570762BE632A2A /* unittest.app */;
+			name = unittests;
+			productName = unittests;
+			productReference = 38131626DB570762BE632A2A /* unittests.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FAD13873C55C68CA34763ED0 /* utf8 */ = {
@@ -8327,7 +8327,7 @@
 				405CA2652A0EAD4CADE405B6 /* tile */,
 				49B7764A0A7D5466CBB91CC9 /* tiled_image */,
 				B4BF6BC0B10C58B803F1780E /* tree */,
-				84A89E69F9A04372F7F78B62 /* unittest */,
+				84A89E69F9A04372F7F78B62 /* unittests */,
 				FAD13873C55C68CA34763ED0 /* utf8 */,
 				5392AA2CD0F94CD3E4A31577 /* valuators */,
 			);
@@ -9729,7 +9729,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A2539485AC0DF8E4CEBF5E9 /* unittest.cxx in Sources */,
+				0A2539485AC0DF8E4CEBF5E9 /* unittests.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15843,10 +15843,10 @@
 					../../png,
 					../../jpeg,
 				);
-				INFOPLIST_FILE = "plists/unittest-Info.plist";
+				INFOPLIST_FILE = "plists/unittests-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "unittest";
+				PRODUCT_NAME = "unittests";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -15877,10 +15877,10 @@
 					../../png,
 					../../jpeg,
 				);
-				INFOPLIST_FILE = "plists/unittest-Info.plist";
+				INFOPLIST_FILE = "plists/unittests-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "unittest";
+				PRODUCT_NAME = "unittests";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -16717,7 +16717,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		F10E99E5602AD0CC307386AE /* Build configuration list for PBXNativeTarget "unittest" */ = {
+		F10E99E5602AD0CC307386AE /* Build configuration list for PBXNativeTarget "unittests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				73F4B208F4A2F0CEFB087553 /* Debug */,
