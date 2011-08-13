@@ -1440,7 +1440,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "unittest"=".\unittest.dsp" - Package Owner=<4>
+Project: "unittests"=".\unittests.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

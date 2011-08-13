@@ -17,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory="..\..\test"
+			IntermediateDirectory=".\fullscreen.Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -34,15 +34,12 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug\fullscreen.tlb"
+				TypeLibraryName=".\fullscreen.Debug\fullscreen.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -52,10 +49,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug\fullscreen.pch"
-				AssemblerListingLocation=".\Debug\"
-				ObjectFile=".\Debug\"
-				ProgramDataBaseFileName=".\Debug\"
+				PrecompiledHeaderFile=".\fullscreen.Debug\fullscreen.pch"
+				AssemblerListingLocation=".\fullscreen.Debug\"
+				ObjectFile=".\fullscreen.Debug\"
+				ProgramDataBaseFileName=".\fullscreen.Debug\"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -73,14 +70,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib fltk_gld.lib comctl32.lib"
-				OutputFile="..\..\test\fullscreend.exe"
+				AdditionalDependencies="fltk.lib fltk_gl.lib glu32.lib opengl32.lib comctl32.lib"
+				OutputFile="..\..\test\fullscreen.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug\fullscreen.pdb"
+				ProgramDatabaseFile=".\fullscreen.Debug\fullscreen.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -110,8 +107,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory="..\..\test"
+			IntermediateDirectory=".\fullscreen.Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -127,15 +124,12 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release\fullscreen.tlb"
+				TypeLibraryName=".\fullscreen.Release\fullscreen.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -147,10 +141,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release\fullscreen.pch"
-				AssemblerListingLocation=".\Release\"
-				ObjectFile=".\Release\"
-				ProgramDataBaseFileName=".\Release\"
+				PrecompiledHeaderFile=".\fullscreen.Release\fullscreen.pch"
+				AssemblerListingLocation=".\fullscreen.Release\"
+				ObjectFile=".\fullscreen.Release\"
+				ProgramDataBaseFileName=".\fullscreen.Release\"
 				SuppressStartupBanner="true"
 				CompileAs="0"
 			/>
@@ -167,13 +161,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_gl.lib comctl32.lib"
+				AdditionalDependencies="fltk.lib fltk_gl.lib glu32.lib opengl32.lib comctl32.lib"
 				OutputFile="..\..\test\fullscreen.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Release\fullscreen.pdb"
+				ProgramDatabaseFile=".\fullscreen.Release\fullscreen.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"

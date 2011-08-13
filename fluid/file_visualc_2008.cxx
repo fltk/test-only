@@ -221,10 +221,7 @@ static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt, char is
       } else if (t->is_target_dependency() && tgt->is_app_target()) {
         Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
         if (dep && dep->is_lib_target()) {
-          if (is_debug)
-            fprintf(out, "%sd.lib ", t->name());
-          else
-            fprintf(out, "%s.lib ", t->name());
+          fprintf(out, "%s.lib ", t->name());
         }
       }
     }
@@ -235,23 +232,22 @@ static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt, char is
 
 static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   // some definitions we will need later
-  const char *cfg, *pre, *dbg, *pre2;
+  const char *cfg, *pre, *pre2;
   int opt, lib, cfg_type;
-  char is_lib;
+  char is_lib, cfg_path[256];
   
   if (is_debug) {
     cfg = "Debug";  // this is the name of the configuration as well as the path for all temporary files
     pre = "_DEBUG"; // this is a preprocessor definition for compile time configuration
-    dbg = "d";      // this is the name extension for debug libs and executables
     opt = 0;        // this is the level of optimization
     lib = 3;        // this is the link library (not sure what it actually does...)
   } else {
     cfg = "Release";
     pre = "NDEBUG";
-    dbg = "";
     opt = 4;
     lib = 2;
   }
+  sprintf(cfg_path, "%s.%s", tgt->name(), cfg);
   
   if (tgt->is_lib_target()) {
     is_lib = 1;           // are we building a (static) library?
@@ -265,8 +261,8 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   
   fprintf(out, "\t\t<Configuration\r\n");
   fprintf(out, "\t\t\tName=\"%s|Win32\"\r\n", cfg);
-  fprintf(out, "\t\t\tOutputDirectory=\".\\%s\"\r\n", cfg);
-  fprintf(out, "\t\t\tIntermediateDirectory=\".\\%s\"\r\n", cfg);
+  fprintf(out, "\t\t\tOutputDirectory=\"..\\..\\%s\"\r\n", DOS_path(tgt->target_path()));
+  fprintf(out, "\t\t\tIntermediateDirectory=\".\\%s\"\r\n", cfg_path);
   fprintf(out, "\t\t\tConfigurationType=\"%d\"\r\n", cfg_type);
   fprintf(out, "\t\t\tInheritedPropertySheets=\"$(VCInstallDir)VCProjectDefaults\\UpgradeFromVC71.vsprops\"\r\n");
   fprintf(out, "\t\t\tUseOfMFC=\"0\"\r\n");
@@ -282,16 +278,13 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   fprintf(out, "\t\t\t\tName=\"VCXMLDataGeneratorTool\"\r\n");
   fprintf(out, "\t\t\t/>\r\n");
   fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCWebServiceProxyGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
   fprintf(out, "\t\t\t\tName=\"VCMIDLTool\"\r\n");
   fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"%s\"\r\n", pre);
-  if (!is_lib) { // Not sure why either one of these is missing, but the are...
+  if (!is_lib) { // Not sure why any of these are missing for libraries, but the are...
     fprintf(out, "\t\t\t\tMkTypLibCompatible=\"true\"\r\n");
     fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
     fprintf(out, "\t\t\t\tTargetEnvironment=\"1\"\r\n");
-    fprintf(out, "\t\t\t\tTypeLibraryName=\".\\%s\\%s.tlb\"\r\n", cfg, tgt->name());
+    fprintf(out, "\t\t\t\tTypeLibraryName=\".\\%s\\%s.tlb\"\r\n", cfg_path, tgt->name());
     fprintf(out, "\t\t\t\tHeaderFileName=\"\"\r\n");
   }
   fprintf(out, "\t\t\t/>\r\n");
@@ -306,10 +299,10 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_CRT_SECURE_NO_DEPRECATE;WIN32;%s;%s_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN\"\r\n", pre, pre2);
   fprintf(out, "\t\t\t\tRuntimeLibrary=\"%d\"\r\n", lib);
   fprintf(out, "\t\t\t\tUsePrecompiledHeader=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tPrecompiledHeaderFile=\".\\%s\\%s.pch\"\r\n", cfg, tgt->name());
-  fprintf(out, "\t\t\t\tAssemblerListingLocation=\".\\%s\\\"\r\n", cfg);
-  fprintf(out, "\t\t\t\tObjectFile=\".\\%s\\\"\r\n", cfg);
-  fprintf(out, "\t\t\t\tProgramDataBaseFileName=\".\\%s\\\"\r\n", cfg);
+  fprintf(out, "\t\t\t\tPrecompiledHeaderFile=\".\\%s\\%s.pch\"\r\n", cfg_path, tgt->name());
+  fprintf(out, "\t\t\t\tAssemblerListingLocation=\".\\%s\\\"\r\n", cfg_path);
+  fprintf(out, "\t\t\t\tObjectFile=\".\\%s\\\"\r\n", cfg_path);
+  fprintf(out, "\t\t\t\tProgramDataBaseFileName=\".\\%s\\\"\r\n", cfg_path);
   if (is_lib) {
     fprintf(out, "\t\t\t\tBrowseInformation=\"1\"\r\n");
   }
@@ -345,7 +338,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     write_additional_dependencies(out, tgt, is_debug);
     fprintf(out, "comctl32.lib\"\r\n");
     
-    fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s%s.exe\"\r\n", DOS_path(tgt->target_path()), tgt->name(), dbg);
+    fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s.exe\"\r\n", DOS_path(tgt->target_path()), tgt->name());
     fprintf(out, "\t\t\t\tLinkIncremental=\"1\"\r\n");
     fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
     fprintf(out, "\t\t\t\tAdditionalLibraryDirectories=\"..\\..\\lib\"\r\n");
@@ -353,7 +346,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     if (is_debug) {
       fprintf(out, "\t\t\t\tGenerateDebugInformation=\"true\"\r\n");
     }
-    fprintf(out, "\t\t\t\tProgramDatabaseFile=\".\\%s\\%s.pdb\"\r\n", cfg, tgt->name());
+    fprintf(out, "\t\t\t\tProgramDatabaseFile=\".\\%s\\%s.pdb\"\r\n", cfg_path, tgt->name());
     fprintf(out, "\t\t\t\tSubSystem=\"2\"\r\n");
     fprintf(out, "\t\t\t\tRandomizedBaseAddress=\"1\"\r\n");
     fprintf(out, "\t\t\t\tDataExecutionPrevention=\"0\"\r\n");
@@ -387,7 +380,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   fprintf(out, "\t\t\t\tName=\"VCPostBuildEventTool\"\r\n");
   fprintf(out, "\t\t\t/>\r\n");
   fprintf(out, "\t\t</Configuration>\r\n");
-  
+
   return 0;
 }
 
@@ -510,141 +503,6 @@ int write_fltk_ide_visualc2008() {
       }
     }
   }
-  
-  return 0;
-  
-  // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .
-  // When done, everything will likely be integrated into the executable to make one compact package.
-  strcpy(base_dir, filename);
-  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
-  strcpy(tgt_base, base_dir);
-  strcpy(buf, base_dir);
-  strcat(buf, "ide/templates/VisualC2008.tmpl");
-  out = stdout;
-  FILE *in = fopen(buf, "rb");
-  
-  for (;;) {
-    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
-      break;
-    char *hash = buf-1;
-    char copyLine = 1;
-    for (;;) {
-      hash = strchr(hash+1, '#');
-      if (!hash) break;
-      if (hash && hash[1]=='#') { // double hash escapes the control character
-        int n = strlen(hash);
-        memmove(hash, hash+1, n);
-        continue;
-      } else { // single hash is a command
-        copyLine = 0;
-        if (strncmp(hash, "#WriteFile(",11)==0) {
-          // mark the end of the filename (this will crash if the formatting is wrong!)
-          char *sep = strchr(hash, ')');
-          *sep = 0;
-          // filename is relative, so add it to the base_dir
-          char fnbuf[2048];
-          strcpy(fnbuf, base_dir);
-          strcat(fnbuf, hash+11);
-          out = fopen(fnbuf, "wb");
-          // set the filepath for this target. In this module, all filenames are relative to the Makefile
-          strcpy(tgt_base, fnbuf);
-          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
-                                                        // restore buffer and continue 
-          *sep = ')';
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#CloseFile", 10)==0) {
-          if (out!=stdout) fclose(out);
-          out = stdout;
-          // set the filepath for the default target. 
-          strcpy(tgt_base, base_dir);
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC 2008 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_code() && f->builds_in(FL_ENV_VC2008)) {
-              fprintf(out, "\t\t<File\r\n");
-              fprintf(out, "\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
-              fprintf(out, "\t\t\t>\r\n");
-              fprintf(out, "\t\t\t<FileConfiguration\r\n");
-              fprintf(out, "\t\t\t\tName=\"Debug|Win32\"\r\n");
-              fprintf(out, "\t\t\t\t>\r\n");
-              fprintf(out, "\t\t\t\t<Tool\r\n");
-              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-              fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
-              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-              fprintf(out, "\t\t\t\t/>\r\n");
-              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-              fprintf(out, "\t\t\t<FileConfiguration\r\n");
-              fprintf(out, "\t\t\t\tName=\"Release|Win32\"\r\n");
-              fprintf(out, "\t\t\t\t>\r\n");
-              fprintf(out, "\t\t\t\t<Tool\r\n");
-              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-              fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-              fprintf(out, "\t\t\t\t/>\r\n");
-              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-              fprintf(out, "\t\t\t<FileConfiguration\r\n");
-              fprintf(out, "\t\t\t\tName=\"Debug Cairo|Win32\"\r\n");
-              fprintf(out, "\t\t\t\t>\r\n");
-              fprintf(out, "\t\t\t\t<Tool\r\n");
-              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-              fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
-              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-              fprintf(out, "\t\t\t\t/>\r\n");
-              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-              fprintf(out, "\t\t\t<FileConfiguration\r\n");
-              fprintf(out, "\t\t\t\tName=\"Release Cairo|Win32\"\r\n");
-              fprintf(out, "\t\t\t\t>\r\n");
-              fprintf(out, "\t\t\t\t<Tool\r\n");
-              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-              fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-              fprintf(out, "\t\t\t\t/>\r\n");
-              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-              fprintf(out, "\t\t</File>\r\n");                        
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#HeaderFiles(", 13)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC 2008 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_header() && f->lists_in(FL_ENV_VC2008)) {
-              fprintf(out, "\t\t\t<File\r\n");
-              fprintf(out, "\t\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
-              fprintf(out, "\t\t\t\t>\r\n");
-              // OK, we have cheated here quite a bit. The stuff missing here (as opposed to "#SourceFiles"
-              // depends on "builds_in", and not on the fact of being a header file. But for now it does
-              // what we expect...
-              fprintf(out, "\t\t\t</File>\r\n");                        
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else {
-          printf("Unknown command in template: <<%s>>\n", hash);
-          copyLine = 1;
-          hash++;
-        }
-      }
-    }
-    if (copyLine) fputs(buf, out);
-  }
-  
-  fclose(in);
-  if (out!=stdout) fclose(out);
   
   return 0;
 }

@@ -399,11 +399,6 @@ int main(int argc, char **argv) {
   putenv((char *)"FLTK_DOCDIR=../documentation/html");
   char buf[FLTK3_PATH_MAX];
   strcpy(buf, argv[0]);
-#if ( defined _MSC_VER || defined __MWERKS__ ) && defined _DEBUG
-  // MS_VisualC appends a 'd' to debugging executables. remove it.
-  fltk3::filename_setext( buf, "" );
-  buf[ strlen(buf)-1 ] = 0;
-#endif
   fltk3::filename_setext(buf,".menu");
   const char *fname = buf;
   int i = 0;
