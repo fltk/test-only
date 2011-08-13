@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -2669,6 +2669,7 @@ workspace FLTK {open selected
       uuid_Xcode4_DebugBuildConfiguration {A6AD0BA5-C51B-4C60-851C-472F9FEAE9FA}
       uuid_Xcode4_ReleaseBuildConfiguration {5799E68C-6C23-4D48-A6A5-46C26838604D}
       uuid_VC2008_Project {AF7CC2D4-BBC7-4995-B18D-6A590C267527}
+      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -2780,6 +2781,7 @@ workspace FLTK {open selected
       uuid_Xcode4_DebugBuildConfiguration {7EEBB1B1-6C1C-4342-9B7C-3F96957A39D8}
       uuid_Xcode4_ReleaseBuildConfiguration {4364C496-C8EA-4726-BE8F-8D94ADDF19C7}
       uuid_VC2008_Project {417DB0F9-647A-4A36-ADFF-4196F7C1963D}
+      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -3027,7 +3029,7 @@ workspace FLTK {open selected
         }
       }
     }
-    lib_target fltk_zlib {
+    lib_target fltk_zlib {selected
       uuid_Xcode4_FluidBuildRule {123C1072-0C58-4F44-AD82-E57DC97E4F36}
       uuid_Xcode4_ProductFileReference {AFDEBB8C-A6BB-4318-814D-9D4B6586BF8B}
       uuid_Xcode4_FrameworksBuildPhase {DEBCC581-E57F-4C21-8DA4-57A0CC89BBE4}
@@ -3040,6 +3042,7 @@ workspace FLTK {open selected
       uuid_Xcode4_DebugBuildConfiguration {6A888480-8064-4D1B-A159-4AB5ED4D4051}
       uuid_Xcode4_ReleaseBuildConfiguration {F1E12179-62FF-476F-B95D-DF8C211E2D1C}
       uuid_VC2008_Project {2F487ADB-AB3A-44B1-A824-D25C00A2D30A}
+      build_env 123
       target_path lib
     } {
       folder Sources {
