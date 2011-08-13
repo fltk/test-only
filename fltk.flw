@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -11,7 +11,7 @@ workspace FLTK {open
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
-  build_env 8
+  build_env 4
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -313,7 +313,7 @@ workspace FLTK {open
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk {open selected
+    lib_target fltk {open
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
