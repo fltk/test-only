@@ -48,7 +48,7 @@ double write_version;
 
 int open_write(const char *s) {
   if (!s) {fout = stdout; return 1;}
-  FILE *f = fltk3::fopen(s,"w");
+  FILE *f = fltk3::fopen(s,"wb");
   if (!f) return 0;
   fout = f;
   return 1;

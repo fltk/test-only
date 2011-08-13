@@ -344,9 +344,6 @@ extern const char* header_file_name;
 extern Fl_Class_Type *current_class;
 
 int write_code(const char *s, const char *t) {
-  const char *filemode = "w";
-  if (write_sourceview) 
-    filemode = "wb";
   write_number++;
   delete id_root; id_root = 0;
   indentation = 0;
@@ -354,13 +351,13 @@ int write_code(const char *s, const char *t) {
   current_widget_class = 0L;
   if (!s) code_file = stdout;
   else {
-    FILE *f = fltk3::fopen(s, filemode);
+    FILE *f = fltk3::fopen(s, "wb");
     if (!f) return 0;
     code_file = f;
   }
   if (!t) header_file = stdout;
   else {
-    FILE *f = fltk3::fopen(t, filemode);
+    FILE *f = fltk3::fopen(t, "wb");
     if (!f) {fclose(code_file); return 0;}
     header_file = f;
   }
@@ -468,7 +465,7 @@ int write_code(const char *s, const char *t) {
 }
 
 int write_strings(const char *sfile) {
-  FILE *fp = fltk3::fopen(sfile, "w");
+  FILE *fp = fltk3::fopen(sfile, "wb");
   Fl_Type *p;
   Fl_Widget_Type *w;
   int i;

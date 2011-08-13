@@ -610,7 +610,7 @@ void new_cb(fltk3::Widget *, void *v) {
 	return;
       }
 
-      if ((outfile = fltk3::fopen(cutfname(1), "w")) == NULL) {
+      if ((outfile = fltk3::fopen(cutfname(1), "wb")) == NULL) {
 	fltk3::alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
         	 strerror(errno));
 	fclose(infile);
