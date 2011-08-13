@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="mandelbrot"
-	ProjectGUID="{7BBECC0F-9381-4BF2-87CA-3FD1DA93DEAF}"
+	ProjectGUID="{599F1D54-64F1-4333-B886-7D63E2D6D086}"
+	RootNamespace="mandelbrot"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -16,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\mandelbrot_"
-			IntermediateDirectory=".\mandelbrot_"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -41,20 +42,20 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\mandelbrot_/mandelbrot.tlb"
+				TypeLibraryName=".\Debug\mandelbrot.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..\..\zlib;..\..\png;..\..\jpeg;../.."
+				AdditionalIncludeDirectories=".;..\..\zlib;..\..\png;..\..\jpeg"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\mandelbrot_/mandelbrot.pch"
-				AssemblerListingLocation=".\mandelbrot_/"
-				ObjectFile=".\mandelbrot_/"
-				ProgramDataBaseFileName=".\mandelbrot_/"
+				PrecompiledHeaderFile=".\Debug\mandelbrot.pch"
+				AssemblerListingLocation=".\Debug\"
+				ObjectFile=".\Debug\"
+				ProgramDataBaseFileName=".\Debug\"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -72,14 +73,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib fltkd.lib comctl32.lib"
-				OutputFile="../../test/mandelbrotd.exe"
+				AdditionalDependencies="fltkd.lib comctl32.lib"
+				OutputFile="..\..\test\mandelbrotd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\mandelbrot_/mandelbrotd.pdb"
+				ProgramDatabaseFile=".\Debug\mandelbrot.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -134,7 +135,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/mandelbrot.tlb"
+				TypeLibraryName=".\Release\mandelbrot.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -142,14 +143,14 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".;..\..\zlib;..\..\png;..\..\jpeg;../.."
+				AdditionalIncludeDirectories=".;..\..\zlib;..\..\png;..\..\jpeg"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/mandelbrot.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\Release\mandelbrot.pch"
+				AssemblerListingLocation=".\Release\"
+				ObjectFile=".\Release\"
+				ProgramDataBaseFileName=".\Release\"
 				SuppressStartupBanner="true"
 				CompileAs="0"
 			/>
@@ -166,199 +167,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib fltk.lib comctl32.lib"
-				OutputFile="../../test/mandelbrot.exe"
+				AdditionalDependencies="fltk.lib comctl32.lib"
+				OutputFile="..\..\test\mandelbrot.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Release/mandelbrot.pdb"
-				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug Cairo|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="1"
-				TypeLibraryName=".\mandelbrot_/mandelbrot.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories=".;..\..\zlib;..\..\png;..\..\jpeg;../.."
-				PreprocessorDefinitions="FLTK_HAVE_CAIRO=1;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\mandelbrot_/mandelbrot.pch"
-				AssemblerListingLocation=".\mandelbrot_/"
-				ObjectFile=".\mandelbrot_/"
-				ProgramDataBaseFileName=".\mandelbrot_/"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
-				CompileAs="0"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib glu32.lib opengl32.lib fltkd.lib comctl32.lib"
-				OutputFile="../../test/mandelbrotd.exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames="libcd"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\mandelbrot_/mandelbrotd.pdb"
-				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release Cairo|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="true"
-				SuppressStartupBanner="true"
-				TargetEnvironment="1"
-				TypeLibraryName=".\Release/mandelbrot.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".;..\..\zlib;..\..\png;..\..\jpeg;../.."
-				PreprocessorDefinitions="FLTK_HAVE_CAIRO=1,_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/mandelbrot.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
-				SuppressStartupBanner="true"
-				CompileAs="0"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib fltk.lib comctl32.lib cairo.lib"
-				OutputFile="../../test/mandelbrot.exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Release/mandelbrot.pdb"
+				ProgramDatabaseFile=".\Release\mandelbrot.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -412,25 +227,6 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug Cairo|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release Cairo|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\test\mandelbrot_ui.cxx"
@@ -454,25 +250,6 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug Cairo|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release Cairo|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\test\mandelbrot_ui.fl"
@@ -484,7 +261,7 @@
 					Name="VCCustomBuildTool"
 					Description="Create .cxx and .h file with fluidd"
 					CommandLine="cfluid /D $(InputName).fl&#x0D;&#x0A;"
-					Outputs="../../test/$(InputName).cxx"
+					Outputs="..\..\test\\$(InputName).cxx"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -494,27 +271,7 @@
 					Name="VCCustomBuildTool"
 					Description="Create .cxx and .h file with fluid"
 					CommandLine="cfluid $(InputName).fl&#x0D;&#x0A;"
-					Outputs="../../test/$(InputName).cxx"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug Cairo|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Create .cxx and .h file with fluidd"
-					CommandLine="cfluid /D $(InputName).fl&#x0D;&#x0A;"
-					Outputs="../../test/$(InputName).cxx"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release Cairo|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Create .cxx and .h file with fluid"
-					CommandLine="cfluid $(InputName).fl&#x0D;&#x0A;"
-					Outputs="../../test/$(InputName).cxx"
+					Outputs="..\..\test\\$(InputName).cxx"
 				/>
 			</FileConfiguration>
 		</File>

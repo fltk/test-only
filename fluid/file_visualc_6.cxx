@@ -67,9 +67,10 @@ static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
   
   Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
   for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
-    fprintf(out, "    Begin Project Dependency\r\n");
-    fprintf(out, "    Project_Dep_Name %s\r\n", tgt_dep->name());
-    fprintf(out, "    End Project Dependency\r\n");
+    if (tgt_dep->builds_in(FL_ENV_VC6)) {
+      fprintf(out, "    Begin Project Dependency\r\n");
+      fprintf(out, "    Project_Dep_Name %s\r\n", tgt_dep->name());
+      fprintf(out, "    End Project Dependency\r\n");}
   }
   fprintf(out, "}}}\r\n\r\n");
   fprintf(out, "###############################################################################\r\n");
@@ -233,16 +234,16 @@ static int write_dsp_file_for_lib(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\r\n");
   fprintf(out, "# PROP BASE Use_MFC 0\r\n");
   fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Output_Dir \"Release\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
   fprintf(out, "# PROP Use_MFC 0\r\n");
   fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP Output_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Output_Dir \"Release\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
   fprintf(out, "# SUBTRACT CPP /Os\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409\r\n");
   fprintf(out, "# ADD RSC /l 0x409\r\n");
@@ -257,16 +258,16 @@ static int write_dsp_file_for_lib(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\r\n");
   fprintf(out, "# PROP BASE Use_MFC 0\r\n");
   fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Output_Dir \"Debug\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
   fprintf(out, "# PROP Use_MFC 0\r\n");
   fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP Output_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Output_Dir \"Debug\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /GX /Z7 /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /FR /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /GX /Z7 /Od /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /FR /YX /FD /c\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409\r\n");
   fprintf(out, "# ADD RSC /l 0x409\r\n");
   fprintf(out, "BSC32=bscmake.exe\r\n");
@@ -337,17 +338,17 @@ static int write_dsp_file_for_dll(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\r\n");
   fprintf(out, "# PROP BASE Use_MFC 0\r\n");
   fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Release/%sdll\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Output_Dir \"Release\\%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release\\%sdll\"\r\n", tgt->name());
   fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
   fprintf(out, "# PROP Use_MFC 0\r\n");
   fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP Output_Dir \"Release/%sdll\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Release/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Output_Dir \"Release\\%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release\\%sdll\"\r\n", tgt->name());
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /I \".\" /I \"../..\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /I \".\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
@@ -368,17 +369,17 @@ static int write_dsp_file_for_dll(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\r\n");
   fprintf(out, "# PROP BASE Use_MFC 0\r\n");
   fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Debug/%sdll\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Output_Dir \"Debug\\%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug\\%sdll\"\r\n", tgt->name());
   fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
   fprintf(out, "# PROP Use_MFC 0\r\n");
   fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP Output_Dir \"Debug/%sdll\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Debug/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Output_Dir \"Debug\\%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug\\%sdll\"\r\n", tgt->name());
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /GX /ZI /Od /I \".\" /I \"../..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /GX /ZI /Od /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
@@ -391,7 +392,7 @@ static int write_dsp_file_for_dll(FILE *out, Fl_Target_Type *tgt) {
   
   fprintf(out, "# ADD LINK32 ");
   write_add_link32(out, tgt, 1);
-  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:\"%sdlld.pdb\" /debug /machine:I386 /out:\"Debug/%sdll/%sdlld.dll\" /pdbtype:sept\r\n", tgt->name(), tgt->name(), tgt->name());
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:\"%sdlld.pdb\" /debug /machine:I386 /out:\"Debug\\%sdll\\%sdlld.dll\" /pdbtype:sept\r\n", tgt->name(), tgt->name(), tgt->name());
   
   fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
   fprintf(out, "\r\n");
@@ -454,17 +455,17 @@ static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\r\n");
   fprintf(out, "# PROP BASE Use_MFC 0\r\n");
   fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Output_Dir \"Release\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
   fprintf(out, "# PROP Use_MFC 0\r\n");
   fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP Output_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Output_Dir \"Release\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
@@ -485,17 +486,17 @@ static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\r\n");
   fprintf(out, "# PROP BASE Use_MFC 0\r\n");
   fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Output_Dir \"Debug\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
   fprintf(out, "# PROP Use_MFC 0\r\n");
   fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP Output_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Output_Dir \"Debug\\%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"..\\..\" /I \"..\\../zlib\" /I \"..\\../png\" /I \"..\\../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
@@ -520,6 +521,8 @@ static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# Name \"%s - Win32 Debug\"\r\n", tgt->name());
   
   write_source_files(out, tgt);
+// TODO: include header file if they are so configured
+// TODO: create visual folders in the IDE if possible (surely is!)
   
   fprintf(out, "# End Target\r\n");
   fprintf(out, "# End Project\r\n");

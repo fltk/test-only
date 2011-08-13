@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="glpuzzle"
-	ProjectGUID="{A0506BCD-CFC0-4549-805F-170E85F570D3}"
-	RootNamespace="glpuzzle"
+	Name="unittest"
+	ProjectGUID="{82B53033-E5E3-4813-AFA4-B08EB3F21513}"
+	RootNamespace="unittest"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -42,7 +42,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug\glpuzzle.tlb"
+				TypeLibraryName=".\Debug\unittest.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -52,7 +52,7 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug\glpuzzle.pch"
+				PrecompiledHeaderFile=".\Debug\unittest.pch"
 				AssemblerListingLocation=".\Debug\"
 				ObjectFile=".\Debug\"
 				ProgramDataBaseFileName=".\Debug\"
@@ -73,14 +73,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib fltk_gld.lib comctl32.lib"
-				OutputFile="..\..\test\glpuzzled.exe"
+				AdditionalDependencies="fltkd.lib comctl32.lib"
+				OutputFile="..\..\test\unittestd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug\glpuzzle.pdb"
+				ProgramDatabaseFile=".\Debug\unittest.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -135,7 +135,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release\glpuzzle.tlb"
+				TypeLibraryName=".\Release\unittest.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -147,7 +147,7 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release\glpuzzle.pch"
+				PrecompiledHeaderFile=".\Release\unittest.pch"
 				AssemblerListingLocation=".\Release\"
 				ObjectFile=".\Release\"
 				ProgramDataBaseFileName=".\Release\"
@@ -167,13 +167,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_gl.lib comctl32.lib"
-				OutputFile="..\..\test\glpuzzle.exe"
+				AdditionalDependencies="fltk.lib comctl32.lib"
+				OutputFile="..\..\test\unittest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Release\glpuzzle.pdb"
+				ProgramDatabaseFile=".\Release\unittest.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -206,7 +206,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\test\glpuzzle.cxx"
+			RelativePath="..\..\test\unittest.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -10,12 +10,13 @@ workspace FLTK {open selected
   uuid_Xcode4_ContainerItemProxy {7DB77C01-F47B-42CE-883F-5CD221F15472}
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
+  uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   build_env 8
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
   } {
-    app_target Fluid {open
+    app_target Fluid {
       uuid_Xcode4_ProductReference {FD9750B2-CA9C-4856-A516-E56BD9B2E805}
       uuid_Xcode4_ProductFileReference {4616D958-4FAE-4BE9-921B-A868F80B6CC7}
       uuid_Xcode4_FluidBuildRule {30FE3F00-9876-4AE4-9F6E-35B6B4CAA24E}
@@ -28,6 +29,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {C143F235-8192-487A-B75C-D27624DF84C5}
       uuid_Xcode4_DebugBuildConfiguration {4E5F68A7-E8CF-4CE6-B6D9-CC72721ACA8D}
       uuid_Xcode4_ReleaseBuildConfiguration {DBC57ADC-4CD0-4039-9337-653734B00120}
+      uuid_VC2008_Project {1B69337F-FA83-41F1-86AC-9C3E5EDDF7CD}
       target_path fluid
     } {
       folder Headers {open
@@ -311,7 +313,7 @@ workspace FLTK {open selected
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk {open
+    lib_target fltk {open selected
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -324,6 +326,7 @@ workspace FLTK {open selected
       uuid_Xcode4_FrameworksBuildPhase {B5140FAA-6B8D-4D78-814B-695B78247541}
       uuid_Xcode4_Group {727B6B68-F3C4-4BBB-9445-1AB0CD7EA6D9}
       uuid_Xcode4_ProductFileReference {86C380FE-33B2-4515-8BCE-B23C96A44961}
+      uuid_VC2008_Project {57369729-6B61-4DCD-9289-79E0E2A168E8}
       target_path lib
     } {
       folder Headers {
@@ -2458,6 +2461,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {98C43993-30FA-4699-BCA8-688651F80CFD}
       uuid_Xcode4_DebugBuildConfiguration {B71FD785-E704-42A1-88EF-A3E795FE3D9B}
       uuid_Xcode4_ReleaseBuildConfiguration {6B770F3D-FAEB-462A-8D41-7253B4DFA362}
+      uuid_VC2008_Project {F0B23DD8-B4C3-4DB7-A879-3250CFAC686B}
       target_path lib
     } {
       folder Sources {
@@ -2582,6 +2586,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {86B2A6B4-033B-4FB9-857F-07685AB81D91}
       uuid_Xcode4_DebugBuildConfiguration {BFD6BE9B-3A61-4E77-A4A2-24AB64D69A5D}
       uuid_Xcode4_ReleaseBuildConfiguration {F5ABCB61-FEAC-4C37-BFE1-76DB4BC56CAF}
+      uuid_VC2008_Project {9BDDFD0A-6B25-4532-8AAF-897D526A845D}
       target_path lib
     } {
       folder Sources {
@@ -2663,6 +2668,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {523E09CD-9A26-4EB9-A1B3-B4B1A378223E}
       uuid_Xcode4_DebugBuildConfiguration {A6AD0BA5-C51B-4C60-851C-472F9FEAE9FA}
       uuid_Xcode4_ReleaseBuildConfiguration {5799E68C-6C23-4D48-A6A5-46C26838604D}
+      uuid_VC2008_Project {AF7CC2D4-BBC7-4995-B18D-6A590C267527}
       target_path lib
     } {
       folder Sources {
@@ -2773,6 +2779,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {D6C93C8C-8865-4D57-B9F7-371B058F4E3D}
       uuid_Xcode4_DebugBuildConfiguration {7EEBB1B1-6C1C-4342-9B7C-3F96957A39D8}
       uuid_Xcode4_ReleaseBuildConfiguration {4364C496-C8EA-4726-BE8F-8D94ADDF19C7}
+      uuid_VC2008_Project {417DB0F9-647A-4A36-ADFF-4196F7C1963D}
       target_path lib
     } {
       folder Sources {
@@ -3032,6 +3039,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {D73EA28D-B8C4-413B-9AA7-5A80277F5CF4}
       uuid_Xcode4_DebugBuildConfiguration {6A888480-8064-4D1B-A159-4AB5ED4D4051}
       uuid_Xcode4_ReleaseBuildConfiguration {F1E12179-62FF-476F-B95D-DF8C211E2D1C}
+      uuid_VC2008_Project {2F487ADB-AB3A-44B1-A824-D25C00A2D30A}
       target_path lib
     } {
       folder Sources {
@@ -3140,6 +3148,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {B3C4660E-0662-4704-B20B-40FC7A8F35F3}
       uuid_Xcode4_DebugBuildConfiguration {06CF865E-799A-470F-8039-7F92371A7A0F}
       uuid_Xcode4_ReleaseBuildConfiguration {19E5FC43-B6E3-4CCE-B7A0-00557C87E880}
+      uuid_VC2008_Project {AAC13E91-C3A5-4742-8D97-26F6E3019AE4}
       target_path test
     } {
       file_ref {demo.cxx} {
@@ -3582,6 +3591,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {400DBCF8-9539-4FFE-9816-EE6C4237795C}
       uuid_Xcode4_DebugBuildConfiguration {B29206D0-BD01-4EE6-B723-BE40D6979D43}
       uuid_Xcode4_ReleaseBuildConfiguration {1EA7FE65-16F7-4E62-BC4C-081680DD9007}
+      uuid_VC2008_Project {001A9787-8FD8-4B62-8476-8FDAFC41D7E2}
       target_path test
     } {
       file_ref {adjuster.cxx} {
@@ -3608,6 +3618,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {EF7174C6-7FF6-4C1E-904D-26B1981F4C2F}
       uuid_Xcode4_DebugBuildConfiguration {8E357A32-28C7-4C10-ACDD-AAF0DBE8A326}
       uuid_Xcode4_ReleaseBuildConfiguration {C4BC49C2-E3B8-42C3-A50A-F6BD36BA67E3}
+      uuid_VC2008_Project {8851FA01-2513-4A95-BDAD-21BA2A443E7C}
       target_path test
     } {
       file_ref {arc.cxx} {
@@ -3634,6 +3645,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {2A942836-31B7-4936-81EF-2DD5C9AF6C7E}
       uuid_Xcode4_DebugBuildConfiguration {A3FDAEA6-35DC-4359-9179-41FBCDBDB082}
       uuid_Xcode4_ReleaseBuildConfiguration {67F3113C-77E3-4B0D-99A6-C2BE864272D4}
+      uuid_VC2008_Project {98A189C1-09E0-41C2-B6A0-9AC3FA922EF0}
       target_path test
     } {
       file_ref {ask.cxx} {
@@ -3660,6 +3672,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {3261914F-384C-4F20-BAE4-E377A333531C}
       uuid_Xcode4_DebugBuildConfiguration {D3E8DB29-E92D-42F2-809B-F3E53BDCC71A}
       uuid_Xcode4_ReleaseBuildConfiguration {9233D05D-56E1-4F45-AEBE-348A9B2F501A}
+      uuid_VC2008_Project {BC021DFF-0572-486A-B41C-F402FFCA0A31}
       target_path test
     } {
       file_ref {bitmap.cxx} {
@@ -3686,6 +3699,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {DBE8050A-D1DB-4EB3-8ADE-EDE7915312DB}
       uuid_Xcode4_DebugBuildConfiguration {6A369CB3-C726-4518-929A-47D02CDD3813}
       uuid_Xcode4_ReleaseBuildConfiguration {A0370B96-FA68-4B21-9FA2-99AE875C1421}
+      uuid_VC2008_Project {384E7244-879F-4238-B68C-8996A32B506A}
       target_path test
     } {
       file_ref {blocks.cxx} {
@@ -3727,6 +3741,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {BCEF7C87-80E5-4B46-8FCD-CC1CBB0BC595}
       uuid_Xcode4_DebugBuildConfiguration {1443945F-EB54-4CA7-BCC1-F81D92649F2C}
       uuid_Xcode4_ReleaseBuildConfiguration {CBC9B387-8A89-4677-9901-7FF2A99D9EA9}
+      uuid_VC2008_Project {9921B382-8FC5-4E13-B9DA-B9752CE43EDA}
       target_path test
     } {
       file_ref {boxtype.cxx} {
@@ -3753,6 +3768,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {0ED7D729-725A-4CDC-B235-A319C98021CA}
       uuid_Xcode4_DebugBuildConfiguration {4F6FB9BE-1954-4747-8823-CA79CBF1A03F}
       uuid_Xcode4_ReleaseBuildConfiguration {ED402542-5E62-49B6-952A-44A86B801353}
+      uuid_VC2008_Project {0645AB27-5F42-4350-B4DE-BC9915103BA3}
       target_path test
     } {
       file_ref {browser.cxx} {
@@ -3779,6 +3795,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {98437FEC-C25D-47F2-BD38-E62DB84E6546}
       uuid_Xcode4_DebugBuildConfiguration {DD57C221-DD46-47BD-8F23-08379FCBE464}
       uuid_Xcode4_ReleaseBuildConfiguration {5F9A065C-BE7D-4FAB-A87C-D48184B91C1F}
+      uuid_VC2008_Project {EB201263-5D19-483F-8967-779B7A23973E}
       target_path test
     } {
       file_ref {button.cxx} {
@@ -3805,6 +3822,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {CF9806FB-F116-4206-BDA2-2F62EABD73BF}
       uuid_Xcode4_DebugBuildConfiguration {8662694E-5355-4FB3-8324-C8A0AFF1043C}
       uuid_Xcode4_ReleaseBuildConfiguration {1549F39E-14C0-459D-965A-30940E4912B5}
+      uuid_VC2008_Project {0457B212-626D-4694-A513-B96E60EDBC39}
       target_path test
     } {
       file_ref {buttons.cxx} {
@@ -3831,6 +3849,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {4C964E85-CC0C-42EB-89FE-D0C4AAB20E18}
       uuid_Xcode4_DebugBuildConfiguration {0A90176F-8DA4-4B2D-82CF-B9A8FCF787B3}
       uuid_Xcode4_ReleaseBuildConfiguration {33A3BDE3-3CB3-4E79-842C-F6CAB140543C}
+      uuid_VC2008_Project {AFA521D1-3AF4-427A-9F49-3CF7E279691F}
       target_path test
     } {
       file_ref {checkers.cxx} {
@@ -3857,6 +3876,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {BEF23FED-A691-4A1F-86C8-9D4A18F1C15B}
       uuid_Xcode4_DebugBuildConfiguration {5BCCDC1E-D0F5-4725-A187-14FC51A8B656}
       uuid_Xcode4_ReleaseBuildConfiguration {4B05CDCC-758A-452C-B0F3-10102DE641D7}
+      uuid_VC2008_Project {9D51C550-7AE2-45A5-BD7E-5698A5ABD0A3}
       target_path test
     } {
       file_ref {clock.cxx} {
@@ -3883,6 +3903,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {B23D9D24-C248-480F-B1A0-3A1CAEB8D690}
       uuid_Xcode4_DebugBuildConfiguration {863EA031-5570-4BDF-AB93-E31E36EA3AA1}
       uuid_Xcode4_ReleaseBuildConfiguration {181BD306-0EA0-4161-BBBD-1FC4B918688F}
+      uuid_VC2008_Project {F8E8C96D-B1BE-4CDE-A6FB-79F958A45AF2}
       target_path test
     } {
       file_ref {colbrowser.cxx} {
@@ -3913,6 +3934,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {DE51B494-7FAB-42B7-9EF3-24E22E76B747}
       uuid_Xcode4_DebugBuildConfiguration {7B129B2A-724B-4926-B06C-8F6D7637D8A6}
       uuid_Xcode4_ReleaseBuildConfiguration {54E90AA3-960F-4511-B451-408E927884D0}
+      uuid_VC2008_Project {1E1DB164-7B4A-41E7-BA03-05E163E92ABE}
       target_path test
     } {
       file_ref {color_chooser.cxx} {
@@ -3939,6 +3961,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {0C04D9E6-D644-4B90-BF85-57171196B1FB}
       uuid_Xcode4_DebugBuildConfiguration {082C895B-9C19-41C6-A315-5E94B0BA52D4}
       uuid_Xcode4_ReleaseBuildConfiguration {9C2E3467-011E-4FCD-9882-E7E8E539AE9D}
+      uuid_VC2008_Project {B740BD32-2F75-4E74-9B11-63DCAE6E6418}
       target_path test
     } {
       file_ref {cube.cxx} {
@@ -4007,6 +4030,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {C94595CE-49EF-4FB9-8768-0851064F787D}
       uuid_Xcode4_DebugBuildConfiguration {0AB3E8EF-768B-452D-8422-0F8122C9CE7D}
       uuid_Xcode4_ReleaseBuildConfiguration {B5DF2A4D-5211-4BE8-A11A-C77946044A23}
+      uuid_VC2008_Project {060105B4-5FA8-46A2-B5AF-B58F0CF2958A}
       target_path test
     } {
       file_ref {CubeView.cxx} {
@@ -4091,6 +4115,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {2F8F6926-F3DB-4732-AA0B-D6905AACEF6A}
       uuid_Xcode4_DebugBuildConfiguration {1426D2B4-03EF-46EB-85DD-7B405A1878BC}
       uuid_Xcode4_ReleaseBuildConfiguration {1276414B-9ABA-46F5-8E49-334F84233FA3}
+      uuid_VC2008_Project {C1F8DFB7-9C66-4138-800B-2B2B7CBE383C}
       target_path test
     } {
       file_ref {cursor.cxx} {
@@ -4117,6 +4142,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {07BE09A8-7568-4347-931A-B624834D327A}
       uuid_Xcode4_DebugBuildConfiguration {6F972745-D600-4ADA-AB19-ED9C538E504C}
       uuid_Xcode4_ReleaseBuildConfiguration {73753145-1E68-48F9-8D70-2CEDA9800F23}
+      uuid_VC2008_Project {B2C572AE-4720-4770-B451-382FCB87A34A}
       target_path test
     } {
       file_ref {curve.cxx} {
@@ -4143,6 +4169,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {E6F73024-8BB7-48BB-96A7-55433DB25F08}
       uuid_Xcode4_DebugBuildConfiguration {AE76D772-32E0-495D-A375-0F9931D32D78}
       uuid_Xcode4_ReleaseBuildConfiguration {375F5065-7B91-4DEA-AD95-AB97109623DD}
+      uuid_VC2008_Project {81262FB6-1DCC-42BE-90DE-552036188129}
       target_path test
     } {
       file_ref {device.cxx} {
@@ -4193,6 +4220,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {D2EAD973-F746-4568-84D5-4C01F5196DC6}
       uuid_Xcode4_DebugBuildConfiguration {B46B63CC-C470-43F5-B5C5-AD619DAC910D}
       uuid_Xcode4_ReleaseBuildConfiguration {C63049E0-AC05-4769-92D0-B1DC7B052F0C}
+      uuid_VC2008_Project {FC0E7C5C-715B-41DF-A6C1-5C634046680B}
       target_path test
     } {
       file_ref {doublebuffer.cxx} {
@@ -4219,6 +4247,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {4553F1B1-3D16-42CA-AF7F-57F22BA57885}
       uuid_Xcode4_DebugBuildConfiguration {F7A849E6-6B2B-47F8-9B88-1BB1E25D0853}
       uuid_Xcode4_ReleaseBuildConfiguration {BCD21E7E-9BAC-40CA-98FB-D28B9684ADB1}
+      uuid_VC2008_Project {AE6C6316-F27C-49AB-9AE7-B5B1C76E7158}
       target_path test
     } {
       file_ref {editor.cxx} {
@@ -4245,6 +4274,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {ED945D6A-F678-45F3-B061-B59717CF601F}
       uuid_Xcode4_DebugBuildConfiguration {FA69FDF0-588A-4893-80E0-301C30116817}
       uuid_Xcode4_ReleaseBuildConfiguration {F250B10D-ACA9-4780-A4B0-DC819A3DD667}
+      uuid_VC2008_Project {B63B4333-146D-4878-97DF-2B288E1D6AFB}
       target_path test
     } {
       file_ref {fast_slow.fl} {
@@ -4277,6 +4307,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {847C01EB-DB50-430E-99A4-2C742B861DE8}
       uuid_Xcode4_DebugBuildConfiguration {6499C0E8-ECF2-4094-A381-9F947FB18FC4}
       uuid_Xcode4_ReleaseBuildConfiguration {0EAAE607-BE6C-4946-B6CD-224F8B73E9C7}
+      uuid_VC2008_Project {74C90FEF-F138-4A72-B3B6-F2D2D8A114E6}
       target_path test
     } {
       file_ref {file_chooser.cxx} {
@@ -4327,6 +4358,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {C0A03909-9E95-4539-91B5-BBA46684DCBD}
       uuid_Xcode4_DebugBuildConfiguration {6EB1CC53-31F0-4ADA-AC41-D5A6ABF4F866}
       uuid_Xcode4_ReleaseBuildConfiguration {4AF73F9C-DC7C-4687-A828-FED53F2428A8}
+      uuid_VC2008_Project {3E7EC4B3-B8B4-4055-B9A7-A07EC88A15EC}
       target_path test
     } {
       file_ref {fonts.cxx} {
@@ -4353,6 +4385,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {C863A6CB-AFD2-42F8-8724-D11CE4F329E9}
       uuid_Xcode4_DebugBuildConfiguration {A1A50ACE-0D64-4A16-8B38-DB1191BEACD0}
       uuid_Xcode4_ReleaseBuildConfiguration {FE9018B4-4AB0-4117-86C3-AC56B7946B85}
+      uuid_VC2008_Project {9C217068-6B33-4F5E-974E-D795185EBF6D}
       target_path test
     } {
       file_ref {fractals.cxx} {
@@ -4426,6 +4459,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {5155D23E-15B6-4C73-88BB-2381262EBF0C}
       uuid_Xcode4_DebugBuildConfiguration {1F995939-B31C-4F07-BB00-BA37B8DE143A}
       uuid_Xcode4_ReleaseBuildConfiguration {F44249C3-B359-490C-806F-888969822DCC}
+      uuid_VC2008_Project {9CFD2E83-D5C8-4789-8BBA-7F17DC9021F9}
       target_path test
     } {
       file_ref {fullscreen.cxx} {
@@ -4494,6 +4528,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {43436329-0124-4A86-BAAD-5D95610D45C2}
       uuid_Xcode4_DebugBuildConfiguration {E11D2E98-080F-495D-AA90-1F09D198E0ED}
       uuid_Xcode4_ReleaseBuildConfiguration {5D6CA0E3-887C-4495-8B30-6D0E94621E60}
+      uuid_VC2008_Project {5D723F2F-94C0-4FA7-9C05-A090B035A083}
       target_path test
     } {
       file_ref {gl_overlay.cxx} {
@@ -4562,6 +4597,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {3C724375-1B6E-4D2D-9E86-D48C55193B5D}
       uuid_Xcode4_DebugBuildConfiguration {EAA9EBB4-1B59-43CF-8745-C8538BBD55D7}
       uuid_Xcode4_ReleaseBuildConfiguration {54B0625E-4CAB-4339-961B-3CF7E82B9CB7}
+      uuid_VC2008_Project {A0506BCD-CFC0-4549-805F-170E85F570D3}
       target_path test
     } {
       file_ref {glpuzzle.cxx} {
@@ -4630,6 +4666,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {3E1F0567-084E-44B6-A133-CC693FBF76D2}
       uuid_Xcode4_DebugBuildConfiguration {7B99ADC3-3161-402C-8855-82134A054BBB}
       uuid_Xcode4_ReleaseBuildConfiguration {B61D15AA-379B-4E4B-8BEC-8141961C13AF}
+      uuid_VC2008_Project {8F0165D2-6107-49A0-BD35-B01A472A4062}
       target_path test
     } {
       file_ref {hello.cxx} {
@@ -4656,6 +4693,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {0FF188BC-66E7-4BB5-8C9B-6D4090D4FCF5}
       uuid_Xcode4_DebugBuildConfiguration {B4EBAFF3-4FBB-4D2B-84ED-AB031164699E}
       uuid_Xcode4_ReleaseBuildConfiguration {78EA2F0B-B587-4ED8-B845-BD5D15EC56C6}
+      uuid_VC2008_Project {B846C052-53B2-4B99-9930-6C440E047FD8}
       target_path test
     } {
       file_ref {help.cxx} {
@@ -4706,6 +4744,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {F97E7B0A-1B83-472F-8479-35033144C493}
       uuid_Xcode4_DebugBuildConfiguration {333FFE95-C30F-421E-9A66-00754A53C5D0}
       uuid_Xcode4_ReleaseBuildConfiguration {B1E9CD4E-BEED-4CB0-B2FC-993BCE65B942}
+      uuid_VC2008_Project {B28DEB1D-FFE9-4801-8F54-1F2D7D96D11A}
       target_path test
     } {
       file_ref {iconize.cxx} {
@@ -4732,6 +4771,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {29048322-BDD9-47C3-98EC-4B2F253D1230}
       uuid_Xcode4_DebugBuildConfiguration {712D43D4-D8B9-45B0-98CB-1000FE55B897}
       uuid_Xcode4_ReleaseBuildConfiguration {94881463-DF8C-4475-BF77-43AAC5D5DAD1}
+      uuid_VC2008_Project {0C0BB057-9E25-4673-95F7-06641BA79C9A}
       target_path test
     } {
       file_ref {image.cxx} {
@@ -4758,6 +4798,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {1DE1484F-9826-4167-8B81-CFDE80744ECF}
       uuid_Xcode4_DebugBuildConfiguration {E5674AE4-5CC8-409D-B06D-67A7DB1BB28C}
       uuid_Xcode4_ReleaseBuildConfiguration {9D2FFDF0-6E53-4A14-9F15-CA75F26B8282}
+      uuid_VC2008_Project {0FC89FEC-16BA-49A8-90B4-0EFDCA5360F7}
       target_path test
     } {
       file_ref {inactive.cxx} {
@@ -4784,6 +4825,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {44F6FFEF-331F-48C4-8ED6-B011E0A1D832}
       uuid_Xcode4_DebugBuildConfiguration {6B9D5F23-4D2C-4E3A-AE06-BA8A86B68812}
       uuid_Xcode4_ReleaseBuildConfiguration {A12AF490-AE55-4C9F-9B06-5467DA6741EC}
+      uuid_VC2008_Project {8F2803B3-0728-47DB-A5AA-8D797D763E88}
       target_path test
     } {
       file_ref {input.cxx} {
@@ -4810,6 +4852,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {64B93C66-4DEE-49BB-B8D1-BC42A8B400D3}
       uuid_Xcode4_DebugBuildConfiguration {4C0F87B4-8A17-4383-9E0D-952F284E4656}
       uuid_Xcode4_ReleaseBuildConfiguration {EFBDBF31-41B2-44FB-816D-F419A593EEB1}
+      uuid_VC2008_Project {AEEAA248-8FE2-4687-830B-610FE75C3CC0}
       target_path test
     } {
       file_ref {input_choice.cxx} {
@@ -4836,6 +4879,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {8388D8A2-05EC-47D1-A2C0-0747BF104DF4}
       uuid_Xcode4_DebugBuildConfiguration {8E80B608-CFE4-4830-A66B-919518D4731E}
       uuid_Xcode4_ReleaseBuildConfiguration {6C16E359-B290-4362-9E47-D7FFB08A3724}
+      uuid_VC2008_Project {E6C2D3FF-4100-49D2-9014-56114A9E8608}
       target_path test
     } {
       file_ref {keyboard.cxx} {
@@ -4873,6 +4917,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {FCE01CE4-6455-42EC-AD5E-4D0CF2C51399}
       uuid_Xcode4_DebugBuildConfiguration {B5D30E0C-A63A-4968-A55E-26CDC05646AC}
       uuid_Xcode4_ReleaseBuildConfiguration {81DDB330-D3F5-4928-89B4-9F55D2F03EBD}
+      uuid_VC2008_Project {D2DBBCD9-40D2-4A49-BDAF-346120D2DB8E}
       target_path test
     } {
       file_ref {label.cxx} {
@@ -4899,6 +4944,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {643E8EE5-458D-4C92-AB3A-F91A8B888C84}
       uuid_Xcode4_DebugBuildConfiguration {E9DF98F5-F10F-4132-8618-9D9DD8E0CEC2}
       uuid_Xcode4_ReleaseBuildConfiguration {353E806A-C519-4E8A-94A0-9C0E7A5EA994}
+      uuid_VC2008_Project {E8CE65CA-3B20-4A38-A0D8-3DF575ADE66E}
       target_path test
     } {
       file_ref {line_style.cxx} {
@@ -4925,6 +4971,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {D500F1F0-A7A2-4BF8-9C04-4752E7D3D3EF}
       uuid_Xcode4_DebugBuildConfiguration {80D86100-9D72-483A-9D20-A11EADFB94C2}
       uuid_Xcode4_ReleaseBuildConfiguration {3B0004F6-4409-478D-AAF4-163419AF3879}
+      uuid_VC2008_Project {C1AEABBA-E0F6-4B82-B709-0A44BAADEF59}
       target_path test
     } {
       file_ref {list_visuals.cxx} {
@@ -4951,6 +4998,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {6DA1631A-83A9-48DC-BDC0-CFAB499E5EF4}
       uuid_Xcode4_DebugBuildConfiguration {14D82BC2-A3CF-45D6-A67E-1877F4D4755D}
       uuid_Xcode4_ReleaseBuildConfiguration {499ACCB8-2834-4AC2-8A26-37FFC8432AB5}
+      uuid_VC2008_Project {599F1D54-64F1-4333-B886-7D63E2D6D086}
       target_path test
     } {
       file_ref {mandelbrot.cxx} {
@@ -4988,6 +5036,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {71824BD8-B50F-45C6-8CAD-374E8192C330}
       uuid_Xcode4_DebugBuildConfiguration {F6BF6D77-8478-4A29-8DD3-07F64CBA11E7}
       uuid_Xcode4_ReleaseBuildConfiguration {CBE65E17-AD51-4EB9-94FB-DFB6F3B840E4}
+      uuid_VC2008_Project {7897431E-6BC4-4A96-9A41-CFF1D0D02241}
       target_path test
     } {
       file_ref {menubar.cxx} {
@@ -5014,6 +5063,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {A66B05A8-57B6-4908-A6F2-FE10796DBF41}
       uuid_Xcode4_DebugBuildConfiguration {3CA1DE6D-72E8-472F-8A10-C8B015EC1E82}
       uuid_Xcode4_ReleaseBuildConfiguration {B25D5B4B-CEFA-4E00-9AA7-1A6F7AAF7A59}
+      uuid_VC2008_Project {E8472464-AD36-4AFD-9248-1B5D4A680FB6}
       target_path test
     } {
       file_ref {message.cxx} {
@@ -5040,6 +5090,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {0A61E751-56BD-418F-9059-0B1F7CACFC1B}
       uuid_Xcode4_DebugBuildConfiguration {7AA77223-8C3B-4C57-A7BB-014363E2FCFC}
       uuid_Xcode4_ReleaseBuildConfiguration {533EB210-CD5B-4ADC-96AC-BEE905244897}
+      uuid_VC2008_Project {9ECC6E13-4B94-4B31-BDE5-B8E7F9612027}
       target_path test
     } {
       file_ref {minimum.cxx} {
@@ -5066,6 +5117,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {067E7E99-C74F-4240-9B46-9B88F5AA3A3F}
       uuid_Xcode4_DebugBuildConfiguration {084ADDE9-C47F-4E94-B6F7-42C0791C5C9E}
       uuid_Xcode4_ReleaseBuildConfiguration {3052A15D-173A-4CE7-AF1B-1C1BE66841EF}
+      uuid_VC2008_Project {7EBAD616-7AC5-46E0-B203-3F92D8110D9E}
       target_path test
     } {
       file_ref {navigation.cxx} {
@@ -5092,6 +5144,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {255566E6-FFD6-44A7-813D-4CD78E38FB27}
       uuid_Xcode4_DebugBuildConfiguration {A013CDD4-359D-49CC-B08B-F38D4115CA42}
       uuid_Xcode4_ReleaseBuildConfiguration {53BE2778-E370-4472-B538-62D348FD94EC}
+      uuid_VC2008_Project {B0B9FC83-4878-4BBB-A9AE-F0BF6CB51BE7}
       target_path test
     } {
       file_ref {native-filechooser.cxx} {
@@ -5118,6 +5171,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {12326BCE-241A-4794-8D16-A17D82972C01}
       uuid_Xcode4_DebugBuildConfiguration {4D868D4F-257D-47FD-9BA9-480EDD952CA0}
       uuid_Xcode4_ReleaseBuildConfiguration {EA876A73-69F2-4B09-9753-C9962A2091D6}
+      uuid_VC2008_Project {9774BE9A-32B5-408D-A963-EE1ABEA49873}
       target_path test
     } {
       file_ref {output.cxx} {
@@ -5144,6 +5198,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {AE2B9BF3-F1B9-4B05-A936-C0CD01415771}
       uuid_Xcode4_DebugBuildConfiguration {8239C4EC-C5F5-4335-8553-758010BF54F4}
       uuid_Xcode4_ReleaseBuildConfiguration {6FE15CCE-430B-452A-9D5B-D0771E5D9C0A}
+      uuid_VC2008_Project {54BF5BBA-37B9-4D9B-96B7-6AB8327854D6}
       target_path test
     } {
       file_ref {overlay.cxx} {
@@ -5170,6 +5225,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {6CDEF9DC-4430-49D9-AD68-8A18F62BE633}
       uuid_Xcode4_DebugBuildConfiguration {788D22DD-A443-4214-AA1C-C481D60AFDF7}
       uuid_Xcode4_ReleaseBuildConfiguration {B11DB6F2-7B2C-4B0E-BF10-FD7E678BBA51}
+      uuid_VC2008_Project {0FA1976B-7BFC-4390-9722-557D459F76F4}
       target_path test
     } {
       file_ref {pack.cxx} {
@@ -5196,6 +5252,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {6735D737-6936-4783-B709-E81D72934E84}
       uuid_Xcode4_DebugBuildConfiguration {3F2F8327-4926-4489-8CBC-7E23C25D7F51}
       uuid_Xcode4_ReleaseBuildConfiguration {0D25964D-029B-4564-9CD1-0C27DCEAD346}
+      uuid_VC2008_Project {FA1ECD8C-428B-48D9-8447-FA9660B06689}
       target_path test
     } {
       file_ref {pixmap_browser.cxx} {
@@ -5246,6 +5303,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {78F98ADA-9E67-4706-83BD-82E06AB1C93F}
       uuid_Xcode4_DebugBuildConfiguration {67089AE1-24CB-4F0B-9E04-2C4B2658A10A}
       uuid_Xcode4_ReleaseBuildConfiguration {4FBE3B6E-15DD-41CF-8A19-CEEE9EC12AA9}
+      uuid_VC2008_Project {372AFBC9-416B-4FC1-8163-D8F8F8B49755}
       target_path test
     } {
       file_ref {pixmap.cxx} {
@@ -5272,6 +5330,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {0218DBE1-72BD-4CF0-B216-513D41A83984}
       uuid_Xcode4_DebugBuildConfiguration {6357EF90-D496-4F19-A764-24F485DE9A12}
       uuid_Xcode4_ReleaseBuildConfiguration {DCFF9155-7613-449E-8E4F-A6DC10632B3A}
+      uuid_VC2008_Project {C98C9341-8A2C-4F0F-8594-927F49C8A490}
       target_path test
     } {
       file_ref {preferences.fl} {
@@ -5304,6 +5363,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {4D65B3DF-9D04-4959-84AD-23AB9AE66032}
       uuid_Xcode4_DebugBuildConfiguration {D9627B52-687A-4D96-80E0-C89E1FC2167D}
       uuid_Xcode4_ReleaseBuildConfiguration {C0B36765-AC4E-47E5-BCA7-819A313AA86D}
+      uuid_VC2008_Project {D427BAFD-8A53-4942-9E5D-9C4228D0D5AC}
       target_path test
     } {
       file_ref {radio.fl} {
@@ -5336,6 +5396,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {E4CD58D9-AE41-40D8-8DF4-B3EBCC1030B1}
       uuid_Xcode4_DebugBuildConfiguration {0405B4DC-C8F7-49C1-9DD8-DCCDE73E59DF}
       uuid_Xcode4_ReleaseBuildConfiguration {2D724EA9-8BA5-48B6-A859-46E85E8A5BDD}
+      uuid_VC2008_Project {5B78E5E4-C866-4123-84B4-1417C268AACA}
       target_path test
     } {
       file_ref {resizebox.cxx} {
@@ -5362,6 +5423,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {675D4CDE-8944-4716-830E-06A667F1DDB9}
       uuid_Xcode4_DebugBuildConfiguration {DDD1C9FE-E794-42B2-853B-BFA42547EBE3}
       uuid_Xcode4_ReleaseBuildConfiguration {F4CE9542-BDB9-4A7C-9C7F-1079A9705E73}
+      uuid_VC2008_Project {EE8DC2A1-8622-43AA-A6D9-DF30FEBB53FC}
       target_path test
     } {
       file_ref {resize.fl} {
@@ -5394,6 +5456,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {F4963C73-611B-429E-A46F-BFE8EC51CCFB}
       uuid_Xcode4_DebugBuildConfiguration {EEE92623-A84F-458A-94BD-3D53FD08FD61}
       uuid_Xcode4_ReleaseBuildConfiguration {3937EDD2-E304-482B-AE1A-92035884BF60}
+      uuid_VC2008_Project {6316C4EC-B982-4BA9-8FB3-94C94F06C73C}
       target_path test
     } {
       file_ref {rotated_text.cxx} {
@@ -5420,6 +5483,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {036C0339-492F-43ED-98CD-C3619BE2ACAE}
       uuid_Xcode4_DebugBuildConfiguration {78715DA4-FDE6-4320-B584-CE30420027E0}
       uuid_Xcode4_ReleaseBuildConfiguration {1B08FF26-BFE1-4B23-AB08-E914A9EC9F3D}
+      uuid_VC2008_Project {8E4ACC7F-5626-4021-AB24-0C89FE8FCF2F}
       target_path test
     } {
       file_ref {scroll.cxx} {
@@ -5446,6 +5510,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {0800AE83-7D20-420F-BEFA-08B953E07745}
       uuid_Xcode4_DebugBuildConfiguration {22AAC6C2-710F-4815-9995-C2848F8E2CFC}
       uuid_Xcode4_ReleaseBuildConfiguration {9912E9BD-1B82-4AA9-9E43-80CAFA9E9147}
+      uuid_VC2008_Project {663A34A5-965A-4A55-B814-2A638CADD202}
       target_path test
     } {
       file_ref {shape.cxx} {
@@ -5514,6 +5579,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {94C5C853-26E2-4D73-A8A9-0C80628DDEF4}
       uuid_Xcode4_DebugBuildConfiguration {6D6B5F6F-5EAC-4E0E-8C9C-103C4FDC60A5}
       uuid_Xcode4_ReleaseBuildConfiguration {D4651CFF-3DBD-4C35-B0C3-2ED19442EFEA}
+      uuid_VC2008_Project {52F041EB-3418-4A2E-B559-B6EA18CB4EA2}
       target_path test
     } {
       file_ref {subwindow.cxx} {
@@ -5540,6 +5606,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {334E4DF4-7716-4AB7-BC88-5060F0C4937A}
       uuid_Xcode4_DebugBuildConfiguration {583BBAA2-A086-4D8B-B053-86C515E22FAA}
       uuid_Xcode4_ReleaseBuildConfiguration {F88C3345-1A7D-4F4F-99D6-2FEE40E29C43}
+      uuid_VC2008_Project {29D907BD-7A6D-42D5-BDDE-6DEC41766F63}
       target_path test
     } {
       file_ref {sudoku.cxx} {
@@ -5605,6 +5672,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {ECCE97EC-6688-4667-8D47-850D26E0FD1D}
       uuid_Xcode4_DebugBuildConfiguration {225A4683-B9C7-4675-B5A3-994560D4E689}
       uuid_Xcode4_ReleaseBuildConfiguration {E45FEAA0-6151-4B38-97F0-3D9A48579E6C}
+      uuid_VC2008_Project {CFC4D5B5-B13B-44E0-80C5-A9A8BE8DC9C6}
       target_path test
     } {
       file_ref {symbols.cxx} {
@@ -5631,6 +5699,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {29EE471C-E5AF-4A5E-B355-6DA1E3A93DDF}
       uuid_Xcode4_DebugBuildConfiguration {87A28337-CAB8-415E-BCA2-3548D356188C}
       uuid_Xcode4_ReleaseBuildConfiguration {F57FF2AF-8A55-4B8B-B6B6-8D55A3BB6072}
+      uuid_VC2008_Project {8DCB8363-A8A3-402B-A9E2-82B0BCFD5992}
       target_path test
     } {
       file_ref {table.cxx} {
@@ -5657,6 +5726,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {E037C7E8-DB3B-4DBF-A058-5E92971844BD}
       uuid_Xcode4_DebugBuildConfiguration {1EE0BB1A-EF40-483F-8A70-D264039A34D3}
       uuid_Xcode4_ReleaseBuildConfiguration {8E346921-759C-4705-9962-7569BC963327}
+      uuid_VC2008_Project {2AED0659-9176-4597-B6E8-514211C67F2E}
       target_path test
     } {
       file_ref {tabs.fl} {
@@ -5689,6 +5759,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {CFFAFB36-2C28-4521-8047-73B21A602596}
       uuid_Xcode4_DebugBuildConfiguration {D070E688-7214-4E4C-A534-AE911091D8BD}
       uuid_Xcode4_ReleaseBuildConfiguration {84868665-8285-4386-82DD-D16A74B1DABF}
+      uuid_VC2008_Project {CF27B5AE-563D-4696-B736-8AA9E4029544}
       target_path test
     } {
       file_ref {threads.cxx} {
@@ -5715,6 +5786,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {E4E1A724-D068-42D1-97B6-A4801FE0C373}
       uuid_Xcode4_DebugBuildConfiguration {A854844D-E13F-426F-BCB3-4C67B11B3A74}
       uuid_Xcode4_ReleaseBuildConfiguration {4877356F-0201-487E-BBD4-A04E09691B3D}
+      uuid_VC2008_Project {93192E86-8DB1-4DA8-94ED-CF3D8C0D9FF0}
       target_path test
     } {
       file_ref {tile.cxx} {
@@ -5741,6 +5813,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {7D539A06-26B8-4E1D-AB16-97FF7BE52572}
       uuid_Xcode4_DebugBuildConfiguration {8ADF5236-78A6-4AA1-B210-3C35567A1FDC}
       uuid_Xcode4_ReleaseBuildConfiguration {C6EC1BF3-2CFA-412E-9E9D-096A08376730}
+      uuid_VC2008_Project {CDA4E57A-3852-4DC0-83C7-96B065BDCEBC}
       target_path test
     } {
       file_ref {tiled_image.cxx} {
@@ -5791,6 +5864,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {5D534FA8-772B-406F-BC7C-7BD874739BD4}
       uuid_Xcode4_DebugBuildConfiguration {858B5554-5E29-41AC-8DB2-AEEF302421B4}
       uuid_Xcode4_ReleaseBuildConfiguration {C382A52A-8008-4CC6-9B7D-6815E6A570DE}
+      uuid_VC2008_Project {A743EA39-53F1-4B3F-9660-DE2ED763271E}
       target_path test
     } {
       file_ref {tree.fl} {
@@ -5823,6 +5897,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {E86F31F6-EC09-4B40-B9EF-14A46AA797FB}
       uuid_Xcode4_DebugBuildConfiguration {73F4B208-B318-47BA-BEA1-4E6FFB087553}
       uuid_Xcode4_ReleaseBuildConfiguration {35A69372-268E-4D64-9189-BC7068BD404C}
+      uuid_VC2008_Project {82B53033-E5E3-4813-AFA4-B08EB3F21513}
       target_path test
     } {
       file_ref {unittest.cxx} {
@@ -5849,6 +5924,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {DD9D6E24-F6DF-49D2-9129-39F9C69FDFAB}
       uuid_Xcode4_DebugBuildConfiguration {A54947B3-1C62-4CB2-AC54-C73B859A7AA0}
       uuid_Xcode4_ReleaseBuildConfiguration {00E40557-DF2E-4E77-AB92-BA89C124A1E8}
+      uuid_VC2008_Project {1A887418-FAAA-4468-8281-7D43343D7B6C}
       target_path test
     } {
       file_ref {utf8.cxx} {
@@ -5875,6 +5951,7 @@ workspace FLTK {open selected
       uuid_Xcode4_SourcesBuildPhase {C6CB322D-0EED-4D79-9C2A-725082A58318}
       uuid_Xcode4_DebugBuildConfiguration {16EDDF56-F3A2-4B98-B7A2-6B71D19C9C6B}
       uuid_Xcode4_ReleaseBuildConfiguration {C0141158-B510-45A2-905E-193258A1A167}
+      uuid_VC2008_Project {AA5D9385-F52A-488F-88C4-D880E094A779}
       target_path test
     } {
       file_ref {valuators.fl} {
