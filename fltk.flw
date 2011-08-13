@@ -312,7 +312,6 @@ workspace FLTK {open
       uuid_Xcode4_FrameworksBuildPhase {B5140FAA-6B8D-4D78-814B-695B78247541}
       uuid_Xcode4_Group {727B6B68-F3C4-4BBB-9445-1AB0CD7EA6D9}
       uuid_Xcode4_ProductFileReference {86C380FE-33B2-4515-8BCE-B23C96A44961}
-      build_env 123
       target_path lib
     } {
       folder Headers {
@@ -2435,7 +2434,7 @@ workspace FLTK {open
         }
       }
     }
-    lib_target fltk_gl {
+    lib_target fltk_gl {selected
       uuid_Xcode4_FluidBuildRule {C15C877E-5712-4AB2-B7BE-7B8A5F1D6F49}
       uuid_Xcode4_ProductFileReference {47405B55-C42D-4839-B6BF-F6B5BA410AF3}
       uuid_Xcode4_FrameworksBuildPhase {A02CA389-C019-4CB2-82B7-1CC18C255A72}
@@ -2447,7 +2446,6 @@ workspace FLTK {open
       uuid_Xcode4_SourcesBuildPhase {98C43993-30FA-4699-BCA8-688651F80CFD}
       uuid_Xcode4_DebugBuildConfiguration {B71FD785-E704-42A1-88EF-A3E795FE3D9B}
       uuid_Xcode4_ReleaseBuildConfiguration {6B770F3D-FAEB-462A-8D41-7253B4DFA362}
-      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -2539,6 +2537,15 @@ workspace FLTK {open
           filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/ApplicationServices.framework}
           location 2
         }
+        file_ref {opengl32.lib} {
+          uuid_Xcode4_BuildFile {A3D30EDE-4054-449D-85DB-9165C144D76A}
+          uuid_Xcode4_FileRef {F4DCAE99-4BBF-4969-AF5C-0E1E2F52C2EB}
+          uuid_Xcode4_BuildFileInFrameworks {EC36A567-D44E-492D-8E8A-58F684410C4B}
+          build_env 4
+          list_env 4
+          filename_and_path {opengl32.lib}
+          location 3
+        }
       }
       folder Dependencies {open
         uuid_Xcode4_Group {5AD936C1-6A47-4960-8FF6-30D89A6A3DA1}
@@ -2563,7 +2570,6 @@ workspace FLTK {open
       uuid_Xcode4_SourcesBuildPhase {86B2A6B4-033B-4FB9-857F-07685AB81D91}
       uuid_Xcode4_DebugBuildConfiguration {BFD6BE9B-3A61-4E77-A4A2-24AB64D69A5D}
       uuid_Xcode4_ReleaseBuildConfiguration {F5ABCB61-FEAC-4C37-BFE1-76DB4BC56CAF}
-      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -2645,7 +2651,6 @@ workspace FLTK {open
       uuid_Xcode4_SourcesBuildPhase {523E09CD-9A26-4EB9-A1B3-B4B1A378223E}
       uuid_Xcode4_DebugBuildConfiguration {A6AD0BA5-C51B-4C60-851C-472F9FEAE9FA}
       uuid_Xcode4_ReleaseBuildConfiguration {5799E68C-6C23-4D48-A6A5-46C26838604D}
-      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -2756,7 +2761,6 @@ workspace FLTK {open
       uuid_Xcode4_SourcesBuildPhase {D6C93C8C-8865-4D57-B9F7-371B058F4E3D}
       uuid_Xcode4_DebugBuildConfiguration {7EEBB1B1-6C1C-4342-9B7C-3F96957A39D8}
       uuid_Xcode4_ReleaseBuildConfiguration {4364C496-C8EA-4726-BE8F-8D94ADDF19C7}
-      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -3016,7 +3020,6 @@ workspace FLTK {open
       uuid_Xcode4_SourcesBuildPhase {D73EA28D-B8C4-413B-9AA7-5A80277F5CF4}
       uuid_Xcode4_DebugBuildConfiguration {6A888480-8064-4D1B-A159-4AB5ED4D4051}
       uuid_Xcode4_ReleaseBuildConfiguration {F1E12179-62FF-476F-B95D-DF8C211E2D1C}
-      build_env 123
       target_path lib
     } {
       folder Sources {
@@ -3555,7 +3558,7 @@ workspace FLTK {open
         }
       }
     }
-    app_target adjuster {open selected
+    app_target adjuster {open
       uuid_Xcode4_FluidBuildRule {7F4E1728-AA0B-4CE8-A872-92E1BEF787E1}
       uuid_Xcode4_CopyFilesBuildPhase {32C8A51E-56B3-4B97-80CE-687395BC6B83}
       uuid_Xcode4_ProductFileReference {A7E21FA5-F599-4F5F-B681-9AF31A556B3A}

@@ -99,10 +99,6 @@ SOURCE=..\..\src\Fl_Help_Dialog.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fl_images_core.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\Fl_JPEG_Image.cxx
 # End Source File
 # Begin Source File
@@ -112,6 +108,10 @@ SOURCE=..\..\src\Fl_PNG_Image.cxx
 # Begin Source File
 
 SOURCE=..\..\src\Fl_PNM_Image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fl_images_core.cxx
 # End Source File
 # End Target
 # End Project

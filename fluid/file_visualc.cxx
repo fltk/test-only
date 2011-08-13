@@ -56,6 +56,10 @@ const char *DOS_path(const char *filename) {
 
 // ------------ VisualC 6 ------------------------------------------------------
 
+
+/*
+ Write a target entry for a VC6 workspace file.
+ */
 static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
   fprintf(out, "Project: \"%s\"=\".\%s.dsp\" - Package Owner=<4>\r\n\r\n", tgt->name(), tgt->name());
   fprintf(out, "Package=<5>\r\n{{{\r\n}}}\r\n\r\n");
@@ -74,6 +78,9 @@ static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
 }
 
 
+/*
+ Write a workspace fiel in VC6 format.
+ */
 static int write_dsw_file(FILE *out, Fl_Workspace_Type *workspace) {
   // file header
   fprintf(out, "Microsoft Developer Studio Workspace File, Format Version 6.00\r\n");
@@ -97,131 +104,38 @@ static int write_dsw_file(FILE *out, Fl_Workspace_Type *workspace) {
 }
 
 
-static int write_dsp_file(FILE *out, Fl_Target_Type *tgt) {
-  // FIXME: we are not generating code to build the dll's yet!  
-  fprintf(out, "# Microsoft Developer Studio Project File - Name=\"%s\" - Package Owner=<4>\r\n", tgt->name());
-  fprintf(out, "# Microsoft Developer Studio Generated Build File, Format Version 6.00\r\n");
-  fprintf(out, "# ** DO NOT EDIT **\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# TARGTYPE \"Win32 (x86) Application\" 0x0101\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "CFG=%s - Win32 Debug\r\n", tgt->name());
-  fprintf(out, "!MESSAGE This is not a valid makefile. To build this project using NMAKE,\r\n");
-  fprintf(out, "!MESSAGE use the Export Makefile command and run\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\".\r\n", tgt->name());
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE You can specify a configuration when running NMAKE\r\n");
-  fprintf(out, "!MESSAGE by defining the macro CFG on the command line. For example:\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\" CFG=\"%s - Win32 Debug\"\r\n", tgt->name(), tgt->name());
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE Possible choices for configuration are:\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE \"%s - Win32 Release\" (based on \"Win32 (x86) Application\")\r\n", tgt->name());
-  fprintf(out, "!MESSAGE \"%s - Win32 Debug\" (based on \"Win32 (x86) Application\")\r\n", tgt->name());
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# Begin Project\r\n");
-  fprintf(out, "# PROP AllowPerConfigDependencies 0\r\n");
-  fprintf(out, "# PROP Scc_ProjName \"\"\r\n");
-  fprintf(out, "# PROP Scc_LocalPath \"\"\r\n");
-  fprintf(out, "CPP=cl.exe\r\n");
-  fprintf(out, "MTL=midl.exe\r\n");
-  fprintf(out, "RSC=rc.exe\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "!IF  \"$(CFG)\" == \"%s - Win32 Release\"\r\n", tgt->name());
-  fprintf(out, "\r\n");
-  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
-  fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
-  fprintf(out, "# PROP Use_MFC 0\r\n");
-  fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP Output_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
-  fprintf(out, "# PROP Target_Dir \"\"\r\n");
-  fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-// TODO: add library dependencies here!
-  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
-  fprintf(out, "# ADD RSC /l 0x409 /d \"NDEBUG\"\r\n");
-  fprintf(out, "BSC32=bscmake.exe\r\n");
-  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
-  fprintf(out, "# ADD BSC32 /nologo\r\n");
-  fprintf(out, "LINK32=link.exe\r\n");
-  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386\r\n");
+/*
+ Create the list of linked libraries.
+ 
+ If is_debug is set, all internal target links will link to the 
+ debug version of that library
+ */
+static int write_add_link32(FILE *out, Fl_Target_Type *tgt, char is_debug) {
+  for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
+    if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC6)) {
+      if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
+        fprintf(out, "%s ", t->name());
+      } else if (t->is_target_dependency() && tgt->is_app_target()) {
+        Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
+        if (dep && dep->is_lib_target()) {
+          if (is_debug)
+            fprintf(out, "%sd.lib ", t->name());
+          else
+            fprintf(out, "%s.lib ", t->name());
+        }
+      }
+    }
+  }
+  return 0;
+}
 
-  fprintf(out, "# ADD LINK32 ");
-  for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
-    if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC6)) {
-      if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
-        fprintf(out, "%s ", t->name());
-      } else if (t->is_target_dependency()) {
-        Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
-        if (dep && dep->is_lib_target()) {
-          fprintf(out, "%s.lib ", t->name());
-        }
-      }
-    }
-  }
-  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->target_path(), tgt->name());
-  
-  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:yes\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "!ELSEIF  \"$(CFG)\" == \"%s - Win32 Debug\"\r\n", tgt->name());
-  fprintf(out, "\r\n");
-  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
-  fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
-  fprintf(out, "# PROP Use_MFC 0\r\n");
-  fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP Output_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
-  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
-  fprintf(out, "# PROP Target_Dir \"\"\r\n");
-  fprintf(out, "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
-  fprintf(out, "# ADD RSC /l 0x409 /d \"_DEBUG\"\r\n");
-  fprintf(out, "BSC32=bscmake.exe\r\n");
-  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
-  fprintf(out, "# ADD BSC32 /nologo\r\n");
-  fprintf(out, "LINK32=link.exe\r\n");
-  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\r\n");
-  
-  fprintf(out, "# ADD LINK32 ");
-  for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
-    if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC6)) {
-      if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
-        fprintf(out, "%s ", t->name());
-      } else if (t->is_target_dependency()) {
-        Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
-        if (dep && dep->is_lib_target()) {
-          fprintf(out, "%sd.lib ", t->name());
-        }
-      }
-    }
-  }
-  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%sd.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", tgt->target_path(), tgt->name());
-  
-  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "!ENDIF \r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# Begin Target\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# Name \"%s - Win32 Release\"\r\n", tgt->name());
-  fprintf(out, "# Name \"%s - Win32 Debug\"\r\n", tgt->name());
-  
+
+/*
+ Write all the source file dependencies for a VC6 project file.
+ 
+ This also generates the build rules for .fl files.
+ */
+static int write_source_files(FILE *out, Fl_Target_Type *tgt) {
   for (Fl_File_Type *file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
     if (file->builds_in(FL_ENV_VC6)) {
       if (file->file_is_fluid_ui()) {
@@ -273,6 +187,339 @@ static int write_dsp_file(FILE *out, Fl_Target_Type *tgt) {
       }
     }
   }
+  return 0;
+}
+
+
+/*
+ Write an static library project description for VisualC 6.
+ 
+ This function outputs a .dsp file for VC6. This function sets the specific flags
+ for generating a static library.
+ */
+static int write_dsp_file_for_lib(FILE *out, Fl_Target_Type *tgt) {
+
+  fprintf(out, "# Microsoft Developer Studio Project File - Name=\"%s\" - Package Owner=<4>\r\n", tgt->name());
+  fprintf(out, "# Microsoft Developer Studio Generated Build File, Format Version 6.00\r\n");
+  fprintf(out, "# ** DO NOT EDIT **\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# TARGTYPE \"Win32 (x86) Static Library\" 0x0104\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "CFG=%s - Win32 Debug\r\n", tgt->name());
+  fprintf(out, "!MESSAGE This is not a valid makefile. To build this project using NMAKE,\r\n");
+  fprintf(out, "!MESSAGE use the Export Makefile command and run\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\".\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE You can specify a configuration when running NMAKE\r\n");
+  fprintf(out, "!MESSAGE by defining the macro CFG on the command line. For example:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\" CFG=\"%s - Win32 Debug\"\r\n", tgt->name(), tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE Possible choices for configuration are:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE \"%s - Win32 Release\" (based on \"Win32 (x86) Static Library\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \"%s - Win32 Debug\" (based on \"Win32 (x86) Static Library\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Project\r\n");
+  fprintf(out, "# PROP AllowPerConfigDependencies 0\r\n");
+  fprintf(out, "# PROP Scc_ProjName \"\"\r\n");
+  fprintf(out, "# PROP Scc_LocalPath \"\"\r\n");
+  fprintf(out, "CPP=cl.exe\r\n");
+  fprintf(out, "RSC=rc.exe\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!IF  \"$(CFG)\" == \"%s - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP Output_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# SUBTRACT CPP /Os\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409\r\n");
+  fprintf(out, "# ADD RSC /l 0x409\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LIB32=link.exe -lib\r\n");
+  fprintf(out, "# ADD BASE LIB32 /nologo\r\n");
+  fprintf(out, "# ADD LIB32 /nologo /out:\"..\\..\\%s\\%s.lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "!ELSEIF  \"$(CFG)\" == \"%s - Win32 Debug\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP Output_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /GX /Z7 /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /FR /YX /FD /c\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409\r\n");
+  fprintf(out, "# ADD RSC /l 0x409\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LIB32=link.exe -lib\r\n");
+  fprintf(out, "# ADD BASE LIB32 /nologo\r\n");
+  fprintf(out, "# ADD LIB32 /nologo /out:\"..\\..\\%s\\%sd.lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "!ENDIF \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Target\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Name \"%s - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "# Name \"%s - Win32 Debug\"\r\n", tgt->name());
+  
+  write_source_files(out, tgt);
+  
+  fprintf(out, "# End Target\r\n");
+  fprintf(out, "# End Project\r\n");
+   
+  return 0;
+}
+
+
+/*
+ Write an dll project description for VisualC 6.
+ 
+ This function outputs a .dsp file for VC6. This function sets the specific flags
+ for generating a dll. This is pretty much untested and looks wrong in some details.
+ I would greatly appreciate if a VC6 user could test these files, as I no longer
+ own VC6.
+ */
+static int write_dsp_file_for_dll(FILE *out, Fl_Target_Type *tgt) {
+
+  fprintf(out, "# Microsoft Developer Studio Project File - Name=\"%sdll\" - Package Owner=<4>\r\n", tgt->name());
+  fprintf(out, "# Microsoft Developer Studio Generated Build File, Format Version 6.00\r\n");
+  fprintf(out, "# ** DO NOT EDIT **\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# TARGTYPE \"Win32 (x86) Dynamic-Link Library\" 0x0102\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "CFG=%sdll - Win32 Debug\r\n", tgt->name());
+  fprintf(out, "!MESSAGE This is not a valid makefile. To build this project using NMAKE,\r\n");
+  fprintf(out, "!MESSAGE use the Export Makefile command and run\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%sdll.mak\".\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE You can specify a configuration when running NMAKE\r\n");
+  fprintf(out, "!MESSAGE by defining the macro CFG on the command line. For example:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%sdll.mak\" CFG=\"%sdll - Win32 Debug\"\r\n", tgt->name(), tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE Possible choices for configuration are:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE \"%sdll - Win32 Release\" (based on \"Win32 (x86) Dynamic-Link Library\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \"%sdll - Win32 Debug\" (based on \"Win32 (x86) Dynamic-Link Library\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Project\r\n");
+  fprintf(out, "# PROP AllowPerConfigDependencies 0\r\n");
+  fprintf(out, "# PROP Scc_ProjName \"\"\r\n");
+  fprintf(out, "# PROP Scc_LocalPath \"\"\r\n");
+  fprintf(out, "CPP=cl.exe\r\n");
+  fprintf(out, "MTL=midl.exe\r\n");
+  fprintf(out, "RSC=rc.exe\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!IF  \"$(CFG)\" == \"%sdll - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Release/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP Output_Dir \"Release/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /I \".\" /I \"../..\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
+  fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
+  fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
+  fprintf(out, "# ADD RSC /l 0x409 /d \"NDEBUG\"\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LINK32=link.exe\r\n");
+  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386\r\n");
+  
+  fprintf(out, "# ADD LINK32 ");
+  write_add_link32(out, tgt, 0);
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:\"%sdll.pdb\" /machine:I386\r\n", tgt->name());
+  
+  fprintf(out, "# SUBTRACT LINK32 /pdb:none\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!ELSEIF  \"$(CFG)\" == \"%sdll - Win32 Debug\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Debug/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP Output_Dir \"Debug/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug/%sdll\"\r\n", tgt->name());
+  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /GX /ZI /Od /I \".\" /I \"../..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
+  fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
+  fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
+  fprintf(out, "# ADD RSC /l 0x409 /d \"_DEBUG\"\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LINK32=link.exe\r\n");
+  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept\r\n");
+  
+  fprintf(out, "# ADD LINK32 ");
+  write_add_link32(out, tgt, 1);
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:\"%sdlld.pdb\" /debug /machine:I386 /out:\"Debug/%sdll/%sdlld.dll\" /pdbtype:sept\r\n", tgt->name(), tgt->name(), tgt->name());
+  
+  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!ENDIF \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Target\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Name \"%sdll - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "# Name \"%sdll - Win32 Debug\"\r\n", tgt->name());
+  
+  write_source_files(out, tgt);
+  
+  fprintf(out, "# End Target\r\n");
+  fprintf(out, "# End Project\r\n");
+ 
+  return 0;
+}
+
+
+/*
+ Write an application project description for VisualC 6.
+ 
+ This function outputs a .dsp file for VC6. The files should also work with
+ nmake from the command line, which is very useful once Fluid can build and 
+ launch applications.
+ */
+static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
+  fprintf(out, "# Microsoft Developer Studio Project File - Name=\"%s\" - Package Owner=<4>\r\n", tgt->name());
+  fprintf(out, "# Microsoft Developer Studio Generated Build File, Format Version 6.00\r\n");
+  fprintf(out, "# ** DO NOT EDIT **\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# TARGTYPE \"Win32 (x86) Application\" 0x0101\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "CFG=%s - Win32 Debug\r\n", tgt->name());
+  fprintf(out, "!MESSAGE This is not a valid makefile. To build this project using NMAKE,\r\n");
+  fprintf(out, "!MESSAGE use the Export Makefile command and run\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\".\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE You can specify a configuration when running NMAKE\r\n");
+  fprintf(out, "!MESSAGE by defining the macro CFG on the command line. For example:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE NMAKE /f \"%s.mak\" CFG=\"%s - Win32 Debug\"\r\n", tgt->name(), tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE Possible choices for configuration are:\r\n");
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "!MESSAGE \"%s - Win32 Release\" (based on \"Win32 (x86) Application\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \"%s - Win32 Debug\" (based on \"Win32 (x86) Application\")\r\n", tgt->name());
+  fprintf(out, "!MESSAGE \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Project\r\n");
+  fprintf(out, "# PROP AllowPerConfigDependencies 0\r\n");
+  fprintf(out, "# PROP Scc_ProjName \"\"\r\n");
+  fprintf(out, "# PROP Scc_LocalPath \"\"\r\n");
+  fprintf(out, "CPP=cl.exe\r\n");
+  fprintf(out, "MTL=midl.exe\r\n");
+  fprintf(out, "RSC=rc.exe\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!IF  \"$(CFG)\" == \"%s - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
+  fprintf(out, "# PROP Output_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Release/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
+  fprintf(out, "# ADD RSC /l 0x409 /d \"NDEBUG\"\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LINK32=link.exe\r\n");
+  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386\r\n");
+
+  fprintf(out, "# ADD LINK32 ");
+  write_add_link32(out, tgt, 0);
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+  
+  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:yes\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!ELSEIF  \"$(CFG)\" == \"%s - Win32 Debug\"\r\n", tgt->name());
+  fprintf(out, "\r\n");
+  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
+  fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP BASE Output_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
+  fprintf(out, "# PROP Use_MFC 0\r\n");
+  fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
+  fprintf(out, "# PROP Output_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Intermediate_Dir \"Debug/%s\"\r\n", tgt->name());
+  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
+  fprintf(out, "# PROP Target_Dir \"\"\r\n");
+  fprintf(out, "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
+  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
+  fprintf(out, "# ADD RSC /l 0x409 /d \"_DEBUG\"\r\n");
+  fprintf(out, "BSC32=bscmake.exe\r\n");
+  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
+  fprintf(out, "# ADD BSC32 /nologo\r\n");
+  fprintf(out, "LINK32=link.exe\r\n");
+  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\r\n");
+  
+  fprintf(out, "# ADD LINK32 ");
+  write_add_link32(out, tgt, 1);
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%sd.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+  
+  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "!ENDIF \r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Begin Target\r\n");
+  fprintf(out, "\r\n");
+  fprintf(out, "# Name \"%s - Win32 Release\"\r\n", tgt->name());
+  fprintf(out, "# Name \"%s - Win32 Debug\"\r\n", tgt->name());
+  
+  write_source_files(out, tgt);
   
   fprintf(out, "# End Target\r\n");
   fprintf(out, "# End Project\r\n");
@@ -281,6 +528,18 @@ static int write_dsp_file(FILE *out, Fl_Target_Type *tgt) {
 }
 
 
+/*
+ Write all VisualC 6 IDE files.
+ 
+ This module write all the files needed to create the VisualC 6 IDE. It generates
+ an fltk.dsw file and all dsp files depending on it. All parameters are taken from
+ the Fl_..Type hierarchy in Fluid. 
+ 
+ FIXME: !!! Currently, this function is limited to writing the FLTK build system itself. !!!
+ This module was tested with fltk.flw. Eventually, we will be writing universal
+ new IDE setups as a convinience to FLTK/ FLUID users.
+ 
+ */
 int write_fltk_ide_visualc6() {
   
   Fl_Workspace_Type *workspace = (Fl_Workspace_Type*)Fl_Type::first;
@@ -303,95 +562,31 @@ int write_fltk_ide_visualc6() {
   // write project files (.dsp)
   for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_VC6)) {
-      sprintf(buf, "%side/VisualC6/%s.dsp", base_dir, tgt->name());
-      out = fopen(buf, "wb");
-      write_dsp_file(out, tgt);
-      fclose(out);
-    }
-  }
-  
-  //+++
-  // TODO: write static and dynamic library project files
-  // The code below fixes Fluid and fltk.lib for now.
-  
-  // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
-  // When done, everything will likely be integrated into the executable to make one compact package.
-  strcpy(base_dir, filename);
-  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
-  strcpy(tgt_base, base_dir);
-  strcpy(buf, base_dir);
-  strcat(buf, "ide/templates/VisualC6.tmpl");
-  out = stdout;
-  FILE *in = fopen(buf, "rb");
-  
-  for (;;) {
-    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
-      break;
-    char *hash = buf-1;
-    char copyLine = 1;
-    for (;;) {
-      hash = strchr(hash+1, '#');
-      if (!hash) break;
-      if (hash && hash[1]=='#') { // double hash escapes the control character
-        int n = strlen(hash);
-        memmove(hash, hash+1, n);
-        continue;
-      } else { // single hash is a command
-        copyLine = 0;
-        if (strncmp(hash, "#WriteFile(",11)==0) {
-          // mark the end of the filename (this will crash if the formatting is wrong!)
-          char *sep = strchr(hash, ')');
-          *sep = 0;
-          // filename is relative, so add it to the base_dir
-          char fnbuf[2048];
-          strcpy(fnbuf, base_dir);
-          strcat(fnbuf, hash+11);
-          out = fopen(fnbuf, "wb");
-          // set the filepath for this target. In this module, all filenames are relative to the Makefile
-          strcpy(tgt_base, fnbuf);
-          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
-                                                        // restore buffer and continue 
-          *sep = ')';
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#CloseFile", 10)==0) {
-          if (out!=stdout) fclose(out);
-          out = stdout;
-          // set the filepath for the default target. 
-          strcpy(tgt_base, base_dir);
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC6 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_code() && f->builds_in(FL_ENV_VC6)) {
-              fprintf(out, "# Begin Source File\r\n");
-              fprintf(out, "\r\n");
-              fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(f->filename()));
-              fprintf(out, "# End Source File\r\n");
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else {
-          printf("Unknown command in template: <<%s>>\n", hash);
-          copyLine = 1;
-          hash++;
-        }
+      if (tgt->is_app_target()) {
+        sprintf(buf, "%side/VisualC6/%s.dsp", base_dir, tgt->name());
+        out = fopen(buf, "wb");
+        write_dsp_file_for_app(out, tgt);
+        fclose(out);
+      } else if (tgt->is_lib_target()) {
+        sprintf(buf, "%side/VisualC6/%s.dsp", base_dir, tgt->name());
+        out = fopen(buf, "wb");
+        write_dsp_file_for_lib(out, tgt);
+        fclose(out);
+        sprintf(buf, "%side/VisualC6/%sdll.dsp", base_dir, tgt->name());
+        out = fopen(buf, "wb");
+        write_dsp_file_for_dll(out, tgt);
+        fclose(out);
+      } else {
+        printf("Internale error writing unknown VC6 target!\n");
       }
     }
-    if (copyLine) fputs(buf, out);
   }
-  
-  fclose(in);
-  if (out!=stdout) fclose(out);
-  
   return 0;
 }
 
 // ------------ VisualC 2008 ---------------------------------------------------
+
+// TODO: as code is getting more complex, move this into individual modules
 
 int write_fltk_ide_visualc2008() {
   // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .

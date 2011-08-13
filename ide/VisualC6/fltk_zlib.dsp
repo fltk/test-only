@@ -40,8 +40,8 @@ RSC=rc.exe
 # PROP Output_Dir "Release/fltk_zlib"
 # PROP Intermediate_Dir "Release/fltk_zlib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I "." /I "../.." /I "../../zlib" /I "../../png" /I "../../jpeg" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "FL_LIBRARY" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I "." /I "../.." /I "../../zlib" /I "../../png" /I "../../jpeg" /D "WIN32" /D "FL_LIBRARY" /D "NDEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
 # SUBTRACT CPP /Os
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -64,8 +64,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug/fltk_zlib"
 # PROP Intermediate_Dir "Debug/fltk_zlib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /GX /Z7 /Od /I "." /I "../.." /I "../../zlib" /I "../../png" /I "../../jpeg" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "FL_LIBRARY" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MDd /GX /Z7 /Od /I "." /I "../.." /I "../../zlib" /I "../../png" /I "../../jpeg" /D "WIN32" /D "FL_LIBRARY" /D "_DEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -82,48 +82,63 @@ LIB32=link.exe -lib
 # Name "fltk_zlib - Win32 Release"
 # Name "fltk_zlib - Win32 Debug"
 # Begin Source File
+
 SOURCE=..\..\zlib\adler32.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\compress.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\crc32.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\deflate.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzclose.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzlib.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzread.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzwrite.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\infback.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\inffast.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\inflate.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\inftrees.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\trees.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\uncompr.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\zutil.c
 # End Source File
 # End Target

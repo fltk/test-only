@@ -1024,6 +1024,26 @@ static int writeConfigurationListSection(FILE *out) {
 // ------------ file writers dispatch-------------------------------------------
 
 
+/*
+ Write all Xcode IDE files.
+ 
+ This module write all the files needed to create the Xcode. It generates
+ an fltk.dsw file and all dsp files depending on it. All parameters are taken from
+ the Fl_..Type hierarchy in Fluid. 
+ 
+ \todo !!! Currently, this function is limited to writing the FLTK build system itself. !!!
+ This module was tested with fltk.flw. Eventually, we will be writing universal
+ new IDE setups as a convinience to FLTK/ FLUID users.
+ 
+ \todo this module writes the outdated Xcode 3.0 version with a lot of "modernization"
+ hints from Xcode 4. We will have Xcode do teh modernization for us and then check
+ the changes with "diff" and implement those here. The format should then be marked 3.2.
+ 
+ \todo linking to OS X frameworks has a very inflexible path. And even though this
+ setups seems to work, currentl, I would like to use a different path that removes
+ the need for the user to type the full SDK path.
+ 
+ */
 int write_fltk_ide_xcode4() {
   
   workspace = (Fl_Workspace_Type*)Fl_Type::first;

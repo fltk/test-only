@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 opengl32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltk_zlibdll.pdb" /machine:I386
+# ADD LINK32 comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltk_zlibdll.pdb" /machine:I386
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltk_zlibdll - Win32 Debug"
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltk_zlibdlld.pdb" /debug /machine:I386 /out:"Debug/fltk_zlibdll/fltk_zlibdlld.dll" /pdbtype:sept
+# ADD LINK32 comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltk_zlibdlld.pdb" /debug /machine:I386 /out:"Debug/fltk_zlibdll/fltk_zlibdlld.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
 !ENDIF 
@@ -90,48 +90,63 @@ LINK32=link.exe
 # Name "fltk_zlibdll - Win32 Release"
 # Name "fltk_zlibdll - Win32 Debug"
 # Begin Source File
+
 SOURCE=..\..\zlib\adler32.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\compress.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\crc32.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\deflate.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzclose.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzlib.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzread.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\gzwrite.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\infback.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\inffast.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\inflate.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\inftrees.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\trees.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\uncompr.c
 # End Source File
 # Begin Source File
+
 SOURCE=..\..\zlib\zutil.c
 # End Source File
 # End Target
