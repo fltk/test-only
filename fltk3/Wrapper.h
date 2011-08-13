@@ -241,40 +241,41 @@ namespace fltk3 {
     virtual ~Wrapper();
     
     mutable unsigned int pVCalls;
-    static const unsigned int pVCallDtor          = 1<<0;
+	enum {
+      pVCallDtor          = 1<<0,
     
-    static const unsigned int pVCallWidgetDraw    = 1<<1;
-    static const unsigned int pVCallWidgetHandle  = 1<<2;
-    static const unsigned int pVCallWidgetResize  = 1<<3;
-    static const unsigned int pVCallWidgetShow    = 1<<4;
-    static const unsigned int pVCallWidgetHide    = 1<<5;
-    static const unsigned int pVCallWidgetDrawOverlay         = 1<<6;
-    static const unsigned int pVCallWidgetBrowserItemFirst    = 1<<7;
-    static const unsigned int pVCallWidgetBrowserItemNext     = 1<<8;
-    static const unsigned int pVCallWidgetBrowserItemPrev     = 1<<9;
-    static const unsigned int pVCallWidgetBrowserItemLast     = 1<<10;
-    static const unsigned int pVCallWidgetBrowserItemHeight   = 1<<11;
-    static const unsigned int pVCallWidgetBrowserItemWidth    = 1<<12;
-    static const unsigned int pVCallWidgetBrowserItemQuickHeight = 1<<13;
-    static const unsigned int pVCallWidgetBrowserItemDraw     = 1<<14;
-    static const unsigned int pVCallWidgetBrowserItemText     = 1<<15;
-    static const unsigned int pVCallWidgetBrowserItemSwap     = 1<<16;
-    static const unsigned int pVCallWidgetBrowserItemAt       = 1<<17;
-    static const unsigned int pVCallWidgetBrowserFullWidth    = 1<<18;
-    static const unsigned int pVCallWidgetBrowserFullHeight   = 1<<19;
-    static const unsigned int pVCallWidgetBrowserIncrHeight   = 1<<20;
-    static const unsigned int pVCallWidgetBrowserItemSelect   = 1<<21;
-    static const unsigned int pVCallWidgetBrowserItemSelected = 1<<22;
+	  pVCallWidgetDraw    = 1<<1,
+      pVCallWidgetHandle  = 1<<2,
+      pVCallWidgetResize  = 1<<3,
+      pVCallWidgetShow    = 1<<4,
+      pVCallWidgetHide    = 1<<5,
+      pVCallWidgetDrawOverlay         = 1<<6,
+      pVCallWidgetBrowserItemFirst    = 1<<7,
+      pVCallWidgetBrowserItemNext     = 1<<8,
+      pVCallWidgetBrowserItemPrev     = 1<<9,
+      pVCallWidgetBrowserItemLast     = 1<<10,
+      pVCallWidgetBrowserItemHeight   = 1<<11,
+      pVCallWidgetBrowserItemWidth    = 1<<12,
+      pVCallWidgetBrowserItemQuickHeight = 1<<13,
+      pVCallWidgetBrowserItemDraw     = 1<<14,
+      pVCallWidgetBrowserItemText     = 1<<15,
+      pVCallWidgetBrowserItemSwap     = 1<<16,
+      pVCallWidgetBrowserItemAt       = 1<<17,
+      pVCallWidgetBrowserFullWidth    = 1<<18,
+      pVCallWidgetBrowserFullHeight   = 1<<19,
+      pVCallWidgetBrowserIncrHeight   = 1<<20,
+      pVCallWidgetBrowserItemSelect   = 1<<21,
+      pVCallWidgetBrowserItemSelected = 1<<22,
     
-    static const unsigned int pVCallImageCopyWH       = 1<<1;
-    static const unsigned int pVCallImageColorAverage = 1<<2;
-    static const unsigned int pVCallImageDesaturate   = 1<<3;
-    static const unsigned int pVCallImageLabelW       = 1<<4;
-    static const unsigned int pVCallImageLabelM       = 1<<5;
-    static const unsigned int pVCallImageDraw         = 1<<6;
-    static const unsigned int pVCallImageUncache      = 1<<7;
+      pVCallImageCopyWH       = 1<<1,
+      pVCallImageColorAverage = 1<<2,
+      pVCallImageDesaturate   = 1<<3,
+      pVCallImageLabelW       = 1<<4,
+      pVCallImageLabelM       = 1<<5,
+      pVCallImageDraw         = 1<<6,
+      pVCallImageUncache      = 1<<7
+	};
   };
-
   
   class WidgetWrapper : public Wrapper {
   public:

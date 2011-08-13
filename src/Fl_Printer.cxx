@@ -92,12 +92,12 @@ void fltk3::SystemPrinter::set_current(void)
 #elif defined(WIN32)
   fl_gc = (HDC)gc;
 #endif
-  this->fltk3::SurfaceDevice::set_current();
+  this->SurfaceDevice::set_current();
 }
 
 void fltk3::SystemPrinter::origin(int *x, int *y)
 {
-  fltk3::PagedDevice::origin(x, y);
+  PagedDevice::origin(x, y);
 }
 
 #endif
@@ -108,7 +108,7 @@ fltk3::Printer::Printer(void) {
 #else
   printer = new fltk3::PostScriptPrinter();
 #endif
-  fltk3::SurfaceDevice::driver(printer->driver());
+  SurfaceDevice::driver(printer->driver());
 }
 
 int fltk3::Printer::start_job(int pagecount, int *frompage, int *topage)

@@ -169,9 +169,9 @@ int fltk3::TabGroup::handle(int event) {
   case fltk3::PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (fltk3::event_y() > y()+H) return fltk3::Group::handle(event);
+      if (fltk3::event_y() > y()+H) return Group::handle(event);
     } else {
-      if (fltk3::event_y() < y()+h()+H) return fltk3::Group::handle(event);
+      if (fltk3::event_y() < y()+h()+H) return Group::handle(event);
     }}
     /* FALLTHROUGH */
   case fltk3::DRAG:
@@ -195,7 +195,7 @@ int fltk3::TabGroup::handle(int event) {
     }
     return 1;
   case fltk3::MOVE: {
-    int ret = fltk3::Group::handle(event);
+    int ret = Group::handle(event);
     fltk3::Widget *o = fltk3::Tooltip::current(), *n = o;
     int H = tab_height();
     if ( (H>=0) && (fltk3::event_y()>y()+H) )
@@ -211,17 +211,17 @@ int fltk3::TabGroup::handle(int event) {
     return ret; }
   case fltk3::FOCUS:
   case fltk3::UNFOCUS:
-    if (!fltk3::visible_focus()) return fltk3::Group::handle(event);
+    if (!fltk3::visible_focus()) return Group::handle(event);
     if (fltk3::event() == fltk3::RELEASE ||
 	fltk3::event() == fltk3::SHORTCUT ||
 	fltk3::event() == fltk3::KEYBOARD ||
 	fltk3::event() == fltk3::FOCUS ||
 	fltk3::event() == fltk3::UNFOCUS) {
       redraw_tabs();
-      if (fltk3::event() == fltk3::FOCUS) return fltk3::Group::handle(event);
+      if (fltk3::event() == fltk3::FOCUS) return Group::handle(event);
       if (fltk3::event() == fltk3::UNFOCUS) return 0;
       else return 1;
-    } else return fltk3::Group::handle(event);
+    } else return Group::handle(event);
   case fltk3::KEYBOARD:
     switch (fltk3::event_key()) {
       case fltk3::LeftKey:
@@ -242,11 +242,11 @@ int fltk3::TabGroup::handle(int event) {
         return 1;
       case fltk3::DownKey:
         redraw();
-        return fltk3::Group::handle(fltk3::FOCUS);
+        return Group::handle(fltk3::FOCUS);
       default:
         break;
     }
-    return fltk3::Group::handle(event);
+    return Group::handle(event);
   case fltk3::SHORTCUT:
     for (i = 0; i < children(); ++i) {
       fltk3::Widget *c = child(i);
@@ -258,11 +258,11 @@ int fltk3::TabGroup::handle(int event) {
         return 1;
       }
     }
-    return fltk3::Group::handle(event);
+    return Group::handle(event);
   case fltk3::SHOW:
     value(); // update visibilities and fall through
   default:
-    return fltk3::Group::handle(event);
+    return Group::handle(event);
 
   }
 }

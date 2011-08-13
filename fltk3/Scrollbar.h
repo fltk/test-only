@@ -77,7 +77,7 @@ namespace fltk3 {
      \see fltk3::Scrollbar::value(int p)
      \see fltk3::Scrollbar::value(int pos, int size, int first, int total)
      */
-    int value() const {return int(fltk3::Slider::value());}
+    int value() const {return int(Slider::value());}
     
     /**
      Sets the value (position) of the slider in the scrollbar.
@@ -85,7 +85,7 @@ namespace fltk3 {
      \see fltk3::Scrollbar::value()
      \see fltk3::Scrollbar::value(int pos, int size, int first, int total)
      */
-    int value(int p) {return int(fltk3::Slider::value((double)p));}
+    int value(int p) {return int(Slider::value((double)p));}
     
     /**
      Sets the position, size and range of the slider in the scrollbar.

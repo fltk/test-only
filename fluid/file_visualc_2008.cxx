@@ -73,7 +73,7 @@ static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
       for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
         Fl_Target_Type *dep = Fl_Target_Type::find(tgt_dep->name());
         if (dep && tgt_dep->builds_in(FL_ENV_VC2008)) {
-          fprintf(out, "\t\t\{%s} = {%s}\r\n",
+          fprintf(out, "\t\t{%s} = {%s}\r\n",
                   dep->get_UUID(VC2008_Project),
                   dep->get_UUID(VC2008_Project));
         }

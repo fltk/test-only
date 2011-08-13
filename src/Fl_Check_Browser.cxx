@@ -322,7 +322,7 @@ int fltk3::CheckBrowser::handle(int event) {
   FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (event==fltk3::PUSH)
     deselect();
-  return fltk3::Browser_::handle(event);
+  return Browser_::handle(event);
 }
 
 //

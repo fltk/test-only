@@ -114,7 +114,7 @@ int fltk3::Browser_::leftedge() const {
  */
 void fltk3::Browser_::resize(int X, int Y, int W, int H) {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
-  fltk3::Widget::resize(X, Y, W, H);
+  Widget::resize(X, Y, W, H);
   // move the scrollbars so they can respond to events:
   bbox(X,Y,W,H);
   scrollbar.resize(
@@ -776,7 +776,7 @@ int fltk3::Browser_::handle(int event) {
     }
   }
   
-  if (fltk3::Group::handle(event)) return 1;
+  if (Group::handle(event)) return 1;
   if (wp.deleted()) return 1;
   
   int X, Y, W, H; bbox(X, Y, W, H);

@@ -144,7 +144,7 @@ fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
   \returns non-zero if the new value is different to the old one.
  */
 int fltk3::Choice::value(const fltk3::MenuItem *v) {
-  if (!fltk3::Menu_::value(v)) return 0;
+  if (!Menu_::value(v)) return 0;
   redraw();
   return 1;
 }
@@ -158,7 +158,7 @@ int fltk3::Choice::value(const fltk3::MenuItem *v) {
 int fltk3::Choice::value(int v) {
   if (v == -1) return value((const fltk3::MenuItem *)0);
   if (v < 0 || v >= (size() - 1)) return 0;
-  if (!fltk3::Menu_::value(v)) return 0;
+  if (!Menu_::value(v)) return 0;
   redraw();
   return 1;
 }
@@ -194,7 +194,7 @@ int fltk3::Choice::handle(int e) {
     picked(v);
     return 1;
   case fltk3::SHORTCUT:
-    if (fltk3::Widget::test_shortcut()) goto J1;
+    if (Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
     if (!v) return 0;
     if (v != mvalue()) redraw();

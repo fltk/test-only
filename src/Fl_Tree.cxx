@@ -270,8 +270,8 @@ void fltk3::Tree::draw() {
   // We handle drawing children ourselves by calling each item's draw()
   //
   // Handle group's bg
-  fltk3::Group::draw_box();
-  fltk3::Group::draw_label();
+  Group::draw_box();
+  Group::draw_label();
   // Handle tree
   if ( ! _root ) return;
   int cx = x() + fltk3::box_dx(box());
@@ -314,11 +314,11 @@ void fltk3::Tree::draw() {
     _vscroll->resize(sx,sy,sw,sh);
     _vscroll->slider_size(float(ch)/float(ydiff));
   } else {
-    _vscroll->fltk3::Slider::value(0);
+    _vscroll->Slider::value(0);
     _vscroll->hide();
   }
   fltk3::push_clip(cx,cy,cw,ch);
-  fltk3::Group::draw_children();	// draws any FLTK children set via fltk3::Tree::widget()
+  Group::draw_children();	// draws any FLTK children set via fltk3::Tree::widget()
   fltk3::pop_clip();
 }
 
@@ -620,7 +620,7 @@ int fltk3::Tree::handle(int e) {
   }
   
   // Let fltk3::Group take a shot at handling the event
-  if (fltk3::Group::handle(e)) {
+  if (Group::handle(e)) {
     return(1);			// handled? don't continue below
   }
   

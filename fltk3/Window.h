@@ -330,7 +330,7 @@ namespace fltk3 {
       minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; aspect=g; size_range_();}
     
     /** See void fltk3::Window::label(const char*)   */
-    const char* label() const	{return fltk3::Widget::label();}
+    const char* label() const {return Widget::label();}
     /**  See void fltk3::Window::iconlabel(const char*)   */
     const char* iconlabel() const	{return iconlabel_;}
     /** Sets the window title bar label. */

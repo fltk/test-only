@@ -71,7 +71,7 @@ fltk3::PostScriptFileDevice::PostScriptFileDevice(void)
 #ifdef __APPLE__
   gc = fl_gc; // the display context is used by fltk3::text_extents()
 #endif
-  fltk3::SurfaceDevice::driver( new fltk3::PostScriptGraphicsDriver() );
+  SurfaceDevice::driver( new fltk3::PostScriptGraphicsDriver() );
 }
 
 /**
@@ -79,7 +79,7 @@ fltk3::PostScriptFileDevice::PostScriptFileDevice(void)
  */
 fltk3::PostScriptGraphicsDriver *fltk3::PostScriptFileDevice::driver()
 {
-  return (fltk3::PostScriptGraphicsDriver*)fltk3::SurfaceDevice::driver();
+  return (PostScriptGraphicsDriver*)SurfaceDevice::driver();
 }
 
 
@@ -602,14 +602,14 @@ int fltk3::PostScriptGraphicsDriver::start_postscript (int pagecount,
 void fltk3::PostScriptGraphicsDriver::recover(){
   color(cr_,cg_,cb_);
   line_style(linestyle_,linewidth_,linedash_);
-  font(fltk3::GraphicsDriver::font(), fltk3::GraphicsDriver::size());
+  font(GraphicsDriver::font(), GraphicsDriver::size());
 }
 
 void fltk3::PostScriptGraphicsDriver::reset(){
   gap_=1;
   clip_=0;
   cr_=cg_=cb_=0;
-  fltk3::GraphicsDriver::font(fltk3::HELVETICA, 12);
+  GraphicsDriver::font(fltk3::HELVETICA, 12);
   linewidth_=0;
   linestyle_=fltk3::SOLID;
   strcpy(linedash_,"");
@@ -940,7 +940,7 @@ static const char *_fontNames[] = {
 void fltk3::PostScriptGraphicsDriver::font(int f, int s) {
   fltk3::GraphicsDriver *driver = fltk3::DisplayDevice::display_device()->driver();
   driver->font(f,s); // Use display fonts for font measurement
-  fltk3::GraphicsDriver::font(f, s);
+  GraphicsDriver::font(f, s);
   Fl_Font_Descriptor *desc = driver->font_descriptor();
   this->font_descriptor(desc);
   if (f < fltk3::FREE_FONT) {
@@ -990,7 +990,7 @@ void fltk3::PostScriptGraphicsDriver::color(fltk3::Color c) {
 }
 
 void fltk3::PostScriptGraphicsDriver::color(unsigned char r, unsigned char g, unsigned char b) {
-  fltk3::GraphicsDriver::color( fltk3::rgb_color(r, g, b) );
+  GraphicsDriver::color( fltk3::rgb_color(r, g, b) );
   cr_ = r; cg_ = g; cb_ = b;
   if (r == g && g == b) {
     double gray = r/255.0;
@@ -1129,7 +1129,7 @@ void fltk3::PostScriptGraphicsDriver::transformed_draw(const char* str, int n, d
   // compute display width of string
   int w = (int)width(str, n);
   if (w == 0) return;
-  if (fltk3::GraphicsDriver::font() >= fltk3::FREE_FONT) {
+  if (GraphicsDriver::font() >= fltk3::FREE_FONT) {
     transformed_draw_extra(str, n, x, y, w, output, this, false);
     return;
     }
@@ -1438,7 +1438,7 @@ int fltk3::PostScriptFileDevice::printable_rect(int *w, int *h)
 
 void fltk3::PostScriptFileDevice::origin(int *x, int *y)
 {
-  fltk3::PagedDevice::origin(x, y);
+  PagedDevice::origin(x, y);
 }
 
 void fltk3::PostScriptFileDevice::origin(int x, int y)

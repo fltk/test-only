@@ -330,7 +330,7 @@ fltk3::SharedImage::desaturate() {
 void
 fltk3::SharedImage::draw(int X, int Y, int W, int H, int cx, int cy) {
   if (image_) image_->draw(X, Y, W, H, cx, cy);
-  else fltk3::Image::draw(X, Y, W, H, cx, cy);
+  else Image::draw(X, Y, W, H, cx, cy);
 }
 
 

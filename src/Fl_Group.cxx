@@ -643,7 +643,7 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
   
   int *p = sizes(); // save initial sizes and positions
 
-  fltk3::Widget::resize(X,Y,W,H); // make new xywh values visible for children
+  Widget::resize(X,Y,W,H); // make new xywh values visible for children
 
   if (!resizable() || (dw==0 && dh==0) ) {
 

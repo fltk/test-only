@@ -1226,7 +1226,7 @@ int fltk3::Input_::value(const char* str) {
 void fltk3::Input_::resize(int X, int Y, int W, int H) {
   if (W != w()) xscroll_ = 0;
   if (H != h()) yscroll_ = 0;
-  fltk3::Widget::resize(X, Y, W, H);
+  Widget::resize(X, Y, W, H);
 }
 
 /**

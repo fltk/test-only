@@ -133,12 +133,12 @@ static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size, int angl
 static void set_font(fltk3::GraphicsDriver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // just make sure that we will load a new font next time
     fl_angle_ = 0;
-    driver->fltk3::GraphicsDriver::font(0, 0);
+    driver->GraphicsDriver::font(0, 0);
     return;
   }
-  if (fnum == driver->fltk3::GraphicsDriver::font() && size == driver->size() && angle == fl_angle_) return;
+  if (fnum == driver->GraphicsDriver::font() && size == driver->size() && angle == fl_angle_) return;
   fl_angle_ = angle;
-  driver->fltk3::GraphicsDriver::font(fnum, size);
+  driver->GraphicsDriver::font(fnum, size);
   driver->font_descriptor( find(fnum, size, angle) );
 }
 
@@ -291,7 +291,7 @@ void fltk3::GDIGraphicsDriver::text_extents(const char *c, int n, int &dx, int &
   GLYPHMETRICS metrics;
   int maxw = 0, maxh = 0, dh;
   int minx = 0, miny = -999999;
-  unsigned len = 0, idx = 0;
+  unsigned len = 0, idx = 0, ll;
   HWND hWnd = 0;
   HDC gc = fl_gc; // local copy of current gc - make a copy in case we change it...
   int has_surrogates; // will be set if the string contains surrogate pairs
@@ -330,7 +330,7 @@ void fltk3::GDIGraphicsDriver::text_extents(const char *c, int n, int &dx, int &
   // only works for the BMP, so we leverage GetCharacterPlacementW instead, which
   // is not ideal, but works adequately well, and does handle surrogate pairs.
   has_surrogates = 0;
-  for(unsigned ll = 0; ll < len; ll++) {
+  for(ll = 0; ll < len; ll++) {
     if((ext_buff[ll] >= 0xD800) && (ext_buff[ll] < 0xE000)) {
       has_surrogates = -1;
       break;
@@ -401,7 +401,7 @@ void fltk3::GDIGraphicsDriver::draw(const char* str, int n, int x, int y) {
 }
 
 void fltk3::GDIGraphicsDriver::draw(int angle, const char* str, int n, int x, int y) {
-  ::set_font(this, fltk3::GraphicsDriver::font(), size(), angle);
+  ::set_font(this, GraphicsDriver::font(), size(), angle);
   int wn = 0; // count of UTF16 cells to render full string
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, font_descriptor()->fid);
@@ -413,7 +413,7 @@ void fltk3::GDIGraphicsDriver::draw(int angle, const char* str, int n, int x, in
   }
   TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor);
-  ::set_font(this, fltk3::GraphicsDriver::font(), size(), 0);
+  ::set_font(this, GraphicsDriver::font(), size(), 0);
 }
 
 void fltk3::GDIGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {

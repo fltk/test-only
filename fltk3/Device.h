@@ -126,7 +126,7 @@ namespace fltk3 {
     fltk3::Color color_; // current color
     enum {LINE, LOOP, POLYGON, POINT_};
     int sptr;
-    static const int matrix_stack_size = MATRIX_STACK_SIZE;
+    enum { matrix_stack_size = MATRIX_STACK_SIZE };
     matrix stack[MATRIX_STACK_SIZE];
     matrix m;
     int n, p_size, gap_;
@@ -134,7 +134,7 @@ namespace fltk3 {
     int what;
     int fl_clip_state_number;
     int rstackptr;
-    static const int region_stack_max = REGION_STACK_SIZE - 1;
+    enum { region_stack_max = REGION_STACK_SIZE - 1 };
     fltk3::Region rstack[REGION_STACK_SIZE];
 #ifdef WIN32
     int numcount;

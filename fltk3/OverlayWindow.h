@@ -76,7 +76,7 @@ namespace fltk3 {
      */
     OverlayWindow(int X, int Y, int W, int H, const char *l=0)
     : fltk3::DoubleWindow(X,Y,W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
-    void show(int a, char **b) {fltk3::DoubleWindow::show(a,b);}
+    void show(int a, char **b) {DoubleWindow::show(a,b);}
   };
   
 }

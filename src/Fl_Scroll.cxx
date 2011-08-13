@@ -39,7 +39,7 @@ void fltk3::ScrollGroup::clear() {
 
   remove(scrollbar);
   remove(hscrollbar);
-  fltk3::Group::clear();
+  Group::clear();
   add(hscrollbar);
   add(scrollbar);
 }
@@ -340,7 +340,7 @@ void fltk3::ScrollGroup::draw() {
 void fltk3::ScrollGroup::resize(int X, int Y, int W, int H) {
   int dx = X-x(), dy = Y-y();
   int dw = W-w(), dh = H-h();
-  fltk3::Widget::resize(X,Y,W,H); // resize _before_ moving children around
+  Widget::resize(X,Y,W,H); // resize _before_ moving children around
   fix_scrollbar_order();
   // move all the children:
   fltk3::Widget*const* a = array();
@@ -414,7 +414,7 @@ fltk3::ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
 int fltk3::ScrollGroup::handle(int event) {
   FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   fix_scrollbar_order();
-  return fltk3::Group::handle(event);
+  return Group::handle(event);
 }
 
 //

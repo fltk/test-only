@@ -62,7 +62,7 @@ int fltk3::RepeatButton::handle(int event) {
     }
     return 1;
   default:
-    return fltk3::Button::handle(event);
+    return Button::handle(event);
   }
 }
 

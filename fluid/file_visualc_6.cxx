@@ -61,7 +61,7 @@ const char *DOS_path(const char *filename) {
  Write a target entry for a VC6 workspace file.
  */
 static int write_dsw_entry(FILE *out, Fl_Target_Type *tgt, const char *name) {
-  fprintf(out, "Project: \"%s\"=\".\\%s.dsp\" - Package Owner=<4>\r\n\r\n", tgt->name(), tgt->name());
+  fprintf(out, "Project: \"%s\"=\".\\%s.dsp\" - Package Owner=<4>\r\n\r\n", name, name);
   fprintf(out, "Package=<5>\r\n{{{\r\n}}}\r\n\r\n");
   fprintf(out, "Package=<4>\r\n{{{\r\n");
   

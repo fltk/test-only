@@ -200,7 +200,7 @@ fltk3::Counter::Counter(int X, int Y, int W, int H, const char* L)
   selection_color(fltk3::INACTIVE_COLOR); // was fltk3::BLUE
   align(fltk3::ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
-  fltk3::Valuator::step(1, 10);
+  Valuator::step(1, 10);
   lstep_ = 1.0;
   mouseobj = 0;
   textfont_ = fltk3::HELVETICA;

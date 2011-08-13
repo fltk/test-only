@@ -136,10 +136,10 @@ int fltk3::Scrollbar::handle(int event) {
       damage(fltk3::DAMAGE_ALL);
       return 1;
     }
-    return fltk3::Slider::handle(event, X,Y,W,H);
+    return Slider::handle(event, X,Y,W,H);
   case fltk3::DRAG:
     if (pushed_) return 1;
-    return fltk3::Slider::handle(event, X,Y,W,H);
+    return Slider::handle(event, X,Y,W,H);
   case fltk3::MOUSEWHEEL :
     if (horizontal()) {
       if (fltk3::e_dx==0) return 0;
@@ -197,7 +197,7 @@ int fltk3::Scrollbar::handle(int event) {
     }
     v = int(clamp(v));
     if (v != value()) {
-      fltk3::Slider::value(v);
+      Slider::value(v);
       value_damage();
       set_changed();
       do_callback();
@@ -215,8 +215,8 @@ void fltk3::Scrollbar::draw() {
   int W = w()-fltk3::box_dw(box());
   int H = h()-fltk3::box_dh(box());
   if (horizontal()) {
-    if (W < 3*H) {fltk3::Slider::draw(X,Y,W,H); return;}
-    fltk3::Slider::draw(X+H,Y,W-2*H,H);
+    if (W < 3*H) {Slider::draw(X,Y,W,H); return;}
+    Slider::draw(X+H,Y,W-2*H,H);
     if (damage()&fltk3::DAMAGE_ALL) {
       draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
 	       X, Y, H, H, selection_color());
@@ -240,8 +240,8 @@ void fltk3::Scrollbar::draw() {
       }
     }
   } else { // vertical
-    if (H < 3*W) {fltk3::Slider::draw(X,Y,W,H); return;}
-    fltk3::Slider::draw(X,Y+W,W,H-2*W);
+    if (H < 3*W) {Slider::draw(X,Y,W,H); return;}
+    Slider::draw(X,Y+W,W,H-2*W);
     if (damage()&fltk3::DAMAGE_ALL) {
       draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
 	       X, Y, W, W, selection_color());

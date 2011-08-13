@@ -60,7 +60,7 @@ public:
   /** Shows the tooltip windows only if a tooltip text is available. */
   void show() {
     if (!tip) return;
-    fltk3::MenuWindow::show();
+    MenuWindow::show();
   }
 };
 

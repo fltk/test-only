@@ -77,7 +77,7 @@ void fltk3::Slider::slider_size(double v) {
 */
 void fltk3::Slider::bounds(double a, double b) {
   if (minimum() != a || maximum() != b) {
-    fltk3::Valuator::bounds(a, b); 
+    Valuator::bounds(a, b); 
     damage(fltk3::DAMAGE_EXPOSE);
   }
 }

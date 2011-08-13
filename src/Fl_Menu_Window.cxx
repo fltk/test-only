@@ -59,7 +59,7 @@ void fltk3::MenuWindow::show() {
     fl_background_pixel = -1;
   } else
 #endif
-    fltk3::SingleWindow::show();
+    SingleWindow::show();
 }
 
 void fltk3::MenuWindow::flush() {
@@ -79,7 +79,7 @@ void fltk3::MenuWindow::flush() {
   draw();
   fl_overlay = 0;
 #else
-  fltk3::SingleWindow::flush();
+  SingleWindow::flush();
 #endif
 }
 
@@ -97,7 +97,7 @@ void fltk3::MenuWindow::erase() {
 // menu before unmapping it:
 void fltk3::MenuWindow::hide() {
   erase();
-  fltk3::SingleWindow::hide();
+  SingleWindow::hide();
 }
 
 /**  Destroys the window and all of its children.*/

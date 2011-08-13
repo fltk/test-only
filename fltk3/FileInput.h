@@ -102,7 +102,7 @@ namespace fltk3 {
      Returns the current value, which is a pointer to an internal buffer
      and is valid only until the next event is handled.
      */
-    const char	*value() { return fltk3::Input_::value(); }
+    const char	*value() { return Input_::value(); }
   };
   
 }

@@ -2961,7 +2961,7 @@ fltk3::HelpView::handle(int event)	// I - Event to handle
       redraw();
       return 1;
     case fltk3::ENTER :
-      fltk3::Group::handle(event);
+      Group::handle(event);
       return 1;
     case fltk3::LEAVE :
       fltk3::cursor(fltk3::CURSOR_DEFAULT);
@@ -2971,7 +2971,7 @@ fltk3::HelpView::handle(int event)	// I - Event to handle
       else fltk3::cursor(fltk3::CURSOR_DEFAULT);
       return 1;
     case fltk3::PUSH:
-      if (fltk3::Group::handle(event)) return 1;
+      if (Group::handle(event)) return 1;
       linkp = find_link(xx, yy);
       if (linkp) {
         fltk3::cursor(fltk3::CURSOR_HAND);
@@ -3023,7 +3023,7 @@ fltk3::HelpView::handle(int event)	// I - Event to handle
       }
       break; }
   }
-  return (fltk3::Group::handle(event));
+  return (Group::handle(event));
 }
 
 /** 
@@ -3241,7 +3241,7 @@ fltk3::HelpView::resize(int xx,	// I - New left position
 					// Box to draw...
 
 
-  fltk3::Widget::resize(xx, yy, ww, hh);
+  Widget::resize(xx, yy, ww, hh);
 
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   scrollbar_.resize(x() + w() - scrollsize - fltk3::box_dw(b) + fltk3::box_dx(b),

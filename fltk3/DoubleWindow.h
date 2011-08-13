@@ -63,7 +63,7 @@ namespace fltk3 {
     char force_doublebuffering_;
   public:
     void show();
-    void show(int a, char **b) {fltk3::Window::show(a,b);}
+    void show(int a, char **b) {Window::show(a,b);}
     void flush();
     void resize(int,int,int,int);
     void hide();

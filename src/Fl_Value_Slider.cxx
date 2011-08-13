@@ -52,7 +52,7 @@ void fltk3::ValueSlider::draw() {
     syy += 25; bhh = 25; shh -= 25;
   }
   if (damage()&fltk3::DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
-  fltk3::Slider::draw(sxx+fltk3::box_dx(box()),
+  Slider::draw(sxx+fltk3::box_dx(box()),
 		  syy+fltk3::box_dy(box()),
 		  sww-fltk3::box_dw(box()),
 		  shh-fltk3::box_dh(box()));
@@ -76,7 +76,7 @@ int fltk3::ValueSlider::handle(int event) {
   } else {
     syy += 25; shh -= 25;
   }
-  return fltk3::Slider::handle(event,
+  return Slider::handle(event,
 			   sxx+fltk3::box_dx(box()),
 			   syy+fltk3::box_dy(box()),
 			   sww-fltk3::box_dw(box()),

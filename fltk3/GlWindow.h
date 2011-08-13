@@ -89,7 +89,7 @@ namespace fltk3 {
   public:
     
     void show();
-    void show(int a, char **b) {fltk3::Window::show(a,b);}
+    void show(int a, char **b) {Window::show(a,b);}
     void flush();
     void hide();
     void resize(int,int,int,int);

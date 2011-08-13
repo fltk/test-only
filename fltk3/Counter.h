@@ -92,18 +92,18 @@ namespace fltk3 {
      Sets the increments for the normal and large step buttons.
      \param[in] a, b normal and large step increments.
      */
-    void step(double a,double b) {fltk3::Valuator::step(a); lstep_ = b;}
+    void step(double a,double b) {Valuator::step(a); lstep_ = b;}
     
     /**
      Sets the increment for the normal step buttons.
      \param[in] a normal step increment.
      */
-    void step(double a) {fltk3::Valuator::step(a);}
+    void step(double a) {Valuator::step(a);}
     
     /**
      Returns the increment for normal step buttons.
      */
-    double step() const {return fltk3::Valuator::step();}
+    double step() const {return Valuator::step();}
     
     /** Gets the text font */
     fltk3::Font textfont() const {return textfont_;}

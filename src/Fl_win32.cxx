@@ -742,7 +742,9 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_LWIN,	fltk3::MetaLKey},
   {VK_RWIN,	fltk3::MetaRKey},
   {VK_APPS,	fltk3::MenuKey},
+# if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0600)
   {VK_SLEEP,    fltk3::SleepKey},
+#endif
   {VK_MULTIPLY,	fltk3::KPKey+'*'},
   {VK_ADD,	fltk3::KPKey+'+'},
   {VK_SUBTRACT,	fltk3::KPKey+'-'},
@@ -750,7 +752,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_DIVIDE,	fltk3::KPKey+'/'},
   {VK_NUMLOCK,	fltk3::NumLockKey},
   {VK_SCROLL,	fltk3::ScrollLockKey},
-# if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
+# if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0600)
   {VK_BROWSER_BACK, fltk3::BackKey},
   {VK_BROWSER_FORWARD, fltk3::ForwardKey},
   {VK_BROWSER_REFRESH, fltk3::RefreshKey},
@@ -1338,7 +1340,7 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
     flags |= SWP_NOMOVE;
   }
   if (is_a_resize) {
-    fltk3::Group::resize(X,Y,W,H);
+    Group::resize(X,Y,W,H);
     if (visible_r()) {
       redraw(); 
       // only wait for exposure if this window has a size - a window 
@@ -1759,7 +1761,7 @@ const char *fltk3::filename_name(const char *name) {
 }
 
 void fltk3::Window::label(const char *name,const char *iname) {
-  fltk3::Widget::label(name);
+  Widget::label(name);
   iconlabel_ = iname;
   if (shown() && !parent()) {
     if (!name) name = "";

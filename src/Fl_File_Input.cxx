@@ -151,7 +151,7 @@ int						// O - TRUE on success
 fltk3::FileInput::value(const char *str,		// I - New string value
                      int        len) {		// I - Length of value
   damage(fltk3::DAMAGE_BAR);
-  return fltk3::Input::value(str,len);
+  return Input::value(str,len);
 }
 
 
@@ -163,7 +163,7 @@ fltk3::FileInput::value(const char *str,		// I - New string value
 int						// O - TRUE on success
 fltk3::FileInput::value(const char *str) {		// I - New string value
   damage(fltk3::DAMAGE_BAR);
-  return fltk3::Input::value(str);
+  return Input::value(str);
 }
 
 
@@ -180,7 +180,7 @@ void fltk3::FileInput::draw() {
   if ((damage() & fltk3::DAMAGE_ALL) || must_trick_fl_input_) 
     draw_box(b,x(),y()+DIR_HEIGHT,w(),h()-DIR_HEIGHT,color());
   if (!must_trick_fl_input_) 
-    fltk3::Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
+    Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
 		        w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b)-DIR_HEIGHT);
 }
 
@@ -217,11 +217,11 @@ fltk3::FileInput::handle(int event) 		// I - Event
       if (inButtonBar) 
         return handle_button(event);
       else
-        return fltk3::Input::handle(event);
+        return Input::handle(event);
 
     default :
       { fltk3::WidgetTracker wp(this);
-	if (fltk3::Input::handle(event)) {
+	if (Input::handle(event)) {
 	  if (wp.exists())
 	    damage(fltk3::DAMAGE_BAR);
 	  return 1;

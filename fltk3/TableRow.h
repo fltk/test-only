@@ -137,7 +137,7 @@ namespace fltk3 {
     int handle(int event);
     int find_cell(TableContext context,		// find cell's x/y/w/h given r/c
                   int R, int C, int &X, int &Y, int &W, int &H) {
-      return(fltk3::Table::find_cell(context, R, C, X, Y, W, H));
+      return(Table::find_cell(context, R, C, X, Y, W, H));
     }
     
   public:
@@ -163,7 +163,7 @@ namespace fltk3 {
     
     void rows(int val);			// set number of rows
     int rows() {				// get number of rows
-      return(fltk3::Table::rows());
+      return(Table::rows());
     }
     
     /**
@@ -202,7 +202,7 @@ namespace fltk3 {
     void clear() {
       rows(0);		// implies clearing selection
       cols(0);
-      fltk3::Table::clear();	// clear the table
+      Table::clear();	// clear the table
     }
   };
   

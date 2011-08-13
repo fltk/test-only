@@ -156,7 +156,7 @@ namespace fltk3 {
      Returns 0 if browser is empty.
      */
     int size() const { return lines; }
-    void size(int W, int H) { fltk3::Widget::size(W, H); }
+    void size(int W, int H) { Widget::size(W, H); }
     
     int topline() const ;
     /** For internal use only? */
@@ -188,10 +188,10 @@ namespace fltk3 {
     int selected(int line) const ;
     void show(int line);
     /** Shows the entire fltk3::Browser widget -- opposite of hide(). */
-    void show() { fltk3::Widget::show(); }
+    void show() { Widget::show(); }
     void hide(int line);
     /** Hides the entire fltk3::Browser widget -- opposite of show(). */
-    void hide() { fltk3::Widget::hide(); }
+    void hide() { Widget::hide(); }
     int visible(int line) const ;
     
     int value() const ;
@@ -300,7 +300,7 @@ namespace fltk3 {
      \returns 1 if visible, 0 if not visible.
      \see topline(), middleline(), bottomline(), displayed(), lineposition()
      */
-    int displayed(int line) const { return fltk3::Browser_::displayed(find_line(line)); }
+    int displayed(int line) const { return Browser_::displayed(find_line(line)); }
     
     /**
      Make the item at the specified \p line visible().
@@ -310,9 +310,9 @@ namespace fltk3 {
      \see show(int), hide(int), display(), visible(), make_visible()
      */
     void make_visible(int line) {
-      if (line < 1) fltk3::Browser_::display(find_line(1));
-      else if (line > lines) fltk3::Browser_::display(find_line(lines));
-      else fltk3::Browser_::display(find_line(line));
+      if (line < 1) Browser_::display(find_line(1));
+      else if (line > lines) Browser_::display(find_line(lines));
+      else Browser_::display(find_line(line));
     }
     
     // icon support

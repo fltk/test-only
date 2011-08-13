@@ -273,7 +273,7 @@ namespace fltk3 {
     /** Sets the width and height of this widget.
      \param [in] W, H new width and height
      \see fltk3::Widget::size(int, int) */
-    void size(int W, int H) { fltk3::Widget::size(W, H); }
+    void size(int W, int H) { Widget::size(W, H); }
     
     /** Gets the maximum length of the input field.  
      \todo It is not clear if this function is actually required */

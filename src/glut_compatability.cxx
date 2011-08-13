@@ -63,7 +63,7 @@ static void default_display() {}
 
 void fltk3::GlutWindow::make_current() {
   glut_window = this;
-  if (shown()) fltk3::GlWindow::make_current();
+  if (shown()) GlWindow::make_current();
 }
 
 static int indraw;
@@ -168,7 +168,7 @@ int fltk3::GlutWindow::handle(int event) {
     break;
   }
 
-  return fltk3::GlWindow::handle(event);
+  return GlWindow::handle(event);
 }
 
 static int glut_mode = GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH;

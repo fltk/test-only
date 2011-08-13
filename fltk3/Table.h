@@ -449,7 +449,7 @@ namespace fltk3 {
     long col_scroll_position(int col);		// find scroll position of col (in pixels)
     
     int is_fltk_container() { 			// does table contain fltk widgets?
-      return( fltk3::Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
+      return( Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
     }
     
     static void scroll_cb(fltk3::Widget*,void*);	// h/v scrollbar callback
@@ -892,7 +892,7 @@ namespace fltk3 {
       } else {
         table->hide();
       } 
-      fltk3::Group::current(fltk3::Group::parent());
+      Group::current(Group::parent());
     }
     fltk3::Widget * const *array() {
       return(table->array());
@@ -966,7 +966,7 @@ namespace fltk3 {
       _callback_context = context;
       _callback_row = row;
       _callback_col = col;
-      fltk3::Widget::do_callback();
+      Widget::do_callback();
     }
     
 #if FLTK3_DOXYGEN

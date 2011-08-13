@@ -58,7 +58,7 @@ void fltk3::ValueInput::draw() {
 }
 
 void fltk3::ValueInput::resize(int X, int Y, int W, int H) {
-  fltk3::Valuator::resize(X, Y, W, H);
+  Valuator::resize(X, Y, W, H);
   input.resize(X, Y, W, H);
 }
 

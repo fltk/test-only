@@ -67,7 +67,7 @@ int fltk3::ReturnButton::handle(int event) {
     do_callback();
     return 1;
   } else
-    return fltk3::Button::handle(event);
+    return Button::handle(event);
 }
 
 //

@@ -129,7 +129,7 @@ int cube_box::handle(int e) {
   case fltk3::ENTER: cursor(fltk3::CURSOR_CROSS); break;
   case fltk3::LEAVE: cursor(fltk3::CURSOR_DEFAULT); break;
   }
-  return fltk3::GlWindow::handle(e);
+  return GlWindow::handle(e);
 }
 
 #endif

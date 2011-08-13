@@ -117,7 +117,7 @@ namespace fltk3 {
      */
     int size() const {return numb;}
     
-    void size(int W, int H) { fltk3::Widget::size(W, H); }
+    void size(int W, int H) { Widget::size(W, H); }
     
     /**
      Gets the maximum number of data values for a chart.

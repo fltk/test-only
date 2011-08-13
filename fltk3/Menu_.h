@@ -105,7 +105,7 @@ namespace fltk3 {
     }
     int  add(const char *);
     int  size() const ;
-    void size(int W, int H) { fltk3::Widget::size(W, H); }
+    void size(int W, int H) { Widget::size(W, H); }
     void clear();
     int clear_submenu(int index);
     void replace(int,const char *);

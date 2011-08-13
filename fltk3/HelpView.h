@@ -327,7 +327,7 @@ namespace fltk3 {
     void		resize(int,int,int,int);
     /** Gets the size of the help view. */
     int		size() const { return (size_); }
-    void		size(int W, int H) { fltk3::Widget::size(W, H); }
+    void		size(int W, int H) { Widget::size(W, H); }
     /** Sets the default text color. */
     void		textcolor(fltk3::Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
     /** Returns the current default text color. */

@@ -101,7 +101,8 @@ static fltk3::Window *makeform() {
  }
  w->end(); // don't add the buttons automatically
  // create the buttons (right to left)
- for (int b=0, x=310; b<3; b++, x -= 100) {
+ int b, x;
+ for (b=0, x=310; b<3; b++, x -= 100) {
    if (b==1)
      button[b] = new fltk3::ReturnButton(x, 70, 90, 23);
    else
@@ -111,7 +112,7 @@ static fltk3::Window *makeform() {
  }
  button[0]->shortcut(fltk3::EscapeKey);
  // add the buttons (left to right)
- for (int b=2; b>=0; b--)
+ for (b=2; b>=0; b--)
    w->add(button[b]);
  w->begin();
  w->resizable(new fltk3::Box(60,10,110-60,27));

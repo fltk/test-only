@@ -112,7 +112,7 @@ static fltk3::MenuItem mode_menu[] = {
 int fltk3::cc_Value_Input::format(char* buf) {
   fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
   if (c->mode() == M_HEX) return sprintf(buf,"0x%02X", int(value()));
-  else return fltk3::Valuator::format(buf);
+  else return Valuator::format(buf);
 }
 #endif // !FLTK3_DOXYGEN
 

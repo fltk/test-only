@@ -95,8 +95,8 @@ namespace fltk3 {
      */
     int		load(const char *directory, fltk3::FileSortF *sort = fltk3::numericsort);
     
-    fltk3::Fontsize  textsize() const { return fltk3::Browser::textsize(); };
-    void		textsize(fltk3::Fontsize s) { fltk3::Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
+    fltk3::Fontsize  textsize() const { return Browser::textsize(); };
+    void		textsize(fltk3::Fontsize s) { Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
     
     /**
      Sets or gets the file browser type, FILES or

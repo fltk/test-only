@@ -45,7 +45,7 @@ namespace fltk3 {
   class FLTK3_EXPORT SingleWindow : public fltk3::Window {
   public:
     void show();
-    void show(int a, char **b) {fltk3::Window::show(a,b);}
+    void show(int a, char **b) {Window::show(a,b);}
     void flush();
     /**
      Creates a new fltk3::SingleWindow widget using the given

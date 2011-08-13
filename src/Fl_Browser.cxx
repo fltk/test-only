@@ -763,7 +763,7 @@ void* fltk3::Browser::data(int line) const {
 */
 int fltk3::Browser::select(int line, int val) {
   if (line < 1 || line > lines) return 0;
-  return fltk3::Browser_::select(find_line(line), val);
+  return Browser_::select(find_line(line), val);
 }
 
 /**
@@ -790,7 +790,7 @@ void fltk3::Browser::show(int line) {
   if (t->flags & NOTDISPLAYED) {
     t->flags &= ~NOTDISPLAYED;
     full_height_ += item_height(t);
-    if (fltk3::Browser_::displayed(t)) redraw();
+    if (Browser_::displayed(t)) redraw();
   }
 }
 
@@ -808,7 +808,7 @@ void fltk3::Browser::hide(int line) {
   if (!(t->flags & NOTDISPLAYED)) {
     full_height_ -= item_height(t);
     t->flags |= NOTDISPLAYED;
-    if (fltk3::Browser_::displayed(t)) redraw();
+    if (Browser_::displayed(t)) redraw();
   }
 }
 

@@ -43,12 +43,12 @@
 #include <fltk3/x.h>
 
 void fltk3::OverlayWindow::show() {
-  fltk3::DoubleWindow::show();
+  DoubleWindow::show();
   if (overlay_ && overlay_ != this) overlay_->show();
 }
 
 void fltk3::OverlayWindow::hide() {
-  fltk3::DoubleWindow::hide();
+  DoubleWindow::hide();
 }
 
 void fltk3::OverlayWindow::flush() {
@@ -63,12 +63,12 @@ void fltk3::OverlayWindow::flush() {
 #endif
   int erase_overlay = (damage()&fltk3::DAMAGE_OVERLAY) | (overlay_ == this);
   clear_damage((uchar)(damage()&~fltk3::DAMAGE_OVERLAY));
-  fltk3::DoubleWindow::flush(erase_overlay);
+  DoubleWindow::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
 }
 
 void fltk3::OverlayWindow::resize(int X, int Y, int W, int H) {
-  fltk3::DoubleWindow::resize(X,Y,W,H);
+  DoubleWindow::resize(X,Y,W,H);
   if (overlay_ && overlay_!=this) overlay_->resize(0,0,w(),h());
 }
 

@@ -79,7 +79,7 @@ void fltk3::TiledGroup::resize(int X,int Y,int W,int H) {
   int dh = H-h();
   int *p = sizes();
   // resize this (skip the fltk3::Group resize):
-  fltk3::Widget::resize(X,Y,W,H);
+  Widget::resize(X,Y,W,H);
   // find bottom-right of resiable:
   int OR = p[5];
   int NR = X+W-(p[1]-OR);
@@ -173,7 +173,7 @@ int fltk3::TiledGroup::handle(int event) {
     if (mindy <= GRABAREA) {sdrag |= DRAGV; sy = oldy;}
     set_cursor(this, cursors[sdrag]);
     if (sdrag) return 1;
-    return fltk3::Group::handle(event);
+    return Group::handle(event);
   }
 
   case fltk3::LEAVE:
@@ -207,7 +207,7 @@ int fltk3::TiledGroup::handle(int event) {
 
   }
 
-  return fltk3::Group::handle(event);
+  return Group::handle(event);
 }
 
 //

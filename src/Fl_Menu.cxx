@@ -413,7 +413,7 @@ menuwindow::~menuwindow() {
 
 void menuwindow::position(int X, int Y) {
   if (title) {title->position(X, title->y()+Y-y());}
-  fltk3::MenuWindow::position(X, Y);
+  MenuWindow::position(X, Y);
   // x(X); y(Y); // don't wait for response from X
 }
 
@@ -429,7 +429,7 @@ void menuwindow::autoscroll(int n) {
     if (Y < 0) return;
     Y = -Y-10;
   }
-  fltk3::MenuWindow::position(x(), y()+Y);
+  MenuWindow::position(x(), y()+Y);
   // y(y()+Y); // don't wait for response from X
 }
 
@@ -802,7 +802,7 @@ int menuwindow::early_hide_handle(int e) {
     }
     return 1;
   }
-  return fltk3::Window::handle(e);
+  return Window::handle(e);
 }
 
 /**

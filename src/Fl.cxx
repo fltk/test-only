@@ -1152,11 +1152,11 @@ int fltk3::handle_(int e, fltk3::Window* window)
     return 1;
 
   case fltk3::SHOW:
-    wi->fltk3::Widget::show(); // this calls fltk3::Widget::show(), not fltk3::Window::show()
+    wi->Widget::show(); // this calls fltk3::Widget::show(), not fltk3::Window::show()
     return 1;
 
   case fltk3::HIDE:
-    wi->fltk3::Widget::hide(); // this calls fltk3::Widget::hide(), not fltk3::Window::hide()
+    wi->Widget::hide(); // this calls fltk3::Widget::hide(), not fltk3::Window::hide()
     return 1;
 
   case fltk3::PUSH:
@@ -1523,7 +1523,7 @@ int fltk3::Window::handle(int ev)
 //    fltk3::Tooltip::exit(fltk3::Tooltip::current());
   }
 
-  return fltk3::Group::handle(ev);
+  return Group::handle(ev);
 }
 
 ////////////////////////////////////////////////////////////////

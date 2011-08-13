@@ -293,7 +293,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
 #ifdef DEBUG
   printf("    oldWidth=%d, mContinuousWrap=%d, mWrapMargin=%d\n", oldWidth, mContinuousWrap, mWrapMargin);
 #endif // DEBUG
-  fltk3::Widget::resize(X,Y,W,H);
+  Widget::resize(X,Y,W,H);
   if (!buffer()) return;
   X += fltk3::box_dx(box());
   Y += fltk3::box_dy(box());
@@ -3554,7 +3554,7 @@ int fltk3::TextDisplay::handle(int event) {
       !dragging && event != fltk3::LEAVE && event != fltk3::ENTER &&
       event != fltk3::MOVE && event != fltk3::FOCUS && event != fltk3::UNFOCUS &&
       event != fltk3::KEYBOARD && event != fltk3::KEYUP) {
-    return fltk3::Group::handle(event);
+    return Group::handle(event);
   }
   
   switch (event) {
@@ -3590,7 +3590,7 @@ int fltk3::TextDisplay::handle(int event) {
         fltk3::focus(this);
         handle(fltk3::FOCUS);
       }
-      if (fltk3::Group::handle(event)) return 1;
+      if (Group::handle(event)) return 1;
       if (fltk3::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);
       dragging = 1;
       int pos = xy_to_position(fltk3::event_x(), fltk3::event_y(), CURSOR_POS);

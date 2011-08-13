@@ -102,7 +102,7 @@ namespace fltk3 {
      Gets the index of the last item chosen by the user.
      The index is zero initially.
      */
-    int value() const {return fltk3::Menu_::value();}
+    int value() const {return Menu_::value();}
     
     int value(int v);
     

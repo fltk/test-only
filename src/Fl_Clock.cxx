@@ -205,7 +205,7 @@ int fltk3::Clock::handle(int event) {
     fltk3::remove_timeout(tick, this);
     break;
   }
-  return fltk3::ClockOutput::handle(event);
+  return ClockOutput::handle(event);
 }
   
 /**

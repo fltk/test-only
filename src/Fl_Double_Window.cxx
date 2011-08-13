@@ -66,7 +66,7 @@ static int can_xdbe() {
 #endif
 
 void fltk3::DoubleWindow::show() {
-  fltk3::Window::show();
+  Window::show();
 }
 
 static void fl_copy_offscreen_to_display(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
@@ -421,7 +421,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
 void fltk3::DoubleWindow::resize(int X,int Y,int W,int H) {
   int ow = w();
   int oh = h();
-  fltk3::Window::resize(X,Y,W,H);
+  Window::resize(X,Y,W,H);
 #if USE_XDBE
   if (use_xdbe) {
     Fl_X* myi = Fl_X::i(this);
@@ -448,7 +448,7 @@ void fltk3::DoubleWindow::hide() {
 #endif
       fl_delete_offscreen(myi->other_xid);
   }
-  fltk3::Window::hide();
+  Window::hide();
 }
 
 /**

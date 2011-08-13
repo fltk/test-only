@@ -155,7 +155,7 @@ int fltk3::LightButton::handle(int event) {
   case fltk3::RELEASE:
     if (box()) redraw();
   default:
-    return fltk3::Button::handle(event);
+    return Button::handle(event);
   }
 }
 

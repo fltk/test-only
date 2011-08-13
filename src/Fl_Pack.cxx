@@ -172,7 +172,7 @@ void fltk3::PackedGroup::draw() {
   tw += fltk3::box_dw(box()); if (tw <= 0) tw = 1;
   th += fltk3::box_dh(box()); if (th <= 0) th = 1;
   if (tw != w() || th != h()) {
-    fltk3::Widget::resize(x(),y(),tw,th);
+    Widget::resize(x(),y(),tw,th);
     d = fltk3::DAMAGE_ALL;
   }
   if (d&fltk3::DAMAGE_ALL) {

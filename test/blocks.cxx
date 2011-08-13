@@ -742,7 +742,7 @@ BlockWindow::handle(int event) {
   Column	*c;
 
 
-  if (fltk3::DoubleWindow::handle(event)) return (1);
+  if (DoubleWindow::handle(event)) return (1);
   else if (interval_ < 0.0 || paused_) return (0);
 
   switch (event) {
