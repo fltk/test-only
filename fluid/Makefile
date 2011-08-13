@@ -42,7 +42,9 @@ CPPFILES =  \
 	file.cxx \
 	file_cmake.cxx \
 	file_make.cxx \
-	file_visualc.cxx \
+	file_visualc_6.cxx \
+	file_visualc_2008.cxx \
+	file_visualc_2010.cxx \
 	file_xcode.cxx \
 	fluid.cxx \
 	function_panel.cxx \
