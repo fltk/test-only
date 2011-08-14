@@ -322,7 +322,7 @@ workspace FLTK {open
       uuid_Xcode4_Group {727B6B68-F3C4-4BBB-9445-1AB0CD7EA6D9}
       uuid_Xcode4_ProductFileReference {86C380FE-33B2-4515-8BCE-B23C96A44961}
       uuid_VC2008_Project {57369729-6B61-4DCD-9289-79E0E2A168E8}
-      uuid_VC2010_Project {8F8BFE1B-A9AC-48B0-A7AA-4A4A52121098}
+      uuid_VC2010_Project {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
       target_path lib
     } {
       folder Headers {
@@ -3629,6 +3629,7 @@ workspace FLTK {open
       uuid_Xcode4_DebugBuildConfiguration {8E357A32-28C7-4C10-ACDD-AAF0DBE8A326}
       uuid_Xcode4_ReleaseBuildConfiguration {C4BC49C2-E3B8-42C3-A50A-F6BD36BA67E3}
       uuid_VC2008_Project {8851FA01-2513-4A95-BDAD-21BA2A443E7C}
+      uuid_VC2010_Project {96D6AE56-0B6A-4CA3-A52C-B847AC2B4B2F}
       target_path test
     } {
       file_ref {arc.cxx} {

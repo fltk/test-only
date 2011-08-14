@@ -59,12 +59,28 @@ const char *DOS_path(const char *filename) {
 
 // ------------ VisualC 2010 ---------------------------------------------------
 
+
+static int write_sln_configuration(FILE *out, Fl_Workspace_Type *workspace, Fl_Target_Type *tgt) {
+  fprintf(out, "\t\t{%s}.Debug|Win32.ActiveCfg = Debug|Win32\r\n", tgt->get_UUID(VC2010_Project));
+  fprintf(out, "\t\t{%s}.Debug|Win32.Build.0 = Debug|Win32\r\n", tgt->get_UUID(VC2010_Project));
+  fprintf(out, "\t\t{%s}.Release|Win32.ActiveCfg = Release|Win32\r\n", tgt->get_UUID(VC2010_Project));
+  fprintf(out, "\t\t{%s}.Release|Win32.Build.0 = Release|Win32\r\n", tgt->get_UUID(VC2010_Project));
+  return 0;
+}
+
+
+static int write_sln_project(FILE *out, Fl_Workspace_Type *workspace, Fl_Target_Type *tgt) {
+  fprintf(out, "Project(\"{%s}\") = \"%s\", \"%s.vcxproj\", \"{%s}\"\r\n", workspace->get_UUID(VC2010_Workspace), tgt->name(), tgt->name(), tgt->get_UUID(VC2010_Project));
+  // dependencies can be found in the project files
+  fprintf(out, "EndProject\r\n");
+  return 0;
+}
+
+
 /*
  Write a VisualC 2010 Solution file.
  */
 static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
-  
-  Fl_Target_Type *tgt = Fl_Target_Type::find("adjuster");
   
   const char *workspace_id = workspace->get_UUID(VC2010_Workspace);
   
@@ -77,10 +93,10 @@ static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
   fprintf(out, "\t\t{9CF889F1-AEFE-43BA-BA18-B2B09EF8ADEE} = {9CF889F1-AEFE-43BA-BA18-B2B09EF8ADEE}\r\n");
   fprintf(out, "\tEndProjectSection\r\n");
   fprintf(out, "EndProject\r\n");
-  fprintf(out, "Project(\"{%s}\") = \"%s\", \"%s.vcxproj\", \"{%s}\"\r\n", workspace_id, tgt->name(), tgt->name(), tgt->get_UUID(VC2010_Project));
-  fprintf(out, "EndProject\r\n");
-  fprintf(out, "Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"arc\", \"arc.vcxproj\", \"{39ADA7A1-A2C1-4F0B-8B92-04E335570C27}\"\r\n");
-  fprintf(out, "EndProject\r\n");
+  write_sln_project(out, workspace, Fl_Target_Type::find("adjuster"));
+  write_sln_project(out, workspace, Fl_Target_Type::find("arc"));
+  //fprintf(out, "Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"arc\", \"arc.vcxproj\", \"{39ADA7A1-A2C1-4F0B-8B92-04E335570C27}\"\r\n");
+  //fprintf(out, "EndProject\r\n");
   fprintf(out, "Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"ask\", \"ask.vcxproj\", \"{DB6BAA16-C589-448F-9AB5-5969016549EB}\"\r\n");
   fprintf(out, "EndProject\r\n");
   fprintf(out, "Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"bitmap\", \"bitmap.vcxproj\", \"{65B5BB3F-EE54-4604-B49B-7676AED83AAB}\"\r\n");
@@ -258,14 +274,8 @@ static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
   fprintf(out, "\t\t{09427220-8C9C-498A-8D50-1638D3FB87E5}.Debug|Win32.Build.0 = Debug|Win32\r\n");
   fprintf(out, "\t\t{09427220-8C9C-498A-8D50-1638D3FB87E5}.Release|Win32.ActiveCfg = Release|Win32\r\n");
   fprintf(out, "\t\t{09427220-8C9C-498A-8D50-1638D3FB87E5}.Release|Win32.Build.0 = Release|Win32\r\n");
-  fprintf(out, "\t\t{%s}.Debug|Win32.ActiveCfg = Debug|Win32\r\n", tgt->get_UUID(VC2010_Project));
-  fprintf(out, "\t\t{%s}.Debug|Win32.Build.0 = Debug|Win32\r\n", tgt->get_UUID(VC2010_Project));
-  fprintf(out, "\t\t{%s}.Release|Win32.ActiveCfg = Release|Win32\r\n", tgt->get_UUID(VC2010_Project));
-  fprintf(out, "\t\t{%s}.Release|Win32.Build.0 = Release|Win32\r\n", tgt->get_UUID(VC2010_Project));
-  fprintf(out, "\t\t{39ADA7A1-A2C1-4F0B-8B92-04E335570C27}.Debug|Win32.ActiveCfg = Debug|Win32\r\n");
-  fprintf(out, "\t\t{39ADA7A1-A2C1-4F0B-8B92-04E335570C27}.Debug|Win32.Build.0 = Debug|Win32\r\n");
-  fprintf(out, "\t\t{39ADA7A1-A2C1-4F0B-8B92-04E335570C27}.Release|Win32.ActiveCfg = Release|Win32\r\n");
-  fprintf(out, "\t\t{39ADA7A1-A2C1-4F0B-8B92-04E335570C27}.Release|Win32.Build.0 = Release|Win32\r\n");
+  write_sln_configuration(out, workspace, Fl_Target_Type::find("adjuster"));
+  write_sln_configuration(out, workspace, Fl_Target_Type::find("arc"));
   fprintf(out, "\t\t{DB6BAA16-C589-448F-9AB5-5969016549EB}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32\r\n");
   fprintf(out, "\t\t{DB6BAA16-C589-448F-9AB5-5969016549EB}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32\r\n");
   fprintf(out, "\t\t{DB6BAA16-C589-448F-9AB5-5969016549EB}.Debug|Win32.ActiveCfg = Debug|Win32\r\n");
@@ -1129,7 +1139,10 @@ static int write_vcxproj_file(FILE *out, Fl_Target_Type *tgt) {
   for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
     Fl_Target_Type *dep = Fl_Target_Type::find(tgt_dep->name());
     if (dep && tgt_dep->builds_in(FL_ENV_VC2010)) {
-      fprintf(out, "    <ProjectReference Include=\"%s.vcxproj\">\r\n", dep->name());
+      if (strcmp(dep->name(), "fltk")==0)
+		fprintf(out, "    <ProjectReference Include=\"%s.lib.vcxproj\">\r\n", dep->name());
+	  else
+        fprintf(out, "    <ProjectReference Include=\"%s.vcxproj\">\r\n", dep->name());
       fprintf(out, "      <Project>{%s}</Project>\r\n", dep->get_UUID(VC2010_Project));
       fprintf(out, "      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>\r\n");
       fprintf(out, "    </ProjectReference>\r\n");
@@ -1148,21 +1161,8 @@ static int write_vcxproj_file(FILE *out, Fl_Target_Type *tgt) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 int write_fltk_ide_visualc2010() {
-  
-#if 1
-  
-  
+
   Fl_Workspace_Type *workspace = (Fl_Workspace_Type*)Fl_Type::first;
   
   workspace = (Fl_Workspace_Type*)Fl_Type::first;
@@ -1205,134 +1205,7 @@ int write_fltk_ide_visualc2010() {
     }
   }
   
-  return 0;
-
-#else
-  
-  // for now, we use a template file in FLTK/ide/templates/VisualC2010.tmpl .
-  // When done, everything will likely be integrated into the executable to make one compact package.
-  char buf[2048], base_dir[2048], tgt_base[2048];
-  strcpy(base_dir, filename);
-  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
-  strcpy(tgt_base, base_dir);
-  strcpy(buf, base_dir);
-  strcat(buf, "ide/templates/VisualC2010.tmpl");
-  FILE *out = stdout;
-  FILE *in = fopen(buf, "rb");
-  
-  for (;;) {
-    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
-      break;
-    char *hash = buf-1;
-    char copyLine = 1;
-    for (;;) {
-      hash = strchr(hash+1, '#');
-      if (!hash) break;
-      if (hash && hash[1]=='#') { // double hash escapes the control character
-        int n = strlen(hash);
-        memmove(hash, hash+1, n);
-        continue;
-      } else { // single hash is a command
-        copyLine = 0;
-        if (strncmp(hash, "#WriteFile(",11)==0) {
-          // mark the end of the filename (this will crash if the formatting is wrong!)
-          char *sep = strchr(hash, ')');
-          *sep = 0;
-          // filename is relative, so add it to the base_dir
-          char fnbuf[2048];
-          strcpy(fnbuf, base_dir);
-          strcat(fnbuf, hash+11);
-          out = fopen(fnbuf, "wb");
-          // set the filepath for this target. In this module, all filenames are relative to the Makefile
-          strcpy(tgt_base, fnbuf);
-          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
-                                                        // restore buffer and continue 
-          *sep = ')';
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#CloseFile", 10)==0) {
-          if (out!=stdout) fclose(out);
-          out = stdout;
-          // set the filepath for the default target. 
-          strcpy(tgt_base, base_dir);
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC 2010 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_code() && f->builds_in(FL_ENV_VC2010)) {
-              fprintf(out, "    <ClCompile Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
-              fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Disabled</Optimization>\r\n");
-              fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-              fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-              fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
-              fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-              fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-              fprintf(out, "    </ClCompile>\r\n");
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#SourceFilesFilters(", 20)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+20, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC 2010 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_code() && f->lists_in(FL_ENV_VC2010)) {
-              fprintf(out, "    <ClInclude Include=\"..\\..\\%s\" />\r\n", DOS_path(f->filename()));
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#HeaderFiles(", 13)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC 2010 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_header() && f->lists_in(FL_ENV_VC2010)) {
-              fprintf(out, "    <ClInclude Include=\"..\\..\\%s\" />\r\n", DOS_path(f->filename()));
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else if (strncmp(hash, "#HeaderFilesFilters(", 20)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+20, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing VisualC 2010 file: target not found!");
-            return -1;
-          }
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->file_is_header() && f->lists_in(FL_ENV_VC2010)) {
-              fprintf(out, "    <ClInclude Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
-              fprintf(out, "      <Filter>Headers</Filter>\r\n");
-              fprintf(out, "    </ClInclude>\r\n");
-            }
-          }
-          hash = strchr(hash, ';')+1;
-        } else {
-          printf("Unknown command in template: <<%s>>\n", hash);
-          copyLine = 1;
-          hash++;
-        }
-      }
-    }
-    if (copyLine) fputs(buf, out);
-  }
-  
-  fclose(in);
-  if (out!=stdout) fclose(out);
-  
-  return 0;
-  
-#endif
-  
+  return 0;  
 }
 
 //

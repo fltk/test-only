@@ -137,8 +137,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="fltk.vcxproj">
-      <Project>{8F8BFE1B-A9AC-48B0-A7AA-4A4A52121098}</Project>
+    <ProjectReference Include="fltk.lib.vcxproj">
+      <Project>{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
