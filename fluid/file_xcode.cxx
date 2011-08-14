@@ -200,6 +200,17 @@ static int writeBuildFileReferences(FILE *out, Fl_Target_Type *tgt) {
   // TODO: not yet implemented
   
   // --- in CopyFiles
+  for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->builds_in(FL_ENV_XC4) && file->file_is_other()) {
+      char BuildFileInCopyFiles[32]; strcpy(BuildFileInCopyFiles, file->get_UUID_Xcode(Xcode4_BuildFileInCopyFiles));
+      char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_FileRef));
+      fprintf(out, "\t\t%s /* %s in CopyFiles */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
+              BuildFileInCopyFiles,
+              file->name(), 
+              FileRef, 
+              file->name());
+    }
+  }  
   for (dep = Fl_Target_Dependency_Type::first_dependency(tgt); dep; dep = dep->next_dependency(tgt)) {
     if (dep->builds_in(FL_ENV_XC4)) {
       Fl_Target_Type *file = Fl_Target_Type::find(dep->name());
@@ -321,6 +332,14 @@ static int writeCopyFilesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tdstSubfolderSpec = 10;\n");
   fprintf(out, "\t\t\tfiles = (\n");
   
+  for (Fl_File_Type *file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->builds_in(FL_ENV_XC4) && file->file_is_other()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, file->get_UUID_Xcode(Xcode4_BuildFileInCopyFiles));
+      fprintf(out, "\t\t\t\t%s /* %s in CopyFiles */,\n", 
+              PBXBuildFile, 
+              file->name());
+    }
+  }  
   Fl_Target_Dependency_Type *tgt_dep = Fl_Target_Dependency_Type::first_dependency(tgt);
   for ( ; tgt_dep; tgt_dep = tgt_dep->next_dependency(tgt)) {
     if (tgt_dep->builds_in(FL_ENV_XC4)) {
@@ -849,7 +868,11 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\tGCC_OPTIMIZATION_LEVEL = 0;\n");
   fprintf(out, "\t\t\t\tGCC_PRECOMPILE_PREFIX_HEADER = YES;\n");
   fprintf(out, "\t\t\t\tGCC_PREFIX_HEADER = fltk.pch;\n");
-  fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;\n");
+  if (tgt->is_lib_target()) {
+    fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;\n");
+  } else {
+    fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;\n");
+  }
   fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;\n");
   fprintf(out, "\t\t\t\tHEADER_SEARCH_PATHS = (\n");
   fprintf(out, "\t\t\t\t\t../../ide/XCode4/,\n");
@@ -885,7 +908,11 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\tGCC_MODEL_TUNING = G5;\n");
   fprintf(out, "\t\t\t\tGCC_PRECOMPILE_PREFIX_HEADER = YES;\n");
   fprintf(out, "\t\t\t\tGCC_PREFIX_HEADER = fltk.pch;\n");
-  fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;\n");
+  if (tgt->is_lib_target()) {
+    fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;\n");
+  } else {
+    fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;\n");
+  }
   fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;\n");
   fprintf(out, "\t\t\t\tHEADER_SEARCH_PATHS = (\n");
   fprintf(out, "\t\t\t\t\t../../ide/XCode4/,\n");

@@ -1612,6 +1612,10 @@ char Fl_File_Type::file_is_fluid_ui() {
   return (pFileType==FL_FILE_FLUID_UI);
 }
 
+char Fl_File_Type::file_is_other() {
+  return (pFileType==FL_FILE_TEXT);
+}
+
 char Fl_File_Type::file_is_code() {
   return (pFileType==FL_FILE_CPP_SOURCE)||(pFileType==FL_FILE_C_SOURCE)||(pFileType==FL_FILE_OBJC_SOURCE);
 }

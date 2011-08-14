@@ -62,6 +62,7 @@ void file_panel_set_cb(fltk3::Widget*, void *v);
 extern fltk3::ScrollGroup *pScrollGroup;
 #include <fltk3/PackedGroup.h>
 #include <fltk3/Input.h>
+extern fltk3::Group *wSpacer;
 extern fltk3::Group *pCloseGroup;
 #include <fltk3/Box.h>
 #include <fltk3/Button.h>

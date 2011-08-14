@@ -352,6 +352,16 @@ int load_the_menu(const char* fname)
     strcpy(pos,"/Resources/demo.menu");
     fin  = fltk3::fopen(fname,"r");
   }
+  if (fin == NULL) {
+    // mac os bundle menu detection:
+    char* pos = strrchr(fname,'/');
+    if (!pos) return 0;
+    *pos='\0';
+    pos = strrchr(fname,'/');
+    if (!pos) return 0;
+    strcpy(pos,"/Frameworks/demo.menu");
+    fin  = fltk3::fopen(fname,"r");
+  }
 #endif
   if (fin == NULL) {
     return 0;

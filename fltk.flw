@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -11,6 +11,7 @@ workspace FLTK {open selected
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
+  build_env 64
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -3154,6 +3155,7 @@ workspace FLTK {open selected
       }
       file_ref {demo.menu} {
         uuid_Xcode4_FileRef {ECA7517B-8B55-424F-87C1-50EE47C2906D}
+        uuid_Xcode4_BuildFileInCopyFiles {F645817C-EF53-468B-8531-DEC7DB2BD101}
         filename_and_path {test/demo.menu}
       }
       folder Dependencies {
@@ -3574,6 +3576,15 @@ workspace FLTK {open selected
           uuid_Xcode4_TargetDependency {98439850-5A2B-4F0A-AB84-696AA4EA4FE7}
         }
       }
+      file_ref {CoreFoundation.framework} {
+        uuid_Xcode4_BuildFile {FBA3CB9B-4A2A-4E97-AA03-71B62E820431}
+        uuid_Xcode4_FileRef {3B0CB05A-0A03-4302-A87E-142FAEEE2EF4}
+        uuid_Xcode4_BuildFileInFrameworks {92FA7242-322C-4DF9-93BC-8E1CD30D1F85}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreFoundation.framework}
+        location 2
+      }
     }
     app_target adjuster {open
       uuid_Xcode4_FluidBuildRule {7F4E1728-AA0B-4CE8-A872-92E1BEF787E1}
@@ -3909,6 +3920,7 @@ workspace FLTK {open selected
       }
       file_ref {rgb.txt} {
         uuid_Xcode4_FileRef {5D766E96-4E14-4AE4-AEEE-88B90C9FD617}
+        uuid_Xcode4_BuildFileInCopyFiles {E1C4BA41-C74B-461C-949F-B8B773AF73AF}
         filename_and_path {test/rgb.txt}
       }
       target_dependency fltk {
@@ -4726,6 +4738,15 @@ workspace FLTK {open selected
         uuid_Xcode4_BuildFileInCopyFiles {66BDB4B5-2ED7-49B5-9BAB-D55F1193378C}
         uuid_Xcode4_ContainerItemProxy {4BECC4A3-DA5A-4277-8EB2-12A092039220}
         uuid_Xcode4_TargetDependency {C97FDF57-E364-4760-82AB-204B5B8AA873}
+      }
+      file_ref {CoreFoundation.framework} {selected
+        uuid_Xcode4_BuildFile {69B58AF4-D60A-445C-905C-5256AC625FFD}
+        uuid_Xcode4_FileRef {1B275953-33A5-4183-95CA-2770A1887E96}
+        uuid_Xcode4_BuildFileInFrameworks {5C74C3F7-8683-406E-85A6-DEF17FF48879}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreFoundation.framework}
+        location 2
       }
     }
     app_target iconize {open

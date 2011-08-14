@@ -388,6 +388,7 @@ public:
   char file_is_fluid_ui();
   char file_is_code();
   char file_is_header();
+  char file_is_other();
 };
 extern Fl_File_Type Fl_File_type;
 

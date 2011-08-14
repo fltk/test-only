@@ -199,8 +199,7 @@ if (pEnv==FL_ENV_ALL) {
   int n = strlen(buf);
   if (n>2) buf[n-2] = 0;
   pEnvMenu->copy_label(buf);
-}} {selected
-    }
+}} {}
   }
   Function {value(unsigned int v)} {
     comment {Set the environment flags} open return_type void
@@ -251,6 +250,7 @@ Function {make_file_panel()} {open
   for (i=0; i<n; i++) {
     o->child(i)->hide();
   }
+  wSpacer->show();
   Fl_Panel::propagate_load(o, v);
   o->layout();
   // TODO: if the window grows taller than the screen height,
@@ -266,8 +266,8 @@ Function {make_file_panel()} {open
   else
     sprintf(buf, "%s Properties", Fl_Panel::current->name());
   the_file_panel->label(buf);
-}} open
-        xywh {10 10 407 400} resizable
+}} open selected
+        xywh {10 10 400 400} resizable
       } {
         {fltk3::Group} {} {
           callback {if (v == Fl_Panel::LOAD) {
@@ -638,6 +638,9 @@ Function {make_file_panel()} {open
             class Fl_Environment_Choice
           } {}
         }
+        {fltk3::Group} wSpacer {open
+          xywh {10 400 400 10}
+        } {}
       }
     }
     {fltk3::Group} pCloseGroup {

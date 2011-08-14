@@ -188,6 +188,7 @@ static void cb_(fltk3::PackedGroup* o, void* v) {
   for (i=0; i<n; i++) {
     o->child(i)->hide();
   }
+  wSpacer->show();
   Fl_Panel::propagate_load(o, v);
   o->layout();
   // TODO: if the window grows taller than the screen height,
@@ -485,6 +486,8 @@ static void cb_List(Fl_Environment_Choice* o, void* v) {
   };
 }
 
+fltk3::Group *wSpacer=(fltk3::Group *)0;
+
 fltk3::Group *pCloseGroup=(fltk3::Group *)0;
 
 static void cb_Close(fltk3::Button*, void* v) {
@@ -513,7 +516,7 @@ Fl_Panel* make_file_panel() {
       pScrollGroup->box(fltk3::FLAT_BOX);
       pScrollGroup->color(fltk3::LIGHT1);
       pScrollGroup->callback((fltk3::Callback*)Fl_Panel::propagate_load);
-      { fltk3::PackedGroup* o = new fltk3::PackedGroup(10, 10, 407, 400);
+      { fltk3::PackedGroup* o = new fltk3::PackedGroup(10, 10, 400, 400);
         o->callback((fltk3::Callback*)cb_);
         { fltk3::Group* o = new fltk3::Group(10, 10, 400, 30);
           o->labelsize(12);
@@ -621,6 +624,9 @@ Fl_Panel* make_file_panel() {
           } // Fl_Environment_Choice* o
           o->end();
         } // fltk3::Group* o
+        { wSpacer = new fltk3::Group(10, 400, 400, 10);
+          wSpacer->end();
+        } // fltk3::Group* wSpacer
         o->end();
         fltk3::Group::current()->resizable(o);
       } // fltk3::PackedGroup* o
