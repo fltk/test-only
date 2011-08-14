@@ -11,7 +11,8 @@ workspace FLTK {open
   uuid_Xcode4_DebugBuildConfiguration {2B180F46-0364-417C-B270-125FAF04B452}
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
-  build_env 64
+  uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
+  build_env 16
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -32,7 +33,7 @@ workspace FLTK {open
       uuid_VC2008_Project {1B69337F-FA83-41F1-86AC-9C3E5EDDF7CD}
       target_path fluid
     } {
-      folder Headers {open
+      folder Headers {
         uuid_Xcode4_Group {DA2A6DF9-A5C3-436C-85B3-0A416E71C3D2}
       } {
         file_ref {CodeEditor.h} {
@@ -114,7 +115,7 @@ workspace FLTK {open
           filename_and_path {fluid/workspace_panel.h}
         }
       }
-      folder Sources {open
+      folder Sources {
         uuid_Xcode4_Group {A7473707-DAEF-403D-A178-64742001185E}
       } {
         file_ref {CodeEditor.cxx} {
@@ -268,7 +269,7 @@ workspace FLTK {open
           filename_and_path {fluid/workspace_panel.cxx}
         }
       }
-      folder Dependencies {open
+      folder Dependencies {
         uuid_Xcode4_Group {A6C2C5AC-C608-489D-8C74-B63CCDEB081B}
       } {
         target_dependency fltk {
@@ -307,7 +308,7 @@ workspace FLTK {open
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk {open
+    lib_target fltk {
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -321,6 +322,7 @@ workspace FLTK {open
       uuid_Xcode4_Group {727B6B68-F3C4-4BBB-9445-1AB0CD7EA6D9}
       uuid_Xcode4_ProductFileReference {86C380FE-33B2-4515-8BCE-B23C96A44961}
       uuid_VC2008_Project {57369729-6B61-4DCD-9289-79E0E2A168E8}
+      uuid_VC2010_Project {8F8BFE1B-A9AC-48B0-A7AA-4A4A52121098}
       target_path lib
     } {
       folder Headers {
@@ -3599,6 +3601,7 @@ workspace FLTK {open
       uuid_Xcode4_DebugBuildConfiguration {B29206D0-BD01-4EE6-B723-BE40D6979D43}
       uuid_Xcode4_ReleaseBuildConfiguration {1EA7FE65-16F7-4E62-BC4C-081680DD9007}
       uuid_VC2008_Project {001A9787-8FD8-4B62-8476-8FDAFC41D7E2}
+      uuid_VC2010_Project {51F6CDA8-3AF3-4DDC-B412-8E5E92F3393B}
       target_path test
     } {
       file_ref {adjuster.cxx} {
@@ -3606,7 +3609,7 @@ workspace FLTK {open
         uuid_Xcode4_FileRef {3D06E7D8-83DA-4C4E-AB15-601198A70787}
         filename_and_path {test/adjuster.cxx}
       }
-      target_dependency fltk {
+      target_dependency fltk {selected
         uuid_Xcode4_BuildFileInFrameworks {DB7E12FC-EF17-4F5C-A8CE-A61078C49DF2}
         uuid_Xcode4_BuildFileInCopyFiles {8D6D8BC6-E27A-417F-8145-71D210799F30}
         uuid_Xcode4_ContainerItemProxy {788DC2BA-6B5F-45E4-8DD3-C257E6FC3234}
@@ -4739,7 +4742,7 @@ workspace FLTK {open
         uuid_Xcode4_ContainerItemProxy {4BECC4A3-DA5A-4277-8EB2-12A092039220}
         uuid_Xcode4_TargetDependency {C97FDF57-E364-4760-82AB-204B5B8AA873}
       }
-      file_ref {CoreFoundation.framework} {selected
+      file_ref {CoreFoundation.framework} {
         uuid_Xcode4_BuildFile {69B58AF4-D60A-445C-905C-5256AC625FFD}
         uuid_Xcode4_FileRef {1B275953-33A5-4183-95CA-2770A1887E96}
         uuid_Xcode4_BuildFileInFrameworks {5C74C3F7-8683-406E-85A6-DEF17FF48879}

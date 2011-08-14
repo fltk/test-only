@@ -207,13 +207,14 @@ static int write_source_files(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+
 /*
  Create the list of linked libraries.
  
  If is_debug is set, all internal target links will link to the 
  debug version of that library
  */
-static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt, char is_debug) {
+static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
   for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
     if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC2008)) {
       if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
@@ -241,13 +242,14 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     pre = "_DEBUG"; // this is a preprocessor definition for compile time configuration
     opt = 0;        // this is the level of optimization
     lib = 3;        // this is the link library (not sure what it actually does...)
+    sprintf(cfg_path, "%s%s", tgt->name(), "_debug");
   } else {
     cfg = "Release";
     pre = "NDEBUG";
     opt = 4;
     lib = 2;
+    sprintf(cfg_path, "%s%s", tgt->name(), "_release");
   }
-  sprintf(cfg_path, "%s.%s", tgt->name(), cfg);
   
   if (tgt->is_lib_target()) {
     is_lib = 1;           // are we building a (static) library?
@@ -335,7 +337,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     fprintf(out, "\t\t\t\tName=\"VCLinkerTool\"\r\n");
     
     fprintf(out, "\t\t\t\tAdditionalDependencies=\"");
-    write_additional_dependencies(out, tgt, is_debug);
+    write_additional_dependencies(out, tgt);
     fprintf(out, "comctl32.lib\"\r\n");
     
     fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s.exe\"\r\n", DOS_path(tgt->target_path()), tgt->name());
@@ -499,7 +501,7 @@ int write_fltk_ide_visualc2008() {
         fclose(out);
         // TODO: no support for dll's yet
       } else {
-        printf("Internale error writing unknown VC6 target!\n");
+        printf("Internale error writing unknown VC2008 target!\n");
       }
     }
   }
