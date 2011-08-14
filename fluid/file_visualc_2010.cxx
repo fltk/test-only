@@ -38,7 +38,21 @@
 
 
 extern const char *filename;
-extern const char *DOS_path(const char *filename);
+
+// ------------ file conversion ------------------------------------------------
+
+const char *DOS_path(const char *filename) {
+  static char buf[2048];
+  char *c;
+  strcpy(buf, filename);
+  for (c=buf;;c++) {
+    switch (*c) {
+      case '/': *c = '\\'; break;
+      case 0: return buf;
+    }
+  }
+  return buf;
+}
 
 // ------------ VisualC 2010 ---------------------------------------------------
 

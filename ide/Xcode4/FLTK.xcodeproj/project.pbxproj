@@ -24,7 +24,6 @@
 		D719FB0AB75C88BEA02F7959 /* file.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9E8495FA110AAD01A53EA61 /* file.cxx */; };
 		D491A3BE8AB1F6509AC987B9 /* file_cmake.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C610271CF5AC9FE97D070C83 /* file_cmake.cxx */; };
 		3FAA34C0BFA47881999528A7 /* file_make.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AA03064178C5288F12B116BF /* file_make.cxx */; };
-		D23CCE7A20C65D179702D9DB /* file_visualc_6.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 86DB409A0E66AEA4212D8905 /* file_visualc_6.cxx */; };
 		D3CCB5E03B77C45759C469E8 /* file_visualc_2008.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1B4AC73D10FB821DF56598F7 /* file_visualc_2008.cxx */; };
 		1BB7A5BDAFA0BDA8A87FBA6A /* file_visualc_2010.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 2AFB60F3ADAD2478D8A7F74A /* file_visualc_2010.cxx */; };
 		554CA518D3F63B715126D6FB /* file_xcode.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */; };
@@ -3770,7 +3769,6 @@
 		C9E8495FA110AAD01A53EA61 /* file.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file.cxx; path = ../../fluid/file.cxx; sourceTree = SOURCE_ROOT; };
 		C610271CF5AC9FE97D070C83 /* file_cmake.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_cmake.cxx; path = ../../fluid/file_cmake.cxx; sourceTree = SOURCE_ROOT; };
 		AA03064178C5288F12B116BF /* file_make.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_make.cxx; path = ../../fluid/file_make.cxx; sourceTree = SOURCE_ROOT; };
-		86DB409A0E66AEA4212D8905 /* file_visualc_6.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc_6.cxx; path = ../../fluid/file_visualc_6.cxx; sourceTree = SOURCE_ROOT; };
 		1B4AC73D10FB821DF56598F7 /* file_visualc_2008.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc_2008.cxx; path = ../../fluid/file_visualc_2008.cxx; sourceTree = SOURCE_ROOT; };
 		2AFB60F3ADAD2478D8A7F74A /* file_visualc_2010.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc_2010.cxx; path = ../../fluid/file_visualc_2010.cxx; sourceTree = SOURCE_ROOT; };
 		8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_xcode.cxx; path = ../../fluid/file_xcode.cxx; sourceTree = SOURCE_ROOT; };
@@ -5136,7 +5134,6 @@
 				C9E8495FA110AAD01A53EA61 /* file.cxx */,
 				C610271CF5AC9FE97D070C83 /* file_cmake.cxx */,
 				AA03064178C5288F12B116BF /* file_make.cxx */,
-				86DB409A0E66AEA4212D8905 /* file_visualc_6.cxx */,
 				1B4AC73D10FB821DF56598F7 /* file_visualc_2008.cxx */,
 				2AFB60F3ADAD2478D8A7F74A /* file_visualc_2010.cxx */,
 				8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */,
@@ -8890,7 +8887,6 @@
 				D719FB0AB75C88BEA02F7959 /* file.cxx in Sources */,
 				D491A3BE8AB1F6509AC987B9 /* file_cmake.cxx in Sources */,
 				3FAA34C0BFA47881999528A7 /* file_make.cxx in Sources */,
-				D23CCE7A20C65D179702D9DB /* file_visualc_6.cxx in Sources */,
 				D3CCB5E03B77C45759C469E8 /* file_visualc_2008.cxx in Sources */,
 				1BB7A5BDAFA0BDA8A87FBA6A /* file_visualc_2010.cxx in Sources */,
 				554CA518D3F63B715126D6FB /* file_xcode.cxx in Sources */,
