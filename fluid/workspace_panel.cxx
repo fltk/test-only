@@ -87,7 +87,7 @@ pEnvMenu->copy(menu_pEnvMenu);
 fltk3::MenuItem *mi = (fltk3::MenuItem*)pEnvMenu->menu();
 int level = 0;
 while (mi->label()) {
-  unsigned int me = (intptr_t)mi->user_data();
+  unsigned int me = (int)(long)mi->user_data();
   if (me) {
     fltk3::MultiLabel *ml = new fltk3::MultiLabel;
     ml->labela = (char*)&menu_none_pixmap;
