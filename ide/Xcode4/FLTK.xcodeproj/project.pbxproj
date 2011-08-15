@@ -607,7 +607,7 @@
 		20F0A0AB1E01B61DE96ACF87 /* image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 04420ABF2C9A76ADD540BFB3 /* image.cxx */; };
 		C328C1462C1BC9F72437B45B /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
 		75CC268F72D04A692FF84F90 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
-		AD6A5D715759DEBBE26DFED3 /* inactive.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B3E1A1F6164DE44198702 /* inactive.cxx */; };
+		73B44703B3531F93E624F2AB /* inactive.fl in Sources */ = {isa = PBXBuildFile; fileRef = 295B1BF30B93DB11F38E280E /* inactive.fl */; };
 		7B867E2105A0137597745EB7 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
 		F84B19DFE34CAA14F9BE1497 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk.framework */; };
 		CDFD6D222115D70A09272409 /* input.cxx in Sources */ = {isa = PBXBuildFile; fileRef = DBE8F57CF32E554D590FF812 /* input.cxx */; };
@@ -4272,7 +4272,7 @@
 		485FE757F7E72AE85A0A748C /* iconize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iconize.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04420ABF2C9A76ADD540BFB3 /* image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = image.cxx; path = ../../test/image.cxx; sourceTree = SOURCE_ROOT; };
 		B762D2EC97F863F0C20D54F8 /* image.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = image.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E7B3E1A1F6164DE44198702 /* inactive.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = inactive.cxx; path = ../../test/inactive.cxx; sourceTree = SOURCE_ROOT; };
+		295B1BF30B93DB11F38E280E /* inactive.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = inactive.fl; path = ../../test/inactive.fl; sourceTree = SOURCE_ROOT; };
 		0FE867409A9EE6783883AC59 /* inactive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = inactive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE8F57CF32E554D590FF812 /* input.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = input.cxx; path = ../../test/input.cxx; sourceTree = SOURCE_ROOT; };
 		65DD819C4812FFA694D297E7 /* input.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = input.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6034,7 +6034,7 @@
 		4C05078A12EF52B88763A3EA /* inactive */ = {
 			isa = PBXGroup;
 			children = (
-				6E7B3E1A1F6164DE44198702 /* inactive.cxx */,
+				295B1BF30B93DB11F38E280E /* inactive.fl */,
 			);
 			name = inactive;
 			sourceTree = "<group>";
@@ -9467,7 +9467,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD6A5D715759DEBBE26DFED3 /* inactive.cxx in Sources */,
+				73B44703B3531F93E624F2AB /* inactive.fl in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

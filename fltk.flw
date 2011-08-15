@@ -4872,10 +4872,10 @@ workspace FLTK {open selected
       uuid_VC2010_Project {25CC5BF0-9190-4363-A601-D8A2DE05128A}
       target_path test
     } {
-      file_ref {inactive.cxx} {
-        uuid_Xcode4_BuildFileInSources {AD6A5D71-1457-430E-A390-7D2BE26DFED3}
-        uuid_Xcode4_FileRef {6E7B3E1A-5C29-4348-B81E-DCC044198702}
-        filename_and_path {test/inactive.cxx}
+      file_ref {inactive.fl} {
+        uuid_Xcode4_BuildFileInSources {73B44703-F5D9-468A-9DC3-8250E624F2AB}
+        uuid_Xcode4_FileRef {295B1BF3-4466-4FF5-9D8E-469FF38E280E}
+        filename_and_path {test/inactive.fl}
       }
       target_dependency fltk {
         uuid_Xcode4_BuildFileInFrameworks {7B867E21-4AD4-4F74-B856-AB2397745EB7}
