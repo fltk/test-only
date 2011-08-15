@@ -110,7 +110,7 @@ static uchar sorceress_bits[] = {
 class MyWidget: public fltk3::Box{
 protected:
   void draw(){
-    fltk3::Box::draw();
+    Box::draw();
     fltk3::color(fltk3::RED);
     fltk3::rectf(x()+5,y()+5,w()-10,h()-10);
     fltk3::push_clip(x()+6,y()+6,w()-12,h()-12);
@@ -142,7 +142,7 @@ public:
 class MyWidget2: public fltk3::Box{
 protected:
   void draw(){
-    fltk3::Box::draw();
+    Box::draw();
     int d;
 //    fltk3::line_style(0);
     for(d=y()+5;d<48+y();d+=2){
@@ -280,7 +280,7 @@ public:
 class MyWidget3: public fltk3::Box{
 protected:
   void draw(){
-    fltk3::Box::draw();
+    Box::draw();
     double d;
 //    fltk3::line_style(0);
     fltk3::push_clip(x()+5,y()+5,45,43);
@@ -314,7 +314,7 @@ public:
 class MyWidget4: public fltk3::Box{
 protected:
   void draw(){
-    fltk3::Box::draw();
+    Box::draw();
     fltk3::push_matrix();
     fltk3::translate(x(),y());
     fltk3::scale(.75,.75);
@@ -487,7 +487,7 @@ public:
 class MyWidget5: public fltk3::Box{
 protected:
   void draw(){
-    fltk3::Box::draw();
+    Box::draw();
     //fltk3::push_clip(x(),y(),w(),h());
     fltk3::push_matrix();
     

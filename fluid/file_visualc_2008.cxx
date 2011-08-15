@@ -55,12 +55,13 @@ static const char *VC2008_Project = "VC2008_Project";
  There are currently no Cairo setting (I will solve that differently)
  */
 static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
+  Fl_Target_Type *tgt;
   // write header
   fprintf(out, "Microsoft Visual Studio Solution File, Format Version 10.00\r\n");
   fprintf(out, "# Visual C++ Express 2008\r\n");
   
   // write all projects and their dependencies
-  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+  for (tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_VC2008)) {
       fprintf(out, "Project(\"{%s}\") = \"%s\", \"%s.vcproj\", \"{%s}\"\r\n",
               workspace->get_UUID(VC2008_Workspace), 
@@ -94,7 +95,7 @@ static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
   
   // now write a list of configurations for each target
   fprintf(out, "\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\r\n");
-  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+  for (tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_VC2008)) {
       fprintf(out, "\t\t{%s}.Debug|Win32.ActiveCfg = Debug|Win32\r\n", tgt->get_UUID(VC2008_Project));
       fprintf(out, "\t\t{%s}.Debug|Win32.Build.0 = Debug|Win32\r\n", tgt->get_UUID(VC2008_Project));

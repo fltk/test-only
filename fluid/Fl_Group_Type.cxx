@@ -39,7 +39,7 @@
 
 // Override group's resize behavior to do nothing to children:
 void igroup::resize(int X, int Y, int W, int H) {
-  fltk3::Widget::resize(X,Y,W,H);
+  Widget::resize(X,Y,W,H);
   redraw();
 }
 
@@ -236,7 +236,7 @@ const char tabs_type_name[] = "fltk3::TabGroup";
 
 // Override group's resize behavior to do nothing to children:
 void itabs::resize(int X, int Y, int W, int H) {
-  fltk3::Widget::resize(X,Y,W,H);
+  Widget::resize(X,Y,W,H);
   redraw();
 }
 
@@ -267,7 +267,7 @@ const char wizard_type_name[] = "fltk3::WizardGroup";
 
 // Override group's resize behavior to do nothing to children:
 void iwizard::resize(int X, int Y, int W, int H) {
-  fltk3::Widget::resize(X,Y,W,H);
+  Widget::resize(X,Y,W,H);
   redraw();
 }
 

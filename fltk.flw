@@ -12,7 +12,7 @@ workspace FLTK {open selected
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
-  build_env 8
+  build_env 4
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -315,7 +315,7 @@ workspace FLTK {open selected
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk {
+    lib_target fltk {open
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -2452,7 +2452,7 @@ workspace FLTK {open selected
         }
       }
     }
-    lib_target fltk_gl {
+    lib_target fltk_gl {open
       uuid_Xcode4_FluidBuildRule {C15C877E-5712-4AB2-B7BE-7B8A5F1D6F49}
       uuid_Xcode4_ProductFileReference {47405B55-C42D-4839-B6BF-F6B5BA410AF3}
       uuid_Xcode4_FrameworksBuildPhase {A02CA389-C019-4CB2-82B7-1CC18C255A72}
@@ -2575,10 +2575,11 @@ workspace FLTK {open selected
           uuid_Xcode4_BuildFileInCopyFiles {3A7B0801-6B7F-4688-BC98-DD30E2829536}
           uuid_Xcode4_ContainerItemProxy {A8E79403-D7ED-4D85-92DE-AB2236A0903A}
           uuid_Xcode4_TargetDependency {2BE20519-553B-4081-A660-2DDB853A0EDD}
+          build_env 91
         }
       }
     }
-    lib_target fltk_images {
+    lib_target fltk_images {open
       uuid_Xcode4_FluidBuildRule {3B6D1711-B7F7-4646-9550-CCC0D38666DB}
       uuid_Xcode4_ProductFileReference {BF7522F0-DF30-4FBE-B61F-D44FB67C2110}
       uuid_Xcode4_FrameworksBuildPhase {E922EF9B-6694-4CD8-9E64-646407893DE6}
@@ -2646,22 +2647,25 @@ workspace FLTK {open selected
           uuid_Xcode4_BuildFileInCopyFiles {8B041A15-060E-4ED8-BB33-F147C4EB7662}
           uuid_Xcode4_ContainerItemProxy {6B50C690-8555-4F18-86CC-49B249AFF4A1}
           uuid_Xcode4_TargetDependency {0ED253BE-A025-449A-B0CE-98970A1A8119}
+          build_env 91
         }
         target_dependency fltk_png {
           uuid_Xcode4_BuildFileInFrameworks {5F01A68D-D52A-4AC6-AA14-4F0CEF71F730}
           uuid_Xcode4_BuildFileInCopyFiles {1F90ED55-BDB0-413C-9A63-FD8E24D69794}
           uuid_Xcode4_ContainerItemProxy {B08169D8-AD1B-4FE0-8708-8176EB6EE7B3}
           uuid_Xcode4_TargetDependency {BCCDA5FF-EE55-4F37-83CF-ECE0A4EA0315}
+          build_env 91
         }
         target_dependency fltk_jpeg {
           uuid_Xcode4_BuildFileInFrameworks {788FE6BC-FC49-4F30-8C02-E66DF4069E08}
           uuid_Xcode4_BuildFileInCopyFiles {496D6E42-F3B3-4972-914E-84B3A6BEDA0E}
           uuid_Xcode4_ContainerItemProxy {B17A1C57-1070-4AB8-88C1-EAAE31224532}
           uuid_Xcode4_TargetDependency {3655FD89-72FE-418B-8AEB-DF5571B04967}
+          build_env 91
         }
       }
     }
-    lib_target fltk_png {
+    lib_target fltk_png {open
       uuid_Xcode4_FluidBuildRule {B468177C-52F4-4139-A3FF-67AB6002BC34}
       uuid_Xcode4_ProductFileReference {06A7B68E-69DF-48DF-9752-4CC40872987D}
       uuid_Xcode4_FrameworksBuildPhase {E6A799B5-B767-4119-BAAE-E6ABAED46318}
@@ -2675,7 +2679,7 @@ workspace FLTK {open selected
       uuid_Xcode4_ReleaseBuildConfiguration {5799E68C-6C23-4D48-A6A5-46C26838604D}
       uuid_VC2008_Project {AF7CC2D4-BBC7-4995-B18D-6A590C267527}
       uuid_VC2010_Project {A6556097-732F-4D5C-9763-96A896DA0F8F}
-      build_env 123
+      build_env 127
       target_path lib
     } {
       folder Sources {
@@ -2765,16 +2769,18 @@ workspace FLTK {open selected
           uuid_Xcode4_BuildFileInCopyFiles {487334DA-41CD-4EDA-B24E-D9C633C85812}
           uuid_Xcode4_ContainerItemProxy {EDC7DB92-9194-40C0-ABB4-5D02D8DAC985}
           uuid_Xcode4_TargetDependency {705F04BB-AA4A-4845-AC82-61E2709BCB42}
+          build_env 91
         }
         target_dependency fltk_zlib {
           uuid_Xcode4_BuildFileInFrameworks {AB672F58-66FD-476C-BA59-994248B463F8}
           uuid_Xcode4_BuildFileInCopyFiles {2DA17766-AF46-4EB8-BF0C-B958F80158A2}
           uuid_Xcode4_ContainerItemProxy {E9425A34-644F-4D08-86E8-0C6577B981FD}
           uuid_Xcode4_TargetDependency {24EF29AC-2D68-4BD7-9A39-37D3CC90CB0A}
+          build_env 91
         }
       }
     }
-    lib_target fltk_jpeg {
+    lib_target fltk_jpeg {open
       uuid_Xcode4_FluidBuildRule {657AA958-2632-4A29-B657-91775A869EBC}
       uuid_Xcode4_ProductFileReference {C03975F6-58DD-41B5-9A0D-D73961888340}
       uuid_Xcode4_FrameworksBuildPhase {65CF0CCA-3098-403B-A9B6-70000827BCE8}
@@ -2788,7 +2794,7 @@ workspace FLTK {open selected
       uuid_Xcode4_ReleaseBuildConfiguration {4364C496-C8EA-4726-BE8F-8D94ADDF19C7}
       uuid_VC2008_Project {417DB0F9-647A-4A36-ADFF-4196F7C1963D}
       uuid_VC2010_Project {845449C0-BCC9-4404-89DC-52E53E80F8D0}
-      build_env 123
+      build_env 127
       target_path lib
     } {
       folder Sources {
@@ -3033,10 +3039,11 @@ workspace FLTK {open selected
           uuid_Xcode4_BuildFileInCopyFiles {0E7E9400-D367-4993-8390-88825A44719E}
           uuid_Xcode4_ContainerItemProxy {7BFBB398-8097-4804-A67A-7014D8FEBA3B}
           uuid_Xcode4_TargetDependency {2FF3060F-3901-41C9-9914-A51C93775F32}
+          build_env 91
         }
       }
     }
-    lib_target fltk_zlib {
+    lib_target fltk_zlib {open
       uuid_Xcode4_FluidBuildRule {123C1072-0C58-4F44-AD82-E57DC97E4F36}
       uuid_Xcode4_ProductFileReference {AFDEBB8C-A6BB-4318-814D-9D4B6586BF8B}
       uuid_Xcode4_FrameworksBuildPhase {DEBCC581-E57F-4C21-8DA4-57A0CC89BBE4}
@@ -3050,7 +3057,7 @@ workspace FLTK {open selected
       uuid_Xcode4_ReleaseBuildConfiguration {F1E12179-62FF-476F-B95D-DF8C211E2D1C}
       uuid_VC2008_Project {2F487ADB-AB3A-44B1-A824-D25C00A2D30A}
       uuid_VC2010_Project {8051E81E-8228-43EA-AABA-FE4E48CB10AD}
-      build_env 123
+      build_env 127
       target_path lib
     } {
       folder Sources {
@@ -3140,6 +3147,7 @@ workspace FLTK {open selected
           uuid_Xcode4_BuildFileInCopyFiles {2EC24DA9-FD73-42C8-8413-1ED28BF57B2B}
           uuid_Xcode4_ContainerItemProxy {8C9700E2-E6FB-4603-8811-5142A89F69EA}
           uuid_Xcode4_TargetDependency {3B9C4DB7-822F-4624-9CC0-35D44F9D485A}
+          build_env 91
         }
       }
     }

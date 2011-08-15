@@ -108,11 +108,11 @@ Function {} {open
     {fltk3::Scrollbar} {} {
       label HORIZONTAL
       callback callback
-      tooltip {Horizontal Scrollbar} xywh {305 65 95 20} type Horizontal labelsize 8 maximum 100 value 20
+      tooltip {Horizontal Scrollbar} xywh {305 65 95 20} type Horizontal labelsize 8 maximum 100
     }
     {fltk3::Scrollbar} {} {
       label 0
-      callback callback
+      callback callback selected
       tooltip {Vertical Scrollbar} xywh {400 20 20 105} labelsize 8 align 1 maximum 100
     }
     {fltk3::Box} {} {
@@ -126,7 +126,7 @@ Function {} {open
     }
     {fltk3::Adjuster} {} {
       label {w()<h()}
-      callback callback selected
+      callback callback
       tooltip {Vertical Adjuster} xywh {530 35 25 75} labelsize 8
     }
     {fltk3::Box} {} {

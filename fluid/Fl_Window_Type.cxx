@@ -318,7 +318,7 @@ void Overlay_Window::draw() {
 	fltk3::rectf(X,Y,CHECKSIZE,CHECKSIZE);
       }
   }
-  fltk3::OverlayWindow::draw();
+  OverlayWindow::draw();
 }
 
 extern fltk3::Window *main_window;
@@ -363,7 +363,7 @@ int Overlay_Window::handle(int e) {
     switch (e) {
       case fltk3::SHOW:
       case fltk3::HIDE:
-        ret = fltk3::OverlayWindow::handle(e);
+        ret = OverlayWindow::handle(e);
     }
   }
   return ret;
@@ -529,7 +529,7 @@ void Overlay_Window::resize(int X,int Y,int W,int H) {
   if (W!=w() || H!=h())
     set_modflag(1);
 
-  fltk3::OverlayWindow::resize(X,Y,W,H);
+  OverlayWindow::resize(X,Y,W,H);
   resizable(t);
   update_xywh();
 }

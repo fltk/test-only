@@ -627,7 +627,7 @@ SudokuCell::handle(int event) {
       break;
   }
 
-  return fltk3::Widget::handle(event);
+  return Widget::handle(event);
 }
 
 
@@ -1226,7 +1226,7 @@ Sudoku::reset_cb(fltk3::Widget *widget, void *) {
 void
 Sudoku::resize(int X, int Y, int W, int H) {
   // Resize the window...
-  fltk3::DoubleWindow::resize(X, Y, W, H);
+  DoubleWindow::resize(X, Y, W, H);
 
   // Save the new window geometry...
   prefs_.set("x", X);

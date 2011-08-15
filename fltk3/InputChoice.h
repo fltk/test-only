@@ -84,7 +84,7 @@ namespace fltk3 {
       if (item && item->flags & (fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) return;	// ignore submenus
       if (!strcmp(o->inp_->value(), o->menu_->text()))
       {
-        o->fltk3::Widget::clear_changed();
+        o->Widget::clear_changed();
         if (o->when() & fltk3::WHEN_NOT_CHANGED)
           o->do_callback();
       }
@@ -92,7 +92,7 @@ namespace fltk3 {
       {
         o->inp_->value(o->menu_->text());
         o->inp_->set_changed();
-        o->fltk3::Widget::set_changed();
+        o->Widget::set_changed();
         if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
           o->do_callback();
       }
@@ -101,7 +101,7 @@ namespace fltk3 {
       
       if (o->callback() != default_callback)
       {
-        o->fltk3::Widget::clear_changed();
+        o->Widget::clear_changed();
         o->inp_->clear_changed();
       }
     }
@@ -110,11 +110,11 @@ namespace fltk3 {
       fltk3::InputChoice *o=(fltk3::InputChoice *)data;
       fltk3::WidgetTracker wp(o);
       if (o->inp_->changed()) {
-        o->fltk3::Widget::set_changed();
+        o->Widget::set_changed();
         if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
           o->do_callback();
       } else {
-        o->fltk3::Widget::clear_changed();
+        o->Widget::clear_changed();
         if (o->when() & fltk3::WHEN_NOT_CHANGED)
           o->do_callback();
       }
@@ -122,7 +122,7 @@ namespace fltk3 {
       if (wp.deleted()) return;
       
       if (o->callback() != default_callback)
-        o->fltk3::Widget::clear_changed();
+        o->Widget::clear_changed();
     }
     
     // Custom resize behavior -- input stretches, menu button doesn't
@@ -143,7 +143,7 @@ namespace fltk3 {
      <P> Inherited destructor Destroys the widget and any value associated with it.
      */
     InputChoice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
-      fltk3::Group::box(fltk3::DOWN_BOX);
+      Group::box(fltk3::DOWN_BOX);
       align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
       inp_ = new fltk3::Input(inp_x(), inp_y(),
                               inp_w(), inp_h());
@@ -159,10 +159,10 @@ namespace fltk3 {
     
     /** Adds an item to the menu.*/
     void add(const char *s) { menu_->add(s);  }
-    int changed() const { return inp_->changed() | fltk3::Widget::changed();}
+    int changed() const { return inp_->changed() | Widget::changed();}
     void clear_changed() { 
       inp_->clear_changed();
-      fltk3::Widget::clear_changed();
+      Widget::clear_changed();
     }
     void set_changed() { 
       inp_->set_changed();
@@ -179,7 +179,7 @@ namespace fltk3 {
     /** Sets the fltk3::MenuItem array used for the menu. */
     void menu(const fltk3::MenuItem *m) { menu_->menu(m); }
     void resize(int X, int Y, int W, int H) {
-      fltk3::Group::resize(X,Y,W,H);
+      Group::resize(X,Y,W,H);
       inp_->resize(inp_x(), inp_y(), inp_w(), inp_h());
       menu_->resize(menu_x(), menu_y(), menu_w(), menu_h());
     }

@@ -83,7 +83,7 @@ void testwindow::draw() {
 #ifdef DEBUG
   printf("%s : draw\n",label());
 #endif
-  fltk3::Window::draw();
+  Window::draw();
 #ifdef DEBUG_POS
   if (key) fltk3::draw(&key, 1, cx, cy);
 #endif
@@ -99,7 +99,7 @@ int testwindow::handle(int e) {
     if (e == fltk3::LEAVE) 
       cursor(fltk3::CURSOR_DEFAULT);
   }
-  if (fltk3::Window::handle(e)) return 1;
+  if (Window::handle(e)) return 1;
   if (e == fltk3::FOCUS) return 1;
   if (e == fltk3::PUSH) {fltk3::focus(this); return 1;}
   if (e == fltk3::KEYBOARD && fltk3::event_text()[0]) {

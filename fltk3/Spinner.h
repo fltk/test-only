@@ -173,7 +173,7 @@ namespace fltk3 {
           else return 0;
       }
       
-      return fltk3::Group::handle(event);
+      return Group::handle(event);
     }
     
     /** Speling mistakes retained for source compatibility \deprecated */
@@ -191,7 +191,7 @@ namespace fltk3 {
     /** Sets the minimum and maximum values for the widget. */
     void		range(double a, double b) { minimum_ = a; maximum_ = b; }
     void		resize(int X, int Y, int W, int H) {
-      fltk3::Group::resize(X,Y,W,H);
+      Group::resize(X,Y,W,H);
       
       input_.resize(X, Y, W - H / 2 - 2, H);
       up_button_.resize(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2);

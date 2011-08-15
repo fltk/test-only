@@ -81,11 +81,12 @@ static int write_sln_project(FILE *out, Fl_Workspace_Type *workspace, Fl_Target_
  Write a VisualC 2010 Solution file.
  */
 static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
-  
+  Fl_Target_Type *tgt;
+
   fprintf(out, "Microsoft Visual Studio Solution File, Format Version 11.00\r\n");
   fprintf(out, "# Visual C++ Express 2010\r\n");
   
-  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+  for (tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_VC2010)) {
       write_sln_project(out, workspace, tgt);
     }
@@ -99,7 +100,7 @@ static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
   fprintf(out, "\tEndGlobalSection\r\n");
   
   fprintf(out, "\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\r\n");
-  for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+  for (tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_VC2010)) {
       write_sln_configuration(out, workspace, tgt);
     }

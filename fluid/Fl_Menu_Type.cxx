@@ -611,7 +611,7 @@ int Shortcut_Button::handle(int e) {
   } else if (e == fltk3::FOCUS) {
     return value();
   } else {
-    int r = fltk3::Button::handle(e);
+    int r = Button::handle(e);
     if (e == fltk3::RELEASE && value() && fltk3::focus() != this) take_focus();
     return r;
   }

@@ -78,7 +78,7 @@ class CodeViewer : public CodeEditor {
   
   protected:
 
-  int handle(int ev) { return fltk3::TextDisplay::handle(ev); }
+  int handle(int ev) { return TextDisplay::handle(ev); }
 };
 
 #endif // !CodeEditor_h

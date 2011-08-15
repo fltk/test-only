@@ -46,7 +46,7 @@ public:
 }*test;
 
 void test_box::draw() {
-  fltk3::DoubleWindow::draw();
+  DoubleWindow::draw();
   fltk3::color((uchar)(sliders[0]->value()),
 	   (uchar)(sliders[1]->value()),
 	   (uchar)(sliders[2]->value()));

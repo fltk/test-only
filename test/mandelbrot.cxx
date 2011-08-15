@@ -219,7 +219,7 @@ void Drawing_Area::resize(int XX,int YY,int WW,int HH) {
     H = HH-8;
     if (buffer) {delete[] buffer; buffer = 0; new_display();}
   }
-  fltk3::Box::resize(XX,YY,WW,HH);
+  Box::resize(XX,YY,WW,HH);
 }
 
 //

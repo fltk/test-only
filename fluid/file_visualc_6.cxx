@@ -465,7 +465,7 @@ static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
 
   fprintf(out, "# ADD LINK32 ");
   write_add_link32(out, tgt, 0);
-  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+  fprintf(out, "comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../%s/%s.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
   
   fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:yes\r\n");
   fprintf(out, "\r\n");

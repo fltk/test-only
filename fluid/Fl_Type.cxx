@@ -253,7 +253,7 @@ static void Widget_Browser_callback(fltk3::Widget *o,void *) {
 Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
 : fltk3::Browser_(X,Y,W,H,l) {
   type(fltk3::MULTI_BROWSER);
-  fltk3::Widget::callback(Widget_Browser_callback);
+  Widget::callback(Widget_Browser_callback);
   when(fltk3::WHEN_RELEASE);
 }
 
@@ -506,7 +506,7 @@ int Widget_Browser::handle(int e) {
         title->dnd_paste();
       return 1;
   }
-  return fltk3::Browser_::handle(e);
+  return Browser_::handle(e);
 }
 
 Fl_Type::Fl_Type() {

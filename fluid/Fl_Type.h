@@ -671,21 +671,21 @@ public:
 class igroup : public fltk3::Group {
 public:
   void resize(int,int,int,int);
-  void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
-  igroup(int X,int Y,int W,int H) : fltk3::Group(X,Y,W,H) {fltk3::Group::current(0);}
+  void full_resize(int X, int Y, int W, int H) { Group::resize(X, Y, W, H); }
+  igroup(int X,int Y,int W,int H) : fltk3::Group(X,Y,W,H) {Group::current(0);}
 };
 
 class itabs : public fltk3::TabGroup {
 public:
   void resize(int,int,int,int);
-  void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
+  void full_resize(int X, int Y, int W, int H) { Group::resize(X, Y, W, H); }
   itabs(int X,int Y,int W,int H) : fltk3::TabGroup(X,Y,W,H) {}
 };
 
 class iwizard : public fltk3::WizardGroup {
 public:
   void resize(int,int,int,int);
-  void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
+  void full_resize(int X, int Y, int W, int H) { Group::resize(X, Y, W, H); }
   iwizard(int X,int Y,int W,int H) : fltk3::WizardGroup(X,Y,W,H) {}
 };
 
