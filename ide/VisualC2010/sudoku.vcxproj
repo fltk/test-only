@@ -70,8 +70,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;fltk.lib;fltk_images.lib;fltk_png.lib;fltk_jpeg.lib;fltk_zlib.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\test\sudoku.exe</OutputFile>
+      <AdditionalDependencies>winmm.lib;fltkd.lib;fltk_imagesd.lib;fltk_pngd.lib;fltk_jpegd.lib;fltk_zlibd.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\test\sudokud.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

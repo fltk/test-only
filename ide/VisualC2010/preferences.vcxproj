@@ -70,8 +70,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>fltk.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\test\preferences.exe</OutputFile>
+      <AdditionalDependencies>fltkd.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\test\preferencesd.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -138,8 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\test\preferences.fl">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create .cxx and .h file with fluid</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cfluid %(Filename).fl
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create .cxx and .h file with fluidd</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cfluid /D %(Filename).fl
       </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\test\\%(Filename).cxx;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create .cxx and .h file with fluid</Message>

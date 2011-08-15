@@ -119,7 +119,7 @@ static int write_sln_file(FILE *out, Fl_Workspace_Type *workspace) {
 /*
  Create the list of linked libraries.
  */
-static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
+static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
     if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC2008)) {
       if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
@@ -127,7 +127,7 @@ static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
       } else if (t->is_target_dependency() && tgt->is_app_target()) {
         Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
         if (dep && dep->is_lib_target()) {
-          fprintf(out, "%s.lib;", t->name());
+          fprintf(out, "%s%s.lib;", t->name(), (is_debug?"d":""));
         }
       }
     }
@@ -138,7 +138,7 @@ static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
 
 static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   // some definitions we will need later
-  const char *cfg, *pre, *pre2;
+  const char *cfg, *pre, *pre2, *debug_d;
   int opt, lib, cfg_type;
   char is_lib, cfg_path[256];
   
@@ -148,12 +148,14 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     opt = 0;        // this is the level of optimization
     lib = 3;        // this is the link library (not sure what it actually does...)
     sprintf(cfg_path, "%s%s", tgt->name(), "_debug");
+	debug_d = "d";
   } else {
     cfg = "Release";
     pre = "NDEBUG";
     opt = 4;
     lib = 2;
     sprintf(cfg_path, "%s%s", tgt->name(), "_release");
+	debug_d = "";
   }
   
   if (tgt->is_lib_target()) {
@@ -213,15 +215,15 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
 
   if (is_lib) {
     fprintf(out, "    <Lib>\r\n");
-    fprintf(out, "    <OutputFile>..\\..\\%s\\$(ProjectName).lib</OutputFile>\r\n", DOS_path(tgt->target_path()));
+    fprintf(out, "    <OutputFile>..\\..\\%s\\%s%s.lib</OutputFile>\r\n", DOS_path(tgt->target_path()), tgt->name(), debug_d);
     fprintf(out, "    <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
     fprintf(out, "    </Lib>\r\n");
   } else {
     fprintf(out, "    <Link>\r\n");
     fprintf(out, "      <AdditionalDependencies>");
-    write_additional_dependencies(out, tgt);
+    write_additional_dependencies(out, tgt, is_debug);
     fprintf(out, "comctl32.lib;%%(AdditionalDependencies)</AdditionalDependencies>\r\n");
-    fprintf(out, "      <OutputFile>..\\..\\%s\\%s.exe</OutputFile>\r\n", DOS_path(tgt->target_path()), tgt->name());
+    fprintf(out, "      <OutputFile>..\\..\\%s\\%s%s.exe</OutputFile>\r\n", DOS_path(tgt->target_path()), tgt->name(), debug_d);
     fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
     fprintf(out, "      <AdditionalLibraryDirectories>..\\..\\lib;%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>\r\n");
     fprintf(out, "      <IgnoreSpecificDefaultLibraries>libcd;%%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>\r\n");
@@ -271,8 +273,8 @@ static int write_fluid_custom_build(FILE *out, Fl_File_Type *file) {
 
   //fprintf(out, "  <ItemGroup>\r\n");
   fprintf(out, "    <CustomBuild Include=\"..\\..\\%s\">\r\n", DOS_path(file->filename()));
-  fprintf(out, "      <Message Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Create .cxx and .h file with fluid</Message>\r\n");
-  fprintf(out, "      <Command Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">cfluid %%(Filename).fl\r\n");
+  fprintf(out, "      <Message Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Create .cxx and .h file with fluidd</Message>\r\n");
+  fprintf(out, "      <Command Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">cfluid /D %%(Filename).fl\r\n");
   fprintf(out, "      </Command>\r\n");
   fprintf(out, "      <Outputs Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">..\\..\\%s\\%%(Filename).cxx;%%(Outputs)</Outputs>\r\n", DOS_path(flPath));
   fprintf(out, "      <Message Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">Create .cxx and .h file with fluid</Message>\r\n");
@@ -440,9 +442,6 @@ int write_fltk_ide_visualc2010() {
   FILE *out = fopen(buf, "wb");
   write_sln_file(out, workspace);
   fclose(out);
-  
-  // TODO: write fluid build rule into a file
-  // cfluid.cmd 
   
   // write project files (.vcproj)
   for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
