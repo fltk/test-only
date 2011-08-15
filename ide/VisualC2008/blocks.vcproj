@@ -70,8 +70,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib fltk.lib comctl32.lib"
-				OutputFile="..\..\test\blocks.exe"
+				AdditionalDependencies="winmm.lib fltkd.lib comctl32.lib"
+				OutputFile="..\..\test\blocksd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"

@@ -70,8 +70,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib comctl32.lib"
-				OutputFile="..\..\test\valuators.exe"
+				AdditionalDependencies="fltkd.lib comctl32.lib"
+				OutputFile="..\..\test\valuatorsd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"

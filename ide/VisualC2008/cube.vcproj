@@ -70,8 +70,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_gl.lib glu32.lib opengl32.lib comctl32.lib"
-				OutputFile="..\..\test\cube.exe"
+				AdditionalDependencies="fltkd.lib fltk_gld.lib glu32.lib opengl32.lib comctl32.lib"
+				OutputFile="..\..\test\cubed.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"

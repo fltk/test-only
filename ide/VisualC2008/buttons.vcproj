@@ -70,8 +70,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib comctl32.lib"
-				OutputFile="..\..\test\buttons.exe"
+				AdditionalDependencies="fltkd.lib comctl32.lib"
+				OutputFile="..\..\test\buttonsd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"

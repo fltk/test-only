@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_png.lib"
+				OutputFile="..\..\lib\fltk_pngd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

@@ -214,7 +214,7 @@ static int write_source_files(FILE *out, Fl_Target_Type *tgt) {
  If is_debug is set, all internal target links will link to the 
  debug version of that library
  */
-static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
+static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   for (Fl_Type *t = tgt->next; t && (t->level>tgt->level); t = t->next) {
     if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_VC2008)) {
       if (t->is_file() && ((Fl_File_Type*)t)->file_is_library()) {
@@ -222,7 +222,7 @@ static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
       } else if (t->is_target_dependency() && tgt->is_app_target()) {
         Fl_Target_Type *dep = Fl_Target_Type::find(t->name());
         if (dep && dep->is_lib_target()) {
-          fprintf(out, "%s.lib ", t->name());
+          fprintf(out, "%s%s.lib ", t->name(), (is_debug?"d":""));
         }
       }
     }
@@ -233,7 +233,7 @@ static int write_additional_dependencies(FILE *out, Fl_Target_Type *tgt) {
 
 static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   // some definitions we will need later
-  const char *cfg, *pre, *pre2;
+  const char *cfg, *pre, *pre2, *debug_d;
   int opt, lib, cfg_type;
   char is_lib, cfg_path[256];
   
@@ -243,12 +243,14 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     opt = 0;        // this is the level of optimization
     lib = 3;        // this is the link library (not sure what it actually does...)
     sprintf(cfg_path, "%s%s", tgt->name(), "_debug");
+	debug_d = "d";
   } else {
     cfg = "Release";
     pre = "NDEBUG";
     opt = 4;
     lib = 2;
     sprintf(cfg_path, "%s%s", tgt->name(), "_release");
+	debug_d = "";
   }
   
   if (tgt->is_lib_target()) {
@@ -329,7 +331,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
   if (is_lib) {
     fprintf(out, "\t\t\t<Tool\r\n");
     fprintf(out, "\t\t\t\tName=\"VCLibrarianTool\"\r\n");
-    fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s.lib\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+    fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s%s.lib\"\r\n", DOS_path(tgt->target_path()), tgt->name(), debug_d);
     fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
     fprintf(out, "\t\t\t/>\r\n");
   } else {
@@ -337,10 +339,10 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     fprintf(out, "\t\t\t\tName=\"VCLinkerTool\"\r\n");
     
     fprintf(out, "\t\t\t\tAdditionalDependencies=\"");
-    write_additional_dependencies(out, tgt);
+    write_additional_dependencies(out, tgt, is_debug);
     fprintf(out, "comctl32.lib\"\r\n");
     
-    fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s.exe\"\r\n", DOS_path(tgt->target_path()), tgt->name());
+    fprintf(out, "\t\t\t\tOutputFile=\"..\\..\\%s\\%s%s.exe\"\r\n", DOS_path(tgt->target_path()), tgt->name(), debug_d);
     fprintf(out, "\t\t\t\tLinkIncremental=\"1\"\r\n");
     fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
     fprintf(out, "\t\t\t\tAdditionalLibraryDirectories=\"..\\..\\lib\"\r\n");
@@ -482,9 +484,6 @@ int write_fltk_ide_visualc2008() {
   FILE *out = fopen(buf, "wb");
   write_sln_file(out, workspace);
   fclose(out);
-  
-  // TODO: write fluid build rule into a file
-  // cfluid.cmd 
   
   // write project files (.vcproj)
   for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
