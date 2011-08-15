@@ -57,7 +57,7 @@ widget_class Fl_Environment_Choice {open
   decl {unsigned int pEnv;} {protected local
   }
   {fltk3::MenuButton} pEnvMenu {
-    label {- unknown -} open
+    label {- unknown -} open selected
     xywh {0 0 200 26} labelsize 9 align 192
   } {
     MenuItem pMenuAll {
@@ -112,6 +112,12 @@ if (callback())
         user_data FL_ENV_ALL_VC
         callback cb_pMenuAll
         xywh {0 0 100 20} labelsize 12 divider
+      }
+      MenuItem {} {
+        label {VisualC 6}
+        user_data FL_ENV_VC6
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
       }
       MenuItem {} {
         label {VisualC 2008}
@@ -193,9 +199,10 @@ if (pEnv==FL_ENV_ALL) {
   char buf[1024]; buf[0] = 0;
   if (pEnv&FL_ENV_MAKE) strcat(buf, "make, ");
   if (pEnv&FL_ENV_CMAKE) strcat(buf, "cmake, ");
+  if (pEnv&FL_ENV_VC6) strcat(buf, "VC6, ");
   if (pEnv&FL_ENV_VC2008) strcat(buf, "VC2008, ");
   if (pEnv&FL_ENV_VC2010) strcat(buf, "VC2010, ");
-  if (pEnv&FL_ENV_XC4) strcat(buf, "Xcode3&&4, ");
+  if (pEnv&FL_ENV_XC4) strcat(buf, "Xcode3 && 4, ");
   int n = strlen(buf);
   if (n>2) buf[n-2] = 0;
   pEnvMenu->copy_label(buf);
@@ -266,7 +273,7 @@ Function {make_file_panel()} {open
   else
     sprintf(buf, "%s Properties", Fl_Panel::current->name());
   the_file_panel->label(buf);
-}} open selected
+}} open
         xywh {10 10 400 400} resizable
       } {
         {fltk3::Group} {} {

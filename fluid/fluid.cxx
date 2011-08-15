@@ -951,6 +951,7 @@ void manual_cb(fltk3::Widget *, void *) {
 extern int write_fltk_makefiles();
 extern int write_fltk_cmake();
 extern int write_fltk_ide_xcode4();
+extern int write_fltk_ide_visualc6();
 extern int write_fltk_ide_visualc2008();
 extern int write_fltk_ide_visualc2010();
 
@@ -989,9 +990,10 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
   if (completion_button->value()) {
     ret = fltk3::choice("Write Build Environments:\n\n"
                         "You are about to create the following Build Environments:\n"
-                        "%s%s%s%s%s", "Cancel", "Continue", 0,
+                        "%s%s%s%s%s%s", "Cancel", "Continue", 0,
                         workspace->builds_in(FL_ENV_MAKE)?" - Autoconf/Makefile\n":"",
                         workspace->builds_in(FL_ENV_CMAKE)?" - CMake\n":"",
+                        workspace->builds_in(FL_ENV_VC6)?" - VisualC 6\n":"",
                         workspace->builds_in(FL_ENV_VC2008)?" - VisualC 2008\n":"",
                         workspace->builds_in(FL_ENV_VC2010)?" - VisualC 2010\n":"",
                         workspace->builds_in(FL_ENV_XC4)?" - Xcode 3 & 4\n":"");
@@ -1011,6 +1013,10 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
   }
   if (workspace->builds_in(FL_ENV_XC4) && write_fltk_ide_xcode4()) {
     int v = fltk3::choice("Error writing Xcode 3 & 4 build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+  if (workspace->builds_in(FL_ENV_VC6) && write_fltk_ide_visualc6()) {
+    int v = fltk3::choice("Error writing VisualC 6 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
   if (workspace->builds_in(FL_ENV_VC2008) && write_fltk_ide_visualc2008()) {

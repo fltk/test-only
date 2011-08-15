@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\fluid"
-			IntermediateDirectory=".\Fluid.Debug"
+			IntermediateDirectory=".\Fluid_debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -39,7 +39,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Fluid.Debug\Fluid.tlb"
+				TypeLibraryName=".\Fluid_debug\Fluid.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -49,10 +49,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Fluid.Debug\Fluid.pch"
-				AssemblerListingLocation=".\Fluid.Debug\"
-				ObjectFile=".\Fluid.Debug\"
-				ProgramDataBaseFileName=".\Fluid.Debug\"
+				PrecompiledHeaderFile=".\Fluid_debug\Fluid.pch"
+				AssemblerListingLocation=".\Fluid_debug\"
+				ObjectFile=".\Fluid_debug\"
+				ProgramDataBaseFileName=".\Fluid_debug\"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -77,7 +77,7 @@
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Fluid.Debug\Fluid.pdb"
+				ProgramDatabaseFile=".\Fluid_debug\Fluid.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -108,7 +108,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\fluid"
-			IntermediateDirectory=".\Fluid.Release"
+			IntermediateDirectory=".\Fluid_release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -129,7 +129,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Fluid.Release\Fluid.tlb"
+				TypeLibraryName=".\Fluid_release\Fluid.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -141,10 +141,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Fluid.Release\Fluid.pch"
-				AssemblerListingLocation=".\Fluid.Release\"
-				ObjectFile=".\Fluid.Release\"
-				ProgramDataBaseFileName=".\Fluid.Release\"
+				PrecompiledHeaderFile=".\Fluid_release\Fluid.pch"
+				AssemblerListingLocation=".\Fluid_release\"
+				ObjectFile=".\Fluid_release\"
+				ProgramDataBaseFileName=".\Fluid_release\"
 				SuppressStartupBanner="true"
 				CompileAs="0"
 			/>
@@ -167,7 +167,7 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Fluid.Release\Fluid.pdb"
+				ProgramDatabaseFile=".\Fluid_release\Fluid.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -546,6 +546,29 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\file_make.cxx"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\fluid\file_visualc_6.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

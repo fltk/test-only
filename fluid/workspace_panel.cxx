@@ -57,6 +57,7 @@ fltk3::MenuItem Fl_Environment_Choice::menu_pEnvMenu[] = {
  {0,0,0,0,0,0,0,0,0},
  {"MS Windows", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_ALL_VC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 6", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_VC6), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"VisualC 2008", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_VC2008), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"VisualC 2010", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_VC2010), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0},
@@ -140,9 +141,10 @@ void Fl_Environment_Choice::update_all() {
     char buf[1024]; buf[0] = 0;
     if (pEnv&FL_ENV_MAKE) strcat(buf, "make, ");
     if (pEnv&FL_ENV_CMAKE) strcat(buf, "cmake, ");
+    if (pEnv&FL_ENV_VC6) strcat(buf, "VC6, ");
     if (pEnv&FL_ENV_VC2008) strcat(buf, "VC2008, ");
     if (pEnv&FL_ENV_VC2010) strcat(buf, "VC2010, ");
-    if (pEnv&FL_ENV_XC4) strcat(buf, "Xcode3&&4, ");
+    if (pEnv&FL_ENV_XC4) strcat(buf, "Xcode3 && 4, ");
     int n = strlen(buf);
     if (n>2) buf[n-2] = 0;
     pEnvMenu->copy_label(buf);
