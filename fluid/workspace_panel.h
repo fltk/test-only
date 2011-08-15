@@ -29,7 +29,6 @@
 #define workspace_panel_h
 #include <fltk3/run.h>
 #include "Fl_Type.h"
-#include <stdint.h>
 #include <fltk3/Pixmap.h>
 #include <fltk3/MultiLabel.h>
 extern fltk3::Pixmap menu_none_pixmap;

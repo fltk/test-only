@@ -29,7 +29,7 @@
 
 void Fl_Environment_Choice::cb_pMenuAll_i(fltk3::Menu_*, void* v) {
   // this is what we want to set or clear, pEnv is what we currently have
-unsigned int e = (intptr_t)v;
+unsigned int e = (int)(long)v;
 // find a good logic for settting, clearing, and partial values
 if ( (pEnv&e)==e ) {
   // if all bits in the menu are set, toggle the bits off
@@ -113,7 +113,7 @@ void Fl_Environment_Choice::update_all() {
   fltk3::MenuItem *mi = (fltk3::MenuItem*)pEnvMenu->menu();
   int level = 0;
   while (mi->label()) {
-    unsigned int me = (intptr_t)mi->user_data();
+    unsigned int me = (int)(long)mi->user_data();
     if (me) {
       fltk3::MultiLabel *ml = (fltk3::MultiLabel*)mi->label();
       if ( (me&e)==0 ) {
