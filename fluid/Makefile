@@ -25,7 +25,7 @@
 #      http://www.fltk.org/str.php
 #
 
-CPPFILES =  \
+CPPFILES = \
 	CodeEditor.cxx \
 	Fl_Function_Type.cxx \
 	Fl_Group_Type.cxx \
@@ -61,14 +61,14 @@ include ../makeinclude
 
 all:	$(FLUID) fluid$(EXEEXT)
 
-fluid$(EXEEXT):		$(OBJECTS) $(LIBNAME) $(FLLIBNAME) \
-			$(IMGLIBNAME)
+fluid$(EXEEXT):		$(OBJECTS) $(FLTK_LIBNAME) \
+			$(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKFLTKFORMS) $(LINKFLTKIMG) $(LDLIBS)
 	$(OSX_ONLY) $(INSTALL_BIN) fluid fluid.app/Contents/MacOS
 
-fluid-shared$(EXEEXT):	$(OBJECTS) ../src/$(DSONAME) ../src/$(FLDSONAME) \
-			../src/$(IMGDSONAME)
+fluid-shared$(EXEEXT):	$(OBJECTS) ../src/$(FLTK_DSONAME) ../src/$(FLDSONAME) \
+			../src/$(FLTK_IMAGES_DSONAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LDLIBS)
 

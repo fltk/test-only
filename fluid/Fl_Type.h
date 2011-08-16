@@ -233,6 +233,7 @@ class Fl_Tool_Type : public Fl_Type {
   int pNUUID, pnUUID;
   char **pUUIDName;
   char **pUUID;
+  unsigned pFlags;
   
   void set_UUID(const char *name, const char *uuid);
   void set_UUID(int i, const char *uuid);
@@ -256,6 +257,10 @@ public:
   void list_env(unsigned int e) { pListEnv = e; }
   unsigned int list_env() { return pListEnv; }
   int lists_in(unsigned int env) { return (((pBuildEnv|pListEnv)&env)!=0); }
+  
+  unsigned flags() { return pFlags; }
+  void set_flags(unsigned v) { pFlags |= v; }
+  void clear_flags(unsigned v) { pFlags &= ~v; }
 };
 
 class Fl_Workspace_Type : public Fl_Tool_Type {
@@ -293,14 +298,19 @@ extern Fl_Target_Dependency_Type Fl_Target_Dependency_type;
 
 class Fl_Target_Type : public Fl_Tool_Type {
   char *pTargetPath;
+  char *pMakefilePath;
 public:
   Fl_Target_Type() :
   Fl_Tool_Type(),
-  pTargetPath(0) {
+  pTargetPath(0),
+  pMakefilePath(0)
+  {
     pTargetPath = strdup("");
+    pMakefilePath = strdup("");
   }
   ~Fl_Target_Type() {
     if (pTargetPath) free(pTargetPath);
+    if (pMakefilePath) free(pMakefilePath);
   }
   const char *type_name() { return "target"; }
   Fl_Type *make();
@@ -311,6 +321,8 @@ public:
   Fl_Target_Type *next_target(Fl_Type *base);
   void target_path(const char *path);
   const char *target_path() { return pTargetPath; }
+  void makefile_path(const char *path);
+  const char *makefile_path() { return pMakefilePath; }
   void write_properties();
   char read_property(const char *);
 };

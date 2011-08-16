@@ -1084,7 +1084,8 @@ Fl_Tool_Type::Fl_Tool_Type()
   pBuildEnv(FL_ENV_ALL),
   pListEnv(FL_ENV_ALL),
   pNUUID(0), pnUUID(0), 
-  pUUIDName(0L), pUUID(0) 
+  pUUIDName(0L), pUUID(0),
+  pFlags(0)
 {
 }
 
@@ -1367,9 +1368,23 @@ void Fl_Target_Type::target_path(const char *path) {
   }
 }
 
+void Fl_Target_Type::makefile_path(const char *path) {
+  if (pMakefilePath) {
+    free(pMakefilePath);
+    pMakefilePath = 0L;
+  }
+  if (path) {
+    pMakefilePath = strdup(path);
+  } else {
+    pMakefilePath = strdup("");
+  }
+}
+
 char Fl_Target_Type::read_property(const char *c) {
   if (!strcmp(c,"target_path")) {
     target_path(read_word());
+  } else if (!strcmp(c,"makefile_path")) {
+    makefile_path(read_word());
   } else {
     return Fl_Tool_Type::read_property(c);
   }
@@ -1382,6 +1397,11 @@ void Fl_Target_Type::write_properties() {
     write_indent(level+1);
     write_string("target_path");
     write_word(target_path());
+  }
+  if (makefile_path() && *makefile_path()) {
+    write_indent(level+1);
+    write_string("makefile_path");
+    write_word(makefile_path());
   }
 }
 

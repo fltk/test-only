@@ -94,7 +94,7 @@ extern "C"
 
 static fltk3::HelpDialog *help_dialog = 0;
 
-fltk3::Preferences	fluid_prefs(fltk3::Preferences::USER, "fltk.org", "fluid");
+fltk3::Preferences fluid_prefs(fltk3::Preferences::USER, "fltk.org", "fluid");
 int gridx = 5;
 int gridy = 5;
 int snap = 1;

@@ -270,7 +270,7 @@ uninstall-osx:
 	../fluid/fluid$(EXEEXT) -c $<
 
 # All demos depend on the FLTK library...
-$(ALL): $(LIBNAME)
+$(ALL): $(FLTK_LIBNAME)
 
 # General demos...
 unittests$(EXEEXT): unittests.o
@@ -320,7 +320,7 @@ demo$(EXEEXT): demo.o
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINKFLTK) $(LDLIBS)
 
-device$(EXEEXT): device.o $(IMGLIBNAME)
+device$(EXEEXT): device.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) device.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
@@ -333,7 +333,7 @@ editor$(EXEEXT): editor.o
 fast_slow$(EXEEXT): fast_slow.o
 fast_slow.cxx:	fast_slow.fl ../fluid/fluid$(EXEEXT)
 
-file_chooser$(EXEEXT): file_chooser.o $(IMGLIBNAME)
+file_chooser$(EXEEXT): file_chooser.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
@@ -341,7 +341,7 @@ fonts$(EXEEXT): fonts.o
 
 hello$(EXEEXT): hello.o
 
-help$(EXEEXT): help.o $(IMGLIBNAME)
+help$(EXEEXT): help.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) help.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
@@ -382,13 +382,13 @@ message$(EXEEXT): message.o
 
 minimum$(EXEEXT): minimum.o
 
-native-filechooser$(EXEEXT): native-filechooser.o $(IMGLIBNAME)
+native-filechooser$(EXEEXT): native-filechooser.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) native-filechooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
 navigation$(EXEEXT): navigation.o
 
-output$(EXEEXT): output.o $(FLLIBNAME)
+output$(EXEEXT): output.o
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINKFLTK) $(LDLIBS)
 
@@ -398,7 +398,7 @@ pack$(EXEEXT): pack.o
 
 pixmap$(EXEEXT): pixmap.o
 
-pixmap_browser$(EXEEXT): pixmap_browser.o $(IMGLIBNAME)
+pixmap_browser$(EXEEXT): pixmap_browser.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) pixmap_browser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
@@ -454,7 +454,7 @@ valuators$(EXEEXT): valuators.o
 valuators.cxx:	valuators.fl ../fluid/fluid$(EXEEXT)
 
 # All OpenGL demos depend on the FLTK and FLTK_GL libraries...
-$(GLALL): $(LIBNAME) $(GLLIBNAME)
+$(GLALL): $(FLTK_LIBNAME) $(FLTK_GL_LIBNAME)
 
 # OpenGL demos...
 CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o

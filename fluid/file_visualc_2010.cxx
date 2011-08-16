@@ -429,8 +429,6 @@ int write_fltk_ide_visualc2010() {
 
   Fl_Workspace_Type *workspace = (Fl_Workspace_Type*)Fl_Type::first;
   
-  workspace = (Fl_Workspace_Type*)Fl_Type::first;
-  
   char buf[2048], base_dir[2048], tgt_base[2048];
   strcpy(base_dir, filename);
   *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
