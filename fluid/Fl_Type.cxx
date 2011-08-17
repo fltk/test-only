@@ -1318,6 +1318,18 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
+// Nasty: we assume that the name is not longer than 63 characters... .
+const char *Fl_Target_Type::caps_name() {
+  if (!pCapsName) pCapsName = (char*)malloc(64);
+  const char *s = name();
+  char *d = pCapsName;
+  while (*s) {
+    *d++ = *s++;
+  }
+  *d++ = 0;
+  return pCapsName;
+}
+
 Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
   // find a partial string, if 'end' is set to a character
   char buf[2048];
