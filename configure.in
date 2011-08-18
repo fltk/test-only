@@ -5,7 +5,7 @@ dnl "$Id$"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
-dnl Copyright 1998-2010 by Bill Spitzak and others.
+dnl Copyright 1998-2011 by Bill Spitzak and others.
 dnl
 dnl This library is free software; you can redistribute it and/or
 dnl modify it under the terms of the GNU Library General Public
@@ -116,20 +116,20 @@ case $uname in
 esac
 
 dnl Define the libraries and link options we will need.
-LINKFLTK="../lib/libfltk.a"
-LINKFLTKGL="../lib/libfltk_gl.a"
-LINKFLTKIMG="../lib/libfltk_images.a"
+LINK_FLTK="../lib/libfltk.a"
+LINK_FLTK_GL="../lib/libfltk_gl.a"
+LINK_FLTK_IMAGES="../lib/libfltk_images.a"
 GLDEMOS="gldemos"
 
 LIBEXT=".a"
-LIBNAME="../lib/libfltk.a"
-GLLIBNAME="../lib/libfltk_gl.a"
-IMGLIBNAME="../lib/libfltk_images.a"
+FLTK_LIBNAME="../lib/libfltk.a"
+FLTK_GL_LIBNAME="../lib/libfltk_gl.a"
+FLTK_IMAGES_LIBNAME="../lib/libfltk_images.a"
 CAIROLIBNAME="../lib/libfltk_cairo.a"
 
-LIBBASENAME="libfltk.a"
-GLLIBBASENAME="libfltk_gl.a"
-IMGLIBBASENAME="libfltk_images.a"
+FLTK_LIBBASENAME="libfltk.a"
+FLTK_GL_LIBBASENAME="libfltk_gl.a"
+FLTK_IMAGES_LIBBASENAME="libfltk_images.a"
 CAIROLIBBASENAME="libfltk_cairo.a"
 
 dnl Check for Cairo library unless disabled...
@@ -155,7 +155,7 @@ if test x$enable_cairoext = xyes; then
 	  FLTKCAIROOPTION="-L ../cairo -lfltk_cairo$SHAREDSUFFIX"
 	  LIBS="$CAIROLIBS $LIBS" 
 	  dnl $LINKFLTKCAIRO 
-	  LINKFLTK+=" $LINKFLTKCAIRO"
+	  LINK_FLTK+=" $LINKFLTKCAIRO"
 else 
     if test x$enable_cairo = xyes; then
 	  AC_DEFINE(FLTK_HAVE_CAIRO)
@@ -177,21 +177,18 @@ AC_SUBST(LINKFLTKCAIRO)
 AC_SUBST(FLTKCAIROOPTION)
 
 
-AC_SUBST(FLLIBNAME)
 AC_SUBST(GLDEMOS)
-AC_SUBST(GLLIBNAME)
-AC_SUBST(IMGLIBNAME)
 AC_SUBST(CAIROLIBNAME)
 AC_SUBST(LIBEXT)
-AC_SUBST(LIBNAME)
-AC_SUBST(LINKFLTK)
-AC_SUBST(LINKFLTKGL)
-AC_SUBST(LINKFLTKIMG)
-
-AC_SUBST(LIBBASENAME)
-AC_SUBST(FLLIBBASENAME)
-AC_SUBST(GLLIBBASENAME)
-AC_SUBST(IMGLIBBASENAME)
+AC_SUBST(FLTK_LIBNAME)
+AC_SUBST(LINK_FLTK)
+AC_SUBST(FLTK_LIBBASENAME)
+AC_SUBST(FLTK_GL_LIBNAME)
+AC_SUBST(LINK_FLTK_GL)
+AC_SUBST(FLTK_GL_LIBBASENAME)
+AC_SUBST(FLTK_IMAGES_LIBNAME)
+AC_SUBST(LINK_FLTK_IMAGES)
+AC_SUBST(FLTK_IMAGES_LIBBASENAME)
 AC_SUBST(CAIROLIBBASENAME)
 
 dnl Handle compile-time options...
@@ -218,17 +215,17 @@ if test x$enable_shared = xyes; then
 
     case $uname in
 	Darwin*)
-            DSONAME="libfltk.$FL_API_VERSION.dylib"
-            GLDSONAME="libfltk_gl.$FL_API_VERSION.dylib"
-            IMGDSONAME="libfltk_images.$FL_API_VERSION.dylib"
+            FLTK_DSONAME="libfltk.$FL_API_VERSION.dylib"
+            FLTK_GL_DSONAME="libfltk_gl.$FL_API_VERSION.dylib"
+            FLTK_IMAGES_DSONAME="libfltk_images.$FL_API_VERSION.dylib"
             CAIRODSONAME="libfltk_cairo.$FL_API_VERSION.dylib"
 	    DSOCOMMAND="\$(CXX) \$(ARCHFLAGS) \$(DSOFLAGS) -dynamiclib -lc -o"
 	    ;;
 
 	SunOS* | UNIX_S*)
-            DSONAME="libfltk.so.$FL_API_VERSION"
-            GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
-            IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
+            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
+            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
 	    DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -h \$@ \$(LDLIBS) -G $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
@@ -236,9 +233,9 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	HP-UX*)
-            DSONAME="libfltk.sl.$FL_API_VERSION"
-            GLDSONAME="libfltk_gl.sl.$FL_API_VERSION"
-            IMGDSONAME="libfltk_images.sl.$FL_API_VERSION"
+            FLTK_DSONAME="libfltk.sl.$FL_API_VERSION"
+            FLTK_GL_DSONAME="libfltk_gl.sl.$FL_API_VERSION"
+            FLTK_IMAGES_DSONAME="libfltk_images.sl.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.sl.$FL_API_VERSION"
 	    DSOCOMMAND="ld \$(DSOFLAGS) -b -z +h \$@ $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
@@ -246,9 +243,9 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	IRIX*)
-            DSONAME="libfltk.so.$FL_API_VERSION"
-            GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
-            IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
+            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
+            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32" -a "x$libdir" != "x/usr/lib64"; then
@@ -256,9 +253,9 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	OSF1*)
-            DSONAME="libfltk.so.$FL_API_VERSION"
-            GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
-            IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
+            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
+            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32"; then
@@ -266,9 +263,9 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	Linux* | *BSD*)
-            DSONAME="libfltk.so.$FL_API_VERSION"
-            GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
-            IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
+            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
+            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib64"; then
@@ -276,9 +273,9 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	AIX*)
-            DSONAME="libfltk_s.a"
-            GLDSONAME="libfltk_gl_s.a"
-            IMGDSONAME="libfltk_images_s.a"
+            FLTK_DSONAME="libfltk_s.a"
+            FLTK_GL_DSONAME="libfltk_gl_s.a"
+            FLTK_IMAGES_DSONAME="libfltk_images_s.a"
             CAIRODSONAME="libfltk_cairo_s.a"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
             SHAREDSUFFIX="_s"
@@ -286,20 +283,20 @@ if test x$enable_shared = xyes; then
         CYGWIN* | MINGW*)
 	    PICFLAG=0
 	    if test x$enable_cygwin != xyes; then
-		DSONAME="mgwfltknox-$FL_API_VERSION.dll"
-		GLDSONAME="mgwfltknox_gl-$FL_API_VERSION.dll"
-		IMGDSONAME="mgwfltknox_images-$FL_API_VERSION.dll"
+		FLTK_DSONAME="mgwfltknox-$FL_API_VERSION.dll"
+		FLTK_GL_DSONAME="mgwfltknox_gl-$FL_API_VERSION.dll"
+		FLTK_IMAGES_DSONAME="mgwfltknox_images-$FL_API_VERSION.dll"
 		CAIRODSONAME="mgwfltknox_cairo-$FL_API_VERSION.dll"
 	    else
 		if test x$enable_x11 = xyes; then
-		    DSONAME="cygfltk-$FL_API_VERSION.dll"
-		    GLDSONAME="cygfltk_gl-$FL_API_VERSION.dll"
-		    IMGDSONAME="cygfltk_images-$FL_API_VERSION.dll"
+		    FLTK_DSONAME="cygfltk-$FL_API_VERSION.dll"
+		    FLTK_GL_DSONAME="cygfltk_gl-$FL_API_VERSION.dll"
+		    FLTK_IMAGES_DSONAME="cygfltk_images-$FL_API_VERSION.dll"
 		    CAIRODSONAME="cygfltk_cairo-$FL_API_VERSION.dll"
 		else
-		    DSONAME="cygfltknox-$FL_API_VERSION.dll"
-		    GLDSONAME="cygfltknox_gl-$FL_API_VERSION.dll"
-		    IMGDSONAME="cygfltknox_images-$FL_API_VERSION.dll"
+		    FLTK_DSONAME="cygfltknox-$FL_API_VERSION.dll"
+		    FLTK_GL_DSONAME="cygfltknox_gl-$FL_API_VERSION.dll"
+		    FLTK_IMAGES_DSONAME="cygfltknox_images-$FL_API_VERSION.dll"
 		    CAIRODSONAME="cygfltknox_cairo-$FL_API_VERSION.dll"
 		fi
 	    fi
@@ -315,9 +312,9 @@ if test x$enable_shared = xyes; then
 	    ;;
 	*)
             AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)
-            DSONAME="libfltk.so.$FL_API_VERSION"
-            GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
-            IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
+            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
+            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    ;;
@@ -327,10 +324,9 @@ if test x$enable_shared = xyes; then
 else
     DSOCOMMAND="echo"
     DSOLINK=""
-    DSONAME=""
-    FLDSONAME=""
-    GLDSONAME=""
-    IMGDSONAME=""
+    FLTK_DSONAME=""
+    FLTK_GL_DSONAME=""
+    FLTK_IMAGES_DSONAME=""
     CAIRODSONAME=""
     PICFLAG=0
     SHAREDSUFFIX=""
@@ -341,10 +337,9 @@ fi
 AC_SUBST(DSOCOMMAND)
 AC_SUBST(DSOFLAGS)
 AC_SUBST(DSOLINK)
-AC_SUBST(DSONAME)
-AC_SUBST(FLDSONAME)
-AC_SUBST(GLDSONAME)
-AC_SUBST(IMGDSONAME)
+AC_SUBST(FLTK_DSONAME)
+AC_SUBST(FLTK_GL_DSONAME)
+AC_SUBST(FLTK_IMAGES_DSONAME)
 AC_SUBST(CAIRODSONAME)
 AC_SUBST(SHAREDSUFFIX)
 AC_SUBST(LINKSHARED)
@@ -836,9 +831,9 @@ case $uname_GUI in
         	AC_DEFINE(HAVE_GL_GLU_H)
 		GLLIB="-lglu32 $GLLIB")
 	else
-	    LINKFLTKGL=""
-	    GLLIBNAME=""
-	    GLDSONAME=""
+	    LINK_FLTK_GL=""
+	    FLTK_GL_LIBNAME=""
+	    FLTK_GL_DSONAME=""
 	    GLDEMOS=""
 	fi
 
@@ -870,9 +865,9 @@ case $uname_GUI in
             AC_DEFINE(HAVE_GL_GLU_H)
             GLLIB="-framework AGL -framework OpenGL -framework ApplicationServices"
         else
-	    LINKFLTKGL=""
-	    GLLIBNAME=""
-	    GLDSONAME=""
+	    LINK_FLTK_GL=""
+	    FLTK_GL_LIBNAME=""
+	    FLTK_GL_DSONAME=""
 	    GLDEMOS=""
         fi
 
@@ -942,15 +937,15 @@ case $uname_GUI in
 	    )
 
 	    if test x$ac_cv_lib_GL_glXMakeCurrent != xyes -a x$ac_cv_lib_MesaGL_glXMakeCurrent != xyes; then
-		    LINKFLTKGL=""
-		    GLLIBNAME=""
-		    GLDSONAME=""
+		    LINK_FLTK_GL=""
+		    FLTK_GL_LIBNAME=""
+		    FLTK_GL_DSONAME=""
 		    GLDEMOS=""
 	    fi
 	else
-	    LINKFLTKGL=""
-	    GLLIBNAME=""
-	    GLDSONAME=""
+	    LINK_FLTK_GL=""
+	    FLTK_GL_LIBNAME=""
+	    FLTK_GL_DSONAME=""
 	    GLDEMOS=""
 	fi
 

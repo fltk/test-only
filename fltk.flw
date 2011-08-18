@@ -277,7 +277,7 @@ workspace FLTK {open
           filename_and_path {fluid/workspace_panel.cxx}
         }
       }
-      folder Dependencies {
+      folder Dependencies {open
         uuid_Xcode4_Group {A6C2C5AC-C608-489D-8C74-B63CCDEB081B}
       } {
         target_dependency fltk {
@@ -297,23 +297,26 @@ workspace FLTK {open
           uuid_Xcode4_BuildFileInCopyFiles {F552DCC4-71E4-404E-A678-E6B4C6F1988A}
           uuid_Xcode4_ContainerItemProxy {3143C159-1BDC-4FD1-9796-7B5D0DC00309}
           uuid_Xcode4_TargetDependency {785B1845-DCDD-4315-9D7A-B42AD474CA8B}
+          build_env 94
         }
-        target_dependency fltk_jpeg {
+        target_dependency fltk_jpeg {selected
           uuid_Xcode4_BuildFileInFrameworks {6138F435-ED9E-4A53-9DE7-63A95EC0C6BD}
           uuid_Xcode4_BuildFileInCopyFiles {CC663664-AAA4-45BB-9B3C-73F8CB778028}
           uuid_Xcode4_ContainerItemProxy {5BF281B9-FC98-4EBE-A3DF-9BCDBC8F9203}
           uuid_Xcode4_TargetDependency {1B574128-6173-4A14-BDDA-1D6595B5BE71}
+          build_env 94
         }
-        target_dependency fltk_zlib {
+        target_dependency fltk_zlib {selected
           uuid_Xcode4_BuildFileInFrameworks {97A7C9B9-2334-4593-AF2E-C78E02AEBDDF}
           uuid_Xcode4_BuildFileInCopyFiles {0D2A2AC9-1CDD-4408-8DFB-1D4E1B01BBEF}
           uuid_Xcode4_ContainerItemProxy {529024F4-EDEF-44C3-99C0-01650CE6F845}
           uuid_Xcode4_TargetDependency {E68A4A14-39E7-4C41-80F3-E4EF81474AD5}
+          build_env 94
         }
       }
     }
   }
-  folder Libraries {open selected
+  folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
     lib_target fltk {
@@ -2683,7 +2686,7 @@ workspace FLTK {open
       uuid_Xcode4_ReleaseBuildConfiguration {5799E68C-6C23-4D48-A6A5-46C26838604D}
       uuid_VC2008_Project {AF7CC2D4-BBC7-4995-B18D-6A590C267527}
       uuid_VC2010_Project {A6556097-732F-4D5C-9763-96A896DA0F8F}
-      build_env 127
+      build_env 126
       target_path lib
       makefile_path src
     } {
@@ -2799,7 +2802,7 @@ workspace FLTK {open
       uuid_Xcode4_ReleaseBuildConfiguration {4364C496-C8EA-4726-BE8F-8D94ADDF19C7}
       uuid_VC2008_Project {417DB0F9-647A-4A36-ADFF-4196F7C1963D}
       uuid_VC2010_Project {845449C0-BCC9-4404-89DC-52E53E80F8D0}
-      build_env 127
+      build_env 126
       target_path lib
       makefile_path src
     } {
@@ -3063,7 +3066,7 @@ workspace FLTK {open
       uuid_Xcode4_ReleaseBuildConfiguration {F1E12179-62FF-476F-B95D-DF8C211E2D1C}
       uuid_VC2008_Project {2F487ADB-AB3A-44B1-A824-D25C00A2D30A}
       uuid_VC2010_Project {8051E81E-8228-43EA-AABA-FE4E48CB10AD}
-      build_env 127
+      build_env 126
       target_path lib
       makefile_path src
     } {

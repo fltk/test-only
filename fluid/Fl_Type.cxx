@@ -1324,7 +1324,7 @@ const char *Fl_Target_Type::caps_name() {
   const char *s = name();
   char *d = pCapsName;
   while (*s) {
-    *d++ = *s++;
+    *d++ = toupper(*s++);
   }
   *d++ = 0;
   return pCapsName;

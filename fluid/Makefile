@@ -25,7 +25,7 @@
 #      http://www.fltk.org/str.php
 #
 
-CPPFILES =  \
+FLUID_CPPFILES = \
 	CodeEditor.cxx \
 	Fl_Function_Type.cxx \
 	Fl_Group_Type.cxx \
@@ -55,30 +55,30 @@ CPPFILES =  \
 
 ################################################################
 
-OBJECTS = $(CPPFILES:.cxx=.o)
+FLUID_OBJECTS = $(FLUID_CPPFILES:.cxx=.o)
 
 include ../makeinclude
 
 all:	$(FLUID) fluid$(EXEEXT)
 
-fluid$(EXEEXT):		$(OBJECTS) $(LIBNAME) $(FLLIBNAME) \
-			$(IMGLIBNAME)
+fluid$(EXEEXT): $(FLUID_OBJECTS) $(FLTK_LIBNAME) $(FLTK_IMAGES_LIBNAME)
+
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKFLTKFORMS) $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(FLUID_OBJECTS) $(LINKFLTKFORMS) $(LINK_FLTK_IMAGES) $(LDLIBS)
 	$(OSX_ONLY) $(INSTALL_BIN) fluid fluid.app/Contents/MacOS
 
-fluid-shared$(EXEEXT):	$(OBJECTS) ../src/$(DSONAME) ../src/$(FLDSONAME) \
-			../src/$(IMGDSONAME)
+fluid-shared$(EXEEXT):	$(FLUID_OBJECTS) ../src/$(FLTK_DSONAME) ../src/$(FLTK_IMAGES_DSONAME)
+
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(FLUID_OBJECTS) $(LINKSHARED) $(LDLIBS)
 
 clean:
 	-$(RM) *.o core.* *~ *.bck *.bck
 	-$(RM) core fluid$(EXEEXT) fluid-shared$(EXEEXT)
 	-$(RM) fluid.app/Contents/MacOS/fluid$(EXEEXT)
 
-depend:	$(CPPFILES)
-	makedepend -Y -I.. -f makedepend $(CPPFILES)
+depend:	$(FLUID_CPPFILES)
+	makedepend -Y -I.. -f makedepend $(FLUID_CPPFILES)
 
 # Automatically generated dependencies...
 include makedepend
@@ -136,6 +136,7 @@ rebuild:
 	./fluid -c print_panel.fl
 	./fluid -c template_panel.fl
 	./fluid -c widget_panel.fl
+
 
 #
 # End of "$Id$".

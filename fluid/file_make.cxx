@@ -74,34 +74,50 @@ char target_has_objc_code(Fl_Target_Type *tgt) {
   return 0;
 }
 
-static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
-  fprintf(out, "#\n");
-  fprintf(out, "# \"$Id: makeinclude.in 8740 2011-05-26 14:43:46Z matt $\"\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Make include file for the Fast Light Tool Kit (FLTK).\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Copyright 1998-2010 by Bill Spitzak and others.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is free software; you can redistribute it and/or\n");
-  fprintf(out, "# modify it under the terms of the GNU Library General Public\n");
-  fprintf(out, "# License as published by the Free Software Foundation; either\n");
-  fprintf(out, "# version 2 of the License, or (at your option) any later version.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is distributed in the hope that it will be useful,\n");
-  fprintf(out, "# but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(out, "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n");
-  fprintf(out, "# Library General Public License for more details.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# You should have received a copy of the GNU Library General Public\n");
-  fprintf(out, "# License along with this library; if not, write to the Free Software\n");
-  fprintf(out, "# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n");
-  fprintf(out, "# USA.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Please report all bugs and problems on the following page:\n");
-  fprintf(out, "#\n");
-  fprintf(out, "#      http://www.fltk.org/str.php\n");
-  fprintf(out, "#\n");
+static int write_header(FILE *out, const char *msg, const char *rem="#") {
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s \"$Id$\"\n", rem);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s %s\n", rem, msg);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s Copyright 1998-2011 by Bill Spitzak and others.\n", rem);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s This library is free software; you can redistribute it and/or\n", rem);
+  fprintf(out, "%s modify it under the terms of the GNU Library General Public\n", rem);
+  fprintf(out, "%s License as published by the Free Software Foundation; either\n", rem);
+  fprintf(out, "%s version 2 of the License, or (at your option) any later version.\n", rem);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s This library is distributed in the hope that it will be useful,\n", rem);
+  fprintf(out, "%s but WITHOUT ANY WARRANTY; without even the implied warranty of\n", rem);
+  fprintf(out, "%s MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n", rem);
+  fprintf(out, "%s Library General Public License for more details.\n", rem);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s You should have received a copy of the GNU Library General Public\n", rem);
+  fprintf(out, "%s License along with this library; if not, write to the Free Software\n", rem);
+  fprintf(out, "%s Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n", rem);
+  fprintf(out, "%s USA.\n", rem);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s Please report all bugs and problems on the following page:\n", rem);
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s      http://www.fltk.org/str.php\n", rem);
+  fprintf(out, "%s\n", rem);
   fprintf(out, "\n");
+  return 0;
+}
+
+int write_footer(FILE *out, const char *rem="#") {
+  fprintf(out, "\n");
+  fprintf(out, "%s\n", rem);
+  fprintf(out, "%s End of \"$Id$\".\n", rem);
+  fprintf(out, "%s\n", rem);
+  return 0;
+}
+
+static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
+  
+  Fl_Target_Type *tgt;
+
+  write_header(out, "Make include file for the Fast Light Tool Kit (FLTK).");
   fprintf(out, "prefix\t\t= @prefix@\n");
   fprintf(out, "exec_prefix\t= @exec_prefix@\n");
   fprintf(out, "bindir\t\t= @bindir@\n");
@@ -140,25 +156,22 @@ static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "CXXFLAGS\t= $(OPTIM) @LARGEFILE@ @PTHREAD_FLAGS@ @CPPFLAGS@ @CXXFLAGS@ $(FLTKFLAGS)\n");
   fprintf(out, "\n");
   fprintf(out, "# program to make the archive:\n");
-  fprintf(out, "LIBNAME\t\t= @LIBNAME@\n");
-  fprintf(out, "FLLIBNAME\t= @FLLIBNAME@\n");
-  fprintf(out, "GLLIBNAME\t= @GLLIBNAME@\n");
-  fprintf(out, "IMGLIBNAME\t= @IMGLIBNAME@\n");
+  
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "%s_LIBNAME\t\t= @%s_LIBNAME@\n", tgt->caps_name(), tgt->caps_name());      
+      fprintf(out, "%s_DSONAME\t\t= @%s_DSONAME@\n", tgt->caps_name(), tgt->caps_name());      
+      fprintf(out, "%s_LIBBASENAME\t\t= @%s_LIBBASENAME@\n", tgt->caps_name(), tgt->caps_name());      
+    }
+  }
+    
   fprintf(out, "CAIROLIBNAME\t= @CAIROLIBNAME@\n");
   fprintf(out, "LIBCOMMAND\t= @LIBCOMMAND@\n");
   fprintf(out, "LIBEXT\t\t= @LIBEXT@\n");
   fprintf(out, "RANLIB\t\t= @RANLIB@\n");
-  fprintf(out, "DSONAME\t\t= @DSONAME@\n");
-  fprintf(out, "FLDSONAME\t= @FLDSONAME@\n");
-  fprintf(out, "GLDSONAME\t= @GLDSONAME@\n");
-  fprintf(out, "IMGDSONAME\t= @IMGDSONAME@\n");
   fprintf(out, "CAIRODSONAME\t= @CAIRODSONAME@\n");
   fprintf(out, "DSOCOMMAND\t= @DSOCOMMAND@\n");
   fprintf(out, "\n");
-  fprintf(out, "LIBBASENAME\t= @LIBBASENAME@\n");
-  fprintf(out, "FLLIBBASENAME\t= @FLLIBBASENAME@\n");
-  fprintf(out, "GLLIBBASENAME\t= @GLLIBBASENAME@\n");
-  fprintf(out, "IMGLIBBASENAME\t= @IMGLIBBASENAME@\n");
   fprintf(out, "CAIROLIBBASENAME= @CAIROLIBBASENAME@\n");
   fprintf(out, "\n");
   fprintf(out, "# libraries to link with:\n");
@@ -169,9 +182,9 @@ static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "LDFLAGS\t\t= $(OPTIM) @LDFLAGS@\n");
   fprintf(out, "LDLIBS\t\t= @LIBS@\n");
   fprintf(out, "GLDLIBS\t\t= @GLLIB@ @LIBS@\n");
-  fprintf(out, "LINKFLTK\t= @LINKFLTK@\n");
-  fprintf(out, "LINKFLTKGL\t= @LINKFLTKGL@\n");
-  fprintf(out, "LINKFLTKIMG\t= @LINKFLTKIMG@ @LINKFLTK@ $(IMAGELIBS)\n");
+  fprintf(out, "LINK_FLTK\t= @LINK_FLTK@\n");
+  fprintf(out, "LINK_FLTK_GL\t= @LINK_FLTK_GL@\n");
+  fprintf(out, "LINK_FLTK_IMAGES\t= @LINK_FLTK_IMAGES@ @LINK_FLTK@ $(IMAGELIBS)\n");
   fprintf(out, "LINKFLTKCAIRO\t= @LINKFLTKCAIRO@ $(CAIROLIBS)\n");
   fprintf(out, "FLTKCAIROOPTION = @FLTKCAIROOPTION@\n");
   fprintf(out, "LINKSHARED\t= @DSOLINK@ @LINKSHARED@ $(IMAGELIBS) $(CAIROLIBS)\n");
@@ -223,7 +236,7 @@ static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "\n");
   fprintf(out, ".o$(EXEEXT):\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) $< $(LINK_FLTK) $(LDLIBS) -o $@\n");
   fprintf(out, "\n");
   fprintf(out, ".c.o:\n");
   fprintf(out, "\techo Compiling $<...\n");
@@ -249,43 +262,17 @@ static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "\t$(NROFF) -man $< >t\n");
   fprintf(out, "\tpack -f t\n");
   fprintf(out, "\tmv t.z $@\n");
-  fprintf(out, "\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# End of \"$Id: makeinclude.in 8740 2011-05-26 14:43:46Z matt $\".\n");
-  fprintf(out, "#\n");
+  write_footer(out);
   return 0;
 }
 
 static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
+  
+  Fl_Target_Type *tgt;
+  
   fprintf(out, "dnl -*- sh -*-\n");
   fprintf(out, "dnl the \"configure\" script is made from this by running GNU \"autoconf\"\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl \"$Id: configure.in 8740 2011-05-26 14:43:46Z matt $\"\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl Configuration script for the Fast Light Tool Kit (FLTK).\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl Copyright 1998-2010 by Bill Spitzak and others.\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl This library is free software; you can redistribute it and/or\n");
-  fprintf(out, "dnl modify it under the terms of the GNU Library General Public\n");
-  fprintf(out, "dnl License as published by the Free Software Foundation; either\n");
-  fprintf(out, "dnl version 2 of the License, or (at your option) any later version.\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl This library is distributed in the hope that it will be useful,\n");
-  fprintf(out, "dnl but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(out, "dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n");
-  fprintf(out, "dnl Library General Public License for more details.\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl You should have received a copy of the GNU Library General Public\n");
-  fprintf(out, "dnl License along with this library; if not, write to the Free Software\n");
-  fprintf(out, "dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n");
-  fprintf(out, "dnl USA.\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl Please report all bugs and problems on the following page:\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl      http://www.fltk.org/str.php\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "\n");
+  write_header(out, "Configuration script for the Fast Light Tool Kit (FLTK).", "dnl");
   fprintf(out, "dnl We need at least autoconf 2.50...\n");
   fprintf(out, "AC_PREREQ(2.50)\n");
   fprintf(out, "\n");
@@ -374,23 +361,34 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\t;;\n");
   fprintf(out, "esac\n");
   fprintf(out, "\n");
+  
   fprintf(out, "dnl Define the libraries and link options we will need.\n");
-  fprintf(out, "LINKFLTK=\"../lib/libfltk.a\"\n");
-  fprintf(out, "LINKFLTKGL=\"../lib/libfltk_gl.a\"\n");
-  fprintf(out, "LINKFLTKIMG=\"../lib/libfltk_images.a\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "LINK_%s=\"../%s/lib%s.a\"\n", tgt->caps_name(), tgt->target_path(), tgt->name());
+    }
+  }
+  
   fprintf(out, "GLDEMOS=\"gldemos\"\n");
   fprintf(out, "\n");
   fprintf(out, "LIBEXT=\".a\"\n");
-  fprintf(out, "LIBNAME=\"../lib/libfltk.a\"\n");
-  fprintf(out, "GLLIBNAME=\"../lib/libfltk_gl.a\"\n");
-  fprintf(out, "IMGLIBNAME=\"../lib/libfltk_images.a\"\n");
+  
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "%s_LIBNAME=\"../%s/lib%s.a\"\n", tgt->caps_name(), tgt->target_path(), tgt->name());
+    }
+  }
   fprintf(out, "CAIROLIBNAME=\"../lib/libfltk_cairo.a\"\n");
   fprintf(out, "\n");
-  fprintf(out, "LIBBASENAME=\"libfltk.a\"\n");
-  fprintf(out, "GLLIBBASENAME=\"libfltk_gl.a\"\n");
-  fprintf(out, "IMGLIBBASENAME=\"libfltk_images.a\"\n");
+  
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "%s_LIBBASENAME=\"lib%s.a\"\n", tgt->caps_name(), tgt->name());
+    }
+  }
   fprintf(out, "CAIROLIBBASENAME=\"libfltk_cairo.a\"\n");
   fprintf(out, "\n");
+  
   fprintf(out, "dnl Check for Cairo library unless disabled...\n");
   fprintf(out, "CAIRODIR=\"\"\n");
   fprintf(out, "CAIROFLAGS=\"\"\n");
@@ -414,7 +412,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\t  FLTKCAIROOPTION=\"-L ../cairo -lfltk_cairo$SHAREDSUFFIX\"\n");
   fprintf(out, "\t  LIBS=\"$CAIROLIBS $LIBS\" \n");
   fprintf(out, "\t  dnl $LINKFLTKCAIRO \n");
-  fprintf(out, "\t  LINKFLTK+=\" $LINKFLTKCAIRO\"\n");
+  fprintf(out, "\t  LINK_FLTK+=\" $LINKFLTKCAIRO\"\n");
   fprintf(out, "else \n");
   fprintf(out, "    if test x$enable_cairo = xyes; then\n");
   fprintf(out, "\t  AC_DEFINE(FLTK_HAVE_CAIRO)\n");
@@ -436,23 +434,20 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "AC_SUBST(FLTKCAIROOPTION)\n");
   fprintf(out, "\n");
   fprintf(out, "\n");
-  fprintf(out, "AC_SUBST(FLLIBNAME)\n");
   fprintf(out, "AC_SUBST(GLDEMOS)\n");
-  fprintf(out, "AC_SUBST(GLLIBNAME)\n");
-  fprintf(out, "AC_SUBST(IMGLIBNAME)\n");
   fprintf(out, "AC_SUBST(CAIROLIBNAME)\n");
   fprintf(out, "AC_SUBST(LIBEXT)\n");
-  fprintf(out, "AC_SUBST(LIBNAME)\n");
-  fprintf(out, "AC_SUBST(LINKFLTK)\n");
-  fprintf(out, "AC_SUBST(LINKFLTKGL)\n");
-  fprintf(out, "AC_SUBST(LINKFLTKIMG)\n");
-  fprintf(out, "\n");
-  fprintf(out, "AC_SUBST(LIBBASENAME)\n");
-  fprintf(out, "AC_SUBST(FLLIBBASENAME)\n");
-  fprintf(out, "AC_SUBST(GLLIBBASENAME)\n");
-  fprintf(out, "AC_SUBST(IMGLIBBASENAME)\n");
+  
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "AC_SUBST(%s_LIBNAME)\n", tgt->caps_name());
+      fprintf(out, "AC_SUBST(LINK_%s)\n", tgt->caps_name());
+      fprintf(out, "AC_SUBST(%s_LIBBASENAME)\n", tgt->caps_name());
+    }
+  }  
   fprintf(out, "AC_SUBST(CAIROLIBBASENAME)\n");
   fprintf(out, "\n");
+  
   fprintf(out, "dnl Handle compile-time options...\n");
   fprintf(out, "AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]])\n");
   fprintf(out, "if test x$enable_debug = xyes; then\n");
@@ -477,17 +472,21 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\n");
   fprintf(out, "    case $uname in\n");
   fprintf(out, "\tDarwin*)\n");
-  fprintf(out, "            DSONAME=\"libfltk.$FL_API_VERSION.dylib\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.$FL_API_VERSION.dylib\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.$FL_API_VERSION.dylib\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.$FL_API_VERSION.dylib\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.$FL_API_VERSION.dylib\"\n");
   fprintf(out, "\t    DSOCOMMAND=\"\\$(CXX) \\$(ARCHFLAGS) \\$(DSOFLAGS) -dynamiclib -lc -o\"\n");
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\n");
   fprintf(out, "\tSunOS* | UNIX_S*)\n");
-  fprintf(out, "            DSONAME=\"libfltk.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.so.$FL_API_VERSION\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.so.$FL_API_VERSION\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.so.$FL_API_VERSION\"\n");
   fprintf(out, "\t    DSOCOMMAND=\"\\$(CXX) \\$(DSOFLAGS) -h \\$@ \\$(LDLIBS) -G $DEBUGFLAG -o\"\n");
   fprintf(out, "\t    if test \"x$libdir\" != \"x/usr/lib\"; then\n");
@@ -495,9 +494,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "            fi\n");
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\tHP-UX*)\n");
-  fprintf(out, "            DSONAME=\"libfltk.sl.$FL_API_VERSION\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.sl.$FL_API_VERSION\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.sl.$FL_API_VERSION\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.sl.$FL_API_VERSION\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.sl.$FL_API_VERSION\"\n");
   fprintf(out, "\t    DSOCOMMAND=\"ld \\$(DSOFLAGS) -b -z +h \\$@ $DEBUGFLAG -o\"\n");
   fprintf(out, "\t    if test \"x$libdir\" != \"x/usr/lib\"; then\n");
@@ -505,9 +506,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "            fi\n");
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\tIRIX*)\n");
-  fprintf(out, "            DSONAME=\"libfltk.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.so.$FL_API_VERSION\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.so.$FL_API_VERSION\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.so.$FL_API_VERSION\"\n");
   fprintf(out, "            DSOCOMMAND=\"\\$(CXX) \\$(DSOFLAGS) -Wl,-soname,\\$@,-set_version,sgi1.1 \\$(LDLIBS) -shared $DEBUGFLAG -o\"\n");
   fprintf(out, "\t    if test \"x$libdir\" != \"x/usr/lib\" -a \"x$libdir\" != \"x/usr/lib32\" -a \"x$libdir\" != \"x/usr/lib64\"; then\n");
@@ -515,9 +518,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "            fi\n");
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\tOSF1*)\n");
-  fprintf(out, "            DSONAME=\"libfltk.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.so.$FL_API_VERSION\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.so.$FL_API_VERSION\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.so.$FL_API_VERSION\"\n");
   fprintf(out, "            DSOCOMMAND=\"\\$(CXX) \\$(DSOFLAGS) -Wl,-soname,\\$@ \\$(LDLIBS) -shared $DEBUGFLAG -o\"\n");
   fprintf(out, "\t    if test \"x$libdir\" != \"x/usr/lib\" -a \"x$libdir\" != \"x/usr/lib32\"; then\n");
@@ -525,9 +530,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "            fi\n");
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\tLinux* | *BSD*)\n");
-  fprintf(out, "            DSONAME=\"libfltk.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.so.$FL_API_VERSION\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.so.$FL_API_VERSION\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.so.$FL_API_VERSION\"\n");
   fprintf(out, "            DSOCOMMAND=\"\\$(CXX) \\$(DSOFLAGS) -Wl,-soname,\\$@ \\$(LDLIBS) -shared -fPIC $DEBUGFLAG -o\"\n");
   fprintf(out, "\t    if test \"x$libdir\" != \"x/usr/lib\" -a \"x$libdir\" != \"x/usr/lib64\"; then\n");
@@ -535,30 +542,33 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "            fi\n");
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\tAIX*)\n");
-  fprintf(out, "            DSONAME=\"libfltk_s.a\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl_s.a\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images_s.a\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s_s.a\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo_s.a\"\n");
   fprintf(out, "            DSOCOMMAND=\"\\$(CXX) \\$(DSOFLAGS) -Wl,-bexpall,-bM:SRE,-bnoentry -o\"\n");
   fprintf(out, "            SHAREDSUFFIX=\"_s\"\n");
   fprintf(out, "            ;;\n");
   fprintf(out, "        CYGWIN* | MINGW*)\n");
   fprintf(out, "\t    PICFLAG=0\n");
+  // FIXME: naming convention is messed up!
   fprintf(out, "\t    if test x$enable_cygwin != xyes; then\n");
-  fprintf(out, "\t\tDSONAME=\"mgwfltknox-$FL_API_VERSION.dll\"\n");
-  fprintf(out, "\t\tGLDSONAME=\"mgwfltknox_gl-$FL_API_VERSION.dll\"\n");
-  fprintf(out, "\t\tIMGDSONAME=\"mgwfltknox_images-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\tFLTK_DSONAME=\"mgwfltknox-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\tFLTK_GL_DSONAME=\"mgwfltknox_gl-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\tFLTK_IMAGES_DSONAME=\"mgwfltknox_images-$FL_API_VERSION.dll\"\n");
   fprintf(out, "\t\tCAIRODSONAME=\"mgwfltknox_cairo-$FL_API_VERSION.dll\"\n");
   fprintf(out, "\t    else\n");
   fprintf(out, "\t\tif test x$enable_x11 = xyes; then\n");
-  fprintf(out, "\t\t    DSONAME=\"cygfltk-$FL_API_VERSION.dll\"\n");
-  fprintf(out, "\t\t    GLDSONAME=\"cygfltk_gl-$FL_API_VERSION.dll\"\n");
-  fprintf(out, "\t\t    IMGDSONAME=\"cygfltk_images-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\t    FLTK_DSONAME=\"cygfltk-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\t    FLTK_GL_DSONAME=\"cygfltk_gl-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\t    FLTK_IMAGES_DSONAME=\"cygfltk_images-$FL_API_VERSION.dll\"\n");
   fprintf(out, "\t\t    CAIRODSONAME=\"cygfltk_cairo-$FL_API_VERSION.dll\"\n");
   fprintf(out, "\t\telse\n");
-  fprintf(out, "\t\t    DSONAME=\"cygfltknox-$FL_API_VERSION.dll\"\n");
-  fprintf(out, "\t\t    GLDSONAME=\"cygfltknox_gl-$FL_API_VERSION.dll\"\n");
-  fprintf(out, "\t\t    IMGDSONAME=\"cygfltknox_images-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\t    FLTK_DSONAME=\"cygfltknox-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\t    FLTK_GL_DSONAME=\"cygfltknox_gl-$FL_API_VERSION.dll\"\n");
+  fprintf(out, "\t\t    FLTK_IMAGES_DSONAME=\"cygfltknox_images-$FL_API_VERSION.dll\"\n");
   fprintf(out, "\t\t    CAIRODSONAME=\"cygfltknox_cairo-$FL_API_VERSION.dll\"\n");
   fprintf(out, "\t\tfi\n");
   fprintf(out, "\t    fi\n");
@@ -574,9 +584,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\t    ;;\n");
   fprintf(out, "\t*)\n");
   fprintf(out, "            AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)\n");
-  fprintf(out, "            DSONAME=\"libfltk.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            GLDSONAME=\"libfltk_gl.so.$FL_API_VERSION\"\n");
-  fprintf(out, "            IMGDSONAME=\"libfltk_images.so.$FL_API_VERSION\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "            %s_DSONAME=\"lib%s.so.$FL_API_VERSION\"\n", tgt->caps_name(), tgt->name());
+    }
+  }  
   fprintf(out, "            CAIRODSONAME=\"libfltk_cairo.so.$FL_API_VERSION\"\n");
   fprintf(out, "            DSOCOMMAND=\"\\$(CXX) \\$(DSOFLAGS) -Wl,-soname,\\$@ \\$(LDLIBS) -shared $DEBUGFLAG -o\"\n");
   fprintf(out, "\t    ;;\n");
@@ -586,10 +598,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "else\n");
   fprintf(out, "    DSOCOMMAND=\"echo\"\n");
   fprintf(out, "    DSOLINK=\"\"\n");
-  fprintf(out, "    DSONAME=\"\"\n");
-  fprintf(out, "    FLDSONAME=\"\"\n");
-  fprintf(out, "    GLDSONAME=\"\"\n");
-  fprintf(out, "    IMGDSONAME=\"\"\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "    %s_DSONAME=\"\"\n", tgt->caps_name());
+    }
+  }  
   fprintf(out, "    CAIRODSONAME=\"\"\n");
   fprintf(out, "    PICFLAG=0\n");
   fprintf(out, "    SHAREDSUFFIX=\"\"\n");
@@ -600,10 +613,11 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "AC_SUBST(DSOCOMMAND)\n");
   fprintf(out, "AC_SUBST(DSOFLAGS)\n");
   fprintf(out, "AC_SUBST(DSOLINK)\n");
-  fprintf(out, "AC_SUBST(DSONAME)\n");
-  fprintf(out, "AC_SUBST(FLDSONAME)\n");
-  fprintf(out, "AC_SUBST(GLDSONAME)\n");
-  fprintf(out, "AC_SUBST(IMGDSONAME)\n");
+  for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
+      fprintf(out, "AC_SUBST(%s_DSONAME)\n", tgt->caps_name());
+    }
+  }  
   fprintf(out, "AC_SUBST(CAIRODSONAME)\n");
   fprintf(out, "AC_SUBST(SHAREDSUFFIX)\n");
   fprintf(out, "AC_SUBST(LINKSHARED)\n");
@@ -1095,9 +1109,9 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "        \tAC_DEFINE(HAVE_GL_GLU_H)\n");
   fprintf(out, "\t\tGLLIB=\"-lglu32 $GLLIB\")\n");
   fprintf(out, "\telse\n");
-  fprintf(out, "\t    LINKFLTKGL=\"\"\n");
-  fprintf(out, "\t    GLLIBNAME=\"\"\n");
-  fprintf(out, "\t    GLDSONAME=\"\"\n");
+  fprintf(out, "\t    LINK_FLTK_GL=\"\"\n");
+  fprintf(out, "\t    FLTK_GL_LIBNAME=\"\"\n");
+  fprintf(out, "\t    FLTK_GL_DSONAME=\"\"\n");
   fprintf(out, "\t    GLDEMOS=\"\"\n");
   fprintf(out, "\tfi\n");
   fprintf(out, "\n");
@@ -1129,9 +1143,9 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "            AC_DEFINE(HAVE_GL_GLU_H)\n");
   fprintf(out, "            GLLIB=\"-framework AGL -framework OpenGL -framework ApplicationServices\"\n");
   fprintf(out, "        else\n");
-  fprintf(out, "\t    LINKFLTKGL=\"\"\n");
-  fprintf(out, "\t    GLLIBNAME=\"\"\n");
-  fprintf(out, "\t    GLDSONAME=\"\"\n");
+  fprintf(out, "\t    LINK_FLTK_GL=\"\"\n");
+  fprintf(out, "\t    FLTK_GL_LIBNAME=\"\"\n");
+  fprintf(out, "\t    FLTK_GL_DSONAME=\"\"\n");
   fprintf(out, "\t    GLDEMOS=\"\"\n");
   fprintf(out, "        fi\n");
   fprintf(out, "\n");
@@ -1201,15 +1215,15 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\t    )\n");
   fprintf(out, "\n");
   fprintf(out, "\t    if test x$ac_cv_lib_GL_glXMakeCurrent != xyes -a x$ac_cv_lib_MesaGL_glXMakeCurrent != xyes; then\n");
-  fprintf(out, "\t\t    LINKFLTKGL=\"\"\n");
-  fprintf(out, "\t\t    GLLIBNAME=\"\"\n");
-  fprintf(out, "\t\t    GLDSONAME=\"\"\n");
+  fprintf(out, "\t\t    LINK_FLTK_GL=\"\"\n");
+  fprintf(out, "\t\t    FLTK_GL_LIBNAME=\"\"\n");
+  fprintf(out, "\t\t    FLTK_GL_DSONAME=\"\"\n");
   fprintf(out, "\t\t    GLDEMOS=\"\"\n");
   fprintf(out, "\t    fi\n");
   fprintf(out, "\telse\n");
-  fprintf(out, "\t    LINKFLTKGL=\"\"\n");
-  fprintf(out, "\t    GLLIBNAME=\"\"\n");
-  fprintf(out, "\t    GLDSONAME=\"\"\n");
+  fprintf(out, "\t    LINK_FLTK_GL=\"\"\n");
+  fprintf(out, "\t    FLTK_GL_LIBNAME=\"\"\n");
+  fprintf(out, "\t    FLTK_GL_DSONAME=\"\"\n");
   fprintf(out, "\t    GLDEMOS=\"\"\n");
   fprintf(out, "\tfi\n");
   fprintf(out, "\n");
@@ -1651,95 +1665,68 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\n");
   fprintf(out, "dnl Make sure the fltk-config script is executable...\n");
   fprintf(out, "chmod +x fltk-config\n");
-  fprintf(out, "\n");
-  fprintf(out, "dnl\n");
-  fprintf(out, "dnl End of \"$Id: configure.in 8740 2011-05-26 14:43:46Z matt $\".\n");
-  fprintf(out, "dnl\n");
+  write_footer(out, "dnl");
   return 0;
 }
 
 static int write_fluid_makefile(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
-  fprintf(out, "#\n");
-  fprintf(out, "# \"$Id: Makefile 8947 2011-08-13 12:01:15Z matt $\"\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# FLUID makefile for the Fast Light Tool Kit (FLTK).\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Copyright 1998-2011 by Bill Spitzak and others.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is free software; you can redistribute it and/or\n");
-  fprintf(out, "# modify it under the terms of the GNU Library General Public\n");
-  fprintf(out, "# License as published by the Free Software Foundation; either\n");
-  fprintf(out, "# version 2 of the License, or (at your option) any later version.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is distributed in the hope that it will be useful,\n");
-  fprintf(out, "# but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(out, "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n");
-  fprintf(out, "# Library General Public License for more details.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# You should have received a copy of the GNU Library General Public\n");
-  fprintf(out, "# License along with this library; if not, write to the Free Software\n");
-  fprintf(out, "# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n");
-  fprintf(out, "# USA.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Please report all bugs and problems on the following page:\n");
-  fprintf(out, "#\n");
-  fprintf(out, "#      http://www.fltk.org/str.php\n");
-  fprintf(out, "#\n");
-  fprintf(out, "\n");
-  fprintf(out, "CPPFILES =  \\\n");
-  fprintf(out, "\tCodeEditor.cxx \\\n");
-  fprintf(out, "\tFl_Function_Type.cxx \\\n");
-  fprintf(out, "\tFl_Group_Type.cxx \\\n");
-  fprintf(out, "\tFl_Menu_Type.cxx \\\n");
-  fprintf(out, "\tFl_Type.cxx \\\n");
-  fprintf(out, "\tFl_Widget_Type.cxx \\\n");
-  fprintf(out, "\tFl_Window_Type.cxx \\\n");
-  fprintf(out, "\tFluid_Image.cxx \\\n");
-  fprintf(out, "\tabout_panel.cxx \\\n");
-  fprintf(out, "\talign_widget.cxx \\\n");
-  fprintf(out, "\talignment_panel.cxx \\\n");
-  fprintf(out, "\tcode.cxx \\\n");
-  fprintf(out, "\tfactory.cxx \\\n");
-  fprintf(out, "\tfile.cxx \\\n");
-  fprintf(out, "\tfile_cmake.cxx \\\n");
-  fprintf(out, "\tfile_make.cxx \\\n");
-  fprintf(out, "\tfile_visualc_6.cxx \\\n");
-  fprintf(out, "\tfile_visualc_2008.cxx \\\n");
-  fprintf(out, "\tfile_visualc_2010.cxx \\\n");
-  fprintf(out, "\tfile_xcode.cxx \\\n");
-  fprintf(out, "\tfluid.cxx \\\n");
-  fprintf(out, "\tfunction_panel.cxx \\\n");
-  fprintf(out, "\ttemplate_panel.cxx \\\n");
-  fprintf(out, "\tundo.cxx \\\n");
-  fprintf(out, "\twidget_panel.cxx \\\n");
-  fprintf(out, "\tworkspace_panel.cxx\n");
-  fprintf(out, "\n");
+  
+  Fl_Target_Type *tgt = Fl_Target_Type::find("Fluid");
+  Fl_Target_Dependency_Type *dep;
+  Fl_File_Type * file;
+  
+  write_header(out, "FLUID makefile for the Fast Light Tool Kit (FLTK).");
+  fprintf(out, "FLUID_CPPFILES =");
+  for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+    if (file->builds_in(FL_ENV_MAKE)) {
+      if (file->file_is_fluid_ui()) {
+        fprintf(out, " \\\n\t");
+        write_file(out, file, base_dir, tgt_base, ".cxx");
+      } else if (file->file_is_code()) {
+        fprintf(out, " \\\n\t");
+        write_file(out, file, base_dir, tgt_base);
+      }
+    }
+  }
+  fprintf(out, "\n\n");
   fprintf(out, "################################################################\n");
   fprintf(out, "\n");
-  fprintf(out, "OBJECTS = $(CPPFILES:.cxx=.o)\n");
+  fprintf(out, "FLUID_OBJECTS = $(FLUID_CPPFILES:.cxx=.o)\n");
   fprintf(out, "\n");
   fprintf(out, "include ../makeinclude\n");
   fprintf(out, "\n");
   fprintf(out, "all:\t$(FLUID) fluid$(EXEEXT)\n");
   fprintf(out, "\n");
-  fprintf(out, "fluid$(EXEEXT):\t\t$(OBJECTS) $(LIBNAME) $(FLLIBNAME) \\\n");
-  fprintf(out, "\t\t\t$(IMGLIBNAME)\n");
+  fprintf(out, "fluid$(EXEEXT): $(FLUID_OBJECTS)");
+  for (dep = Fl_Target_Dependency_Type::first_dependency(tgt); dep; dep = dep->next_dependency(tgt)) {
+    if (dep->builds_in(FL_ENV_MAKE)) {
+      Fl_Target_Type *tgt_dep = Fl_Target_Type::find(dep->name());
+      fprintf(out, " $(%s_LIBNAME)", tgt_dep->caps_name());
+    }
+  }
+  fprintf(out, "\n\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKFLTKFORMS) $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(FLUID_OBJECTS) $(LINKFLTKFORMS) $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\t$(OSX_ONLY) $(INSTALL_BIN) fluid fluid.app/Contents/MacOS\n");
   fprintf(out, "\n");
-  fprintf(out, "fluid-shared$(EXEEXT):\t$(OBJECTS) ../src/$(DSONAME) ../src/$(FLDSONAME) \\\n");
-  fprintf(out, "\t\t\t../src/$(IMGDSONAME)\n");
+  fprintf(out, "fluid-shared$(EXEEXT):\t$(FLUID_OBJECTS)");
+  for (dep = Fl_Target_Dependency_Type::first_dependency(tgt); dep; dep = dep->next_dependency(tgt)) {
+    if (dep->builds_in(FL_ENV_MAKE)) {
+      Fl_Target_Type *tgt_dep = Fl_Target_Type::find(dep->name());
+      fprintf(out, " ../src/$(%s_DSONAME)", tgt_dep->caps_name());
+    }
+  }
+  fprintf(out, "\n\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(FLUID_OBJECTS) $(LINKSHARED) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "clean:\n");
   fprintf(out, "\t-$(RM) *.o core.* *~ *.bck *.bck\n");
   fprintf(out, "\t-$(RM) core fluid$(EXEEXT) fluid-shared$(EXEEXT)\n");
   fprintf(out, "\t-$(RM) fluid.app/Contents/MacOS/fluid$(EXEEXT)\n");
   fprintf(out, "\n");
-  fprintf(out, "depend:\t$(CPPFILES)\n");
-  fprintf(out, "\tmakedepend -Y -I.. -f makedepend $(CPPFILES)\n");
+  fprintf(out, "depend:\t$(FLUID_CPPFILES)\n");
+  fprintf(out, "\tmakedepend -Y -I.. -f makedepend $(FLUID_CPPFILES)\n");
   fprintf(out, "\n");
   fprintf(out, "# Automatically generated dependencies...\n");
   fprintf(out, "include makedepend\n");
@@ -1798,41 +1785,13 @@ static int write_fluid_makefile(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "\t./fluid -c template_panel.fl\n");
   fprintf(out, "\t./fluid -c widget_panel.fl\n");
   fprintf(out, "\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# End of \"$Id: Makefile 8947 2011-08-13 12:01:15Z matt $\".\n");
-  fprintf(out, "#\n");
+  write_footer(out);
   return 0;
 }
 
 static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
-  fprintf(out, "#\n");
-  fprintf(out, "# \"$Id: Makefile 8899 2011-08-02 10:05:56Z matt $\"\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Library makefile for the Fast Light Tool Kit (FLTK).\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Copyright 1998-2010 by Bill Spitzak and others.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is free software; you can redistribute it and/or\n");
-  fprintf(out, "# modify it under the terms of the GNU Library General Public\n");
-  fprintf(out, "# License as published by the Free Software Foundation; either\n");
-  fprintf(out, "# version 2 of the License, or (at your option) any later version.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is distributed in the hope that it will be useful,\n");
-  fprintf(out, "# but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(out, "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n");
-  fprintf(out, "# Library General Public License for more details.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# You should have received a copy of the GNU Library General Public\n");
-  fprintf(out, "# License along with this library; if not, write to the Free Software\n");
-  fprintf(out, "# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n");
-  fprintf(out, "# USA.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Please report all bugs and problems on the following page:\n");
-  fprintf(out, "#\n");
-  fprintf(out, "#      http://www.fltk.org/str.php\n");
-  fprintf(out, "#\n");
-  fprintf(out, "\n");
-  fprintf(out, "CPPFILES =  \\\n");
+  write_header(out, "Library makefile for the Fast Light Tool Kit (FLTK).");
+  fprintf(out, "FLTK_CPPFILES =  \\\n");
   fprintf(out, "\tFl.cxx \\\n");
   fprintf(out, "\tFl_Adjuster.cxx \\\n");
   fprintf(out, "\tFl_Bitmap.cxx \\\n");
@@ -1978,12 +1937,12 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\tscandir.cxx \\\n");
   fprintf(out, "\tscreen_xywh.cxx\n");
   fprintf(out, "\t\n");
-  fprintf(out, "OBJCPPFILES =  \\\n");
+  fprintf(out, "FLTK_OBJCPPFILES =  \\\n");
   fprintf(out, "\tFl_cocoa.mm \\\n");
   fprintf(out, "\tFl_Native_File_Chooser_MAC.mm \\\n");
   fprintf(out, "\tFl_Quartz_Printer.mm\n");
   fprintf(out, "\t\n");
-  fprintf(out, "GLCPPFILES = \\\n");
+  fprintf(out, "FLTK_GL_CPPFILES = \\\n");
   fprintf(out, "\tFl_Gl_Choice.cxx \\\n");
   fprintf(out, "\tFl_Gl_Overlay.cxx \\\n");
   fprintf(out, "\tFl_Gl_Device_Plugin.cxx \\\n");
@@ -1997,7 +1956,7 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\tglut_compatability.cxx \\\n");
   fprintf(out, "\tglut_font.cxx\n");
   fprintf(out, "\n");
-  fprintf(out, "IMGCPPFILES = \\\n");
+  fprintf(out, "FLTK_IMAGES_CPPFILES = \\\n");
   fprintf(out, "\tfl_images_core.cxx \\\n");
   fprintf(out, "\tFl_BMP_Image.cxx \\\n");
   fprintf(out, "\tFl_File_Icon2.cxx \\\n");
@@ -2007,7 +1966,7 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\tFl_PNG_Image.cxx \\\n");
   fprintf(out, "\tFl_PNM_Image.cxx\n");
   fprintf(out, "\n");
-  fprintf(out, "CFILES =  \\\n");
+  fprintf(out, "FLTK_CFILES =  \\\n");
   fprintf(out, "\tflstring.c \\\n");
   fprintf(out, "\tvsnprintf.c \\\n");
   fprintf(out, "\txutf8/case.c \\\n");
@@ -2022,127 +1981,119 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "FLTKFLAGS = -DFL_LIBRARY\n");
   fprintf(out, "include ../makeinclude\n");
   fprintf(out, "\n");
-  fprintf(out, "MMFILES = $(shell if test $(USEMMFILES) = Yes; then echo $(OBJCPPFILES); fi)\n");
+  fprintf(out, "FLTK_MMFILES = $(shell if test $(USEMMFILES) = Yes; then echo $(FLTK_OBJCPPFILES); fi)\n");
   fprintf(out, "\n");
-  fprintf(out, "OBJECTS =  $(MMFILES:.mm=.o) $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)\n");
-  fprintf(out, "GLOBJECTS = $(GLCPPFILES:.cxx=.o)\n");
-  fprintf(out, "FLOBJECTS = $(FLCPPFILES:.cxx=.o)\n");
-  fprintf(out, "IMGOBJECTS = $(IMGCPPFILES:.cxx=.o)\n");
+  fprintf(out, "FLTK_OBJECTS =  $(FLTK_MMFILES:.mm=.o) $(FLTK_CPPFILES:.cxx=.o) $(FLTK_CFILES:.c=.o)\n");
+  fprintf(out, "FLTK_GL_OBJECTS = $(FLTK_GL_CPPFILES:.cxx=.o)\n");
+  fprintf(out, "FLTK_IMAGES_OBJECTS = $(FLTK_IMAGES_CPPFILES:.cxx=.o)\n");
   fprintf(out, "\n");
-  fprintf(out, "all:\t$(LIBNAME) $(DSONAME) \\\n");
-  fprintf(out, "\t$(FLLIBNAME) $(FLDSONAME) \\\n");
-  fprintf(out, "\t$(GLLIBNAME) $(GLDSONAME) \\\n");
-  fprintf(out, "\t$(IMGLIBNAME) $(IMGDSONAME) \n");
+  fprintf(out, "all:\t$(FLTK_LIBNAME) $(FLTK_DSONAME) \\\n");
+  fprintf(out, "\t$(FLTK_GL_LIBNAME) $(FLTK_GL_DSONAME) \\\n");
+  fprintf(out, "\t$(FLTK_IMAGES_LIBNAME) $(FLTK_IMAGES_DSONAME) \n");
   fprintf(out, "\n");
-  fprintf(out, "$(LIBNAME): $(OBJECTS)\n");
+  fprintf(out, "$(FLTK_LIBNAME): $(FLTK_OBJECTS)\n");
   fprintf(out, "\techo $(LIBCOMMAND) $@ ...\n");
   fprintf(out, "\t$(RM) $@\n");
-  fprintf(out, "\t$(LIBCOMMAND) $@ $(OBJECTS)\n");
+  fprintf(out, "\t$(LIBCOMMAND) $@ $(FLTK_OBJECTS)\n");
   fprintf(out, "\t$(RANLIB) $@\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk.so.1.3: $(OBJECTS)\n");
+  fprintf(out, "libfltk.so.1.3: $(FLTK_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $@ $(OBJECTS)\n");
+  fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK_OBJECTS)\n");
   fprintf(out, "\t$(RM) libfltk.so\n");
   fprintf(out, "\t$(LN) libfltk.so.1.3 libfltk.so\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk.sl.1.3: $(OBJECTS)\n");
+  fprintf(out, "libfltk.sl.1.3: $(FLTK_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $@ $(OBJECTS)\n");
+  fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK_OBJECTS)\n");
   fprintf(out, "\t$(RM) libfltk.sl\n");
   fprintf(out, "\t$(LN) libfltk.sl.1.3 libfltk.sl\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk.1.3.dylib: $(OBJECTS)\n");
+  fprintf(out, "libfltk.1.3.dylib: $(FLTK_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
   fprintf(out, "\t$(DSOCOMMAND) $@ \\\n");
   fprintf(out, "\t\t-install_name $(libdir)/$@ \\\n");
   fprintf(out, "\t\t-current_version 1.3.0 \\\n");
   fprintf(out, "\t\t-compatibility_version 1.3.0 \\\n");
-  fprintf(out, "\t\t$(OBJECTS) $(LDLIBS)\n");
+  fprintf(out, "\t\t$(FLTK_OBJECTS) $(LDLIBS)\n");
   fprintf(out, "\t$(RM) libfltk.dylib\n");
   fprintf(out, "\t$(LN) libfltk.1.3.dylib libfltk.dylib\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_s.a: $(OBJECTS)\n");
+  fprintf(out, "libfltk_s.a: $(FLTK_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) libfltk_s.o ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) libfltk_s.o $(OBJECTS) $(IMAGELIBS)\n");
+  fprintf(out, "\t$(DSOCOMMAND) libfltk_s.o $(FLTK_OBJECTS) $(IMAGELIBS)\n");
   fprintf(out, "\techo $(LIBCOMMAND) libfltk_s.a libfltk_s.o\n");
   fprintf(out, "\t$(RM) $@\n");
   fprintf(out, "\t$(LIBCOMMAND) libfltk_s.a libfltk_s.o\n");
   fprintf(out, "\t$(CHMOD) +x libfltk_s.a\n");
   fprintf(out, "\n");
-  fprintf(out, "$(FLLIBNAME): $(FLOBJECTS)\n");
+  fprintf(out, "$(FLTK_GL_LIBNAME): $(FLTK_GL_OBJECTS)\n");
   fprintf(out, "\techo $(LIBCOMMAND) $@ ...\n");
   fprintf(out, "\t$(RM) $@\n");
-  fprintf(out, "\t$(LIBCOMMAND) $@ $(FLOBJECTS)\n");
+  fprintf(out, "\t$(LIBCOMMAND) $@ $(FLTK_GL_OBJECTS)\n");
   fprintf(out, "\t$(RANLIB) $@\n");
   fprintf(out, "\n");
-  fprintf(out, "$(GLLIBNAME): $(GLOBJECTS)\n");
-  fprintf(out, "\techo $(LIBCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(RM) $@\n");
-  fprintf(out, "\t$(LIBCOMMAND) $@ $(GLOBJECTS)\n");
-  fprintf(out, "\t$(RANLIB) $@\n");
-  fprintf(out, "\n");
-  fprintf(out, "libfltk_gl.so.1.3: $(GLOBJECTS) libfltk.so.1.3\n");
+  fprintf(out, "libfltk_gl.so.1.3: $(FLTK_GL_OBJECTS) libfltk.so.1.3\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $@ $(GLOBJECTS) -L. -lfltk\n");
+  fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK_GL_OBJECTS) -L. -lfltk\n");
   fprintf(out, "\t$(RM) libfltk_gl.so\n");
   fprintf(out, "\t$(LN) libfltk_gl.so.1.3 libfltk_gl.so\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_gl.sl.1.3: $(GLOBJECTS) libfltk.sl.1.3\n");
+  fprintf(out, "libfltk_gl.sl.1.3: $(FLTK_GL_OBJECTS) libfltk.sl.1.3\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $@ $(GLOBJECTS) -L. -lfltk\n");
+  fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK_GL_OBJECTS) -L. -lfltk\n");
   fprintf(out, "\t$(RM) libfltk_gl.sl\n");
   fprintf(out, "\t$(LN) libfltk_gl.sl.1.3 libfltk_gl.sl\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_gl.1.3.dylib: $(GLOBJECTS) libfltk.1.3.dylib\n");
+  fprintf(out, "libfltk_gl.1.3.dylib: $(FLTK_GL_OBJECTS) libfltk.1.3.dylib\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
   fprintf(out, "\t$(DSOCOMMAND) $@ \\\n");
   fprintf(out, "\t\t-install_name $(libdir)/$@ \\\n");
   fprintf(out, "\t\t-current_version 1.3.0 \\\n");
   fprintf(out, "\t\t-compatibility_version 1.3.0 \\\n");
-  fprintf(out, "\t\t$(GLOBJECTS) -L. $(GLDLIBS) -lfltk\n");
+  fprintf(out, "\t\t$(FLTK_GL_OBJECTS) -L. $(GLDLIBS) -lfltk\n");
   fprintf(out, "\t$(RM) libfltk_gl.dylib\n");
   fprintf(out, "\t$(LN) libfltk_gl.1.3.dylib libfltk_gl.dylib\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_gl_s.a: $(GLOBJECTS)\n");
+  fprintf(out, "libfltk_gl_s.a: $(FLTK_GL_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) libfltk_gl_s.o ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) libfltk_gl_s.o $(GLOBJECTS)\n");
+  fprintf(out, "\t$(DSOCOMMAND) libfltk_gl_s.o $(FLTK_GL_OBJECTS)\n");
   fprintf(out, "\techo $(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o\n");
   fprintf(out, "\t$(RM) $@\n");
   fprintf(out, "\t$(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o\n");
   fprintf(out, "\t$(CHMOD) +x libfltk_gl_s.a\n");
   fprintf(out, "\n");
-  fprintf(out, "$(IMGLIBNAME): $(IMGOBJECTS)\n");
+  fprintf(out, "$(FLTK_IMAGES_LIBNAME): $(FLTK_IMAGES_OBJECTS)\n");
   fprintf(out, "\techo $(LIBCOMMAND) $@ ...\n");
   fprintf(out, "\t$(RM) $@\n");
-  fprintf(out, "\t$(LIBCOMMAND) $@ $(IMGOBJECTS)\n");
+  fprintf(out, "\t$(LIBCOMMAND) $@ $(FLTK_IMAGES_OBJECTS)\n");
   fprintf(out, "\t$(RANLIB) $@\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_images.so.1.3: $(IMGOBJECTS) libfltk.so.1.3\n");
+  fprintf(out, "libfltk_images.so.1.3: $(FLTK_IMAGES_OBJECTS) libfltk.so.1.3\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $@ $(IMGOBJECTS) -L. $(IMAGELIBS) -lfltk\n");
+  fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK_IMAGES_OBJECTS) -L. $(IMAGELIBS) -lfltk\n");
   fprintf(out, "\t$(RM) libfltk_images.so\n");
   fprintf(out, "\t$(LN) libfltk_images.so.1.3 libfltk_images.so\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_images.sl.1.3: $(IMGOBJECTS) libfltk.sl.1.3\n");
+  fprintf(out, "libfltk_images.sl.1.3: $(FLTK_IMAGES_OBJECTS) libfltk.sl.1.3\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $@ $(IMGOBJECTS) -L. $(IMAGELIBS) -lfltk\n");
+  fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK_IMAGES_OBJECTS) -L. $(IMAGELIBS) -lfltk\n");
   fprintf(out, "\t$(RM) libfltk_images.sl\n");
   fprintf(out, "\t$(LN) libfltk_images.sl.1.3 libfltk_images.sl\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_images.1.3.dylib: $(IMGOBJECTS) libfltk.1.3.dylib\n");
+  fprintf(out, "libfltk_images.1.3.dylib: $(FLTK_IMAGES_OBJECTS) libfltk.1.3.dylib\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
   fprintf(out, "\t$(DSOCOMMAND) $@ \\\n");
   fprintf(out, "\t\t-install_name $(libdir)/$@ \\\n");
   fprintf(out, "\t\t-current_version 1.3.0 \\\n");
   fprintf(out, "\t\t-compatibility_version 1.3.0 \\\n");
-  fprintf(out, "\t\t$(IMGOBJECTS)  -L. $(LDLIBS) $(IMAGELIBS) -lfltk\n");
+  fprintf(out, "\t\t$(FLTK_IMAGES_OBJECTS)  -L. $(LDLIBS) $(IMAGELIBS) -lfltk\n");
   fprintf(out, "\t$(RM) libfltk_images.dylib\n");
   fprintf(out, "\t$(LN) libfltk_images.1.3.dylib libfltk_images.dylib\n");
   fprintf(out, "\n");
-  fprintf(out, "libfltk_images_s.a: $(IMGOBJECTS)\n");
+  fprintf(out, "libfltk_images_s.a: $(FLTK_IMAGES_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) libfltk_images_s.o ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) libfltk_images_s.o $(IMGOBJECTS)\n");
+  fprintf(out, "\t$(DSOCOMMAND) libfltk_images_s.o $(FLTK_IMAGES_OBJECTS)\n");
   fprintf(out, "\techo $(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o\n");
   fprintf(out, "\t$(RM) $@\n");
   fprintf(out, "\t$(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o\n");
@@ -2160,20 +2111,20 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "# cygwin GDI shared libraries\n");
   fprintf(out, "#-----------------------------------------------------------------\n");
   fprintf(out, "\n");
-  fprintf(out, "cygfltknox-1.3.dll: $(LIBNAME)\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(LIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(LIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "cygfltknox-1.3.dll: $(FLTK_LIBNAME)\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk.dll.a $(LDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "cygfltknox_gl-1.3.dll: $(GLLIBNAME) cygfltknox-1.3.dll\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(GLLIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(GLLIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "cygfltknox_gl-1.3.dll: $(FLTK_GL_LIBNAME) cygfltknox-1.3.dll\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_GL_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_GL_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk_gl.dll.a \\\n");
   fprintf(out, "\t\t-L. -lfltk $(GLDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "cygfltknox_images-1.3.dll: $(IMGLIBNAME) cygfltknox-1.3.dll\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(IMGLIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(IMGLIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "cygfltknox_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) cygfltknox-1.3.dll\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk_images.dll.a \\\n");
   fprintf(out, "\t\t-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \\\n");
   fprintf(out, "\t\t\t$(IMAGELIBS) $(LDLIBS)\n");
@@ -2182,32 +2133,32 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "# cygwin X11 shared libraries\n");
   fprintf(out, "#-----------------------------------------------------------------\n");
   fprintf(out, "\n");
-  fprintf(out, "cygfltk-1.3.dll: $(LIBNAME)\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(LIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(LIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "cygfltk-1.3.dll: $(FLTK_LIBNAME)\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk.dll.a $(LDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "cygfltk_gl-1.3.dll: $(GLLIBNAME) cygfltk-1.3.dll\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(GLLIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(GLLIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "cygfltk_gl-1.3.dll: $(FLTK_GL_LIBNAME) cygfltk-1.3.dll\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_GL_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_GL_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk_gl.dll.a \\\n");
   fprintf(out, "\t\t-L. -lfltk $(GLDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "cygfltk_images-1.3.dll: $(IMGLIBNAME) cygfltk-1.3.dll\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(IMGLIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(IMGLIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "cygfltk_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) cygfltk-1.3.dll\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk_images.dll.a \\\n");
   fprintf(out, "\t\t-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \\\n");
   fprintf(out, "\t\t\t$(IMAGELIBS) $(LDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "mgwfltknox-1.3.dll: $(LIBNAME)\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(LIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(LIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "mgwfltknox-1.3.dll: $(FLTK_LIBNAME)\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk.dll.a $(LDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "mgwfltknox_gl-1.3.dll: $(GLLIBNAME) mgwfltknox-1.3.dll\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(GLLIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(GLLIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "mgwfltknox_gl-1.3.dll: $(FLTK_GL_LIBNAME) mgwfltknox-1.3.dll\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_GL_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_GL_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk_gl.dll.a \\\n");
   fprintf(out, "\t\t-L. -lfltk $(GLDLIBS)\n");
   fprintf(out, "\n");
@@ -2215,27 +2166,27 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "# See STR #1585 for --exclude-libs\n");
   fprintf(out, "#-----------------------------------------------------\n");
   fprintf(out, "\n");
-  fprintf(out, "mgwfltknox_images-1.3.dll: $(IMGLIBNAME) mgwfltknox-1.3.dll\n");
-  fprintf(out, "\techo $(DSOCOMMAND) $(IMGLIBNAME) ...\n");
-  fprintf(out, "\t$(DSOCOMMAND) $(IMGLIBNAME) -Wl,--no-whole-archive \\\n");
+  fprintf(out, "mgwfltknox_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) mgwfltknox-1.3.dll\n");
+  fprintf(out, "\techo $(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) ...\n");
+  fprintf(out, "\t$(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) -Wl,--no-whole-archive \\\n");
   fprintf(out, "\t\t-Wl,--out-implib=libfltk_images.dll.a \\\n");
   fprintf(out, "\t\t-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \\\n");
   fprintf(out, "\t\t\t$(IMAGELIBS) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "clean:\n");
   fprintf(out, "\t-$(RM) *.o xutf8/*.o *.dll.a core.* *~ *.bak *.bck\n");
-  fprintf(out, "\t-$(RM) $(DSONAME) $(FLDSONAME) $(GLDSONAME) $(IMGDSONAME) \\\n");
-  fprintf(out, "\t\t$(LIBNAME) $(FLLIBNAME) $(GLLIBNAME) \\\n");
-  fprintf(out, "\t\t$(IMGLIBNAME) \\\n");
+  fprintf(out, "\t-$(RM) $(FLTK_DSONAME) $(FLTK_GL_DSONAME) $(FLTK_IMAGES_DSONAME) \\\n");
+  fprintf(out, "\t\t$(FLTK_LIBNAME) $(FLTK_GL_LIBNAME) \\\n");
+  fprintf(out, "\t\t$(FLTK_IMAGES_LIBNAME) \\\n");
   fprintf(out, "\t\tlibfltk.so libfltk_gl.so libfltk_images.so \\\n");
   fprintf(out, "\t\tlibfltk.sl libfltk_gl.sl libfltk_images.sl \\\n");
   fprintf(out, "\t\tlibfltk.dylib \\\n");
   fprintf(out, "\t\tlibfltk_gl.dylib libfltk_images.dylib \\\n");
   fprintf(out, "\t\tcmap core\n");
   fprintf(out, "\n");
-  fprintf(out, "depend:\t$(CPPFILES) $(MMFILES) $(FLCPPFILES) $(GLCPPFILES) $(IMGCPPFILES) $(CFILES)\n");
-  fprintf(out, "\tmakedepend -Y -I.. -f makedepend $(CPPFILES) $(MMFILES) $(FLCPPFILES) \\\n");
-  fprintf(out, "\t\t$(GLCPPFILES) $(IMGCPPFILES) $(CFILES)\n");
+  fprintf(out, "depend:\t$(FLTK_CPPFILES) $(FLTK_MMFILES) $(FLTK_GL_CPPFILES) $(FLTK_IMAGES_CPPFILES) $(FLTK_CFILES)\n");
+  fprintf(out, "\tmakedepend -Y -I.. -f makedepend $(FLTK_CPPFILES) $(FLTK_MMFILES) \\\n");
+  fprintf(out, "\t\t$(FLTK_GL_CPPFILES) $(FLTK_IMAGES_CPPFILES) $(FLTK_CFILES)\n");
   fprintf(out, "\n");
   fprintf(out, "# Automatically generated dependencies... generated on a Linux/Unix host !\n");
   fprintf(out, "include makedepend\n");
@@ -2308,114 +2259,111 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "################################################################\n");
   fprintf(out, "\n");
-  fprintf(out, "install: $(LIBNAME) $(DSONAME) \\\n");
-  fprintf(out, "\t$(FLLIBNAME) $(FLDSONAME) \\\n");
-  fprintf(out, "\t$(GLLIBNAME) $(GLDSONAME) \\\n");
-  fprintf(out, "\t$(IMGLIBNAME) $(IMGDSONAME) \n");
+  fprintf(out, "install: $(FLTK_LIBNAME) $(FLTK_DSONAME) \\\n");
+  fprintf(out, "\t$(FLTK_GL_LIBNAME) $(FLTK_GL_DSONAME) \\\n");
+  fprintf(out, "\t$(FLTK_IMAGES_LIBNAME) $(FLTK_IMAGES_DSONAME) \n");
   fprintf(out, "\techo \"Installing libraries in $(DESTDIR)$(libdir)...\"\n");
   fprintf(out, "\t-$(INSTALL_DIR) $(DESTDIR)$(libdir)\n");
   fprintf(out, "\t-$(INSTALL_DIR) $(DESTDIR)$(bindir)\n");
-  fprintf(out, "\t$(RM) $(DESTDIR)$(libdir)/$(LIBBASENAME)\n");
-  fprintf(out, "\t$(INSTALL_LIB) $(LIBNAME) $(DESTDIR)$(libdir)\n");
-  fprintf(out, "\t$(INSTALL_LIB) $(FLLIBNAME) $(DESTDIR)$(libdir)\n");
-  fprintf(out, "\t$(INSTALL_LIB) $(IMGLIBNAME) $(DESTDIR)$(libdir)\n");
-  fprintf(out, "\t$(RANLIB) $(DESTDIR)$(libdir)/$(LIBBASENAME)\n");
-  fprintf(out, "\t$(RANLIB) $(DESTDIR)$(libdir)/$(FLLIBBASENAME)\n");
-  fprintf(out, "\tif test x$(GLLIBNAME) != x; then \\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(GLLIBNAME) $(DESTDIR)$(libdir); \\\n");
-  fprintf(out, "\t\t$(RANLIB) $(DESTDIR)$(libdir)/$(GLLIBBASENAME); \\\n");
+  fprintf(out, "\t$(RM) $(DESTDIR)$(libdir)/$(FLTK_LIBBASENAME)\n");
+  fprintf(out, "\t$(INSTALL_LIB) $(FLTK_LIBNAME) $(DESTDIR)$(libdir)\n");
+  fprintf(out, "\t$(INSTALL_LIB) $(FLTK_IMAGES_LIBNAME) $(DESTDIR)$(libdir)\n");
+  fprintf(out, "\t$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK_LIBBASENAME)\n");
+  fprintf(out, "\tif test x$(FLTK_GL_LIBNAME) != x; then \\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_GL_LIBNAME) $(DESTDIR)$(libdir); \\\n");
+  fprintf(out, "\t\t$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK_GL_LIBBASENAME); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\t$(RANLIB) $(DESTDIR)$(libdir)/$(IMGLIBBASENAME)\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk.so.1.3; then\\\n");
+  fprintf(out, "\t$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK_IMAGES_LIBBASENAME)\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk.so.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.so*;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk.so.1.3 $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk.so.1.3 $(DESTDIR)$(libdir)/libfltk.so;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk.sl.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk.sl.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.sl*;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk.sl.1.3 $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk.sl.1.3 $(DESTDIR)$(libdir)/libfltk.sl;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk.1.3.dylib; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk.1.3.dylib; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.*dylib;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk.1.3.dylib $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk.1.3.dylib $(DESTDIR)$(libdir)/libfltk.dylib;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk_s.a; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk_s.a; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_s.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_s.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xcygfltknox-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(DSONAME);\\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(DSONAME) $(DESTDIR)$(bindir); \\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xcygfltknox-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME);\\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_DSONAME) $(DESTDIR)$(bindir); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk.dll.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xmgwfltknox-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(DSONAME);\\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(DSONAME) $(DESTDIR)$(bindir); \\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xmgwfltknox-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME);\\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_DSONAME) $(DESTDIR)$(bindir); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk.dll.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl.so.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl.so.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.so*;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_gl.so.1.3 $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk_gl.so.1.3 $(DESTDIR)$(libdir)/libfltk_gl.so;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl.sl.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl.sl.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.sl*;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_gl.sl.1.3 $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk_gl.sl.1.3 $(DESTDIR)$(libdir)/libfltk_gl.sl;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl.1.3.dylib; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl.1.3.dylib; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.*dylib;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_gl.1.3.dylib $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk_gl.1.3.dylib $(DESTDIR)$(libdir)/libfltk_gl.dylib;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl_s.a; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl_s.a; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl_s.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_gl_s.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xcygfltknox_gl-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(GLDSONAME);\\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(GLDSONAME) $(DESTDIR)$(bindir); \\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xcygfltknox_gl-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME);\\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_GL_DSONAME) $(DESTDIR)$(bindir); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_gl.dll.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xmgwfltknox_gl-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(GLDSONAME);\\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(GLDSONAME) $(DESTDIR)$(bindir); \\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xmgwfltknox_gl-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME);\\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_GL_DSONAME) $(DESTDIR)$(bindir); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_gl.dll.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images.so.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.so.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.so*;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_images.so.1.3 $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk_images.so.1.3 $(DESTDIR)$(libdir)/libfltk_images.so;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images.sl.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.sl.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.sl*;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_images.sl.1.3 $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk_images.sl.1.3 $(DESTDIR)$(libdir)/libfltk_images.sl;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images.1.3.dylib; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.1.3.dylib; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.*dylib;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_images.1.3.dylib $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\t\t$(LN) libfltk_images.1.3.dylib $(DESTDIR)$(libdir)/libfltk_images.dylib;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images_s.a; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images_s.a; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images_s.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_images_s.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xcygfltknox_images-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(IMGDSONAME); \\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(IMGDSONAME) $(DESTDIR)$(bindir); \\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xcygfltknox_images-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_IMAGES_DSONAME) $(DESTDIR)$(bindir); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_images.dll.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xmgwfltknox_images-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(IMGDSONAME); \\\n");
-  fprintf(out, "\t\t$(INSTALL_LIB) $(IMGDSONAME) $(DESTDIR)$(bindir); \\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xmgwfltknox_images-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \\\n");
+  fprintf(out, "\t\t$(INSTALL_LIB) $(FLTK_IMAGES_DSONAME) $(DESTDIR)$(bindir); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\\\n");
   fprintf(out, "\t\t$(INSTALL_LIB) libfltk_images.dll.a $(DESTDIR)$(libdir); \\\n");
   fprintf(out, "\tfi\n");
@@ -2423,122 +2371,92 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "uninstall:\n");
   fprintf(out, "\techo \"Uninstalling libraries...\"\n");
-  fprintf(out, "\t$(RM) $(DESTDIR)$(libdir)/$(LIBBASENAME)\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk.so.1.3; then\\\n");
+  fprintf(out, "\t$(RM) $(DESTDIR)$(libdir)/$(FLTK_LIBBASENAME)\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk.so.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.so*;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk.sl.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk.sl.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.sl*;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk.1.3.dylib; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk.1.3.dylib; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.*dylib;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xlibfltk_s.a; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xlibfltk_s.a; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_s.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xcygfltknox-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(DSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xcygfltknox-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xcygfltk-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(DSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xcygfltk-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(DSONAME) = xmgwfltknox-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(DSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_DSONAME) = xmgwfltknox-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\t$(RM) $(DESTDIR)$(libdir)/$(FLLIBBASENAME);\n");
-  fprintf(out, "\tif test x$(GLLIBNAME) != x; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/$(GLLIBBASENAME);\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_LIBNAME) != x; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/$(FLTK_GL_LIBBASENAME);\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl.so.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl.so.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.so*;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl.sl.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl.sl.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.sl*;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl.1.3.dylib; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl.1.3.dylib; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.*dylib;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xlibfltk_gl_s.a; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xlibfltk_gl_s.a; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl_s.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xcygfltknox_gl-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(GLDSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xcygfltknox_gl-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xcygfltk_gl-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(GLDSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xcygfltk_gl-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(GLDSONAME) = xmgwfltknox_gl-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(GLDSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_GL_DSONAME) = xmgwfltknox_gl-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGLIBNAME) != x; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/$(IMGLIBBASENAME);\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_LIBNAME) != x; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/$(FLTK_IMAGES_LIBBASENAME);\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images.so.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.so.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.so*;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images.sl.1.3; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.sl.1.3; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.sl*;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images.1.3.dylib; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.1.3.dylib; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.*dylib;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xlibfltk_images_s.a; then\\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images_s.a; then\\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images_s.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xcygfltknox_images-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(IMGDSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xcygfltknox_images-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xcygfltk_images-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(IMGDSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xcygfltk_images-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\tif test x$(IMGDSONAME) = xmgwfltknox_images-1.3.dll; then\\\n");
-  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(IMGDSONAME); \\\n");
+  fprintf(out, "\tif test x$(FLTK_IMAGES_DSONAME) = xmgwfltknox_images-1.3.dll; then\\\n");
+  fprintf(out, "\t\t$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \\\n");
   fprintf(out, "\t\t$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\\\n");
   fprintf(out, "\tfi\n");
-  fprintf(out, "\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# End of \"$Id: Makefile 8899 2011-08-02 10:05:56Z matt $\".\n");
-  fprintf(out, "#\n");
+  write_footer(out);
   fprintf(out, "# DO NOT DELETE\n");
   return 0;
 }
 
 static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
-  fprintf(out, "#\n");
-  fprintf(out, "# \"$Id: Makefile 8740 2011-05-26 14:43:46Z matt $\"\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Test/example program makefile for the Fast Light Tool Kit (FLTK).\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Copyright 1998-2010 by Bill Spitzak and others.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is free software; you can redistribute it and/or\n");
-  fprintf(out, "# modify it under the terms of the GNU Library General Public\n");
-  fprintf(out, "# License as published by the Free Software Foundation; either\n");
-  fprintf(out, "# version 2 of the License, or (at your option) any later version.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# This library is distributed in the hope that it will be useful,\n");
-  fprintf(out, "# but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(out, "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n");
-  fprintf(out, "# Library General Public License for more details.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# You should have received a copy of the GNU Library General Public\n");
-  fprintf(out, "# License along with this library; if not, write to the Free Software\n");
-  fprintf(out, "# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n");
-  fprintf(out, "# USA.\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# Please report all bugs and problems on the following page:\n");
-  fprintf(out, "#\n");
-  fprintf(out, "#      http://www.fltk.org/str.php\n");
-  fprintf(out, "#\n");
-  fprintf(out, "\n");
+  write_header(out, "Test/example program makefile for the Fast Light Tool Kit (FLTK).");
   fprintf(out, "include ../makeinclude\n");
   fprintf(out, "\n");
   fprintf(out, "CPPFILES =\\\n");
@@ -2784,7 +2702,7 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\t../fluid/fluid$(EXEEXT) -c $<\n");
   fprintf(out, "\n");
   fprintf(out, "# All demos depend on the FLTK library...\n");
-  fprintf(out, "$(ALL): $(LIBNAME)\n");
+  fprintf(out, "$(ALL): $(FLTK_LIBNAME)\n");
   fprintf(out, "\n");
   fprintf(out, "# General demos...\n");
   fprintf(out, "unittests$(EXEEXT): unittests.o\n");
@@ -2810,19 +2728,19 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "blocks$(EXEEXT): blocks.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) blocks.o -o $@ $(AUDIOLIBS) $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) blocks.o -o $@ $(AUDIOLIBS) $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "\t$(OSX_ONLY) $(INSTALL_BIN) blocks$(EXEEXT) blocks.app/Contents/MacOS\n");
   fprintf(out, "\n");
   fprintf(out, "checkers$(EXEEXT): checkers.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) checkers.o -o $@ $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) checkers.o -o $@ $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "\t$(OSX_ONLY) $(INSTALL_BIN) checkers$(EXEEXT) checkers.app/Contents/MacOS\n");
   fprintf(out, "\n");
   fprintf(out, "clock$(EXEEXT): clock.o\n");
   fprintf(out, "\n");
   fprintf(out, "colbrowser$(EXEEXT): colbrowser.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "color_chooser$(EXEEXT): color_chooser.o\n");
   fprintf(out, "\n");
@@ -2832,32 +2750,32 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "demo$(EXEEXT): demo.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "\n");
-  fprintf(out, "device$(EXEEXT): device.o $(IMGLIBNAME)\n");
+  fprintf(out, "device$(EXEEXT): device.o $(FLTK_IMAGES_LIBNAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) device.o -o $@ $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) device.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "doublebuffer$(EXEEXT): doublebuffer.o\n");
   fprintf(out, "\n");
   fprintf(out, "editor$(EXEEXT): editor.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) editor.o -o $@ $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) editor.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "fast_slow$(EXEEXT): fast_slow.o\n");
   fprintf(out, "fast_slow.cxx:\tfast_slow.fl ../fluid/fluid$(EXEEXT)\n");
   fprintf(out, "\n");
-  fprintf(out, "file_chooser$(EXEEXT): file_chooser.o $(IMGLIBNAME)\n");
+  fprintf(out, "file_chooser$(EXEEXT): file_chooser.o $(FLTK_IMAGES_LIBNAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "fonts$(EXEEXT): fonts.o\n");
   fprintf(out, "\n");
   fprintf(out, "hello$(EXEEXT): hello.o\n");
   fprintf(out, "\n");
-  fprintf(out, "help$(EXEEXT): help.o $(IMGLIBNAME)\n");
+  fprintf(out, "help$(EXEEXT): help.o $(FLTK_IMAGES_LIBNAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) help.o -o $@ $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) help.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "iconize$(EXEEXT): iconize.o\n");
   fprintf(out, "\n");
@@ -2872,13 +2790,13 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "keyboard$(EXEEXT): keyboard_ui.o keyboard.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ keyboard.o keyboard_ui.o $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ keyboard.o keyboard_ui.o $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "keyboard_ui.o:\tkeyboard_ui.h\n");
   fprintf(out, "keyboard_ui.cxx:\tkeyboard_ui.fl ../fluid/fluid$(EXEEXT)\n");
   fprintf(out, "\n");
   fprintf(out, "label$(EXEEXT): label.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ label.o $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ label.o $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "line_style$(EXEEXT): line_style.o\n");
   fprintf(out, "\n");
@@ -2886,7 +2804,7 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "mandelbrot$(EXEEXT): mandelbrot_ui.o mandelbrot.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ mandelbrot.o mandelbrot_ui.o $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ mandelbrot.o mandelbrot_ui.o $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "mandelbrot_ui.o:\tmandelbrot_ui.h\n");
   fprintf(out, "mandelbrot_ui.cxx:\tmandelbrot_ui.fl ../fluid/fluid$(EXEEXT)\n");
   fprintf(out, "\n");
@@ -2896,15 +2814,15 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "minimum$(EXEEXT): minimum.o\n");
   fprintf(out, "\n");
-  fprintf(out, "native-filechooser$(EXEEXT): native-filechooser.o $(IMGLIBNAME)\n");
+  fprintf(out, "native-filechooser$(EXEEXT): native-filechooser.o $(FLTK_IMAGES_LIBNAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) native-filechooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) native-filechooser.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "navigation$(EXEEXT): navigation.o\n");
   fprintf(out, "\n");
-  fprintf(out, "output$(EXEEXT): output.o $(FLLIBNAME)\n");
+  fprintf(out, "output$(EXEEXT): output.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINKFLTK) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINK_FLTK) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "overlay$(EXEEXT): overlay.o\n");
   fprintf(out, "\n");
@@ -2912,9 +2830,9 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "pixmap$(EXEEXT): pixmap.o\n");
   fprintf(out, "\n");
-  fprintf(out, "pixmap_browser$(EXEEXT): pixmap_browser.o $(IMGLIBNAME)\n");
+  fprintf(out, "pixmap_browser$(EXEEXT): pixmap_browser.o $(FLTK_IMAGES_LIBNAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) pixmap_browser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) pixmap_browser.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "preferences$(EXEEXT):\tpreferences.o\n");
   fprintf(out, "preferences.cxx:\tpreferences.fl ../fluid/fluid$(EXEEXT)\n");
@@ -2937,13 +2855,13 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "sudoku: sudoku.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o -o $@ $(AUDIOLIBS) $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o -o $@ $(AUDIOLIBS) $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\t$(OSX_ONLY) $(INSTALL_BIN) sudoku$(EXEEXT) sudoku.app/Contents/MacOS\n");
   fprintf(out, "\n");
   fprintf(out, "sudoku.exe: sudoku.o sudoku.rc\n");
   fprintf(out, "\techo Linking $@...\n");
   fprintf(out, "\t$(RC) sudoku.rc sudokures.o\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o sudokures.o -o $@ $(AUDIOLIBS) $(LINKFLTKIMG) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o sudokures.o -o $@ $(AUDIOLIBS) $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "symbols$(EXEEXT): symbols.o\n");
   fprintf(out, "\n");
@@ -2968,14 +2886,14 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "valuators.cxx:\tvaluators.fl ../fluid/fluid$(EXEEXT)\n");
   fprintf(out, "\n");
   fprintf(out, "# All OpenGL demos depend on the FLTK and FLTK_GL libraries...\n");
-  fprintf(out, "$(GLALL): $(LIBNAME) $(GLLIBNAME)\n");
+  fprintf(out, "$(GLALL): $(FLTK_LIBNAME) $(FLTK_GL_LIBNAME)\n");
   fprintf(out, "\n");
   fprintf(out, "# OpenGL demos...\n");
   fprintf(out, "CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o\n");
   fprintf(out, "\techo Linking $@...\n");
   fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ \\\n");
   fprintf(out, "\t\tCubeMain.o CubeView.o CubeViewUI.o \\\n");
-  fprintf(out, "\t\t$(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t\t$(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "CubeMain.o: CubeViewUI.h CubeView.h CubeViewUI.cxx\n");
   fprintf(out, "CubeView.o: CubeView.h\n");
   fprintf(out, "CubeViewUI.o:\tCubeViewUI.cxx CubeViewUI.h\n");
@@ -2983,35 +2901,32 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\n");
   fprintf(out, "cube$(EXEEXT): cube.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ cube.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ cube.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "fractals$(EXEEXT): fractals.o fracviewer.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fractals.o fracviewer.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fractals.o fracviewer.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "fullscreen$(EXEEXT): fullscreen.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fullscreen.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fullscreen.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "glpuzzle$(EXEEXT): glpuzzle.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "gl_overlay$(EXEEXT): gl_overlay.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "shape$(EXEEXT): shape.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ shape.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ shape.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "cairo_test$(EXEEXT): cairo_test.o\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(CAIROFLAGS) $(LDFLAGS) -o $@ cairo_test.o $(LINKFLTK) $(LINKFLTKCAIRO) $(GLDLIBS)\n");
-  fprintf(out, "\n");
-  fprintf(out, "#\n");
-  fprintf(out, "# End of \"$Id: Makefile 8740 2011-05-26 14:43:46Z matt $\".\n");
-  fprintf(out, "#\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(CAIROFLAGS) $(LDFLAGS) -o $@ cairo_test.o $(LINK_FLTK) $(LINKFLTKCAIRO) $(GLDLIBS)\n");
+  write_footer(out);
   return 0;
 }
 
@@ -3053,7 +2968,7 @@ static int write_fluid_makefile(FILE *out, Fl_Workspace_Type *workspace, const c
   Fl_Target_Type *tgt = first_target; // currently we support only a single target in this module
   
   fprintf(out, "\n");
-  fprintf(out, "CPPFILES =");
+  fprintf(out, "FLUID_CPPFILES =");
   
   for (Fl_File_Type *file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
     if (file->builds_in(FL_ENV_MAKE)) {
@@ -3067,7 +2982,7 @@ static int write_fluid_makefile(FILE *out, Fl_Workspace_Type *workspace, const c
   
   fprintf(out, "################################################################\n");
   fprintf(out, "\n");
-  fprintf(out, "OBJECTS = $(CPPFILES:.cxx=.o)\n");
+  fprintf(out, "FLUID_OBJECTS = $(FLUID_CPPFILES:.cxx=.o)\n");
   fprintf(out, "\n");
   fprintf(out, "include ../makeinclude\n");
   fprintf(out, "\n");
@@ -3075,24 +2990,24 @@ static int write_fluid_makefile(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "all:\t$(%s) fluid$(EXEEXT)\n", tgt->caps_name()); // name() is mixed case :-(
   fprintf(out, "\n");
   
-  fprintf(out, "fluid$(EXEEXT):\t\t$(OBJECTS) $(FLTK_LIBNAME) \\\n");
+  fprintf(out, "fluid$(EXEEXT):\t\t$(FLUID_OBJECTS) $(FLTK_LIBNAME) \\\n");
   fprintf(out, "\t\t\t$(FLTK_IMAGES_LIBNAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKFLTKFORMS) $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(FLUID_OBJECTS) $(LINKFLTKFORMS) $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
   fprintf(out, "\t$(OSX_ONLY) $(INSTALL_BIN) fluid fluid.app/Contents/MacOS\n");
   fprintf(out, "\n");
-  fprintf(out, "fluid-shared$(EXEEXT):\t$(OBJECTS) ../src/$(FLTK_DSONAME) \\\n");
+  fprintf(out, "fluid-shared$(EXEEXT):\t$(FLUID_OBJECTS) ../src/$(FLTK_DSONAME) \\\n");
   fprintf(out, "\t\t\t../src/$(FLTK_IMAGES_DSONAME)\n");
   fprintf(out, "\techo Linking $@...\n");
-  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LDLIBS)\n");
+  fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(FLUID_OBJECTS) $(LINKSHARED) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "clean:\n");
   fprintf(out, "\t-$(RM) *.o core.* *~ *.bck *.bck\n");
   fprintf(out, "\t-$(RM) core fluid$(EXEEXT) fluid-shared$(EXEEXT)\n");
   fprintf(out, "\t-$(RM) fluid.app/Contents/MacOS/fluid$(EXEEXT)\n");
   fprintf(out, "\n");
-  fprintf(out, "depend:\t$(CPPFILES)\n");
-  fprintf(out, "\tmakedepend -Y -I.. -f makedepend $(CPPFILES)\n");
+  fprintf(out, "depend:\t$(FLUID_CPPFILES)\n");
+  fprintf(out, "\tmakedepend -Y -I.. -f makedepend $(FLUID_CPPFILES)\n");
   fprintf(out, "\n");
   fprintf(out, "# Automatically generated dependencies...\n");
   fprintf(out, "include makedepend\n");

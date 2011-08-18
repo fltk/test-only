@@ -3,7 +3,7 @@
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-2010 by Bill Spitzak and others.
+# Copyright 1998-2011 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -270,7 +270,7 @@ uninstall-osx:
 	../fluid/fluid$(EXEEXT) -c $<
 
 # All demos depend on the FLTK library...
-$(ALL): $(LIBNAME)
+$(ALL): $(FLTK_LIBNAME)
 
 # General demos...
 unittests$(EXEEXT): unittests.o
@@ -296,19 +296,19 @@ buttons$(EXEEXT): buttons.o
 
 blocks$(EXEEXT): blocks.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) blocks.o -o $@ $(AUDIOLIBS) $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) blocks.o -o $@ $(AUDIOLIBS) $(LINK_FLTK) $(LDLIBS)
 	$(OSX_ONLY) $(INSTALL_BIN) blocks$(EXEEXT) blocks.app/Contents/MacOS
 
 checkers$(EXEEXT): checkers.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) checkers.o -o $@ $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) checkers.o -o $@ $(LINK_FLTK) $(LDLIBS)
 	$(OSX_ONLY) $(INSTALL_BIN) checkers$(EXEEXT) checkers.app/Contents/MacOS
 
 clock$(EXEEXT): clock.o
 
 colbrowser$(EXEEXT): colbrowser.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINK_FLTK) $(LDLIBS)
 
 color_chooser$(EXEEXT): color_chooser.o
 
@@ -318,32 +318,32 @@ curve$(EXEEXT): curve.o
 
 demo$(EXEEXT): demo.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINK_FLTK) $(LDLIBS)
 
-device$(EXEEXT): device.o $(IMGLIBNAME)
+device$(EXEEXT): device.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) device.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) device.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 doublebuffer$(EXEEXT): doublebuffer.o
 
 editor$(EXEEXT): editor.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) editor.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) editor.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 fast_slow$(EXEEXT): fast_slow.o
 fast_slow.cxx:	fast_slow.fl ../fluid/fluid$(EXEEXT)
 
-file_chooser$(EXEEXT): file_chooser.o $(IMGLIBNAME)
+file_chooser$(EXEEXT): file_chooser.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 fonts$(EXEEXT): fonts.o
 
 hello$(EXEEXT): hello.o
 
-help$(EXEEXT): help.o $(IMGLIBNAME)
+help$(EXEEXT): help.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) help.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) help.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 iconize$(EXEEXT): iconize.o
 
@@ -358,13 +358,13 @@ input_choice$(EXEEXT): input_choice.o
 
 keyboard$(EXEEXT): keyboard_ui.o keyboard.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ keyboard.o keyboard_ui.o $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ keyboard.o keyboard_ui.o $(LINK_FLTK) $(LDLIBS)
 keyboard_ui.o:	keyboard_ui.h
 keyboard_ui.cxx:	keyboard_ui.fl ../fluid/fluid$(EXEEXT)
 
 label$(EXEEXT): label.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ label.o $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ label.o $(LINK_FLTK) $(LDLIBS)
 
 line_style$(EXEEXT): line_style.o
 
@@ -372,7 +372,7 @@ list_visuals$(EXEEXT): list_visuals.o
 
 mandelbrot$(EXEEXT): mandelbrot_ui.o mandelbrot.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ mandelbrot.o mandelbrot_ui.o $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ mandelbrot.o mandelbrot_ui.o $(LINK_FLTK) $(LDLIBS)
 mandelbrot_ui.o:	mandelbrot_ui.h
 mandelbrot_ui.cxx:	mandelbrot_ui.fl ../fluid/fluid$(EXEEXT)
 
@@ -382,15 +382,15 @@ message$(EXEEXT): message.o
 
 minimum$(EXEEXT): minimum.o
 
-native-filechooser$(EXEEXT): native-filechooser.o $(IMGLIBNAME)
+native-filechooser$(EXEEXT): native-filechooser.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) native-filechooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) native-filechooser.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 navigation$(EXEEXT): navigation.o
 
-output$(EXEEXT): output.o $(FLLIBNAME)
+output$(EXEEXT): output.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINKFLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINK_FLTK) $(LDLIBS)
 
 overlay$(EXEEXT): overlay.o
 
@@ -398,9 +398,9 @@ pack$(EXEEXT): pack.o
 
 pixmap$(EXEEXT): pixmap.o
 
-pixmap_browser$(EXEEXT): pixmap_browser.o $(IMGLIBNAME)
+pixmap_browser$(EXEEXT): pixmap_browser.o $(FLTK_IMAGES_LIBNAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) pixmap_browser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) pixmap_browser.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 preferences$(EXEEXT):	preferences.o
 preferences.cxx:	preferences.fl ../fluid/fluid$(EXEEXT)
@@ -423,13 +423,13 @@ subwindow$(EXEEXT): subwindow.o
 
 sudoku: sudoku.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o -o $@ $(AUDIOLIBS) $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o -o $@ $(AUDIOLIBS) $(LINK_FLTK_IMAGES) $(LDLIBS)
 	$(OSX_ONLY) $(INSTALL_BIN) sudoku$(EXEEXT) sudoku.app/Contents/MacOS
 
 sudoku.exe: sudoku.o sudoku.rc
 	echo Linking $@...
 	$(RC) sudoku.rc sudokures.o
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o sudokures.o -o $@ $(AUDIOLIBS) $(LINKFLTKIMG) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o sudokures.o -o $@ $(AUDIOLIBS) $(LINK_FLTK_IMAGES) $(LDLIBS)
 
 symbols$(EXEEXT): symbols.o
 
@@ -454,14 +454,14 @@ valuators$(EXEEXT): valuators.o
 valuators.cxx:	valuators.fl ../fluid/fluid$(EXEEXT)
 
 # All OpenGL demos depend on the FLTK and FLTK_GL libraries...
-$(GLALL): $(LIBNAME) $(GLLIBNAME)
+$(GLALL): $(FLTK_LIBNAME) $(FLTK_GL_LIBNAME)
 
 # OpenGL demos...
 CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ \
 		CubeMain.o CubeView.o CubeViewUI.o \
-		$(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+		$(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 CubeMain.o: CubeViewUI.h CubeView.h CubeViewUI.cxx
 CubeView.o: CubeView.h
 CubeViewUI.o:	CubeViewUI.cxx CubeViewUI.h
@@ -469,31 +469,31 @@ CubeViewUI.cxx:	CubeViewUI.fl ../fluid/fluid$(EXEEXT)
 
 cube$(EXEEXT): cube.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ cube.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ cube.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 
 fractals$(EXEEXT): fractals.o fracviewer.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fractals.o fracviewer.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fractals.o fracviewer.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 
 fullscreen$(EXEEXT): fullscreen.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fullscreen.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fullscreen.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 
 glpuzzle$(EXEEXT): glpuzzle.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 
 gl_overlay$(EXEEXT): gl_overlay.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 
 shape$(EXEEXT): shape.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ shape.o $(LINKFLTKGL) $(LINKFLTK) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ shape.o $(LINK_FLTK_GL) $(LINK_FLTK) $(GLDLIBS)
 
 cairo_test$(EXEEXT): cairo_test.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(CAIROFLAGS) $(LDFLAGS) -o $@ cairo_test.o $(LINKFLTK) $(LINKFLTKCAIRO) $(GLDLIBS)
+	$(CXX) $(ARCHFLAGS) $(CAIROFLAGS) $(LDFLAGS) -o $@ cairo_test.o $(LINK_FLTK) $(LINKFLTKCAIRO) $(GLDLIBS)
 
 #
 # End of "$Id$".
