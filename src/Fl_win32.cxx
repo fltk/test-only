@@ -1304,9 +1304,11 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   }
 
   //Proceed to positioning the window fully inside the screen, if possible
-  //Make border's lower right corner visible
+  //Find screen that contains most of the window
+  //FIXME: this ought to be the "work area" instead of the entire screen !
   int scr_x, scr_y, scr_w, scr_h;
-  fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h, X, Y);
+  fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h, X, Y, W, H);
+  //Make border's lower right corner visible
   if (scr_x+scr_w < X+W) X = scr_x+scr_w - W;
   if (scr_y+scr_h < Y+H) Y = scr_y+scr_h - H;
   //Make border's upper left corner visible
