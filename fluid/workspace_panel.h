@@ -69,7 +69,6 @@ extern fltk3::Group *pCloseGroup;
 Fl_Panel* make_file_panel();
 extern fltk3::MenuItem menu_Unknown[];
 extern fltk3::MenuItem menu_Relative[];
-extern fltk3::MenuItem menu_Relative1[];
 extern fltk3::MenuItem menu_Option[];
 #endif
 

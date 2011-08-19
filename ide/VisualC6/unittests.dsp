@@ -93,5 +93,41 @@ LINK32=link.exe
 
 SOURCE=..\..\test\unittests.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_about.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_circles.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_images.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_lines.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_points.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_rects.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_scrollbarsize.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_text.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\test\unittest_viewport.cxx
+# End Source File
 # End Target
 # End Project

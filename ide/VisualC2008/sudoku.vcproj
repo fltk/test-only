@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib fltkd.lib fltk_imagesd.lib fltk_pngd.lib fltk_jpegd.lib fltk_zlibd.lib comctl32.lib"
+				AdditionalDependencies="fltkd.lib fltk_imagesd.lib fltk_pngd.lib fltk_jpegd.lib fltk_zlibd.lib winmm.lib comctl32.lib"
 				OutputFile="..\..\test\sudokud.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib fltk.lib fltk_images.lib fltk_png.lib fltk_jpeg.lib fltk_zlib.lib comctl32.lib"
+				AdditionalDependencies="fltk.lib fltk_images.lib fltk_png.lib fltk_jpeg.lib fltk_zlib.lib winmm.lib comctl32.lib"
 				OutputFile="..\..\test\sudoku.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

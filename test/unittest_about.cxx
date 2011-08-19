@@ -25,6 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "unittests.h"
+
 #include <fltk3/HelpView.h>
 
 //

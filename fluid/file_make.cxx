@@ -2476,15 +2476,8 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "# All demos depend on the FLTK library...\n");
   fprintf(out, "$(ALL): $(FLTK_LIBNAME)\n");
   fprintf(out, "\n");
-  fprintf(out, "# General demos...\n");
-  fprintf(out, "unittests$(EXEEXT): unittests.o\n");
-  fprintf(out, "\n");
-  fprintf(out, "unittests.cxx: unittest_about.cxx unittest_points.cxx unittest_lines.cxx unittest_circles.cxx \\\n");
-  fprintf(out, "\tunittest_rects.cxx unittest_text.cxx unittest_viewport.cxx unittest_images.cxx\n");
-  fprintf(out, "\n");
 
   // write all targets
-  // TODO: add special lines for OS X executables that go inside App packages.
   
   for (tgt = first_target; tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->builds_in(FL_ENV_MAKE) && strcmp(tgt->makefile_path(), path)==0) {
@@ -2505,7 +2498,9 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
             Fl_Target_Type *tgt_dep = Fl_Target_Type::find(t->name());
             if (tgt_dep->is_lib_target()) {
               fprintf(out, " $(%s_LIB_NAME)", tgt_dep->caps_name());
-            } // TODO: depend on another app to be built first
+            } else {
+              // TODO: depend on another app to be built first
+            }
           }
         }
       }
@@ -2513,7 +2508,6 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
       
       // create the linker line
       fprintf(out, "\techo Linking $@...\n");
-      //fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) device.o -o $@ $(LINK_FLTK_IMAGES) $(LDLIBS)\n");
       fprintf(out, "\t$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@");
       for (t=tgt->next; t && (t->level > tgt->level); t=t->next) {
         if (t->is_tool() && ((Fl_Tool_Type*)t)->builds_in(FL_ENV_MAKE)) {

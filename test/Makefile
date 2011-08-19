@@ -267,12 +267,6 @@ uninstall-osx:
 # All demos depend on the FLTK library...
 $(ALL): $(FLTK_LIBNAME)
 
-# General demos...
-unittests$(EXEEXT): unittests.o
-
-unittests.cxx: unittest_about.cxx unittest_points.cxx unittest_lines.cxx unittest_circles.cxx \
-	unittest_rects.cxx unittest_text.cxx unittest_viewport.cxx unittest_images.cxx
-
 Demo$(EXEEXT): demo.o $(FLTK_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINK_FLTK) $(LDLIBS)
@@ -557,9 +551,9 @@ tree$(EXEEXT): tree.o $(FLTK_LIB_NAME)
 tree.o: tree.h
 tree.cxx: tree.fl ../fluid/fluid$(EXEEXT)
 
-unittests$(EXEEXT): unittests.o $(FLTK_LIB_NAME)
+unittests$(EXEEXT): unittests.o unittest_about.o unittest_circles.o unittest_images.o unittest_lines.o unittest_points.o unittest_rects.o unittest_scrollbarsize.o unittest_text.o unittest_viewport.o $(FLTK_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ unittests.o $(LINK_FLTK) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ unittests.o unittest_about.o unittest_circles.o unittest_images.o unittest_lines.o unittest_points.o unittest_rects.o unittest_scrollbarsize.o unittest_text.o unittest_viewport.o $(LINK_FLTK) $(LDLIBS)
 
 utf8$(EXEEXT): utf8.o $(FLTK_LIB_NAME)
 	echo Linking $@...
