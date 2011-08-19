@@ -488,8 +488,6 @@ static void cb_List(Fl_Environment_Choice* o, void* v) {
   };
 }
 
-fltk3::Group *wSpacer=(fltk3::Group *)0;
-
 static void cb_8(fltk3::Group* o, void* v) {
   if (v == Fl_Panel::LOAD) {
   for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
@@ -519,6 +517,174 @@ static void cb_Makefile(fltk3::Input* o, void* v) {
     set_modflag(1);
   };
 }
+
+static void cb_9(fltk3::Group* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_target()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+};
+}
+
+static void cb_Value(fltk3::Input* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_target()) {
+        o->value(((Fl_Target_Type*)t)->makefile_path());
+      }
+    }
+  } else {
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_target()) {
+        ((Fl_Target_Type*)t)->makefile_path(o->value());
+      }
+    }
+    set_modflag(1);
+  };
+}
+
+static void cb_a(fltk3::Group* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_file()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+};
+}
+
+static void cb_Relative1(fltk3::MenuButton* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  /*...*/
+  } else {
+    int mod = 0;
+    const fltk3::MenuItem *mi = o->mvalue();
+    int e = mi->argument();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->location() != e) {
+          ((Fl_File_Type*)t)->location(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+
+  // FIXME: we should show <multiple values> if required
+  Fl_File_Type *ff = Fl_Panel::current_file();
+  if (ff) {
+    unsigned int fl =ff->location();
+    for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+      if (!mi->label()) break;
+      if (mi->argument()==fl) {
+        o->label(mi->label());
+        break;
+      }
+    }
+  };
+}
+
+fltk3::MenuItem menu_Relative1[] = {
+ {"Relative to Workspace", 0,  0, (void*)(FL_LOCATION_WORKSPACE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Absolute Path", 0,  0, (void*)(FL_LOCATION_ABSOLUTE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Relative to IDE", 0,  0, (void*)(FL_LOCATION_IDE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Relative to SDK", 0,  0, (void*)(FL_LOCATION_SDK), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
+static void cb_b(fltk3::Group* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_option()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+};
+}
+
+static void cb_Option(fltk3::Input* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_option()) {
+        o->value(((Fl_Option_Type*)t)->value());
+      }
+    }
+  } else {
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_option()) {
+        ((Fl_Option_Type*)t)->value(o->value());
+      }
+    }
+    set_modflag(1);
+  };
+}
+
+static void cb_c(fltk3::Group* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+    if (t->selected && t->is_option()) {
+      o->show();
+      break;
+    }
+  }
+  if (o->visible())
+    Fl_Panel::propagate_load(o, v);
+};
+}
+
+static void cb_Option1(fltk3::Choice* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+    int type = 0;
+    if (Fl_Type::current && Fl_Type::current->is_option()) {
+      type = ((Fl_Option_Type*)Fl_Type::current)->value_type();
+    } else {
+      for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+        if (t->selected && t->is_option()) {
+          type = ((Fl_Option_Type*)t)->value_type();
+          break;
+        }
+      }
+    }
+    for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+      if (!mi->label()) break;
+      if (mi->argument()==type) {
+        o->value(mi);
+        break;
+      }
+    }
+  } else {
+    const fltk3::MenuItem *mi = o->mvalue();
+    if (mi) {
+      for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+        if (t->selected && t->is_option()) {
+          ((Fl_Option_Type*)t)->value_type(mi->argument());
+        }
+      }
+    }
+    set_modflag(1);
+  };
+}
+
+fltk3::MenuItem menu_Option[] = {
+ {"Compiler Item", 0,  0, (void*)(FL_OPTION_COMPILER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Linker Item", 0,  0, (void*)(FL_OPTION_LINKER), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Other", 0,  0, (void*)(FL_OPTION_OTHER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
+fltk3::Group *wSpacer=(fltk3::Group *)0;
 
 fltk3::Group *pCloseGroup=(fltk3::Group *)0;
 
@@ -656,9 +822,6 @@ Fl_Panel* make_file_panel() {
           } // Fl_Environment_Choice* o
           o->end();
         } // fltk3::Group* o
-        { wSpacer = new fltk3::Group(10, 400, 400, 10);
-          wSpacer->end();
-        } // fltk3::Group* wSpacer
         { fltk3::Group* o = new fltk3::Group(7, 70, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_8);
@@ -672,6 +835,64 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Input* o
           o->end();
         } // fltk3::Group* o
+        { fltk3::Group* o = new fltk3::Group(7, 257, 400, 30);
+          o->labelsize(12);
+          o->callback((fltk3::Callback*)cb_9);
+          o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+          { fltk3::Input* o = new fltk3::Input(107, 262, 290, 20, "Value ");
+            o->labelsize(12);
+            o->textsize(12);
+            o->callback((fltk3::Callback*)cb_Value);
+            o->when(fltk3::WHEN_CHANGED);
+            fltk3::Group::current()->resizable(o);
+          } // fltk3::Input* o
+          o->end();
+        } // fltk3::Group* o
+        { fltk3::Group* o = new fltk3::Group(12, 287, 400, 30);
+          o->labelsize(12);
+          o->callback((fltk3::Callback*)cb_a);
+          o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+          { fltk3::Group* o = new fltk3::Group(112, 292, 200, 20, "Location ");
+            o->labelsize(12);
+            o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
+            o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+            { fltk3::MenuButton* o = new fltk3::MenuButton(112, 292, 200, 20, "Relative to Workspace");
+              o->labelsize(12);
+              o->callback((fltk3::Callback*)cb_Relative1);
+              o->menu(menu_Relative1);
+            } // fltk3::MenuButton* o
+            o->end();
+          } // fltk3::Group* o
+          o->end();
+        } // fltk3::Group* o
+        { fltk3::Group* o = new fltk3::Group(9, 322, 400, 30);
+          o->labelsize(12);
+          o->callback((fltk3::Callback*)cb_b);
+          o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+          { fltk3::Input* o = new fltk3::Input(109, 327, 290, 20, "Option Value ");
+            o->tooltip("name and path of the file");
+            o->labelsize(12);
+            o->textsize(12);
+            o->callback((fltk3::Callback*)cb_Option);
+            o->when(fltk3::WHEN_CHANGED);
+            fltk3::Group::current()->resizable(o);
+          } // fltk3::Input* o
+          o->end();
+        } // fltk3::Group* o
+        { fltk3::Group* o = new fltk3::Group(8, 352, 400, 30);
+          o->callback((fltk3::Callback*)cb_c);
+          { fltk3::Choice* o = new fltk3::Choice(108, 357, 200, 20, "Option Type ");
+            o->down_box(fltk3::BORDER_BOX);
+            o->labelsize(12);
+            o->textsize(12);
+            o->callback((fltk3::Callback*)cb_Option1);
+            o->menu(menu_Option);
+          } // fltk3::Choice* o
+          o->end();
+        } // fltk3::Group* o
+        { wSpacer = new fltk3::Group(10, 400, 400, 10);
+          wSpacer->end();
+        } // fltk3::Group* wSpacer
         o->end();
         fltk3::Group::current()->resizable(o);
       } // fltk3::PackedGroup* o

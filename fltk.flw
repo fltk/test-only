@@ -297,21 +297,18 @@ workspace FLTK {open
           uuid_Xcode4_BuildFileInCopyFiles {F552DCC4-71E4-404E-A678-E6B4C6F1988A}
           uuid_Xcode4_ContainerItemProxy {3143C159-1BDC-4FD1-9796-7B5D0DC00309}
           uuid_Xcode4_TargetDependency {785B1845-DCDD-4315-9D7A-B42AD474CA8B}
-          build_env 94
         }
-        target_dependency fltk_jpeg {selected
+        target_dependency fltk_jpeg {
           uuid_Xcode4_BuildFileInFrameworks {6138F435-ED9E-4A53-9DE7-63A95EC0C6BD}
           uuid_Xcode4_BuildFileInCopyFiles {CC663664-AAA4-45BB-9B3C-73F8CB778028}
           uuid_Xcode4_ContainerItemProxy {5BF281B9-FC98-4EBE-A3DF-9BCDBC8F9203}
           uuid_Xcode4_TargetDependency {1B574128-6173-4A14-BDDA-1D6595B5BE71}
-          build_env 94
         }
-        target_dependency fltk_zlib {selected
+        target_dependency fltk_zlib {
           uuid_Xcode4_BuildFileInFrameworks {97A7C9B9-2334-4593-AF2E-C78E02AEBDDF}
           uuid_Xcode4_BuildFileInCopyFiles {0D2A2AC9-1CDD-4408-8DFB-1D4E1B01BBEF}
           uuid_Xcode4_ContainerItemProxy {529024F4-EDEF-44C3-99C0-01650CE6F845}
           uuid_Xcode4_TargetDependency {E68A4A14-39E7-4C41-80F3-E4EF81474AD5}
-          build_env 94
         }
       }
     }
@@ -2686,7 +2683,7 @@ workspace FLTK {open
       uuid_Xcode4_ReleaseBuildConfiguration {5799E68C-6C23-4D48-A6A5-46C26838604D}
       uuid_VC2008_Project {AF7CC2D4-BBC7-4995-B18D-6A590C267527}
       uuid_VC2010_Project {A6556097-732F-4D5C-9763-96A896DA0F8F}
-      build_env 126
+      build_env 127
       target_path lib
       makefile_path src
     } {
@@ -2802,7 +2799,7 @@ workspace FLTK {open
       uuid_Xcode4_ReleaseBuildConfiguration {4364C496-C8EA-4726-BE8F-8D94ADDF19C7}
       uuid_VC2008_Project {417DB0F9-647A-4A36-ADFF-4196F7C1963D}
       uuid_VC2010_Project {845449C0-BCC9-4404-89DC-52E53E80F8D0}
-      build_env 126
+      build_env 127
       target_path lib
       makefile_path src
     } {
@@ -3066,7 +3063,7 @@ workspace FLTK {open
       uuid_Xcode4_ReleaseBuildConfiguration {F1E12179-62FF-476F-B95D-DF8C211E2D1C}
       uuid_VC2008_Project {2F487ADB-AB3A-44B1-A824-D25C00A2D30A}
       uuid_VC2010_Project {8051E81E-8228-43EA-AABA-FE4E48CB10AD}
-      build_env 126
+      build_env 127
       target_path lib
       makefile_path src
     } {
@@ -3758,6 +3755,18 @@ workspace FLTK {open
         uuid_Xcode4_FileRef {CE316BB5-C691-4202-8843-AE3C8327B31A}
         filename_and_path {test/blocks.cxx}
       }
+      target_dependency fltk {
+        uuid_Xcode4_BuildFileInFrameworks {F2191AFC-C993-40E9-8669-4AC1400FFCC2}
+        uuid_Xcode4_BuildFileInCopyFiles {7AA6A418-70C8-414D-8DC3-120B57A68AA0}
+        uuid_Xcode4_ContainerItemProxy {1FD69761-084F-4B59-B3D9-477918A5BE6A}
+        uuid_Xcode4_TargetDependency {B8B7D845-05F7-46E6-B658-97C9A651B29C}
+      }
+      file_ref {winmm.lib} {
+        build_env 28
+        list_env 28
+        filename_and_path {winmm.lib}
+        location 3
+      }
       file_ref {CoreAudio.framework} {
         uuid_Xcode4_BuildFile {FA4B79B4-22D0-4469-BC6F-E6E93020A42E}
         uuid_Xcode4_FileRef {78544AE2-3C05-41E6-9D20-3281B4B5E084}
@@ -3767,17 +3776,10 @@ workspace FLTK {open
         filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreAudio.framework}
         location 2
       }
-      file_ref {winmm.lib} {
-        build_env 28
-        list_env 28
-        filename_and_path {winmm.lib}
-        location 3
-      }
-      target_dependency fltk {
-        uuid_Xcode4_BuildFileInFrameworks {F2191AFC-C993-40E9-8669-4AC1400FFCC2}
-        uuid_Xcode4_BuildFileInCopyFiles {7AA6A418-70C8-414D-8DC3-120B57A68AA0}
-        uuid_Xcode4_ContainerItemProxy {1FD69761-084F-4B59-B3D9-477918A5BE6A}
-        uuid_Xcode4_TargetDependency {B8B7D845-05F7-46E6-B658-97C9A651B29C}
+      tool_option {Makefile Audio libraries} {
+        build_env 1
+        value {$(AUDIOLIBS)}
+        valuetype 2
       }
     }
     app_target boxtype {open
@@ -4087,6 +4089,11 @@ workspace FLTK {open
         filename_and_path {opengl32.lib}
         location 3
       }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
+      }
     }
     app_target CubeView {open
       uuid_Xcode4_FluidBuildRule {5179ED20-243F-4B79-822A-01F0713117E4}
@@ -4167,6 +4174,11 @@ workspace FLTK {open
         list_env 28
         filename_and_path {opengl32.lib}
         location 3
+      }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
       }
       target_dependency Fluid {
         uuid_Xcode4_BuildFileInFrameworks {9A79C5D2-753A-4F53-B760-8C328D1C9ADA}
@@ -4536,6 +4548,11 @@ workspace FLTK {open
         filename_and_path {opengl32.lib}
         location 3
       }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
+      }
     }
     app_target fullscreen {open
       uuid_Xcode4_FluidBuildRule {803CEFC9-B86B-4613-90A8-2287D26D9DE4}
@@ -4606,6 +4623,11 @@ workspace FLTK {open
         list_env 28
         filename_and_path {opengl32.lib}
         location 3
+      }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
       }
     }
     app_target gl_overlay {open
@@ -4678,6 +4700,11 @@ workspace FLTK {open
         filename_and_path {opengl32.lib}
         location 3
       }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
+      }
     }
     app_target glpuzzle {open
       uuid_Xcode4_FluidBuildRule {FC3DFF75-3E15-4CD7-868B-B6A8986E62FC}
@@ -4748,6 +4775,11 @@ workspace FLTK {open
         list_env 28
         filename_and_path {opengl32.lib}
         location 3
+      }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
       }
     }
     app_target hello {open
@@ -5729,6 +5761,11 @@ workspace FLTK {open
         filename_and_path {opengl32.lib}
         location 3
       }
+      tool_option {Makefile OpenGL libraries} {selected
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
+      }
     }
     app_target subwindow {open
       uuid_Xcode4_FluidBuildRule {F1B24263-AEF4-4B3C-B971-D871AB1D82BB}
@@ -5781,21 +5818,6 @@ workspace FLTK {open
         uuid_Xcode4_FileRef {45B471C7-8D57-4244-BD19-8C230A1A2CB9}
         filename_and_path {test/sudoku.cxx}
       }
-      file_ref {CoreAudio.framework} {
-        uuid_Xcode4_BuildFile {1F99C0F7-617D-49A5-8381-2376EC706924}
-        uuid_Xcode4_FileRef {AFC40BE5-7826-46C3-93DF-31460E6BE032}
-        uuid_Xcode4_BuildFileInFrameworks {13D85A5F-C2DC-420A-837C-101F323BB1AC}
-        build_env 96
-        list_env 96
-        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreAudio.framework}
-        location 2
-      }
-      file_ref {winmm.lib} {
-        build_env 28
-        list_env 28
-        filename_and_path {winmm.lib}
-        location 3
-      }
       target_dependency fltk {
         uuid_Xcode4_BuildFileInFrameworks {4BD59DB6-F11B-4DBC-88BE-F191746C2F44}
         uuid_Xcode4_BuildFileInCopyFiles {1277C42A-BA11-405B-BEF9-5A3B5AD91C8B}
@@ -5825,6 +5847,26 @@ workspace FLTK {open
         uuid_Xcode4_BuildFileInCopyFiles {6ED6E780-2CC9-4D9E-925E-59941518A541}
         uuid_Xcode4_ContainerItemProxy {E964FBEE-0180-463B-BB1E-3BE02DB3EAE6}
         uuid_Xcode4_TargetDependency {7C3629C6-6239-48A2-88F4-6B06F648BDFD}
+      }
+      file_ref {CoreAudio.framework} {
+        uuid_Xcode4_BuildFile {1F99C0F7-617D-49A5-8381-2376EC706924}
+        uuid_Xcode4_FileRef {AFC40BE5-7826-46C3-93DF-31460E6BE032}
+        uuid_Xcode4_BuildFileInFrameworks {13D85A5F-C2DC-420A-837C-101F323BB1AC}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreAudio.framework}
+        location 2
+      }
+      file_ref {winmm.lib} {
+        build_env 28
+        list_env 28
+        filename_and_path {winmm.lib}
+        location 3
+      }
+      tool_option {Makefile Audio libraries} {
+        build_env 1
+        value {$(AUDIOLIBS)}
+        valuetype 2
       }
     }
     app_target symbols {open

@@ -25,7 +25,7 @@
 #      http://www.fltk.org/str.php
 #
 
-FLTK_CPPFILES =  \
+FLTK_CPPFILES = \
 	Fl.cxx \
 	Fl_Adjuster.cxx \
 	Fl_Bitmap.cxx \
@@ -170,37 +170,36 @@ FLTK_CPPFILES =  \
 	ps_image.cxx \
 	scandir.cxx \
 	screen_xywh.cxx
-	
-FLTK_OBJCPPFILES =  \
-	Fl_cocoa.mm \
-	Fl_Native_File_Chooser_MAC.mm \
-	Fl_Quartz_Printer.mm
-	
+
 FLTK_GL_CPPFILES = \
 	Fl_Gl_Choice.cxx \
-	Fl_Gl_Overlay.cxx \
 	Fl_Gl_Device_Plugin.cxx \
+	Fl_Gl_Overlay.cxx \
 	Fl_Gl_Window.cxx \
 	freeglut_geometry.cxx \
 	freeglut_stroke_mono_roman.cxx \
 	freeglut_stroke_roman.cxx \
 	freeglut_teapot.cxx \
 	gl_draw.cxx \
-	gl_start.cxx \
 	glut_compatability.cxx \
 	glut_font.cxx
 
 FLTK_IMAGES_CPPFILES = \
-	fl_images_core.cxx \
 	Fl_BMP_Image.cxx \
 	Fl_File_Icon2.cxx \
 	Fl_GIF_Image.cxx \
 	Fl_Help_Dialog.cxx \
 	Fl_JPEG_Image.cxx \
 	Fl_PNG_Image.cxx \
-	Fl_PNM_Image.cxx
+	Fl_PNM_Image.cxx \
+	fl_images_core.cxx
 
-FLTK_CFILES =  \
+FLTK_OBJCPPFILES = \
+	Fl_cocoa.mm \
+	Fl_Native_File_Chooser_MAC.mm \
+	Fl_Quartz_Printer.mm
+
+FLTK_CFILES = \
 	flstring.c \
 	vsnprintf.c \
 	xutf8/case.c \
@@ -211,19 +210,108 @@ FLTK_CFILES =  \
 	xutf8/utf8Utils.c \
 	xutf8/utf8Wrap.c
 
+FLTK_PNG_CFILES = \
+	../../png/png.c \
+	../../png/pngerror.c \
+	../../png/pngget.c \
+	../../png/pngmem.c \
+	../../png/pngpread.c \
+	../../png/pngread.c \
+	../../png/pngrio.c \
+	../../png/pngrtran.c \
+	../../png/pngrutil.c \
+	../../png/pngset.c \
+	../../png/pngtrans.c \
+	../../png/pngwio.c \
+	../../png/pngwrite.c \
+	../../png/pngwtran.c \
+	../../png/pngwutil.c
+
+FLTK_JPEG_CFILES = \
+	../../jpeg/jaricom.c \
+	../../jpeg/jcarith.c \
+	../../jpeg/jdarith.c \
+	../../jpeg/jcapimin.c \
+	../../jpeg/jcapistd.c \
+	../../jpeg/jccoefct.c \
+	../../jpeg/jccolor.c \
+	../../jpeg/jcdctmgr.c \
+	../../jpeg/jchuff.c \
+	../../jpeg/jcinit.c \
+	../../jpeg/jcmainct.c \
+	../../jpeg/jcmarker.c \
+	../../jpeg/jcmaster.c \
+	../../jpeg/jcomapi.c \
+	../../jpeg/jcparam.c \
+	../../jpeg/jcprepct.c \
+	../../jpeg/jcsample.c \
+	../../jpeg/jctrans.c \
+	../../jpeg/jdapimin.c \
+	../../jpeg/jdapistd.c \
+	../../jpeg/jdatadst.c \
+	../../jpeg/jdatasrc.c \
+	../../jpeg/jdcoefct.c \
+	../../jpeg/jdcolor.c \
+	../../jpeg/jddctmgr.c \
+	../../jpeg/jdhuff.c \
+	../../jpeg/jdinput.c \
+	../../jpeg/jdmainct.c \
+	../../jpeg/jdmarker.c \
+	../../jpeg/jdmaster.c \
+	../../jpeg/jdmerge.c \
+	../../jpeg/jdpostct.c \
+	../../jpeg/jdsample.c \
+	../../jpeg/jdtrans.c \
+	../../jpeg/jerror.c \
+	../../jpeg/jfdctflt.c \
+	../../jpeg/jfdctfst.c \
+	../../jpeg/jfdctint.c \
+	../../jpeg/jidctflt.c \
+	../../jpeg/jidctfst.c \
+	../../jpeg/jidctint.c \
+	../../jpeg/jmemmgr.c \
+	../../jpeg/jmemnobs.c \
+	../../jpeg/jquant1.c \
+	../../jpeg/jquant2.c \
+	../../jpeg/jutils.c
+
+FLTK_ZLIB_CFILES = \
+	../../zlib/adler32.c \
+	../../zlib/compress.c \
+	../../zlib/crc32.c \
+	../../zlib/deflate.c \
+	../../zlib/gzclose.c \
+	../../zlib/gzlib.c \
+	../../zlib/gzread.c \
+	../../zlib/gzwrite.c \
+	../../zlib/infback.c \
+	../../zlib/inffast.c \
+	../../zlib/inflate.c \
+	../../zlib/inftrees.c \
+	../../zlib/trees.c \
+	../../zlib/uncompr.c \
+	../../zlib/zutil.c
+
 ################################################################
 FLTKFLAGS = -DFL_LIBRARY
 include ../makeinclude
 
 FLTK_MMFILES = $(shell if test $(USEMMFILES) = Yes; then echo $(FLTK_OBJCPPFILES); fi)
 
-FLTK_OBJECTS =  $(FLTK_MMFILES:.mm=.o) $(FLTK_CPPFILES:.cxx=.o) $(FLTK_CFILES:.c=.o)
+FLTK_OBJECTS = $(FLTK_CPPFILES:.cxx=.o) $(FLTK_MMFILES:.mm=.o) $(FLTK_CFILES:.c=.o)
 FLTK_GL_OBJECTS = $(FLTK_GL_CPPFILES:.cxx=.o)
 FLTK_IMAGES_OBJECTS = $(FLTK_IMAGES_CPPFILES:.cxx=.o)
+FLTK_PNG_OBJECTS = $(FLTK_PNG_CFILES:.c=.o)
+FLTK_JPEG_OBJECTS = $(FLTK_JPEG_CFILES:.c=.o)
+FLTK_ZLIB_OBJECTS = $(FLTK_ZLIB_CFILES:.c=.o)
 
-all:	$(FLTK_LIBNAME) $(FLTK_DSONAME) \
+all: \
+	$(FLTK_LIBNAME) $(FLTK_DSONAME) \
 	$(FLTK_GL_LIBNAME) $(FLTK_GL_DSONAME) \
-	$(FLTK_IMAGES_LIBNAME) $(FLTK_IMAGES_DSONAME) 
+	$(FLTK_IMAGES_LIBNAME) $(FLTK_IMAGES_DSONAME) \
+	$(FLTK_PNG_LIBNAME) $(FLTK_PNG_DSONAME) \
+	$(FLTK_JPEG_LIBNAME) $(FLTK_JPEG_DSONAME) \
+	$(FLTK_ZLIB_LIBNAME) $(FLTK_ZLIB_DSONAME)
 
 $(FLTK_LIBNAME): $(FLTK_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...

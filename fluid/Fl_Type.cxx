@@ -121,6 +121,7 @@ static fltk3::Pixmap	protected_pixmap(protected_xpm);
 #include "pixmaps/flMenuAll.xpm"
 #include "pixmaps/flWorkspace.xpm"
 #include "pixmaps/flDependency.xpm"
+#include "pixmaps/flOption.xpm"
 
 static fltk3::Pixmap	window_pixmap(flWindow_xpm);
 static fltk3::Pixmap	button_pixmap(flButton_xpm);
@@ -181,6 +182,7 @@ static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
 static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
 static fltk3::Pixmap	workspace_pixmap(flWorkspace_xpm);
 static fltk3::Pixmap	dependency_pixmap(flDependency_xpm);
+static fltk3::Pixmap	option_pixmap(flOption_xpm);
 fltk3::Pixmap	menu_none_pixmap(flMenuNone_xpm);
 fltk3::Pixmap	menu_multi_pixmap(flMenuMulti_xpm);
 fltk3::Pixmap	menu_all_pixmap(flMenuAll_xpm);
@@ -196,7 +198,7 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap,             /* 42..46 */
  &spinner_pixmap, &widgetclass_pixmap, &data_pixmap, &tree_pixmap, &table_pixmap,                    /* 47..51 */
  &app_target_pixmap, &file_pixmap, &folder_pixmap, &fluid_file_pixmap, &code_file_pixmap,            /* 52..56 */
- &lib_target_pixmap, &workspace_pixmap, &dependency_pixmap};                                         /* 57..59 */
+ &lib_target_pixmap, &workspace_pixmap, &dependency_pixmap, &option_pixmap};                         /* 57..60 */
 
 extern int show_comments;
 extern Fl_Panel *the_file_panel;
@@ -1277,6 +1279,74 @@ void Fl_Workspace_Type::open() {
 }
 
 
+// ------------ Workspace Option -----------------------------------------------
+
+Fl_Option_Type Fl_Option_type;
+
+Fl_Type *Fl_Option_Type::make() {
+  // A workspace must be the first entry
+  if (!project_is_workspace()) {
+    fltk3::message("This element can only be added into a workspace.");
+    return 0;
+  }
+  Fl_Type *p = Fl_Type::current;
+  while (p && !p->is_folder() && !p->is_target() && !p->is_workspace())
+    p = p->parent;  
+  if (!p) {
+    fltk3::message("This element can only be added to a Target, Folder, or Workspace!");
+    return 0;
+  }
+  // add the workspace to the file
+  Fl_Option_Type *o = new Fl_Option_Type();
+  o->name("myOption");
+  o->add(p);
+  o->factory = this;
+  return o;
+}
+
+void Fl_Option_Type::open() {
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  the_file_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_file_panel->show();
+}
+
+void Fl_Option_Type::value(const char *v) {
+  if (pValue) {
+    free(pValue);
+    pValue = 0L;
+  }
+  if (v) {
+    pValue = strdup(v);
+  } else {
+    pValue = strdup("");
+  }
+}
+
+char Fl_Option_Type::read_property(const char *c) {
+  if (!strcmp(c,"value")) {
+    value(read_word());
+  } else if (!strcmp(c,"valuetype")) {
+    value_type(atoi(read_word()));
+  } else {
+    return Fl_Tool_Type::read_property(c);
+  }
+  return 1;
+}
+
+void Fl_Option_Type::write_properties() {
+  Fl_Tool_Type::write_properties();
+  if (value() && *value()) {
+    write_indent(level+1);
+    write_string("value");
+    write_word(value());
+  }
+  if (value_type()!=FL_OPTION_OTHER) {
+    write_indent(level+1);
+    write_string("valuetype %d", value_type());
+  }
+}
+
+
 // ------------ Target Dependency ----------------------------------------------
 
 Fl_Target_Dependency_Type Fl_Target_Dependency_type;
@@ -1318,16 +1388,30 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
-// Nasty: we assume that the name is not longer than 63 characters... .
+// Note: we assume that the name is not longer than 63 characters... .
+// Note: we do not deal with UTF8 chracters here!
 const char *Fl_Target_Type::caps_name() {
-  if (!pCapsName) pCapsName = (char*)malloc(64);
+  if (!pAltName) pAltName = (char*)malloc(64);
   const char *s = name();
-  char *d = pCapsName;
+  char *d = pAltName;
   while (*s) {
     *d++ = toupper(*s++);
   }
   *d++ = 0;
-  return pCapsName;
+  return pAltName;
+}
+
+// Note: we assume that the name is not longer than 63 characters... .
+// Note: we do not deal with UTF8 chracters here!
+const char *Fl_Target_Type::lowercase_name() {
+  if (!pAltName) pAltName = (char*)malloc(64);
+  const char *s = name();
+  char *d = pAltName;
+  while (*s) {
+    *d++ = tolower(*s++);
+  }
+  *d++ = 0;
+  return pAltName;
 }
 
 Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {

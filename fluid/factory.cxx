@@ -1016,6 +1016,7 @@ fltk3::MenuItem New_Menu[] = {
   {"File",0,cb,(void*)&Fl_File_type, fltk3::MENU_DIVIDER},
   {"Group",0,cb,(void*)&Fl_Folder_type},
   {"Target Dependency",0,cb,(void*)&Fl_Target_Dependency_type},
+  {"Option",0,cb,(void*)&Fl_Option_type},
 {0},
 {"Code",0,0,0,fltk3::SUBMENU},
   {"Function/Method",0,cb,(void*)&Fl_Function_type},

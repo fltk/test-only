@@ -36,7 +36,7 @@ OBJS	=	adler32.o compress.o crc32.o uncompr.o deflate.o \
 		trees.o zutil.o inflate.o inftrees.o inffast.o \
 		gzclose.o gzlib.o gzread.o gzwrite.o infback.o
 
-LIBZ	=	../lib/libfltk_z$(LIBEXT)
+LIBZ	=	../lib/libfltk_zlib$(LIBEXT)
 
 
 #
@@ -60,10 +60,10 @@ clean:
 #
 
 install: $(LIBZ)
-	echo "Installing libfltk_z$(LIBEXT) in $(libdir)..."
+	echo "Installing libfltk_zlib$(LIBEXT) in $(libdir)..."
 	-$(INSTALL_DIR) $(DESTDIR)$(libdir)
 	$(INSTALL_LIB) $(LIBZ) $(DESTDIR)$(libdir)
-	$(RANLIB) $(DESTDIR)$(libdir)/libfltk_z$(LIBEXT)
+	$(RANLIB) $(DESTDIR)$(libdir)/libfltk_zlib$(LIBEXT)
 	echo "Installing zlib headers in $(includedir)/FL/images..."
 	-$(INSTALL_DIR) $(DESTDIR)$(includedir)/FL/images
 	$(INSTALL_DATA) zconf.h $(DESTDIR)$(includedir)/FL/images
@@ -76,8 +76,8 @@ install: $(LIBZ)
 #
 
 uninstall:
-	echo "Uninstalling libfltk_z$(LIBEXT) in $(libdir)..."
-	$(RM) $(libdir)/libfltk_z$(LIBEXT)
+	echo "Uninstalling libfltk_zlib$(LIBEXT) in $(libdir)..."
+	$(RM) $(libdir)/libfltk_zlib$(LIBEXT)
 	echo "Uninstalling zlib headers in $(includedir)/FL/images..."
 	$(RM) $(includedir)/FL/images/zconf.h
 	$(RM) $(includedir)/FL/images/zlib.h
@@ -85,7 +85,7 @@ uninstall:
 
 
 #
-# libfltk_z.a
+# libfltk_zlib.a
 #
 
 $(LIBZ):	$(OBJS)

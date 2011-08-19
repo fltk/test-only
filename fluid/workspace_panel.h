@@ -61,6 +61,7 @@ void file_panel_set_cb(fltk3::Widget*, void *v);
 extern fltk3::ScrollGroup *pScrollGroup;
 #include <fltk3/PackedGroup.h>
 #include <fltk3/Input.h>
+#include <fltk3/Choice.h>
 extern fltk3::Group *wSpacer;
 extern fltk3::Group *pCloseGroup;
 #include <fltk3/Box.h>
@@ -68,6 +69,8 @@ extern fltk3::Group *pCloseGroup;
 Fl_Panel* make_file_panel();
 extern fltk3::MenuItem menu_Unknown[];
 extern fltk3::MenuItem menu_Relative[];
+extern fltk3::MenuItem menu_Relative1[];
+extern fltk3::MenuItem menu_Option[];
 #endif
 
 //

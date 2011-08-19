@@ -94,6 +94,12 @@ typedef enum {
   FL_LOCATION_SDK
 } FileLocation;
 
+typedef enum {
+  FL_OPTION_OTHER = 0,
+  FL_OPTION_COMPILER,
+  FL_OPTION_LINKER
+} OptionType;
+
 class Fl_Type {
 
   friend class Widget_Browser;
@@ -216,6 +222,7 @@ public:
   virtual int is_tool() const { return 0; }
   virtual int is_workspace() const { return 0; }
   virtual int is_target_dependency() const { return 0; }
+  virtual int is_option() const { return 0; }
 
   virtual int pixmapID() { return 0; }
 
@@ -263,6 +270,35 @@ public:
   void clear_flags(unsigned v) { pFlags &= ~v; }
 };
 
+class Fl_Option_Type : public Fl_Tool_Type {
+  char *pValue;
+  int pValueType;
+public:
+  Fl_Option_Type() :
+    Fl_Tool_Type(),
+    pValue(strdup("")),
+    pValueType(0) {
+  }
+  ~Fl_Option_Type() {
+    if (pValue) free(pValue);
+  }
+  const char *type_name() { return "tool_option"; }
+  Fl_Type *make();
+  virtual int is_option() const { return 1; }
+  virtual int pixmapID() { return 60; }
+  virtual void open();
+  
+  void write_properties();
+  char read_property(const char *);
+
+  const char *value() { return pValue; }
+  void value(const char *);
+  int value_type() { return pValueType; }
+  void value_type(int v) { pValueType = v; }
+};
+extern Fl_Option_Type Fl_Option_type;
+
+
 class Fl_Workspace_Type : public Fl_Tool_Type {
 public:
   Fl_Workspace_Type() :
@@ -299,13 +335,13 @@ extern Fl_Target_Dependency_Type Fl_Target_Dependency_type;
 class Fl_Target_Type : public Fl_Tool_Type {
   char *pTargetPath;
   char *pMakefilePath;
-  char *pCapsName;
+  char *pAltName;
 public:
   Fl_Target_Type() :
   Fl_Tool_Type(),
   pTargetPath(0),
   pMakefilePath(0),
-  pCapsName(0)
+  pAltName(0)
   {
     pTargetPath = strdup("");
     pMakefilePath = strdup("");
@@ -313,10 +349,11 @@ public:
   ~Fl_Target_Type() {
     if (pTargetPath) free(pTargetPath);
     if (pMakefilePath) free(pMakefilePath);
-    if (pCapsName) free(pCapsName);
+    if (pAltName) free(pAltName);
   }
   const char *type_name() { return "target"; }
   const char *caps_name();
+  const char *lowercase_name();
   Fl_Type *make();
   virtual int is_parent() const { return 1; }
   virtual int is_target() const { return 1; }  
