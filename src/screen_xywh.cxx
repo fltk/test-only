@@ -5,20 +5,11 @@
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+// This library is free software. Distribution and use rights are outlined in
+// the file "COPYING" which should have been included with this file.  If this
+// file is missing or damaged, see the license at:
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
+//     http://www.fltk.org/COPYING.php
 //
 // Please report all bugs and problems on the following page:
 //
@@ -68,7 +59,9 @@ static BOOL CALLBACK screen_cb(HMONITOR mon, HDC, LPRECT r, LPARAM) {
 //  (but we use our self-aquired function pointer instead)
   if (fl_gmi(mon, &mi)) {
     screens[num_screens] = mi.rcMonitor;
-    
+// If we also want to record the work area, we would also store mi.rcWork at this point
+//  work_area[num_screens] = mi.rcWork;
+
     // find the pixel size
     if (mi.cbSize == sizeof(mi)) {
       HDC screen = CreateDC(mi.szDevice, NULL, NULL, NULL);
@@ -85,7 +78,6 @@ static BOOL CALLBACK screen_cb(HMONITOR mon, HDC, LPRECT r, LPARAM) {
 }
 
 static void screen_init() {
-  num_screens = 0;
   // Since not all versions of Windows include multiple monitor support,
   // we do a run-time check for the required functions...
   HMODULE hMod = GetModuleHandle("USER32.DLL");
@@ -95,21 +87,17 @@ static void screen_init() {
     fl_edm_func fl_edm = (fl_edm_func)GetProcAddress(hMod, "EnumDisplayMonitors");
 
     if (fl_edm) {
-      // We do have EnumDisplayMonitors, so lets find out how many monitors...
-      num_screens = GetSystemMetrics(SM_CMONITORS);
-
-//      if (num_screens > 1) {
-        // If there is more than 1 monitor, enumerate them...
-        fl_gmi = (fl_gmi_func)GetProcAddress(hMod, "GetMonitorInfoA");
-
-        if (fl_gmi) {
-          // We have GetMonitorInfoA, enumerate all the screens...
-//        EnumDisplayMonitors(0,0,screen_cb,0);
-//        (but we use our self-aquired function pointer instead)
-          fl_edm(0, 0, screen_cb, 0);
-          return;
-        }
-//      }
+      // we have EnumDisplayMonitors - do we also have GetMonitorInfoA ?
+      fl_gmi = (fl_gmi_func)GetProcAddress(hMod, "GetMonitorInfoA");
+      if (fl_gmi) {
+        // We have GetMonitorInfoA, enumerate all the screens...
+//      EnumDisplayMonitors(0,0,screen_cb,0);
+//      (but we use our self-aquired function pointer instead)
+//      NOTE: num_screens is incremented in screen_cb so we must first reset it here...
+        num_screens = 0;
+        fl_edm(0, 0, screen_cb, 0);
+        return;
+      }
     }
   }
 
