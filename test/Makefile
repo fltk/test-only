@@ -27,8 +27,8 @@
 
 include ../makeinclude
 
-CPPFILES =\
-	unittests.cxx \
+CPPFILES = \
+	demo.cxx \
 	adjuster.cxx \
 	arc.cxx \
 	ask.cxx \
@@ -43,18 +43,17 @@ CPPFILES =\
 	colbrowser.cxx \
 	color_chooser.cxx \
 	cube.cxx \
-	CubeMain.cxx \
 	CubeView.cxx \
+	CubeMain.cxx \
 	cursor.cxx \
 	curve.cxx \
-	demo.cxx \
 	device.cxx \
 	doublebuffer.cxx \
 	editor.cxx \
-	fast_slow.cxx \
 	file_chooser.cxx \
 	fonts.cxx \
 	fractals.cxx \
+	fracviewer.cxx \
 	fullscreen.cxx \
 	gl_overlay.cxx \
 	glpuzzle.cxx \
@@ -62,7 +61,6 @@ CPPFILES =\
 	help.cxx \
 	iconize.cxx \
 	image.cxx \
-	inactive.cxx \
 	input.cxx \
 	input_choice.cxx \
 	keyboard.cxx \
@@ -73,18 +71,14 @@ CPPFILES =\
 	menubar.cxx \
 	message.cxx \
 	minimum.cxx \
-	native-filechooser.cxx \
 	navigation.cxx \
+	native-filechooser.cxx \
 	output.cxx \
 	overlay.cxx \
 	pack.cxx \
 	pixmap_browser.cxx \
 	pixmap.cxx \
-	preferences.cxx \
-	device.cxx \
-	radio.cxx \
 	resizebox.cxx \
-	resize.cxx \
 	rotated_text.cxx \
 	scroll.cxx \
 	shape.cxx \
@@ -92,12 +86,19 @@ CPPFILES =\
 	sudoku.cxx \
 	symbols.cxx \
 	table.cxx \
-	tabs.cxx \
 	threads.cxx \
 	tile.cxx \
 	tiled_image.cxx \
-	tree.cxx \
-	valuators.cxx \
+	unittests.cxx \
+	unittest_about.cxx \
+	unittest_circles.cxx \
+	unittest_images.cxx \
+	unittest_lines.cxx \
+	unittest_points.cxx \
+	unittest_rects.cxx \
+	unittest_scrollbarsize.cxx \
+	unittest_text.cxx \
+	unittest_viewport.cxx \
 	utf8.cxx
 
 ALL = \

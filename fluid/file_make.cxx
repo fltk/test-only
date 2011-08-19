@@ -2292,79 +2292,19 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   write_header(out, "Test/example program makefile for the Fast Light Tool Kit (FLTK).");
   fprintf(out, "include ../makeinclude\n");
   fprintf(out, "\n");
-  fprintf(out, "CPPFILES =\\\n");
-  fprintf(out, "\tunittests.cxx \\\n");
-  fprintf(out, "\tadjuster.cxx \\\n");
-  fprintf(out, "\tarc.cxx \\\n");
-  fprintf(out, "\task.cxx \\\n");
-  fprintf(out, "\tbitmap.cxx \\\n");
-  fprintf(out, "\tblocks.cxx \\\n");
-  fprintf(out, "\tboxtype.cxx \\\n");
-  fprintf(out, "\tbrowser.cxx \\\n");
-  fprintf(out, "\tbutton.cxx \\\n");
-  fprintf(out, "\tbuttons.cxx \\\n");
-  fprintf(out, "\tcheckers.cxx \\\n");
-  fprintf(out, "\tclock.cxx \\\n");
-  fprintf(out, "\tcolbrowser.cxx \\\n");
-  fprintf(out, "\tcolor_chooser.cxx \\\n");
-  fprintf(out, "\tcube.cxx \\\n");
-  fprintf(out, "\tCubeMain.cxx \\\n");
-  fprintf(out, "\tCubeView.cxx \\\n");
-  fprintf(out, "\tcursor.cxx \\\n");
-  fprintf(out, "\tcurve.cxx \\\n");
-  fprintf(out, "\tdemo.cxx \\\n");
-  fprintf(out, "\tdevice.cxx \\\n");
-  fprintf(out, "\tdoublebuffer.cxx \\\n");
-  fprintf(out, "\teditor.cxx \\\n");
-  fprintf(out, "\tfast_slow.cxx \\\n");
-  fprintf(out, "\tfile_chooser.cxx \\\n");
-  fprintf(out, "\tfonts.cxx \\\n");
-  fprintf(out, "\tfractals.cxx \\\n");
-  fprintf(out, "\tfullscreen.cxx \\\n");
-  fprintf(out, "\tgl_overlay.cxx \\\n");
-  fprintf(out, "\tglpuzzle.cxx \\\n");
-  fprintf(out, "\thello.cxx \\\n");
-  fprintf(out, "\thelp.cxx \\\n");
-  fprintf(out, "\ticonize.cxx \\\n");
-  fprintf(out, "\timage.cxx \\\n");
-  fprintf(out, "\tinactive.cxx \\\n");
-  fprintf(out, "\tinput.cxx \\\n");
-  fprintf(out, "\tinput_choice.cxx \\\n");
-  fprintf(out, "\tkeyboard.cxx \\\n");
-  fprintf(out, "\tlabel.cxx \\\n");
-  fprintf(out, "\tline_style.cxx \\\n");
-  fprintf(out, "\tlist_visuals.cxx \\\n");
-  fprintf(out, "\tmandelbrot.cxx \\\n");
-  fprintf(out, "\tmenubar.cxx \\\n");
-  fprintf(out, "\tmessage.cxx \\\n");
-  fprintf(out, "\tminimum.cxx \\\n");
-  fprintf(out, "\tnative-filechooser.cxx \\\n");
-  fprintf(out, "\tnavigation.cxx \\\n");
-  fprintf(out, "\toutput.cxx \\\n");
-  fprintf(out, "\toverlay.cxx \\\n");
-  fprintf(out, "\tpack.cxx \\\n");
-  fprintf(out, "\tpixmap_browser.cxx \\\n");
-  fprintf(out, "\tpixmap.cxx \\\n");
-  fprintf(out, "\tpreferences.cxx \\\n");
-  fprintf(out, "\tdevice.cxx \\\n");
-  fprintf(out, "\tradio.cxx \\\n");
-  fprintf(out, "\tresizebox.cxx \\\n");
-  fprintf(out, "\tresize.cxx \\\n");
-  fprintf(out, "\trotated_text.cxx \\\n");
-  fprintf(out, "\tscroll.cxx \\\n");
-  fprintf(out, "\tshape.cxx \\\n");
-  fprintf(out, "\tsubwindow.cxx \\\n");
-  fprintf(out, "\tsudoku.cxx \\\n");
-  fprintf(out, "\tsymbols.cxx \\\n");
-  fprintf(out, "\ttable.cxx \\\n");
-  fprintf(out, "\ttabs.cxx \\\n");
-  fprintf(out, "\tthreads.cxx \\\n");
-  fprintf(out, "\ttile.cxx \\\n");
-  fprintf(out, "\ttiled_image.cxx \\\n");
-  fprintf(out, "\ttree.cxx \\\n");
-  fprintf(out, "\tvaluators.cxx \\\n");
-  fprintf(out, "\tutf8.cxx\n");
-  fprintf(out, "\n");
+  
+  fprintf(out, "CPPFILES =");
+  for (tgt = first_target; tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->builds_in(FL_ENV_MAKE) && strcmp(tgt->makefile_path(), path)==0) {
+      for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+        if (file->file_is_code()) {
+          fprintf(out, " \\\n\t");
+          write_file(out, file, base_dir, tgt_base);
+        }
+      }
+    }
+  }
+  fprintf(out, "\n\n");
   
   fprintf(out, "ALL =");
   for (tgt = first_target; tgt; tgt = tgt->next_target(workspace)) {
@@ -2395,17 +2335,20 @@ static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "clean:\n");
   fprintf(out, "\t$(RM) $(ALL) $(GLALL) core\n");
   fprintf(out, "\t$(RM) *.o core.* *~ *.bck *.bak\n");
-  fprintf(out, "\t$(RM) CubeViewUI.cxx CubeViewUI.h\n");
-  fprintf(out, "\t$(RM) fast_slow.cxx fast_slow.h\n");
-  fprintf(out, "\t$(RM) inactive.cxx inactive.h\n");
-  fprintf(out, "\t$(RM) keyboard_ui.cxx keyboard_ui.h\n");
-  fprintf(out, "\t$(RM) mandelbrot_ui.cxx mandelbrot_ui.h\n");
-  fprintf(out, "\t$(RM) preferences.cxx preferences.h\n");
-  fprintf(out, "\t$(RM) radio.cxx radio.h\n");
-  fprintf(out, "\t$(RM) resize.cxx resize.h\n");
-  fprintf(out, "\t$(RM) tabs.cxx tabs.h\n");
-  fprintf(out, "\t$(RM) tree.cxx tree.h\n");
-  fprintf(out, "\t$(RM) valuators.cxx valuators.h\n");
+  // list all .fl based .cxx and .h files for removal
+  for (tgt = first_target; tgt; tgt = tgt->next_target(workspace)) {
+    if (tgt->builds_in(FL_ENV_MAKE) && strcmp(tgt->makefile_path(), path)==0) {
+      for (file = Fl_File_Type::first_file(tgt); file; file = file->next_file(tgt)) {
+        if (file->builds_in(FL_ENV_MAKE) && file->file_is_fluid_ui()) {
+          fprintf(out, "\t$(RM) ");
+          write_file(out, file, base_dir, tgt_base, ".cxx");
+          fprintf(out, " ");
+          write_file(out, file, base_dir, tgt_base, ".h");
+          fprintf(out, "\n");
+        }
+      }
+    }
+  }
   fprintf(out, "\t$(OSX_ONLY) $(RM) blocks.app/Contents/MacOS/blocks$(EXEEXT)\n");
   fprintf(out, "\t$(OSX_ONLY) $(RM) checkers.app/Contents/MacOS/checkers$(EXEEXT)\n");
   fprintf(out, "\t$(OSX_ONLY) $(RM) sudoku.app/Contents/MacOS/sudoku$(EXEEXT)\n");

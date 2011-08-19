@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -12,6 +12,7 @@ workspace FLTK {open
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
+  build_env 1
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -6124,7 +6125,7 @@ workspace FLTK {open
       target_path test
       makefile_path test
     } {
-      file_ref {unittests.h} {selected
+      file_ref {unittests.h} {
         uuid_Xcode4_BuildFileInSources {D7B3CC1A-179A-4010-87A5-840CEDC5B573}
         uuid_Xcode4_FileRef {C3BAFC16-1409-4C23-90F1-BADA0CED49BC}
         build_env 0
