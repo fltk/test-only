@@ -105,12 +105,13 @@ int		fltk3::damage_,
 		fltk3::e_y_root,
 		fltk3::e_dx,
 		fltk3::e_dy,
-		fltk3::e_state,
 		fltk3::e_clicks,
 		fltk3::e_is_click,
                 fltk3::e_original_keysym,
 		fltk3::scrollbar_size_ = 16;
 unsigned int fltk3::e_keysym;
+unsigned int fltk3::e_state;
+
 
 char		*fltk3::e_text = (char *)"";
 int		fltk3::e_length;

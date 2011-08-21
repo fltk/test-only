@@ -328,15 +328,21 @@ namespace fltk3 {
     /** Gets the size of the help view. */
     int		size() const { return (size_); }
     void		size(int W, int H) { Widget::size(W, H); }
-    /** Sets the default text color. */
+    /** Sets the default text color.
+     \todo this call overrides Widget::textcolor. That is bad!
+     */
     void		textcolor(fltk3::Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
     /** Returns the current default text color. */
     fltk3::Color	textcolor() const { return (defcolor_); }
-    /** Sets the default text font. */
+    /** Sets the default text font. 
+     \todo this call overrides Widget::textfont. That is bad!
+     */
     void		textfont(fltk3::Font f) { textfont_ = f; format(); }
     /** Returns the current default text font. */
     fltk3::Font       textfont() const { return (textfont_); }
-    /** Sets the default text size. */
+    /** Sets the default text size. 
+     \todo this call overrides Widget::textsize. That is bad!
+     */
     void		textsize(fltk3::Fontsize s) { textsize_ = s; format(); }
     /** Gets the default text size. */
     fltk3::Fontsize  textsize() const { return (textsize_); }

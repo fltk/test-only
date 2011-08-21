@@ -211,7 +211,7 @@ void fltk3::SysMenuBar::menu(const fltk3::MenuItem *m)
  *
  * @see fltk3::Menu_::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags) 
  */
-int fltk3::SysMenuBar::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
+int fltk3::SysMenuBar::add(const char* label, unsigned int shortcut, fltk3::Callback *cb, void *user_data, int flags)
 {
   fl_open_display();
   int rank = fltk3::Menu_::add(label, shortcut, cb, user_data, flags);
@@ -227,7 +227,7 @@ int fltk3::SysMenuBar::add(const char* label, int shortcut, fltk3::Callback *cb,
  *
  * @see fltk3::Menu_::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags) 
  */
-int fltk3::SysMenuBar::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
+int fltk3::SysMenuBar::insert(int index, const char* label, unsigned int shortcut, fltk3::Callback *cb, void *user_data, int flags)
 {
   fl_open_display();
   int rank = fltk3::Menu_::insert(index, label, shortcut, cb, user_data, flags);

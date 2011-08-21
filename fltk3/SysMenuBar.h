@@ -60,8 +60,8 @@ namespace fltk3 {
       fltk3::sys_menu_bar = this;
     }
     void menu(const fltk3::MenuItem *m);
-    int add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0);
-    int insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data=0, int flags=0);
+    int add(const char* label, unsigned int shortcut, fltk3::Callback*, void *user_data=0, int flags=0);
+    int insert(int index, const char* label, unsigned int shortcut, fltk3::Callback *cb, void *user_data=0, int flags=0);
     void remove(int n);
     void replace(int rank, const char *name);
     void clear();

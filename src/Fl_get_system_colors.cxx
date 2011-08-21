@@ -63,7 +63,7 @@ void fltk3::background(uchar r, uchar g, uchar b) {
   double powg = log(g/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
   if (!b) b = 1; else if (b==255) b = 254;
   double powb = log(b/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
-  for (int i = 0; i < fltk3::NUM_GRAY; i++) {
+  for (unsigned int i = 0; i < fltk3::NUM_GRAY; i++) {
     double gray = i/(fltk3::NUM_GRAY-1.0);
     fltk3::set_color(fltk3::gray_ramp(i),
 		  uchar(pow(gray,powr)*255+.5),

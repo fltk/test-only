@@ -239,7 +239,7 @@ static int innards(const char* fmt, va_list ap,
   if (enableHotspot)
     message_form->hotspot(button[0]);
   if (b0 && fltk3::Widget::label_shortcut(b0))
-    button[0]->shortcut(0);
+    button[0]->shortcut((unsigned)0);
   else
     button[0]->shortcut(fltk3::EscapeKey);
 

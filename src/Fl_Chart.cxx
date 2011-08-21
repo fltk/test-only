@@ -300,9 +300,9 @@ fltk3::Widget(X,Y,W,H,L) {
   sizenumb   = fltk3::CHART_MAX;
   autosize_  = 1;
   min = max  = 0;
-  textfont_  = fltk3::HELVETICA;
-  textsize_  = 10;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textfont(fltk3::HELVETICA);
+  textsize(10);
+  textcolor(fltk3::FOREGROUND_COLOR);
   entries    = (fltk3::CHART_ENTRY *)calloc(sizeof(fltk3::CHART_ENTRY), fltk3::CHART_MAX + 1);
 }
 

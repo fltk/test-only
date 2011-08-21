@@ -99,9 +99,9 @@ fltk3::ValueOutput::ValueOutput(int X, int Y, int W, int H,const char *l)
 : fltk3::Valuator(X,Y,W,H,l) {
   box(fltk3::NO_BOX);
   align(fltk3::ALIGN_LEFT);
-  textfont_ = fltk3::HELVETICA;
-  textsize_ = fltk3::NORMAL_SIZE;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textfont(fltk3::HELVETICA);
+  textsize(fltk3::NORMAL_SIZE);
+  textcolor(fltk3::FOREGROUND_COLOR);
   soft_ = 0;
 }
 

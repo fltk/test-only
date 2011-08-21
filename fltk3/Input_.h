@@ -142,19 +142,10 @@ namespace fltk3 {
     int maximum_size_;
     
     /** \internal Shortcut key that will fetch focus for this widget. */
-    int shortcut_;
+    unsigned int shortcut_;
     
     /** \internal This is set if no text but only the cursor needs updating. */
     uchar erase_cursor_only;
-    
-    /** \internal The font used for the entire text. */
-    fltk3::Font textfont_;
-    
-    /** \internal Height of the font used for the entire text. */
-    fltk3::Fontsize textsize_;
-    
-    /** \internal color of the entire text */
-    fltk3::Color textcolor_;
     
     /** \internal color of the text cursor */
     fltk3::Color cursor_color_;
@@ -378,7 +369,7 @@ namespace fltk3 {
     /** Return the shortcut key associated with this widget.
      \return shortcut keystroke
      \see fltk3::Button::shortcut() */
-    int shortcut() const {return shortcut_;}
+    unsigned int shortcut() const {return shortcut_;}
     
     /** 
      Sets the shortcut key associated with this widget.
@@ -386,36 +377,7 @@ namespace fltk3 {
      \param [in] s new shortcut keystroke 
      \see fltk3::Button::shortcut() 
      */
-    void shortcut(int s) {shortcut_ = s;}
-    
-    /** Gets the font of the text in the input field.
-     \return the current fltk3::Font index */
-    fltk3::Font textfont() const {return textfont_;}
-    
-    /** Sets the font of the text in the input field.
-     The text font defaults to \c fltk3::HELVETICA.
-     \param [in] s the new text font */
-    void textfont(fltk3::Font s) {textfont_ = s;}
-    
-    /** Gets the size of the text in the input field.
-     \return the text height in pixels */
-    fltk3::Fontsize textsize() const {return textsize_;}
-    
-    /** Sets the size of the text in the input field.
-     The text height defaults to \c fltk3::NORMAL_SIZE.
-     \param [in] s the new font height in pixel units */
-    void textsize(fltk3::Fontsize s) {textsize_ = s;}
-    
-    /** Gets the color of the text in the input field.
-     \return the text color
-     \see textcolor(fltk3::Color) */
-    fltk3::Color textcolor() const {return textcolor_;}
-    
-    /** Sets the color of the text in the input field.
-     The text color defaults to \c fltk3::FOREGROUND_COLOR.
-     \param [in] n new text color
-     \see textcolor() */
-    void textcolor(fltk3::Color n) {textcolor_ = n;}
+    void shortcut(unsigned int s) {shortcut_ = s;}
     
     /** Gets the color of the cursor.  
      \return the current cursor color */

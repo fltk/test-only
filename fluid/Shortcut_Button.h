@@ -29,7 +29,7 @@
 
 class Shortcut_Button : public fltk3::Button {
 public:
-  int svalue;
+  unsigned int svalue;
   int handle(int);
   void draw();
   Shortcut_Button(int X,int Y,int W,int H, const char* l = 0) :

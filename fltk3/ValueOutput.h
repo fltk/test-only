@@ -55,10 +55,7 @@ namespace fltk3 {
 
     friend class ::Fl_Value_Output;
 
-    fltk3::Font textfont_;
-    fltk3::Fontsize textsize_;
     uchar soft_;
-    fltk3::Color textcolor_;
     
   protected:
     void draw();
@@ -82,17 +79,6 @@ namespace fltk3 {
      */
     uchar soft() const {return soft_;}
     
-    /**    Gets the typeface of the text in the value box.  */
-    fltk3::Font textfont() const {return textfont_;}
-    /**    Sets the typeface of the text in the value box.  */
-    void textfont(fltk3::Font s) {textfont_ = s;}
-    /**    Gets the size of the text in the value box.  */
-    fltk3::Fontsize textsize() const {return textsize_;}
-    void textsize(fltk3::Fontsize s) {textsize_ = s;}
-    /**    Sets the color of the text in the value box.  */
-    fltk3::Color textcolor() const {return textcolor_;}
-    /**    Gets the color of the text in the value box.  */
-    void textcolor(fltk3::Color s) {textcolor_ = s;}
   };
   
 }

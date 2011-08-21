@@ -49,26 +49,11 @@ namespace fltk3 {
 
     friend class ::Fl_Value_Slider;
 
-    fltk3::Font textfont_;
-    fltk3::Fontsize textsize_;
-    fltk3::Color textcolor_;
   protected:
     void draw();
   public:
     int handle(int);
     ValueSlider(int x,int y,int w,int h, const char *l = 0);
-    /**    Gets the typeface of the text in the value box.  */
-    fltk3::Font textfont() const {return textfont_;}
-    /**    Sets the typeface of the text in the value box.  */
-    void textfont(fltk3::Font s) {textfont_ = s;}
-    /**    Gets the size of the text in the value box.  */
-    fltk3::Fontsize textsize() const {return textsize_;}
-    /**    Sets the size of the text in the value box.  */
-    void textsize(fltk3::Fontsize s) {textsize_ = s;}
-    /**    Gets the color of the text in the value box.  */
-    fltk3::Color textcolor() const {return textcolor_;}
-    /**    Sets the color of the text in the value box.  */
-    void textcolor(fltk3::Color s) {textcolor_ = s;}
   };
   
 }

@@ -58,12 +58,12 @@ namespace fltk3 {
 
   public:
     /** Key function binding callback type */
-    typedef int (*KeyFunc)(int key, fltk3::TextEditor* editor);
+    typedef int (*KeyFunc)(unsigned int key, fltk3::TextEditor* editor);
     
     /** Simple linked list associating a key/state to a function */
     struct KeyBinding {
-      int          key;		///< the key pressed
-      int          state;	///< the state of key modifiers
+      unsigned int key;		///< the key pressed
+      unsigned int state;	///< the state of key modifiers
       KeyFunc     function;	///< associated function
       KeyBinding* next;	///< next key binding in the list
     };
@@ -84,51 +84,51 @@ namespace fltk3 {
      */
     int insert_mode() { return insert_mode_; }
     
-    void add_key_binding(int key, int state, KeyFunc f, KeyBinding** list);
+    void add_key_binding(unsigned key, unsigned state, KeyFunc f, KeyBinding** list);
     /** Adds a key of state "state" with the function "function" */
-    void add_key_binding(int key, int state, KeyFunc f)
+    void add_key_binding(unsigned key, unsigned state, KeyFunc f)
     { add_key_binding(key, state, f, &key_bindings); }
-    void remove_key_binding(int key, int state, KeyBinding** list);
+    void remove_key_binding(unsigned key, unsigned state, KeyBinding** list);
     /** Removes the key binding associated with the key "key" of state "state". */
-    void remove_key_binding(int key, int state)
+    void remove_key_binding(unsigned key, unsigned state)
     { remove_key_binding(key, state, &key_bindings); }
     void remove_all_key_bindings(KeyBinding** list);
     /** Removes all of the key bindings associated with the text editor or list. */
     void remove_all_key_bindings() { remove_all_key_bindings(&key_bindings); }
     void add_default_key_bindings(KeyBinding** list);
-    KeyFunc bound_key_function(int key, int state, KeyBinding* list);
+    KeyFunc bound_key_function(unsigned int key, unsigned int state, KeyBinding* list);
     /**  Returns the function associated with a key binding. */
-    KeyFunc bound_key_function(int key, int state)
+    KeyFunc bound_key_function(unsigned int key, unsigned int state)
     { return bound_key_function(key, state, key_bindings); }
     /**  Sets the default key function for unassigned keys. */
     void default_key_function(KeyFunc f) { default_key_function_ = f; }
     
     // functions for the built in default bindings
-    static int kf_default(int c, fltk3::TextEditor* e);
-    static int kf_ignore(int c, fltk3::TextEditor* e);
-    static int kf_backspace(int c, fltk3::TextEditor* e);
-    static int kf_enter(int c, fltk3::TextEditor* e);
-    static int kf_move(int c, fltk3::TextEditor* e);
-    static int kf_shift_move(int c, fltk3::TextEditor* e);
-    static int kf_ctrl_move(int c, fltk3::TextEditor* e);
-    static int kf_c_s_move(int c, fltk3::TextEditor* e);
-    static int kf_meta_move(int c, fltk3::TextEditor* e);
-    static int kf_m_s_move(int c, fltk3::TextEditor* e);
-    static int kf_home(int, fltk3::TextEditor* e);
-    static int kf_end(int c, fltk3::TextEditor* e);
-    static int kf_left(int c, fltk3::TextEditor* e);
-    static int kf_up(int c, fltk3::TextEditor* e);
-    static int kf_right(int c, fltk3::TextEditor* e);
-    static int kf_down(int c, fltk3::TextEditor* e);
-    static int kf_page_up(int c, fltk3::TextEditor* e);
-    static int kf_page_down(int c, fltk3::TextEditor* e);
-    static int kf_insert(int c, fltk3::TextEditor* e);
-    static int kf_delete(int c, fltk3::TextEditor* e);
-    static int kf_copy(int c, fltk3::TextEditor* e);
-    static int kf_cut(int c, fltk3::TextEditor* e);
-    static int kf_paste(int c, fltk3::TextEditor* e);
-    static int kf_select_all(int c, fltk3::TextEditor* e);
-    static int kf_undo(int c, fltk3::TextEditor* e);
+    static int kf_default(unsigned int c, fltk3::TextEditor* e);
+    static int kf_ignore(unsigned int c, fltk3::TextEditor* e);
+    static int kf_backspace(unsigned int c, fltk3::TextEditor* e);
+    static int kf_enter(unsigned int c, fltk3::TextEditor* e);
+    static int kf_move(unsigned int c, fltk3::TextEditor* e);
+    static int kf_shift_move(unsigned int c, fltk3::TextEditor* e);
+    static int kf_ctrl_move(unsigned int c, fltk3::TextEditor* e);
+    static int kf_c_s_move(unsigned int c, fltk3::TextEditor* e);
+    static int kf_meta_move(unsigned int c, fltk3::TextEditor* e);
+    static int kf_m_s_move(unsigned int c, fltk3::TextEditor* e);
+    static int kf_home(unsigned int, fltk3::TextEditor* e);
+    static int kf_end(unsigned int c, fltk3::TextEditor* e);
+    static int kf_left(unsigned int c, fltk3::TextEditor* e);
+    static int kf_up(unsigned int c, fltk3::TextEditor* e);
+    static int kf_right(unsigned int c, fltk3::TextEditor* e);
+    static int kf_down(unsigned int c, fltk3::TextEditor* e);
+    static int kf_page_up(unsigned int c, fltk3::TextEditor* e);
+    static int kf_page_down(unsigned int c, fltk3::TextEditor* e);
+    static int kf_insert(unsigned int c, fltk3::TextEditor* e);
+    static int kf_delete(unsigned int c, fltk3::TextEditor* e);
+    static int kf_copy(unsigned int c, fltk3::TextEditor* e);
+    static int kf_cut(unsigned int c, fltk3::TextEditor* e);
+    static int kf_paste(unsigned int c, fltk3::TextEditor* e);
+    static int kf_select_all(unsigned int c, fltk3::TextEditor* e);
+    static int kf_undo(unsigned int c, fltk3::TextEditor* e);
     
   protected:
     int handle_key();

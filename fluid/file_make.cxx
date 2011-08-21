@@ -2286,7 +2286,7 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
 static int write_test_makefile(FILE *out, Fl_Workspace_Type *workspace, const char *path, const char *base_dir, const char *tgt_base, Fl_Target_Type *first_target) {
 
   Fl_Target_Type *tgt;
-  Fl_Target_Dependency_Type * dep;
+  //Fl_Target_Dependency_Type * dep;
   Fl_File_Type *file;
   
   write_header(out, "Test/example program makefile for the Fast Light Tool Kit (FLTK).");

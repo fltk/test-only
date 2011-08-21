@@ -75,9 +75,6 @@ namespace fltk3 {
     int offset_;		// how far down top_ item the real_position is
     int max_width;	// widest object seen so far
     uchar has_scrollbar_;	// which scrollbars are enabled
-    fltk3::Font textfont_;
-    fltk3::Fontsize textsize_;
-    fltk3::Color textcolor_;
     void* top_;		// which item scrolling position is in
     void* selection_;	// which is selected (except for fltk3::MULTI_BROWSER)
     void *redraw1,*redraw2; // minimal update pointers
@@ -277,34 +274,6 @@ namespace fltk3 {
      - fltk3::Browser_::BOTH_ALWAYS - Both always on.
      */
     void has_scrollbar(uchar mode) { has_scrollbar_ = mode; }
-    
-    /**
-     Gets the default text font for the lines in the browser.
-     \see textfont(), textsize(), textcolor()
-     */
-    fltk3::Font textfont() const { return textfont_; }
-    /**
-     Sets the default text font for the lines in the browser to \p font.
-     */
-    void textfont(fltk3::Font font) { textfont_ = font; }
-    
-    /**
-     Gets the default text size (in pixels) for the lines in the browser.
-     */
-    fltk3::Fontsize textsize() const { return textsize_; }
-    /**
-     Sets the default text size (in pixels) for the lines in the browser to \p size.
-     */
-    void textsize(fltk3::Fontsize size) { textsize_ = size; }
-    
-    /**
-     Gets the default text color for the lines in the browser.
-     */
-    fltk3::Color textcolor() const { return textcolor_; }
-    /**
-     Sets the default text color for the lines in the browser to color \p col.
-     */
-    void textcolor(fltk3::Color col) { textcolor_ = col; }
     
     /**
      Gets the current size of the scrollbars' troughs, in pixels.

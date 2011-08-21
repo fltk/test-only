@@ -592,7 +592,7 @@ int Shortcut_Button::handle(int e) {
   when(0); type(fltk3::TOGGLE_BUTTON);
   if (e == fltk3::KEYBOARD) {
     if (!value()) return 0;
-    int v = fltk3::event_text()[0];
+    unsigned v = fltk3::event_text()[0];
     if ( (v > 32 && v < 0x7f) || (v > 0xa0 && v <= 0xff) ) {
       if (isupper(v)) {
         v = tolower(v);

@@ -180,7 +180,7 @@ void fltk3::TextEditor::add_default_key_bindings(KeyBinding** list) {
 }
 
 /**  Returns the function associated with a key binding.*/
-fltk3::TextEditor::KeyFunc fltk3::TextEditor::bound_key_function(int key, int state, KeyBinding* list) {
+fltk3::TextEditor::KeyFunc fltk3::TextEditor::bound_key_function(unsigned int key, unsigned int state, KeyBinding* list) {
   KeyBinding* cur;
   for (cur = list; cur; cur = cur->next)
     if (cur->key == key)
@@ -201,7 +201,7 @@ void fltk3::TextEditor::remove_all_key_bindings(KeyBinding** list) {
 }
 
 /** Removes the key binding associated with the key "key" of state "state" */
-void fltk3::TextEditor::remove_key_binding(int key, int state, KeyBinding** list) {
+void fltk3::TextEditor::remove_key_binding(unsigned int key, unsigned int state, KeyBinding** list) {
   KeyBinding *cur, *last = 0;
   for (cur = *list; cur; last = cur, cur = cur->next)
     if (cur->key == key && cur->state == state) break;
@@ -211,7 +211,7 @@ void fltk3::TextEditor::remove_key_binding(int key, int state, KeyBinding** list
   delete cur;
 }
 /** Adds a key of state "state" with the function "function" */
-void fltk3::TextEditor::add_key_binding(int key, int state, KeyFunc function,
+void fltk3::TextEditor::add_key_binding(unsigned key, unsigned state, KeyFunc function,
                                 KeyBinding** list) {
   KeyBinding* kb = new KeyBinding;
   kb->key = key;
@@ -231,7 +231,7 @@ static void kill_selection(fltk3::TextEditor* e) {
 }
 
 /** Inserts the text associated with the key */
-int fltk3::TextEditor::kf_default(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_default(unsigned c, fltk3::TextEditor* e) {
   // FIXME: this function is a mess! Fix this!
   if (!c || (!isprint(c) && c != '\t')) return 0;
   char s[2] = "\0";
@@ -246,11 +246,11 @@ int fltk3::TextEditor::kf_default(int c, fltk3::TextEditor* e) {
 }
 
 /** Ignores the keypress */
-int fltk3::TextEditor::kf_ignore(int, fltk3::TextEditor*) {
+int fltk3::TextEditor::kf_ignore(unsigned, fltk3::TextEditor*) {
   return 0; // don't handle
 }
 /**  Does a backspace in the current buffer.*/
-int fltk3::TextEditor::kf_backspace(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_backspace(unsigned, fltk3::TextEditor* e) {
   if (!e->buffer()->selected() && e->move_left()) {
     int p1 = e->insert_position();
     int p2 = e->buffer()->next_char(p1);
@@ -264,7 +264,7 @@ int fltk3::TextEditor::kf_backspace(int, fltk3::TextEditor* e) {
 }
 
 /** Inserts a newline at the current cursor position */
-int fltk3::TextEditor::kf_enter(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_enter(unsigned, fltk3::TextEditor* e) {
   kill_selection(e);
   e->insert("\n");
   e->show_insert_position();
@@ -278,7 +278,7 @@ namespace fltk3 {
 }
 
 /**  Moves the text cursor in the direction indicated by key c.*/
-int fltk3::TextEditor::kf_move(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_move(unsigned c, fltk3::TextEditor* e) {
   int i;
   int selected = e->buffer()->selected();
   if (!selected)
@@ -316,7 +316,7 @@ int fltk3::TextEditor::kf_move(int c, fltk3::TextEditor* e) {
 }
 
 /**  Extends the current selection in the direction of key c.*/
-int fltk3::TextEditor::kf_shift_move(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_shift_move(unsigned c, fltk3::TextEditor* e) {
   kf_move(c, e);
   fltk3::text_drag_me(e->insert_position(), e);
   char *copy = e->buffer()->selection_text();
@@ -327,7 +327,7 @@ int fltk3::TextEditor::kf_shift_move(int c, fltk3::TextEditor* e) {
   return 1;
 }
 /** Moves the current text cursor in the direction indicated by control key */
-int fltk3::TextEditor::kf_ctrl_move(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_ctrl_move(unsigned c, fltk3::TextEditor* e) {
   if (!e->buffer()->selected())
     e->dragPos = e->insert_position();
   if (c != fltk3::UpKey && c != fltk3::DownKey) {
@@ -367,7 +367,7 @@ int fltk3::TextEditor::kf_ctrl_move(int c, fltk3::TextEditor* e) {
 }
 
 /** Moves the current text cursor in the direction indicated by meta key */
-int fltk3::TextEditor::kf_meta_move(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_meta_move(unsigned c, fltk3::TextEditor* e) {
   if (!e->buffer()->selected())
     e->dragPos = e->insert_position();
   if (c != fltk3::UpKey && c != fltk3::DownKey) {
@@ -395,65 +395,65 @@ int fltk3::TextEditor::kf_meta_move(int c, fltk3::TextEditor* e) {
 }
 
 /** Extends the current selection in the direction indicated by meta key c. */
-int fltk3::TextEditor::kf_m_s_move(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_m_s_move(unsigned c, fltk3::TextEditor* e) {
   kf_meta_move(c, e);
   fltk3::text_drag_me(e->insert_position(), e);
   return 1;
 }
 
 /** Extends the current selection in the direction indicated by control key c. */
-int fltk3::TextEditor::kf_c_s_move(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_c_s_move(unsigned c, fltk3::TextEditor* e) {
   kf_ctrl_move(c, e);
   fltk3::text_drag_me(e->insert_position(), e);
   return 1;
 }
 
 /**  Moves the text cursor to the beginning of the current line.*/
-int fltk3::TextEditor::kf_home(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_home(unsigned int, fltk3::TextEditor* e) {
     return kf_move(fltk3::HomeKey, e);
 }
 
 /**  Moves the text cursor to the end of the current line.*/
-int fltk3::TextEditor::kf_end(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_end(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::EndKey, e);
 }
 
 /**  Moves the text cursor one character to the left.*/
-int fltk3::TextEditor::kf_left(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_left(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::LeftKey, e);
 }
 
 /**  Moves the text cursor one line up.*/
-int fltk3::TextEditor::kf_up(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_up(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::UpKey, e);
 }
 
 /**  Moves the text cursor one character to the right.*/
-int fltk3::TextEditor::kf_right(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_right(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::RightKey, e);
 }
 /**  Moves the text cursor one line down.*/
-int fltk3::TextEditor::kf_down(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_down(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::DownKey, e);
 }
 
 /**  Moves the text cursor up one page.*/
-int fltk3::TextEditor::kf_page_up(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_page_up(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::PageUpKey, e);
 }
 
 /**  Moves the text cursor down one page.*/
-int fltk3::TextEditor::kf_page_down(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_page_down(unsigned int, fltk3::TextEditor* e) {
   return kf_move(fltk3::PageDownKey, e);
 }
 /**  Toggles the insert mode in the text editor.*/
-int fltk3::TextEditor::kf_insert(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_insert(unsigned int, fltk3::TextEditor* e) {
   e->insert_mode(e->insert_mode() ? 0 : 1);
   return 1;
 }
 
 /**  Does a delete of selected text or the current character in the current buffer.*/
-int fltk3::TextEditor::kf_delete(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_delete(unsigned int, fltk3::TextEditor* e) {
   if (!e->buffer()->selected()) {
     int p1 = e->insert_position();
     int p2 = e->buffer()->next_char(p1);
@@ -468,7 +468,7 @@ int fltk3::TextEditor::kf_delete(int, fltk3::TextEditor* e) {
 }
 
 /**  Does a copy of selected text or the current character in the current buffer.*/
-int fltk3::TextEditor::kf_copy(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_copy(unsigned int, fltk3::TextEditor* e) {
   if (!e->buffer()->selected()) return 1;
   const char *copy = e->buffer()->selection_text();
   if (*copy) fltk3::copy(copy, strlen(copy), 1);
@@ -478,7 +478,7 @@ int fltk3::TextEditor::kf_copy(int, fltk3::TextEditor* e) {
 }
 
 /**  Does a cut of selected text in the current buffer.*/
-int fltk3::TextEditor::kf_cut(int c, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_cut(unsigned int c, fltk3::TextEditor* e) {
   kf_copy(c, e);
   kill_selection(e);
   e->set_changed();
@@ -487,7 +487,7 @@ int fltk3::TextEditor::kf_cut(int c, fltk3::TextEditor* e) {
 }
 
 /**  Does a paste of selected text in the current buffer.*/
-int fltk3::TextEditor::kf_paste(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_paste(unsigned int, fltk3::TextEditor* e) {
   kill_selection(e);
   fltk3::paste(*e, 1);
   e->show_insert_position();
@@ -497,7 +497,7 @@ int fltk3::TextEditor::kf_paste(int, fltk3::TextEditor* e) {
 }
 
 /**  Selects all text in the current buffer.*/
-int fltk3::TextEditor::kf_select_all(int, fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_select_all(unsigned int, fltk3::TextEditor* e) {
   e->buffer()->select(0, e->buffer()->length());
   const char *copy = e->buffer()->selection_text();
   if (*copy) fltk3::copy(copy, strlen(copy), 0);
@@ -505,7 +505,7 @@ int fltk3::TextEditor::kf_select_all(int, fltk3::TextEditor* e) {
   return 1;
 }
 /**  Undo last edit in the current buffer. Also deselect previous selection. */
-int fltk3::TextEditor::kf_undo(int , fltk3::TextEditor* e) {
+int fltk3::TextEditor::kf_undo(unsigned int , fltk3::TextEditor* e) {
   e->buffer()->unselect();
   fltk3::copy("", 0, 0);
   int crsr;

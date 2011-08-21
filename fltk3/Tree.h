@@ -223,7 +223,7 @@ namespace fltk3 {
       callback_item(item);
       do_callback((fltk3::Widget*)this, user_data());
     }
-    fltk3::TreeItem *next_visible_item(fltk3::TreeItem *start, int dir);
+    fltk3::TreeItem *next_visible_item(fltk3::TreeItem *start, unsigned int dir);
     
   public:
     Tree(int X, int Y, int W, int H, const char *L=0);

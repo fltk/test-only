@@ -815,7 +815,7 @@ unsigned fltk3::utf8to_mb(const char* src, unsigned srclen,
     wchar_t lbuf[1024];
     wchar_t* buf = lbuf;
     unsigned length = fltk3::utf8towc(src, srclen, buf, 1024);
-    int ret;
+    unsigned ret;
     if (length >= 1024) {
       buf = (wchar_t*)(malloc((length+1)*sizeof(wchar_t)));
       fltk3::utf8towc(src, srclen, buf, length+1);

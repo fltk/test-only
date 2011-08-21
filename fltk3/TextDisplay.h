@@ -240,50 +240,30 @@ public:
    have no effects as shortcut_ is unused in this class and derived! 
    \return the current shortcut key
    */
-  int shortcut() const {return shortcut_;}
+  unsigned int shortcut() const {return shortcut_;}
   
   /**
    \todo FIXME : get set methods pointing on shortcut_ 
    have no effects as shortcut_ is unused in this class and derived! 
    \param s the new shortcut key
    */
-  void shortcut(int s) {shortcut_ = s;}
-  
-  /**
-   Gets the default font used when drawing text in the widget.
-   \return current text font face unless overridden by a style
-   */
-  fltk3::Font textfont() const {return textfont_;}
+  void shortcut(unsigned int s) {shortcut_ = s;}
   
   /**
    Sets the default font used when drawing text in the widget.
    \param s default text font face
+   \todo textfont is a method of Widget and should not have this side effect
    */
-  void textfont(fltk3::Font s) {textfont_ = s; mColumnScale = 0;}
-  
-  /**
-   Gets the default size of text in the widget.
-   \return current text height unless overridden by a style
-   */
-  fltk3::Fontsize textsize() const {return textsize_;}
+  void textfont(fltk3::Font s) {Widget::textfont(s); mColumnScale = 0;}
   
   /**
    Sets the default size of text in the widget.
    \param s new text size
+   \todo textsize is a method of Widget and should not have this side effect
    */
-  void textsize(fltk3::Fontsize s) {textsize_ = s; mColumnScale = 0;}
-  
-  /**
-   Gets the default color of text in the widget.
-   \return text color unless overridden by a style
-   */
-  fltk3::Color textcolor() const {return textcolor_;}
-  
-  /**
-   Sets the default color of text in the widget.
-   \param n new text color
-   */
-  void textcolor(fltk3::Color n) {textcolor_ = n;}
+  void textsize(fltk3::Fontsize s) {Widget::textsize(s); mColumnScale = 0;}
+  fltk3::Font textfont() const {return Widget::textfont();}
+  fltk3::Fontsize textsize() const {return Widget::textsize();}
   
   int wrapped_column(int row, int column) const;
   int wrapped_row(int row) const;
@@ -467,11 +447,7 @@ protected:
   int display_insert_position_hint;
   struct { int x, y, w, h; } text_area;
   
-  int shortcut_;
-  
-  fltk3::Font textfont_;
-  fltk3::Fontsize textsize_;
-  fltk3::Color textcolor_;
+  unsigned int shortcut_;
   
   // The following are not presently used from the original NEdit code,
   // but are being put here so that future versions of fltk3::TextDisplay

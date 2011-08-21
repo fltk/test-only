@@ -151,7 +151,7 @@ int fltk3::GlutWindow::handle(int event) {
       break;
     } else {
       if (special) {
-	int k = fltk3::event_key();
+	unsigned k = fltk3::event_key();
 	if (k > fltk3::FKey && k <= fltk3::FLastKey) k -= fltk3::FKey;
 	special(k,ex,ey);
 	return 1;

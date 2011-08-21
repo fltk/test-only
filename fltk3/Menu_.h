@@ -56,9 +56,6 @@ namespace fltk3 {
     
     uchar alloc;			// flag indicates if menu_ is a dynamic copy (=1) or not (=0)
     uchar down_box_;
-    fltk3::Font textfont_;
-    fltk3::Fontsize textsize_;
-    fltk3::Color textcolor_;
     
   public:
     Menu_(int,int,int,int,const char * =0);
@@ -93,13 +90,13 @@ namespace fltk3 {
     const fltk3::MenuItem *menu() const {return menu_;}
     void menu(const fltk3::MenuItem *m);
     void copy(const fltk3::MenuItem *m, void* user_data = 0);
-    int insert(int index, const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
-    int  add(const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
-    /** See int fltk3::Menu_::add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
+    int insert(int index, const char*, unsigned int shortcut, fltk3::Callback*, void* = 0, int = 0);
+    int  add(const char*, unsigned int shortcut, fltk3::Callback*, void* = 0, int = 0);
+    /** See int fltk3::Menu_::add(const char* label, unsigned int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
     int  add(const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
       return add(a,fltk3::old_shortcut(b),c,d,e);
     }
-    /** See int fltk3::Menu_::insert(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
+    /** See int fltk3::Menu_::insert(const char* label, unsigned int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
     int insert(int index, const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
       return insert(index,a,fltk3::old_shortcut(b),c,d,e);
     }
@@ -111,7 +108,7 @@ namespace fltk3 {
     void replace(int,const char *);
     void remove(int);
     /** Changes the shortcut of item i to n.  */
-    void shortcut(int i, int s) {menu_[i].shortcut(s);}
+    void shortcut(int i, unsigned int s) {menu_[i].shortcut(s);}
     /** Sets the flags of item i.  For a list of the flags, see fltk3::MenuItem.  */
     void mode(int i,int fl) {menu_[i].flags = fl;}
     /** Gets the flags of item i.  For a list of the flags, see fltk3::MenuItem.  */
@@ -133,19 +130,6 @@ namespace fltk3 {
     const char *text() const {return value_ ? value_->text : 0;}
     /** Returns the title of item i.  */
     const char *text(int i) const {return menu_[i].text;}
-    
-    /** Gets the current font of menu item labels.  */
-    fltk3::Font textfont() const {return textfont_;}
-    /**  Sets the current font of menu item labels.  */
-    void textfont(fltk3::Font c) {textfont_=c;}
-    /**  Gets the font size of menu item labels.  */
-    fltk3::Fontsize textsize() const {return textsize_;}
-    /**  Sets the font size of menu item labels.  */
-    void textsize(fltk3::Fontsize c) {textsize_=c;}
-    /** Get the current color of menu item labels.  */
-    fltk3::Color textcolor() const {return textcolor_;}
-    /** Sets the current color of menu item labels. */
-    void textcolor(fltk3::Color c) {textcolor_=c;}
     
     /**
      This box type is used to surround the currently-selected items in the

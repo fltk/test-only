@@ -2223,7 +2223,7 @@ void Fl_Widget_Type::write_widget_code() {
     write_c("%s%s->box(fltk3::%s);\n", indent(), var, boxname(o->box()));
 
   // write shortcut command if needed
-  int shortcut = 0;
+  unsigned int shortcut = 0;
   if (is_button()) shortcut = ((fltk3::Button*)o)->shortcut();
   else if (is_input()) shortcut = ((fltk3::Input_*)o)->shortcut();
   else if (is_value_input()) shortcut = ((fltk3::ValueInput*)o)->shortcut();
@@ -2612,7 +2612,7 @@ char Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"class")) {
     subclass(read_word());
   } else if (!strcmp(c,"shortcut")) {
-    int shortcut = strtol(read_word(),0,0);
+    unsigned int shortcut = strtol(read_word(),0,0);
     if (is_button()) ((fltk3::Button*)o)->shortcut(shortcut);
     else if (is_input()) ((fltk3::Input_*)o)->shortcut(shortcut);
     else if (is_value_input()) ((fltk3::ValueInput*)o)->shortcut(shortcut);

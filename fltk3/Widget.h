@@ -86,6 +86,12 @@ namespace fltk3 {
     fltk3::Fontsize size;
     /** text color */
     fltk3::Color color;
+    /** \internal The font used for the entire text. */
+    fltk3::Font textfont_;
+    /** \internal Height of the font used for the entire text. */
+    fltk3::Fontsize textsize_;
+    /** \internal color of the entire text */
+    fltk3::Color textcolor_;
     /** alignment of label */
     fltk3::Align align_;
     /** type of label. \see fltk3::Labeltype */
@@ -964,7 +970,37 @@ namespace fltk3 {
      \deprecated Use selection_color(unsigned) instead.
      */
     void color2(unsigned a) {color2_ = a;}
-  };
+
+    /** Gets the font of the text in the input field.
+     \return the current fltk3::Font index */
+    fltk3::Font textfont() const {return label_.textfont_;}
+    
+    /** Sets the font of the text in the input field.
+     The text font defaults to \c fltk3::HELVETICA.
+     \param [in] s the new text font */
+    void textfont(fltk3::Font s) {label_.textfont_ = s;}
+    
+    /** Gets the size of the text in the input field.
+     \return the text height in pixels */
+    fltk3::Fontsize textsize() const {return label_.textsize_;}
+    
+    /** Sets the size of the text in the input field.
+     The text height defaults to \c fltk3::NORMAL_SIZE.
+     \param [in] s the new font height in pixel units */
+    void textsize(fltk3::Fontsize s) {label_.textsize_ = s;}
+    
+    /** Gets the color of the text in the input field.
+     \return the text color
+     \see textcolor(fltk3::Color) */
+    fltk3::Color textcolor() const {return label_.textcolor_;}
+    
+    /** Sets the color of the text in the input field.
+     The text color defaults to \c fltk3::FOREGROUND_COLOR.
+     \param [in] n new text color
+     \see textcolor() */
+    void textcolor(fltk3::Color n) {label_.textcolor_ = n;}
+    
+};
   
   
   /**

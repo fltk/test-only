@@ -86,9 +86,6 @@ namespace fltk3 {
     fltk3::CHART_ENTRY *entries;
     double min,max;
     uchar autosize_;
-    fltk3::Font textfont_;
-    fltk3::Fontsize textsize_;
-    fltk3::Color textcolor_;
   protected:
     void draw();
   public:
@@ -125,21 +122,6 @@ namespace fltk3 {
     int maxsize() const {return maxnumb;}
     
     void maxsize(int m);
-    
-    /** Gets the chart's text font */
-    fltk3::Font textfont() const {return textfont_;}
-    /** Sets the chart's text font to \p s. */
-    void textfont(fltk3::Font s) {textfont_ = s;}
-    
-    /** Gets the chart's text size */
-    fltk3::Fontsize textsize() const {return textsize_;}
-    /** gets the chart's text size to \p s. */
-    void textsize(fltk3::Fontsize s) {textsize_ = s;}
-    
-    /** Gets the chart's text color */
-    fltk3::Color textcolor() const {return textcolor_;}
-    /** gets the chart's text color to \p n. */
-    void textcolor(fltk3::Color n) {textcolor_ = n;}
     
     /**
      Get whether the chart will automatically adjust the bounds of the chart.

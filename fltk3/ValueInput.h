@@ -100,7 +100,7 @@ namespace fltk3 {
      Returns the current shortcut key for the Input.
      \see fltk3::ValueInput::shortcut(int) 
      */
-    int shortcut() const {return input.shortcut();}
+    unsigned int shortcut() const {return input.shortcut();}
     /** 
      Sets the shortcut key to \p s. Setting this
      overrides the use of '&' in the label().  The value is a bitwise
@@ -118,7 +118,7 @@ namespace fltk3 {
      the shift flags (zero for the other bits indicates a "don't care"
      setting).
      */
-    void shortcut(int s) {input.shortcut(s);}
+    void shortcut(unsigned int s) {input.shortcut(s);}
     
     /** Gets the typeface of the text in the value box.  */
     fltk3::Font textfont() const {return input.textfont();}

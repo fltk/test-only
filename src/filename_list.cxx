@@ -140,7 +140,7 @@ int fltk3::filename_list(const char *d, dirent ***list,
   for (i=0; i<n; i++) {
     int newlen;
     dirent *de = (*list)[i];
-    int len = strlen(de->d_name);
+    unsigned int len = strlen(de->d_name);
 #ifdef __APPLE__
     newlen = len;
 #else

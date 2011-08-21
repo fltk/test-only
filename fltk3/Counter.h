@@ -61,9 +61,6 @@ namespace fltk3 {
 
     friend class ::Fl_Counter;
     
-    fltk3::Font textfont_;
-    fltk3::Fontsize textsize_;
-    fltk3::Color textcolor_;
     double lstep_;
     uchar mouseobj;
     static void repeat_callback(void *);
@@ -103,23 +100,7 @@ namespace fltk3 {
     /**
      Returns the increment for normal step buttons.
      */
-    double step() const {return Valuator::step();}
-    
-    /** Gets the text font */
-    fltk3::Font textfont() const {return textfont_;}
-    /** Sets the text font to \p s */
-    void textfont(fltk3::Font s) {textfont_ = s;}
-    
-    /** Gets the font size */
-    fltk3::Fontsize textsize() const {return textsize_;}
-    /** Sets the font size to \p s */
-    void textsize(fltk3::Fontsize s) {textsize_ = s;}
-    
-    /** Gets the font color */
-    fltk3::Color textcolor() const {return textcolor_;}
-    /** Sets the font color to \p s */
-    void textcolor(fltk3::Color s) {textcolor_ = s;}
-    
+    double step() const {return Valuator::step();}    
   };
   
 }

@@ -120,7 +120,7 @@ namespace fltk3 {
    */
   struct FLTK3_EXPORT MenuItem {
     const char *text;	    ///< menu item text, returned by label()
-    int shortcut_;	    ///< menu item shortcut
+    unsigned int shortcut_;	    ///< menu item shortcut
     fltk3::Callback *callback_;   ///< menu item callback
     void *user_data_;	    ///< menu item user_data for the menu's callback
     int flags;		    ///< menu item flags like fltk3::MENU_TOGGLE, fltk3::MENU_RADIO
@@ -279,7 +279,7 @@ namespace fltk3 {
     void argument(long v) {user_data_ = (void*)v;}
     
     /** Gets what key combination shortcut will trigger the menu item. */
-    int shortcut() const {return shortcut_;}
+    unsigned int shortcut() const {return shortcut_;}
     
     /**
      Sets exactly what key combination will trigger the menu item.  The
@@ -296,7 +296,7 @@ namespace fltk3 {
      and Shift must be off if they are not in the shift flags (zero for the 
      other bits indicates a "don't care" setting).
      */
-    void shortcut(int s) {shortcut_ = s;}
+    void shortcut(unsigned int s) {shortcut_ = s;}
     /**
      Returns true if either fltk3::SUBMENU or fltk3::SUBMENU_POINTER
      is on in the flags. fltk3::SUBMENU indicates an embedded submenu
@@ -414,9 +414,9 @@ namespace fltk3 {
     void uncheck() {flags &= ~MENU_VALUE;}
     
     int insert(int,const char*,int,fltk3::Callback*,void* =0, int =0);
-    int add(const char*, int shortcut, fltk3::Callback*, void* =0, int = 0);
+    int add(const char*, unsigned int shortcut, fltk3::Callback*, void* =0, int = 0);
     
-    /** See int add(const char*, int shortcut, fltk3::Callback*, void*, int) */
+    /** See int add(const char*, unsigned int shortcut, fltk3::Callback*, void*, int) */
     int add(const char*a, const char* b, fltk3::Callback* c,
             void* d = 0, int e = 0) {
       return add(a,fltk3::old_shortcut(b),c,d,e);}

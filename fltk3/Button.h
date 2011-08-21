@@ -88,7 +88,7 @@ namespace fltk3 {
     
     friend class ::Fl_Button;
     
-    int shortcut_;
+    unsigned int shortcut_;
     char value_;
     char oldval;
     uchar down_box_;
@@ -132,7 +132,7 @@ namespace fltk3 {
      Returns the current shortcut key for the button.
      \retval int
      */
-    int shortcut() const {return shortcut_;}
+    unsigned int shortcut() const {return shortcut_;}
     
     /**
      Sets the shortcut key to \c s.
@@ -153,7 +153,7 @@ namespace fltk3 {
      bits indicates a "don't care" setting).
      \param[in] s bitwise OR of key and shift flags
      */
-    void shortcut(int s) {shortcut_ = s;}
+    void shortcut(unsigned int s) {shortcut_ = s;}
     
     /**
      Returns the current down box type, which is drawn when value() is non-zero.

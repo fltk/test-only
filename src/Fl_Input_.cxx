@@ -1060,9 +1060,9 @@ fltk3::Input_::Input_(int X, int Y, int W, int H, const char* l)
   box(fltk3::DOWN_BOX);
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   align(fltk3::ALIGN_LEFT);
-  textsize_ = fltk3::NORMAL_SIZE;
-  textfont_ = fltk3::HELVETICA;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textsize(fltk3::NORMAL_SIZE);
+  textfont(fltk3::HELVETICA);
+  textcolor(fltk3::FOREGROUND_COLOR);
   cursor_color_ = fltk3::FOREGROUND_COLOR; // was fltk3::BLUE
   mark_ = position_ = size_ = 0;
   bufsize = 0;

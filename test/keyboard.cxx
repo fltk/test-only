@@ -65,7 +65,7 @@ int MyWindow::handle(int msg) {
   return 0;
 }
 
-struct keycode_table{int n; const char* text;} table[] = {
+struct keycode_table{unsigned n; const char* text;} table[] = {
   {fltk3::EscapeKey,      "fltk3::EscapeKey"},
   {fltk3::BackSpaceKey,   "fltk3::BackSpaceKey"},
   {fltk3::TabKey,         "fltk3::TabKey"},

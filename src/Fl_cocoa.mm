@@ -1688,8 +1688,8 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   // First let's process the raw key press
   cocoaKeyboardHandler(theEvent);
 
-  int no_text_key = false;
-  static const int notext[] = { // keys that don't emit text
+  unsigned int no_text_key = false;
+  static const unsigned int notext[] = { // keys that don't emit text
     fltk3::BackSpaceKey, fltk3::PrintKey, fltk3::ScrollLockKey, fltk3::PauseKey,
     fltk3::InsertKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::EndKey, fltk3::PageDownKey,
     fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey, fltk3::DownKey, 
@@ -3035,7 +3035,7 @@ static void createAppleMenu(void)
 }
 @end
 
-void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut) 
+void fl_mac_set_about( fltk3::Callback *cb, void *user_data, unsigned int shortcut) 
 {
   fl_open_display();
   fltk3::MenuItem aboutItem;

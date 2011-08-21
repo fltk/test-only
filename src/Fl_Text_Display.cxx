@@ -459,7 +459,7 @@ void fltk3::TextDisplay::draw_text( int left, int top, int width, int height ) {
   int fontHeight, firstLine, lastLine, line;
   
   /* find the line number range of the display */
-  fontHeight = mMaxsize ? mMaxsize : textsize_;
+  fontHeight = mMaxsize ? mMaxsize : textsize();
   firstLine = ( top - text_area.y - fontHeight + 1 ) / fontHeight;
   lastLine = ( top + height - text_area.y ) / fontHeight + 1;
   
@@ -2637,7 +2637,7 @@ void fltk3::TextDisplay::draw_line_numbers(bool /*clearAll*/) {
 #if 0
   int y, line, visLine, nCols, lineStart;
   char lineNumString[12];
-  int lineHeight = mMaxsize ? mMaxsize : textsize_;
+  int lineHeight = mMaxsize ? mMaxsize : textsize();
   int charWidth = TMPFONTWIDTH;   //mFontStruct->max_bounds.width;
   
   /* Don't draw if mLineNumWidth == 0 (line numbers are hidden), or widget is

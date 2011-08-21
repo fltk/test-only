@@ -122,7 +122,7 @@ namespace fltk3 {
   extern int e_y_root;
   extern int e_dx;
   extern int e_dy;
-  extern int e_state;
+  extern unsigned int e_state;
   extern int e_clicks;
   extern int e_is_click;
   extern unsigned int e_keysym;
@@ -588,9 +588,9 @@ namespace fltk3 {
    so that the shift state is not correctly reported until the first event
    <I>after</I> the shift key is pressed or released.
    */
-  inline int event_state()	{return e_state;}
+  inline unsigned event_state()	{return e_state;}
   /** See int event_state() */
-  inline int event_state(int i) {return e_state&i;}
+  inline unsigned event_state(unsigned i) {return e_state&i;}
   /**
    Gets which key on the keyboard was last pushed.
    
@@ -656,7 +656,7 @@ namespace fltk3 {
    Under X this requires a round-trip to the server and is <I>much</I>
    slower than fltk3::event_key(int). \see event_key(int)
    */
-  int get_key(int key); // platform dependent
+  int get_key(unsigned int key); // platform dependent
   /** 
    Returns the text associated with the current event, including fltk3::PASTE or fltk3::DND_RELEASE events.
    This can be used in response to fltk3::KEYUP, fltk3::KEYDOWN, fltk3::PASTE, fltk3::DND_RELEASE.

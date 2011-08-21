@@ -203,9 +203,9 @@ fltk3::Counter::Counter(int X, int Y, int W, int H, const char* L)
   Valuator::step(1, 10);
   lstep_ = 1.0;
   mouseobj = 0;
-  textfont_ = fltk3::HELVETICA;
-  textsize_ = fltk3::NORMAL_SIZE;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textfont(fltk3::HELVETICA);
+  textsize(fltk3::NORMAL_SIZE);
+  textcolor(fltk3::FOREGROUND_COLOR);
 }
 
 //

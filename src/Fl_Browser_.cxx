@@ -978,9 +978,9 @@ hscrollbar(0, 0, 0, 0, 0)
   //scrollbar.align(fltk3::ALIGN_LEFT|fltk3::ALIGN_BOTTOM); // back compatibility?
   hscrollbar.callback(hscrollbar_callback);
   hscrollbar.type(fltk3::HORIZONTAL);
-  textfont_ = fltk3::HELVETICA;
-  textsize_ = fltk3::NORMAL_SIZE;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textfont(fltk3::HELVETICA);
+  textsize(fltk3::NORMAL_SIZE);
+  textcolor(fltk3::FOREGROUND_COLOR);
   has_scrollbar_ = BOTH;
   max_width = 0;
   max_width_item = 0;

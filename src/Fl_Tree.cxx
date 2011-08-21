@@ -329,7 +329,7 @@ void fltk3::Tree::draw() {
 /// \param[in] dir The direction to search. Can be fltk3::UpKey or fltk3::DownKey.
 /// \returns The item found, or 0 if there's no visible items above/below the specified \p item.
 ///
-fltk3::TreeItem *fltk3::Tree::next_visible_item(fltk3::TreeItem *item, int dir) {
+fltk3::TreeItem *fltk3::Tree::next_visible_item(fltk3::TreeItem *item, unsigned int dir) {
   if ( ! item ) {				// no start item?
     item = ( dir == fltk3::UpKey ) ? last() : first();	// start at top or bottom
     if ( ! item ) return(0);
@@ -550,7 +550,7 @@ int fltk3::Tree::handle(int e) {
 	  set_item_focus(first());
 	}
 	if ( _item_focus ) {
-	  int ekey = fltk3::event_key();
+	  unsigned int ekey = fltk3::event_key();
 	  switch (ekey) {
 	    case fltk3::EnterKey:	// ENTER: selects current item only
 	    case fltk3::KPEnterKey:
