@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 	int i = b->argument();
 	if (!i) i = b->label()[0];
         fltk3::Button *btn = ((fltk3::Button*)b);
-        int state = fltk3::event_key(i);
+        int state = fltk3::event_key((unsigned)i);
         if (btn->value()!=state)
 	  btn->value(state);
       } else if (b->callback() == (fltk3::Callback*)shift_cb) {
