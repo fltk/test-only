@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "Fl_Type.h"
-#include "../fltk3/filename.h"
+#include <fltk3/filename.h>
 
 
 static const char *Xcode4_BuildFileInSources = "Xcode4_BuildFileInSources";
@@ -366,7 +366,7 @@ static int writeCopyFilesBuildPhaseSection(FILE *out) {
     if (tgt->is_app_target())
       writeCopyFilesBuildPhase(out, tgt);
   }
-  fprintf(out, "/* End PBXCopyFilesBuildPhasey section */\n");
+  fprintf(out, "/* End PBXCopyFilesBuildPhase section */\n");
   return 0;
 }
 
@@ -700,7 +700,7 @@ static int writeProjectSection(FILE *out) {
   fprintf(out, "\t\t%s /* Project object */ = {\n", Root);
   fprintf(out, "\t\t\tisa = PBXProject;\n");
   fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXProject \"%s\" */;\n", BuildConfigurationList, workspace->name());
-  fprintf(out, "\t\t\tcompatibilityVersion = \"Xcode 3.0\";\n");
+  fprintf(out, "\t\t\tcompatibilityVersion = \"Xcode 3.2\";\n");
   fprintf(out, "\t\t\tdevelopmentRegion = English;\n");
   fprintf(out, "\t\t\thasScannedForEncodings = 0;\n");
   fprintf(out, "\t\t\tknownRegions = (\n");
@@ -876,9 +876,10 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;\n");
   fprintf(out, "\t\t\t\tHEADER_SEARCH_PATHS = (\n");
   fprintf(out, "\t\t\t\t\t../../ide/XCode4/,\n");
-  fprintf(out, "\t\t\t\t\t../../,\n");
-  fprintf(out, "\t\t\t\t\t../../png,\n");
-  fprintf(out, "\t\t\t\t\t../../jpeg,\n");
+  fprintf(out, "\t\t\t\t\t../../include/,\n");
+  fprintf(out, "\t\t\t\t\t../../include/fltk3png,\n");
+  fprintf(out, "\t\t\t\t\t../../include/fltk3jpeg,\n");
+  fprintf(out, "\t\t\t\t\t../../include/fltk3zlib,\n");
   fprintf(out, "\t\t\t\t);\n");
   fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/%s-Info.plist\";\n", tgt->name());
   fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
@@ -916,9 +917,10 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;\n");
   fprintf(out, "\t\t\t\tHEADER_SEARCH_PATHS = (\n");
   fprintf(out, "\t\t\t\t\t../../ide/XCode4/,\n");
-  fprintf(out, "\t\t\t\t\t../../,\n");
-  fprintf(out, "\t\t\t\t\t../../png,\n");
-  fprintf(out, "\t\t\t\t\t../../jpeg,\n");
+  fprintf(out, "\t\t\t\t\t../../include/,\n");
+  fprintf(out, "\t\t\t\t\t../../include/fltk3png,\n");
+  fprintf(out, "\t\t\t\t\t../../include/fltk3jpeg,\n");
+  fprintf(out, "\t\t\t\t\t../../include/fltk3zlib,\n");
   fprintf(out, "\t\t\t\t);\n");
   fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/%s-Info.plist\";\n", tgt->name());
   fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
@@ -953,7 +955,6 @@ static int writeBuildConfigurations(FILE *out, Fl_Workspace_Type *wsp) {
   fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_RETURN_TYPE = YES;\n");
   fprintf(out, "\t\t\t\tGCC_WARN_UNUSED_VARIABLE = YES;\n");
   fprintf(out, "\t\t\t\tONLY_ACTIVE_ARCH = YES;\n");
-  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
   fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk\";\n");
   fprintf(out, "\t\t\t};\n");
   fprintf(out, "\t\t\tname = Debug;\n");
@@ -967,7 +968,6 @@ static int writeBuildConfigurations(FILE *out, Fl_Workspace_Type *wsp) {
   fprintf(out, "\t\t\t\tGCC_C_LANGUAGE_STANDARD = gnu99;\n");
   fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_RETURN_TYPE = YES;\n");
   fprintf(out, "\t\t\t\tGCC_WARN_UNUSED_VARIABLE = YES;\n");
-  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
   fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk\";\n");
   fprintf(out, "\t\t\t};\n");
   fprintf(out, "\t\t\tname = Release;\n");
@@ -1023,7 +1023,7 @@ static int writeBuildConfigurationList(FILE *out, Fl_Workspace_Type *wsp) {
   char releaseKey[32]; strcpy(releaseKey, wsp->get_UUID_Xcode(Xcode4_ReleaseBuildConfiguration));
   
   // write the section for this target
-  fprintf(out, "\t\t%s /* Build configuration list for PBXNativeTarget \"%s\" */ = {\n", listKey, wsp->name());
+  fprintf(out, "\t\t%s /* Build configuration list for PBXProject \"%s\" */ = {\n", listKey, wsp->name());
   fprintf(out, "\t\t\tisa = XCConfigurationList;\n");
   fprintf(out, "\t\t\tbuildConfigurations = (\n");
   fprintf(out, "\t\t\t\t%s /* Debug */,\n", debugKey);
@@ -1090,7 +1090,7 @@ int write_fltk_ide_xcode4() {
   fprintf(out, "\tarchiveVersion = 1;\n");
   fprintf(out, "\tclasses = {\n");
   fprintf(out, "\t};\n");
-  fprintf(out, "\tobjectVersion = 44;\n");
+  fprintf(out, "\tobjectVersion = 46;\n");
   fprintf(out, "\tobjects = {\n");
 
   writeBuildFileSection(out);
