@@ -188,7 +188,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     fprintf(out, "      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>\r\n");
     fprintf(out, "      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>\r\n");
   }
-  fprintf(out, "      <AdditionalIncludeDirectories>.;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;..\\..;%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+  fprintf(out, "      <AdditionalIncludeDirectories>.;..\\..\\include;..\\..\\include\\fltk3zlib;..\\..\\include\\fltk3png;..\\..\\include\\fltk3jpeg;%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
   fprintf(out, "      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;%s;%s_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n", pre, pre2);
   if (is_debug) {
     fprintf(out, "      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>\r\n");
