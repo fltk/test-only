@@ -28,7 +28,7 @@
  */
 #if !defined(WIN32) && !defined(__APPLE__)
 
-#include "../../fltk3/Xutf8.h"
+#include "../../include/fltk3/Xutf8.h"
 #include <X11/Xlib.h>
 #include <ctype.h>
 #include <stdlib.h>

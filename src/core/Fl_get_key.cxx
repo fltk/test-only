@@ -40,7 +40,7 @@
 
 extern char fl_key_vector[32]; // in Fl_x.cxx
 
-int fltk3::event_key(int k) {
+int fltk3::event_key(unsigned int k) {
   if (k > fltk3::MouseButton && k <= fltk3::MouseButton+8)
     return fltk3::event_state(8<<(k-fltk3::MouseButton));
   int i;
@@ -56,7 +56,7 @@ int fltk3::event_key(int k) {
   return fl_key_vector[i/8] & (1 << (i%8));
 }
 
-int fltk3::get_key(int k) {
+int fltk3::get_key(unsigned int k) {
   fl_open_display();
   XQueryKeymap(fl_display, fl_key_vector);
   return event_key(k);

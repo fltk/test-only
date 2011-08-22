@@ -512,7 +512,7 @@ void save_file(const char *newfile) {
 
 void copy_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  fltk3::TextEditor::kf_copy(0, e->editor);
+  fltk3::TextEditor::kf_copy((unsigned)0, e->editor);
 }
 
 void cut_cb(fltk3::Widget*, void* v) {

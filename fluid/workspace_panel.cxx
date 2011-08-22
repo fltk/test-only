@@ -347,7 +347,7 @@ static void cb_Unknown(fltk3::MenuButton* o, void* v) {
         strcat(buf, "<unknown>");
         break;
       }
-      if (mi->argument()==ft) {
+      if (mi->argument()==(int)ft) {
         strcat(buf, mi->label());
         break;
       }
@@ -410,7 +410,7 @@ static void cb_Relative(fltk3::MenuButton* o, void* v) {
     unsigned int fl =ff->location();
     for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
       if (!mi->label()) break;
-      if (mi->argument()==fl) {
+      if (mi->argument()==(int)fl) {
         o->label(mi->label());
         break;
       }
@@ -645,7 +645,7 @@ static void cb_Close(fltk3::Button*, void* v) {
 
 Fl_Panel* make_file_panel() {
   Fl_Panel* w;
-  { Fl_Panel* o = new Fl_Panel(0, 0, 420, 454, "File Properties");
+  { Fl_Panel* o = new Fl_Panel(0, 0, 420, 450, "File Properties");
     w = o;
     o->box(fltk3::FLAT_BOX);
     o->color(fltk3::BACKGROUND_COLOR);

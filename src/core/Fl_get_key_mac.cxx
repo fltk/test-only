@@ -82,7 +82,7 @@ static int fltk2mac(int fltk) {
 }
 
 //: returns true, if that key was pressed during the last event
-int fltk3::event_key(int k) {
+int fltk3::event_key(unsigned int k) {
   return get_key(k);
 }
 

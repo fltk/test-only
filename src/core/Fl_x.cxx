@@ -823,7 +823,7 @@ static void set_event_xy() {
 
 // if this is same event as last && is_click, increment click count:
 static inline void checkdouble() {
-  if (fltk3::e_is_click == fltk3::e_keysym)
+  if (((unsigned)fltk3::e_is_click) == fltk3::e_keysym)
     fltk3::e_clicks++;
   else {
     fltk3::e_clicks = 0;

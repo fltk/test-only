@@ -44,7 +44,7 @@
 #include "print_panel.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 #include <fltk3/Preferences.h>
 #include <fltk3/IntInput.h>
 
@@ -527,7 +527,7 @@ void print_load() {
   }
 
   print_choice->clear();
-  print_choice->add(fltk3::Printer::dialog_print_to_file, 0, 0, 0, fltk3::MENU_DIVIDER);
+  print_choice->add(fltk3::Printer::dialog_print_to_file, (unsigned)0, 0, 0, fltk3::MENU_DIVIDER);
   print_choice->value(0);
   
   print_start = 0;
@@ -543,7 +543,7 @@ void print_load() {
         }
         *qptr = '\0';
 
-        print_choice->add(qname, 0, 0, (void *)strdup(name), 0);
+        print_choice->add(qname, (unsigned)0, 0, (void *)strdup(name), 0);
       } else if (!strncmp(line, "system default destination: ", 28)) {
         if (sscanf(line + 28, "%s", defname) != 1) defname[0] = '\0';
       }

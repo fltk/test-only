@@ -515,7 +515,8 @@ int read_file(const char *filename, int merge) {
 
 // ------------ file conversion ------------------------------------------------
 
-void convert_file(const char *src_name, int v) {
+void convert_file(const char *, int ) {
+/*
   char dst_name[2048];
   char line[2048];
   strcpy(dst_name, src_name);
@@ -529,6 +530,7 @@ void convert_file(const char *src_name, int v) {
   }
   fclose(f_out);
   fclose(f_in);
+*/
 }
 
 void convert_1_to_3_cb(fltk3::Widget *, void *) {

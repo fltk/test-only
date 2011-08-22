@@ -342,17 +342,17 @@ curve$(EXEEXT): curve.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ curve.o $(LINK_FLTK3) $(LDLIBS)
 
-device$(EXEEXT): device.o $(FLTK3_LIB_NAME) $(FLTK3IMAGES_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
+device$(EXEEXT): device.o $(FLTK3IMAGES_LIB_NAME) $(FLTK3_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ device.o $(LINK_FLTK3) $(LINK_FLTK3IMAGES) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ device.o $(LINK_FLTK3IMAGES) $(LINK_FLTK3) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
 
 doublebuffer$(EXEEXT): doublebuffer.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ doublebuffer.o $(LINK_FLTK3) $(LDLIBS)
 
-editor$(EXEEXT): editor.o $(FLTK3_LIB_NAME)
+editor$(EXEEXT): editor.o $(FLTK3IMAGES_LIB_NAME) $(FLTK3_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ editor.o $(LINK_FLTK3) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ editor.o $(LINK_FLTK3IMAGES) $(LINK_FLTK3) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
 
 fast_slow$(EXEEXT): fast_slow.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
@@ -360,17 +360,17 @@ fast_slow$(EXEEXT): fast_slow.o $(FLTK3_LIB_NAME)
 fast_slow.o: fast_slow.h
 fast_slow.cxx: fast_slow.fl ../fluid/fluid$(EXEEXT)
 
-file_chooser$(EXEEXT): file_chooser.o $(FLTK3_LIB_NAME) $(FLTK3IMAGES_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
+file_chooser$(EXEEXT): file_chooser.o $(FLTK3IMAGES_LIB_NAME) $(FLTK3_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ file_chooser.o $(LINK_FLTK3) $(LINK_FLTK3IMAGES) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ file_chooser.o $(LINK_FLTK3IMAGES) $(LINK_FLTK3) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
 
 fonts$(EXEEXT): fonts.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fonts.o $(LINK_FLTK3) $(LDLIBS)
 
-fractals$(EXEEXT): fractals.o fracviewer.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
+fractals$(EXEEXT): fractals.o fracviewer.o $(FLTK3GL_LIB_NAME) $(FLTK3_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fractals.o fracviewer.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fractals.o fracviewer.o $(LINK_FLTK3GL) $(LINK_FLTK3) $(GLLIB) $(LDLIBS)
 
 fullscreen$(EXEEXT): fullscreen.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
 	echo Linking $@...
@@ -380,17 +380,17 @@ gl_overlay$(EXEEXT): gl_overlay.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
 
-glpuzzle$(EXEEXT): glpuzzle.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
+glpuzzle$(EXEEXT): glpuzzle.o $(FLTK3GL_LIB_NAME) $(FLTK3_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINK_FLTK3GL) $(LINK_FLTK3) $(GLLIB) $(LDLIBS)
 
 hello$(EXEEXT): hello.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ hello.o $(LINK_FLTK3) $(LDLIBS)
 
-help$(EXEEXT): help.o $(FLTK3_LIB_NAME) $(FLTK3IMAGES_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
+help$(EXEEXT): help.o $(FLTK3IMAGES_LIB_NAME) $(FLTK3_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ help.o $(LINK_FLTK3) $(LINK_FLTK3IMAGES) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ help.o $(LINK_FLTK3IMAGES) $(LINK_FLTK3) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
 
 iconize$(EXEEXT): iconize.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
@@ -454,9 +454,9 @@ navigation$(EXEEXT): navigation.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ navigation.o $(LINK_FLTK3) $(LDLIBS)
 
-native-filechooser$(EXEEXT): native-filechooser.o $(FLTK3_LIB_NAME)
+native-filechooser$(EXEEXT): native-filechooser.o $(FLTK3IMAGES_LIB_NAME) $(FLTK3_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ native-filechooser.o $(LINK_FLTK3) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ native-filechooser.o $(LINK_FLTK3IMAGES) $(LINK_FLTK3) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(LDLIBS)
 
 output$(EXEEXT): output.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
@@ -516,9 +516,9 @@ subwindow$(EXEEXT): subwindow.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ subwindow.o $(LINK_FLTK3) $(LDLIBS)
 
-sudoku$(EXEEXT): sudoku.o $(FLTK3_LIB_NAME) $(FLTK3IMAGES_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
+sudoku$(EXEEXT): sudoku.o $(FLTK3IMAGES_LIB_NAME) $(FLTK3_LIB_NAME) $(FLTK3PNG_LIB_NAME) $(FLTK3JPEG_LIB_NAME) $(FLTK3ZLIB_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ sudoku.o $(LINK_FLTK3) $(LINK_FLTK3IMAGES) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(AUDIOLIBS) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ sudoku.o $(LINK_FLTK3IMAGES) $(LINK_FLTK3) $(LINK_FLTK3PNG) $(LINK_FLTK3JPEG) $(LINK_FLTK3ZLIB) $(AUDIOLIBS) $(LDLIBS)
 
 symbols$(EXEEXT): symbols.o $(FLTK3_LIB_NAME)
 	echo Linking $@...

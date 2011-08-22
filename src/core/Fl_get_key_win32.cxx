@@ -123,7 +123,7 @@ static int fltk2ms(unsigned int fltk) {
   return 0;
 }
 
-int fltk3::event_key(int k) {
+int fltk3::event_key(unsigned int k) {
   return GetKeyState(fltk2ms(k))&~1;
 }
 

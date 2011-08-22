@@ -48,7 +48,7 @@ decl {extern fltk3::Pixmap menu_all_pixmap;} {public global
 } 
 
 widget_class Fl_Environment_Choice {open
-  xywh {820 144 200 26} type Double
+  xywh {820 144 200 25} type Double
   class {fltk3::Group} visible position_relative
 } {
   decl {unsigned int pEnv;} {protected local
@@ -241,7 +241,7 @@ Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
     label {File Properties} open
-    xywh {730 54 420 454} type Double labelsize 11 align 80 resizable hotspot
+    xywh {730 54 420 450} type Double labelsize 11 align 80 resizable hotspot
     class Fl_Panel non_modal visible
   } {
     {fltk3::ScrollGroup} pScrollGroup {
@@ -423,7 +423,7 @@ Function {make_file_panel()} {open
         strcat(buf, "<unknown>");
         break;
       }
-      if (mi->argument()==ft) {
+      if (mi->argument()==(int)ft) {
         strcat(buf, mi->label());
         break;
       }
@@ -543,12 +543,12 @@ Function {make_file_panel()} {open
     unsigned int fl =ff->location();
     for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
       if (!mi->label()) break;
-      if (mi->argument()==fl) {
+      if (mi->argument()==(int)fl) {
         o->label(mi->label());
         break;
       }
     }
-  }} open
+  }} open selected
               xywh {108 164 200 20} labelsize 12
             } {
               MenuItem {} {
@@ -748,7 +748,7 @@ Function {make_file_panel()} {open
   }
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
-}} open selected
+}} open
           xywh {6 322 400 30}
         } {
           {fltk3::Choice} {} {

@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -316,7 +316,7 @@ workspace FLTK {open selected
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk3 {open
+    lib_target fltk3 {
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -334,7 +334,7 @@ workspace FLTK {open selected
       target_path lib
       makefile_path src
     } {
-      folder Headers {open
+      folder Headers {
         uuid_Xcode4_Group {C2F00625-E401-4002-85F6-FA183D17629D}
       } {
         file_ref {Adjuster.h} {
@@ -1498,7 +1498,7 @@ workspace FLTK {open selected
           filename_and_path {include/fltk3/Xutf8.h}
         }
       }
-      folder Sources {open
+      folder Sources {
         uuid_Xcode4_Group {91990322-0AF9-42F2-A077-713540EE5AB1}
       } {
         file_ref {Fl_cocoa.mm} {
@@ -4281,17 +4281,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {C6EE0C83-C290-4C40-ADBA-9F9F5E7ADCE2}
         filename_and_path {test/device.cxx}
       }
-      target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {3A6AA37D-E7E4-4EA5-81A7-4FA034EAD2B5}
-        uuid_Xcode4_BuildFileInCopyFiles {F2D47D4B-48B4-42D4-A564-056B894B4A74}
-        uuid_Xcode4_ContainerItemProxy {1C38DF89-4C32-40EF-92B7-B42A04614F9D}
-        uuid_Xcode4_TargetDependency {B3189DC8-0EF1-4347-83AB-0ADA50B98124}
-      }
       target_dependency fltk3images {
         uuid_Xcode4_BuildFileInFrameworks {E9B29690-4BEE-49DD-9B9C-861306BB8899}
         uuid_Xcode4_BuildFileInCopyFiles {B12D0006-E19C-449C-9FFB-5B22CEA00737}
         uuid_Xcode4_ContainerItemProxy {5B6611B6-7CCA-4167-80F3-632AADA9267D}
         uuid_Xcode4_TargetDependency {915B34B2-E11C-483D-9A00-B91FFFC4D449}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {3A6AA37D-E7E4-4EA5-81A7-4FA034EAD2B5}
+        uuid_Xcode4_BuildFileInCopyFiles {F2D47D4B-48B4-42D4-A564-056B894B4A74}
+        uuid_Xcode4_ContainerItemProxy {1C38DF89-4C32-40EF-92B7-B42A04614F9D}
+        uuid_Xcode4_TargetDependency {B3189DC8-0EF1-4347-83AB-0ADA50B98124}
       }
       target_dependency fltk3png {
         uuid_Xcode4_BuildFileInFrameworks {A054E478-76AB-4E90-BAAB-DCD0C4D95CFB}
@@ -4363,11 +4363,35 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {F4669FEA-4960-4059-890C-2EC26D4B0224}
         filename_and_path {test/editor.cxx}
       }
+      target_dependency fltk3images {
+        uuid_Xcode4_BuildFileInFrameworks {E2A0524E-E9DD-1645-EC1E-BFBF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {E2A0524E-3EC8-0630-EC1E-BFBF4D617474}
+        uuid_Xcode4_ContainerItemProxy {E2A0524E-A1D4-4F61-EC1E-BFBF4D617474}
+        uuid_Xcode4_TargetDependency {E2A0524E-41C2-9A41-EC1E-BFBF4D617474}
+      }
       target_dependency fltk3 {
         uuid_Xcode4_BuildFileInFrameworks {CC700B10-67D3-4C20-8843-97CBA2F00588}
         uuid_Xcode4_BuildFileInCopyFiles {3120A5BF-8036-4FEA-90FD-695121FC497B}
         uuid_Xcode4_ContainerItemProxy {B8128304-DA10-4CB3-AE2F-D088C4A2925D}
         uuid_Xcode4_TargetDependency {48385C52-4A9F-4CCC-8F95-46EBB7325FD6}
+      }
+      target_dependency fltk3png {
+        uuid_Xcode4_BuildFileInFrameworks {E2A0524E-E1F8-7755-EC1E-BFBF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {E2A0524E-FCAD-0B44-EC1E-BFBF4D617474}
+        uuid_Xcode4_ContainerItemProxy {E2A0524E-6723-0705-EC1E-BFBF4D617474}
+        uuid_Xcode4_TargetDependency {E2A0524E-3E82-0438-EC1E-BFBF4D617474}
+      }
+      target_dependency fltk3jpeg {
+        uuid_Xcode4_BuildFileInFrameworks {E2A0524E-015F-4677-EC1E-BFBF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {E2A0524E-7EC6-2477-EC1E-BFBF4D617474}
+        uuid_Xcode4_ContainerItemProxy {E2A0524E-972A-485C-EC1E-BFBF4D617474}
+        uuid_Xcode4_TargetDependency {E2A0524E-EAB9-6324-EC1E-BFBF4D617474}
+      }
+      target_dependency fltk3zlib {
+        uuid_Xcode4_BuildFileInFrameworks {E2A0524E-DC4A-885E-EC1E-BFBF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {E2A0524E-6BD3-EA51-EC1E-BFBF4D617474}
+        uuid_Xcode4_ContainerItemProxy {E2A0524E-9677-512D-EC1E-BFBF4D617474}
+        uuid_Xcode4_TargetDependency {E2A0524E-8FD7-0B58-EC1E-BFBF4D617474}
       }
     }
     app_target fast_slow {open
@@ -4427,17 +4451,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {AD3FE6EB-D96E-43FB-8360-96D54B935C14}
         filename_and_path {test/file_chooser.cxx}
       }
-      target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {C744FA2A-7979-48A9-85AC-CC2849FEDCA1}
-        uuid_Xcode4_BuildFileInCopyFiles {3E5C5DA5-DAF3-45E9-BBEE-1C038D0F4A71}
-        uuid_Xcode4_ContainerItemProxy {CC3DCFB0-B286-4CE9-A700-7AE10849DDFB}
-        uuid_Xcode4_TargetDependency {4C6BC702-3AFB-4DD1-995A-3959FCBE165C}
-      }
       target_dependency fltk3images {
         uuid_Xcode4_BuildFileInFrameworks {9EBE574D-2374-400E-8F91-8A0C95FF9E90}
         uuid_Xcode4_BuildFileInCopyFiles {76924521-B590-4D27-A9A9-5BE5E11F158E}
         uuid_Xcode4_ContainerItemProxy {1BCC1587-7E3B-46EA-975E-F84EECB3AC66}
         uuid_Xcode4_TargetDependency {41746EC3-4F80-4692-84F3-B0A06E478F37}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {C744FA2A-7979-48A9-85AC-CC2849FEDCA1}
+        uuid_Xcode4_BuildFileInCopyFiles {3E5C5DA5-DAF3-45E9-BBEE-1C038D0F4A71}
+        uuid_Xcode4_ContainerItemProxy {CC3DCFB0-B286-4CE9-A700-7AE10849DDFB}
+        uuid_Xcode4_TargetDependency {4C6BC702-3AFB-4DD1-995A-3959FCBE165C}
       }
       target_dependency fltk3png {
         uuid_Xcode4_BuildFileInFrameworks {DB178FC2-71EF-4CB8-AD04-08BF3B172761}
@@ -4514,17 +4538,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {DB32AB5C-80B3-4D73-82D2-E686C8B6B7D8}
         filename_and_path {test/fracviewer.cxx}
       }
-      target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {6BBBF8A9-6AE9-4076-9F3B-AA3ACD270510}
-        uuid_Xcode4_BuildFileInCopyFiles {3FE2ECDD-3F6F-4989-A5FE-440F485B0A34}
-        uuid_Xcode4_ContainerItemProxy {E459F3FB-0862-40DF-84FA-6ADB23E3CC84}
-        uuid_Xcode4_TargetDependency {FF75163F-DF83-40AC-BEF3-749B48010FBD}
-      }
       target_dependency fltk3gl {
         uuid_Xcode4_BuildFileInFrameworks {6E086496-CBFF-46A4-A936-C509CAD971CC}
         uuid_Xcode4_BuildFileInCopyFiles {E2256E49-5D38-4BD6-8100-E662DC798A3C}
         uuid_Xcode4_ContainerItemProxy {0F4A629B-FE52-49FE-8BD9-5809083C69E4}
         uuid_Xcode4_TargetDependency {555A7AF1-03E5-4CEC-B2EC-FD0252366A92}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {6BBBF8A9-6AE9-4076-9F3B-AA3ACD270510}
+        uuid_Xcode4_BuildFileInCopyFiles {3FE2ECDD-3F6F-4989-A5FE-440F485B0A34}
+        uuid_Xcode4_ContainerItemProxy {E459F3FB-0862-40DF-84FA-6ADB23E3CC84}
+        uuid_Xcode4_TargetDependency {FF75163F-DF83-40AC-BEF3-749B48010FBD}
       }
       file_ref {AGL.framework} {
         uuid_Xcode4_BuildFile {E2F04F02-EB08-4C34-B358-B9ECB8C300E3}
@@ -4742,17 +4766,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {E05F987F-6F85-4F29-A408-D03E4B697B07}
         filename_and_path {test/glpuzzle.cxx}
       }
-      target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {EC0F97FD-F032-44F9-BAA8-79A5CCDE94A5}
-        uuid_Xcode4_BuildFileInCopyFiles {A8762C2D-C668-467E-A77A-15ED1F7D2A60}
-        uuid_Xcode4_ContainerItemProxy {845975FB-977D-41CB-A292-61DA90791884}
-        uuid_Xcode4_TargetDependency {660B6F62-9971-487A-B2C3-609517B90235}
-      }
       target_dependency fltk3gl {
         uuid_Xcode4_BuildFileInFrameworks {808870F4-C2F9-483B-ADC6-EC3704C8669A}
         uuid_Xcode4_BuildFileInCopyFiles {906A5A3D-8AE5-4773-A091-7F7C40BC8CFD}
         uuid_Xcode4_ContainerItemProxy {77FC120C-006C-4852-8ED0-0B96F3DA7415}
         uuid_Xcode4_TargetDependency {B0E0191E-94A6-47CD-9219-C4FA067DACE8}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {EC0F97FD-F032-44F9-BAA8-79A5CCDE94A5}
+        uuid_Xcode4_BuildFileInCopyFiles {A8762C2D-C668-467E-A77A-15ED1F7D2A60}
+        uuid_Xcode4_ContainerItemProxy {845975FB-977D-41CB-A292-61DA90791884}
+        uuid_Xcode4_TargetDependency {660B6F62-9971-487A-B2C3-609517B90235}
       }
       file_ref {AGL.framework} {
         uuid_Xcode4_BuildFile {503AB25E-507A-4442-809A-82F40F3D7648}
@@ -4847,17 +4871,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {5DF919E9-EAF9-44AF-AA59-C5118620CA78}
         filename_and_path {test/help.cxx}
       }
-      target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {5EECA66D-C121-493D-BE1E-9863C54A170B}
-        uuid_Xcode4_BuildFileInCopyFiles {FF19AABC-EE2C-4302-AD31-D3190DE840C2}
-        uuid_Xcode4_ContainerItemProxy {7176BA30-F6F2-462B-9070-3F02BE68DB4C}
-        uuid_Xcode4_TargetDependency {D8AC90BC-33E6-4EAD-9178-7783B7FA3434}
-      }
       target_dependency fltk3images {
         uuid_Xcode4_BuildFileInFrameworks {55C0D4C7-3676-4D87-B5D4-F7AD2107BC09}
         uuid_Xcode4_BuildFileInCopyFiles {DCE8BFD2-8039-46C5-AE03-1D260582164C}
         uuid_Xcode4_ContainerItemProxy {3554B5F6-5522-48F3-A6CB-7D48FBA6511D}
         uuid_Xcode4_TargetDependency {665E19C8-EE5D-40EB-818B-E930364DFFA9}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {5EECA66D-C121-493D-BE1E-9863C54A170B}
+        uuid_Xcode4_BuildFileInCopyFiles {FF19AABC-EE2C-4302-AD31-D3190DE840C2}
+        uuid_Xcode4_ContainerItemProxy {7176BA30-F6F2-462B-9070-3F02BE68DB4C}
+        uuid_Xcode4_TargetDependency {D8AC90BC-33E6-4EAD-9178-7783B7FA3434}
       }
       target_dependency fltk3png {
         uuid_Xcode4_BuildFileInFrameworks {BEEEDBE3-B1E2-46FF-BAD8-705115D11004}
@@ -5337,11 +5361,35 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {E3F5E9E7-259F-4B80-BCD1-E312D0AF5F26}
         filename_and_path {test/native-filechooser.cxx}
       }
+      target_dependency fltk3images {
+        uuid_Xcode4_BuildFileInFrameworks {47A2524E-E9DD-1645-5CC7-86BF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {47A2524E-3EC8-0630-5CC7-86BF4D617474}
+        uuid_Xcode4_ContainerItemProxy {47A2524E-A1D4-4F61-5CC7-86BF4D617474}
+        uuid_Xcode4_TargetDependency {47A2524E-41C2-9A41-5CC7-86BF4D617474}
+      }
       target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {EA1F5CD8-C9DB-472A-9E75-012EB19F8D1E}
-        uuid_Xcode4_BuildFileInCopyFiles {8B45D566-448B-4FD9-B55B-59850EF64591}
-        uuid_Xcode4_ContainerItemProxy {0F62A6EA-CFBA-46B3-9295-6EC44F81BF78}
-        uuid_Xcode4_TargetDependency {D5E30CCA-E116-4F96-9B1A-09B1349FB7D7}
+        uuid_Xcode4_BuildFileInFrameworks {47A2524E-E1F8-7755-5CC7-86BF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {47A2524E-FCAD-0B44-5CC7-86BF4D617474}
+        uuid_Xcode4_ContainerItemProxy {47A2524E-6723-0705-5CC7-86BF4D617474}
+        uuid_Xcode4_TargetDependency {47A2524E-3E82-0438-5CC7-86BF4D617474}
+      }
+      target_dependency fltk3png {
+        uuid_Xcode4_BuildFileInFrameworks {47A2524E-015F-4677-5CC7-86BF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {47A2524E-7EC6-2477-5CC7-86BF4D617474}
+        uuid_Xcode4_ContainerItemProxy {47A2524E-972A-485C-5CC7-86BF4D617474}
+        uuid_Xcode4_TargetDependency {47A2524E-EAB9-6324-5CC7-86BF4D617474}
+      }
+      target_dependency fltk3jpeg {
+        uuid_Xcode4_BuildFileInFrameworks {47A2524E-DC4A-885E-5CC7-86BF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {47A2524E-6BD3-EA51-5CC7-86BF4D617474}
+        uuid_Xcode4_ContainerItemProxy {47A2524E-9677-512D-5CC7-86BF4D617474}
+        uuid_Xcode4_TargetDependency {47A2524E-8FD7-0B58-5CC7-86BF4D617474}
+      }
+      target_dependency fltk3zlib {
+        uuid_Xcode4_BuildFileInFrameworks {47A2524E-38A4-3E15-5CC7-86BF4D617474}
+        uuid_Xcode4_BuildFileInCopyFiles {47A2524E-5C58-5538-5CC7-86BF4D617474}
+        uuid_Xcode4_ContainerItemProxy {47A2524E-2A4E-A670-5CC7-86BF4D617474}
+        uuid_Xcode4_TargetDependency {47A2524E-EC42-236A-5CC7-86BF4D617474}
       }
     }
     app_target output {open
@@ -5832,17 +5880,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {45B471C7-8D57-4244-BD19-8C230A1A2CB9}
         filename_and_path {test/sudoku.cxx}
       }
+      target_dependency fltk3images {selected
+        uuid_Xcode4_BuildFileInFrameworks {DF57BE2E-0AF6-4604-80F4-7C340B8D9141}
+        uuid_Xcode4_BuildFileInCopyFiles {0D0C53CA-958A-44CD-BCD8-6E23BD960020}
+        uuid_Xcode4_ContainerItemProxy {9AA4F2ED-945E-4EE8-AA00-A0A11E333E24}
+        uuid_Xcode4_TargetDependency {53FE520F-A4D9-4C8A-8272-543AC64ECEC1}
+      }
       target_dependency fltk3 {
         uuid_Xcode4_BuildFileInFrameworks {4BD59DB6-F11B-4DBC-88BE-F191746C2F44}
         uuid_Xcode4_BuildFileInCopyFiles {1277C42A-BA11-405B-BEF9-5A3B5AD91C8B}
         uuid_Xcode4_ContainerItemProxy {3D1A55EE-4C83-4AF8-93C0-44F5E0D93646}
         uuid_Xcode4_TargetDependency {0E6EB228-6578-4065-91C8-EF43B01991F2}
-      }
-      target_dependency fltk3images {
-        uuid_Xcode4_BuildFileInFrameworks {DF57BE2E-0AF6-4604-80F4-7C340B8D9141}
-        uuid_Xcode4_BuildFileInCopyFiles {0D0C53CA-958A-44CD-BCD8-6E23BD960020}
-        uuid_Xcode4_ContainerItemProxy {9AA4F2ED-945E-4EE8-AA00-A0A11E333E24}
-        uuid_Xcode4_TargetDependency {53FE520F-A4D9-4C8A-8272-543AC64ECEC1}
       }
       target_dependency fltk3png {
         uuid_Xcode4_BuildFileInFrameworks {0A54EEB6-E507-4065-91CF-482E33B69D6F}

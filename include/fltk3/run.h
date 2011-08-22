@@ -650,7 +650,7 @@ namespace fltk3 {
    
    On WIN32 fltk3::get_key(fltk3::KPEnterKey) and fltk3::event_key(fltk3::KPEnterKey) do not work.
    */
-  int event_key(int key);
+  int event_key(unsigned int key);
   /** 
    Returns true if the given \p key is held down <I>now</I>.  
    Under X this requires a round-trip to the server and is <I>much</I>
