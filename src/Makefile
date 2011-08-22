@@ -25,299 +25,317 @@
 #      http://www.fltk.org/str.php
 #
 
-FLTK_CPPFILES = \
-	Fl.cxx \
-	Fl_Adjuster.cxx \
-	Fl_Bitmap.cxx \
-	Fl_Box.cxx \
-	Fl_Browser.cxx \
-	Fl_Browser_.cxx \
-	Fl_Browser_load.cxx \
-	Fl_Button.cxx \
-	Fl_Chart.cxx \
-	Fl_Check_Browser.cxx \
-	Fl_Check_Button.cxx \
-	Fl_Choice.cxx \
-	Fl_Clock.cxx \
-	Fl_Color_Chooser.cxx \
-	Fl_Counter.cxx \
-	Fl_Device.cxx \
-	Fl_Dial.cxx \
-	Fl_Double_Window.cxx \
-	Fl_File_Browser.cxx \
-	Fl_File_Chooser.cxx \
-	Fl_File_Chooser2.cxx \
-	Fl_File_Icon.cxx \
-	Fl_File_Input.cxx \
-	Fl_Group.cxx \
-	Fl_Help_View.cxx \
-	Fl_Image.cxx \
-	Fl_Input.cxx \
-	Fl_Input_.cxx \
-	Fl_Light_Button.cxx \
-	Fl_Menu.cxx \
-	Fl_Menu_.cxx \
-	Fl_Menu_Bar.cxx \
-	Fl_Menu_Button.cxx \
-	Fl_Menu_Window.cxx \
-	Fl_Menu_add.cxx \
-	Fl_Menu_global.cxx \
-	Fl_Multi_Label.cxx \
-	Fl_Native_File_Chooser.cxx \
-	Fl_Overlay_Window.cxx \
-	Fl_Pack.cxx \
-	Fl_Paged_Device.cxx \
-	Fl_Pixmap.cxx \
-	Fl_Positioner.cxx \
-	Fl_Printer.cxx \
-	Fl_Preferences.cxx \
-	Fl_Progress.cxx \
-	Fl_Repeat_Button.cxx \
-	Fl_Return_Button.cxx \
-	Fl_Roller.cxx \
-	Fl_Round_Button.cxx \
-	Fl_Scroll.cxx \
-	Fl_Scrollbar.cxx \
-	Fl_Shared_Image.cxx \
-	Fl_Single_Window.cxx \
-	Fl_Slider.cxx \
-	Style.cxx \
-	Fl_Sys_Menu_Bar.cxx \
-	Fl_Table.cxx \
-	Fl_Table_Row.cxx \
-	Fl_Tabs.cxx \
-	Fl_Text_Buffer.cxx \
-	Fl_Text_Display.cxx \
-	Fl_Text_Editor.cxx \
-	Fl_Tile.cxx \
-	Fl_Tiled_Image.cxx \
-	Fl_Tooltip.cxx \
-	Fl_Tree.cxx \
-	Fl_Tree_Item.cxx \
-	Fl_Tree_Item_Array.cxx \
-	Fl_Tree_Prefs.cxx \
-	Fl_Valuator.cxx \
-	Fl_Value_Input.cxx \
-	Fl_Value_Output.cxx \
-	Fl_Value_Slider.cxx \
-	Fl_Widget.cxx \
-	Fl_Window.cxx \
-	Fl_Window_fullscreen.cxx \
-	Fl_Window_hotspot.cxx \
-	Fl_Window_iconize.cxx \
-	Fl_Wizard.cxx \
-	Fl_XBM_Image.cxx \
-	Fl_XPM_Image.cxx \
-	Fl_abort.cxx \
-	Fl_add_idle.cxx \
-	Fl_arg.cxx \
-	Fl_compose.cxx \
-	Fl_display.cxx \
-	Fl_get_key.cxx \
-	Fl_get_system_colors.cxx \
-	Fl_grab.cxx \
-	Fl_lock.cxx \
-	Fl_own_colormap.cxx \
-	Fl_visual.cxx \
-	Fl_x.cxx \
-	filename_absolute.cxx \
-	filename_expand.cxx \
-	filename_ext.cxx \
-	filename_isdir.cxx \
-	filename_list.cxx \
-	filename_match.cxx \
-	filename_setext.cxx \
-	fl_arc.cxx \
-	fl_arci.cxx \
-	fl_ask.cxx \
-	fl_boxtype.cxx \
-	fl_call_main.cxx \
-	fl_color.cxx \
-	fl_cursor.cxx \
-	fl_curve.cxx \
-	fl_diamond_box.cxx \
-	fl_dnd.cxx \
-	fl_draw.cxx \
-	fl_draw_image.cxx \
-	fl_draw_pixmap.cxx \
-	fl_encoding_latin1.cxx \
-	fl_encoding_mac_roman.cxx \
-	fl_engraved_label.cxx \
-	fl_file_dir.cxx \
-	fl_font.cxx \
-	fl_gtk.cxx \
-	fl_labeltype.cxx \
-	fl_line_style.cxx \
-	fl_open_uri.cxx \
-	fl_oval_box.cxx \
-	fl_overlay.cxx \
-	fl_overlay_visual.cxx \
-	fl_plastic.cxx \
-	fl_read_image.cxx \
-	fl_rect.cxx \
-	fl_round_box.cxx \
-	fl_rounded_box.cxx \
-	fl_scroll_area.cxx \
-	fl_set_font.cxx \
-	fl_set_fonts.cxx \
-	fl_shadow_box.cxx \
-	fl_shortcut.cxx \
-	fl_show_colormap.cxx \
-	fl_symbols.cxx \
-	fl_utf8.cxx \
-	fl_utf.cxx \
-	fl_vertex.cxx \
-	numericsort.cxx \
-	ps_image.cxx \
-	scandir.cxx \
-	screen_xywh.cxx
+FLTK3_CPPFILES = \
+	core/Fl.cxx \
+	core/Fl_Adjuster.cxx \
+	core/Fl_Bitmap.cxx \
+	core/Fl_Box.cxx \
+	core/Fl_Browser.cxx \
+	core/Fl_Browser_.cxx \
+	core/Fl_Browser_load.cxx \
+	core/Fl_Button.cxx \
+	core/Fl_Chart.cxx \
+	core/Fl_Check_Browser.cxx \
+	core/Fl_Check_Button.cxx \
+	core/Fl_Choice.cxx \
+	core/Fl_Clock.cxx \
+	core/Fl_Color_Chooser.cxx \
+	core/Fl_Counter.cxx \
+	core/Fl_Device.cxx \
+	core/Fl_Dial.cxx \
+	core/Fl_Double_Window.cxx \
+	core/Fl_File_Browser.cxx \
+	core/Fl_File_Chooser.cxx \
+	core/Fl_File_Chooser2.cxx \
+	core/Fl_File_Icon.cxx \
+	core/Fl_File_Input.cxx \
+	core/Fl_Group.cxx \
+	core/Fl_Help_View.cxx \
+	core/Fl_Image.cxx \
+	core/Fl_Input.cxx \
+	core/Fl_Input_.cxx \
+	core/Fl_Light_Button.cxx \
+	core/Fl_Menu.cxx \
+	core/Fl_Menu_.cxx \
+	core/Fl_Menu_Bar.cxx \
+	core/Fl_Menu_Button.cxx \
+	core/Fl_Menu_Window.cxx \
+	core/Fl_Menu_add.cxx \
+	core/Fl_Menu_global.cxx \
+	core/Fl_Multi_Label.cxx \
+	core/Fl_Native_File_Chooser.cxx \
+	core/Fl_Overlay_Window.cxx \
+	core/Fl_Pack.cxx \
+	core/Fl_Paged_Device.cxx \
+	core/Fl_Pixmap.cxx \
+	core/Fl_Positioner.cxx \
+	core/Fl_Printer.cxx \
+	core/Fl_Preferences.cxx \
+	core/Fl_Progress.cxx \
+	core/Fl_Repeat_Button.cxx \
+	core/Fl_Return_Button.cxx \
+	core/Fl_Roller.cxx \
+	core/Fl_Round_Button.cxx \
+	core/Fl_Scroll.cxx \
+	core/Fl_Scrollbar.cxx \
+	core/Fl_Shared_Image.cxx \
+	core/Fl_Single_Window.cxx \
+	core/Fl_Slider.cxx \
+	core/Style.cxx \
+	core/Fl_Sys_Menu_Bar.cxx \
+	core/Fl_Table.cxx \
+	core/Fl_Table_Row.cxx \
+	core/Fl_Tabs.cxx \
+	core/Fl_Text_Buffer.cxx \
+	core/Fl_Text_Display.cxx \
+	core/Fl_Text_Editor.cxx \
+	core/Fl_Tile.cxx \
+	core/Fl_Tiled_Image.cxx \
+	core/Fl_Tooltip.cxx \
+	core/Fl_Tree.cxx \
+	core/Fl_Tree_Item.cxx \
+	core/Fl_Tree_Item_Array.cxx \
+	core/Fl_Tree_Prefs.cxx \
+	core/Fl_Valuator.cxx \
+	core/Fl_Value_Input.cxx \
+	core/Fl_Value_Output.cxx \
+	core/Fl_Value_Slider.cxx \
+	core/Fl_Widget.cxx \
+	core/Fl_Window.cxx \
+	core/Fl_Window_fullscreen.cxx \
+	core/Fl_Window_hotspot.cxx \
+	core/Fl_Window_iconize.cxx \
+	core/Fl_Wizard.cxx \
+	core/Fl_XBM_Image.cxx \
+	core/Fl_XPM_Image.cxx \
+	core/Fl_abort.cxx \
+	core/Fl_add_idle.cxx \
+	core/Fl_arg.cxx \
+	core/Fl_compose.cxx \
+	core/Fl_display.cxx \
+	core/Fl_get_key.cxx \
+	core/Fl_get_system_colors.cxx \
+	core/Fl_grab.cxx \
+	core/Fl_lock.cxx \
+	core/Fl_own_colormap.cxx \
+	core/Fl_visual.cxx \
+	core/Fl_x.cxx \
+	core/filename_absolute.cxx \
+	core/filename_expand.cxx \
+	core/filename_ext.cxx \
+	core/filename_isdir.cxx \
+	core/filename_list.cxx \
+	core/filename_match.cxx \
+	core/filename_setext.cxx \
+	core/fl_arc.cxx \
+	core/fl_arci.cxx \
+	core/fl_ask.cxx \
+	core/fl_boxtype.cxx \
+	core/fl_call_main.cxx \
+	core/fl_color.cxx \
+	core/fl_cursor.cxx \
+	core/fl_curve.cxx \
+	core/fl_diamond_box.cxx \
+	core/fl_dnd.cxx \
+	core/fl_draw.cxx \
+	core/fl_draw_image.cxx \
+	core/fl_draw_pixmap.cxx \
+	core/fl_encoding_latin1.cxx \
+	core/fl_encoding_mac_roman.cxx \
+	core/fl_engraved_label.cxx \
+	core/fl_file_dir.cxx \
+	core/fl_font.cxx \
+	core/fl_gtk.cxx \
+	core/fl_labeltype.cxx \
+	core/fl_line_style.cxx \
+	core/fl_open_uri.cxx \
+	core/fl_oval_box.cxx \
+	core/fl_overlay.cxx \
+	core/fl_overlay_visual.cxx \
+	core/fl_plastic.cxx \
+	core/fl_read_image.cxx \
+	core/fl_rect.cxx \
+	core/fl_round_box.cxx \
+	core/fl_rounded_box.cxx \
+	core/fl_scroll_area.cxx \
+	core/fl_set_font.cxx \
+	core/fl_set_fonts.cxx \
+	core/fl_shadow_box.cxx \
+	core/fl_shortcut.cxx \
+	core/fl_show_colormap.cxx \
+	core/fl_symbols.cxx \
+	core/fl_utf8.cxx \
+	core/fl_utf.cxx \
+	core/fl_vertex.cxx \
+	core/numericsort.cxx \
+	core/ps_image.cxx \
+	core/scandir.cxx \
+	core/screen_xywh.cxx
 
-FLTK_GL_CPPFILES = \
-	Fl_Gl_Choice.cxx \
-	Fl_Gl_Device_Plugin.cxx \
-	Fl_Gl_Overlay.cxx \
-	Fl_Gl_Window.cxx \
-	freeglut_geometry.cxx \
-	freeglut_stroke_mono_roman.cxx \
-	freeglut_stroke_roman.cxx \
-	freeglut_teapot.cxx \
-	gl_draw.cxx \
-	glut_compatability.cxx \
-	glut_font.cxx
+FLTK3GL_CPPFILES = \
+	core/Fl_Gl_Choice.cxx \
+	core/Fl_Gl_Device_Plugin.cxx \
+	core/Fl_Gl_Overlay.cxx \
+	core/Fl_Gl_Window.cxx \
+	core/freeglut_geometry.cxx \
+	core/freeglut_stroke_mono_roman.cxx \
+	core/freeglut_stroke_roman.cxx \
+	core/freeglut_teapot.cxx \
+	core/gl_draw.cxx \
+	core/glut_compatability.cxx \
+	core/glut_font.cxx
 
-FLTK_IMAGES_CPPFILES = \
-	Fl_BMP_Image.cxx \
-	Fl_File_Icon2.cxx \
-	Fl_GIF_Image.cxx \
-	Fl_Help_Dialog.cxx \
-	Fl_JPEG_Image.cxx \
-	Fl_PNG_Image.cxx \
-	Fl_PNM_Image.cxx \
-	fl_images_core.cxx
+FLTK3IMAGES_CPPFILES = \
+	core/Fl_BMP_Image.cxx \
+	core/Fl_File_Icon2.cxx \
+	core/Fl_GIF_Image.cxx \
+	core/Fl_Help_Dialog.cxx \
+	core/Fl_JPEG_Image.cxx \
+	core/Fl_PNG_Image.cxx \
+	core/Fl_PNM_Image.cxx \
+	core/fl_images_core.cxx
 
-FLTK_OBJCPPFILES = \
-	Fl_cocoa.mm \
-	Fl_Native_File_Chooser_MAC.mm \
-	Fl_Quartz_Printer.mm
+FLTK3_OBJCPPFILES = \
+	core/Fl_cocoa.mm \
+	core/Fl_Native_File_Chooser_MAC.mm \
+	core/Fl_Quartz_Printer.mm
 
-FLTK_CFILES = \
-	flstring.c \
-	vsnprintf.c \
-	xutf8/case.c \
-	xutf8/is_right2left.c \
-	xutf8/is_spacing.c \
-	xutf8/keysym2Ucs.c \
-	xutf8/utf8Input.c \
-	xutf8/utf8Utils.c \
-	xutf8/utf8Wrap.c
+FLTK3_CFILES = \
+	core/flstring.c \
+	core/vsnprintf.c \
+	core/xutf8/case.c \
+	core/xutf8/is_right2left.c \
+	core/xutf8/is_spacing.c \
+	core/xutf8/keysym2Ucs.c \
+	core/xutf8/utf8Input.c \
+	core/xutf8/utf8Utils.c \
+	core/xutf8/utf8Wrap.c
 
-FLTK_PNG_CFILES = \
-	../../png/png.c \
-	../../png/pngerror.c \
-	../../png/pngget.c \
-	../../png/pngmem.c \
-	../../png/pngpread.c \
-	../../png/pngread.c \
-	../../png/pngrio.c \
-	../../png/pngrtran.c \
-	../../png/pngrutil.c \
-	../../png/pngset.c \
-	../../png/pngtrans.c \
-	../../png/pngwio.c \
-	../../png/pngwrite.c \
-	../../png/pngwtran.c \
-	../../png/pngwutil.c
+FLTK3PNG_CFILES = \
+	png/png.c \
+	png/pngerror.c \
+	png/pngget.c \
+	png/pngmem.c \
+	png/pngpread.c \
+	png/pngread.c \
+	png/pngrio.c \
+	png/pngrtran.c \
+	png/pngrutil.c \
+	png/pngset.c \
+	png/pngtrans.c \
+	png/pngwio.c \
+	png/pngwrite.c \
+	png/pngwtran.c \
+	png/pngwutil.c
 
-FLTK_JPEG_CFILES = \
-	../../jpeg/jaricom.c \
-	../../jpeg/jcarith.c \
-	../../jpeg/jdarith.c \
-	../../jpeg/jcapimin.c \
-	../../jpeg/jcapistd.c \
-	../../jpeg/jccoefct.c \
-	../../jpeg/jccolor.c \
-	../../jpeg/jcdctmgr.c \
-	../../jpeg/jchuff.c \
-	../../jpeg/jcinit.c \
-	../../jpeg/jcmainct.c \
-	../../jpeg/jcmarker.c \
-	../../jpeg/jcmaster.c \
-	../../jpeg/jcomapi.c \
-	../../jpeg/jcparam.c \
-	../../jpeg/jcprepct.c \
-	../../jpeg/jcsample.c \
-	../../jpeg/jctrans.c \
-	../../jpeg/jdapimin.c \
-	../../jpeg/jdapistd.c \
-	../../jpeg/jdatadst.c \
-	../../jpeg/jdatasrc.c \
-	../../jpeg/jdcoefct.c \
-	../../jpeg/jdcolor.c \
-	../../jpeg/jddctmgr.c \
-	../../jpeg/jdhuff.c \
-	../../jpeg/jdinput.c \
-	../../jpeg/jdmainct.c \
-	../../jpeg/jdmarker.c \
-	../../jpeg/jdmaster.c \
-	../../jpeg/jdmerge.c \
-	../../jpeg/jdpostct.c \
-	../../jpeg/jdsample.c \
-	../../jpeg/jdtrans.c \
-	../../jpeg/jerror.c \
-	../../jpeg/jfdctflt.c \
-	../../jpeg/jfdctfst.c \
-	../../jpeg/jfdctint.c \
-	../../jpeg/jidctflt.c \
-	../../jpeg/jidctfst.c \
-	../../jpeg/jidctint.c \
-	../../jpeg/jmemmgr.c \
-	../../jpeg/jmemnobs.c \
-	../../jpeg/jquant1.c \
-	../../jpeg/jquant2.c \
-	../../jpeg/jutils.c
+FLTK3JPEG_CFILES = \
+	jpeg/jaricom.c \
+	jpeg/jcarith.c \
+	jpeg/jdarith.c \
+	jpeg/jcapimin.c \
+	jpeg/jcapistd.c \
+	jpeg/jccoefct.c \
+	jpeg/jccolor.c \
+	jpeg/jcdctmgr.c \
+	jpeg/jchuff.c \
+	jpeg/jcinit.c \
+	jpeg/jcmainct.c \
+	jpeg/jcmarker.c \
+	jpeg/jcmaster.c \
+	jpeg/jcomapi.c \
+	jpeg/jcparam.c \
+	jpeg/jcprepct.c \
+	jpeg/jcsample.c \
+	jpeg/jctrans.c \
+	jpeg/jdapimin.c \
+	jpeg/jdapistd.c \
+	jpeg/jdatadst.c \
+	jpeg/jdatasrc.c \
+	jpeg/jdcoefct.c \
+	jpeg/jdcolor.c \
+	jpeg/jddctmgr.c \
+	jpeg/jdhuff.c \
+	jpeg/jdinput.c \
+	jpeg/jdmainct.c \
+	jpeg/jdmarker.c \
+	jpeg/jdmaster.c \
+	jpeg/jdmerge.c \
+	jpeg/jdpostct.c \
+	jpeg/jdsample.c \
+	jpeg/jdtrans.c \
+	jpeg/jerror.c \
+	jpeg/jfdctflt.c \
+	jpeg/jfdctfst.c \
+	jpeg/jfdctint.c \
+	jpeg/jidctflt.c \
+	jpeg/jidctfst.c \
+	jpeg/jidctint.c \
+	jpeg/jmemmgr.c \
+	jpeg/jmemnobs.c \
+	jpeg/jquant1.c \
+	jpeg/jquant2.c \
+	jpeg/jutils.c
 
-FLTK_ZLIB_CFILES = \
-	../../zlib/adler32.c \
-	../../zlib/compress.c \
-	../../zlib/crc32.c \
-	../../zlib/deflate.c \
-	../../zlib/gzclose.c \
-	../../zlib/gzlib.c \
-	../../zlib/gzread.c \
-	../../zlib/gzwrite.c \
-	../../zlib/infback.c \
-	../../zlib/inffast.c \
-	../../zlib/inflate.c \
-	../../zlib/inftrees.c \
-	../../zlib/trees.c \
-	../../zlib/uncompr.c \
-	../../zlib/zutil.c
+FLTK3ZLIB_CFILES = \
+	zlib/adler32.c \
+	zlib/compress.c \
+	zlib/crc32.c \
+	zlib/deflate.c \
+	zlib/gzclose.c \
+	zlib/gzlib.c \
+	zlib/gzread.c \
+	zlib/gzwrite.c \
+	zlib/infback.c \
+	zlib/inffast.c \
+	zlib/inflate.c \
+	zlib/inftrees.c \
+	zlib/trees.c \
+	zlib/uncompr.c \
+	zlib/zutil.c
 
 ################################################################
 FLTKFLAGS = -DFL_LIBRARY
 include ../makeinclude
 
-FLTK_MMFILES = $(shell if test $(USEMMFILES) = Yes; then echo $(FLTK_OBJCPPFILES); fi)
+FLTK3_MMFILES = $(shell if test $(USEMMFILES) = Yes; then echo $(FLTK3_OBJCPPFILES); fi)
 
-FLTK_OBJECTS = $(FLTK_CPPFILES:.cxx=.o) $(FLTK_MMFILES:.mm=.o) $(FLTK_CFILES:.c=.o)
-FLTK_GL_OBJECTS = $(FLTK_GL_CPPFILES:.cxx=.o)
-FLTK_IMAGES_OBJECTS = $(FLTK_IMAGES_CPPFILES:.cxx=.o)
-FLTK_PNG_OBJECTS = $(FLTK_PNG_CFILES:.c=.o)
-FLTK_JPEG_OBJECTS = $(FLTK_JPEG_CFILES:.c=.o)
-FLTK_ZLIB_OBJECTS = $(FLTK_ZLIB_CFILES:.c=.o)
+FLTK3_OBJECTS = $(FLTK3_CPPFILES:.cxx=.o) $(FLTK3_MMFILES:.mm=.o) $(FLTK3_CFILES:.c=.o)
+FLTK3GL_OBJECTS = $(FLTK3GL_CPPFILES:.cxx=.o)
+FLTK3IMAGES_OBJECTS = $(FLTK3IMAGES_CPPFILES:.cxx=.o)
+FLTK3PNG_OBJECTS = $(FLTK3PNG_CFILES:.c=.o)
+FLTK3JPEG_OBJECTS = $(FLTK3JPEG_CFILES:.c=.o)
+FLTK3ZLIB_OBJECTS = $(FLTK3ZLIB_CFILES:.c=.o)
 
 all: \
-	$(FLTK_LIBNAME) $(FLTK_DSONAME) \
-	$(FLTK_GL_LIBNAME) $(FLTK_GL_DSONAME) \
-	$(FLTK_IMAGES_LIBNAME) $(FLTK_IMAGES_DSONAME) \
-	$(FLTK_PNG_LIBNAME) $(FLTK_PNG_DSONAME) \
-	$(FLTK_JPEG_LIBNAME) $(FLTK_JPEG_DSONAME) \
-	$(FLTK_ZLIB_LIBNAME) $(FLTK_ZLIB_DSONAME)
+	$(FLTK3_LIBNAME) $(FLTK3_DSONAME) \
+	$(FLTK3GL_LIBNAME) $(FLTK3GL_DSONAME) \
+	$(FLTK3IMAGES_LIBNAME) $(FLTK3IMAGES_DSONAME) \
+	$(FLTK3PNG_LIBNAME) $(FLTK3PNG_DSONAME) \
+	$(FLTK3JPEG_LIBNAME) $(FLTK3JPEG_DSONAME) \
+	$(FLTK3ZLIB_LIBNAME) $(FLTK3ZLIB_DSONAME)
 
-$(FLTK_LIBNAME): $(FLTK_OBJECTS)
+$(FLTK3_LIBNAME): $(FLTK3_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	$(RM) $@
-	$(LIBCOMMAND) $@ $(FLTK_OBJECTS)
+	$(LIBCOMMAND) $@ $(FLTK3_OBJECTS)
+	$(RANLIB) $@
+
+$(FLTK3JPEG_LIBNAME): $(FLTK3JPEG_OBJECTS)
+	echo $(LIBCOMMAND) $@ ...
+	$(RM) $@
+	$(LIBCOMMAND) $@ $(FLTK3JPEG_OBJECTS)
+	$(RANLIB) $@
+
+$(FLTK3PNG_LIBNAME): $(FLTK3PNG_OBJECTS)
+	echo $(LIBCOMMAND) $@ ...
+	$(RM) $@
+	$(LIBCOMMAND) $@ $(FLTK3PNG_OBJECTS)
+	$(RANLIB) $@
+
+$(FLTK3ZLIB_LIBNAME): $(FLTK3ZLIB_OBJECTS)
+	echo $(LIBCOMMAND) $@ ...
+	$(RM) $@
+	$(LIBCOMMAND) $@ $(FLTK3ZLIB_OBJECTS)
 	$(RANLIB) $@
 
 libfltk.so.1.3: $(FLTK_OBJECTS)
@@ -350,10 +368,10 @@ libfltk_s.a: $(FLTK_OBJECTS)
 	$(LIBCOMMAND) libfltk_s.a libfltk_s.o
 	$(CHMOD) +x libfltk_s.a
 
-$(FLTK_GL_LIBNAME): $(FLTK_GL_OBJECTS)
+$(FLTK3GL_LIBNAME): $(FLTK3GL_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	$(RM) $@
-	$(LIBCOMMAND) $@ $(FLTK_GL_OBJECTS)
+	$(LIBCOMMAND) $@ $(FLTK3GL_OBJECTS)
 	$(RANLIB) $@
 
 libfltk_gl.so.1.3: $(FLTK_GL_OBJECTS) libfltk.so.1.3
@@ -386,10 +404,10 @@ libfltk_gl_s.a: $(FLTK_GL_OBJECTS)
 	$(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o
 	$(CHMOD) +x libfltk_gl_s.a
 
-$(FLTK_IMAGES_LIBNAME): $(FLTK_IMAGES_OBJECTS)
+$(FLTK3IMAGES_LIBNAME): $(FLTK3IMAGES_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	$(RM) $@
-	$(LIBCOMMAND) $@ $(FLTK_IMAGES_OBJECTS)
+	$(LIBCOMMAND) $@ $(FLTK3IMAGES_OBJECTS)
 	$(RANLIB) $@
 
 libfltk_images.so.1.3: $(FLTK_IMAGES_OBJECTS) libfltk.so.1.3
@@ -505,7 +523,7 @@ clean:
 		libfltk.sl libfltk_gl.sl libfltk_images.sl \
 		libfltk.dylib \
 		libfltk_gl.dylib libfltk_images.dylib \
-		cmap core
+		cmap
 
 depend:	$(FLTK_CPPFILES) $(FLTK_MMFILES) $(FLTK_GL_CPPFILES) $(FLTK_IMAGES_CPPFILES) $(FLTK_CFILES)
 	makedepend -Y -I.. -f makedepend $(FLTK_CPPFILES) $(FLTK_MMFILES) \

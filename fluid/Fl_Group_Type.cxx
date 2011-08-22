@@ -35,7 +35,7 @@
 #include <fltk3/Table.h>
 #include <fltk3/message.h>
 #include "Fl_Widget_Type.h"
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 
 // Override group's resize behavior to do nothing to children:
 void igroup::resize(int X, int Y, int W, int H) {

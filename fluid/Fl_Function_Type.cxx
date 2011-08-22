@@ -31,7 +31,7 @@
 #include "Fl_Type.h"
 #include <fltk3/ask.h>
 #include <fltk3/FileChooser.h>
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 

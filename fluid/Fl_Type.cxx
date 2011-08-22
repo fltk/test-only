@@ -43,7 +43,7 @@
 #include <fltk3/draw.h>
 #include <fltk3/filename.h>
 #include <stdlib.h>
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 #include <stdio.h>
 
 #include "Fl_Type.h"

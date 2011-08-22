@@ -32,7 +32,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/flstring.h"
+// FIXME: either make the interface public or remove this include statement!
+#include "../src/core/flstring.h"
 #include <stdarg.h>
 #include "alignment_panel.h"
 #include "workspace_panel.h"

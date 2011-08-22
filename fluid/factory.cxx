@@ -39,7 +39,7 @@
 #include <fltk3/Pixmap.h>
 #include <fltk3/Tree.h>
 #include <stdio.h>
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 #include "undo.h"
 
 #include "Fl_Widget_Type.h"

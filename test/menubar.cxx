@@ -34,7 +34,7 @@
 #include <fltk3/Choice.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 #include <fltk3/draw.h>
 
 void window_cb(fltk3::Widget* w, void*) {

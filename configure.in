@@ -31,7 +31,7 @@ dnl We need at least autoconf 2.50...
 AC_PREREQ(2.50)
 
 dnl Required file in package...
-AC_INIT(src/Fl.cxx)
+AC_INIT(src/core/Fl.cxx)
 
 dnl So --with-archflags option is used during "checking size of long"
 if test `uname` = Darwin; then
@@ -116,49 +116,49 @@ case $uname in
 esac
 
 dnl Define the libraries and link options we will need.
-LINK_FLTK="../lib/libfltk.a"
-LINK_FLTK_GL="../lib/libfltk_gl.a"
-LINK_FLTK_IMAGES="../lib/libfltk_images.a"
-LINK_FLTK_PNG="../lib/libfltk_png.a"
-LINK_FLTK_JPEG="../lib/libfltk_jpeg.a"
-LINK_FLTK_ZLIB="../lib/libfltk_zlib.a"
+LINK_FLTK3="../lib/libfltk3.a"
+LINK_FLTK3GL="../lib/libfltk3gl.a"
+LINK_FLTK3IMAGES="../lib/libfltk3images.a"
+LINK_FLTK3PNG="../lib/libfltk3png.a"
+LINK_FLTK3JPEG="../lib/libfltk3jpeg.a"
+LINK_FLTK3ZLIB="../lib/libfltk3zlib.a"
 GLDEMOS="gldemos"
 
 LIBEXT=".a"
-FLTK_LIBNAME="../lib/libfltk.a"
-FLTK_GL_LIBNAME="../lib/libfltk_gl.a"
-FLTK_IMAGES_LIBNAME="../lib/libfltk_images.a"
-FLTK_PNG_LIBNAME="../lib/libfltk_png.a"
-FLTK_JPEG_LIBNAME="../lib/libfltk_jpeg.a"
-FLTK_ZLIB_LIBNAME="../lib/libfltk_zlib.a"
+FLTK3_LIBNAME="../lib/libfltk3.a"
+FLTK3GL_LIBNAME="../lib/libfltk3gl.a"
+FLTK3IMAGES_LIBNAME="../lib/libfltk3images.a"
+FLTK3PNG_LIBNAME="../lib/libfltk3png.a"
+FLTK3JPEG_LIBNAME="../lib/libfltk3jpeg.a"
+FLTK3ZLIB_LIBNAME="../lib/libfltk3zlib.a"
 
-FLTK_LIBBASENAME="libfltk.a"
-FLTK_GL_LIBBASENAME="libfltk_gl.a"
-FLTK_IMAGES_LIBBASENAME="libfltk_images.a"
-FLTK_PNG_LIBBASENAME="libfltk_png.a"
-FLTK_JPEG_LIBBASENAME="libfltk_jpeg.a"
-FLTK_ZLIB_LIBBASENAME="libfltk_zlib.a"
+FLTK3_LIBBASENAME="libfltk3.a"
+FLTK3GL_LIBBASENAME="libfltk3gl.a"
+FLTK3IMAGES_LIBBASENAME="libfltk3images.a"
+FLTK3PNG_LIBBASENAME="libfltk3png.a"
+FLTK3JPEG_LIBBASENAME="libfltk3jpeg.a"
+FLTK3ZLIB_LIBBASENAME="libfltk3zlib.a"
 
 AC_SUBST(GLDEMOS)
 AC_SUBST(LIBEXT)
-AC_SUBST(FLTK_LIBNAME)
-AC_SUBST(LINK_FLTK)
-AC_SUBST(FLTK_LIBBASENAME)
-AC_SUBST(FLTK_GL_LIBNAME)
-AC_SUBST(LINK_FLTK_GL)
-AC_SUBST(FLTK_GL_LIBBASENAME)
-AC_SUBST(FLTK_IMAGES_LIBNAME)
-AC_SUBST(LINK_FLTK_IMAGES)
-AC_SUBST(FLTK_IMAGES_LIBBASENAME)
-AC_SUBST(FLTK_PNG_LIBNAME)
-AC_SUBST(LINK_FLTK_PNG)
-AC_SUBST(FLTK_PNG_LIBBASENAME)
-AC_SUBST(FLTK_JPEG_LIBNAME)
-AC_SUBST(LINK_FLTK_JPEG)
-AC_SUBST(FLTK_JPEG_LIBBASENAME)
-AC_SUBST(FLTK_ZLIB_LIBNAME)
-AC_SUBST(LINK_FLTK_ZLIB)
-AC_SUBST(FLTK_ZLIB_LIBBASENAME)
+AC_SUBST(FLTK3_LIBNAME)
+AC_SUBST(LINK_FLTK3)
+AC_SUBST(FLTK3_LIBBASENAME)
+AC_SUBST(FLTK3GL_LIBNAME)
+AC_SUBST(LINK_FLTK3GL)
+AC_SUBST(FLTK3GL_LIBBASENAME)
+AC_SUBST(FLTK3IMAGES_LIBNAME)
+AC_SUBST(LINK_FLTK3IMAGES)
+AC_SUBST(FLTK3IMAGES_LIBBASENAME)
+AC_SUBST(FLTK3PNG_LIBNAME)
+AC_SUBST(LINK_FLTK3PNG)
+AC_SUBST(FLTK3PNG_LIBBASENAME)
+AC_SUBST(FLTK3JPEG_LIBNAME)
+AC_SUBST(LINK_FLTK3JPEG)
+AC_SUBST(FLTK3JPEG_LIBBASENAME)
+AC_SUBST(FLTK3ZLIB_LIBNAME)
+AC_SUBST(LINK_FLTK3ZLIB)
+AC_SUBST(FLTK3ZLIB_LIBBASENAME)
 
 dnl Handle compile-time options...
 AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]])
@@ -184,109 +184,109 @@ if test x$enable_shared = xyes; then
 
     case $uname in
         Darwin*)
-            FLTK_DSONAME="libfltk.$FL_API_VERSION.dylib"
-            FLTK_GL_DSONAME="libfltk_gl.$FL_API_VERSION.dylib"
-            FLTK_IMAGES_DSONAME="libfltk_images.$FL_API_VERSION.dylib"
-            FLTK_PNG_DSONAME="libfltk_png.$FL_API_VERSION.dylib"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.$FL_API_VERSION.dylib"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.$FL_API_VERSION.dylib"
+            FLTK3_DSONAME="libfltk3.$FL_API_VERSION.dylib"
+            FLTK3GL_DSONAME="libfltk3gl.$FL_API_VERSION.dylib"
+            FLTK3IMAGES_DSONAME="libfltk3images.$FL_API_VERSION.dylib"
+            FLTK3PNG_DSONAME="libfltk3png.$FL_API_VERSION.dylib"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.$FL_API_VERSION.dylib"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.$FL_API_VERSION.dylib"
             DSOCOMMAND="\$(CXX) \$(ARCHFLAGS) \$(DSOFLAGS) -dynamiclib -lc -o"
             ;;
 
         SunOS* | UNIX_S*)
-            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
-            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
-            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
-            FLTK_PNG_DSONAME="libfltk_png.so.$FL_API_VERSION"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.so.$FL_API_VERSION"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.so.$FL_API_VERSION"
+            FLTK3_DSONAME="libfltk3.so.$FL_API_VERSION"
+            FLTK3GL_DSONAME="libfltk3gl.so.$FL_API_VERSION"
+            FLTK3IMAGES_DSONAME="libfltk3images.so.$FL_API_VERSION"
+            FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -h \$@ \$(LDLIBS) -G $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib"; then
                     DSOLINK="-R$libdir"
             fi
             ;;
         HP-UX*)
-            FLTK_DSONAME="libfltk.sl.$FL_API_VERSION"
-            FLTK_GL_DSONAME="libfltk_gl.sl.$FL_API_VERSION"
-            FLTK_IMAGES_DSONAME="libfltk_images.sl.$FL_API_VERSION"
-            FLTK_PNG_DSONAME="libfltk_png.sl.$FL_API_VERSION"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.sl.$FL_API_VERSION"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.sl.$FL_API_VERSION"
+            FLTK3_DSONAME="libfltk3.sl.$FL_API_VERSION"
+            FLTK3GL_DSONAME="libfltk3gl.sl.$FL_API_VERSION"
+            FLTK3IMAGES_DSONAME="libfltk3images.sl.$FL_API_VERSION"
+            FLTK3PNG_DSONAME="libfltk3png.sl.$FL_API_VERSION"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.sl.$FL_API_VERSION"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.sl.$FL_API_VERSION"
             DSOCOMMAND="ld \$(DSOFLAGS) -b -z +h \$@ $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib"; then
                     DSOLINK="-Wl,-rpath,$libdir"
             fi
             ;;
         IRIX*)
-            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
-            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
-            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
-            FLTK_PNG_DSONAME="libfltk_png.so.$FL_API_VERSION"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.so.$FL_API_VERSION"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.so.$FL_API_VERSION"
+            FLTK3_DSONAME="libfltk3.so.$FL_API_VERSION"
+            FLTK3GL_DSONAME="libfltk3gl.so.$FL_API_VERSION"
+            FLTK3IMAGES_DSONAME="libfltk3images.so.$FL_API_VERSION"
+            FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32" -a "x$libdir" != "x/usr/lib64"; then
                     DSOLINK="-Wl,-rpath,$libdir"
             fi
             ;;
         OSF1*)
-            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
-            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
-            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
-            FLTK_PNG_DSONAME="libfltk_png.so.$FL_API_VERSION"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.so.$FL_API_VERSION"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.so.$FL_API_VERSION"
+            FLTK3_DSONAME="libfltk3.so.$FL_API_VERSION"
+            FLTK3GL_DSONAME="libfltk3gl.so.$FL_API_VERSION"
+            FLTK3IMAGES_DSONAME="libfltk3images.so.$FL_API_VERSION"
+            FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32"; then
                     DSOLINK="-Wl,-rpath,$libdir"
             fi
             ;;
         Linux* | *BSD*)
-            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
-            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
-            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
-            FLTK_PNG_DSONAME="libfltk_png.so.$FL_API_VERSION"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.so.$FL_API_VERSION"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.so.$FL_API_VERSION"
+            FLTK3_DSONAME="libfltk3.so.$FL_API_VERSION"
+            FLTK3GL_DSONAME="libfltk3gl.so.$FL_API_VERSION"
+            FLTK3IMAGES_DSONAME="libfltk3images.so.$FL_API_VERSION"
+            FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib64"; then
                     DSOLINK="-Wl,-rpath,$libdir"
             fi
             ;;
         AIX*)
-            FLTK_DSONAME="libfltk_s.a"
-            FLTK_GL_DSONAME="libfltk_gl_s.a"
-            FLTK_IMAGES_DSONAME="libfltk_images_s.a"
-            FLTK_PNG_DSONAME="libfltk_png_s.a"
-            FLTK_JPEG_DSONAME="libfltk_jpeg_s.a"
-            FLTK_ZLIB_DSONAME="libfltk_zlib_s.a"
+            FLTK3_DSONAME="libfltk3_s.a"
+            FLTK3GL_DSONAME="libfltk3gl_s.a"
+            FLTK3IMAGES_DSONAME="libfltk3images_s.a"
+            FLTK3PNG_DSONAME="libfltk3png_s.a"
+            FLTK3JPEG_DSONAME="libfltk3jpeg_s.a"
+            FLTK3ZLIB_DSONAME="libfltk3zlib_s.a"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
             SHAREDSUFFIX="_s"
             ;;
         CYGWIN* | MINGW*)
             PICFLAG=0
             if test x$enable_cygwin != xyes; then
-                FLTK_DSONAME="mgwfltknox-$FL_API_VERSION.dll"
-                FLTK_GL_DSONAME="mgwfltk_glnox-$FL_API_VERSION.dll"
-                FLTK_IMAGES_DSONAME="mgwfltk_imagesnox-$FL_API_VERSION.dll"
-                FLTK_PNG_DSONAME="mgwfltk_pngnox-$FL_API_VERSION.dll"
-                FLTK_JPEG_DSONAME="mgwfltk_jpegnox-$FL_API_VERSION.dll"
-                FLTK_ZLIB_DSONAME="mgwfltk_zlibnox-$FL_API_VERSION.dll"
+                FLTK3_DSONAME="mgwfltk3nox-$FL_API_VERSION.dll"
+                FLTK3GL_DSONAME="mgwfltk3glnox-$FL_API_VERSION.dll"
+                FLTK3IMAGES_DSONAME="mgwfltk3imagesnox-$FL_API_VERSION.dll"
+                FLTK3PNG_DSONAME="mgwfltk3pngnox-$FL_API_VERSION.dll"
+                FLTK3JPEG_DSONAME="mgwfltk3jpegnox-$FL_API_VERSION.dll"
+                FLTK3ZLIB_DSONAME="mgwfltk3zlibnox-$FL_API_VERSION.dll"
             else
                 if test x$enable_x11 = xyes; then
-                    FLTK_DSONAME="cygfltk-$FL_API_VERSION.dll"
-                    FLTK_GL_DSONAME="cygfltk_gl-$FL_API_VERSION.dll"
-                    FLTK_IMAGES_DSONAME="cygfltk_images-$FL_API_VERSION.dll"
-                    FLTK_PNG_DSONAME="cygfltk_png-$FL_API_VERSION.dll"
-                    FLTK_JPEG_DSONAME="cygfltk_jpeg-$FL_API_VERSION.dll"
-                    FLTK_ZLIB_DSONAME="cygfltk_zlib-$FL_API_VERSION.dll"
+                    FLTK3_DSONAME="cygfltk3-$FL_API_VERSION.dll"
+                    FLTK3GL_DSONAME="cygfltk3gl-$FL_API_VERSION.dll"
+                    FLTK3IMAGES_DSONAME="cygfltk3images-$FL_API_VERSION.dll"
+                    FLTK3PNG_DSONAME="cygfltk3png-$FL_API_VERSION.dll"
+                    FLTK3JPEG_DSONAME="cygfltk3jpeg-$FL_API_VERSION.dll"
+                    FLTK3ZLIB_DSONAME="cygfltk3zlib-$FL_API_VERSION.dll"
                 else
-                    FLTK_DSONAME="cygfltknox-$FL_API_VERSION.dll"
-                    FLTK_GL_DSONAME="cygfltk_glnox-$FL_API_VERSION.dll"
-                    FLTK_IMAGES_DSONAME="cygfltk_imagesnox-$FL_API_VERSION.dll"
-                    FLTK_PNG_DSONAME="cygfltk_pngnox-$FL_API_VERSION.dll"
-                    FLTK_JPEG_DSONAME="cygfltk_jpegnox-$FL_API_VERSION.dll"
-                    FLTK_ZLIB_DSONAME="cygfltk_zlibnox-$FL_API_VERSION.dll"
+                    FLTK3_DSONAME="cygfltk3nox-$FL_API_VERSION.dll"
+                    FLTK3GL_DSONAME="cygfltk3glnox-$FL_API_VERSION.dll"
+                    FLTK3IMAGES_DSONAME="cygfltk3imagesnox-$FL_API_VERSION.dll"
+                    FLTK3PNG_DSONAME="cygfltk3pngnox-$FL_API_VERSION.dll"
+                    FLTK3JPEG_DSONAME="cygfltk3jpegnox-$FL_API_VERSION.dll"
+                    FLTK3ZLIB_DSONAME="cygfltk3zlibnox-$FL_API_VERSION.dll"
                 fi
             fi
             #-----------------------------------------------------------
@@ -301,12 +301,12 @@ if test x$enable_shared = xyes; then
             ;;
         *)
             AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)
-            FLTK_DSONAME="libfltk.so.$FL_API_VERSION"
-            FLTK_GL_DSONAME="libfltk_gl.so.$FL_API_VERSION"
-            FLTK_IMAGES_DSONAME="libfltk_images.so.$FL_API_VERSION"
-            FLTK_PNG_DSONAME="libfltk_png.so.$FL_API_VERSION"
-            FLTK_JPEG_DSONAME="libfltk_jpeg.so.$FL_API_VERSION"
-            FLTK_ZLIB_DSONAME="libfltk_zlib.so.$FL_API_VERSION"
+            FLTK3_DSONAME="libfltk3.so.$FL_API_VERSION"
+            FLTK3GL_DSONAME="libfltk3gl.so.$FL_API_VERSION"
+            FLTK3IMAGES_DSONAME="libfltk3images.so.$FL_API_VERSION"
+            FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
+            FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
+            FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
             ;;
     esac
@@ -315,12 +315,12 @@ if test x$enable_shared = xyes; then
 else
     DSOCOMMAND="echo"
     DSOLINK=""
-    FLTK_DSONAME=""
-    FLTK_GL_DSONAME=""
-    FLTK_IMAGES_DSONAME=""
-    FLTK_PNG_DSONAME=""
-    FLTK_JPEG_DSONAME=""
-    FLTK_ZLIB_DSONAME=""
+    FLTK3_DSONAME=""
+    FLTK3GL_DSONAME=""
+    FLTK3IMAGES_DSONAME=""
+    FLTK3PNG_DSONAME=""
+    FLTK3JPEG_DSONAME=""
+    FLTK3ZLIB_DSONAME=""
     PICFLAG=0
     SHAREDSUFFIX=""
     FLUID="fluid"
@@ -330,12 +330,12 @@ fi
 AC_SUBST(DSOCOMMAND)
 AC_SUBST(DSOFLAGS)
 AC_SUBST(DSOLINK)
-AC_SUBST(FLTK_DSONAME)
-AC_SUBST(FLTK_GL_DSONAME)
-AC_SUBST(FLTK_IMAGES_DSONAME)
-AC_SUBST(FLTK_PNG_DSONAME)
-AC_SUBST(FLTK_JPEG_DSONAME)
-AC_SUBST(FLTK_ZLIB_DSONAME)
+AC_SUBST(FLTK3_DSONAME)
+AC_SUBST(FLTK3GL_DSONAME)
+AC_SUBST(FLTK3IMAGES_DSONAME)
+AC_SUBST(FLTK3PNG_DSONAME)
+AC_SUBST(FLTK3JPEG_DSONAME)
+AC_SUBST(FLTK3ZLIB_DSONAME)
 AC_SUBST(SHAREDSUFFIX)
 AC_SUBST(LINKSHARED)
 AC_SUBST(FLUID)
@@ -610,7 +610,7 @@ AC_SUBST(STATICIMAGELIBS)
 # Handle the JPEG lib linking mode (use fltk local or system lib)
 # If --enable-(resp. --disable-)localjpeg parameter is not set by user
 # Then we check the JPEG lib usability, with result in sysjpeglib_ok variable
-AC_ARG_ENABLE(localjpeg, [  --enable-localjpeg      use local JPEG library, default=auto])
+AC_ARG_ENABLE(localjpeg, [  --enable-localjpeg      use local JPEG library, default=yes])
 # Check for System lib use if automatic mode or --disable-localjpeg is requested
 sysjpeglib_ok=no
 sysjpeginc_ok=no
@@ -624,10 +624,10 @@ if test x$enable_localjpeg != xyes; then
 fi
 # Now set the jpeg lib and include flags according to the requested mode and availability 
 if test x$enable_localjpeg = xyes -o x$sysjpeglib_ok = xno; then
-    JPEGINC="-I../jpeg"
+    JPEGINC="-I../include/fltk3jpeg"
     JPEG="jpeg"
-    IMAGELIBS="-lfltk_jpeg $IMAGELIBS"
-    STATICIMAGELIBS="\$libdir/libfltk_jpeg.a $STATICIMAGELIBS"
+    IMAGELIBS="-lfltk3jpeg $IMAGELIBS"
+    STATICIMAGELIBS="\$libdir/libfltk3jpeg.a $STATICIMAGELIBS"
     AC_DEFINE(HAVE_LIBJPEG)
     #ac_cv_lib_jpeg_jpeg_CreateCompress=no # from ima: should not be necessary
     # Finally, warn user if system lib was requested but not found
@@ -645,7 +645,7 @@ fi
 # Handle the ZLIB lib linking mode (use fltk local or system lib)
 # If --enable-(resp. --disable-)localzlib parameter is not set by user
 # Then we check the ZLIB lib usability, with result in syszlib_ok variable
-AC_ARG_ENABLE(localzlib, [  --enable-localzlib      use local ZLIB library, default=auto])
+AC_ARG_ENABLE(localzlib, [  --enable-localzlib      use local ZLIB library, default=yes])
 # Check for System lib use if automatic mode or --disable-localzlib is requested
 syszlib_ok=no
 syszinc_ok=no
@@ -659,11 +659,11 @@ if test x$enable_localzlib != xyes; then
 fi
 # Now set the Z lib and include flags according to the requested mode and availability 
 if test x$enable_localzlib = xyes -o x$syszlib_ok = xno ; then
-    ZLIBINC="-I../zlib"
+    ZLIBINC="-I../include/fltk3zlib"
     ZLIB="zlib"
-    LIBS="-lfltk_zlib $LIBS"
-    IMAGELIBS="-lfltk_zlib $IMAGELIBS"
-    STATICIMAGELIBS="\$libdir/libfltk_zlib.a $STATICIMAGELIBS"
+    LIBS="-lfltk3zlib $LIBS"
+    IMAGELIBS="-lfltk3zlib $IMAGELIBS"
+    STATICIMAGELIBS="\$libdir/libfltk3zlib.a $STATICIMAGELIBS"
     AC_DEFINE(HAVE_LIBZ)
     ac_cv_lib_z_gzgets=no # fc: is still necessary ?
     # Finally, warn user if system lib was requested but not found
@@ -682,7 +682,7 @@ fi
 # Handle the PNG lib linking mode (use fltk local or system lib)
 # If --enable-(resp. --disable-)localpng parameter is not set by user
 # Then we check the png lib usability with result in syspng_lib variable
-AC_ARG_ENABLE(localpng, [  --enable-localpng       use local PNG library, default=auto])
+AC_ARG_ENABLE(localpng, [  --enable-localpng       use local PNG library, default=yes])
 
 # Now check if system lib is usable, we check Lib AND include availability with inc variant,
 # but only, if the builtin lib is not requested
@@ -703,10 +703,10 @@ fi
 
 # The following is executed if the lib was not found usable or if local lib is required explicitly
 if test x$enable_localpng = xyes -o x$syspnglib_ok = xno ; then
-    PNGINC="-I../png"
+    PNGINC="-I../include/fltk3png"
     PNG="png"
-    IMAGELIBS="-lfltk_png $IMAGELIBS"
-    STATICIMAGELIBS="\$libdir/libfltk_png.a $STATICIMAGELIBS"
+    IMAGELIBS="-lfltk3png $IMAGELIBS"
+    STATICIMAGELIBS="\$libdir/libfltk3png.a $STATICIMAGELIBS"
     AC_DEFINE(HAVE_LIBPNG)
     AC_DEFINE(HAVE_PNG_H)
     AC_DEFINE(HAVE_PNG_GET_VALID)
@@ -1371,7 +1371,7 @@ fi
 
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec FL/Makefile)
+AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec include/fltk3/Makefile)
 
 dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config

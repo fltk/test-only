@@ -48,7 +48,7 @@
 #include <sys/stat.h>
 #include <time.h> // time(), localtime(), etc.
 
-#include "../src/flstring.h"
+#include "../src/core/flstring.h"
 #include "alignment_panel.h"
 #include "function_panel.h"
 #include "template_panel.h"
