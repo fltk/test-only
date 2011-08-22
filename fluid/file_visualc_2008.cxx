@@ -300,7 +300,7 @@ static int write_configuration(FILE *out, Fl_Target_Type *tgt, char is_debug) {
     fprintf(out, "\t\t\t\tInlineFunctionExpansion=\"2\"\r\n");
     fprintf(out, "\t\t\t\tFavorSizeOrSpeed=\"2\"\r\n");
   }
-  fprintf(out, "\t\t\t\tAdditionalIncludeDirectories=\".;..\\..;..\\..\\zlib;..\\..\\png;..\\..\\jpeg\"\r\n");
+  fprintf(out, "\t\t\t\tAdditionalIncludeDirectories=\".;..\\..\\include;..\\..\\include\\fltk3zlib;..\\..\\include\\fltk3png;..\\..\\include\\fltk3jpeg\"\r\n");
   fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_CRT_SECURE_NO_DEPRECATE;WIN32;%s;%s_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN\"\r\n", pre, pre2);
   fprintf(out, "\t\t\t\tRuntimeLibrary=\"%d\"\r\n", lib);
   fprintf(out, "\t\t\t\tUsePrecompiledHeader=\"0\"\r\n");
