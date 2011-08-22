@@ -179,7 +179,7 @@ all:	$(ALL) $(GLDEMOS)
 gldemos:	$(GLALL)
 
 depend:	$(CPPFILES)
-	makedepend -Y -I.. -f makedepend $(CPPFILES)
+	makedepend -Y -I../include -f makedepend $(CPPFILES)
 
 # Automatically generated dependencies...
 include makedepend
@@ -266,7 +266,7 @@ uninstall-osx:
 	../fluid/fluid$(EXEEXT) -c $<
 
 # All demos depend on the FLTK library...
-$(ALL): $(FLTK_LIBNAME)
+$(ALL): $(FLTK3_LIBNAME)
 
 Demo$(EXEEXT): demo.o $(FLTK3_LIB_NAME)
 	echo Linking $@...

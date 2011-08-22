@@ -147,7 +147,7 @@ UNINSTALL_DESKTOP = @UNINSTALL_DESKTOP@
 
 .o$(EXEEXT):
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) $< $(LINK_FLTK) $(LDLIBS) -o $@
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) $< $(LINK_FLTK3) $(LDLIBS) -o $@
 
 .c.o:
 	echo Compiling $<...

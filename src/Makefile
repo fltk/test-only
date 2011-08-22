@@ -320,10 +320,16 @@ $(FLTK3_LIBNAME): $(FLTK3_OBJECTS)
 	$(LIBCOMMAND) $@ $(FLTK3_OBJECTS)
 	$(RANLIB) $@
 
-$(FLTK3JPEG_LIBNAME): $(FLTK3JPEG_OBJECTS)
+$(FLTK3GL_LIBNAME): $(FLTK3GL_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	$(RM) $@
-	$(LIBCOMMAND) $@ $(FLTK3JPEG_OBJECTS)
+	$(LIBCOMMAND) $@ $(FLTK3GL_OBJECTS)
+	$(RANLIB) $@
+
+$(FLTK3IMAGES_LIBNAME): $(FLTK3IMAGES_OBJECTS)
+	echo $(LIBCOMMAND) $@ ...
+	$(RM) $@
+	$(LIBCOMMAND) $@ $(FLTK3IMAGES_OBJECTS)
 	$(RANLIB) $@
 
 $(FLTK3PNG_LIBNAME): $(FLTK3PNG_OBJECTS)
@@ -332,109 +338,103 @@ $(FLTK3PNG_LIBNAME): $(FLTK3PNG_OBJECTS)
 	$(LIBCOMMAND) $@ $(FLTK3PNG_OBJECTS)
 	$(RANLIB) $@
 
+$(FLTK3JPEG_LIBNAME): $(FLTK3JPEG_OBJECTS)
+	echo $(LIBCOMMAND) $@ ...
+	$(RM) $@
+	$(LIBCOMMAND) $@ $(FLTK3JPEG_OBJECTS)
+	$(RANLIB) $@
+
 $(FLTK3ZLIB_LIBNAME): $(FLTK3ZLIB_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	$(RM) $@
 	$(LIBCOMMAND) $@ $(FLTK3ZLIB_OBJECTS)
 	$(RANLIB) $@
 
-libfltk.so.1.3: $(FLTK_OBJECTS)
+libfltk.so.1.3: $(FLTK3_OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLTK_OBJECTS)
+	$(DSOCOMMAND) $@ $(FLTK3_OBJECTS)
 	$(RM) libfltk.so
 	$(LN) libfltk.so.1.3 libfltk.so
 
-libfltk.sl.1.3: $(FLTK_OBJECTS)
+libfltk.sl.1.3: $(FLTK3_OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLTK_OBJECTS)
+	$(DSOCOMMAND) $@ $(FLTK3_OBJECTS)
 	$(RM) libfltk.sl
 	$(LN) libfltk.sl.1.3 libfltk.sl
 
-libfltk.1.3.dylib: $(FLTK_OBJECTS)
+libfltk.1.3.dylib: $(FLTK3_OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
 		-current_version 1.3.0 \
 		-compatibility_version 1.3.0 \
-		$(FLTK_OBJECTS) $(LDLIBS)
+		$(FLTK3_OBJECTS) $(LDLIBS)
 	$(RM) libfltk.dylib
 	$(LN) libfltk.1.3.dylib libfltk.dylib
 
-libfltk_s.a: $(FLTK_OBJECTS)
+libfltk_s.a: $(FLTK3_OBJECTS)
 	echo $(DSOCOMMAND) libfltk_s.o ...
-	$(DSOCOMMAND) libfltk_s.o $(FLTK_OBJECTS) $(IMAGELIBS)
+	$(DSOCOMMAND) libfltk_s.o $(FLTK3_OBJECTS) $(IMAGELIBS)
 	echo $(LIBCOMMAND) libfltk_s.a libfltk_s.o
 	$(RM) $@
 	$(LIBCOMMAND) libfltk_s.a libfltk_s.o
 	$(CHMOD) +x libfltk_s.a
 
-$(FLTK3GL_LIBNAME): $(FLTK3GL_OBJECTS)
-	echo $(LIBCOMMAND) $@ ...
-	$(RM) $@
-	$(LIBCOMMAND) $@ $(FLTK3GL_OBJECTS)
-	$(RANLIB) $@
-
-libfltk_gl.so.1.3: $(FLTK_GL_OBJECTS) libfltk.so.1.3
+libfltk_gl.so.1.3: $(FLTK3GL_OBJECTS) libfltk.so.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLTK_GL_OBJECTS) -L. -lfltk
+	$(DSOCOMMAND) $@ $(FLTK3GL_OBJECTS) -L. -lfltk
 	$(RM) libfltk_gl.so
 	$(LN) libfltk_gl.so.1.3 libfltk_gl.so
 
-libfltk_gl.sl.1.3: $(FLTK_GL_OBJECTS) libfltk.sl.1.3
+libfltk_gl.sl.1.3: $(FLTK3GL_OBJECTS) libfltk.sl.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLTK_GL_OBJECTS) -L. -lfltk
+	$(DSOCOMMAND) $@ $(FLTK3GL_OBJECTS) -L. -lfltk
 	$(RM) libfltk_gl.sl
 	$(LN) libfltk_gl.sl.1.3 libfltk_gl.sl
 
-libfltk_gl.1.3.dylib: $(FLTK_GL_OBJECTS) libfltk.1.3.dylib
+libfltk_gl.1.3.dylib: $(FLTK3GL_OBJECTS) libfltk.1.3.dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
 		-current_version 1.3.0 \
 		-compatibility_version 1.3.0 \
-		$(FLTK_GL_OBJECTS) -L. $(GLDLIBS) -lfltk
+		$(FLTK3GL_OBJECTS) -L. $(GLDLIBS) -lfltk
 	$(RM) libfltk_gl.dylib
 	$(LN) libfltk_gl.1.3.dylib libfltk_gl.dylib
 
-libfltk_gl_s.a: $(FLTK_GL_OBJECTS)
+libfltk_gl_s.a: $(FLTK3GL_OBJECTS)
 	echo $(DSOCOMMAND) libfltk_gl_s.o ...
-	$(DSOCOMMAND) libfltk_gl_s.o $(FLTK_GL_OBJECTS)
+	$(DSOCOMMAND) libfltk_gl_s.o $(FLTK3GL_OBJECTS)
 	echo $(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o
 	$(RM) $@
 	$(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o
 	$(CHMOD) +x libfltk_gl_s.a
 
-$(FLTK3IMAGES_LIBNAME): $(FLTK3IMAGES_OBJECTS)
-	echo $(LIBCOMMAND) $@ ...
-	$(RM) $@
-	$(LIBCOMMAND) $@ $(FLTK3IMAGES_OBJECTS)
-	$(RANLIB) $@
-
-libfltk_images.so.1.3: $(FLTK_IMAGES_OBJECTS) libfltk.so.1.3
+libfltk_images.so.1.3: $(FLTK3IMAGES_OBJECTS) libfltk.so.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLTK_IMAGES_OBJECTS) -L. $(IMAGELIBS) -lfltk
+	$(DSOCOMMAND) $@ $(FLTK3IMAGES_OBJECTS) -L. $(IMAGELIBS) -lfltk
 	$(RM) libfltk_images.so
 	$(LN) libfltk_images.so.1.3 libfltk_images.so
 
-libfltk_images.sl.1.3: $(FLTK_IMAGES_OBJECTS) libfltk.sl.1.3
+libfltk_images.sl.1.3: $(FLTK3IMAGES_OBJECTS) libfltk.sl.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLTK_IMAGES_OBJECTS) -L. $(IMAGELIBS) -lfltk
+	$(DSOCOMMAND) $@ $(FLTK3IMAGES_OBJECTS) -L. $(IMAGELIBS) -lfltk
 	$(RM) libfltk_images.sl
 	$(LN) libfltk_images.sl.1.3 libfltk_images.sl
 
-libfltk_images.1.3.dylib: $(FLTK_IMAGES_OBJECTS) libfltk.1.3.dylib
+libfltk_images.1.3.dylib: $(FLTK3IMAGES_OBJECTS) libfltk.1.3.dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
 		-current_version 1.3.0 \
 		-compatibility_version 1.3.0 \
-		$(FLTK_IMAGES_OBJECTS)  -L. $(LDLIBS) $(IMAGELIBS) -lfltk
+		$(FLTK3IMAGES_OBJECTS)  -L. $(LDLIBS) $(IMAGELIBS) -lfltk
 	$(RM) libfltk_images.dylib
 	$(LN) libfltk_images.1.3.dylib libfltk_images.dylib
 
-libfltk_images_s.a: $(FLTK_IMAGES_OBJECTS)
+libfltk_images_s.a: $(FLTK3IMAGES_OBJECTS)
 	echo $(DSOCOMMAND) libfltk_images_s.o ...
-	$(DSOCOMMAND) libfltk_images_s.o $(FLTK_IMAGES_OBJECTS)
+	$(DSOCOMMAND) libfltk_images_s.o $(FLTK3IMAGES_OBJECTS)
 	echo $(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
 	$(RM) $@
 	$(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
@@ -452,20 +452,20 @@ libfltk_images_s.a: $(FLTK_IMAGES_OBJECTS)
 # cygwin GDI shared libraries
 #-----------------------------------------------------------------
 
-cygfltknox-1.3.dll: $(FLTK_LIBNAME)
-	echo $(DSOCOMMAND) $(FLTK_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_LIBNAME) -Wl,--no-whole-archive \
+cygfltknox-1.3.dll: $(FLTK3_LIBNAME)
+	echo $(DSOCOMMAND) $(FLTK3_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk.dll.a $(LDLIBS)
 
-cygfltknox_gl-1.3.dll: $(FLTK_GL_LIBNAME) cygfltknox-1.3.dll
-	echo $(DSOCOMMAND) $(FLTK_GL_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_GL_LIBNAME) -Wl,--no-whole-archive \
+cygfltknox_gl-1.3.dll: $(FLTK3GL_LIBNAME) cygfltknox-1.3.dll
+	echo $(DSOCOMMAND) $(FLTK3GL_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3GL_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk_gl.dll.a \
 		-L. -lfltk $(GLDLIBS)
 
-cygfltknox_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) cygfltknox-1.3.dll
-	echo $(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) -Wl,--no-whole-archive \
+cygfltknox_images-1.3.dll: $(FLTK3IMAGES_LIBNAME) cygfltknox-1.3.dll
+	echo $(DSOCOMMAND) $(FLTK3IMAGES_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3IMAGES_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk_images.dll.a \
 		-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \
 			$(IMAGELIBS) $(LDLIBS)
@@ -474,32 +474,32 @@ cygfltknox_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) cygfltknox-1.3.dll
 # cygwin X11 shared libraries
 #-----------------------------------------------------------------
 
-cygfltk-1.3.dll: $(FLTK_LIBNAME)
-	echo $(DSOCOMMAND) $(FLTK_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_LIBNAME) -Wl,--no-whole-archive \
+cygfltk-1.3.dll: $(FLTK3_LIBNAME)
+	echo $(DSOCOMMAND) $(FLTK3_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk.dll.a $(LDLIBS)
 
-cygfltk_gl-1.3.dll: $(FLTK_GL_LIBNAME) cygfltk-1.3.dll
-	echo $(DSOCOMMAND) $(FLTK_GL_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_GL_LIBNAME) -Wl,--no-whole-archive \
+cygfltk_gl-1.3.dll: $(FLTK3GL_LIBNAME) cygfltk-1.3.dll
+	echo $(DSOCOMMAND) $(FLTK3GL_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3GL_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk_gl.dll.a \
 		-L. -lfltk $(GLDLIBS)
 
-cygfltk_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) cygfltk-1.3.dll
-	echo $(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) -Wl,--no-whole-archive \
+cygfltk_images-1.3.dll: $(FLTK3IMAGES_LIBNAME) cygfltk-1.3.dll
+	echo $(DSOCOMMAND) $(FLTK3IMAGES_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3IMAGES_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk_images.dll.a \
 		-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \
 			$(IMAGELIBS) $(LDLIBS)
 
-mgwfltknox-1.3.dll: $(FLTK_LIBNAME)
-	echo $(DSOCOMMAND) $(FLTK_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_LIBNAME) -Wl,--no-whole-archive \
+mgwfltknox-1.3.dll: $(FLTK3_LIBNAME)
+	echo $(DSOCOMMAND) $(FLTK3_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk.dll.a $(LDLIBS)
 
-mgwfltknox_gl-1.3.dll: $(FLTK_GL_LIBNAME) mgwfltknox-1.3.dll
-	echo $(DSOCOMMAND) $(FLTK_GL_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_GL_LIBNAME) -Wl,--no-whole-archive \
+mgwfltknox_gl-1.3.dll: $(FLTK3GL_LIBNAME) mgwfltknox-1.3.dll
+	echo $(DSOCOMMAND) $(FLTK3GL_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3GL_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk_gl.dll.a \
 		-L. -lfltk $(GLDLIBS)
 
@@ -507,27 +507,27 @@ mgwfltknox_gl-1.3.dll: $(FLTK_GL_LIBNAME) mgwfltknox-1.3.dll
 # See STR #1585 for --exclude-libs
 #-----------------------------------------------------
 
-mgwfltknox_images-1.3.dll: $(FLTK_IMAGES_LIBNAME) mgwfltknox-1.3.dll
-	echo $(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) ...
-	$(DSOCOMMAND) $(FLTK_IMAGES_LIBNAME) -Wl,--no-whole-archive \
+mgwfltknox_images-1.3.dll: $(FLTK3IMAGES_LIBNAME) mgwfltknox-1.3.dll
+	echo $(DSOCOMMAND) $(FLTK3IMAGES_LIBNAME) ...
+	$(DSOCOMMAND) $(FLTK3IMAGES_LIBNAME) -Wl,--no-whole-archive \
 		-Wl,--out-implib=libfltk_images.dll.a \
 		-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \
 			$(IMAGELIBS) $(LDLIBS)
 
 clean:
 	-$(RM) *.o xutf8/*.o *.dll.a core.* *~ *.bak *.bck
-	-$(RM) $(FLTK_DSONAME) $(FLTK_GL_DSONAME) $(FLTK_IMAGES_DSONAME) \
-		$(FLTK_LIBNAME) $(FLTK_GL_LIBNAME) \
-		$(FLTK_IMAGES_LIBNAME) \
+	-$(RM) $(FLTK3_DSONAME) $(FLTK3GL_DSONAME) $(FLTK3IMAGES_DSONAME) \
+		$(FLTK3_LIBNAME) $(FLTK3GL_LIBNAME) \
+		$(FLTK3IMAGES_LIBNAME) \
 		libfltk.so libfltk_gl.so libfltk_images.so \
 		libfltk.sl libfltk_gl.sl libfltk_images.sl \
 		libfltk.dylib \
 		libfltk_gl.dylib libfltk_images.dylib \
 		cmap
 
-depend:	$(FLTK_CPPFILES) $(FLTK_MMFILES) $(FLTK_GL_CPPFILES) $(FLTK_IMAGES_CPPFILES) $(FLTK_CFILES)
-	makedepend -Y -I.. -f makedepend $(FLTK_CPPFILES) $(FLTK_MMFILES) \
-		$(FLTK_GL_CPPFILES) $(FLTK_IMAGES_CPPFILES) $(FLTK_CFILES)
+depend:	$(FLTK3_CPPFILES) $(FLTK3_MMFILES) $(FLTK3GL_CPPFILES) $(FLTK3IMAGES_CPPFILES) $(FLTK3_CFILES)
+	makedepend -Y -I../include -f makedepend $(FLTK3_CPPFILES) $(FLTK3_MMFILES) \
+		$(FLTK3GL_CPPFILES) $(FLTK3IMAGES_CPPFILES) $(FLTK3_CFILES)
 
 # Automatically generated dependencies... generated on a Linux/Unix host !
 include makedepend
@@ -600,111 +600,111 @@ gl_start.o:	../fltk3/osx.h ../fltk3/win32.h
 
 ################################################################
 
-install: $(FLTK_LIBNAME) $(FLTK_DSONAME) \
-	$(FLTK_GL_LIBNAME) $(FLTK_GL_DSONAME) \
-	$(FLTK_IMAGES_LIBNAME) $(FLTK_IMAGES_DSONAME) 
+install: $(FLTK3_LIBNAME) $(FLTK3_DSONAME) \
+	$(FLTK3GL_LIBNAME) $(FLTK3GL_DSONAME) \
+	$(FLTK3IMAGES_LIBNAME) $(FLTK3IMAGES_DSONAME) 
 	echo "Installing libraries in $(DESTDIR)$(libdir)..."
 	-$(INSTALL_DIR) $(DESTDIR)$(libdir)
 	-$(INSTALL_DIR) $(DESTDIR)$(bindir)
-	$(RM) $(DESTDIR)$(libdir)/$(FLTK_LIBBASENAME)
-	$(INSTALL_LIB) $(FLTK_LIBNAME) $(DESTDIR)$(libdir)
-	$(INSTALL_LIB) $(FLTK_IMAGES_LIBNAME) $(DESTDIR)$(libdir)
-	$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK_LIBBASENAME)
-	if test x$(FLTK_GL_LIBNAME) != x; then \
-		$(INSTALL_LIB) $(FLTK_GL_LIBNAME) $(DESTDIR)$(libdir); \
-		$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK_GL_LIBBASENAME); \
+	$(RM) $(DESTDIR)$(libdir)/$(FLTK3_LIBBASENAME)
+	$(INSTALL_LIB) $(FLTK3_LIBNAME) $(DESTDIR)$(libdir)
+	$(INSTALL_LIB) $(FLTK3IMAGES_LIBNAME) $(DESTDIR)$(libdir)
+	$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK3_LIBBASENAME)
+	if test x$(FLTK3GL_LIBNAME) != x; then \
+		$(INSTALL_LIB) $(FLTK3GL_LIBNAME) $(DESTDIR)$(libdir); \
+		$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK3GL_LIBBASENAME); \
 	fi
-	$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK_IMAGES_LIBBASENAME)
-	if test x$(FLTK_DSONAME) = xlibfltk.so.1.3; then\
+	$(RANLIB) $(DESTDIR)$(libdir)/$(FLTK3IMAGES_LIBBASENAME)
+	if test x$(FLTK3_DSONAME) = xlibfltk.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk.so*;\
 		$(INSTALL_LIB) libfltk.so.1.3 $(DESTDIR)$(libdir); \
 		$(LN) libfltk.so.1.3 $(DESTDIR)$(libdir)/libfltk.so;\
 	fi
-	if test x$(FLTK_DSONAME) = xlibfltk.sl.1.3; then\
+	if test x$(FLTK3_DSONAME) = xlibfltk.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk.sl*;\
 		$(INSTALL_LIB) libfltk.sl.1.3 $(DESTDIR)$(libdir); \
 		$(LN) libfltk.sl.1.3 $(DESTDIR)$(libdir)/libfltk.sl;\
 	fi
-	if test x$(FLTK_DSONAME) = xlibfltk.1.3.dylib; then\
+	if test x$(FLTK3_DSONAME) = xlibfltk.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk.*dylib;\
 		$(INSTALL_LIB) libfltk.1.3.dylib $(DESTDIR)$(libdir); \
 		$(LN) libfltk.1.3.dylib $(DESTDIR)$(libdir)/libfltk.dylib;\
 	fi
-	if test x$(FLTK_DSONAME) = xlibfltk_s.a; then\
+	if test x$(FLTK3_DSONAME) = xlibfltk_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_s.a;\
 		$(INSTALL_LIB) libfltk_s.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_DSONAME) = xcygfltknox-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME);\
-		$(INSTALL_LIB) $(FLTK_DSONAME) $(DESTDIR)$(bindir); \
+	if test x$(FLTK3_DSONAME) = xcygfltknox-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3_DSONAME);\
+		$(INSTALL_LIB) $(FLTK3_DSONAME) $(DESTDIR)$(bindir); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\
 		$(INSTALL_LIB) libfltk.dll.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_DSONAME) = xmgwfltknox-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME);\
-		$(INSTALL_LIB) $(FLTK_DSONAME) $(DESTDIR)$(bindir); \
+	if test x$(FLTK3_DSONAME) = xmgwfltknox-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3_DSONAME);\
+		$(INSTALL_LIB) $(FLTK3_DSONAME) $(DESTDIR)$(bindir); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\
 		$(INSTALL_LIB) libfltk.dll.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl.so.1.3; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.so*;\
 		$(INSTALL_LIB) libfltk_gl.so.1.3 $(DESTDIR)$(libdir); \
 		$(LN) libfltk_gl.so.1.3 $(DESTDIR)$(libdir)/libfltk_gl.so;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl.sl.1.3; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.sl*;\
 		$(INSTALL_LIB) libfltk_gl.sl.1.3 $(DESTDIR)$(libdir); \
 		$(LN) libfltk_gl.sl.1.3 $(DESTDIR)$(libdir)/libfltk_gl.sl;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl.1.3.dylib; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.*dylib;\
 		$(INSTALL_LIB) libfltk_gl.1.3.dylib $(DESTDIR)$(libdir); \
 		$(LN) libfltk_gl.1.3.dylib $(DESTDIR)$(libdir)/libfltk_gl.dylib;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl_s.a; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl_s.a;\
 		$(INSTALL_LIB) libfltk_gl_s.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_GL_DSONAME) = xcygfltknox_gl-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME);\
-		$(INSTALL_LIB) $(FLTK_GL_DSONAME) $(DESTDIR)$(bindir); \
+	if test x$(FLTK3GL_DSONAME) = xcygfltknox_gl-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3GL_DSONAME);\
+		$(INSTALL_LIB) $(FLTK3GL_DSONAME) $(DESTDIR)$(bindir); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\
 		$(INSTALL_LIB) libfltk_gl.dll.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_GL_DSONAME) = xmgwfltknox_gl-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME);\
-		$(INSTALL_LIB) $(FLTK_GL_DSONAME) $(DESTDIR)$(bindir); \
+	if test x$(FLTK3GL_DSONAME) = xmgwfltknox_gl-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3GL_DSONAME);\
+		$(INSTALL_LIB) $(FLTK3GL_DSONAME) $(DESTDIR)$(bindir); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\
 		$(INSTALL_LIB) libfltk_gl.dll.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.so.1.3; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.so*;\
 		$(INSTALL_LIB) libfltk_images.so.1.3 $(DESTDIR)$(libdir); \
 		$(LN) libfltk_images.so.1.3 $(DESTDIR)$(libdir)/libfltk_images.so;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.sl.1.3; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.sl*;\
 		$(INSTALL_LIB) libfltk_images.sl.1.3 $(DESTDIR)$(libdir); \
 		$(LN) libfltk_images.sl.1.3 $(DESTDIR)$(libdir)/libfltk_images.sl;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.1.3.dylib; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.*dylib;\
 		$(INSTALL_LIB) libfltk_images.1.3.dylib $(DESTDIR)$(libdir); \
 		$(LN) libfltk_images.1.3.dylib $(DESTDIR)$(libdir)/libfltk_images.dylib;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images_s.a; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images_s.a;\
 		$(INSTALL_LIB) libfltk_images_s.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xcygfltknox_images-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \
-		$(INSTALL_LIB) $(FLTK_IMAGES_DSONAME) $(DESTDIR)$(bindir); \
+	if test x$(FLTK3IMAGES_DSONAME) = xcygfltknox_images-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3IMAGES_DSONAME); \
+		$(INSTALL_LIB) $(FLTK3IMAGES_DSONAME) $(DESTDIR)$(bindir); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\
 		$(INSTALL_LIB) libfltk_images.dll.a $(DESTDIR)$(libdir); \
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xmgwfltknox_images-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \
-		$(INSTALL_LIB) $(FLTK_IMAGES_DSONAME) $(DESTDIR)$(bindir); \
+	if test x$(FLTK3IMAGES_DSONAME) = xmgwfltknox_images-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3IMAGES_DSONAME); \
+		$(INSTALL_LIB) $(FLTK3IMAGES_DSONAME) $(DESTDIR)$(bindir); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\
 		$(INSTALL_LIB) libfltk_images.dll.a $(DESTDIR)$(libdir); \
 	fi
@@ -712,83 +712,83 @@ install: $(FLTK_LIBNAME) $(FLTK_DSONAME) \
 
 uninstall:
 	echo "Uninstalling libraries..."
-	$(RM) $(DESTDIR)$(libdir)/$(FLTK_LIBBASENAME)
-	if test x$(FLTK_DSONAME) = xlibfltk.so.1.3; then\
+	$(RM) $(DESTDIR)$(libdir)/$(FLTK3_LIBBASENAME)
+	if test x$(FLTK3_DSONAME) = xlibfltk.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk.so*;\
 	fi
-	if test x$(FLTK_DSONAME) = xlibfltk.sl.1.3; then\
+	if test x$(FLTK3_DSONAME) = xlibfltk.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk.sl*;\
 	fi
-	if test x$(FLTK_DSONAME) = xlibfltk.1.3.dylib; then\
+	if test x$(FLTK3_DSONAME) = xlibfltk.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk.*dylib;\
 	fi
-	if test x$(FLTK_DSONAME) = xlibfltk_s.a; then\
+	if test x$(FLTK3_DSONAME) = xlibfltk_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_s.a;\
 	fi
-	if test x$(FLTK_DSONAME) = xcygfltknox-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME); \
+	if test x$(FLTK3_DSONAME) = xcygfltknox-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\
 	fi
-	if test x$(FLTK_DSONAME) = xcygfltk-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME); \
+	if test x$(FLTK3_DSONAME) = xcygfltk-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\
 	fi
-	if test x$(FLTK_DSONAME) = xmgwfltknox-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_DSONAME); \
+	if test x$(FLTK3_DSONAME) = xmgwfltknox-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk.dll.a;\
 	fi
-	if test x$(FLTK_GL_LIBNAME) != x; then\
-		$(RM) $(DESTDIR)$(libdir)/$(FLTK_GL_LIBBASENAME);\
+	if test x$(FLTK3GL_LIBNAME) != x; then\
+		$(RM) $(DESTDIR)$(libdir)/$(FLTK3GL_LIBBASENAME);\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl.so.1.3; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.so*;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl.sl.1.3; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.sl*;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl.1.3.dylib; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.*dylib;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xlibfltk_gl_s.a; then\
+	if test x$(FLTK3GL_DSONAME) = xlibfltk_gl_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl_s.a;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xcygfltknox_gl-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME); \
+	if test x$(FLTK3GL_DSONAME) = xcygfltknox_gl-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3GL_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xcygfltk_gl-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME); \
+	if test x$(FLTK3GL_DSONAME) = xcygfltk_gl-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3GL_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\
 	fi
-	if test x$(FLTK_GL_DSONAME) = xmgwfltknox_gl-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_GL_DSONAME); \
+	if test x$(FLTK3GL_DSONAME) = xmgwfltknox_gl-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3GL_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.dll.a;\
 	fi
-	if test x$(FLTK_IMAGES_LIBNAME) != x; then\
-		$(RM) $(DESTDIR)$(libdir)/$(FLTK_IMAGES_LIBBASENAME);\
+	if test x$(FLTK3IMAGES_LIBNAME) != x; then\
+		$(RM) $(DESTDIR)$(libdir)/$(FLTK3IMAGES_LIBBASENAME);\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.so.1.3; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.so*;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.sl.1.3; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.sl*;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images.1.3.dylib; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.*dylib;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xlibfltk_images_s.a; then\
+	if test x$(FLTK3IMAGES_DSONAME) = xlibfltk_images_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images_s.a;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xcygfltknox_images-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \
+	if test x$(FLTK3IMAGES_DSONAME) = xcygfltknox_images-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3IMAGES_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xcygfltk_images-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \
+	if test x$(FLTK3IMAGES_DSONAME) = xcygfltk_images-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3IMAGES_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\
 	fi
-	if test x$(FLTK_IMAGES_DSONAME) = xmgwfltknox_images-1.3.dll; then\
-		$(RM) $(DESTDIR)$(bindir)/$(FLTK_IMAGES_DSONAME); \
+	if test x$(FLTK3IMAGES_DSONAME) = xmgwfltknox_images-1.3.dll; then\
+		$(RM) $(DESTDIR)$(bindir)/$(FLTK3IMAGES_DSONAME); \
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\
 	fi
 

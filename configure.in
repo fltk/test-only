@@ -826,9 +826,9 @@ case $uname_GUI in
                 AC_DEFINE(HAVE_GL_GLU_H)
                 GLLIB="-lglu32 $GLLIB")
         else
-            LINK_FLTK_GL=""
-            FLTK_GL_LIBNAME=""
-            FLTK_GL_DSONAME=""
+            LINK_FLTK3GL=""
+            FLTK3GL_LIBNAME=""
+            FLTK3GL_DSONAME=""
             GLDEMOS=""
         fi
 
@@ -860,9 +860,9 @@ case $uname_GUI in
             AC_DEFINE(HAVE_GL_GLU_H)
             GLLIB="-framework AGL -framework OpenGL -framework ApplicationServices"
         else
-            LINK_FLTK_GL=""
-            FLTK_GL_LIBNAME=""
-            FLTK_GL_DSONAME=""
+            LINK_FLTK3GL=""
+            FLTK3GL_LIBNAME=""
+            FLTK3GL_DSONAME=""
             GLDEMOS=""
         fi
 
@@ -932,15 +932,15 @@ case $uname_GUI in
             )
 
             if test x$ac_cv_lib_GL_glXMakeCurrent != xyes -a x$ac_cv_lib_MesaGL_glXMakeCurrent != xyes; then
-                    LINK_FLTK_GL=""
-                    FLTK_GL_LIBNAME=""
-                    FLTK_GL_DSONAME=""
+                    LINK_FLTK3GL=""
+                    FLTK3GL_LIBNAME=""
+                    FLTK3GL_DSONAME=""
                     GLDEMOS=""
             fi
         else
-            LINK_FLTK_GL=""
-            FLTK_GL_LIBNAME=""
-            FLTK_GL_DSONAME=""
+            LINK_FLTK3GL=""
+            FLTK3GL_LIBNAME=""
+            FLTK3GL_DSONAME=""
             GLDEMOS=""
         fi
 

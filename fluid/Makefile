@@ -76,7 +76,7 @@ clean:
 	-$(RM) fluid.app/Contents/MacOS/fluid$(EXEEXT)
 
 depend:	$(FLUID_CPPFILES)
-	makedepend -Y -I.. -f makedepend $(FLUID_CPPFILES)
+	makedepend -Y -I../include -f makedepend $(FLUID_CPPFILES)
 
 # Automatically generated dependencies...
 include makedepend
