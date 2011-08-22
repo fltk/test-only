@@ -1426,6 +1426,29 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\src\Style.cxx"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+		</File>
+		<File
 			RelativePath="..\..\src\Fl_Sys_Menu_Bar.cxx"
 			>
 			<FileConfiguration

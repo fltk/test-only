@@ -119,6 +119,29 @@ fltk3::MenuItem *sourceview_item = 0L;
 
 ////////////////////////////////////////////////////////////////
 
+// this little helper class allows us to return C strings without the need for 
+// static buffers. When using this, the same function can be called and used
+// as an argument for another function call, for example:
+//  printf("%s %s %s\n", file->name(), file->DOS_name(), file->caps_name())'
+
+const int MAX_RET_BUF = 10;
+char *tmp_ret_buf[MAX_RET_BUF];
+int tmp_ret_sze[MAX_RET_BUF];
+int curr_ret_buf = 0;
+
+char *get_temporary_return_buffer(int size) {
+  int i = curr_ret_buf;
+  curr_ret_buf++;
+  if (curr_ret_buf>=MAX_RET_BUF) curr_ret_buf = 0;
+  if (!tmp_ret_buf[i] || tmp_ret_sze[i]<size) {
+    tmp_ret_buf[i] = (char*)realloc(tmp_ret_buf[i], size);
+    tmp_ret_sze[i] = size;
+  }
+  return tmp_ret_buf[i];
+}
+
+////////////////////////////////////////////////////////////////
+
 const char *filename;
 void set_filename(const char *c);
 void set_modflag(int mf);
@@ -1839,8 +1862,8 @@ static void sigint(SIGARG) {
 }
 #endif
 
-
 int main(int argc,char **argv) {
+  
   int i = 1;
   
   if (!fltk3::args(argc,argv,i,arg) || i < argc-1) {

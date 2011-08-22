@@ -102,6 +102,7 @@
 		7CB9D27B0F1CE28C828F280B /* Fl_Shared_Image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8580401C9D38395ECAD127AC /* Fl_Shared_Image.cxx */; };
 		550F71EE23A3D8E00A890F88 /* Fl_Single_Window.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 17A03BA54D8D67397D8BDCEE /* Fl_Single_Window.cxx */; };
 		052ACB65AAC112E4DFA7B7C1 /* Fl_Slider.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 085FAF82201B9FD1927A8BAA /* Fl_Slider.cxx */; };
+		195134865585E031DF857E7B /* Style.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CAA3AD964456E0912791C783 /* Style.cxx */; };
 		B7E4B117D093ED504AD5127B /* Fl_Sys_Menu_Bar.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 43C12A4D372777B2307220CC /* Fl_Sys_Menu_Bar.cxx */; };
 		E0D6CAE34DC85454B5C61EBA /* Fl_Table.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 025842431942A90D06F5BCFA /* Fl_Table.cxx */; };
 		56C8DD01C98608D164F2047B /* Fl_Table_Row.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7097EA09B5B8FCFEEBE28CA8 /* Fl_Table_Row.cxx */; };
@@ -307,6 +308,7 @@
 		6B6E93959C26469571F9DFD1 /* SingleWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 632C7A3607B6D6DF36ACC513 /* SingleWindow.h */; };
 		58F214FCF3D78AEA6EBE814F /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BDF52555005D838492790A2 /* Slider.h */; };
 		32F02A4A0503D782BF4AC7AF /* Spinner.h in Headers */ = {isa = PBXBuildFile; fileRef = CAC6AA7711A18CC39662C445 /* Spinner.h */; };
+		4D7A7651D8484CBB4F5ACD8B /* Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D65E2CE0929E7D80EBE3A6 /* Style.h */; };
 		52D66EE74C4F004504F481BE /* SysMenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = A76F03E86AE77A3F2A140721 /* SysMenuBar.h */; };
 		2ABC0F5B9F7C4012195F0A58 /* TabGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 789EF90B6C6E5D44F4E6A32F /* TabGroup.h */; };
 		0F97400005C5CEA32C40A1AB /* Table.h in Headers */ = {isa = PBXBuildFile; fileRef = B367CABCC2161E23D1F55A5C /* Table.h */; };
@@ -3907,6 +3909,7 @@
 		632C7A3607B6D6DF36ACC513 /* SingleWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleWindow.h; path = ../../fltk3/SingleWindow.h; sourceTree = SOURCE_ROOT; };
 		7BDF52555005D838492790A2 /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Slider.h; path = ../../fltk3/Slider.h; sourceTree = SOURCE_ROOT; };
 		CAC6AA7711A18CC39662C445 /* Spinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Spinner.h; path = ../../fltk3/Spinner.h; sourceTree = SOURCE_ROOT; };
+		14D65E2CE0929E7D80EBE3A6 /* Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Style.h; path = ../../fltk3/Style.h; sourceTree = SOURCE_ROOT; };
 		A76F03E86AE77A3F2A140721 /* SysMenuBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SysMenuBar.h; path = ../../fltk3/SysMenuBar.h; sourceTree = SOURCE_ROOT; };
 		789EF90B6C6E5D44F4E6A32F /* TabGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TabGroup.h; path = ../../fltk3/TabGroup.h; sourceTree = SOURCE_ROOT; };
 		B367CABCC2161E23D1F55A5C /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Table.h; path = ../../fltk3/Table.h; sourceTree = SOURCE_ROOT; };
@@ -3998,6 +4001,7 @@
 		8580401C9D38395ECAD127AC /* Fl_Shared_Image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Shared_Image.cxx; path = ../../src/Fl_Shared_Image.cxx; sourceTree = SOURCE_ROOT; };
 		17A03BA54D8D67397D8BDCEE /* Fl_Single_Window.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Single_Window.cxx; path = ../../src/Fl_Single_Window.cxx; sourceTree = SOURCE_ROOT; };
 		085FAF82201B9FD1927A8BAA /* Fl_Slider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Slider.cxx; path = ../../src/Fl_Slider.cxx; sourceTree = SOURCE_ROOT; };
+		CAA3AD964456E0912791C783 /* Style.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Style.cxx; path = ../../src/Style.cxx; sourceTree = SOURCE_ROOT; };
 		43C12A4D372777B2307220CC /* Fl_Sys_Menu_Bar.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Sys_Menu_Bar.cxx; path = ../../src/Fl_Sys_Menu_Bar.cxx; sourceTree = SOURCE_ROOT; };
 		025842431942A90D06F5BCFA /* Fl_Table.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Table.cxx; path = ../../src/Fl_Table.cxx; sourceTree = SOURCE_ROOT; };
 		7097EA09B5B8FCFEEBE28CA8 /* Fl_Table_Row.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Table_Row.cxx; path = ../../src/Fl_Table_Row.cxx; sourceTree = SOURCE_ROOT; };
@@ -5318,6 +5322,7 @@
 				632C7A3607B6D6DF36ACC513 /* SingleWindow.h */,
 				7BDF52555005D838492790A2 /* Slider.h */,
 				CAC6AA7711A18CC39662C445 /* Spinner.h */,
+				14D65E2CE0929E7D80EBE3A6 /* Style.h */,
 				A76F03E86AE77A3F2A140721 /* SysMenuBar.h */,
 				789EF90B6C6E5D44F4E6A32F /* TabGroup.h */,
 				B367CABCC2161E23D1F55A5C /* Table.h */,
@@ -5416,6 +5421,7 @@
 				8580401C9D38395ECAD127AC /* Fl_Shared_Image.cxx */,
 				17A03BA54D8D67397D8BDCEE /* Fl_Single_Window.cxx */,
 				085FAF82201B9FD1927A8BAA /* Fl_Slider.cxx */,
+				CAA3AD964456E0912791C783 /* Style.cxx */,
 				43C12A4D372777B2307220CC /* Fl_Sys_Menu_Bar.cxx */,
 				025842431942A90D06F5BCFA /* Fl_Table.cxx */,
 				7097EA09B5B8FCFEEBE28CA8 /* Fl_Table_Row.cxx */,
@@ -6566,6 +6572,7 @@
 				6B6E93959C26469571F9DFD1 /* SingleWindow.h in Headers */,
 				58F214FCF3D78AEA6EBE814F /* Slider.h in Headers */,
 				32F02A4A0503D782BF4AC7AF /* Spinner.h in Headers */,
+				4D7A7651D8484CBB4F5ACD8B /* Style.h in Headers */,
 				52D66EE74C4F004504F481BE /* SysMenuBar.h in Headers */,
 				2ABC0F5B9F7C4012195F0A58 /* TabGroup.h in Headers */,
 				0F97400005C5CEA32C40A1AB /* Table.h in Headers */,
@@ -9006,6 +9013,7 @@
 				7CB9D27B0F1CE28C828F280B /* Fl_Shared_Image.cxx in Sources */,
 				550F71EE23A3D8E00A890F88 /* Fl_Single_Window.cxx in Sources */,
 				052ACB65AAC112E4DFA7B7C1 /* Fl_Slider.cxx in Sources */,
+				195134865585E031DF857E7B /* Style.cxx in Sources */,
 				B7E4B117D093ED504AD5127B /* Fl_Sys_Menu_Bar.cxx in Sources */,
 				E0D6CAE34DC85454B5C61EBA /* Fl_Table.cxx in Sources */,
 				56C8DD01C98608D164F2047B /* Fl_Table_Row.cxx in Sources */,

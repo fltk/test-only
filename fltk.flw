@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -12,7 +12,6 @@ workspace FLTK {open selected
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
-  build_env 1
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -316,7 +315,7 @@ workspace FLTK {open selected
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk {
+    lib_target fltk {open
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -334,7 +333,7 @@ workspace FLTK {open selected
       target_path lib
       makefile_path src
     } {
-      folder Headers {
+      folder Headers {open selected
         uuid_Xcode4_Group {C2F00625-E401-4002-85F6-FA183D17629D}
       } {
         file_ref {Adjuster.h} {
@@ -1225,6 +1224,14 @@ workspace FLTK {open selected
           list_env 124
           filename_and_path {fltk3/Spinner.h}
         }
+        file_ref {Style.h} {
+          uuid_Xcode4_BuildFile {3E5FDE91-66B5-4D67-8BB6-92C0A8FA56D7}
+          uuid_Xcode4_FileRef {14D65E2C-A6C4-4656-A8EF-369280EBE3A6}
+          uuid_Xcode4_BuildFileInHeaders {4D7A7651-910F-4947-9747-DBFC4F5ACD8B}
+          build_env 96
+          list_env 124
+          filename_and_path {fltk3/Style.h}
+        }
         file_ref {SysMenuBar.h} {
           uuid_Xcode4_BuildFile {F9CF92AB-336C-4D0A-BFF4-835EC59F6CD1}
           uuid_Xcode4_FileRef {A76F03E8-29AB-434C-A057-DA682A140721}
@@ -1490,7 +1497,7 @@ workspace FLTK {open selected
           filename_and_path {fltk3/Xutf8.h}
         }
       }
-      folder Sources {
+      folder Sources {open
         uuid_Xcode4_Group {91990322-0AF9-42F2-A077-713540EE5AB1}
       } {
         file_ref {Fl_cocoa.mm} {
@@ -1846,6 +1853,12 @@ workspace FLTK {open selected
           uuid_Xcode4_FileRef {085FAF82-6F59-4F42-AB4C-349D927A8BAA}
           uuid_Xcode4_BuildFileInSources {052ACB65-EF8A-454B-AFDB-BD3FDFA7B7C1}
           filename_and_path {src/Fl_Slider.cxx}
+        }
+        file_ref {Style.cxx} {
+          uuid_Xcode4_BuildFile {DD895EB1-D352-4D09-99D7-D9DE1758D9F9}
+          uuid_Xcode4_FileRef {CAA3AD96-0CC5-4893-8893-68022791C783}
+          uuid_Xcode4_BuildFileInSources {19513486-168E-430B-88A7-6896DF857E7B}
+          filename_and_path {src/Style.cxx}
         }
         file_ref {Fl_Sys_Menu_Bar.cxx} {
           uuid_Xcode4_BuildFile {FC5F7A11-9A94-4596-BCF0-458EB54BF587}

@@ -335,13 +335,11 @@ extern Fl_Target_Dependency_Type Fl_Target_Dependency_type;
 class Fl_Target_Type : public Fl_Tool_Type {
   char *pTargetPath;
   char *pMakefilePath;
-  char *pAltName;
 public:
   Fl_Target_Type() :
   Fl_Tool_Type(),
   pTargetPath(0),
-  pMakefilePath(0),
-  pAltName(0)
+  pMakefilePath(0)
   {
     pTargetPath = strdup("");
     pMakefilePath = strdup("");
@@ -349,7 +347,6 @@ public:
   ~Fl_Target_Type() {
     if (pTargetPath) free(pTargetPath);
     if (pMakefilePath) free(pMakefilePath);
-    if (pAltName) free(pAltName);
   }
   const char *type_name() { return "target"; }
   const char *caps_name();

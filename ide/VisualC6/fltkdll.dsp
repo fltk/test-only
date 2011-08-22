@@ -311,6 +311,10 @@ SOURCE=..\..\src\Fl_Slider.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\Style.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\Fl_Sys_Menu_Bar.cxx
 # End Source File
 # Begin Source File

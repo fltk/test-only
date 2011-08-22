@@ -81,6 +81,7 @@ FLTK_CPPFILES = \
 	Fl_Shared_Image.cxx \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
+	Style.cxx \
 	Fl_Sys_Menu_Bar.cxx \
 	Fl_Table.cxx \
 	Fl_Table_Row.cxx \

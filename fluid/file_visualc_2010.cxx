@@ -41,11 +41,12 @@ static const char *VC2010_Workspace = "VC2010_Workspace";
 static const char *VC2010_Project = "VC2010_Project";
 
 extern const char *filename;
+extern char *get_temporary_return_buffer(int size);
 
 // ------------ file conversion ------------------------------------------------
 
 const char *DOS_path(const char *filename) {
-  static char buf[2048];
+  char *buf = get_temporary_return_buffer(FLTK3_PATH_MAX);
   char *c;
   strcpy(buf, filename);
   for (c=buf;;c++) {

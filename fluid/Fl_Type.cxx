@@ -202,6 +202,7 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
 
 extern int show_comments;
 extern Fl_Panel *the_file_panel;
+extern char *get_temporary_return_buffer(int size);
 
 ////////////////////////////////////////////////////////////////
 
@@ -288,7 +289,9 @@ static Fl_Type* pushedtitle;
 
 // Generate a descriptive text for this item, to put in browser & window titles
 const char* Fl_Type::title() {
-  const char* c = name(); if (c) return c;
+  const char* c = name(); 
+  if (c) 
+    return c;
   return type_name();
 }
 
@@ -1166,7 +1169,7 @@ const char *Fl_Tool_Type::get_UUID(const char *name) {
 }
 
 const char *Fl_Tool_Type::get_UUID_Xcode(const char *name) {
-  static char buf[25];
+  char *buf = get_temporary_return_buffer(25);
   const char *uuid = get_UUID(name);
   // 937C4900-51AA-4C11-8DD3-7AB5 9944F03E
   unsigned int a, b, c, d, e, f;
@@ -1238,8 +1241,8 @@ int Fl_Tool_Type::dnd_paste() {
         }
         // add the file 's' to this item
         if (e!=s) {
-          char buf[2048];
-          fltk3::filename_relative(buf, 2048, s, basedir);
+          char buf[FLTK3_PATH_MAX];
+          fltk3::filename_relative(buf, FLTK3_PATH_MAX, s, basedir);
           Fl_File_Type *o = new Fl_File_Type();
           o->filename(buf);
           o->add(this);
@@ -1388,35 +1391,33 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
-// Note: we assume that the name is not longer than 63 characters... .
 // Note: we do not deal with UTF8 chracters here!
 const char *Fl_Target_Type::caps_name() {
-  if (!pAltName) pAltName = (char*)malloc(64);
   const char *s = name();
-  char *d = pAltName;
+  char *buf = get_temporary_return_buffer(strlen(s)+1);
+  char *d = buf;
   while (*s) {
     *d++ = toupper(*s++);
   }
   *d++ = 0;
-  return pAltName;
+  return buf;
 }
 
-// Note: we assume that the name is not longer than 63 characters... .
 // Note: we do not deal with UTF8 chracters here!
 const char *Fl_Target_Type::lowercase_name() {
-  if (!pAltName) pAltName = (char*)malloc(64);
   const char *s = name();
-  char *d = pAltName;
+  char *buf = get_temporary_return_buffer(strlen(s)+1);
+  char *d = buf;
   while (*s) {
     *d++ = tolower(*s++);
   }
   *d++ = 0;
-  return pAltName;
+  return buf;
 }
 
 Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
   // find a partial string, if 'end' is set to a character
-  char buf[2048];
+  char buf[FLTK3_PATH_MAX];
   strcpy(buf, name);
   if (end) {
     char *sep = strchr(buf, end);
@@ -1749,13 +1750,13 @@ const char *Fl_File_Type::filename_name() {
 }
 
 const char *Fl_File_Type::filename_relative(const char *fnbase, const char *tgtbase) {
-  char src_name[2048];
-  static char result[2048];
+  char src_name[FLTK3_PATH_MAX];
+  char *result = get_temporary_return_buffer(FLTK3_PATH_MAX);
   const char *fn = filename();
   if (fn) {
     strcpy(src_name, fnbase);
     strcat(src_name, fn);
-    fltk3::filename_relative(result, 2048, src_name, tgtbase);
+    fltk3::filename_relative(result, FLTK3_PATH_MAX, src_name, tgtbase);
     return result;
   } else {
     return 0;
