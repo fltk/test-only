@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib fltk_gld.lib glu32.lib opengl32.lib comctl32.lib"
+				AdditionalDependencies="fltk3gld.lib fltk3d.lib glu32.lib opengl32.lib comctl32.lib"
 				OutputFile="..\..\test\glpuzzled.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_gl.lib glu32.lib opengl32.lib comctl32.lib"
+				AdditionalDependencies="fltk3gl.lib fltk3.lib glu32.lib opengl32.lib comctl32.lib"
 				OutputFile="..\..\test\glpuzzle.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

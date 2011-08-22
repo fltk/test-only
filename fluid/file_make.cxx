@@ -35,7 +35,7 @@
 #include <stdarg.h>
 #include <ctype.h>
 #include "Fl_Type.h"
-#include "../fltk3/filename.h"
+#include <fltk3/filename.h>
 
 // ------------ file conversion ------------------------------------------------
 

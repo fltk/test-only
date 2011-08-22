@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fltk_png"
+	Name="fltk3png"
 	ProjectGUID="{AF7CC2D4-BBC7-4995-B18D-6A590C267527}"
-	RootNamespace="fltk_png"
+	RootNamespace="fltk3png"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_png_debug"
+			IntermediateDirectory=".\fltk3png_debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -44,10 +44,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_png_debug\fltk_png.pch"
-				AssemblerListingLocation=".\fltk_png_debug\"
-				ObjectFile=".\fltk_png_debug\"
-				ProgramDataBaseFileName=".\fltk_png_debug\"
+				PrecompiledHeaderFile=".\fltk3png_debug\fltk3png.pch"
+				AssemblerListingLocation=".\fltk3png_debug\"
+				ObjectFile=".\fltk3png_debug\"
+				ProgramDataBaseFileName=".\fltk3png_debug\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_pngd.lib"
+				OutputFile="..\..\lib\fltk3pngd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -88,7 +88,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_png_release"
+			IntermediateDirectory=".\fltk3png_release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -116,10 +116,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_png_release\fltk_png.pch"
-				AssemblerListingLocation=".\fltk_png_release\"
-				ObjectFile=".\fltk_png_release\"
-				ProgramDataBaseFileName=".\fltk_png_release\"
+				PrecompiledHeaderFile=".\fltk3png_release\fltk3png.pch"
+				AssemblerListingLocation=".\fltk3png_release\"
+				ObjectFile=".\fltk3png_release\"
+				ProgramDataBaseFileName=".\fltk3png_release\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_png.lib"
+				OutputFile="..\..\lib\fltk3png.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\png\png.c"
+			RelativePath="..\..\src\png\png.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngerror.c"
+			RelativePath="..\..\src\png\pngerror.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngget.c"
+			RelativePath="..\..\src\png\pngget.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngmem.c"
+			RelativePath="..\..\src\png\pngmem.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngpread.c"
+			RelativePath="..\..\src\png\pngpread.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngread.c"
+			RelativePath="..\..\src\png\pngread.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngrio.c"
+			RelativePath="..\..\src\png\pngrio.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngrtran.c"
+			RelativePath="..\..\src\png\pngrtran.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngrutil.c"
+			RelativePath="..\..\src\png\pngrutil.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngset.c"
+			RelativePath="..\..\src\png\pngset.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngtrans.c"
+			RelativePath="..\..\src\png\pngtrans.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -414,7 +414,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngwio.c"
+			RelativePath="..\..\src\png\pngwio.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -437,7 +437,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngwrite.c"
+			RelativePath="..\..\src\png\pngwrite.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -460,7 +460,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngwtran.c"
+			RelativePath="..\..\src\png\pngwtran.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -483,7 +483,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\png\pngwutil.c"
+			RelativePath="..\..\src\png\pngwutil.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

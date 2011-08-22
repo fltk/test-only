@@ -70,7 +70,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>fltkd.lib;fltk_imagesd.lib;fltk_pngd.lib;fltk_jpegd.lib;fltk_zlibd.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fltk3d.lib;fltk3imagesd.lib;fltk3pngd.lib;fltk3jpegd.lib;fltk3zlibd.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\test\pixmap_browserd.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -114,7 +114,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>fltk.lib;fltk_images.lib;fltk_png.lib;fltk_jpeg.lib;fltk_zlib.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fltk3.lib;fltk3images.lib;fltk3png.lib;fltk3jpeg.lib;fltk3zlib.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\test\pixmap_browser.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -137,23 +137,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="fltk.vcxproj">
+    <ProjectReference Include="fltk3.vcxproj">
       <Project>{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="fltk_images.vcxproj">
+    <ProjectReference Include="fltk3images.vcxproj">
       <Project>{4527AC02-4EB6-41C9-8ECA-819F7725A9BF}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="fltk_png.vcxproj">
+    <ProjectReference Include="fltk3png.vcxproj">
       <Project>{A6556097-732F-4D5C-9763-96A896DA0F8F}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="fltk_jpeg.vcxproj">
+    <ProjectReference Include="fltk3jpeg.vcxproj">
       <Project>{845449C0-BCC9-4404-89DC-52E53E80F8D0}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="fltk_zlib.vcxproj">
+    <ProjectReference Include="fltk3zlib.vcxproj">
       <Project>{8051E81E-8228-43EA-AABA-FE4E48CB10AD}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

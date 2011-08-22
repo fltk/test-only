@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib fltk_imagesd.lib fltk_pngd.lib fltk_jpegd.lib fltk_zlibd.lib comctl32.lib"
+				AdditionalDependencies="fltk3imagesd.lib fltk3d.lib fltk3pngd.lib fltk3jpegd.lib fltk3zlibd.lib comctl32.lib"
 				OutputFile="..\..\test\deviced.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib fltk_images.lib fltk_png.lib fltk_jpeg.lib fltk_zlib.lib comctl32.lib"
+				AdditionalDependencies="fltk3images.lib fltk3.lib fltk3png.lib fltk3jpeg.lib fltk3zlib.lib comctl32.lib"
 				OutputFile="..\..\test\device.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

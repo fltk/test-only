@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -12,7 +12,7 @@ workspace FLTK {open
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
-  build_env 1
+  build_env 28
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -5880,7 +5880,7 @@ workspace FLTK {open
         uuid_Xcode4_FileRef {45B471C7-8D57-4244-BD19-8C230A1A2CB9}
         filename_and_path {test/sudoku.cxx}
       }
-      target_dependency fltk3images {selected
+      target_dependency fltk3images {
         uuid_Xcode4_BuildFileInFrameworks {DF57BE2E-0AF6-4604-80F4-7C340B8D9141}
         uuid_Xcode4_BuildFileInCopyFiles {0D0C53CA-958A-44CD-BCD8-6E23BD960020}
         uuid_Xcode4_ContainerItemProxy {9AA4F2ED-945E-4EE8-AA00-A0A11E333E24}

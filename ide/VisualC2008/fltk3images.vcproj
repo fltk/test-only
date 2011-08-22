@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fltk_images"
+	Name="fltk3images"
 	ProjectGUID="{9BDDFD0A-6B25-4532-8AAF-897D526A845D}"
-	RootNamespace="fltk_images"
+	RootNamespace="fltk3images"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_images_debug"
+			IntermediateDirectory=".\fltk3images_debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -44,10 +44,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_images_debug\fltk_images.pch"
-				AssemblerListingLocation=".\fltk_images_debug\"
-				ObjectFile=".\fltk_images_debug\"
-				ProgramDataBaseFileName=".\fltk_images_debug\"
+				PrecompiledHeaderFile=".\fltk3images_debug\fltk3images.pch"
+				AssemblerListingLocation=".\fltk3images_debug\"
+				ObjectFile=".\fltk3images_debug\"
+				ProgramDataBaseFileName=".\fltk3images_debug\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_imagesd.lib"
+				OutputFile="..\..\lib\fltk3imagesd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -88,7 +88,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_images_release"
+			IntermediateDirectory=".\fltk3images_release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -116,10 +116,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_images_release\fltk_images.pch"
-				AssemblerListingLocation=".\fltk_images_release\"
-				ObjectFile=".\fltk_images_release\"
-				ProgramDataBaseFileName=".\fltk_images_release\"
+				PrecompiledHeaderFile=".\fltk3images_release\fltk3images.pch"
+				AssemblerListingLocation=".\fltk3images_release\"
+				ObjectFile=".\fltk3images_release\"
+				ProgramDataBaseFileName=".\fltk3images_release\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_images.lib"
+				OutputFile="..\..\lib\fltk3images.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\Fl_BMP_Image.cxx"
+			RelativePath="..\..\src\core\Fl_BMP_Image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_File_Icon2.cxx"
+			RelativePath="..\..\src\core\Fl_File_Icon2.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_GIF_Image.cxx"
+			RelativePath="..\..\src\core\Fl_GIF_Image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_Help_Dialog.cxx"
+			RelativePath="..\..\src\core\Fl_Help_Dialog.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_JPEG_Image.cxx"
+			RelativePath="..\..\src\core\Fl_JPEG_Image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_PNG_Image.cxx"
+			RelativePath="..\..\src\core\Fl_PNG_Image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_PNM_Image.cxx"
+			RelativePath="..\..\src\core\Fl_PNM_Image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\fl_images_core.cxx"
+			RelativePath="..\..\src\core\fl_images_core.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

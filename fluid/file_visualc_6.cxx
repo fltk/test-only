@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "Fl_Type.h"
-#include "../fltk3/filename.h"
+#include <fltk3/filename.h>
 
 
 extern const char *filename;
@@ -230,7 +230,7 @@ static int write_dsp_file_for_lib(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# PROP Intermediate_Dir \"Release\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I \".\" /I \"..\\..\\include\" /I \"..\\..\\include\\fltk3zlib\" /I \"..\\..\\include\\fltk3png\" /I \"..\\..\\include\\fltk3jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
   fprintf(out, "# SUBTRACT CPP /Os\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409\r\n");
   fprintf(out, "# ADD RSC /l 0x409\r\n");
@@ -254,7 +254,7 @@ static int write_dsp_file_for_lib(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# PROP Intermediate_Dir \"Debug\\%s\"\r\n", tgt->name());
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /GX /Z7 /Od /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /FR /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /GX /Z7 /Od /I \".\" /I \"..\\..\\include\" /I \"..\\..\\include\\fltk3zlib\" /I \"..\\..\\include\\fltk3png\" /I \"..\\..\\include\\fltk3jpeg\" /D \"WIN32\" /D \"FL_LIBRARY\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /FR /YX /FD /c\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409\r\n");
   fprintf(out, "# ADD RSC /l 0x409\r\n");
   fprintf(out, "BSC32=bscmake.exe\r\n");
@@ -335,7 +335,7 @@ static int write_dsp_file_for_dll(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /I \".\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /W3 /GX /Os /Ob2 /I \"..\\..\\include\\fltk3zlib\" /I \"..\\..\\include\\fltk3png\" /I \"..\\..\\include\\fltk3jpeg\" /I \".\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
@@ -366,7 +366,7 @@ static int write_dsp_file_for_dll(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /GX /ZI /Od /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /GX /ZI /Od /I \".\" /I \"..\\..\\include\" /I \"..\\..\\include\\fltk3zlib\" /I \"..\\..\\include\\fltk3png\" /I \"..\\..\\include\\fltk3jpeg\" /D \"FL_DLL\" /D \"FL_LIBRARY\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o /win32 \"NUL\"\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
@@ -452,7 +452,7 @@ static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"..\\..\" /I \"..\\..\\zlib\" /I \"..\\..\\png\" /I \"..\\..\\jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"..\\..\\include\" /I \"..\\..\\include\\fltk3zlib\" /I \"..\\..\\include\\fltk3png\" /I \"..\\..\\include\\fltk3jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
@@ -483,7 +483,7 @@ static int write_dsp_file_for_app(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
   fprintf(out, "# PROP Target_Dir \"\"\r\n");
   fprintf(out, "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"..\\..\" /I \"..\\../zlib\" /I \"..\\../png\" /I \"..\\../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
+  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"..\\..\\include\" /I \"..\\..\\include\\fltk3zlib\" /I \"..\\..\\include\\fltk3png\" /I \"..\\..\\include\\fltk3jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
   fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
   fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");

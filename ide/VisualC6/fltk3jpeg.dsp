@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="fltk_jpeg" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="fltk3jpeg" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=fltk_jpeg - Win32 Debug
+CFG=fltk3jpeg - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "fltk_jpeg.mak".
+!MESSAGE NMAKE /f "fltk3jpeg.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fltk_jpeg.mak" CFG="fltk_jpeg - Win32 Debug"
+!MESSAGE NMAKE /f "fltk3jpeg.mak" CFG="fltk3jpeg - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "fltk_jpeg - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "fltk_jpeg - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "fltk3jpeg - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "fltk3jpeg - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -28,20 +28,20 @@ CFG=fltk_jpeg - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "fltk_jpeg - Win32 Release"
+!IF  "$(CFG)" == "fltk3jpeg - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release\fltk_jpeg"
-# PROP BASE Intermediate_Dir "Release\fltk_jpeg"
+# PROP BASE Output_Dir "Release\fltk3jpeg"
+# PROP BASE Intermediate_Dir "Release\fltk3jpeg"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release\fltk_jpeg"
-# PROP Intermediate_Dir "Release\fltk_jpeg"
+# PROP Output_Dir "Release\fltk3jpeg"
+# PROP Intermediate_Dir "Release\fltk3jpeg"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "FL_LIBRARY" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I "." /I "..\.." /I "..\..\zlib" /I "..\..\png" /I "..\..\jpeg" /D "WIN32" /D "FL_LIBRARY" /D "NDEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD CPP /nologo /MD /GX /Ot /Op /Ob2 /I "." /I "..\..\include" /I "..\..\include\fltk3zlib" /I "..\..\include\fltk3png" /I "..\..\include\fltk3jpeg" /D "WIN32" /D "FL_LIBRARY" /D "NDEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
 # SUBTRACT CPP /Os
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -50,22 +50,22 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\fltk_jpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\fltk3jpeg.lib"
 
-!ELSEIF  "$(CFG)" == "fltk_jpeg - Win32 Debug"
+!ELSEIF  "$(CFG)" == "fltk3jpeg - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug\fltk_jpeg"
-# PROP BASE Intermediate_Dir "Debug\fltk_jpeg"
+# PROP BASE Output_Dir "Debug\fltk3jpeg"
+# PROP BASE Intermediate_Dir "Debug\fltk3jpeg"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug\fltk_jpeg"
-# PROP Intermediate_Dir "Debug\fltk_jpeg"
+# PROP Output_Dir "Debug\fltk3jpeg"
+# PROP Intermediate_Dir "Debug\fltk3jpeg"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "FL_LIBRARY" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /GX /Z7 /Od /I "." /I "..\.." /I "..\..\zlib" /I "..\..\png" /I "..\..\jpeg" /D "WIN32" /D "FL_LIBRARY" /D "_DEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /GX /Z7 /Od /I "." /I "..\..\include" /I "..\..\include\fltk3zlib" /I "..\..\include\fltk3png" /I "..\..\include\fltk3jpeg" /D "WIN32" /D "FL_LIBRARY" /D "_DEBUG" /D "_WINDOWS" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -73,197 +73,197 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\fltk_jpegd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\fltk3jpegd.lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "fltk_jpeg - Win32 Release"
-# Name "fltk_jpeg - Win32 Debug"
+# Name "fltk3jpeg - Win32 Release"
+# Name "fltk3jpeg - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\jpeg\jaricom.c
+SOURCE=..\..\src\jpeg\jaricom.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcarith.c
+SOURCE=..\..\src\jpeg\jcarith.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdarith.c
+SOURCE=..\..\src\jpeg\jdarith.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcapimin.c
+SOURCE=..\..\src\jpeg\jcapimin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcapistd.c
+SOURCE=..\..\src\jpeg\jcapistd.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jccoefct.c
+SOURCE=..\..\src\jpeg\jccoefct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jccolor.c
+SOURCE=..\..\src\jpeg\jccolor.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcdctmgr.c
+SOURCE=..\..\src\jpeg\jcdctmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jchuff.c
+SOURCE=..\..\src\jpeg\jchuff.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcinit.c
+SOURCE=..\..\src\jpeg\jcinit.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcmainct.c
+SOURCE=..\..\src\jpeg\jcmainct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcmarker.c
+SOURCE=..\..\src\jpeg\jcmarker.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcmaster.c
+SOURCE=..\..\src\jpeg\jcmaster.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcomapi.c
+SOURCE=..\..\src\jpeg\jcomapi.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcparam.c
+SOURCE=..\..\src\jpeg\jcparam.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcprepct.c
+SOURCE=..\..\src\jpeg\jcprepct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jcsample.c
+SOURCE=..\..\src\jpeg\jcsample.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jctrans.c
+SOURCE=..\..\src\jpeg\jctrans.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdapimin.c
+SOURCE=..\..\src\jpeg\jdapimin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdapistd.c
+SOURCE=..\..\src\jpeg\jdapistd.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdatadst.c
+SOURCE=..\..\src\jpeg\jdatadst.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdatasrc.c
+SOURCE=..\..\src\jpeg\jdatasrc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdcoefct.c
+SOURCE=..\..\src\jpeg\jdcoefct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdcolor.c
+SOURCE=..\..\src\jpeg\jdcolor.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jddctmgr.c
+SOURCE=..\..\src\jpeg\jddctmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdhuff.c
+SOURCE=..\..\src\jpeg\jdhuff.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdinput.c
+SOURCE=..\..\src\jpeg\jdinput.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdmainct.c
+SOURCE=..\..\src\jpeg\jdmainct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdmarker.c
+SOURCE=..\..\src\jpeg\jdmarker.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdmaster.c
+SOURCE=..\..\src\jpeg\jdmaster.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdmerge.c
+SOURCE=..\..\src\jpeg\jdmerge.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdpostct.c
+SOURCE=..\..\src\jpeg\jdpostct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdsample.c
+SOURCE=..\..\src\jpeg\jdsample.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jdtrans.c
+SOURCE=..\..\src\jpeg\jdtrans.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jerror.c
+SOURCE=..\..\src\jpeg\jerror.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jfdctflt.c
+SOURCE=..\..\src\jpeg\jfdctflt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jfdctfst.c
+SOURCE=..\..\src\jpeg\jfdctfst.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jfdctint.c
+SOURCE=..\..\src\jpeg\jfdctint.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jidctflt.c
+SOURCE=..\..\src\jpeg\jidctflt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jidctfst.c
+SOURCE=..\..\src\jpeg\jidctfst.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jidctint.c
+SOURCE=..\..\src\jpeg\jidctint.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jmemmgr.c
+SOURCE=..\..\src\jpeg\jmemmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jmemnobs.c
+SOURCE=..\..\src\jpeg\jmemnobs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jquant1.c
+SOURCE=..\..\src\jpeg\jquant1.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jquant2.c
+SOURCE=..\..\src\jpeg\jquant2.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\jpeg\jutils.c
+SOURCE=..\..\src\jpeg\jutils.c
 # End Source File
 # End Target
 # End Project

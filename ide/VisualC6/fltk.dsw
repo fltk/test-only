@@ -12,25 +12,25 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "fltk"=".\fltk.dsp" - Package Owner=<4>
+Project: "fltk3"=".\fltk3.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -42,7 +42,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltkdll"=".\fltkdll.dsp" - Package Owner=<4>
+Project: "fltk3dll"=".\fltk3dll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -54,7 +54,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_gl"=".\fltk_gl.dsp" - Package Owner=<4>
+Project: "fltk3gl"=".\fltk3gl.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -66,7 +66,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_gldll"=".\fltk_gldll.dsp" - Package Owner=<4>
+Project: "fltk3gldll"=".\fltk3gldll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -78,7 +78,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_images"=".\fltk_images.dsp" - Package Owner=<4>
+Project: "fltk3images"=".\fltk3images.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -90,7 +90,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_imagesdll"=".\fltk_imagesdll.dsp" - Package Owner=<4>
+Project: "fltk3imagesdll"=".\fltk3imagesdll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -102,7 +102,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_png"=".\fltk_png.dsp" - Package Owner=<4>
+Project: "fltk3png"=".\fltk3png.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -114,7 +114,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_pngdll"=".\fltk_pngdll.dsp" - Package Owner=<4>
+Project: "fltk3pngdll"=".\fltk3pngdll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -126,7 +126,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_jpeg"=".\fltk_jpeg.dsp" - Package Owner=<4>
+Project: "fltk3jpeg"=".\fltk3jpeg.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -138,7 +138,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_jpegdll"=".\fltk_jpegdll.dsp" - Package Owner=<4>
+Project: "fltk3jpegdll"=".\fltk3jpegdll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -150,7 +150,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_zlib"=".\fltk_zlib.dsp" - Package Owner=<4>
+Project: "fltk3zlib"=".\fltk3zlib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -162,7 +162,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk_zlibdll"=".\fltk_zlibdll.dsp" - Package Owner=<4>
+Project: "fltk3zlibdll"=".\fltk3zlibdll.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -183,7 +183,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name adjuster
@@ -402,7 +402,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -417,7 +417,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -432,7 +432,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -447,7 +447,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -462,7 +462,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -477,7 +477,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -492,7 +492,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -507,7 +507,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -522,7 +522,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -537,7 +537,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -552,7 +552,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -567,7 +567,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -582,7 +582,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -597,10 +597,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3gl
     End Project Dependency
 }}}
 
@@ -615,10 +615,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3gl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -636,7 +636,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -651,7 +651,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -666,19 +666,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -693,7 +693,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -708,7 +708,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3images
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3png
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3jpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -723,7 +735,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -741,19 +753,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -768,7 +780,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -783,10 +795,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3gl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -801,10 +813,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3gl
     End Project Dependency
 }}}
 
@@ -819,10 +831,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3gl
     End Project Dependency
 }}}
 
@@ -837,10 +849,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3gl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -855,7 +867,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -870,19 +882,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -897,7 +909,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -912,7 +924,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -927,7 +939,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -942,7 +954,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -957,7 +969,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -972,7 +984,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -990,7 +1002,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1005,7 +1017,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1020,7 +1032,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1035,7 +1047,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -1053,7 +1065,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1068,7 +1080,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1083,7 +1095,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1098,7 +1110,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1113,7 +1125,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3images
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3png
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3jpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -1128,7 +1152,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1143,7 +1167,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1158,7 +1182,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1173,19 +1197,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -1200,7 +1224,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1215,7 +1239,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -1233,7 +1257,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -1251,7 +1275,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1266,7 +1290,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -1284,7 +1308,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1299,7 +1323,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1314,10 +1338,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_gl
+    Project_Dep_Name fltk3gl
     End Project Dependency
 }}}
 
@@ -1332,7 +1356,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1347,19 +1371,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -1374,7 +1398,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1389,7 +1413,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1404,7 +1428,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -1422,7 +1446,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1437,7 +1461,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1452,19 +1476,19 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_images
+    Project_Dep_Name fltk3images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_png
+    Project_Dep_Name fltk3png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_jpeg
+    Project_Dep_Name fltk3jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk_zlib
+    Project_Dep_Name fltk3zlib
     End Project Dependency
 }}}
 
@@ -1479,7 +1503,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid
@@ -1497,7 +1521,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1512,7 +1536,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
@@ -1527,7 +1551,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk3
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name Fluid

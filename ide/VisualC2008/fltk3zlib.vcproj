@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fltk_zlib"
+	Name="fltk3zlib"
 	ProjectGUID="{2F487ADB-AB3A-44B1-A824-D25C00A2D30A}"
-	RootNamespace="fltk_zlib"
+	RootNamespace="fltk3zlib"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_zlib_debug"
+			IntermediateDirectory=".\fltk3zlib_debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -44,10 +44,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_zlib_debug\fltk_zlib.pch"
-				AssemblerListingLocation=".\fltk_zlib_debug\"
-				ObjectFile=".\fltk_zlib_debug\"
-				ProgramDataBaseFileName=".\fltk_zlib_debug\"
+				PrecompiledHeaderFile=".\fltk3zlib_debug\fltk3zlib.pch"
+				AssemblerListingLocation=".\fltk3zlib_debug\"
+				ObjectFile=".\fltk3zlib_debug\"
+				ProgramDataBaseFileName=".\fltk3zlib_debug\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_zlibd.lib"
+				OutputFile="..\..\lib\fltk3zlibd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -88,7 +88,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_zlib_release"
+			IntermediateDirectory=".\fltk3zlib_release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -116,10 +116,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_zlib_release\fltk_zlib.pch"
-				AssemblerListingLocation=".\fltk_zlib_release\"
-				ObjectFile=".\fltk_zlib_release\"
-				ProgramDataBaseFileName=".\fltk_zlib_release\"
+				PrecompiledHeaderFile=".\fltk3zlib_release\fltk3zlib.pch"
+				AssemblerListingLocation=".\fltk3zlib_release\"
+				ObjectFile=".\fltk3zlib_release\"
+				ProgramDataBaseFileName=".\fltk3zlib_release\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_zlib.lib"
+				OutputFile="..\..\lib\fltk3zlib.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\zlib\adler32.c"
+			RelativePath="..\..\src\zlib\adler32.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\compress.c"
+			RelativePath="..\..\src\zlib\compress.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\crc32.c"
+			RelativePath="..\..\src\zlib\crc32.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\deflate.c"
+			RelativePath="..\..\src\zlib\deflate.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\gzclose.c"
+			RelativePath="..\..\src\zlib\gzclose.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\gzlib.c"
+			RelativePath="..\..\src\zlib\gzlib.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\gzread.c"
+			RelativePath="..\..\src\zlib\gzread.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\gzwrite.c"
+			RelativePath="..\..\src\zlib\gzwrite.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\infback.c"
+			RelativePath="..\..\src\zlib\infback.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\inffast.c"
+			RelativePath="..\..\src\zlib\inffast.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\inflate.c"
+			RelativePath="..\..\src\zlib\inflate.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -414,7 +414,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\inftrees.c"
+			RelativePath="..\..\src\zlib\inftrees.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -437,7 +437,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\trees.c"
+			RelativePath="..\..\src\zlib\trees.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -460,7 +460,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\uncompr.c"
+			RelativePath="..\..\src\zlib\uncompr.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -483,7 +483,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\zlib\zutil.c"
+			RelativePath="..\..\src\zlib\zutil.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

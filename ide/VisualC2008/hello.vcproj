@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib comctl32.lib"
+				AdditionalDependencies="fltk3d.lib comctl32.lib"
 				OutputFile="..\..\test\hellod.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib comctl32.lib"
+				AdditionalDependencies="fltk3.lib comctl32.lib"
 				OutputFile="..\..\test\hello.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

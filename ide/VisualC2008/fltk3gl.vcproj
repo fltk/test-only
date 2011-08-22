@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fltk_gl"
+	Name="fltk3gl"
 	ProjectGUID="{F0B23DD8-B4C3-4DB7-A879-3250CFAC686B}"
-	RootNamespace="fltk_gl"
+	RootNamespace="fltk3gl"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_gl_debug"
+			IntermediateDirectory=".\fltk3gl_debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -44,10 +44,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_gl_debug\fltk_gl.pch"
-				AssemblerListingLocation=".\fltk_gl_debug\"
-				ObjectFile=".\fltk_gl_debug\"
-				ProgramDataBaseFileName=".\fltk_gl_debug\"
+				PrecompiledHeaderFile=".\fltk3gl_debug\fltk3gl.pch"
+				AssemblerListingLocation=".\fltk3gl_debug\"
+				ObjectFile=".\fltk3gl_debug\"
+				ProgramDataBaseFileName=".\fltk3gl_debug\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_gld.lib"
+				OutputFile="..\..\lib\fltk3gld.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -88,7 +88,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib"
-			IntermediateDirectory=".\fltk_gl_release"
+			IntermediateDirectory=".\fltk3gl_release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -116,10 +116,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;FL_LIBRARY;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\fltk_gl_release\fltk_gl.pch"
-				AssemblerListingLocation=".\fltk_gl_release\"
-				ObjectFile=".\fltk_gl_release\"
-				ProgramDataBaseFileName=".\fltk_gl_release\"
+				PrecompiledHeaderFile=".\fltk3gl_release\fltk3gl.pch"
+				AssemblerListingLocation=".\fltk3gl_release\"
+				ObjectFile=".\fltk3gl_release\"
+				ProgramDataBaseFileName=".\fltk3gl_release\"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk_gl.lib"
+				OutputFile="..\..\lib\fltk3gl.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\Fl_Gl_Choice.cxx"
+			RelativePath="..\..\src\core\Fl_Gl_Choice.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_Gl_Device_Plugin.cxx"
+			RelativePath="..\..\src\core\Fl_Gl_Device_Plugin.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_Gl_Overlay.cxx"
+			RelativePath="..\..\src\core\Fl_Gl_Overlay.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\Fl_Gl_Window.cxx"
+			RelativePath="..\..\src\core\Fl_Gl_Window.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\freeglut_geometry.cxx"
+			RelativePath="..\..\src\core\freeglut_geometry.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\freeglut_stroke_mono_roman.cxx"
+			RelativePath="..\..\src\core\freeglut_stroke_mono_roman.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\freeglut_stroke_roman.cxx"
+			RelativePath="..\..\src\core\freeglut_stroke_roman.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\freeglut_teapot.cxx"
+			RelativePath="..\..\src\core\freeglut_teapot.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\gl_draw.cxx"
+			RelativePath="..\..\src\core\gl_draw.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\glut_compatability.cxx"
+			RelativePath="..\..\src\core\glut_compatability.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\glut_font.cxx"
+			RelativePath="..\..\src\core\glut_font.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
