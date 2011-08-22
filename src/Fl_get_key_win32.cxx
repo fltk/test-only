@@ -107,7 +107,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {VK_DELETE,	fltk3::DeleteKey}
 };
 
-static int fltk2ms(int fltk) {
+static int fltk2ms(unsigned int fltk) {
   if (fltk >= '0' && fltk <= '9') return fltk;
   if (fltk >= 'A' && fltk <= 'Z') return fltk;
   if (fltk >= 'a' && fltk <= 'z') return fltk-('a'-'A');
@@ -127,7 +127,7 @@ int fltk3::event_key(int k) {
   return GetKeyState(fltk2ms(k))&~1;
 }
 
-int fltk3::get_key(int k) {
+int fltk3::get_key(unsigned int k) {
   uchar foo[256];
   GetKeyboardState(foo);
   return foo[fltk2ms(k)]&~1;
