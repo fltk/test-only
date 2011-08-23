@@ -34,7 +34,7 @@ CubeView::CubeView(int x,int y,int w,int h,const char *l)
             : fltk3::GlWindow(x,y,w,h,l)
 #else
 CubeView::CubeView(int x,int y,int w,int h,const char *l)
-            : Fl_Box(x,y,w,h,l)
+            : fltk3::Box(x,y,w,h,l)
 #endif /* HAVE_GL */
 {
     vAng = 0.0;
@@ -57,7 +57,7 @@ CubeView::CubeView(int x,int y,int w,int h,const char *l)
 
 #if !HAVE_GL
     label("OpenGL is required for this demo to operate.");
-    align(FL_ALIGN_WRAP | FL_ALIGN_INSIDE);
+    align(fltk3::ALIGN_WRAP | fltk3::ALIGN_INSIDE);
 #endif /* !HAVE_GL */
 }
 

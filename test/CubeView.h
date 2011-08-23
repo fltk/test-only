@@ -41,7 +41,7 @@
 #if HAVE_GL
 class CubeView : public fltk3::GlWindow {
 #else
-class CubeView : public Fl_Box {
+class CubeView : public fltk3::Box {
 #endif /* HAVE_GL */
 
 public:
