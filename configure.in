@@ -1370,7 +1370,7 @@ else
 fi
 
 dnl Write all of the files...
-AC_CONFIG_HEADER(config.h:configh.in)
+AC_CONFIG_HEADER(include/config.h:include/configh.in)
 AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec include/fltk3/Makefile)
 
 dnl Make sure the fltk-config script is executable...

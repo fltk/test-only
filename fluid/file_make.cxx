@@ -1601,7 +1601,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "fi\n");
   fprintf(out, "\n");
   fprintf(out, "dnl Write all of the files...\n");
-  fprintf(out, "AC_CONFIG_HEADER(config.h:configh.in)\n");
+  fprintf(out, "AC_CONFIG_HEADER(include/config.h:include/configh.in)\n");
   fprintf(out, "AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec include/fltk3/Makefile)\n");
   fprintf(out, "\n");
   fprintf(out, "dnl Make sure the fltk-config script is executable...\n");

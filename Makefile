@@ -89,24 +89,24 @@ distclean: clean
 		$(RM) test/`basename $$file .fl`.h; \
 	done
 
-fltk-config: configure configh.in fltk-config.in
+fltk-config: configure include/configh.in fltk-config.in
 	if test -f config.status; then \
 		./config.status --recheck; \
 		./config.status; \
 	else \
 		./configure; \
 	fi
-	touch config.h
+	touch include/config.h
 	chmod +x fltk-config
 
-makeinclude: configure configh.in makeinclude.in
+makeinclude: configure include/configh.in makeinclude.in
 	if test -f config.status; then \
 		./config.status --recheck; \
 		./config.status; \
 	else \
 		./configure; \
 	fi
-	touch config.h
+	touch include/config.h
 	chmod +x fltk-config
 
 configure: configure.in
