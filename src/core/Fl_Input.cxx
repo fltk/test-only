@@ -645,6 +645,12 @@ int fltk3::Input::handle(int event) {
       //NOTREACHED
       
     case fltk3::PUSH:
+      
+      if (((unsigned)fltk3::event_buttons())==fltk3::BUTTON3) {
+        handle_menu_event();
+        return 1;
+      }
+
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
         fltk3::Boxtype b = box();

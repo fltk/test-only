@@ -194,6 +194,9 @@ namespace fltk3 {
     /* Move the cursor to the column given by up_down_pos. */
     int up_down_position(int, int keepmark=0);
     
+    /* Handle right mouse button clicks. */
+    void handle_menu_event();
+    
     /* Handle mouse clicks and mouse moves. */
     void handle_mouse(int, int, int, int, int keepmark=0);
     

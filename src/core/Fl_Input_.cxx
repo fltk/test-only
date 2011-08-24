@@ -28,6 +28,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Input_.h>
 #include <fltk3/Window.h>
+#include <fltk3/MenuItem.h>
 #include <fltk3/draw.h>
 #include <fltk3/ask.h>
 #include <math.h>
@@ -506,11 +507,52 @@ int fltk3::Input_::line_start(int i) const {
   } else return j;
 }
 
+
+static fltk3::MenuItem ccp_menu[] = {
+  { "Cut", fltk3::COMMAND|'x', 0, (void*)1 },
+  { "Copy", fltk3::COMMAND|'c', 0, (void*)2 },
+  { "Paste", fltk3::COMMAND|'v', 0, (void*)3 },
+  { 0 }
+};
+
+/**
+ Handles right mouse button clicks.
+ */
+void fltk3::Input_::handle_menu_event() {
+  int ex = fltk3::event_x(), ey = fltk3::event_y();
+  if (mark()!=position() && (input_type()!=fltk3::SECRET_INPUT)) {
+    ccp_menu[0].activate();
+    ccp_menu[1].activate();
+  } else {
+    // TODO: if nothing is selected, try to select the word under the cursor
+    ccp_menu[0].deactivate();
+    ccp_menu[1].deactivate();
+  }
+  if (!readonly() /*&& paste_buffer && *paste_buffer*/ ) // TODO: provide a function that can check if data is in the paste buffer
+    ccp_menu[2].activate();
+  else 
+    ccp_menu[2].deactivate();        
+  const fltk3::MenuItem *mi = ccp_menu->popup(fltk3::event_x(), fltk3::event_y());
+  if (mi) {
+    switch (mi->argument()) {
+      case 1: copy(1); cut(); break;
+      case 2: copy(1); break;
+      case 3: 
+        fltk3::e_x = ex; fltk3::e_y = ey; // coordinates were messed up by popup menu!as c
+        handle_mouse(x()+fltk3::box_dx(box()), y()+fltk3::box_dy(box()), 0, 0, 0); 
+        paste(*this, 1); 
+        break;
+    }
+  }
+  return;
+}
+
 /** 
   Handles mouse clicks and mouse moves.
   \todo Add comment and parameters
 */
 void fltk3::Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
+  
   was_up_down = 0;
   if (!size()) return;
   setfont();
@@ -962,6 +1004,7 @@ int fltk3::Input_::handletext(int event, int X, int Y, int W, int H) {
     return 1;
 
   case fltk3::PUSH:
+      
     if (active_r() && window()) window()->cursor(fltk3::CURSOR_INSERT);
 
     handle_mouse(X, Y, W, H, fltk3::event_state(fltk3::SHIFT));
