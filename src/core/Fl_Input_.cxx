@@ -519,27 +519,34 @@ static fltk3::MenuItem ccp_menu[] = {
  Handles right mouse button clicks.
  */
 void fltk3::Input_::handle_menu_event() {
-  int ex = fltk3::event_x(), ey = fltk3::event_y();
-  if (mark()!=position() && (input_type()!=fltk3::SECRET_INPUT)) {
+  int m = mark(), p = position();
+  if (m<p) { int x=p; p=m; m=x; }
+  handle_mouse(x()+fltk3::box_dx(box()), y()+fltk3::box_dy(box()), 0, 0, 0);
+  if ( ( (p==m && p!=position()) || position()<p || position()>m ) && (input_type()!=fltk3::SECRET_INPUT)) {
+    handle_mouse(x()+fltk3::box_dx(box()), y()+fltk3::box_dy(box()), 0, 0, 0); 
+    p = word_start(position()); 
+    m = word_end(position());
+  }
+  position(p, m);
+  if (p!=m && (input_type()!=fltk3::SECRET_INPUT)) {
     ccp_menu[0].activate();
     ccp_menu[1].activate();
   } else {
-    // TODO: if nothing is selected, try to select the word under the cursor
     ccp_menu[0].deactivate();
     ccp_menu[1].deactivate();
   }
   if (!readonly() /*&& paste_buffer && *paste_buffer*/ ) // TODO: provide a function that can check if data is in the paste buffer
     ccp_menu[2].activate();
   else 
-    ccp_menu[2].deactivate();        
+    ccp_menu[2].deactivate();
+  redraw();
+  fltk3::flush();
   const fltk3::MenuItem *mi = ccp_menu->popup(fltk3::event_x(), fltk3::event_y());
   if (mi) {
     switch (mi->argument()) {
       case 1: copy(1); cut(); break;
       case 2: copy(1); break;
       case 3: 
-        fltk3::e_x = ex; fltk3::e_y = ey; // coordinates were messed up by popup menu!as c
-        handle_mouse(x()+fltk3::box_dx(box()), y()+fltk3::box_dy(box()), 0, 0, 0); 
         paste(*this, 1); 
         break;
     }
