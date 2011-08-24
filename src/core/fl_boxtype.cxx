@@ -136,34 +136,38 @@ void fltk3::frame2(const char* s, int x, int y, int w, int h) {
 }
 
 /** Draws a box of type fltk3::NO_BOX */
-void fl_no_box(int, int, int, int, fltk3::Color) {}
+void fl_no_box(int, int, int, int, fltk3::Color, fltk3::Boxtype) {}
+
+void fl_flat_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
+  fltk3::rectf(x, y, w, h, c);
+}
 
 /** Draws a frame of type fltk3::THIN_DOWN_FRAME */
-void fl_classic_thin_down_frame(int x, int y, int w, int h, fltk3::Color) {
+void fl_classic_thin_down_frame(int x, int y, int w, int h, fltk3::Color, fltk3::Boxtype) {
   fltk3::frame2("WWHH",x,y,w,h);
 }
 
 /** Draws a box of type fltk3::THIN_DOWN_BOX */
-void fl_classic_thin_down_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_classic_thin_down_frame(x,y,w,h,c);
+void fl_classic_thin_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_classic_thin_down_frame(x,y,w,h,c,t);
   fltk3::color(draw_it_active ? c : fltk3::inactive(c));
   fltk3::rectf(x+1, y+1, w-2, h-2);
 }
 
 /** Draws a frame of type fltk3::THIN_UP_FRAME */
-void fl_classic_thin_up_frame(int x, int y, int w, int h, fltk3::Color) {
+void fl_classic_thin_up_frame(int x, int y, int w, int h, fltk3::Color, fltk3::Boxtype) {
   fltk3::frame2("HHWW",x,y,w,h);
 }
 
 /** Draws a box of type fltk3::THIN_UP_BOX */
-void fl_classic_thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_classic_thin_up_frame(x,y,w,h,c);
+void fl_classic_thin_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_classic_thin_up_frame(x,y,w,h,c,t);
   fltk3::color(draw_it_active ? c : fltk3::inactive(c));
   fltk3::rectf(x+1, y+1, w-2, h-2);
 }
 
 /** Draws a frame of type fltk3::UP_FRAME */
-void fl_classic_up_frame(int x, int y, int w, int h, fltk3::Color) {
+void fl_classic_up_frame(int x, int y, int w, int h, fltk3::Color, fltk3::Boxtype) {
 #if BORDER_WIDTH == 1
   fltk3::frame2("HHWW",x,y,w,h);
 #else
@@ -179,14 +183,14 @@ void fl_classic_up_frame(int x, int y, int w, int h, fltk3::Color) {
 #define D2 (BORDER_WIDTH+BORDER_WIDTH)
 
 /** Draws a box of type fltk3::UP_BOX */
-void fl_classic_up_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_classic_up_frame(x,y,w,h,c);
+void fl_classic_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_classic_up_frame(x,y,w,h,c,t);
   fltk3::color(draw_it_active ? c : fltk3::inactive(c));
   fltk3::rectf(x+D1, y+D1, w-D2, h-D2);
 }
 
 /** Draws a frame of type fltk3::DOWN_FRAME */
-void fl_classic_down_frame(int x, int y, int w, int h, fltk3::Color) {
+void fl_classic_down_frame(int x, int y, int w, int h, fltk3::Color, fltk3::Boxtype) {
 #if BORDER_WIDTH == 1
   fltk3::frame2("WWHH",x,y,w,h);
 #else
@@ -199,31 +203,31 @@ void fl_classic_down_frame(int x, int y, int w, int h, fltk3::Color) {
 }
 
 /** Draws a box of type fltk3::DOWN_BOX */
-void fl_classic_down_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_classic_down_frame(x,y,w,h,c);
+void fl_classic_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_classic_down_frame(x,y,w,h,c,t);
   fltk3::color(c); fltk3::rectf(x+D1, y+D1, w-D2, h-D2);
 }
 
 /** Draws a frame of type fltk3::ENGRAVED_FRAME */
-void fl_engraved_frame(int x, int y, int w, int h, fltk3::Color) {
+void fl_engraved_frame(int x, int y, int w, int h, fltk3::Color, fltk3::Boxtype) {
   fltk3::frame("HHWWWWHH",x,y,w,h);
 }
 
 /** Draws a box of type fltk3::ENGRAVED_BOX */
-void fl_engraved_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_engraved_frame(x,y,w,h,c);
+void fl_engraved_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_engraved_frame(x,y,w,h,c,t);
   fltk3::color(draw_it_active ? c : fltk3::inactive(c));
   fltk3::rectf(x+2, y+2, w-4, h-4);
 }
 
 /** Draws a frame of type fltk3::EMBOSSED_FRAME */
-void fl_embossed_frame(int x, int y, int w, int h, fltk3::Color) {
+void fl_embossed_frame(int x, int y, int w, int h, fltk3::Color, fltk3::Boxtype) {
   fltk3::frame("WWHHHHWW",x,y,w,h);
 }
 
 /** Draws a box of type fltk3::EMBOSSED_BOX */
-void fl_embossed_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_embossed_frame(x,y,w,h,c);
+void fl_embossed_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_embossed_frame(x,y,w,h,c,t);
   fltk3::color(draw_it_active ? c : fltk3::inactive(c));
   fltk3::rectf(x+2, y+2, w-4, h-4);
 }
@@ -232,7 +236,7 @@ void fl_embossed_box(int x, int y, int w, int h, fltk3::Color c) {
   Draws a bounded rectangle with a given position, size and color.
   Equivalent to drawing a box of type fltk3::BORDER_BOX.
 */
-void fl_rectbound(int x, int y, int w, int h, fltk3::Color bgcolor) {
+void fl_rectbound(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype) {
   fltk3::color(draw_it_active ? fltk3::BLACK : fltk3::inactive(fltk3::BLACK));
   fltk3::rect(x, y, w, h);
   fltk3::color(draw_it_active ? bgcolor : fltk3::inactive(bgcolor));
@@ -243,48 +247,48 @@ void fl_rectbound(int x, int y, int w, int h, fltk3::Color bgcolor) {
 /**
   Draws a frame of type fltk3::BORDER_FRAME.
 */
-void fl_border_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_border_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
   fltk3::color(draw_it_active ? c : fltk3::inactive(c));
   fltk3::rect(x, y, w, h);
 }
 
 ////////////////////////////////////////////////////////////////
 
-void fl_diamond_down_box(int x,int y,int w,int h,fltk3::Color bgcolor);
-void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor);
-void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_shadow_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_diamond_down_box(int x,int y,int w,int h,fltk3::Color bgcolor, fltk3::Boxtype);
+void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor, fltk3::Boxtype);
+void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_shadow_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
 
-void fl_classic_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor);
-void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor);
-void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_classic_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype);
+void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype);
+void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
 
-void fl_oval_shadow_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_oval_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_oval_shadow_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_oval_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
 
-void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_plastic_down_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_plastic_up_round(int x, int y, int w, int h, fltk3::Color c);
-void fl_plastic_down_round(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_plastic_down_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_plastic_up_round(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_plastic_down_round(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
 
-void fl_gtk_up_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_up_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_down_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_down_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_thin_up_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_thin_up_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_thin_down_frame(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_thin_down_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c);
-void fl_gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_down_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_thin_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_thin_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_thin_down_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_thin_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
+void fl_gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype);
 
 static struct {
   fltk3::BoxDrawF *f;
@@ -293,7 +297,7 @@ static struct {
 } fl_box_table[256] = {
 // must match list in enumerations.h!!!
   {fl_no_box,                   0,0,0,0,1},		
-  {fltk3::rectf,                0,0,0,0,1}, // fltk3::FLAT_BOX
+  {fl_flat_box,                 0,0,0,0,1}, // fltk3::FLAT_BOX
   {fl_gtk_up_box,		2,2,4,4,0}, // FL_GTK_UP_BOX,
   {fl_gtk_down_box,		2,2,4,4,0}, // FL_GTK_DOWN_BOX,
   {fl_gtk_up_frame,		2,2,4,4,0}, // FL_GTK_UP_FRAME,
@@ -359,7 +363,7 @@ static struct {
   Returns the X offset for the given boxtype.
   \see box_dy()
 */
-int fltk3::box_dx(fltk3::Boxtype t) {return fl_box_table[t].dx;}
+int fltk3::box_dx(fltk3::Boxtype t) {return fl_box_table[t&255].dx;}
 
 /**
     Returns the Y offset for the given boxtype.
@@ -384,19 +388,19 @@ int fltk3::box_dx(fltk3::Boxtype t) {return fl_box_table[t].dx;}
     for deriving custom widgets, where one wants to avoid drawing 
     over the widget's own border box().
 */
-int fltk3::box_dy(fltk3::Boxtype t) {return fl_box_table[t].dy;}
+int fltk3::box_dy(fltk3::Boxtype t) {return fl_box_table[t&255].dy;}
 
 /**
   Returns the width offset for the given boxtype.
   \see box_dy().
 */
-int fltk3::box_dw(fltk3::Boxtype t) {return fl_box_table[t].dw;}
+int fltk3::box_dw(fltk3::Boxtype t) {return fl_box_table[t&255].dw;}
 
 /**
   Returns the height offset for the given boxtype.
   \see box_dy().
 */
-int fltk3::box_dh(fltk3::Boxtype t) {return fl_box_table[t].dh;}
+int fltk3::box_dh(fltk3::Boxtype t) {return fl_box_table[t&255].dh;}
 
 /**
   Sets the drawing function for a given box type.
@@ -404,29 +408,29 @@ int fltk3::box_dh(fltk3::Boxtype t) {return fl_box_table[t].dh;}
   \param[in] f box drawing function
 */
 void fl_internal_boxtype(fltk3::Boxtype t, fltk3::BoxDrawF* f) {
-  if (!fl_box_table[t].set) {
-    fl_box_table[t].f   = f;
-    fl_box_table[t].set = 1;
+  if (!fl_box_table[t&255].set) {
+    fl_box_table[t&255].f   = f;
+    fl_box_table[t&255].set = 1;
   }
 }
 
 /** Gets the current box drawing function for the specified box type. */
 fltk3::BoxDrawF *fltk3::get_boxtype(fltk3::Boxtype t) {
-  return fl_box_table[t].f;
+  return fl_box_table[t&255].f;
 }
 /** Sets the function to call to draw a specific boxtype. */
 void fltk3::set_boxtype(fltk3::Boxtype t, fltk3::BoxDrawF* f,
 		      uchar a, uchar b, uchar c, uchar d) {
-  fl_box_table[t].f   = f;
-  fl_box_table[t].set = 1;
-  fl_box_table[t].dx  = a;
-  fl_box_table[t].dy  = b;
-  fl_box_table[t].dw  = c;
-  fl_box_table[t].dh  = d;
+  fl_box_table[t&255].f   = f;
+  fl_box_table[t&255].set = 1;
+  fl_box_table[t&255].dx  = a;
+  fl_box_table[t&255].dy  = b;
+  fl_box_table[t&255].dw  = c;
+  fl_box_table[t&255].dh  = d;
 }
 /** Copies the from boxtype. */
 void fltk3::set_boxtype(fltk3::Boxtype to, fltk3::Boxtype from) {
-  fl_box_table[to] = fl_box_table[from];
+  fl_box_table[to&255] = fl_box_table[from&255];
 }
 
 /**
@@ -436,7 +440,7 @@ void fltk3::set_boxtype(fltk3::Boxtype to, fltk3::Boxtype from) {
   \param[in] c color
 */
 void fltk3::draw_box(fltk3::Boxtype t, int x, int y, int w, int h, fltk3::Color c) {
-  if (t && fl_box_table[t].f) fl_box_table[t].f(x,y,w,h,c);
+  if (t && fl_box_table[t&255].f) fl_box_table[t&255].f(x,y,w,h,c,t);
 }
 
 //extern fltk3::Widget *fl_boxcheat; // hack set by fltk3::Window.cxx
@@ -463,7 +467,7 @@ void fltk3::Widget::draw_box(fltk3::Boxtype t, fltk3::Color c) const {
 /** Draws a box of type t, of color c at the position X,Y and size W,H. */
 void fltk3::Widget::draw_box(fltk3::Boxtype t, int X, int Y, int W, int H, fltk3::Color c) const {
   draw_it_active = active_r();
-  fl_box_table[t].f(X, Y, W, H, c);
+  fl_box_table[t&255].f(X, Y, W, H, c, t);
   draw_it_active = 1;
 }
 

@@ -529,6 +529,11 @@ namespace fltk3 {
     GTK_THIN_DOWN_FRAME = THIN_DOWN_FRAME,///< gtk+ version of fltk3::THIN_DOWN_FRAME
     GTK_ROUND_UP_BOX = ROUND_UP_BOX,      ///< gtk+ version of fltk3::ROUND_UP_BOX
     GTK_ROUND_DOWN_BOX = ROUND_DOWN_BOX,  ///< gtk+ version of fltk3::ROUND_DOWN_BOX
+    
+    TIE_LEFT    = 0x10000000,
+    TIE_RIGHT   = 0x20000000,
+    TIE_TOP     = 0x40000000,
+    TIE_BOTTOM  = 0x80000000,
   };
   
   // conversions of box types to other boxtypes:

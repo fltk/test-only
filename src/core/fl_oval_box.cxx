@@ -32,24 +32,24 @@
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
 
-void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
   fltk3::color(c);
   fltk3::pie(x, y, w, h, 0, 360);
 }
 
-void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
   fltk3::color(c);
   fltk3::arc(x, y, w, h, 0, 360);
 }
 
-void fl_oval_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_oval_flat_box(x,y,w,h,c);
-  fl_oval_frame(x,y,w,h,fltk3::BLACK);
+void fl_oval_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_oval_flat_box(x,y,w,h,c,t);
+  fl_oval_frame(x,y,w,h,fltk3::BLACK,t);
 }
 
-void fl_oval_shadow_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_oval_flat_box(x+3,y+3,w,h,fltk3::DARK3);
-  fl_oval_box(x,y,w,h,c);
+void fl_oval_shadow_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+  fl_oval_flat_box(x+3,y+3,w,h,fltk3::DARK3,t);
+  fl_oval_box(x,y,w,h,c,t);
 }
 
 //

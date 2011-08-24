@@ -72,7 +72,7 @@ namespace fltk3 {
   typedef void (LabelMeasureF)(const fltk3::Label *label, int &width, int &height);
   
   /** Signature of some box drawing functions passed as parameters */
-  typedef void (BoxDrawF)(int x, int y, int w, int h, fltk3::Color color);
+  typedef void (BoxDrawF)(int x, int y, int w, int h, fltk3::Color color, fltk3::Boxtype type);
   
   /** Signature of some timeout callback functions passed as parameters */
   typedef void (*TimeoutHandler)(void *data);

@@ -75,7 +75,15 @@ void fltk3::Button::setonly() { // set this radio button on, turn others off
 void fltk3::Button::draw() {
   FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (type() == fltk3::HIDDEN_BUTTON) return;
-  fltk3::Color col = value() ? selection_color() : color();
+  fltk3::Color col;
+  if (value()) {
+    if (selection_color()==fltk3::GRAY) 
+      col = fltk3::color_average(fltk3::BLACK, color(), 0.2f);
+    else
+      col = selection_color();
+  } else {
+    col = color();
+  }
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(), col);
   draw_backdrop();
   if (labeltype() == fltk3::NORMAL_LABEL && value()) {

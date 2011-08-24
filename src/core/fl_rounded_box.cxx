@@ -54,26 +54,26 @@ static void rbox(int fill, int x, int y, int w, int h) {
   if (fill) fltk3::end_polygon(); else fltk3::end_loop();
 }
 
-void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
   fltk3::color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
 }
 
-void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
   fltk3::color(c); rbox(0, x, y, w, h);
 }
 
-void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
   fltk3::color(c); rbox(1, x, y, w, h);
   fltk3::color(fltk3::BLACK); rbox(0, x, y, w, h);
 }
 
-void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
   // draw shadow:
   fltk3::color(fltk3::DARK3);
   rbox(1, x+BW, y+BW, w, h);
   rbox(0, x+BW, y+BW, w, h);
   // draw the box:
-  fl_rounded_box(x, y, w, h, c);
+  fl_rounded_box(x, y, w, h, c, t);
 }
 
 //

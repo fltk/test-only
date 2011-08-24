@@ -127,7 +127,7 @@ namespace fltk3 {
     Color color2_;
     uchar type_;
     uchar damage_;
-    uchar box_;
+    Boxtype box_;
     uchar when_;
     
     const char *tooltip_;

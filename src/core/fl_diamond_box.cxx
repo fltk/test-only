@@ -38,7 +38,7 @@ namespace fltk3 {
   extern uchar* gray_ramp();
 }
 
-void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor) {
+void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor, fltk3::Boxtype) {
   w &= -2;
   h &= -2;
   int x1 = x+w/2;
@@ -54,7 +54,7 @@ void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor) {
   fltk3::color(g['A']); fltk3::loop(x, y1, x1, y, x+w, y1, x1, y+h);
 }
 
-void fl_diamond_down_box(int x,int y,int w,int h,fltk3::Color bgcolor) {
+void fl_diamond_down_box(int x,int y,int w,int h,fltk3::Color bgcolor, fltk3::Boxtype) {
   w &= -2;
   h &= -2;
   int x1 = x+w/2;
