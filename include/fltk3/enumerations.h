@@ -468,12 +468,12 @@ namespace fltk3 {
   /*@{*/
   enum Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
     
-    NO_BOX = 0,		///< nothing is drawn at all, this box is invisible
+    NO_BOX = 0,                 ///< nothing is drawn at all, this box is invisible
     FLAT_BOX,			///< a flat box
     UP_BOX,			///< see figure 1
     DOWN_BOX,			///< see figure 1
     UP_FRAME,			///< see figure 1
-    DOWN_FRAME,		///< see figure 1
+    DOWN_FRAME,                 ///< see figure 1
     THIN_UP_BOX,		///< see figure 1
     THIN_DOWN_BOX,		///< see figure 1
     THIN_UP_FRAME,		///< see figure 1
@@ -483,41 +483,52 @@ namespace fltk3 {
     EMBOSSED_BOX,		///< see figure 1
     ENGRAVED_FRAME,		///< see figure 1
     EMBOSSED_FRAME,		///< see figure 1
-    BORDER_BOX,		///< see figure 1
-    SHADOW_BOX,		///< see figure 1
+    BORDER_BOX,                 ///< see figure 1
+    SHADOW_BOX,                 ///< see figure 1
     BORDER_FRAME,		///< see figure 1
     SHADOW_FRAME,		///< see figure 1
     ROUNDED_BOX,		///< see figure 1
     RSHADOW_BOX,		///< see figure 1
     ROUNDED_FRAME,		///< see figure 1
-    RFLAT_BOX,		///< see figure 1
+    RFLAT_BOX,                  ///< see figure 1
     ROUND_UP_BOX,		///< see figure 1
     ROUND_DOWN_BOX,		///< see figure 1
     DIAMOND_UP_BOX,		///< see figure 1
     DIAMOND_DOWN_BOX,		///< see figure 1
     OVAL_BOX,			///< see figure 1
     OSHADOW_BOX,		///< see figure 1
-    OVAL_FRAME,		///< see figure 1
-    OFLAT_BOX,		///< see figure 1
+    OVAL_FRAME,                 ///< see figure 1
+    OFLAT_BOX,                  ///< see figure 1
     PLASTIC_UP_BOX,		///< plastic version of fltk3::UP_BOX
     PLASTIC_DOWN_BOX,		///< plastic version of fltk3::DOWN_BOX
     PLASTIC_UP_FRAME,		///< plastic version of fltk3::UP_FRAME
-    PLASTIC_DOWN_FRAME,	///< plastic version of fltk3::DOWN_FRAME
+    PLASTIC_DOWN_FRAME,         ///< plastic version of fltk3::DOWN_FRAME
     PLASTIC_THIN_UP_BOX,	///< plastic version of fltk3::THIN_UP_BOX
     PLASTIC_THIN_DOWN_BOX,	///< plastic version of fltk3::THIN_DOWN_BOX
     PLASTIC_ROUND_UP_BOX,	///< plastic version of fltk3::ROUND_UP_BOX
     PLASTIC_ROUND_DOWN_BOX,	///< plastic version of fltk3::ROUND_DOWN_BOX
-    GTK_UP_BOX,		///< gtk+ version of fltk3::UP_BOX
-    GTK_DOWN_BOX,		///< gtk+ version of fltk3::DOWN_BOX
-    GTK_UP_FRAME,		///< gtk+ version of fltk3::UP_FRAME
-    GTK_DOWN_FRAME,		///< gtk+ version of fltk3::DOWN_RAME
-    GTK_THIN_UP_BOX,		///< gtk+ version of fltk3::THIN_UP_BOX
-    GTK_THIN_DOWN_BOX,	///< gtk+ version of fltk3::THIN_DOWN_BOX
-    GTK_THIN_UP_FRAME,	///< gtk+ version of fltk3::UP_FRAME
-    GTK_THIN_DOWN_FRAME,	///< gtk+ version of fltk3::THIN_DOWN_FRAME
-    GTK_ROUND_UP_BOX,		///< gtk+ version of fltk3::ROUND_UP_BOX
-    GTK_ROUND_DOWN_BOX,	///< gtk+ version of fltk3::ROUND_DOWN_BOX
-    FREE_BOXTYPE		///< the first free box type for creation of new box types
+    CLASSIC_UP_BOX,		///< classic version of fltk3::UP_BOX
+    CLASSIC_DOWN_BOX,		///< classic version of fltk3::DOWN_BOX
+    CLASSIC_UP_FRAME,		///< classic version of fltk3::UP_FRAME
+    CLASSIC_DOWN_FRAME,		///< classic version of fltk3::DOWN_RAME
+    CLASSIC_THIN_UP_BOX,	///< classic version of fltk3::THIN_UP_BOX
+    CLASSIC_THIN_DOWN_BOX,	///< classic version of fltk3::THIN_DOWN_BOX
+    CLASSIC_THIN_UP_FRAME,	///< classic version of fltk3::UP_FRAME
+    CLASSIC_THIN_DOWN_FRAME,	///< classic version of fltk3::THIN_DOWN_FRAME
+    CLASSIC_ROUND_UP_BOX,	///< classic version of fltk3::ROUND_UP_BOX
+    CLASSIC_ROUND_DOWN_BOX,	///< classic version of fltk3::ROUND_DOWN_BOX
+    FREE_BOXTYPE,		///< the first free box type for creation of new box types
+                                // alternative names:
+    GTK_UP_BOX = UP_BOX,                  ///< gtk+ version of fltk3::UP_BOX
+    GTK_DOWN_BOX = DOWN_BOX,              ///< gtk+ version of fltk3::DOWN_BOX
+    GTK_UP_FRAME = UP_FRAME,              ///< gtk+ version of fltk3::UP_FRAME
+    GTK_DOWN_FRAME = DOWN_FRAME,          ///< gtk+ version of fltk3::DOWN_RAME
+    GTK_THIN_UP_BOX = THIN_UP_BOX,        ///< gtk+ version of fltk3::THIN_UP_BOX
+    GTK_THIN_DOWN_BOX = THIN_DOWN_BOX,    ///< gtk+ version of fltk3::THIN_DOWN_BOX
+    GTK_THIN_UP_FRAME = THIN_UP_FRAME,    ///< gtk+ version of fltk3::UP_FRAME
+    GTK_THIN_DOWN_FRAME = THIN_DOWN_FRAME,///< gtk+ version of fltk3::THIN_DOWN_FRAME
+    GTK_ROUND_UP_BOX = ROUND_UP_BOX,      ///< gtk+ version of fltk3::ROUND_UP_BOX
+    GTK_ROUND_DOWN_BOX = ROUND_DOWN_BOX,  ///< gtk+ version of fltk3::ROUND_DOWN_BOX
   };
   
   // conversions of box types to other boxtypes:
@@ -584,15 +595,15 @@ namespace fltk3 {
    .            |                                 |
    . LEFT_BOTTOM+---------------------------------+RIGHT_BOTTOM
    .            BOTTOM_RIGHT   BOTTOM   BOTTOM_LEFT
-   
+   .
    Inside alignments:
-   +---------------------------------+
-   |TOP_LEFT       TOP      TOP_RIGHT|
-   |                                 |
-   |LEFT                        RIGHT|
-   |                                 |
-   |BOTTOM_RIGHT  BOTTOM  BOTTOM_LEFT|
-   +---------------------------------+
+   .            +---------------------------------+
+   .            |TOP_LEFT       TOP      TOP_RIGHT|
+   .            |                                 |
+   .            |LEFT                        RIGHT|
+   .            |                                 |
+   .            |BOTTOM_RIGHT  BOTTOM  BOTTOM_LEFT|
+   .            +---------------------------------+
    \endcode
    \see #ALIGN_CENTER, etc.
    */

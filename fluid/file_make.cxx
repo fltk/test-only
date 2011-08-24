@@ -1836,6 +1836,8 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\t$(RM) libfltk.so\n");
   fprintf(out, "\t$(LN) libfltk.so.1.3 libfltk.so\n");
   fprintf(out, "\n");
+  
+  
   fprintf(out, "libfltk.sl.1.3: $(FLTK3_OBJECTS)\n");
   fprintf(out, "\techo $(DSOCOMMAND) $@ ...\n");
   fprintf(out, "\t$(DSOCOMMAND) $@ $(FLTK3_OBJECTS)\n");
@@ -2011,7 +2013,7 @@ static int write_fltk_makefile(FILE *out, Fl_Workspace_Type *workspace, const ch
   fprintf(out, "\t\t\t$(IMAGELIBS) $(LDLIBS)\n");
   fprintf(out, "\n");
   fprintf(out, "clean:\n");
-  fprintf(out, "\t-$(RM) *.o xutf8/*.o *.dll.a core.* *~ *.bak *.bck\n");
+  fprintf(out, "\t-$(RM) *.o */*.o */*/*.o *.dll.a core.* *~ *.bak *.bck\n");
   fprintf(out, "\t-$(RM) $(FLTK3_DSONAME) $(FLTK3GL_DSONAME) $(FLTK3IMAGES_DSONAME) \\\n");
   fprintf(out, "\t\t$(FLTK3_LIBNAME) $(FLTK3GL_LIBNAME) \\\n");
   fprintf(out, "\t\t$(FLTK3IMAGES_LIBNAME) \\\n");

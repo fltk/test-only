@@ -171,7 +171,7 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
     if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, selection_color());
 
     if (type()!=fltk3::HOR_FILL_SLIDER && type() != fltk3::VERT_FILL_SLIDER &&
-        fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
+        !fltk3::scheme_) {
       if (W>H && wsl>(hsl+8)) {
         // Draw horizontal grippers
 	int yy, hh;

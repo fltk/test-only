@@ -229,7 +229,7 @@ void fltk3::Scrollbar::draw() {
       int w1 = (H-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(H-w1-1)/2;
       int yy1 = Y+(H-2*w1-1)/2;
-      if (fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
+      if (!fltk3::scheme()) {
 	fltk3::polygon(x1, yy1+w1, x1+w1, yy1+2*w1, x1+w1-1, yy1+w1, x1+w1, yy1);
 	x1 += (W-H);
 	fltk3::polygon(x1, yy1, x1+1, yy1+w1, x1, yy1+2*w1, x1+w1, yy1+w1);
@@ -254,7 +254,7 @@ void fltk3::Scrollbar::draw() {
       int w1 = (W-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(W-2*w1-1)/2;
       int yy1 = Y+(W-w1-1)/2;
-      if (fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
+      if (!fltk3::scheme()) {
 	fltk3::polygon(x1, yy1+w1, x1+w1, yy1+w1-1, x1+2*w1, yy1+w1, x1+w1, yy1);
 	yy1 += H-W;
 	fltk3::polygon(x1, yy1, x1+w1, yy1+1, x1+w1, yy1+w1);

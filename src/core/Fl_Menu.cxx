@@ -198,11 +198,11 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 	int tW = (W - fltk3::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
 	int td = fltk3::box_dx(fltk3::ROUND_DOWN_BOX) + 1;
-        if (fltk3::scheme()) {
+        if (!fltk3::scheme() || !strcmp(fltk3::scheme(), "classic")) {
 	  // Offset the radio circle...
 	  td ++;
 
-	  if (!strcmp(fltk3::scheme(), "gtk+")) {
+	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
 	    fltk3::pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
@@ -237,7 +237,7 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 	    break;
 	}
 
-	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
+	if (!fltk3::scheme()) {
 	  fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
 	  fltk3::arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
 	}
@@ -245,7 +245,7 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
     } else {
       fltk3::draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
-	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
+	if (!fltk3::scheme()) {
 	  fltk3::color(fltk3::SELECTION_COLOR);
 	} else {
 	  fltk3::color(labelcolor_);

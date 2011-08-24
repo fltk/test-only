@@ -107,16 +107,16 @@ int main(int argc, char ** argv) {
   bt("fltk3::PLASTIC_ROUND_DOWN_BOX",fltk3::PLASTIC_ROUND_DOWN_BOX);
   N += 2;
 
-  bt("fltk3::GTK_UP_BOX",fltk3::GTK_UP_BOX);
-  bt("fltk3::GTK_DOWN_BOX",fltk3::GTK_DOWN_BOX);
-  bt("fltk3::GTK_UP_FRAME",fltk3::GTK_UP_FRAME);
-  bt("fltk3::GTK_DOWN_FRAME",fltk3::GTK_DOWN_FRAME);
-  bt("fltk3::GTK_THIN_UP_BOX",fltk3::GTK_THIN_UP_BOX);
-  bt("fltk3::GTK_THIN_DOWN_BOX",fltk3::GTK_THIN_DOWN_BOX);
-  bt("fltk3::GTK_THIN_UP_FRAME",fltk3::GTK_THIN_UP_FRAME);
-  bt("fltk3::GTK_THIN_DOWN_FRAME",fltk3::GTK_THIN_DOWN_FRAME);
-  bt("fltk3::GTK_ROUND_UP_BOX",fltk3::GTK_ROUND_UP_BOX);
-  bt("fltk3::GTK_ROUND_DOWN_BOX",fltk3::GTK_ROUND_DOWN_BOX);
+  bt("fltk3::CLASSIC_UP_BOX",fltk3::CLASSIC_UP_BOX);
+  bt("fltk3::CLASSIC_DOWN_BOX",fltk3::CLASSIC_DOWN_BOX);
+  bt("fltk3::CLASSIC_UP_FRAME",fltk3::CLASSIC_UP_FRAME);
+  bt("fltk3::CLASSIC_DOWN_FRAME",fltk3::CLASSIC_DOWN_FRAME);
+  bt("fltk3::CLASSIC_THIN_UP_BOX",fltk3::CLASSIC_THIN_UP_BOX);
+  bt("fltk3::CLASSIC_THIN_DOWN_BOX",fltk3::CLASSIC_THIN_DOWN_BOX);
+  bt("fltk3::CLASSIC_THIN_UP_FRAME",fltk3::CLASSIC_THIN_UP_FRAME);
+  bt("fltk3::CLASSIC_THIN_DOWN_FRAME",fltk3::CLASSIC_THIN_DOWN_FRAME);
+  bt("fltk3::CLASSIC_ROUND_UP_BOX",fltk3::CLASSIC_ROUND_UP_BOX);
+  bt("fltk3::CLASSIC_ROUND_DOWN_BOX",fltk3::CLASSIC_ROUND_DOWN_BOX);
   window->resizable(window);
   window->end();
   window->show();

@@ -682,12 +682,12 @@ fltk3::MenuItem boxmenu[] = {
 {"PLASTIC_THIN_DOWN_BOX",0,0,(void *)fltk3::PLASTIC_THIN_DOWN_BOX},
 {"PLASTIC_ROUND_UP_BOX",0,0,(void *)fltk3::PLASTIC_ROUND_UP_BOX},
 {"PLASTIC_ROUND_DOWN_BOX",0,0,(void *)fltk3::PLASTIC_ROUND_DOWN_BOX},
-{"GTK_UP_BOX",0,0,(void *)fltk3::GTK_UP_BOX},
-{"GTK_DOWN_BOX",0,0,(void *)fltk3::GTK_DOWN_BOX},
-{"GTK_THIN_UP_BOX",0,0,(void *)fltk3::GTK_THIN_UP_BOX},
-{"GTK_THIN_DOWN_BOX",0,0,(void *)fltk3::GTK_THIN_DOWN_BOX},
-{"GTK_ROUND_UP_BOX",0,0,(void *)fltk3::GTK_ROUND_UP_BOX},
-{"GTK_ROUND_DOWN_BOX",0,0,(void *)fltk3::GTK_ROUND_DOWN_BOX},
+{"CLASSIC_UP_BOX",0,0,(void *)fltk3::CLASSIC_UP_BOX},
+{"CLASSIC_DOWN_BOX",0,0,(void *)fltk3::CLASSIC_DOWN_BOX},
+{"CLASSIC_THIN_UP_BOX",0,0,(void *)fltk3::CLASSIC_THIN_UP_BOX},
+{"CLASSIC_THIN_DOWN_BOX",0,0,(void *)fltk3::CLASSIC_THIN_DOWN_BOX},
+{"CLASSIC_ROUND_UP_BOX",0,0,(void *)fltk3::CLASSIC_ROUND_UP_BOX},
+{"CLASSIC_ROUND_DOWN_BOX",0,0,(void *)fltk3::CLASSIC_ROUND_DOWN_BOX},
 {0},
 {"frames",0,0,0,fltk3::SUBMENU},
 {"UP_FRAME",0,0,(void *)fltk3::UP_FRAME},
@@ -702,10 +702,10 @@ fltk3::MenuItem boxmenu[] = {
 {"OVAL_FRAME",0,0,(void *)fltk3::OVAL_FRAME},
 {"PLASTIC_UP_FRAME",0,0,(void *)fltk3::PLASTIC_UP_FRAME},
 {"PLASTIC_DOWN_FRAME",0,0,(void *)fltk3::PLASTIC_DOWN_FRAME},
-{"GTK_UP_FRAME",0,0,(void *)fltk3::GTK_UP_FRAME},
-{"GTK_DOWN_FRAME",0,0,(void *)fltk3::GTK_DOWN_FRAME},
-{"GTK_THIN_UP_FRAME",0,0,(void *)fltk3::GTK_THIN_UP_FRAME},
-{"GTK_THIN_DOWN_FRAME",0,0,(void *)fltk3::GTK_THIN_DOWN_FRAME},
+{"CLASSIC_UP_FRAME",0,0,(void *)fltk3::CLASSIC_UP_FRAME},
+{"CLASSIC_DOWN_FRAME",0,0,(void *)fltk3::CLASSIC_DOWN_FRAME},
+{"CLASSIC_THIN_UP_FRAME",0,0,(void *)fltk3::CLASSIC_THIN_UP_FRAME},
+{"CLASSIC_THIN_DOWN_FRAME",0,0,(void *)fltk3::CLASSIC_THIN_DOWN_FRAME},
 {0},
 {0}};
 
@@ -718,6 +718,7 @@ const char *boxname(int i) {
 
 int boxnumber(const char *i) {
   if (i[0]=='F' && i[1]=='L' && i[2]=='_') i += 3;
+  if (strncmp(i, "GTK_", 4)==0) i += 4; // GTK is the defaut scheme in FLTK3
   for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
     if (boxmenu[j].label() && !strcmp(boxmenu[j].label(), i)) {
       return int(boxmenu[j].argument());

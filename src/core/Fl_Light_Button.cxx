@@ -60,7 +60,7 @@ void fltk3::LightButton::draw() {
         // Check box...
         draw_box(down_box(), x()+dx, y()+dy, W, W, fltk3::BACKGROUND2_COLOR);
 	if (value()) {
-	  if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
+	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	  } else {
 	    fltk3::color(col);
@@ -86,7 +86,7 @@ void fltk3::LightButton::draw() {
 	  int tdx = dx + (W - tW) / 2;
 	  int tdy = dy + (W - tW) / 2;
 
-	  if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
+	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
 	    fltk3::pie(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
@@ -120,7 +120,7 @@ void fltk3::LightButton::draw() {
 	      break;
 	  }
 
-	  if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
+	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
 	    fltk3::arc(x() + tdx, y() + tdy, tW + 1, tW + 1, 60.0, 180.0);
 	  }

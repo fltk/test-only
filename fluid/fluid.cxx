@@ -1266,8 +1266,8 @@ void scheme_cb(fltk3::Choice *, void *) {
     case 2 : // Plastic
       fltk3::scheme("plastic");
       break;
-    case 3 : // GTK+
-      fltk3::scheme("gtk+");
+    case 3 : // Classic
+      fltk3::scheme("classic");
       break;
   }
 

@@ -176,7 +176,7 @@ fltk3::MenuItem menu_scheme_choice[] = {
  {"Default", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"None", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"Plastic", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
- {"GTK+", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"Classic", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
