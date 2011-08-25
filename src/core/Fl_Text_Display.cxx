@@ -37,6 +37,7 @@
 #include <fltk3/run.h>
 #include <fltk3/TextBuffer.h>
 #include <fltk3/TextDisplay.h>
+#include <fltk3/MenuItem.h>
 #include <fltk3/Window.h>
 #include <fltk3/Printer.h>
 
@@ -3542,6 +3543,64 @@ void fltk3::TextDisplay::scroll_timer_cb(void *user_data) {
 }
 
 
+static fltk3::MenuItem ccp_menu[] = {
+  { "Cut", fltk3::COMMAND|'x', 0, (void*)1 },
+  { "Copy", fltk3::COMMAND|'c', 0, (void*)2 },
+  { "Paste", fltk3::COMMAND|'v', 0, (void*)3 },
+  { 0 }
+};
+
+/**
+ Handles right mouse button clicks.
+ */
+void fltk3::TextDisplay::handle_menu_event() {
+  fltk3::TextBuffer *buf = mBuffer;
+  if (!buf) return;
+  int m = buf->primary_selection()->end(), p = buf->primary_selection()->start();
+  int pc = xy_to_position(fltk3::event_x(), fltk3::event_y(), CHARACTER_POS);
+  if (!buf->primary_selection()->selected()) { p = m = insert_position(); }
+  if ( ( (p==m && p!=pc) || pc<p || pc>m )) {
+    p = word_start(pc); 
+    m = word_end(pc);
+    buf->primary_selection()->set(p, m);
+    insert_position(pc);
+  }
+  if (p!=m && !readonly())
+    ccp_menu[0].activate();
+  else
+    ccp_menu[0].deactivate();
+  if (p!=m)
+    ccp_menu[1].activate();
+  else
+    ccp_menu[1].deactivate();
+  if (!readonly() /*&& paste_buffer && *paste_buffer*/ ) // TODO: how do we know that this is read-only? provide a function that can check if data is in the paste buffer
+    ccp_menu[2].activate();
+  else 
+    ccp_menu[2].deactivate();
+  redraw();
+  fltk3::flush();
+  const fltk3::MenuItem *mi = ccp_menu->popup(fltk3::event_x(), fltk3::event_y());
+  if (mi) {
+    const char *copy;
+    switch (mi->argument()) {
+      case 1:
+        copy = buf->selection_text();
+        if (*copy) fltk3::copy(copy, strlen(copy), 1);
+        free((void*)copy);
+        buf->remove_selection();
+        break;
+      case 2: 
+        copy = buf->selection_text();
+        if (*copy) fltk3::copy(copy, strlen(copy), 1);
+        free((void*)copy);
+        break;
+      case 3: 
+        paste(*this, 1); 
+        break;
+    }
+  }
+}
+
 
 /**
  \brief Event handling.
@@ -3589,6 +3648,10 @@ int fltk3::TextDisplay::handle(int event) {
       if (fltk3::focus() != this) {
         fltk3::focus(this);
         handle(fltk3::FOCUS);
+      }
+      if (((unsigned)fltk3::event_buttons())==fltk3::BUTTON3) {
+        handle_menu_event();
+        return 1;
       }
       if (Group::handle(event)) return 1;
       if (fltk3::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);

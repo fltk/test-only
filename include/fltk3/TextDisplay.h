@@ -121,6 +121,10 @@ public:
   TextDisplay(int X, int Y, int W, int H, const char *l = 0);
   ~TextDisplay();
   
+  virtual int readonly() { return 1; }
+  
+  void handle_menu_event();
+  
   virtual int handle(int e);
   
   void buffer(fltk3::TextBuffer* buf);

@@ -70,6 +70,7 @@ namespace fltk3 {
     
     TextEditor(int X, int Y, int W, int H, const char* l = 0);
     ~TextEditor() { remove_all_key_bindings(); }
+    virtual int readonly() { return 0; }
     virtual int handle(int e);
     /**
      Sets the current insert mode; if non-zero, new text

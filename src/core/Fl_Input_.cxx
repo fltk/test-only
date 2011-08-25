@@ -519,6 +519,12 @@ static fltk3::MenuItem ccp_menu[] = {
  Handles right mouse button clicks.
  */
 void fltk3::Input_::handle_menu_event() {
+
+  if (fltk3::focus() != this) {
+    fltk3::focus(this);
+    handle(fltk3::FOCUS);
+  }
+
   int m = mark(), p = position();
   if (m<p) { int x=p; p=m; m=x; }
   handle_mouse(x()+fltk3::box_dx(box()), y()+fltk3::box_dy(box()), 0, 0, 0);
@@ -528,13 +534,14 @@ void fltk3::Input_::handle_menu_event() {
     m = word_end(position());
   }
   position(p, m);
-  if (p!=m && (input_type()!=fltk3::SECRET_INPUT)) {
+  if (p!=m && (input_type()!=fltk3::SECRET_INPUT) && !readonly())
     ccp_menu[0].activate();
-    ccp_menu[1].activate();
-  } else {
+  else
     ccp_menu[0].deactivate();
+  if (p!=m && (input_type()!=fltk3::SECRET_INPUT))
+    ccp_menu[1].activate();
+  else
     ccp_menu[1].deactivate();
-  }
   if (!readonly() /*&& paste_buffer && *paste_buffer*/ ) // TODO: provide a function that can check if data is in the paste buffer
     ccp_menu[2].activate();
   else 
