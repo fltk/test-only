@@ -40,7 +40,7 @@
 #include <fltk3/Tooltip.h>
 #include <fltk3/PagedDevice.h>
 #include "flstring.h"
-#include "Fl_Font.H"
+#include "font.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

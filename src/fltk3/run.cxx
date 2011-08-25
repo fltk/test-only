@@ -1710,7 +1710,7 @@ void fltk3::Window::flush() {
 }
 
 #ifdef WIN32
-#  include "Fl_win32.cxx"
+#  include "win32.cxx"
 //#elif defined(__APPLE__)
 #endif
 

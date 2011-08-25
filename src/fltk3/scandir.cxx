@@ -17,7 +17,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 USA.  */
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#  include "scandir_win32.cxx"
+#  include "win32_scandir.cxx"
 #else
 
 #  include "flstring.h"
