@@ -152,6 +152,7 @@ public:
   virtual const char *title(); // string for browser
   virtual const char *type_name() = 0; // type for code output
   virtual const char *alt_type_name() { return type_name(); } // alternate type for FLTK1 file reading
+  virtual const char *include_path() { return 0; }
 
   const char *name() const {return name_;}
   void name(const char *);
@@ -622,6 +623,7 @@ public:
   void open();
   virtual const char *type_name() {return "class";}
   virtual const char *alt_type_name() { return type_name(); }
+  virtual const char *include_path() { return "fltk3"; }
   int is_parent() const {return 1;}
   int is_decl_block() const {return 1;}
   int is_class() const {return 1;}
@@ -678,6 +680,7 @@ public:
   Fl_Widget_Type();
   Fl_Type *make();
   void open();
+  virtual const char *include_path() { return "fltk3"; }
 
   const char *extra_code(int n) const {return extra_code_[n];}
   void extra_code(int n,const char *);

@@ -33,7 +33,7 @@
 #  include <stdlib.h>
 #  include "GLChoice.H"
 #  include <fltk3gl/glDraw.h>
-#  include "../core/flstring.h"
+#  include "../fltk3/flstring.h"
 #  include <fltk3/utf8.h>
 
 #  ifdef __APPLE__

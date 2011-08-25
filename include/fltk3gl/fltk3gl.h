@@ -26,7 +26,7 @@
 //
 
 #ifndef FLTK3GL_FLTK3GL_H
-#define FLTK3GL_FLTK3ALL_H
+#define FLTK3GL_FLTK3GL_H
 
 #include "all.h"
 

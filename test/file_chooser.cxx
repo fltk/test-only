@@ -46,7 +46,7 @@
 #include <fltk3/FileChooser.h>
 #include <fltk3/FileIcon.h>
 #include <fltk3/SharedImage.h>
-#include <fltk3/PNMImage.h>
+#include <fltk3images/PNMImage.h>
 #include <fltk3/LightButton.h>
 #include <fltk3/DoubleWindow.h>
 #include <string.h>

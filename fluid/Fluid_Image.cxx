@@ -29,7 +29,7 @@
 #include <fltk3/Widget.h>
 #include "Fl_Type.h"
 #include "Fluid_Image.h"
-#include "../src/core/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -57,7 +57,6 @@ void Fluid_Image::write_static() {
     // Write Pixmap data...
     write_c("\n");
     if (pixmap_header_written != write_number) {
-      // FIXME: this will have to be fltk3image/...
       write_c("#include <fltk3/Pixmap.h>\n");
       pixmap_header_written = write_number;
     }
@@ -106,7 +105,7 @@ void Fluid_Image::write_static() {
     // Write jpeg image data...
     write_c("\n");
     if (jpeg_header_written != write_number) {
-      write_c("#include <fltk3/JPEGImage.h>\n");
+      write_c("#include <fltk3images/JPEGImage.h>\n");
       jpeg_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",

@@ -30,7 +30,7 @@
 #include <fltk3/Box.h>
 #include <fltk3/Button.h>
 #include <fltk3/FileIcon.h>
-#include <fltk3/HelpDialog.h>
+#include <fltk3images/HelpDialog.h>
 #include <fltk3/HoldBrowser.h>
 #include <fltk3/MenuBar.h>
 #include <fltk3/Input.h>
@@ -38,7 +38,7 @@
 #include <fltk3/ask.h>
 #include <fltk3/draw.h>
 #include <fltk3/FileChooser.h>
-#include <fltk3/PNGImage.h>
+#include <fltk3images/PNGImage.h>
 #include <fltk3/Printer.h>
 #include <fltk3/message.h>
 #include <fltk3/filename.h>
@@ -48,7 +48,7 @@
 #include <sys/stat.h>
 #include <time.h> // time(), localtime(), etc.
 
-#include "../src/core/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include "alignment_panel.h"
 #include "function_panel.h"
 #include "template_panel.h"

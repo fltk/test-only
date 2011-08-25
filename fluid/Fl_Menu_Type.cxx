@@ -40,7 +40,7 @@
 #include <fltk3/ValueInput.h>
 #include <fltk3/TextDisplay.h>
 #include <fltk3/Wrapper.h>
-#include "../src/core/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 

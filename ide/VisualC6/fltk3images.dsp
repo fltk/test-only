@@ -83,35 +83,35 @@ LIB32=link.exe -lib
 # Name "fltk3images - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_BMP_Image.cxx
+SOURCE=..\..\src\fltk3images\BMPImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_File_Icon2.cxx
+SOURCE=..\..\src\fltk3images\FileIcon2.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_GIF_Image.cxx
+SOURCE=..\..\src\fltk3images\GIFImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Help_Dialog.cxx
+SOURCE=..\..\src\fltk3images\HelpDialog.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_JPEG_Image.cxx
+SOURCE=..\..\src\fltk3images\images_core.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_PNG_Image.cxx
+SOURCE=..\..\src\fltk3images\JPEGImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_PNM_Image.cxx
+SOURCE=..\..\src\fltk3images\PNGImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_images_core.cxx
+SOURCE=..\..\src\fltk3images\PNMImage.cxx
 # End Source File
 # End Target
 # End Project

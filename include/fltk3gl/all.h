@@ -34,7 +34,7 @@
 #include "GLWindow.h"
 #include "glDraw.h"
 
-#endif // !FLTK3GLALL_H
+#endif // !FLTK3GL_ALL_H
 
 //
 // End of "$Id: gl.h 8623 2011-04-24 17:09:41Z AlbrechtS $".

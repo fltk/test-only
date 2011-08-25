@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\core\Fl_BMP_Image.cxx"
+			RelativePath="..\..\src\fltk3images\BMPImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_File_Icon2.cxx"
+			RelativePath="..\..\src\fltk3images\FileIcon2.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_GIF_Image.cxx"
+			RelativePath="..\..\src\fltk3images\GIFImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Help_Dialog.cxx"
+			RelativePath="..\..\src\fltk3images\HelpDialog.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_JPEG_Image.cxx"
+			RelativePath="..\..\src\fltk3images\images_core.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_PNG_Image.cxx"
+			RelativePath="..\..\src\fltk3images\JPEGImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_PNM_Image.cxx"
+			RelativePath="..\..\src\fltk3images\PNGImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_images_core.cxx"
+			RelativePath="..\..\src\fltk3images\PNMImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

@@ -33,7 +33,7 @@
 // Include necessary headers...
 //
 
-#include <fltk3/HelpDialog.h>
+#include <fltk3images/HelpDialog.h>
 
 
 #ifdef USING_XCODE

@@ -87,599 +87,599 @@ SOURCE=..\..\src\fltk3\run.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Adjuster.cxx
+SOURCE=..\..\src\fltk3\Adjuster.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Bitmap.cxx
+SOURCE=..\..\src\fltk3\Bitmap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Box.cxx
+SOURCE=..\..\src\fltk3\Box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Browser.cxx
+SOURCE=..\..\src\fltk3\Browser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Browser_.cxx
+SOURCE=..\..\src\fltk3\Browser_.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Browser_load.cxx
+SOURCE=..\..\src\fltk3\Browser_load.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Button.cxx
+SOURCE=..\..\src\fltk3\Button.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Chart.cxx
+SOURCE=..\..\src\fltk3\Chart.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Check_Browser.cxx
+SOURCE=..\..\src\fltk3\CheckBrowser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Check_Button.cxx
+SOURCE=..\..\src\fltk3\CheckButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Choice.cxx
+SOURCE=..\..\src\fltk3\Choice.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Clock.cxx
+SOURCE=..\..\src\fltk3\Clock.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Color_Chooser.cxx
+SOURCE=..\..\src\fltk3\ColorChooser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Counter.cxx
+SOURCE=..\..\src\fltk3\Counter.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Device.cxx
+SOURCE=..\..\src\fltk3\Device.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Dial.cxx
+SOURCE=..\..\src\fltk3\Dial.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Double_Window.cxx
+SOURCE=..\..\src\fltk3\DoubleWindow.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_File_Browser.cxx
+SOURCE=..\..\src\fltk3\FileBrowser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_File_Chooser.cxx
+SOURCE=..\..\src\fltk3\FileChooser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_File_Chooser2.cxx
+SOURCE=..\..\src\fltk3\FileChooser2.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_File_Icon.cxx
+SOURCE=..\..\src\fltk3\FileIcon.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_File_Input.cxx
+SOURCE=..\..\src\fltk3\FileInput.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Group.cxx
+SOURCE=..\..\src\fltk3\Group.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Help_View.cxx
+SOURCE=..\..\src\fltk3\HelpView.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Image.cxx
+SOURCE=..\..\src\fltk3\Image.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Input.cxx
+SOURCE=..\..\src\fltk3\Input.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Input_.cxx
+SOURCE=..\..\src\fltk3\Input_.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Light_Button.cxx
+SOURCE=..\..\src\fltk3\LightButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu.cxx
+SOURCE=..\..\src\fltk3\Menu.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu_.cxx
+SOURCE=..\..\src\fltk3\Menu_.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu_Bar.cxx
+SOURCE=..\..\src\fltk3\MenuBar.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu_Button.cxx
+SOURCE=..\..\src\fltk3\MenuButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu_Window.cxx
+SOURCE=..\..\src\fltk3\MenuWindow.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu_add.cxx
+SOURCE=..\..\src\fltk3\Menu_add.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Menu_global.cxx
+SOURCE=..\..\src\fltk3\Menu_global.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Multi_Label.cxx
+SOURCE=..\..\src\fltk3\MultiLabel.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Native_File_Chooser.cxx
+SOURCE=..\..\src\fltk3\NativeFileChooser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Overlay_Window.cxx
+SOURCE=..\..\src\fltk3\OverlayWindow.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Pack.cxx
+SOURCE=..\..\src\fltk3\PackedGroup.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Paged_Device.cxx
+SOURCE=..\..\src\fltk3\PagedDevice.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Pixmap.cxx
+SOURCE=..\..\src\fltk3\Pixmap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Positioner.cxx
+SOURCE=..\..\src\fltk3\Positioner.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Printer.cxx
+SOURCE=..\..\src\fltk3\Printer.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Preferences.cxx
+SOURCE=..\..\src\fltk3\Preferences.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Progress.cxx
+SOURCE=..\..\src\fltk3\Progress.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Repeat_Button.cxx
+SOURCE=..\..\src\fltk3\RepeatButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Return_Button.cxx
+SOURCE=..\..\src\fltk3\ReturnButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Roller.cxx
+SOURCE=..\..\src\fltk3\Roller.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Round_Button.cxx
+SOURCE=..\..\src\fltk3\RoundButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Scroll.cxx
+SOURCE=..\..\src\fltk3\ScrollGroup.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Scrollbar.cxx
+SOURCE=..\..\src\fltk3\Scrollbar.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Shared_Image.cxx
+SOURCE=..\..\src\fltk3\SharedImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Single_Window.cxx
+SOURCE=..\..\src\fltk3\SingleWindow.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Slider.cxx
+SOURCE=..\..\src\fltk3\Slider.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Style.cxx
+SOURCE=..\..\src\fltk3\Style.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Sys_Menu_Bar.cxx
+SOURCE=..\..\src\fltk3\SysMenuBar.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Table.cxx
+SOURCE=..\..\src\fltk3\Table.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Table_Row.cxx
+SOURCE=..\..\src\fltk3\TableRow.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tabs.cxx
+SOURCE=..\..\src\fltk3\TabGroup.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Text_Buffer.cxx
+SOURCE=..\..\src\fltk3\TextBuffer.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Text_Display.cxx
+SOURCE=..\..\src\fltk3\TextDisplay.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Text_Editor.cxx
+SOURCE=..\..\src\fltk3\TextEditor.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tile.cxx
+SOURCE=..\..\src\fltk3\TiledGroup.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tiled_Image.cxx
+SOURCE=..\..\src\fltk3\TiledImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tooltip.cxx
+SOURCE=..\..\src\fltk3\Tooltip.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tree.cxx
+SOURCE=..\..\src\fltk3\Tree.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tree_Item.cxx
+SOURCE=..\..\src\fltk3\TreeItem.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tree_Item_Array.cxx
+SOURCE=..\..\src\fltk3\TreeItemArray.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Tree_Prefs.cxx
+SOURCE=..\..\src\fltk3\TreePrefs.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Valuator.cxx
+SOURCE=..\..\src\fltk3\Valuator.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Value_Input.cxx
+SOURCE=..\..\src\fltk3\ValueInput.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Value_Output.cxx
+SOURCE=..\..\src\fltk3\ValueOutput.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Value_Slider.cxx
+SOURCE=..\..\src\fltk3\ValueSlider.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Widget.cxx
+SOURCE=..\..\src\fltk3\Widget.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Window.cxx
+SOURCE=..\..\src\fltk3\Window.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Window_fullscreen.cxx
+SOURCE=..\..\src\fltk3\Window_fullscreen.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Window_hotspot.cxx
+SOURCE=..\..\src\fltk3\Window_hotspot.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Window_iconize.cxx
+SOURCE=..\..\src\fltk3\Window_iconize.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Wizard.cxx
+SOURCE=..\..\src\fltk3\Wizard.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_XBM_Image.cxx
+SOURCE=..\..\src\fltk3\XBMImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_XPM_Image.cxx
+SOURCE=..\..\src\fltk3\XPMImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_abort.cxx
+SOURCE=..\..\src\fltk3\abort.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_add_idle.cxx
+SOURCE=..\..\src\fltk3\add_idle.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_arg.cxx
+SOURCE=..\..\src\fltk3\arg.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_compose.cxx
+SOURCE=..\..\src\fltk3\compose.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_display.cxx
+SOURCE=..\..\src\fltk3\display.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_get_key.cxx
+SOURCE=..\..\src\fltk3\get_key.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_get_system_colors.cxx
+SOURCE=..\..\src\fltk3\get_system_colors.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_grab.cxx
+SOURCE=..\..\src\fltk3\grab.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_lock.cxx
+SOURCE=..\..\src\fltk3\lock.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_own_colormap.cxx
+SOURCE=..\..\src\fltk3\own_colormap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_visual.cxx
+SOURCE=..\..\src\fltk3\visual.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_x.cxx
+SOURCE=..\..\src\fltk3\x11.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_absolute.cxx
+SOURCE=..\..\src\fltk3\filename_absolute.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_expand.cxx
+SOURCE=..\..\src\fltk3\filename_expand.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_ext.cxx
+SOURCE=..\..\src\fltk3\filename_ext.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_isdir.cxx
+SOURCE=..\..\src\fltk3\filename_isdir.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_list.cxx
+SOURCE=..\..\src\fltk3\filename_list.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_match.cxx
+SOURCE=..\..\src\fltk3\filename_match.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\filename_setext.cxx
+SOURCE=..\..\src\fltk3\filename_setext.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_arc.cxx
+SOURCE=..\..\src\fltk3\arc.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_arci.cxx
+SOURCE=..\..\src\fltk3\arci.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_ask.cxx
+SOURCE=..\..\src\fltk3\ask.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_boxtype.cxx
+SOURCE=..\..\src\fltk3\boxtype.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_call_main.cxx
+SOURCE=..\..\src\fltk3\call_main.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_color.cxx
+SOURCE=..\..\src\fltk3\color.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_cursor.cxx
+SOURCE=..\..\src\fltk3\cursor.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_curve.cxx
+SOURCE=..\..\src\fltk3\curve.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_diamond_box.cxx
+SOURCE=..\..\src\fltk3\diamond_box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_dnd.cxx
+SOURCE=..\..\src\fltk3\dnd.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_draw.cxx
+SOURCE=..\..\src\fltk3\draw.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_draw_image.cxx
+SOURCE=..\..\src\fltk3\draw_image.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_draw_pixmap.cxx
+SOURCE=..\..\src\fltk3\draw_pixmap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_encoding_latin1.cxx
+SOURCE=..\..\src\fltk3\encoding_latin1.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_encoding_mac_roman.cxx
+SOURCE=..\..\src\fltk3\encoding_mac_roman.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_engraved_label.cxx
+SOURCE=..\..\src\fltk3\engraved_label.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_file_dir.cxx
+SOURCE=..\..\src\fltk3\file_dir.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_font.cxx
+SOURCE=..\..\src\fltk3\font.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_gtk.cxx
+SOURCE=..\..\src\fltk3\gtk.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_labeltype.cxx
+SOURCE=..\..\src\fltk3\labeltype.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_line_style.cxx
+SOURCE=..\..\src\fltk3\line_style.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_open_uri.cxx
+SOURCE=..\..\src\fltk3\open_uri.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_oval_box.cxx
+SOURCE=..\..\src\fltk3\oval_box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_overlay.cxx
+SOURCE=..\..\src\fltk3\overlay.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_overlay_visual.cxx
+SOURCE=..\..\src\fltk3\overlay_visual.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_plastic.cxx
+SOURCE=..\..\src\fltk3\plastic.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_read_image.cxx
+SOURCE=..\..\src\fltk3\read_image.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_rect.cxx
+SOURCE=..\..\src\fltk3\rect.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_round_box.cxx
+SOURCE=..\..\src\fltk3\round_box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_rounded_box.cxx
+SOURCE=..\..\src\fltk3\rounded_box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_scroll_area.cxx
+SOURCE=..\..\src\fltk3\scroll_area.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_set_font.cxx
+SOURCE=..\..\src\fltk3\set_font.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_set_fonts.cxx
+SOURCE=..\..\src\fltk3\set_fonts.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_shadow_box.cxx
+SOURCE=..\..\src\fltk3\shadow_box.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_shortcut.cxx
+SOURCE=..\..\src\fltk3\shortcut.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_show_colormap.cxx
+SOURCE=..\..\src\fltk3\show_colormap.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_symbols.cxx
+SOURCE=..\..\src\fltk3\symbols.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_utf8.cxx
+SOURCE=..\..\src\fltk3\utf8.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_utf.cxx
+SOURCE=..\..\src\fltk3\utf.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\fl_vertex.cxx
+SOURCE=..\..\src\fltk3\vertex.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\numericsort.cxx
+SOURCE=..\..\src\fltk3\numericsort.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\ps_image.cxx
+SOURCE=..\..\src\fltk3\ps_image.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\scandir.cxx
+SOURCE=..\..\src\fltk3\scandir.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\screen_xywh.cxx
+SOURCE=..\..\src\fltk3\screen_xywh.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\flstring.c
+SOURCE=..\..\src\fltk3\flstring.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\vsnprintf.c
+SOURCE=..\..\src\fltk3\vsnprintf.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\xutf8\case.c
+SOURCE=..\..\src\fltk3\xutf8\case.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\xutf8\is_right2left.c
+SOURCE=..\..\src\fltk3\xutf8\is_right2left.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\xutf8\is_spacing.c
+SOURCE=..\..\src\fltk3\xutf8\is_spacing.c
 # End Source File
 # End Target
 # End Project

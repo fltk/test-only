@@ -32,7 +32,7 @@
 #include <fltk3/Group.h>
 #include <fltk3/ask.h>
 #include <fltk3/draw.h>
-#include <fltk3/HelpDialog.h>
+#include <fltk3images/HelpDialog.h>
 #include <fltk3/Preferences.h>
 #include <fltk3/SysMenuBar.h>
 #include <fltk3/x.h>

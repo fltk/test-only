@@ -30,7 +30,7 @@
 #include "undo.h"
 #include <fltk3/Preferences.h>
 #include <fltk3/filename.h>
-#include "../src/core/flstring.h"
+#include "../src/fltk3/flstring.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <io.h>
 #  include <windows.h>

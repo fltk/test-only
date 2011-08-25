@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/core/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdarg.h>
 
 #include <fltk3/run.h>

@@ -35,7 +35,7 @@
 #include <fltk3/Slider.h>
 #include <fltk3/Spinner.h>
 #include <fltk3/Window.h>
-#include "../src/core/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -1960,8 +1960,7 @@ int isdeclare(const char *c) {
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
   if (!subclass() || (is_class() && !strncmp(t, "fltk3::", 7))) {
-    // FIXME: this will not work for fltk3gl and fltk3images any more!
-    write_declare("#include <fltk3/%s.h>", t+7);
+    write_declare("#include <%s/%s.h>", include_path(), t+7);
   }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))

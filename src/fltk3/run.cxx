@@ -63,7 +63,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../core/flstring.h"
+#include "flstring.h"
 
 #if defined(DEBUG) || defined(DEBUG_WATCH)
 #  include <stdio.h>

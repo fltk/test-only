@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Adjuster.cxx"
+			RelativePath="..\..\src\fltk3\Adjuster.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Bitmap.cxx"
+			RelativePath="..\..\src\fltk3\Bitmap.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Box.cxx"
+			RelativePath="..\..\src\fltk3\Box.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Browser.cxx"
+			RelativePath="..\..\src\fltk3\Browser.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Browser_.cxx"
+			RelativePath="..\..\src\fltk3\Browser_.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Browser_load.cxx"
+			RelativePath="..\..\src\fltk3\Browser_load.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Button.cxx"
+			RelativePath="..\..\src\fltk3\Button.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Chart.cxx"
+			RelativePath="..\..\src\fltk3\Chart.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Check_Browser.cxx"
+			RelativePath="..\..\src\fltk3\CheckBrowser.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Check_Button.cxx"
+			RelativePath="..\..\src\fltk3\CheckButton.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -414,7 +414,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Choice.cxx"
+			RelativePath="..\..\src\fltk3\Choice.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -437,7 +437,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Clock.cxx"
+			RelativePath="..\..\src\fltk3\Clock.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -460,7 +460,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Color_Chooser.cxx"
+			RelativePath="..\..\src\fltk3\ColorChooser.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -483,7 +483,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Counter.cxx"
+			RelativePath="..\..\src\fltk3\Counter.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -506,7 +506,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Device.cxx"
+			RelativePath="..\..\src\fltk3\Device.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -529,7 +529,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Dial.cxx"
+			RelativePath="..\..\src\fltk3\Dial.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -552,7 +552,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Double_Window.cxx"
+			RelativePath="..\..\src\fltk3\DoubleWindow.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -575,7 +575,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_File_Browser.cxx"
+			RelativePath="..\..\src\fltk3\FileBrowser.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -598,7 +598,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_File_Chooser.cxx"
+			RelativePath="..\..\src\fltk3\FileChooser.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -621,7 +621,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_File_Chooser2.cxx"
+			RelativePath="..\..\src\fltk3\FileChooser2.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -644,7 +644,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_File_Icon.cxx"
+			RelativePath="..\..\src\fltk3\FileIcon.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -667,7 +667,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_File_Input.cxx"
+			RelativePath="..\..\src\fltk3\FileInput.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -690,7 +690,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Group.cxx"
+			RelativePath="..\..\src\fltk3\Group.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -713,7 +713,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Help_View.cxx"
+			RelativePath="..\..\src\fltk3\HelpView.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -736,7 +736,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Image.cxx"
+			RelativePath="..\..\src\fltk3\Image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -759,7 +759,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Input.cxx"
+			RelativePath="..\..\src\fltk3\Input.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -782,7 +782,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Input_.cxx"
+			RelativePath="..\..\src\fltk3\Input_.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -805,7 +805,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Light_Button.cxx"
+			RelativePath="..\..\src\fltk3\LightButton.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -828,7 +828,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu.cxx"
+			RelativePath="..\..\src\fltk3\Menu.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -851,7 +851,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu_.cxx"
+			RelativePath="..\..\src\fltk3\Menu_.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -874,7 +874,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu_Bar.cxx"
+			RelativePath="..\..\src\fltk3\MenuBar.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -897,7 +897,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu_Button.cxx"
+			RelativePath="..\..\src\fltk3\MenuButton.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -920,7 +920,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu_Window.cxx"
+			RelativePath="..\..\src\fltk3\MenuWindow.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -943,7 +943,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu_add.cxx"
+			RelativePath="..\..\src\fltk3\Menu_add.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -966,7 +966,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Menu_global.cxx"
+			RelativePath="..\..\src\fltk3\Menu_global.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -989,7 +989,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Multi_Label.cxx"
+			RelativePath="..\..\src\fltk3\MultiLabel.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1012,7 +1012,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Native_File_Chooser.cxx"
+			RelativePath="..\..\src\fltk3\NativeFileChooser.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1035,7 +1035,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Overlay_Window.cxx"
+			RelativePath="..\..\src\fltk3\OverlayWindow.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1058,7 +1058,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Pack.cxx"
+			RelativePath="..\..\src\fltk3\PackedGroup.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1081,7 +1081,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Paged_Device.cxx"
+			RelativePath="..\..\src\fltk3\PagedDevice.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1104,7 +1104,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Pixmap.cxx"
+			RelativePath="..\..\src\fltk3\Pixmap.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1127,7 +1127,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Positioner.cxx"
+			RelativePath="..\..\src\fltk3\Positioner.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1150,7 +1150,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Printer.cxx"
+			RelativePath="..\..\src\fltk3\Printer.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1173,7 +1173,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Preferences.cxx"
+			RelativePath="..\..\src\fltk3\Preferences.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1196,7 +1196,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Progress.cxx"
+			RelativePath="..\..\src\fltk3\Progress.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1219,7 +1219,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Repeat_Button.cxx"
+			RelativePath="..\..\src\fltk3\RepeatButton.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1242,7 +1242,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Return_Button.cxx"
+			RelativePath="..\..\src\fltk3\ReturnButton.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1265,7 +1265,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Roller.cxx"
+			RelativePath="..\..\src\fltk3\Roller.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1288,7 +1288,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Round_Button.cxx"
+			RelativePath="..\..\src\fltk3\RoundButton.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1311,7 +1311,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Scroll.cxx"
+			RelativePath="..\..\src\fltk3\ScrollGroup.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1334,7 +1334,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Scrollbar.cxx"
+			RelativePath="..\..\src\fltk3\Scrollbar.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1357,7 +1357,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Shared_Image.cxx"
+			RelativePath="..\..\src\fltk3\SharedImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1380,7 +1380,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Single_Window.cxx"
+			RelativePath="..\..\src\fltk3\SingleWindow.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1403,7 +1403,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Slider.cxx"
+			RelativePath="..\..\src\fltk3\Slider.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1426,7 +1426,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Style.cxx"
+			RelativePath="..\..\src\fltk3\Style.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1449,7 +1449,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Sys_Menu_Bar.cxx"
+			RelativePath="..\..\src\fltk3\SysMenuBar.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1472,7 +1472,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Table.cxx"
+			RelativePath="..\..\src\fltk3\Table.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1495,7 +1495,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Table_Row.cxx"
+			RelativePath="..\..\src\fltk3\TableRow.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1518,7 +1518,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tabs.cxx"
+			RelativePath="..\..\src\fltk3\TabGroup.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1541,7 +1541,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Text_Buffer.cxx"
+			RelativePath="..\..\src\fltk3\TextBuffer.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1564,7 +1564,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Text_Display.cxx"
+			RelativePath="..\..\src\fltk3\TextDisplay.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1587,7 +1587,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Text_Editor.cxx"
+			RelativePath="..\..\src\fltk3\TextEditor.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1610,7 +1610,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tile.cxx"
+			RelativePath="..\..\src\fltk3\TiledGroup.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1633,7 +1633,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tiled_Image.cxx"
+			RelativePath="..\..\src\fltk3\TiledImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1656,7 +1656,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tooltip.cxx"
+			RelativePath="..\..\src\fltk3\Tooltip.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1679,7 +1679,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tree.cxx"
+			RelativePath="..\..\src\fltk3\Tree.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1702,7 +1702,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tree_Item.cxx"
+			RelativePath="..\..\src\fltk3\TreeItem.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1725,7 +1725,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tree_Item_Array.cxx"
+			RelativePath="..\..\src\fltk3\TreeItemArray.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1748,7 +1748,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Tree_Prefs.cxx"
+			RelativePath="..\..\src\fltk3\TreePrefs.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1771,7 +1771,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Valuator.cxx"
+			RelativePath="..\..\src\fltk3\Valuator.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1794,7 +1794,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Value_Input.cxx"
+			RelativePath="..\..\src\fltk3\ValueInput.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1817,7 +1817,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Value_Output.cxx"
+			RelativePath="..\..\src\fltk3\ValueOutput.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1840,7 +1840,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Value_Slider.cxx"
+			RelativePath="..\..\src\fltk3\ValueSlider.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1863,7 +1863,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Widget.cxx"
+			RelativePath="..\..\src\fltk3\Widget.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1886,7 +1886,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Window.cxx"
+			RelativePath="..\..\src\fltk3\Window.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1909,7 +1909,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Window_fullscreen.cxx"
+			RelativePath="..\..\src\fltk3\Window_fullscreen.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1932,7 +1932,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Window_hotspot.cxx"
+			RelativePath="..\..\src\fltk3\Window_hotspot.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1955,7 +1955,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Window_iconize.cxx"
+			RelativePath="..\..\src\fltk3\Window_iconize.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1978,7 +1978,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Wizard.cxx"
+			RelativePath="..\..\src\fltk3\Wizard.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2001,7 +2001,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_XBM_Image.cxx"
+			RelativePath="..\..\src\fltk3\XBMImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2024,7 +2024,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_XPM_Image.cxx"
+			RelativePath="..\..\src\fltk3\XPMImage.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2047,7 +2047,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_abort.cxx"
+			RelativePath="..\..\src\fltk3\abort.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2070,7 +2070,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_add_idle.cxx"
+			RelativePath="..\..\src\fltk3\add_idle.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2093,7 +2093,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_arg.cxx"
+			RelativePath="..\..\src\fltk3\arg.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2116,7 +2116,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_compose.cxx"
+			RelativePath="..\..\src\fltk3\compose.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2139,7 +2139,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_display.cxx"
+			RelativePath="..\..\src\fltk3\display.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2162,7 +2162,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_get_key.cxx"
+			RelativePath="..\..\src\fltk3\get_key.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2185,7 +2185,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_get_system_colors.cxx"
+			RelativePath="..\..\src\fltk3\get_system_colors.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2208,7 +2208,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_grab.cxx"
+			RelativePath="..\..\src\fltk3\grab.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2231,7 +2231,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_lock.cxx"
+			RelativePath="..\..\src\fltk3\lock.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2254,7 +2254,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_own_colormap.cxx"
+			RelativePath="..\..\src\fltk3\own_colormap.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2277,7 +2277,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_visual.cxx"
+			RelativePath="..\..\src\fltk3\visual.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2300,7 +2300,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_x.cxx"
+			RelativePath="..\..\src\fltk3\x11.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2323,7 +2323,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_absolute.cxx"
+			RelativePath="..\..\src\fltk3\filename_absolute.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2346,7 +2346,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_expand.cxx"
+			RelativePath="..\..\src\fltk3\filename_expand.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2369,7 +2369,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_ext.cxx"
+			RelativePath="..\..\src\fltk3\filename_ext.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2392,7 +2392,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_isdir.cxx"
+			RelativePath="..\..\src\fltk3\filename_isdir.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2415,7 +2415,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_list.cxx"
+			RelativePath="..\..\src\fltk3\filename_list.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2438,7 +2438,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_match.cxx"
+			RelativePath="..\..\src\fltk3\filename_match.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2461,7 +2461,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\filename_setext.cxx"
+			RelativePath="..\..\src\fltk3\filename_setext.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2484,7 +2484,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_arc.cxx"
+			RelativePath="..\..\src\fltk3\arc.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2507,7 +2507,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_arci.cxx"
+			RelativePath="..\..\src\fltk3\arci.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2530,7 +2530,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_ask.cxx"
+			RelativePath="..\..\src\fltk3\ask.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2553,7 +2553,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_boxtype.cxx"
+			RelativePath="..\..\src\fltk3\boxtype.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2576,7 +2576,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_call_main.cxx"
+			RelativePath="..\..\src\fltk3\call_main.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2599,7 +2599,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_color.cxx"
+			RelativePath="..\..\src\fltk3\color.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2622,7 +2622,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_cursor.cxx"
+			RelativePath="..\..\src\fltk3\cursor.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2645,7 +2645,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_curve.cxx"
+			RelativePath="..\..\src\fltk3\curve.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2668,7 +2668,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_diamond_box.cxx"
+			RelativePath="..\..\src\fltk3\diamond_box.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2691,7 +2691,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_dnd.cxx"
+			RelativePath="..\..\src\fltk3\dnd.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2714,7 +2714,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_draw.cxx"
+			RelativePath="..\..\src\fltk3\draw.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2737,7 +2737,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_draw_image.cxx"
+			RelativePath="..\..\src\fltk3\draw_image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2760,7 +2760,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_draw_pixmap.cxx"
+			RelativePath="..\..\src\fltk3\draw_pixmap.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2783,7 +2783,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_encoding_latin1.cxx"
+			RelativePath="..\..\src\fltk3\encoding_latin1.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2806,7 +2806,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_encoding_mac_roman.cxx"
+			RelativePath="..\..\src\fltk3\encoding_mac_roman.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2829,7 +2829,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_engraved_label.cxx"
+			RelativePath="..\..\src\fltk3\engraved_label.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2852,7 +2852,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_file_dir.cxx"
+			RelativePath="..\..\src\fltk3\file_dir.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2875,7 +2875,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_font.cxx"
+			RelativePath="..\..\src\fltk3\font.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2898,7 +2898,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_gtk.cxx"
+			RelativePath="..\..\src\fltk3\gtk.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2921,7 +2921,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_labeltype.cxx"
+			RelativePath="..\..\src\fltk3\labeltype.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2944,7 +2944,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_line_style.cxx"
+			RelativePath="..\..\src\fltk3\line_style.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2967,7 +2967,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_open_uri.cxx"
+			RelativePath="..\..\src\fltk3\open_uri.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -2990,7 +2990,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_oval_box.cxx"
+			RelativePath="..\..\src\fltk3\oval_box.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3013,7 +3013,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_overlay.cxx"
+			RelativePath="..\..\src\fltk3\overlay.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3036,7 +3036,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_overlay_visual.cxx"
+			RelativePath="..\..\src\fltk3\overlay_visual.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3059,7 +3059,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_plastic.cxx"
+			RelativePath="..\..\src\fltk3\plastic.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3082,7 +3082,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_read_image.cxx"
+			RelativePath="..\..\src\fltk3\read_image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3105,7 +3105,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_rect.cxx"
+			RelativePath="..\..\src\fltk3\rect.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3128,7 +3128,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_round_box.cxx"
+			RelativePath="..\..\src\fltk3\round_box.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3151,7 +3151,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_rounded_box.cxx"
+			RelativePath="..\..\src\fltk3\rounded_box.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3174,7 +3174,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_scroll_area.cxx"
+			RelativePath="..\..\src\fltk3\scroll_area.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3197,7 +3197,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_set_font.cxx"
+			RelativePath="..\..\src\fltk3\set_font.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3220,7 +3220,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_set_fonts.cxx"
+			RelativePath="..\..\src\fltk3\set_fonts.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3243,7 +3243,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_shadow_box.cxx"
+			RelativePath="..\..\src\fltk3\shadow_box.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3266,7 +3266,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_shortcut.cxx"
+			RelativePath="..\..\src\fltk3\shortcut.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3289,7 +3289,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_show_colormap.cxx"
+			RelativePath="..\..\src\fltk3\show_colormap.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3312,7 +3312,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_symbols.cxx"
+			RelativePath="..\..\src\fltk3\symbols.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3335,7 +3335,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_utf8.cxx"
+			RelativePath="..\..\src\fltk3\utf8.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3358,7 +3358,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_utf.cxx"
+			RelativePath="..\..\src\fltk3\utf.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3381,7 +3381,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\fl_vertex.cxx"
+			RelativePath="..\..\src\fltk3\vertex.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3404,7 +3404,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\numericsort.cxx"
+			RelativePath="..\..\src\fltk3\numericsort.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3427,7 +3427,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\ps_image.cxx"
+			RelativePath="..\..\src\fltk3\ps_image.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3450,7 +3450,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\scandir.cxx"
+			RelativePath="..\..\src\fltk3\scandir.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3473,7 +3473,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\screen_xywh.cxx"
+			RelativePath="..\..\src\fltk3\screen_xywh.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3496,7 +3496,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\flstring.c"
+			RelativePath="..\..\src\fltk3\flstring.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3519,7 +3519,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\vsnprintf.c"
+			RelativePath="..\..\src\fltk3\vsnprintf.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3542,7 +3542,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\xutf8\case.c"
+			RelativePath="..\..\src\fltk3\xutf8\case.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3565,7 +3565,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\xutf8\is_right2left.c"
+			RelativePath="..\..\src\fltk3\xutf8\is_right2left.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -3588,7 +3588,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\xutf8\is_spacing.c"
+			RelativePath="..\..\src\fltk3\xutf8\is_spacing.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

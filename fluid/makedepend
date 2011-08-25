@@ -50,7 +50,7 @@ Fl_Function_Type.o: ../include/fltk3/RGBImage.h ../include/fltk3/TabGroup.h
 Fl_Function_Type.o: ../include/fltk3/PackedGroup.h
 Fl_Function_Type.o: ../include/fltk3/WizardGroup.h ../include/fltk3/Menu_.h
 Fl_Function_Type.o: ../include/fltk3/InputChoice.h ../include/fltk3/MenuBar.h
-Fl_Function_Type.o: ../src/core/flstring.h ../include/fltk3/Export.h
+Fl_Function_Type.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h
 Fl_Function_Type.o: ../include/config.h function_panel.h
 Fl_Function_Type.o: ../include/fltk3/LightButton.h
 Fl_Function_Type.o: ../include/fltk3/TextEditor.h
@@ -83,7 +83,7 @@ Fl_Group_Type.o: ../include/fltk3/WizardGroup.h ../include/fltk3/Menu_.h
 Fl_Group_Type.o: ../include/fltk3/MenuButton.h ../include/fltk3/Menu_.h
 Fl_Group_Type.o: ../include/fltk3/Choice.h ../include/fltk3/InputChoice.h
 Fl_Group_Type.o: ../include/fltk3/Input.h ../include/fltk3/Input_.h
-Fl_Group_Type.o: ../include/fltk3/MenuBar.h ../src/core/flstring.h
+Fl_Group_Type.o: ../include/fltk3/MenuBar.h ../src/fltk3/flstring.h
 Fl_Group_Type.o: ../include/fltk3/Export.h ../include/config.h
 Fl_Menu_Type.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 Fl_Menu_Type.o: ../include/fltk3/Export.h ../include/fltk3/types.h
@@ -120,7 +120,7 @@ Fl_Menu_Type.o: ../include/fltk3/RepeatButton.h ../include/fltk3/run.h
 Fl_Menu_Type.o: ../include/fltk3/ReturnButton.h
 Fl_Menu_Type.o: ../include/fltk3/RoundButton.h ../include/fltk3/message.h
 Fl_Menu_Type.o: ../include/fltk3/ask.h ../include/fltk3/ValueInput.h
-Fl_Menu_Type.o: ../src/core/flstring.h ../include/fltk3/Export.h
+Fl_Menu_Type.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h
 Fl_Menu_Type.o: ../include/config.h ../include/fltk3/Output.h
 Fl_Menu_Type.o: Shortcut_Button.h
 Fl_Type.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
@@ -139,7 +139,7 @@ Fl_Type.o: ../include/fltk3/Plugin.h ../include/fltk3/Preferences.h
 Fl_Type.o: ../include/fltk3/Image.h ../include/fltk3/Bitmap.h
 Fl_Type.o: ../include/fltk3/Image.h ../include/fltk3/Pixmap.h
 Fl_Type.o: ../include/fltk3/RGBImage.h ../include/fltk3/filename.h
-Fl_Type.o: ../src/core/flstring.h ../include/fltk3/Export.h
+Fl_Type.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h
 Fl_Type.o: ../include/config.h Fl_Type.h ../include/fltk3/DoubleWindow.h
 Fl_Type.o: ../include/fltk3/Menu.h ../include/fltk3/MenuItem.h Fluid_Image.h
 Fl_Type.o: ../include/fltk3/SharedImage.h ../include/fltk3/TabGroup.h
@@ -215,7 +215,7 @@ Fl_Widget_Type.o: ../include/fltk3/Spinner.h ../include/fltk3/RepeatButton.h
 Fl_Widget_Type.o: ../include/fltk3/run.h ../include/fltk3/ReturnButton.h
 Fl_Widget_Type.o: ../include/fltk3/RoundButton.h ../include/fltk3/message.h
 Fl_Widget_Type.o: ../include/fltk3/ask.h ../include/fltk3/Slider.h
-Fl_Widget_Type.o: ../src/core/flstring.h ../include/fltk3/Export.h
+Fl_Widget_Type.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h
 Fl_Widget_Type.o: ../include/config.h widget_panel.h
 Fl_Widget_Type.o: ../include/fltk3/ValueInput.h
 Fl_Widget_Type.o: ../include/fltk3/LightButton.h Shortcut_Button.h
@@ -262,7 +262,7 @@ Fl_Window_Type.o: ../include/fltk3/ReturnButton.h widget_panel.h
 Fl_Window_Type.o: ../include/fltk3/ValueInput.h
 Fl_Window_Type.o: ../include/fltk3/LightButton.h Shortcut_Button.h
 Fl_Window_Type.o: CodeEditor.h ../include/fltk3/TextEditor.h
-Fl_Window_Type.o: ../include/fltk3/TextDisplay.h ../src/core/flstring.h
+Fl_Window_Type.o: ../include/fltk3/TextDisplay.h ../src/fltk3/flstring.h
 Fl_Window_Type.o: ../include/fltk3/Export.h ../include/config.h
 Fluid_Image.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 Fluid_Image.o: ../include/fltk3/Export.h ../include/fltk3/types.h
@@ -286,7 +286,7 @@ Fluid_Image.o: ../include/fltk3/Menu_.h ../include/fltk3/MenuButton.h
 Fluid_Image.o: ../include/fltk3/Menu_.h ../include/fltk3/Choice.h
 Fluid_Image.o: ../include/fltk3/InputChoice.h ../include/fltk3/Input.h
 Fluid_Image.o: ../include/fltk3/Input_.h ../include/fltk3/MenuBar.h
-Fluid_Image.o: ../src/core/flstring.h ../include/fltk3/Export.h
+Fluid_Image.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h
 Fluid_Image.o: ../include/config.h ../include/fltk3/filename.h
 Fluid_Image.o: ../include/fltk3/FileChooser.h ../include/fltk3/Button.h
 Fluid_Image.o: ../include/fltk3/TiledGroup.h ../include/fltk3/FileBrowser.h
@@ -360,7 +360,7 @@ alignment_panel.o: ../include/fltk3/Input.h ../include/fltk3/Spinner.h
 alignment_panel.o: ../include/fltk3/RepeatButton.h ../include/fltk3/run.h
 alignment_panel.o: ../include/fltk3/ReturnButton.h
 alignment_panel.o: ../include/fltk3/RoundButton.h ../include/fltk3/ask.h
-code.o: ../src/core/flstring.h ../include/fltk3/Export.h ../include/config.h
+code.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h ../include/config.h
 code.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 code.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 code.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h Fl_Type.h
@@ -410,7 +410,7 @@ factory.o: ../include/fltk3/Object.h ../include/fltk3/Plugin.h
 factory.o: ../include/fltk3/Preferences.h ../include/fltk3/Image.h
 factory.o: ../include/fltk3/Bitmap.h ../include/fltk3/RGBImage.h
 factory.o: ../include/fltk3/TreeItem.h ../include/fltk3/TreeItemArray.h
-factory.o: ../include/fltk3/TreePrefs.h ../src/core/flstring.h
+factory.o: ../include/fltk3/TreePrefs.h ../src/fltk3/flstring.h
 factory.o: ../include/fltk3/Export.h ../include/config.h undo.h
 factory.o: Fl_Widget_Type.h Fl_Type.h ../include/fltk3/DoubleWindow.h
 factory.o: ../include/fltk3/Menu.h ../include/fltk3/MenuItem.h Fluid_Image.h
@@ -441,7 +441,7 @@ factory.o: ../include/fltk3/Roller.h ../include/fltk3/Output.h
 factory.o: ../include/fltk3/Input.h ../include/fltk3/ValueInput.h
 factory.o: ../include/fltk3/ValueOutput.h ../include/fltk3/ValueSlider.h
 factory.o: ../include/fltk3/MultiLabel.h
-file.o: ../src/core/flstring.h ../include/fltk3/Export.h ../include/config.h
+file.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h ../include/config.h
 file.o: alignment_panel.h ../include/fltk3/run.h ../include/fltk3/utf8.h
 file.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 file.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
@@ -630,7 +630,7 @@ fluid.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
 fluid.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
 fluid.o: ../include/fltk3/Box.h ../include/fltk3/Button.h
 fluid.o: ../include/fltk3/FileIcon.h ../include/fltk3/run.h
-fluid.o: ../include/fltk3/HelpDialog.h ../include/fltk3/Group.h
+fluid.o: ../include/fltk3images/HelpDialog.h ../include/fltk3/Group.h
 fluid.o: ../include/fltk3/Input.h ../include/fltk3/Input_.h
 fluid.o: ../include/fltk3/HelpView.h ../include/fltk3/Scrollbar.h
 fluid.o: ../include/fltk3/Slider.h ../include/fltk3/Valuator.h
@@ -651,10 +651,10 @@ fluid.o: ../include/fltk3/TiledGroup.h ../include/fltk3/FileBrowser.h
 fluid.o: ../include/fltk3/FileIcon.h ../include/fltk3/CheckButton.h
 fluid.o: ../include/fltk3/LightButton.h ../include/fltk3/Button.h
 fluid.o: ../include/fltk3/FileInput.h ../include/fltk3/ReturnButton.h
-fluid.o: ../include/fltk3/PNGImage.h ../include/fltk3/Printer.h
+fluid.o: ../include/fltk3images/PNGImage.h ../include/fltk3/Printer.h
 fluid.o: ../include/fltk3/PagedDevice.h ../include/fltk3/PostScript.h
 fluid.o: ../include/fltk3/message.h ../include/fltk3/ask.h
-fluid.o: ../include/fltk3/filename.h ../src/core/flstring.h
+fluid.o: ../include/fltk3/filename.h ../src/fltk3/flstring.h
 fluid.o: ../include/fltk3/Export.h ../include/config.h alignment_panel.h
 fluid.o: ../include/fltk3/TextBuffer.h ../include/fltk3/TextDisplay.h
 fluid.o: ../include/fltk3/TextBuffer.h ../include/fltk3/Tooltip.h
@@ -715,7 +715,7 @@ template_panel.o: ../include/fltk3/Valuator.h ../include/fltk3/Image.h
 template_panel.o: ../include/fltk3/Box.h ../include/fltk3/Input.h
 template_panel.o: ../include/fltk3/Input_.h ../include/fltk3/Group.h
 template_panel.o: ../include/fltk3/Button.h ../include/fltk3/ReturnButton.h
-template_panel.o: ../include/fltk3/Button.h ../src/core/flstring.h
+template_panel.o: ../include/fltk3/Button.h ../src/fltk3/flstring.h
 template_panel.o: ../include/fltk3/Export.h ../include/config.h
 template_panel.o: ../include/fltk3/filename.h ../include/fltk3/ask.h
 template_panel.o: ../include/fltk3/SharedImage.h
@@ -742,7 +742,7 @@ undo.o: ../include/fltk3/MenuButton.h ../include/fltk3/Menu_.h
 undo.o: ../include/fltk3/Choice.h ../include/fltk3/InputChoice.h
 undo.o: ../include/fltk3/Input.h ../include/fltk3/Input_.h
 undo.o: ../include/fltk3/MenuBar.h undo.h ../include/fltk3/filename.h
-undo.o: ../src/core/flstring.h ../include/fltk3/Export.h ../include/config.h
+undo.o: ../src/fltk3/flstring.h ../include/fltk3/Export.h ../include/config.h
 widget_panel.o: widget_panel.h ../include/fltk3/run.h ../include/fltk3/utf8.h
 widget_panel.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 widget_panel.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h

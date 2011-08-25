@@ -281,7 +281,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "AC_PREREQ(2.50)\n");
   fprintf(out, "\n");
   fprintf(out, "dnl Required file in package...\n");
-  fprintf(out, "AC_INIT(src/core/Fl.cxx)\n");
+  fprintf(out, "AC_INIT(src/fltk3/run.cxx)\n");
   fprintf(out, "\n");
   fprintf(out, "dnl So --with-archflags option is used during \"checking size of long\"\n");
   fprintf(out, "if test `uname` = Darwin; then\n");
