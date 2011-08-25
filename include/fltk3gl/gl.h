@@ -51,7 +51,7 @@
 #ifndef FLtk3_gl_H
 #  define FLtk3_gl_H
 
-#  include "enumerations.h" // for color names
+#  include <fltk3/enumerations.h> // for color names
 #  ifdef WIN32
 #    include <windows.h>
 #  endif

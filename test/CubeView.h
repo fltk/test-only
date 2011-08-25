@@ -30,8 +30,8 @@
 #include <config.h>
 #include <fltk3/run.h>
 #if HAVE_GL
-#  include <fltk3/GlWindow.h>
-#  include <fltk3/gl.h>
+#  include <fltk3gl/GlWindow.h>
+#  include <fltk3gl/gl.h>
 #else
 #  include <fltk3/Box.h>
 #endif /* HAVE_GL */
@@ -39,7 +39,7 @@
 #include <stdlib.h>
 
 #if HAVE_GL
-class CubeView : public fltk3::GlWindow {
+class CubeView : public fltk3::GLWindow {
 #else
 class CubeView : public fltk3::Box {
 #endif /* HAVE_GL */

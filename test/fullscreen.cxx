@@ -31,7 +31,7 @@
 //
 // If it is a seperate window, turning double buffering on and off
 // will cause the window to raise, deiconize, and possibly move.  You
-// can avoid this by making the fltk3::GlWindow a child of a normal
+// can avoid this by making the fltk3::GLWindow a child of a normal
 // window.
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
@@ -65,10 +65,10 @@
 #include <stdio.h>
 
 #if HAVE_GL
-#include <fltk3/gl.h>
-#include <fltk3/GlWindow.h>
+#include <fltk3gl/gl.h>
+#include <fltk3gl/GLWindow.h>
 
-class shape_window : public fltk3::GlWindow {
+class shape_window : public fltk3::GLWindow {
   void draw();
 public:
   int sides;
@@ -76,7 +76,7 @@ public:
 };
 
 shape_window::shape_window(int x,int y,int w,int h,const char *l) :
-fltk3::GlWindow(x,y,w,h,l) {
+fltk3::GLWindow(x,y,w,h,l) {
   sides = 3;
 }
 

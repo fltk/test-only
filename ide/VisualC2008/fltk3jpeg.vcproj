@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\jpeg\jaricom.c"
+			RelativePath="..\..\src\fltk3jpeg\jaricom.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcarith.c"
+			RelativePath="..\..\src\fltk3jpeg\jcarith.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdarith.c"
+			RelativePath="..\..\src\fltk3jpeg\jdarith.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcapimin.c"
+			RelativePath="..\..\src\fltk3jpeg\jcapimin.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcapistd.c"
+			RelativePath="..\..\src\fltk3jpeg\jcapistd.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jccoefct.c"
+			RelativePath="..\..\src\fltk3jpeg\jccoefct.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jccolor.c"
+			RelativePath="..\..\src\fltk3jpeg\jccolor.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcdctmgr.c"
+			RelativePath="..\..\src\fltk3jpeg\jcdctmgr.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jchuff.c"
+			RelativePath="..\..\src\fltk3jpeg\jchuff.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcinit.c"
+			RelativePath="..\..\src\fltk3jpeg\jcinit.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcmainct.c"
+			RelativePath="..\..\src\fltk3jpeg\jcmainct.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -414,7 +414,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcmarker.c"
+			RelativePath="..\..\src\fltk3jpeg\jcmarker.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -437,7 +437,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcmaster.c"
+			RelativePath="..\..\src\fltk3jpeg\jcmaster.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -460,7 +460,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcomapi.c"
+			RelativePath="..\..\src\fltk3jpeg\jcomapi.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -483,7 +483,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcparam.c"
+			RelativePath="..\..\src\fltk3jpeg\jcparam.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -506,7 +506,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcprepct.c"
+			RelativePath="..\..\src\fltk3jpeg\jcprepct.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -529,7 +529,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jcsample.c"
+			RelativePath="..\..\src\fltk3jpeg\jcsample.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -552,7 +552,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jctrans.c"
+			RelativePath="..\..\src\fltk3jpeg\jctrans.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -575,7 +575,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdapimin.c"
+			RelativePath="..\..\src\fltk3jpeg\jdapimin.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -598,7 +598,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdapistd.c"
+			RelativePath="..\..\src\fltk3jpeg\jdapistd.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -621,7 +621,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdatadst.c"
+			RelativePath="..\..\src\fltk3jpeg\jdatadst.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -644,7 +644,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdatasrc.c"
+			RelativePath="..\..\src\fltk3jpeg\jdatasrc.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -667,7 +667,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdcoefct.c"
+			RelativePath="..\..\src\fltk3jpeg\jdcoefct.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -690,7 +690,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdcolor.c"
+			RelativePath="..\..\src\fltk3jpeg\jdcolor.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -713,7 +713,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jddctmgr.c"
+			RelativePath="..\..\src\fltk3jpeg\jddctmgr.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -736,7 +736,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdhuff.c"
+			RelativePath="..\..\src\fltk3jpeg\jdhuff.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -759,7 +759,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdinput.c"
+			RelativePath="..\..\src\fltk3jpeg\jdinput.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -782,7 +782,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdmainct.c"
+			RelativePath="..\..\src\fltk3jpeg\jdmainct.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -805,7 +805,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdmarker.c"
+			RelativePath="..\..\src\fltk3jpeg\jdmarker.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -828,7 +828,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdmaster.c"
+			RelativePath="..\..\src\fltk3jpeg\jdmaster.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -851,7 +851,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdmerge.c"
+			RelativePath="..\..\src\fltk3jpeg\jdmerge.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -874,7 +874,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdpostct.c"
+			RelativePath="..\..\src\fltk3jpeg\jdpostct.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -897,7 +897,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdsample.c"
+			RelativePath="..\..\src\fltk3jpeg\jdsample.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -920,7 +920,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jdtrans.c"
+			RelativePath="..\..\src\fltk3jpeg\jdtrans.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -943,7 +943,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jerror.c"
+			RelativePath="..\..\src\fltk3jpeg\jerror.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -966,7 +966,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jfdctflt.c"
+			RelativePath="..\..\src\fltk3jpeg\jfdctflt.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -989,7 +989,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jfdctfst.c"
+			RelativePath="..\..\src\fltk3jpeg\jfdctfst.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1012,7 +1012,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jfdctint.c"
+			RelativePath="..\..\src\fltk3jpeg\jfdctint.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1035,7 +1035,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jidctflt.c"
+			RelativePath="..\..\src\fltk3jpeg\jidctflt.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1058,7 +1058,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jidctfst.c"
+			RelativePath="..\..\src\fltk3jpeg\jidctfst.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1081,7 +1081,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jidctint.c"
+			RelativePath="..\..\src\fltk3jpeg\jidctint.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1104,7 +1104,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jmemmgr.c"
+			RelativePath="..\..\src\fltk3jpeg\jmemmgr.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1127,7 +1127,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jmemnobs.c"
+			RelativePath="..\..\src\fltk3jpeg\jmemnobs.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1150,7 +1150,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jquant1.c"
+			RelativePath="..\..\src\fltk3jpeg\jquant1.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1173,7 +1173,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jquant2.c"
+			RelativePath="..\..\src\fltk3jpeg\jquant2.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1196,7 +1196,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\jpeg\jutils.c"
+			RelativePath="..\..\src\fltk3jpeg\jutils.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\zlib\adler32.c"
+			RelativePath="..\..\src\fltk3zlib\adler32.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\compress.c"
+			RelativePath="..\..\src\fltk3zlib\compress.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\crc32.c"
+			RelativePath="..\..\src\fltk3zlib\crc32.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\deflate.c"
+			RelativePath="..\..\src\fltk3zlib\deflate.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\gzclose.c"
+			RelativePath="..\..\src\fltk3zlib\gzclose.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\gzlib.c"
+			RelativePath="..\..\src\fltk3zlib\gzlib.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\gzread.c"
+			RelativePath="..\..\src\fltk3zlib\gzread.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\gzwrite.c"
+			RelativePath="..\..\src\fltk3zlib\gzwrite.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\infback.c"
+			RelativePath="..\..\src\fltk3zlib\infback.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\inffast.c"
+			RelativePath="..\..\src\fltk3zlib\inffast.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\inflate.c"
+			RelativePath="..\..\src\fltk3zlib\inflate.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -414,7 +414,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\inftrees.c"
+			RelativePath="..\..\src\fltk3zlib\inftrees.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -437,7 +437,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\trees.c"
+			RelativePath="..\..\src\fltk3zlib\trees.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -460,7 +460,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\uncompr.c"
+			RelativePath="..\..\src\fltk3zlib\uncompr.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -483,7 +483,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\zlib\zutil.c"
+			RelativePath="..\..\src\fltk3zlib\zutil.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

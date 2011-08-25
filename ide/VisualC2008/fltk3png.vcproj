@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\png\png.c"
+			RelativePath="..\..\src\fltk3png\png.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngerror.c"
+			RelativePath="..\..\src\fltk3png\pngerror.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngget.c"
+			RelativePath="..\..\src\fltk3png\pngget.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngmem.c"
+			RelativePath="..\..\src\fltk3png\pngmem.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngpread.c"
+			RelativePath="..\..\src\fltk3png\pngpread.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngread.c"
+			RelativePath="..\..\src\fltk3png\pngread.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngrio.c"
+			RelativePath="..\..\src\fltk3png\pngrio.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngrtran.c"
+			RelativePath="..\..\src\fltk3png\pngrtran.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngrutil.c"
+			RelativePath="..\..\src\fltk3png\pngrutil.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngset.c"
+			RelativePath="..\..\src\fltk3png\pngset.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngtrans.c"
+			RelativePath="..\..\src\fltk3png\pngtrans.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -414,7 +414,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngwio.c"
+			RelativePath="..\..\src\fltk3png\pngwio.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -437,7 +437,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngwrite.c"
+			RelativePath="..\..\src\fltk3png\pngwrite.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -460,7 +460,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngwtran.c"
+			RelativePath="..\..\src\fltk3png\pngwtran.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -483,7 +483,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\png\pngwutil.c"
+			RelativePath="..\..\src\fltk3png\pngwutil.c"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

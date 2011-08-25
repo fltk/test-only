@@ -380,11 +380,11 @@ int load_the_menu(const char* fname)
     while (line[i] == ' ' || line[i] == '\t') i++;
     if (line[i] == '\n') continue;
     if (line[i] == '#') continue;
-    while (line[i] != ':' && line[i] != '\n') mname[j++] = line[i++];
+    while (line[i] != ';' && line[i] != '\n') mname[j++] = line[i++];
     mname[j] = '\0';
-    if (line[i] == ':') i++;
+    if (line[i] == ';') i++;
     j = 0; 
-    while (line[i] != ':' && line[i] != '\n')
+    while (line[i] != ';' && line[i] != '\n')
     {
       if (line[i] == '\\') {
         i++;
@@ -395,9 +395,9 @@ int load_the_menu(const char* fname)
         iname[j++] = line[i++];
     }
     iname[j] = '\0';
-    if (line[i] == ':') i++;
+    if (line[i] == ';') i++;
     j = 0;
-    while (line[i] != ':' && line[i] != '\n') cname[j++] = line[i++];
+    while (line[i] != ';' && line[i] != '\n') cname[j++] = line[i++];
     cname[j] = '\0';
     addto_menu(mname,iname,cname);
   }

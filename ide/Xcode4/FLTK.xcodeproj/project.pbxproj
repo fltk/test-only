@@ -234,12 +234,6 @@
 		742D204F4CECC650D53AC070 /* FormsPixmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E62E615D0C146DBB74B477A /* FormsPixmap.h */; };
 		6A197BCC5117B3666D368B25 /* Free.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F5FE43FEC401E52D4CABB7 /* Free.h */; };
 		8845649A10159ECED0C93211 /* GIFImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 605121E099731EF9977E11C8 /* GIFImage.h */; };
-		53065D004FF8B488CFA68C55 /* gl.h in Headers */ = {isa = PBXBuildFile; fileRef = AA155A8649051FED3B16258B /* gl.h */; };
-		72812FEB6E612A0102F3DE4D /* gl2opengl.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AC61280BAAD923E036E896A /* gl2opengl.h */; };
-		48257DCA29CAA7C8AA38665E /* glDraw.h in Headers */ = {isa = PBXBuildFile; fileRef = B10175537ACF3F6627DF6DB1 /* glDraw.h */; };
-		4DB7B8EB28DA172D8049A0C9 /* glu.h in Headers */ = {isa = PBXBuildFile; fileRef = 853E4A1DF4DE711A3C103971 /* glu.h */; };
-		665EED203FE4C3E866EA7551 /* glut.h in Headers */ = {isa = PBXBuildFile; fileRef = D910C663A8F3170318F324D9 /* glut.h */; };
-		7A5AD5C30E7CB63E2E02E9F8 /* GlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F9673F325010BCD774A4A13D /* GlWindow.h */; };
 		5E1D236DDF180951F39D88D0 /* Group.h in Headers */ = {isa = PBXBuildFile; fileRef = 91EA037664D5A2D49603F364 /* Group.h */; };
 		F7A66B0ADC3A359551BB84FB /* HelpDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 0925F19306CD3458397661F3 /* HelpDialog.h */; };
 		E5826346717EA4FA214A9B1B /* HelpView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CD096CD5808EADB1B646DB4 /* HelpView.h */; };
@@ -343,17 +337,25 @@
 		ACA9550AC903E3D31D80B160 /* XPMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C163988CD45E6AB4710982F /* XPMImage.h */; };
 		E0943D9D77DD934578EBF9DF /* Xutf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1B408952EFBB79A46CDE69 /* Xutf8.h */; };
 		CF5FA17E9AD84BE1BB907031 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F66311E977D66CE29024C3 /* Cocoa.framework */; };
-		E1C77AA3B54E8E48277C3538 /* Fl_Gl_Choice.cxx in Sources */ = {isa = PBXBuildFile; fileRef = DE5C107D549D9A4AFBEF3B60 /* Fl_Gl_Choice.cxx */; };
-		E8D5789A3FCFB823CBE99BDE /* Fl_Gl_Device_Plugin.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 391E3B0B723D3B5BEC865531 /* Fl_Gl_Device_Plugin.cxx */; };
-		070BED62A8E9EB609EBED411 /* Fl_Gl_Overlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 07BC5E29BD251DDB7204BFDA /* Fl_Gl_Overlay.cxx */; };
-		32BC3E68C69915E6305FD0AA /* Fl_Gl_Window.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 53DC629E1A4DC60F75B5DB21 /* Fl_Gl_Window.cxx */; };
+		E1C77AA3B54E8E48277C3538 /* GLChoice.cxx in Sources */ = {isa = PBXBuildFile; fileRef = DE5C107D549D9A4AFBEF3B60 /* GLChoice.cxx */; };
+		E8D5789A3FCFB823CBE99BDE /* GLDevicePlugin.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 391E3B0B723D3B5BEC865531 /* GLDevicePlugin.cxx */; };
+		070BED62A8E9EB609EBED411 /* GLOverlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 07BC5E29BD251DDB7204BFDA /* GLOverlay.cxx */; };
+		32BC3E68C69915E6305FD0AA /* GLWindow.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 53DC629E1A4DC60F75B5DB21 /* GLWindow.cxx */; };
 		ECB8D856706DB17278C0CBF3 /* freeglut_geometry.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FFAAC0780324B089398B7046 /* freeglut_geometry.cxx */; };
 		75788B42FA61D5F0C7324344 /* freeglut_stroke_mono_roman.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 504FF704C99A88103373D40F /* freeglut_stroke_mono_roman.cxx */; };
 		9CDFF78211A53B61A9B2F2CC /* freeglut_stroke_roman.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B2D08460CDF27CADC1A1A460 /* freeglut_stroke_roman.cxx */; };
 		CE3D60CB6B8286E8E2155791 /* freeglut_teapot.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 9F61A674FB4A2BA8A83F337A /* freeglut_teapot.cxx */; };
 		008A289F719739FD1947D877 /* gl_draw.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CBE8D5E4422EFEBE652AE41A /* gl_draw.cxx */; };
+		DED2BAE994607138073A5321 /* gl_start.cxx in Sources */ = {isa = PBXBuildFile; fileRef = EC3E5EA34B66D57E36F8BDA2 /* gl_start.cxx */; };
 		4432E2FF464147568FACEC8A /* glut_compatability.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7458D589FF4368F8F83EDDDE /* glut_compatability.cxx */; };
 		52743D1F8ECF932A110D8886 /* glut_font.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8A51D2BA28A5B8309F60F380 /* glut_font.cxx */; };
+		B7A25ADB27ADCE0C4BC87FF4 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = CED790200D16A60047341619 /* all.h */; };
+		EBA510477FE0A3ED2E3A2A19 /* fltk3gl.h in Headers */ = {isa = PBXBuildFile; fileRef = 53A9932F3639B774F7BAEE86 /* fltk3gl.h */; };
+		53065D004FF8B488CFA68C55 /* gl.h in Headers */ = {isa = PBXBuildFile; fileRef = AA155A8649051FED3B16258B /* gl.h */; };
+		48257DCA29CAA7C8AA38665E /* glDraw.h in Headers */ = {isa = PBXBuildFile; fileRef = B10175537ACF3F6627DF6DB1 /* glDraw.h */; };
+		4DB7B8EB28DA172D8049A0C9 /* glu.h in Headers */ = {isa = PBXBuildFile; fileRef = 853E4A1DF4DE711A3C103971 /* glu.h */; };
+		665EED203FE4C3E866EA7551 /* glut.h in Headers */ = {isa = PBXBuildFile; fileRef = D910C663A8F3170318F324D9 /* glut.h */; };
+		7A5AD5C30E7CB63E2E02E9F8 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F9673F325010BCD774A4A13D /* GLWindow.h */; };
 		A4C556C6862A8E1DEBEFB3EF /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F784E3D3F229DB4B54D18DC /* AGL.framework */; };
 		EC9763DB2EFC72ACBE6F557D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F320856CA55C5B27D76923 /* OpenGL.framework */; };
 		374185370DF817EF401AD7FB /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39E229DEF1CA3739A0890F43 /* ApplicationServices.framework */; };
@@ -3915,12 +3917,6 @@
 		7E62E615D0C146DBB74B477A /* FormsPixmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FormsPixmap.h; path = ../../include/fltk3/FormsPixmap.h; sourceTree = SOURCE_ROOT; };
 		11F5FE43FEC401E52D4CABB7 /* Free.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Free.h; path = ../../include/fltk3/Free.h; sourceTree = SOURCE_ROOT; };
 		605121E099731EF9977E11C8 /* GIFImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GIFImage.h; path = ../../include/fltk3/GIFImage.h; sourceTree = SOURCE_ROOT; };
-		AA155A8649051FED3B16258B /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl.h; path = ../../include/fltk3/gl.h; sourceTree = SOURCE_ROOT; };
-		6AC61280BAAD923E036E896A /* gl2opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl2opengl.h; path = ../../include/fltk3/gl2opengl.h; sourceTree = SOURCE_ROOT; };
-		B10175537ACF3F6627DF6DB1 /* glDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glDraw.h; path = ../../include/fltk3/glDraw.h; sourceTree = SOURCE_ROOT; };
-		853E4A1DF4DE711A3C103971 /* glu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glu.h; path = ../../include/fltk3/glu.h; sourceTree = SOURCE_ROOT; };
-		D910C663A8F3170318F324D9 /* glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glut.h; path = ../../include/fltk3/glut.h; sourceTree = SOURCE_ROOT; };
-		F9673F325010BCD774A4A13D /* GlWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlWindow.h; path = ../../include/fltk3/GlWindow.h; sourceTree = SOURCE_ROOT; };
 		91EA037664D5A2D49603F364 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Group.h; path = ../../include/fltk3/Group.h; sourceTree = SOURCE_ROOT; };
 		0925F19306CD3458397661F3 /* HelpDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpDialog.h; path = ../../include/fltk3/HelpDialog.h; sourceTree = SOURCE_ROOT; };
 		0CD096CD5808EADB1B646DB4 /* HelpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpView.h; path = ../../include/fltk3/HelpView.h; sourceTree = SOURCE_ROOT; };
@@ -4178,17 +4174,25 @@
 		35196210FA39F50016C06ED2 /* is_spacing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = is_spacing.c; path = ../../src/core/xutf8/is_spacing.c; sourceTree = SOURCE_ROOT; };
 		14F66311E977D66CE29024C3 /* Cocoa.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		86C380FE76A739F296A44961 /* fltk3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE5C107D549D9A4AFBEF3B60 /* Fl_Gl_Choice.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Gl_Choice.cxx; path = ../../src/core/Fl_Gl_Choice.cxx; sourceTree = SOURCE_ROOT; };
-		391E3B0B723D3B5BEC865531 /* Fl_Gl_Device_Plugin.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Gl_Device_Plugin.cxx; path = ../../src/core/Fl_Gl_Device_Plugin.cxx; sourceTree = SOURCE_ROOT; };
-		07BC5E29BD251DDB7204BFDA /* Fl_Gl_Overlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Gl_Overlay.cxx; path = ../../src/core/Fl_Gl_Overlay.cxx; sourceTree = SOURCE_ROOT; };
-		53DC629E1A4DC60F75B5DB21 /* Fl_Gl_Window.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Gl_Window.cxx; path = ../../src/core/Fl_Gl_Window.cxx; sourceTree = SOURCE_ROOT; };
-		FFAAC0780324B089398B7046 /* freeglut_geometry.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_geometry.cxx; path = ../../src/core/freeglut_geometry.cxx; sourceTree = SOURCE_ROOT; };
-		504FF704C99A88103373D40F /* freeglut_stroke_mono_roman.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_stroke_mono_roman.cxx; path = ../../src/core/freeglut_stroke_mono_roman.cxx; sourceTree = SOURCE_ROOT; };
-		B2D08460CDF27CADC1A1A460 /* freeglut_stroke_roman.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_stroke_roman.cxx; path = ../../src/core/freeglut_stroke_roman.cxx; sourceTree = SOURCE_ROOT; };
-		9F61A674FB4A2BA8A83F337A /* freeglut_teapot.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_teapot.cxx; path = ../../src/core/freeglut_teapot.cxx; sourceTree = SOURCE_ROOT; };
-		CBE8D5E4422EFEBE652AE41A /* gl_draw.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl_draw.cxx; path = ../../src/core/gl_draw.cxx; sourceTree = SOURCE_ROOT; };
-		7458D589FF4368F8F83EDDDE /* glut_compatability.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glut_compatability.cxx; path = ../../src/core/glut_compatability.cxx; sourceTree = SOURCE_ROOT; };
-		8A51D2BA28A5B8309F60F380 /* glut_font.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glut_font.cxx; path = ../../src/core/glut_font.cxx; sourceTree = SOURCE_ROOT; };
+		CED790200D16A60047341619 /* all.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = all.h; path = ../../include/fltk3gl/all.h; sourceTree = SOURCE_ROOT; };
+		53A9932F3639B774F7BAEE86 /* fltk3gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fltk3gl.h; path = ../../include/fltk3gl/fltk3gl.h; sourceTree = SOURCE_ROOT; };
+		AA155A8649051FED3B16258B /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl.h; path = ../../include/fltk3gl/gl.h; sourceTree = SOURCE_ROOT; };
+		B10175537ACF3F6627DF6DB1 /* glDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glDraw.h; path = ../../include/fltk3gl/glDraw.h; sourceTree = SOURCE_ROOT; };
+		853E4A1DF4DE711A3C103971 /* glu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glu.h; path = ../../include/fltk3gl/glu.h; sourceTree = SOURCE_ROOT; };
+		D910C663A8F3170318F324D9 /* glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glut.h; path = ../../include/fltk3gl/glut.h; sourceTree = SOURCE_ROOT; };
+		F9673F325010BCD774A4A13D /* GLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLWindow.h; path = ../../include/fltk3gl/GLWindow.h; sourceTree = SOURCE_ROOT; };
+		DE5C107D549D9A4AFBEF3B60 /* GLChoice.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLChoice.cxx; path = ../../src/fltk3gl/GLChoice.cxx; sourceTree = SOURCE_ROOT; };
+		391E3B0B723D3B5BEC865531 /* GLDevicePlugin.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLDevicePlugin.cxx; path = ../../src/fltk3gl/GLDevicePlugin.cxx; sourceTree = SOURCE_ROOT; };
+		07BC5E29BD251DDB7204BFDA /* GLOverlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLOverlay.cxx; path = ../../src/fltk3gl/GLOverlay.cxx; sourceTree = SOURCE_ROOT; };
+		53DC629E1A4DC60F75B5DB21 /* GLWindow.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLWindow.cxx; path = ../../src/fltk3gl/GLWindow.cxx; sourceTree = SOURCE_ROOT; };
+		FFAAC0780324B089398B7046 /* freeglut_geometry.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_geometry.cxx; path = ../../src/fltk3gl/freeglut_geometry.cxx; sourceTree = SOURCE_ROOT; };
+		504FF704C99A88103373D40F /* freeglut_stroke_mono_roman.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_stroke_mono_roman.cxx; path = ../../src/fltk3gl/freeglut_stroke_mono_roman.cxx; sourceTree = SOURCE_ROOT; };
+		B2D08460CDF27CADC1A1A460 /* freeglut_stroke_roman.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_stroke_roman.cxx; path = ../../src/fltk3gl/freeglut_stroke_roman.cxx; sourceTree = SOURCE_ROOT; };
+		9F61A674FB4A2BA8A83F337A /* freeglut_teapot.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freeglut_teapot.cxx; path = ../../src/fltk3gl/freeglut_teapot.cxx; sourceTree = SOURCE_ROOT; };
+		CBE8D5E4422EFEBE652AE41A /* gl_draw.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl_draw.cxx; path = ../../src/fltk3gl/gl_draw.cxx; sourceTree = SOURCE_ROOT; };
+		EC3E5EA34B66D57E36F8BDA2 /* gl_start.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl_start.cxx; path = ../../src/fltk3gl/gl_start.cxx; sourceTree = SOURCE_ROOT; };
+		7458D589FF4368F8F83EDDDE /* glut_compatability.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glut_compatability.cxx; path = ../../src/fltk3gl/glut_compatability.cxx; sourceTree = SOURCE_ROOT; };
+		8A51D2BA28A5B8309F60F380 /* glut_font.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glut_font.cxx; path = ../../src/fltk3gl/glut_font.cxx; sourceTree = SOURCE_ROOT; };
 		9F784E3D3F229DB4B54D18DC /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
 		74F320856CA55C5B27D76923 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
 		39E229DEF1CA3739A0890F43 /* ApplicationServices.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/ApplicationServices.framework; sourceTree = DEVELOPER_DIR; };
@@ -5336,12 +5340,6 @@
 				7E62E615D0C146DBB74B477A /* FormsPixmap.h */,
 				11F5FE43FEC401E52D4CABB7 /* Free.h */,
 				605121E099731EF9977E11C8 /* GIFImage.h */,
-				AA155A8649051FED3B16258B /* gl.h */,
-				6AC61280BAAD923E036E896A /* gl2opengl.h */,
-				B10175537ACF3F6627DF6DB1 /* glDraw.h */,
-				853E4A1DF4DE711A3C103971 /* glu.h */,
-				D910C663A8F3170318F324D9 /* glut.h */,
-				F9673F325010BCD774A4A13D /* GlWindow.h */,
 				91EA037664D5A2D49603F364 /* Group.h */,
 				0925F19306CD3458397661F3 /* HelpDialog.h */,
 				0CD096CD5808EADB1B646DB4 /* HelpView.h */,
@@ -5626,18 +5624,33 @@
 			name = fltk3;
 			sourceTree = "<group>";
 		};
+		C95C7D1D61D8113B0374F9C7 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				CED790200D16A60047341619 /* all.h */,
+				53A9932F3639B774F7BAEE86 /* fltk3gl.h */,
+				AA155A8649051FED3B16258B /* gl.h */,
+				B10175537ACF3F6627DF6DB1 /* glDraw.h */,
+				853E4A1DF4DE711A3C103971 /* glu.h */,
+				D910C663A8F3170318F324D9 /* glut.h */,
+				F9673F325010BCD774A4A13D /* GLWindow.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
 		AF239AB59EBE13BBE12676A0 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				DE5C107D549D9A4AFBEF3B60 /* Fl_Gl_Choice.cxx */,
-				391E3B0B723D3B5BEC865531 /* Fl_Gl_Device_Plugin.cxx */,
-				07BC5E29BD251DDB7204BFDA /* Fl_Gl_Overlay.cxx */,
-				53DC629E1A4DC60F75B5DB21 /* Fl_Gl_Window.cxx */,
+				DE5C107D549D9A4AFBEF3B60 /* GLChoice.cxx */,
+				391E3B0B723D3B5BEC865531 /* GLDevicePlugin.cxx */,
+				07BC5E29BD251DDB7204BFDA /* GLOverlay.cxx */,
+				53DC629E1A4DC60F75B5DB21 /* GLWindow.cxx */,
 				FFAAC0780324B089398B7046 /* freeglut_geometry.cxx */,
 				504FF704C99A88103373D40F /* freeglut_stroke_mono_roman.cxx */,
 				B2D08460CDF27CADC1A1A460 /* freeglut_stroke_roman.cxx */,
 				9F61A674FB4A2BA8A83F337A /* freeglut_teapot.cxx */,
 				CBE8D5E4422EFEBE652AE41A /* gl_draw.cxx */,
+				EC3E5EA34B66D57E36F8BDA2 /* gl_start.cxx */,
 				7458D589FF4368F8F83EDDDE /* glut_compatability.cxx */,
 				8A51D2BA28A5B8309F60F380 /* glut_font.cxx */,
 			);
@@ -5664,6 +5677,7 @@
 		DF121658483F09B46244CF34 /* fltk3gl */ = {
 			isa = PBXGroup;
 			children = (
+				C95C7D1D61D8113B0374F9C7 /* Headers */,
 				AF239AB59EBE13BBE12676A0 /* Sources */,
 				7FA05EA9EB6F7E67F85F9A93 /* Libraries */,
 				5AD936C12327BF2E9A6A3DA1 /* Dependencies */,
@@ -6586,12 +6600,6 @@
 				742D204F4CECC650D53AC070 /* FormsPixmap.h in Headers */,
 				6A197BCC5117B3666D368B25 /* Free.h in Headers */,
 				8845649A10159ECED0C93211 /* GIFImage.h in Headers */,
-				53065D004FF8B488CFA68C55 /* gl.h in Headers */,
-				72812FEB6E612A0102F3DE4D /* gl2opengl.h in Headers */,
-				48257DCA29CAA7C8AA38665E /* glDraw.h in Headers */,
-				4DB7B8EB28DA172D8049A0C9 /* glu.h in Headers */,
-				665EED203FE4C3E866EA7551 /* glut.h in Headers */,
-				7A5AD5C30E7CB63E2E02E9F8 /* GlWindow.h in Headers */,
 				5E1D236DDF180951F39D88D0 /* Group.h in Headers */,
 				F7A66B0ADC3A359551BB84FB /* HelpDialog.h in Headers */,
 				E5826346717EA4FA214A9B1B /* HelpView.h in Headers */,
@@ -6701,6 +6709,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7A25ADB27ADCE0C4BC87FF4 /* all.h in Headers */,
+				EBA510477FE0A3ED2E3A2A19 /* fltk3gl.h in Headers */,
+				53065D004FF8B488CFA68C55 /* gl.h in Headers */,
+				48257DCA29CAA7C8AA38665E /* glDraw.h in Headers */,
+				4DB7B8EB28DA172D8049A0C9 /* glu.h in Headers */,
+				665EED203FE4C3E866EA7551 /* glut.h in Headers */,
+				7A5AD5C30E7CB63E2E02E9F8 /* GLWindow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9211,15 +9226,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1C77AA3B54E8E48277C3538 /* Fl_Gl_Choice.cxx in Sources */,
-				E8D5789A3FCFB823CBE99BDE /* Fl_Gl_Device_Plugin.cxx in Sources */,
-				070BED62A8E9EB609EBED411 /* Fl_Gl_Overlay.cxx in Sources */,
-				32BC3E68C69915E6305FD0AA /* Fl_Gl_Window.cxx in Sources */,
+				E1C77AA3B54E8E48277C3538 /* GLChoice.cxx in Sources */,
+				E8D5789A3FCFB823CBE99BDE /* GLDevicePlugin.cxx in Sources */,
+				070BED62A8E9EB609EBED411 /* GLOverlay.cxx in Sources */,
+				32BC3E68C69915E6305FD0AA /* GLWindow.cxx in Sources */,
 				ECB8D856706DB17278C0CBF3 /* freeglut_geometry.cxx in Sources */,
 				75788B42FA61D5F0C7324344 /* freeglut_stroke_mono_roman.cxx in Sources */,
 				9CDFF78211A53B61A9B2F2CC /* freeglut_stroke_roman.cxx in Sources */,
 				CE3D60CB6B8286E8E2155791 /* freeglut_teapot.cxx in Sources */,
 				008A289F719739FD1947D877 /* gl_draw.cxx in Sources */,
+				DED2BAE994607138073A5321 /* gl_start.cxx in Sources */,
 				4432E2FF464147568FACEC8A /* glut_compatability.cxx in Sources */,
 				52743D1F8ECF932A110D8886 /* glut_font.cxx in Sources */,
 			);

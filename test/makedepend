@@ -72,12 +72,12 @@ blocks.o: ../include/fltk3/enumerations.h ../include/fltk3/Window.h
 blocks.o: ../include/fltk3/Device.h ../include/fltk3/Object.h
 blocks.o: ../include/fltk3/Plugin.h ../include/fltk3/Image.h
 blocks.o: ../include/fltk3/Bitmap.h ../include/fltk3/Pixmap.h
-blocks.o: ../include/fltk3/RGBImage.h pixmaps/blast.xpm pixmaps/red.xpm
-blocks.o: pixmaps/red_bomb.xpm pixmaps/green.xpm pixmaps/green_bomb.xpm
-blocks.o: pixmaps/blue.xpm pixmaps/blue_bomb.xpm pixmaps/yellow.xpm
-blocks.o: pixmaps/yellow_bomb.xpm pixmaps/cyan.xpm pixmaps/cyan_bomb.xpm
-blocks.o: pixmaps/magenta.xpm pixmaps/magenta_bomb.xpm pixmaps/gray.xpm
-blocks.o: pixmaps/gray_bomb.xpm
+blocks.o: ../include/fltk3/RGBImage.h ../include/config.h pixmaps/blast.xpm
+blocks.o: pixmaps/red.xpm pixmaps/red_bomb.xpm pixmaps/green.xpm
+blocks.o: pixmaps/green_bomb.xpm pixmaps/blue.xpm pixmaps/blue_bomb.xpm
+blocks.o: pixmaps/yellow.xpm pixmaps/yellow_bomb.xpm pixmaps/cyan.xpm
+blocks.o: pixmaps/cyan_bomb.xpm pixmaps/magenta.xpm pixmaps/magenta_bomb.xpm
+blocks.o: pixmaps/gray.xpm pixmaps/gray_bomb.xpm
 boxtype.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 boxtype.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 boxtype.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
@@ -117,6 +117,7 @@ buttons.o: ../include/fltk3/Button.h ../include/fltk3/RepeatButton.h
 buttons.o: ../include/fltk3/run.h ../include/fltk3/CheckButton.h
 buttons.o: ../include/fltk3/LightButton.h ../include/fltk3/LightButton.h
 buttons.o: ../include/fltk3/RoundButton.h ../include/fltk3/Tooltip.h
+buttons.o: ../include/fltk3/Box.h
 checkers.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 checkers.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 checkers.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
@@ -193,26 +194,25 @@ cube.o: ../include/fltk3/Object.h ../include/fltk3/Button.h
 cube.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
 cube.o: ../include/fltk3/RadioLightButton.h ../include/fltk3/LightButton.h
 cube.o: ../include/fltk3/Button.h ../include/fltk3/Slider.h
-cube.o: ../include/fltk3/Valuator.h ../include/fltk3/GlWindow.h
+cube.o: ../include/fltk3/Valuator.h ../include/fltk3gl/GLWindow.h
+cube.o: ../include/fltk3gl/gl.h ../include/fltk3/enumerations.h
+cube.o: ../include/fltk3/SysMenuBar.h ../include/fltk3/MenuBar.h
+cube.o: ../include/fltk3/Menu_.h ../include/fltk3/MenuItem.h
+cube.o: ../include/fltk3/Image.h ../include/fltk3/x.h
 cube.o: ../include/fltk3/Window.h ../include/fltk3/Group.h
-cube.o: ../include/fltk3/gl.h ../include/fltk3/SysMenuBar.h
-cube.o: ../include/fltk3/MenuBar.h ../include/fltk3/Menu_.h
-cube.o: ../include/fltk3/MenuItem.h ../include/fltk3/Image.h
-cube.o: ../include/fltk3/x.h ../include/fltk3/Printer.h ../include/fltk3/x.h
+cube.o: ../include/fltk3/Printer.h ../include/fltk3/x.h
 cube.o: ../include/fltk3/PagedDevice.h ../include/fltk3/Device.h
 cube.o: ../include/fltk3/Object.h ../include/fltk3/Plugin.h
 cube.o: ../include/fltk3/Preferences.h ../include/fltk3/Image.h
 cube.o: ../include/fltk3/Bitmap.h ../include/fltk3/Pixmap.h
 cube.o: ../include/fltk3/RGBImage.h ../include/fltk3/draw.h
-cube.o: ../include/fltk3/enumerations.h ../include/fltk3/PostScript.h
+cube.o: ../include/fltk3/PostScript.h
 CubeView.o: CubeView.h ../include/config.h ../include/fltk3/run.h
 CubeView.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 CubeView.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
-CubeView.o: ../include/fltk3/enumerations.h ../include/fltk3/GlWindow.h
-CubeView.o: ../include/fltk3/Window.h ../include/fltk3/Group.h
-CubeView.o: ../include/fltk3/Widget.h ../include/fltk3/Rectangle.h
-CubeView.o: ../include/fltk3/Object.h ../include/fltk3/Wrapper.h
-CubeView.o: ../include/fltk3/Widget.h ../include/fltk3/gl.h
+CubeView.o: ../include/fltk3/enumerations.h ../include/fltk3gl/GlWindow.h
+CubeView.o: ../include/fltk3/Window.h ../include/fltk3gl/gl.h
+CubeView.o: ../include/fltk3/enumerations.h
 CubeMain.o: ../include/config.h ../include/fltk3/run.h
 CubeMain.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 CubeMain.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
@@ -223,8 +223,9 @@ CubeMain.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
 CubeMain.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
 CubeMain.o: ../include/fltk3/Group.h ../include/fltk3/Roller.h
 CubeMain.o: ../include/fltk3/Valuator.h ../include/fltk3/Slider.h
-CubeMain.o: ../include/fltk3/Box.h CubeView.h ../include/fltk3/GlWindow.h
-CubeMain.o: ../include/fltk3/gl.h ../include/fltk3/ValueSlider.h
+CubeMain.o: ../include/fltk3/Box.h CubeView.h ../include/fltk3gl/GlWindow.h
+CubeMain.o: ../include/fltk3/Window.h ../include/fltk3gl/gl.h
+CubeMain.o: ../include/fltk3/enumerations.h ../include/fltk3/ValueSlider.h
 CubeMain.o: ../include/fltk3/Slider.h
 cursor.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 cursor.o: ../include/fltk3/Export.h ../include/fltk3/types.h
@@ -381,23 +382,23 @@ fonts.o: ../include/fltk3/Plugin.h ../include/fltk3/Preferences.h
 fonts.o: ../include/fltk3/Image.h ../include/fltk3/Bitmap.h
 fonts.o: ../include/fltk3/Pixmap.h ../include/fltk3/RGBImage.h
 fonts.o: ../include/fltk3/Box.h ../include/fltk3/ask.h
-fractals.o: ../include/config.h ../include/fltk3/glut.h ../include/fltk3/gl.h
-fractals.o: ../include/fltk3/enumerations.h ../include/fltk3/Export.h
-fractals.o: ../include/fltk3/types.h ../include/fltk3/run.h
-fractals.o: ../include/fltk3/GlWindow.h ../include/fltk3/Window.h
-fractals.o: ../include/fltk3/Group.h ../include/fltk3/Widget.h
-fractals.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
-fractals.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
-fractals.o: ../include/fltk3/glu.h fracviewer.h ../include/fltk3/Button.h
-fractals.o: ../include/fltk3/Group.h ../include/fltk3/Window.h
-fracviewer.o: ../include/config.h ../include/fltk3/glut.h
-fracviewer.o: ../include/fltk3/gl.h ../include/fltk3/enumerations.h
+fractals.o: ../include/config.h ../include/fltk3gl/glut.h
+fractals.o: ../include/fltk3gl/gl.h ../include/fltk3/enumerations.h
+fractals.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
+fractals.o: ../include/fltk3/Export.h ../include/fltk3/types.h
+fractals.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
+fractals.o: ../include/fltk3gl/GLWindow.h ../include/fltk3/Window.h
+fractals.o: ../include/fltk3gl/glu.h fracviewer.h ../include/fltk3/Button.h
+fractals.o: ../include/fltk3/Widget.h ../include/fltk3/Rectangle.h
+fractals.o: ../include/fltk3/Object.h ../include/fltk3/Wrapper.h
+fractals.o: ../include/fltk3/Widget.h ../include/fltk3/Group.h
+fracviewer.o: ../include/config.h ../include/fltk3gl/glut.h
+fracviewer.o: ../include/fltk3gl/gl.h ../include/fltk3/enumerations.h
+fracviewer.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 fracviewer.o: ../include/fltk3/Export.h ../include/fltk3/types.h
-fracviewer.o: ../include/fltk3/run.h ../include/fltk3/GlWindow.h
-fracviewer.o: ../include/fltk3/Window.h ../include/fltk3/Group.h
-fracviewer.o: ../include/fltk3/Widget.h ../include/fltk3/Rectangle.h
-fracviewer.o: ../include/fltk3/Object.h ../include/fltk3/Wrapper.h
-fracviewer.o: ../include/fltk3/Widget.h ../include/fltk3/glu.h fracviewer.h
+fracviewer.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
+fracviewer.o: ../include/fltk3gl/GLWindow.h ../include/fltk3/Window.h
+fracviewer.o: ../include/fltk3gl/glu.h fracviewer.h
 fullscreen.o: ../include/config.h ../include/fltk3/run.h
 fullscreen.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 fullscreen.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
@@ -408,7 +409,8 @@ fullscreen.o: ../include/fltk3/Object.h ../include/fltk3/Wrapper.h
 fullscreen.o: ../include/fltk3/Widget.h ../include/fltk3/HorSlider.h
 fullscreen.o: ../include/fltk3/Slider.h ../include/fltk3/Valuator.h
 fullscreen.o: ../include/fltk3/LightButton.h ../include/fltk3/math.h
-fullscreen.o: ../include/fltk3/gl.h ../include/fltk3/GlWindow.h
+fullscreen.o: ../include/fltk3gl/gl.h ../include/fltk3/enumerations.h
+fullscreen.o: ../include/fltk3gl/GLWindow.h ../include/fltk3/Window.h
 gl_overlay.o: ../include/config.h ../include/fltk3/run.h
 gl_overlay.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 gl_overlay.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
@@ -417,18 +419,15 @@ gl_overlay.o: ../include/fltk3/HorSlider.h ../include/fltk3/Slider.h
 gl_overlay.o: ../include/fltk3/Valuator.h ../include/fltk3/Widget.h
 gl_overlay.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
 gl_overlay.o: ../include/fltk3/ToggleButton.h ../include/fltk3/Button.h
-gl_overlay.o: ../include/fltk3/math.h ../include/fltk3/gl.h
-gl_overlay.o: ../include/fltk3/GlWindow.h ../include/fltk3/Window.h
-gl_overlay.o: ../include/fltk3/Group.h ../include/fltk3/Wrapper.h
-gl_overlay.o: ../include/fltk3/Widget.h
-glpuzzle.o: ../include/config.h ../include/fltk3/glut.h ../include/fltk3/gl.h
-glpuzzle.o: ../include/fltk3/enumerations.h ../include/fltk3/Export.h
-glpuzzle.o: ../include/fltk3/types.h ../include/fltk3/run.h
-glpuzzle.o: ../include/fltk3/GlWindow.h ../include/fltk3/Window.h
-glpuzzle.o: ../include/fltk3/Group.h ../include/fltk3/Widget.h
-glpuzzle.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
-glpuzzle.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
-glpuzzle.o: ../include/fltk3/glu.h trackball.c trackball.h
+gl_overlay.o: ../include/fltk3/math.h ../include/fltk3gl/gl.h
+gl_overlay.o: ../include/fltk3/enumerations.h ../include/fltk3gl/GLWindow.h
+glpuzzle.o: ../include/config.h ../include/fltk3gl/glut.h
+glpuzzle.o: ../include/fltk3gl/gl.h ../include/fltk3/enumerations.h
+glpuzzle.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
+glpuzzle.o: ../include/fltk3/Export.h ../include/fltk3/types.h
+glpuzzle.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
+glpuzzle.o: ../include/fltk3gl/GLWindow.h ../include/fltk3/Window.h
+glpuzzle.o: ../include/fltk3gl/glu.h trackball.c trackball.h
 hello.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 hello.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 hello.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h
@@ -787,9 +786,8 @@ shape.o: ../include/fltk3/Window.h ../include/fltk3/HorSlider.h
 shape.o: ../include/fltk3/Slider.h ../include/fltk3/Valuator.h
 shape.o: ../include/fltk3/Widget.h ../include/fltk3/Rectangle.h
 shape.o: ../include/fltk3/Object.h ../include/fltk3/math.h
-shape.o: ../include/fltk3/gl.h ../include/fltk3/GlWindow.h
-shape.o: ../include/fltk3/Window.h ../include/fltk3/Group.h
-shape.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
+shape.o: ../include/fltk3gl/gl.h ../include/fltk3/enumerations.h
+shape.o: ../include/fltk3gl/GLWindow.h
 subwindow.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 subwindow.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 subwindow.o: ../include/fltk3/Xutf8.h ../include/fltk3/enumerations.h

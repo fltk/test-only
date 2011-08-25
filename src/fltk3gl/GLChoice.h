@@ -27,12 +27,12 @@
 
 // Internal interface to set up OpenGL.
 //
-// A "fltk3::GlChoice" is created from an OpenGL mode and holds information
+// A "fltk3::GLChoice" is created from an OpenGL mode and holds information
 // necessary to create a window (on X) and to create an OpenGL "context"
 // (on both X and Win32).
 //
 // fl_create_gl_context takes a window (necessary only on Win32) and an
-// fltk3::GlChoice and returns a new OpenGL context. All contexts share
+// fltk3::GLChoice and returns a new OpenGL context. All contexts share
 // display lists with each other.
 //
 // On X another fl_create_gl_context is provided to create it for any
@@ -72,10 +72,10 @@
 namespace fltk3 {
   
   // Describes crap needed to create a GLContext.
-  class GlChoice {
+  class GLChoice {
     int mode;
     const int *alist;
-    fltk3::GlChoice *next;
+    fltk3::GLChoice *next;
   public:
 #ifdef WIN32
     int pixelformat;	// the visual to use
@@ -90,7 +90,7 @@ namespace fltk3 {
     // Return one of these structures for a given gl mode.
     // The second argument is a glX attribute list, and is used if mode is
     // zero.  This is not supported on Win32:
-    static fltk3::GlChoice *find(int mode, const int *);
+    static fltk3::GLChoice *find(int mode, const int *);
   };
   
   class Window;
@@ -100,19 +100,19 @@ namespace fltk3 {
 
 #ifdef WIN32
   
-  GLContext fl_create_gl_context(fltk3::Window*, const fltk3::GlChoice*, int layer=0);
+  GLContext fl_create_gl_context(fltk3::Window*, const fltk3::GLChoice*, int layer=0);
   
 #elif defined(__APPLE_QUARTZ__)
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
   
-  GLContext fl_create_gl_context(fltk3::Window*, const fltk3::GlChoice*, int layer=0);
+  GLContext fl_create_gl_context(fltk3::Window*, const fltk3::GLChoice*, int layer=0);
   
 #else
   
   GLContext fl_create_gl_context(XVisualInfo* vis);
   
   static inline
-  GLContext fl_create_gl_context(fltk3::Window*, const fltk3::GlChoice* g) {
+  GLContext fl_create_gl_context(fltk3::Window*, const fltk3::GLChoice* g) {
     return fl_create_gl_context(g->vis);
   }
   

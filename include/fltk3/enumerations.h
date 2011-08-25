@@ -872,7 +872,7 @@ namespace fltk3 {
   };
   
   
-  /** visual types and fltk3::GlWindow::mode() (values match Glut) */
+  /** visual types and fltk3::GLWindow::mode() (values match Glut) */
   enum Mode { 
     RGB	= 0,
     INDEX	= 1,

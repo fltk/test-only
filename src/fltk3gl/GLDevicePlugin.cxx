@@ -27,8 +27,8 @@
 
 #include <config.h>
 #include <fltk3/Printer.h>
-#include <fltk3/GlWindow.h>
-#include "Fl_Gl_Choice.H"
+#include <fltk3gl/GLWindow.h>
+#include "GLChoice.H"
 #include <fltk3/run.h>
 #ifndef __APPLE__
 #include <fltk3/draw.h>
@@ -41,7 +41,7 @@ static void imgProviderReleaseData (void *info, const void *data, size_t size)
 }
 #endif
 
-static void print_gl_window(fltk3::GlWindow *glw, int x, int y, int height)
+static void print_gl_window(fltk3::GLWindow *glw, int x, int y, int height)
 {
 #ifdef WIN32
   HDC save_gc = fl_gc;
@@ -138,7 +138,7 @@ public:
   Fl_Gl_Device_Plugin() : fltk3::DevicePlugin(name()) { }
   virtual const char *name() { return "opengl.device.fltk.org"; }
   virtual int print(fltk3::Widget *w, int x, int y, int height) {
-    fltk3::GlWindow *glw = w->as_gl_window();
+    fltk3::GLWindow *glw = w->as_gl_window();
     if (!glw) return 0;
     print_gl_window(glw, x, y, height);
     return 1; 
@@ -147,8 +147,8 @@ public:
 
 static Fl_Gl_Device_Plugin Gl_Device_Plugin;
 
-// The purpose of this variable, used in fltk3::GlWindow.cxx, is only to force this file to be loaded
-// whenever fltk3::GlWindow.cxx is loaded, that is, whenever fltk_gl is.
+// The purpose of this variable, used in fltk3::GLWindow.cxx, is only to force this file to be loaded
+// whenever fltk3::GLWindow.cxx is loaded, that is, whenever fltk_gl is.
 FLTK3_EXPORT int fl_gl_load_plugin = 0;
 
 //

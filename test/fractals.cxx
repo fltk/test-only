@@ -63,8 +63,8 @@ int main(int, char**) {
  *
  */
 
-#include <fltk3/glut.h>
-#include <fltk3/glu.h>
+#include <fltk3gl/glut.h>
+#include <fltk3gl/glu.h>
 
 #include <stdio.h>
 #include <stdlib.h>

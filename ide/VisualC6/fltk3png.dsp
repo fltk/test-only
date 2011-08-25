@@ -83,63 +83,63 @@ LIB32=link.exe -lib
 # Name "fltk3png - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\png\png.c
+SOURCE=..\..\src\fltk3png\png.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngerror.c
+SOURCE=..\..\src\fltk3png\pngerror.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngget.c
+SOURCE=..\..\src\fltk3png\pngget.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngmem.c
+SOURCE=..\..\src\fltk3png\pngmem.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngpread.c
+SOURCE=..\..\src\fltk3png\pngpread.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngread.c
+SOURCE=..\..\src\fltk3png\pngread.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngrio.c
+SOURCE=..\..\src\fltk3png\pngrio.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngrtran.c
+SOURCE=..\..\src\fltk3png\pngrtran.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngrutil.c
+SOURCE=..\..\src\fltk3png\pngrutil.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngset.c
+SOURCE=..\..\src\fltk3png\pngset.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngtrans.c
+SOURCE=..\..\src\fltk3png\pngtrans.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngwio.c
+SOURCE=..\..\src\fltk3png\pngwio.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngwrite.c
+SOURCE=..\..\src\fltk3png\pngwrite.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngwtran.c
+SOURCE=..\..\src\fltk3png\pngwtran.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\png\pngwutil.c
+SOURCE=..\..\src\fltk3png\pngwutil.c
 # End Source File
 # End Target
 # End Project

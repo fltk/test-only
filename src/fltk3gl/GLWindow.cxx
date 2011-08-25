@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include "flstring.h"
+#include "../core/flstring.h"
 #if HAVE_GL
 
 extern int fl_gl_load_plugin;
@@ -36,10 +36,10 @@ static int temp = fl_gl_load_plugin;
 #include <fltk3/run.h>
 #include <fltk3/x.h>
 #ifdef __APPLE__
-#include <fltk3/gl.h>
+#include <fltk3gl/gl.h>
 #endif
-#include "Fl_Gl_Choice.H"
-#include <fltk3/GlWindow.h>
+#include "GLChoice.H"
+#include <fltk3gl/GLWindow.h>
 #include <stdlib.h>
 #include <fltk3/utf8.h>
 
@@ -69,20 +69,20 @@ static char SWAP_TYPE = 0 ; // 0 = determine it from environment variable
 ////////////////////////////////////////////////////////////////
 
 /**  Returns non-zero if the hardware supports the given or current OpenGL  mode. */
-int fltk3::GlWindow::can_do(int a, const int *b) {
-  return fltk3::GlChoice::find(a,b) != 0;
+int fltk3::GLWindow::can_do(int a, const int *b) {
+  return fltk3::GLChoice::find(a,b) != 0;
 }
 
-void fltk3::GlWindow::show() {
+void fltk3::GLWindow::show() {
 #if defined(__APPLE__)
   int need_redraw = 0;
 #endif
   if (!shown()) {
     if (!g) {
-      g = fltk3::GlChoice::find(mode_,alist);
+      g = fltk3::GLChoice::find(mode_,alist);
 
       if (!g && (mode_ & fltk3::DOUBLE) == fltk3::SINGLE) {
-        g = fltk3::GlChoice::find(mode_ | fltk3::DOUBLE,alist);
+        g = fltk3::GLChoice::find(mode_ | fltk3::DOUBLE,alist);
 	if (g) mode_ |= fltk3::FAKE_SINGLE;
       }
 
@@ -93,7 +93,7 @@ void fltk3::GlWindow::show() {
     }
 #if !defined(WIN32) && !defined(__APPLE__)
     Fl_X::make_xid(this, g->vis, g->colormap);
-    if (overlay && overlay != this) ((fltk3::GlWindow*)overlay)->show();
+    if (overlay && overlay != this) ((fltk3::GLWindow*)overlay)->show();
 #elif defined(__APPLE__)
 	if( ! parent() ) need_redraw=1;
 #endif
@@ -110,32 +110,32 @@ void fltk3::GlWindow::show() {
   The invalidate() method turns off valid() and is
   equivalent to calling value(0).
 */
-void fltk3::GlWindow::invalidate() {
+void fltk3::GLWindow::invalidate() {
   valid(0);
   context_valid(0);
 #ifndef WIN32
   if (overlay) {
-    ((fltk3::GlWindow*)overlay)->valid(0);
-    ((fltk3::GlWindow*)overlay)->context_valid(0);
+    ((fltk3::GLWindow*)overlay)->valid(0);
+    ((fltk3::GLWindow*)overlay)->context_valid(0);
   }
 #endif
 }
 
 /**
-  See const int fltk3::GlWindow::mode() const 
+  See const int fltk3::GLWindow::mode() const 
 */
-int fltk3::GlWindow::mode(int m, const int *a) {
+int fltk3::GLWindow::mode(int m, const int *a) {
   if (m == mode_ && a == alist) return 0;
 #ifndef __APPLE__
   int oldmode = mode_;
 #endif // !__APPLE__
 #if !defined(WIN32) && !defined(__APPLE__)
-  fltk3::GlChoice* oldg = g;
+  fltk3::GLChoice* oldg = g;
 #endif // !WIN32 && !__APPLE__
   context(0);
   mode_ = m; alist = a;
   if (shown()) {
-    g = fltk3::GlChoice::find(m, a);
+    g = fltk3::GLChoice::find(m, a);
 
 #if defined(USE_X11)
     // under X, if the visual changes we must make a new X window (yuck!):
@@ -169,8 +169,8 @@ int fltk3::GlWindow::mode(int m, const int *a) {
   selection within the handle() method.
 */
 
-void fltk3::GlWindow::make_current() {
-//  puts("fltk3::GlWindow::make_current()");
+void fltk3::GLWindow::make_current() {
+//  puts("fltk3::GLWindow::make_current()");
 //  printf("make_current: context_=%p\n", context_);
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
@@ -220,7 +220,7 @@ void fltk3::GlWindow::make_current() {
   pixel is 1 unit wide/tall.  If you are drawing 2D images, your 
   draw() method may want to call this if valid() is false.
 */
-void fltk3::GlWindow::ortho() {
+void fltk3::GLWindow::ortho() {
 // Alpha NT seems to have a broken OpenGL that does not like negative coords:
 #ifdef _M_ALPHA
   glLoadIdentity();
@@ -239,7 +239,7 @@ void fltk3::GlWindow::ortho() {
   The swap_buffers() method swaps the back and front buffers.
   It is called automatically after the draw() method is called.
 */
-void fltk3::GlWindow::swap_buffers() {
+void fltk3::GLWindow::swap_buffers() {
 #if defined(USE_X11)
   glXSwapBuffers(fl_display, fl_xid(this));
 #elif defined(WIN32)
@@ -270,7 +270,7 @@ int fl_overlay_depth = 0;
 #endif
 
 
-void fltk3::GlWindow::flush() {
+void fltk3::GLWindow::flush() {
   uchar save_valid = valid_f_ & 1;
 #if HAVE_GL_OVERLAY && defined(WIN32)
   uchar save_valid_f = valid_f_;
@@ -368,7 +368,7 @@ void fltk3::GlWindow::flush() {
 	// we use a separate context for the copy because rasterpos must be 0
 	// and depth test needs to be off:
 	static GLContext ortho_context = 0;
-	static fltk3::GlWindow* ortho_window = 0;
+	static fltk3::GLWindow* ortho_window = 0;
 	int orthoinit = !ortho_context;
 	if (orthoinit) ortho_context = fl_create_gl_context(this, g);
 	fl_set_gl_context(this, ortho_context);
@@ -416,8 +416,8 @@ void fltk3::GlWindow::flush() {
   context_valid(1);
 }
 
-void fltk3::GlWindow::resize(int X,int Y,int W,int H) {
-//  printf("fltk3::GlWindow::resize(X=%d, Y=%d, W=%d, H=%d)\n", X, Y, W, H);
+void fltk3::GLWindow::resize(int X,int Y,int W,int H) {
+//  printf("fltk3::GLWindow::resize(X=%d, Y=%d, W=%d, H=%d)\n", X, Y, W, H);
 //  printf("current: x()=%d, y()=%d, w()=%d, h()=%d\n", x(), y(), w(), h());
 
   if (W != w() || H != h()) valid(0);
@@ -426,7 +426,7 @@ void fltk3::GlWindow::resize(int X,int Y,int W,int H) {
   if (X != x() || Y != y() || W != w() || H != h()) aglUpdateContext(context_);
 #elif !defined(WIN32)
   if ((W != w() || H != h()) && !resizable() && overlay && overlay != this) {
-    ((fltk3::GlWindow*)overlay)->resize(0,0,W,H);
+    ((fltk3::GLWindow*)overlay)->resize(0,0,W,H);
   }
 #endif
 
@@ -444,7 +444,7 @@ void fltk3::GlWindow::resize(int X,int Y,int W,int H) {
   fltk when the window is destroyed, or when the mode() is changed, 
   or the next time context(x) is called.
 */
-void fltk3::GlWindow::context(void* v, int destroy_flag) {
+void fltk3::GLWindow::context(void* v, int destroy_flag) {
   if (context_ && !(mode_&NON_LOCAL_CONTEXT)) fl_delete_gl_context(context_);
   context_ = (GLContext)v;
   if (destroy_flag) mode_ &= ~NON_LOCAL_CONTEXT;
@@ -454,7 +454,7 @@ void fltk3::GlWindow::context(void* v, int destroy_flag) {
 /**
   Hides the window and destroys the OpenGL context.
 */
-void fltk3::GlWindow::hide() {
+void fltk3::GLWindow::hide() {
   context(0);
 #if HAVE_GL_OVERLAY && defined(WIN32)
   if (overlay && overlay != this) {
@@ -469,7 +469,7 @@ void fltk3::GlWindow::hide() {
   The destructor removes the widget and destroys the OpenGL context
   associated with it.
 */
-fltk3::GlWindow::~GlWindow() {
+fltk3::GLWindow::~GLWindow() {
   hide();
 //  delete overlay; this is done by ~Fl_Group
 #ifdef __APPLE__
@@ -479,7 +479,7 @@ fltk3::GlWindow::~GlWindow() {
 #endif
 }
 
-void fltk3::GlWindow::init() {
+void fltk3::GLWindow::init() {
   end(); // we probably don't want any children
   box(fltk3::NO_BOX);
 
@@ -507,20 +507,20 @@ void fltk3::GlWindow::init() {
   OpenGL mode and drawing anything other than flat-shaded will probably
   not work.
 
-  Both this function and fltk3::GlWindow::draw() should check 
-  fltk3::GlWindow::valid() and set the same transformation.  If you
+  Both this function and fltk3::GLWindow::draw() should check 
+  fltk3::GLWindow::valid() and set the same transformation.  If you
   don't your code may not work on other systems.  Depending on the OS,
   and on whether overlays are real or simulated, the OpenGL context may
   be the same or different between the overlay and main window.
 */
-void fltk3::GlWindow::draw_overlay() {
+void fltk3::GLWindow::draw_overlay() {
   FLTK3_OBJECT_VCALLS_WRAPPER(draw_overlay(), DrawOverlay)
 }
 
 #endif
 
   /**
-  You \e \b must subclass fltk3::GlWindow and provide an implementation for 
+  You \e \b must subclass fltk3::GLWindow and provide an implementation for 
   draw().  You may also provide an implementation of draw_overlay()
   if you want to draw into the overlay planes.  You can avoid
   reinitializing the viewport and lights and other things by checking 
@@ -534,16 +534,16 @@ void fltk3::GlWindow::draw_overlay() {
   If double-buffering is enabled in the window, the back and front
   buffers are swapped after this function is completed.
 */
-void fltk3::GlWindow::draw() {
+void fltk3::GLWindow::draw() {
   FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
-  fltk3::fatal("fltk3::GlWindow::draw() *must* be overriden. Please refer to the documentation.");
+  fltk3::fatal("fltk3::GLWindow::draw() *must* be overriden. Please refer to the documentation.");
 }
 
 
 /**
  Handle some FLTK events as needed.
  */
-int fltk3::GlWindow::handle(int event) 
+int fltk3::GLWindow::handle(int event) 
 {
   FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   return Window::handle(event);

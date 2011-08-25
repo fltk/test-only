@@ -1960,6 +1960,7 @@ int isdeclare(const char *c) {
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
   if (!subclass() || (is_class() && !strncmp(t, "fltk3::", 7))) {
+    // FIXME: this will not work for fltk3gl and fltk3images any more!
     write_declare("#include <fltk3/%s.h>", t+7);
   }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {

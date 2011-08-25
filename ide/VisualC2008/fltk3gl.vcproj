@@ -161,7 +161,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\src\core\Fl_Gl_Choice.cxx"
+			RelativePath="..\..\src\fltk3gl\GLChoice.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -184,7 +184,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Gl_Device_Plugin.cxx"
+			RelativePath="..\..\src\fltk3gl\GLDevicePlugin.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -207,7 +207,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Gl_Overlay.cxx"
+			RelativePath="..\..\src\fltk3gl\GLOverlay.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\Fl_Gl_Window.cxx"
+			RelativePath="..\..\src\fltk3gl\GLWindow.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\freeglut_geometry.cxx"
+			RelativePath="..\..\src\fltk3gl\freeglut_geometry.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -276,7 +276,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\freeglut_stroke_mono_roman.cxx"
+			RelativePath="..\..\src\fltk3gl\freeglut_stroke_mono_roman.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -299,7 +299,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\freeglut_stroke_roman.cxx"
+			RelativePath="..\..\src\fltk3gl\freeglut_stroke_roman.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -322,7 +322,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\freeglut_teapot.cxx"
+			RelativePath="..\..\src\fltk3gl\freeglut_teapot.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -345,7 +345,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\gl_draw.cxx"
+			RelativePath="..\..\src\fltk3gl\gl_draw.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -368,7 +368,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\glut_compatability.cxx"
+			RelativePath="..\..\src\fltk3gl\gl_start.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -391,7 +391,30 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\core\glut_font.cxx"
+			RelativePath="..\..\src\fltk3gl\glut_compatability.cxx"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\src\fltk3gl\glut_font.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

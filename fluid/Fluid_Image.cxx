@@ -57,6 +57,7 @@ void Fluid_Image::write_static() {
     // Write Pixmap data...
     write_c("\n");
     if (pixmap_header_written != write_number) {
+      // FIXME: this will have to be fltk3image/...
       write_c("#include <fltk3/Pixmap.h>\n");
       pixmap_header_written = write_number;
     }

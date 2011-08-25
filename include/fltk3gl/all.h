@@ -31,7 +31,7 @@
 #include "gl.h"
 #include "glu.h"
 #include "glut.h"
-#include "GlWindow.h"
+#include "GLWindow.h"
 #include "glDraw.h"
 
 #endif // !FLTK3GLALL_H

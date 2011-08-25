@@ -46,8 +46,8 @@ int main(int, char**) {
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <fltk3/glut.h>	// changed for fltk
-#include <fltk3/glu.h>     // added for fltk
+#include <fltk3gl/glut.h>	// changed for fltk
+#include <fltk3gl/glu.h>     // added for fltk
 #include "trackball.c"	// changed from trackball.h for fltk
 
 #define WIDTH 4

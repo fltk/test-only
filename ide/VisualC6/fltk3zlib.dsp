@@ -83,63 +83,63 @@ LIB32=link.exe -lib
 # Name "fltk3zlib - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\zlib\adler32.c
+SOURCE=..\..\src\fltk3zlib\adler32.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\compress.c
+SOURCE=..\..\src\fltk3zlib\compress.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\crc32.c
+SOURCE=..\..\src\fltk3zlib\crc32.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\deflate.c
+SOURCE=..\..\src\fltk3zlib\deflate.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\gzclose.c
+SOURCE=..\..\src\fltk3zlib\gzclose.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\gzlib.c
+SOURCE=..\..\src\fltk3zlib\gzlib.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\gzread.c
+SOURCE=..\..\src\fltk3zlib\gzread.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\gzwrite.c
+SOURCE=..\..\src\fltk3zlib\gzwrite.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\infback.c
+SOURCE=..\..\src\fltk3zlib\infback.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\inffast.c
+SOURCE=..\..\src\fltk3zlib\inffast.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\inflate.c
+SOURCE=..\..\src\fltk3zlib\inflate.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\inftrees.c
+SOURCE=..\..\src\fltk3zlib\inftrees.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\trees.c
+SOURCE=..\..\src\fltk3zlib\trees.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\uncompr.c
+SOURCE=..\..\src\fltk3zlib\uncompr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\zutil.c
+SOURCE=..\..\src\fltk3zlib\zutil.c
 # End Source File
 # End Target
 # End Project

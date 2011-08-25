@@ -43,10 +43,10 @@ public:
   }
 };
 #else
-#include <fltk3/gl.h>
-#include <fltk3/GlWindow.h>
+#include <fltk3gl/gl.h>
+#include <fltk3gl/GLWindow.h>
 
-class shape_window : public fltk3::GlWindow {
+class shape_window : public fltk3::GLWindow {
   void draw();
   void draw_overlay();
 public:
@@ -56,7 +56,7 @@ public:
 };
 
 shape_window::shape_window(int x,int y,int w,int h,const char *l) :
-fltk3::GlWindow(x,y,w,h,l) {
+fltk3::GLWindow(x,y,w,h,l) {
   sides = overlay_sides = 3;
 }
 

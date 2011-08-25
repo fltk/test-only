@@ -31,9 +31,9 @@
 #  include <fltk3/run.h>
 #  include <fltk3/x.h>
 #  include <stdlib.h>
-#  include "Fl_Gl_Choice.H"
-#  include <fltk3/glDraw.h>
-#  include "flstring.h"
+#  include "GLChoice.H"
+#  include <fltk3gl/glDraw.h>
+#  include "../core/flstring.h"
 #  include <fltk3/utf8.h>
 
 #  ifdef __APPLE__
@@ -45,13 +45,13 @@
 void fl_save_dc(HWND, HDC);
 #  endif
 
-static fltk3::GlChoice *first;
+static fltk3::GLChoice *first;
 
 // this assumes one of the two arguments is zero:
 // We keep the list system in Win32 to stay compatible and interpret
 // the list later...
-fltk3::GlChoice *fltk3::GlChoice::find(int m, const int *alistp) {
-  fltk3::GlChoice *g;
+fltk3::GLChoice *fltk3::GLChoice::find(int m, const int *alistp) {
+  fltk3::GLChoice *g;
   
   for (g = first; g; g = g->next)
     if (g->mode == m && g->alist == alistp) 
@@ -205,7 +205,7 @@ fltk3::GlChoice *fltk3::GlChoice::find(int m, const int *alistp) {
 # error platform unsupported
 #endif
 
-  g = new fltk3::GlChoice;
+  g = new fltk3::GLChoice;
   g->mode = m;
   g->alist = alistp;
   g->next = first;
@@ -274,7 +274,7 @@ GLContext fl_create_gl_context(XVisualInfo* vis) {
 
 #elif defined(WIN32)
 
-GLContext fl_create_gl_context(fltk3::Window* window, const fltk3::GlChoice* g, int layer) {
+GLContext fl_create_gl_context(fltk3::Window* window, const fltk3::GLChoice* g, int layer) {
   Fl_X* i = Fl_X::i(window);
   HDC hdc = i->private_dc;
   if (!hdc) {
@@ -307,7 +307,7 @@ static CGrafPtr fl_GetWindowPort(WindowRef window)
 #endif
 
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-GLContext fl_create_gl_context(fltk3::Window* window, const fltk3::GlChoice* g, int layer) {
+GLContext fl_create_gl_context(fltk3::Window* window, const fltk3::GLChoice* g, int layer) {
   GLContext context, shared_ctx = 0;
   if (context_list && nContext) shared_ctx = context_list[0];
   context = aglCreateContext( g->pixelformat, shared_ctx);

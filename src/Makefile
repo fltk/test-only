@@ -26,7 +26,7 @@
 #
 
 FLTK3_CPPFILES = \
-	core/Fl.cxx \
+	fltk3/run.cxx \
 	core/Fl_Adjuster.cxx \
 	core/Fl_Bitmap.cxx \
 	core/Fl_Box.cxx \
@@ -173,17 +173,18 @@ FLTK3_CPPFILES = \
 	core/screen_xywh.cxx
 
 FLTK3GL_CPPFILES = \
-	core/Fl_Gl_Choice.cxx \
-	core/Fl_Gl_Device_Plugin.cxx \
-	core/Fl_Gl_Overlay.cxx \
-	core/Fl_Gl_Window.cxx \
-	core/freeglut_geometry.cxx \
-	core/freeglut_stroke_mono_roman.cxx \
-	core/freeglut_stroke_roman.cxx \
-	core/freeglut_teapot.cxx \
-	core/gl_draw.cxx \
-	core/glut_compatability.cxx \
-	core/glut_font.cxx
+	fltk3gl/GLChoice.cxx \
+	fltk3gl/GLDevicePlugin.cxx \
+	fltk3gl/GLOverlay.cxx \
+	fltk3gl/GLWindow.cxx \
+	fltk3gl/freeglut_geometry.cxx \
+	fltk3gl/freeglut_stroke_mono_roman.cxx \
+	fltk3gl/freeglut_stroke_roman.cxx \
+	fltk3gl/freeglut_teapot.cxx \
+	fltk3gl/gl_draw.cxx \
+	fltk3gl/gl_start.cxx \
+	fltk3gl/glut_compatability.cxx \
+	fltk3gl/glut_font.cxx
 
 FLTK3IMAGES_CPPFILES = \
 	core/Fl_BMP_Image.cxx \
@@ -212,86 +213,86 @@ FLTK3_CFILES = \
 	core/xutf8/utf8Wrap.c
 
 FLTK3PNG_CFILES = \
-	png/png.c \
-	png/pngerror.c \
-	png/pngget.c \
-	png/pngmem.c \
-	png/pngpread.c \
-	png/pngread.c \
-	png/pngrio.c \
-	png/pngrtran.c \
-	png/pngrutil.c \
-	png/pngset.c \
-	png/pngtrans.c \
-	png/pngwio.c \
-	png/pngwrite.c \
-	png/pngwtran.c \
-	png/pngwutil.c
+	fltk3png/png.c \
+	fltk3png/pngerror.c \
+	fltk3png/pngget.c \
+	fltk3png/pngmem.c \
+	fltk3png/pngpread.c \
+	fltk3png/pngread.c \
+	fltk3png/pngrio.c \
+	fltk3png/pngrtran.c \
+	fltk3png/pngrutil.c \
+	fltk3png/pngset.c \
+	fltk3png/pngtrans.c \
+	fltk3png/pngwio.c \
+	fltk3png/pngwrite.c \
+	fltk3png/pngwtran.c \
+	fltk3png/pngwutil.c
 
 FLTK3JPEG_CFILES = \
-	jpeg/jaricom.c \
-	jpeg/jcarith.c \
-	jpeg/jdarith.c \
-	jpeg/jcapimin.c \
-	jpeg/jcapistd.c \
-	jpeg/jccoefct.c \
-	jpeg/jccolor.c \
-	jpeg/jcdctmgr.c \
-	jpeg/jchuff.c \
-	jpeg/jcinit.c \
-	jpeg/jcmainct.c \
-	jpeg/jcmarker.c \
-	jpeg/jcmaster.c \
-	jpeg/jcomapi.c \
-	jpeg/jcparam.c \
-	jpeg/jcprepct.c \
-	jpeg/jcsample.c \
-	jpeg/jctrans.c \
-	jpeg/jdapimin.c \
-	jpeg/jdapistd.c \
-	jpeg/jdatadst.c \
-	jpeg/jdatasrc.c \
-	jpeg/jdcoefct.c \
-	jpeg/jdcolor.c \
-	jpeg/jddctmgr.c \
-	jpeg/jdhuff.c \
-	jpeg/jdinput.c \
-	jpeg/jdmainct.c \
-	jpeg/jdmarker.c \
-	jpeg/jdmaster.c \
-	jpeg/jdmerge.c \
-	jpeg/jdpostct.c \
-	jpeg/jdsample.c \
-	jpeg/jdtrans.c \
-	jpeg/jerror.c \
-	jpeg/jfdctflt.c \
-	jpeg/jfdctfst.c \
-	jpeg/jfdctint.c \
-	jpeg/jidctflt.c \
-	jpeg/jidctfst.c \
-	jpeg/jidctint.c \
-	jpeg/jmemmgr.c \
-	jpeg/jmemnobs.c \
-	jpeg/jquant1.c \
-	jpeg/jquant2.c \
-	jpeg/jutils.c
+	fltk3jpeg/jaricom.c \
+	fltk3jpeg/jcarith.c \
+	fltk3jpeg/jdarith.c \
+	fltk3jpeg/jcapimin.c \
+	fltk3jpeg/jcapistd.c \
+	fltk3jpeg/jccoefct.c \
+	fltk3jpeg/jccolor.c \
+	fltk3jpeg/jcdctmgr.c \
+	fltk3jpeg/jchuff.c \
+	fltk3jpeg/jcinit.c \
+	fltk3jpeg/jcmainct.c \
+	fltk3jpeg/jcmarker.c \
+	fltk3jpeg/jcmaster.c \
+	fltk3jpeg/jcomapi.c \
+	fltk3jpeg/jcparam.c \
+	fltk3jpeg/jcprepct.c \
+	fltk3jpeg/jcsample.c \
+	fltk3jpeg/jctrans.c \
+	fltk3jpeg/jdapimin.c \
+	fltk3jpeg/jdapistd.c \
+	fltk3jpeg/jdatadst.c \
+	fltk3jpeg/jdatasrc.c \
+	fltk3jpeg/jdcoefct.c \
+	fltk3jpeg/jdcolor.c \
+	fltk3jpeg/jddctmgr.c \
+	fltk3jpeg/jdhuff.c \
+	fltk3jpeg/jdinput.c \
+	fltk3jpeg/jdmainct.c \
+	fltk3jpeg/jdmarker.c \
+	fltk3jpeg/jdmaster.c \
+	fltk3jpeg/jdmerge.c \
+	fltk3jpeg/jdpostct.c \
+	fltk3jpeg/jdsample.c \
+	fltk3jpeg/jdtrans.c \
+	fltk3jpeg/jerror.c \
+	fltk3jpeg/jfdctflt.c \
+	fltk3jpeg/jfdctfst.c \
+	fltk3jpeg/jfdctint.c \
+	fltk3jpeg/jidctflt.c \
+	fltk3jpeg/jidctfst.c \
+	fltk3jpeg/jidctint.c \
+	fltk3jpeg/jmemmgr.c \
+	fltk3jpeg/jmemnobs.c \
+	fltk3jpeg/jquant1.c \
+	fltk3jpeg/jquant2.c \
+	fltk3jpeg/jutils.c
 
 FLTK3ZLIB_CFILES = \
-	zlib/adler32.c \
-	zlib/compress.c \
-	zlib/crc32.c \
-	zlib/deflate.c \
-	zlib/gzclose.c \
-	zlib/gzlib.c \
-	zlib/gzread.c \
-	zlib/gzwrite.c \
-	zlib/infback.c \
-	zlib/inffast.c \
-	zlib/inflate.c \
-	zlib/inftrees.c \
-	zlib/trees.c \
-	zlib/uncompr.c \
-	zlib/zutil.c
+	fltk3zlib/adler32.c \
+	fltk3zlib/compress.c \
+	fltk3zlib/crc32.c \
+	fltk3zlib/deflate.c \
+	fltk3zlib/gzclose.c \
+	fltk3zlib/gzlib.c \
+	fltk3zlib/gzread.c \
+	fltk3zlib/gzwrite.c \
+	fltk3zlib/infback.c \
+	fltk3zlib/inffast.c \
+	fltk3zlib/inflate.c \
+	fltk3zlib/inftrees.c \
+	fltk3zlib/trees.c \
+	fltk3zlib/uncompr.c \
+	fltk3zlib/zutil.c
 
 ################################################################
 FLTKFLAGS = -DFL_LIBRARY
@@ -515,7 +516,7 @@ mgwfltknox_images-1.3.dll: $(FLTK3IMAGES_LIBNAME) mgwfltknox-1.3.dll
 			$(IMAGELIBS) $(LDLIBS)
 
 clean:
-	-$(RM) *.o xutf8/*.o *.dll.a core.* *~ *.bak *.bck
+	-$(RM) *.o */*.o */*/*.o *.dll.a core.* *~ *.bak *.bck
 	-$(RM) $(FLTK3_DSONAME) $(FLTK3GL_DSONAME) $(FLTK3IMAGES_DSONAME) \
 		$(FLTK3_LIBNAME) $(FLTK3GL_LIBNAME) \
 		$(FLTK3IMAGES_LIBNAME) \

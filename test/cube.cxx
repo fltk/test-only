@@ -49,10 +49,10 @@ public:
   }
 };
 #else
-#include <fltk3/GlWindow.h>
-#include <fltk3/gl.h>
+#include <fltk3gl/GLWindow.h>
+#include <fltk3gl/gl.h>
 
-class cube_box : public fltk3::GlWindow {
+class cube_box : public fltk3::GLWindow {
   void draw();
   int handle(int);
 public:
@@ -61,7 +61,7 @@ public:
   double size;
   double speed;
   cube_box(int x,int y,int w,int h,const char *l=0)
-    : fltk3::GlWindow(x,y,w,h,l) {lasttime = 0.0;}
+    : fltk3::GLWindow(x,y,w,h,l) {lasttime = 0.0;}
 };
 
 /* The cube definition */
@@ -129,7 +129,7 @@ int cube_box::handle(int e) {
   case fltk3::ENTER: cursor(fltk3::CURSOR_CROSS); break;
   case fltk3::LEAVE: cursor(fltk3::CURSOR_DEFAULT); break;
   }
-  return GlWindow::handle(e);
+  return GLWindow::handle(e);
 }
 
 #endif

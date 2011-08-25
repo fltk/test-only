@@ -30,25 +30,25 @@
 
 #include <fltk3/run.h>
 #include <fltk3/x.h>
-#include "Fl_Gl_Choice.H"
-#include <fltk3/GlWindow.h>
+#include "GLChoice.H"
+#include <fltk3gl/GLWindow.h>
 #include <stdlib.h>
 
 #if !HAVE_GL_OVERLAY
 
-int fltk3::GlWindow::can_do_overlay() {return 0;}
+int fltk3::GLWindow::can_do_overlay() {return 0;}
 
-void fltk3::GlWindow::make_overlay() {overlay = this;}
+void fltk3::GLWindow::make_overlay() {overlay = this;}
 
 #else
 
-// Methods on fltk3::GlWindow that create an overlay window.  Because
+// Methods on fltk3::GLWindow that create an overlay window.  Because
 // many programs don't need the overlay, this is separated into this
 // source file so it is not linked in if not used.
 
 // Under X this is done by creating another window, of class _Fl_Gl_Overlay
-// which is a subclass of fltk3::GlWindow except it uses the overlay planes.
-// A pointer to this is stored in the "overlay" pointer of the fltk3::GlWindow.
+// which is a subclass of fltk3::GLWindow except it uses the overlay planes.
+// A pointer to this is stored in the "overlay" pointer of the fltk3::GLWindow.
 
 // Under win32 another GLX context is created to draw into the overlay
 // and it is stored in the "overlay" pointer.
@@ -67,13 +67,13 @@ extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
 extern uchar fl_overlay;
 
-class _Fl_Gl_Overlay : public fltk3::GlWindow {
+class _Fl_Gl_Overlay : public fltk3::GLWindow {
   void flush();
   void draw();
 public:
   void show();
   _Fl_Gl_Overlay(int x, int y, int w, int h) :
-    fltk3::GlWindow(x,y,w,h) {
+    fltk3::GLWindow(x,y,w,h) {
     set_flag(INACTIVE);
   }
 };
@@ -97,7 +97,7 @@ void _Fl_Gl_Overlay::flush() {
 void _Fl_Gl_Overlay::draw() {
   if (!valid()) glClearIndex((GLfloat)fl_transparent_pixel);
   if (damage() != fltk3::DAMAGE_EXPOSE) glClear(GL_COLOR_BUFFER_BIT);
-  fltk3::GlWindow *w = (fltk3::GlWindow *)parent();
+  fltk3::GLWindow *w = (fltk3::GLWindow *)parent();
   uchar save_valid = w->valid();
   w->valid(valid());
   fl_overlay = 1;
@@ -119,14 +119,14 @@ void _Fl_Gl_Overlay::show() {
     context(fl_create_gl_context(fl_overlay_visual), 1);
     valid(0);
   }
-  fltk3::GlWindow::show();
+  fltk3::GLWindow::show();
 }
 
-int fltk3::GlWindow::can_do_overlay() {
+int fltk3::GLWindow::can_do_overlay() {
   return fl_find_overlay_visual() != 0;
 }
 
-void fltk3::GlWindow::make_overlay() {
+void fltk3::GLWindow::make_overlay() {
   if (overlay) return;
   if (can_do_overlay()) {
     _Fl_Gl_Overlay* o = new _Fl_Gl_Overlay(0,0,w(),h());
@@ -145,7 +145,7 @@ void fltk3::GlWindow::make_overlay() {
 //static COLORREF *palette;
 extern int fl_overlay_depth;
 
-void fltk3::GlWindow::make_overlay() {
+void fltk3::GLWindow::make_overlay() {
   if (overlay) return;
 
   GLContext context = fl_create_gl_context(this, g, 1);
@@ -180,9 +180,9 @@ void fltk3::GlWindow::make_overlay() {
   return;
 }
 
-int fltk3::GlWindow::can_do_overlay() {
+int fltk3::GLWindow::can_do_overlay() {
   if (!g) {
-    g = fltk3::GlChoice::find(mode_,alist);
+    g = fltk3::GLChoice::find(mode_,alist);
     if (!g) return 0;
   }
   return (g->pfd.bReserved & 15) != 0;
@@ -193,7 +193,7 @@ int fltk3::GlWindow::can_do_overlay() {
 
 #endif
 
-void fltk3::GlWindow::redraw_overlay() {
+void fltk3::GLWindow::redraw_overlay() {
   if (!shown()) return;
   make_overlay();
 #ifdef __APPLE__
@@ -201,14 +201,14 @@ void fltk3::GlWindow::redraw_overlay() {
 #else
 #ifndef WIN32
   if (overlay != this)
-    ((fltk3::GlWindow*)overlay)->redraw();
+    ((fltk3::GLWindow*)overlay)->redraw();
   else
 #endif
     damage(fltk3::DAMAGE_OVERLAY);
 #endif
 }
 
-void fltk3::GlWindow::make_overlay_current() {
+void fltk3::GLWindow::make_overlay_current() {
   make_overlay();
 #ifdef __APPLE__
   // this is not very useful, but unfortunately, Apple decided
@@ -223,7 +223,7 @@ void fltk3::GlWindow::make_overlay_current() {
 //  if (fl_overlay_depth)
 //    wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
 #else
-    ((fltk3::GlWindow*)overlay)->make_current();
+    ((fltk3::GLWindow*)overlay)->make_current();
 #endif
   } else
 #endif
@@ -231,12 +231,12 @@ void fltk3::GlWindow::make_overlay_current() {
 #endif
 }
 /** Hides the window if it is not this window, does nothing in WIN32. */
-void fltk3::GlWindow::hide_overlay() {
+void fltk3::GLWindow::hide_overlay() {
 #if HAVE_GL_OVERLAY
 #ifdef WIN32
   // nothing needs to be done?  Or should it be erased?
 #else
-  if (overlay && overlay!=this) ((fltk3::GlWindow*)overlay)->hide();
+  if (overlay && overlay!=this) ((fltk3::GLWindow*)overlay)->hide();
 #endif
 #endif
 }

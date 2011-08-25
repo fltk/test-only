@@ -31,7 +31,7 @@
 
 #if HAVE_GL
 CubeView::CubeView(int x,int y,int w,int h,const char *l)
-            : fltk3::GlWindow(x,y,w,h,l)
+            : fltk3::GLWindow(x,y,w,h,l)
 #else
 CubeView::CubeView(int x,int y,int w,int h,const char *l)
             : fltk3::Box(x,y,w,h,l)

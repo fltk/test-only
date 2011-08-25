@@ -249,9 +249,9 @@ namespace fltk3 {
    drawing to work. This <I>must</I> be done if you want to draw in
    normal windows with OpenGL with gl_start() and gl_end().
    It may be useful to call this so your X windows use the same visual
-   as an fltk3::GlWindow, which on some servers will reduce colormap flashing.
+   as an fltk3::GLWindow, which on some servers will reduce colormap flashing.
    
-   See fltk3::GlWindow for a list of additional values for the argument.
+   See fltk3::GLWindow for a list of additional values for the argument.
    */
   int gl_visual(int, int *alist=0); // platform dependent
   void own_colormap();

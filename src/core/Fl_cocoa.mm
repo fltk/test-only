@@ -3459,7 +3459,7 @@ void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_of
  Supports old Mac OS X versions that may use a couple of Carbon calls:
  GetKeys used by OS X 10.3 or before (in fltk3::get_key())
  PMSessionPageSetupDialog and PMSessionPrintDialog used by 10.4 or before (in fltk3::Printer::start_job())
- GetWindowPort used by 10.4 or before (in fltk3::GlChoice.cxx)
+ GetWindowPort used by 10.4 or before (in fltk3::GLChoice.cxx)
  */
 void *Fl_X::get_carbon_function(const char *function_name) {
   static void *carbon = NULL;

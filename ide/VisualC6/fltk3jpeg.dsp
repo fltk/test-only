@@ -83,187 +83,187 @@ LIB32=link.exe -lib
 # Name "fltk3jpeg - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jaricom.c
+SOURCE=..\..\src\fltk3jpeg\jaricom.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcarith.c
+SOURCE=..\..\src\fltk3jpeg\jcarith.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdarith.c
+SOURCE=..\..\src\fltk3jpeg\jdarith.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcapimin.c
+SOURCE=..\..\src\fltk3jpeg\jcapimin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcapistd.c
+SOURCE=..\..\src\fltk3jpeg\jcapistd.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jccoefct.c
+SOURCE=..\..\src\fltk3jpeg\jccoefct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jccolor.c
+SOURCE=..\..\src\fltk3jpeg\jccolor.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcdctmgr.c
+SOURCE=..\..\src\fltk3jpeg\jcdctmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jchuff.c
+SOURCE=..\..\src\fltk3jpeg\jchuff.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcinit.c
+SOURCE=..\..\src\fltk3jpeg\jcinit.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcmainct.c
+SOURCE=..\..\src\fltk3jpeg\jcmainct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcmarker.c
+SOURCE=..\..\src\fltk3jpeg\jcmarker.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcmaster.c
+SOURCE=..\..\src\fltk3jpeg\jcmaster.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcomapi.c
+SOURCE=..\..\src\fltk3jpeg\jcomapi.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcparam.c
+SOURCE=..\..\src\fltk3jpeg\jcparam.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcprepct.c
+SOURCE=..\..\src\fltk3jpeg\jcprepct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jcsample.c
+SOURCE=..\..\src\fltk3jpeg\jcsample.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jctrans.c
+SOURCE=..\..\src\fltk3jpeg\jctrans.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdapimin.c
+SOURCE=..\..\src\fltk3jpeg\jdapimin.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdapistd.c
+SOURCE=..\..\src\fltk3jpeg\jdapistd.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdatadst.c
+SOURCE=..\..\src\fltk3jpeg\jdatadst.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdatasrc.c
+SOURCE=..\..\src\fltk3jpeg\jdatasrc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdcoefct.c
+SOURCE=..\..\src\fltk3jpeg\jdcoefct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdcolor.c
+SOURCE=..\..\src\fltk3jpeg\jdcolor.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jddctmgr.c
+SOURCE=..\..\src\fltk3jpeg\jddctmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdhuff.c
+SOURCE=..\..\src\fltk3jpeg\jdhuff.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdinput.c
+SOURCE=..\..\src\fltk3jpeg\jdinput.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdmainct.c
+SOURCE=..\..\src\fltk3jpeg\jdmainct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdmarker.c
+SOURCE=..\..\src\fltk3jpeg\jdmarker.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdmaster.c
+SOURCE=..\..\src\fltk3jpeg\jdmaster.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdmerge.c
+SOURCE=..\..\src\fltk3jpeg\jdmerge.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdpostct.c
+SOURCE=..\..\src\fltk3jpeg\jdpostct.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdsample.c
+SOURCE=..\..\src\fltk3jpeg\jdsample.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jdtrans.c
+SOURCE=..\..\src\fltk3jpeg\jdtrans.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jerror.c
+SOURCE=..\..\src\fltk3jpeg\jerror.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jfdctflt.c
+SOURCE=..\..\src\fltk3jpeg\jfdctflt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jfdctfst.c
+SOURCE=..\..\src\fltk3jpeg\jfdctfst.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jfdctint.c
+SOURCE=..\..\src\fltk3jpeg\jfdctint.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jidctflt.c
+SOURCE=..\..\src\fltk3jpeg\jidctflt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jidctfst.c
+SOURCE=..\..\src\fltk3jpeg\jidctfst.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jidctint.c
+SOURCE=..\..\src\fltk3jpeg\jidctint.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jmemmgr.c
+SOURCE=..\..\src\fltk3jpeg\jmemmgr.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jmemnobs.c
+SOURCE=..\..\src\fltk3jpeg\jmemnobs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jquant1.c
+SOURCE=..\..\src\fltk3jpeg\jquant1.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jquant2.c
+SOURCE=..\..\src\fltk3jpeg\jquant2.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\jpeg\jutils.c
+SOURCE=..\..\src\fltk3jpeg\jutils.c
 # End Source File
 # End Target
 # End Project

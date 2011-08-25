@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -14,10 +14,10 @@ workspace FLTK {open
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
   build_env 64
 } {
-  folder Applications {open
+  folder Applications {
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
   } {
-    app_target Fluid {open
+    app_target Fluid {
       uuid_Xcode4_ProductReference {FD9750B2-CA9C-4856-A516-E56BD9B2E805}
       uuid_Xcode4_ProductFileReference {4616D958-4FAE-4BE9-921B-A868F80B6CC7}
       uuid_Xcode4_FluidBuildRule {30FE3F00-9876-4AE4-9F6E-35B6B4CAA24E}
@@ -632,54 +632,6 @@ workspace FLTK {open
           build_env 96
           list_env 124
           filename_and_path {include/fltk3/GIFImage.h}
-        }
-        file_ref {gl.h} {
-          uuid_Xcode4_BuildFile {171AF659-2712-45E4-917F-0971FA2C1040}
-          uuid_Xcode4_FileRef {AA155A86-0B3D-4238-A705-B8E83B16258B}
-          uuid_Xcode4_BuildFileInHeaders {53065D00-00D5-4F2D-B6B0-0238CFA68C55}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/gl.h}
-        }
-        file_ref {gl2opengl.h} {
-          uuid_Xcode4_BuildFile {A18A80EF-C434-4B35-BE46-702905667C1D}
-          uuid_Xcode4_FileRef {6AC61280-F875-42D8-9A44-087A036E896A}
-          uuid_Xcode4_BuildFileInHeaders {72812FEB-26EE-488F-9EEC-B4ED02F3DE4D}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/gl2opengl.h}
-        }
-        file_ref {glDraw.h} {
-          uuid_Xcode4_BuildFile {0CE51E55-FA96-44E7-B2E8-67DD96F3C30C}
-          uuid_Xcode4_FileRef {B1017553-3892-425D-AD7B-921D27DF6DB1}
-          uuid_Xcode4_BuildFileInHeaders {48257DCA-61D9-4813-AF09-08C1AA38665E}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/glDraw.h}
-        }
-        file_ref {glu.h} {
-          uuid_Xcode4_BuildFile {E5E7BD83-9048-4F70-B075-3AEBA4E431F3}
-          uuid_Xcode4_FileRef {853E4A1D-B602-42DC-8BBD-FAA73C103971}
-          uuid_Xcode4_BuildFileInHeaders {4DB7B8EB-64B3-4C69-9F0A-88278049A0C9}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/glu.h}
-        }
-        file_ref {glut.h} {
-          uuid_Xcode4_BuildFile {8AB70A97-595C-4E23-B623-688B0FF2BCE4}
-          uuid_Xcode4_FileRef {D910C663-E83B-40C8-B04C-A74F18F324D9}
-          uuid_Xcode4_BuildFileInHeaders {665EED20-74C2-4B26-A298-617066EA7551}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/glut.h}
-        }
-        file_ref {GlWindow.h} {
-          uuid_Xcode4_BuildFile {8949C41C-2C1C-4C70-B1D1-CD2E7FF04607}
-          uuid_Xcode4_FileRef {F9673F32-154D-455D-9944-259374A4A13D}
-          uuid_Xcode4_BuildFileInHeaders {7A5AD5C3-4B24-4558-AD62-1B5C2E02E9F8}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/GlWindow.h}
         }
         file_ref {Group.h} {
           uuid_Xcode4_BuildFile {2D46FE73-1213-4993-9C58-3AD4F912D0F1}
@@ -1498,7 +1450,7 @@ workspace FLTK {open
           filename_and_path {include/fltk3/Xutf8.h}
         }
       }
-      folder Sources {open
+      folder Sources {
         uuid_Xcode4_Group {91990322-0AF9-42F2-A077-713540EE5AB1}
       } {
         file_ref {Fl_cocoa.mm} {
@@ -1525,7 +1477,7 @@ workspace FLTK {open
           list_env 96
           filename_and_path {src/core/Fl_Quartz_Printer.mm}
         }
-        file_ref {run.cxx} {selected
+        file_ref {run.cxx} {
           uuid_Xcode4_BuildFile {5E78E80A-9D1C-4351-9F3E-B2944D622982}
           uuid_Xcode4_FileRef {81045D02-0D89-472C-BAE7-D77BD81C23A2}
           uuid_Xcode4_BuildFileInSources {008DDC0F-78E3-4A40-8F42-9408DA34594C}
@@ -2468,7 +2420,7 @@ workspace FLTK {open
         }
       }
     }
-    lib_target fltk3gl {
+    lib_target fltk3gl {open
       uuid_Xcode4_FluidBuildRule {C15C877E-5712-4AB2-B7BE-7B8A5F1D6F49}
       uuid_Xcode4_ProductFileReference {47405B55-C42D-4839-B6BF-F6B5BA410AF3}
       uuid_Xcode4_FrameworksBuildPhase {A02CA389-C019-4CB2-82B7-1CC18C255A72}
@@ -2485,63 +2437,128 @@ workspace FLTK {open
       target_path lib
       makefile_path src
     } {
-      folder Sources {
+      folder Headers {open
+        uuid_Xcode4_Group {C95C7D1D-26EB-4733-85B0-948B0374F9C7}
+      } {
+        file_ref {all.h} {
+          uuid_Xcode4_BuildFile {7D7EA0F0-238C-43DF-BC9E-2E75545A7561}
+          uuid_Xcode4_FileRef {CED79020-45B9-48AF-8CCD-2ACD47341619}
+          uuid_Xcode4_BuildFileInHeaders {B7A25ADB-643D-4390-A61A-68164BC87FF4}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/all.h}
+        }
+        file_ref {fltk3gl.h} {
+          uuid_Xcode4_BuildFile {0B3436B4-295C-420F-BF1E-4F44384233C1}
+          uuid_Xcode4_FileRef {53A9932F-79EC-4FD5-A004-1770F7BAEE86}
+          uuid_Xcode4_BuildFileInHeaders {EBA51047-3BA1-4441-ABEC-08012E3A2A19}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/fltk3gl.h}
+        }
+        file_ref {gl.h} {
+          uuid_Xcode4_BuildFile {171AF659-2712-45E4-917F-0971FA2C1040}
+          uuid_Xcode4_FileRef {AA155A86-0B3D-4238-A705-B8E83B16258B}
+          uuid_Xcode4_BuildFileInHeaders {53065D00-00D5-4F2D-B6B0-0238CFA68C55}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/gl.h}
+        }
+        file_ref {glDraw.h} {
+          uuid_Xcode4_BuildFile {0CE51E55-FA96-44E7-B2E8-67DD96F3C30C}
+          uuid_Xcode4_FileRef {B1017553-3892-425D-AD7B-921D27DF6DB1}
+          uuid_Xcode4_BuildFileInHeaders {48257DCA-61D9-4813-AF09-08C1AA38665E}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/glDraw.h}
+        }
+        file_ref {glu.h} {
+          uuid_Xcode4_BuildFile {E5E7BD83-9048-4F70-B075-3AEBA4E431F3}
+          uuid_Xcode4_FileRef {853E4A1D-B602-42DC-8BBD-FAA73C103971}
+          uuid_Xcode4_BuildFileInHeaders {4DB7B8EB-64B3-4C69-9F0A-88278049A0C9}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/glu.h}
+        }
+        file_ref {glut.h} {
+          uuid_Xcode4_BuildFile {8AB70A97-595C-4E23-B623-688B0FF2BCE4}
+          uuid_Xcode4_FileRef {D910C663-E83B-40C8-B04C-A74F18F324D9}
+          uuid_Xcode4_BuildFileInHeaders {665EED20-74C2-4B26-A298-617066EA7551}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/glut.h}
+        }
+        file_ref {GLWindow.h} {
+          uuid_Xcode4_BuildFile {8949C41C-2C1C-4C70-B1D1-CD2E7FF04607}
+          uuid_Xcode4_FileRef {F9673F32-154D-455D-9944-259374A4A13D}
+          uuid_Xcode4_BuildFileInHeaders {7A5AD5C3-4B24-4558-AD62-1B5C2E02E9F8}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3gl/GLWindow.h}
+        }
+      }
+      folder Sources {open
         uuid_Xcode4_Group {AF239AB5-D7A8-4916-B8FD-AB46E12676A0}
       } {
-        file_ref {Fl_Gl_Choice.cxx} {
+        file_ref {GLChoice.cxx} {
           uuid_Xcode4_BuildFileInSources {E1C77AA3-F9A7-4CE9-8892-06DA277C3538}
           uuid_Xcode4_FileRef {DE5C107D-166F-42F2-9042-0A08FBEF3B60}
-          filename_and_path {src/core/Fl_Gl_Choice.cxx}
+          filename_and_path {src/fltk3gl/GLChoice.cxx}
         }
-        file_ref {Fl_Gl_Device_Plugin.cxx} {
+        file_ref {GLDevicePlugin.cxx} {
           uuid_Xcode4_BuildFileInSources {E8D5789A-7A69-45A6-9900-2123CBE99BDE}
           uuid_Xcode4_FileRef {391E3B0B-3499-46A4-B0FC-8BA7EC865531}
-          filename_and_path {src/core/Fl_Gl_Device_Plugin.cxx}
+          filename_and_path {src/fltk3gl/GLDevicePlugin.cxx}
         }
-        file_ref {Fl_Gl_Overlay.cxx} {
+        file_ref {GLOverlay.cxx} {
           uuid_Xcode4_BuildFileInSources {070BED62-ED38-45D1-BDFE-569E9EBED411}
           uuid_Xcode4_FileRef {07BC5E29-F3DD-4EF8-A362-BEB97204BFDA}
-          filename_and_path {src/core/Fl_Gl_Overlay.cxx}
+          filename_and_path {src/fltk3gl/GLOverlay.cxx}
         }
-        file_ref {Fl_Gl_Window.cxx} {
+        file_ref {GLWindow.cxx} {
           uuid_Xcode4_BuildFileInSources {32BC3E68-841A-4283-B00D-A5EB305FD0AA}
           uuid_Xcode4_FileRef {53DC629E-53C3-498E-91AD-57A275B5DB21}
-          filename_and_path {src/core/Fl_Gl_Window.cxx}
+          filename_and_path {src/fltk3gl/GLWindow.cxx}
         }
         file_ref {freeglut_geometry.cxx} {
           uuid_Xcode4_BuildFileInSources {ECB8D856-36CB-46A6-91F6-208478C0CBF3}
           uuid_Xcode4_FileRef {FFAAC078-4DCA-4EEE-926B-22E2398B7046}
-          filename_and_path {src/core/freeglut_geometry.cxx}
+          filename_and_path {src/fltk3gl/freeglut_geometry.cxx}
         }
         file_ref {freeglut_stroke_mono_roman.cxx} {
           uuid_Xcode4_BuildFileInSources {75788B42-B62E-4C4F-9E61-4B91C7324344}
           uuid_Xcode4_FileRef {504FF704-8B78-42E2-BB35-33253373D40F}
-          filename_and_path {src/core/freeglut_stroke_mono_roman.cxx}
+          filename_and_path {src/fltk3gl/freeglut_stroke_mono_roman.cxx}
         }
         file_ref {freeglut_stroke_roman.cxx} {
           uuid_Xcode4_BuildFileInSources {9CDFF782-50BD-4118-B043-8B22A9B2F2CC}
           uuid_Xcode4_FileRef {B2D08460-836E-4E9C-A77B-DBD6C1A1A460}
-          filename_and_path {src/core/freeglut_stroke_roman.cxx}
+          filename_and_path {src/fltk3gl/freeglut_stroke_roman.cxx}
         }
         file_ref {freeglut_teapot.cxx} {
           uuid_Xcode4_BuildFileInSources {CE3D60CB-29C8-424A-91AA-1742E2155791}
           uuid_Xcode4_FileRef {9F61A674-BE2D-4567-9B0F-B0A7A83F337A}
-          filename_and_path {src/core/freeglut_teapot.cxx}
+          filename_and_path {src/fltk3gl/freeglut_teapot.cxx}
         }
         file_ref {gl_draw.cxx} {
           uuid_Xcode4_BuildFileInSources {008A289F-3FCA-4E5D-9F9D-A6601947D877}
           uuid_Xcode4_FileRef {CBE8D5E4-01A5-438B-B144-4FFA652AE41A}
-          filename_and_path {src/core/gl_draw.cxx}
+          filename_and_path {src/fltk3gl/gl_draw.cxx}
+        }
+        file_ref {gl_start.cxx} {
+          uuid_Xcode4_BuildFileInSources {DED2BAE9-D7AB-43CB-ADFA-DCC2073A5321}
+          uuid_Xcode4_FileRef {EC3E5EA3-09BC-42DA-97C6-42B836F8BDA2}
+          filename_and_path {src/fltk3gl/gl_start.cxx}
         }
         file_ref {glut_compatability.cxx} {
           uuid_Xcode4_BuildFileInSources {4432E2FF-063E-407F-B040-F7168FACEC8A}
           uuid_Xcode4_FileRef {7458D589-B1BE-4EFD-8D40-E5B8F83EDDDE}
-          filename_and_path {src/core/glut_compatability.cxx}
+          filename_and_path {src/fltk3gl/glut_compatability.cxx}
         }
         file_ref {glut_font.cxx} {
           uuid_Xcode4_BuildFileInSources {52743D1F-C453-4A9C-B7FF-24D5110D8886}
           uuid_Xcode4_FileRef {8A51D2BA-6224-4A81-A7C0-1FF09F60F380}
-          filename_and_path {src/core/glut_font.cxx}
+          filename_and_path {src/fltk3gl/glut_font.cxx}
         }
       }
       folder Libraries {open

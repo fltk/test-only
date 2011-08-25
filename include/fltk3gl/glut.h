@@ -42,8 +42,8 @@
 
 #include "gl.h"
 
-#include "run.h"
-#include "GlWindow.h"
+#include <fltk3/run.h>
+#include "GLWindow.h"
 
 class Fl_Glut_Window;
 
@@ -53,7 +53,7 @@ namespace fltk3 {
    GLUT is emulated using this window class and these static variables
    (plus several more static variables hidden in glut_compatability.cxx):
    */
-  class FLTK3_EXPORT GlutWindow : public GlWindow {
+  class FLTK3_EXPORT GlutWindow : public GLWindow {
 
     friend class ::Fl_Glut_Window;
 

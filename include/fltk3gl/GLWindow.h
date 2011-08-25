@@ -1,5 +1,5 @@
 //
-// "$Id: GlWindow.h 8157 2011-01-01 14:01:53Z AlbrechtS $"
+// "$Id: GLWindow.h 8157 2011-01-01 14:01:53Z AlbrechtS $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,12 +26,12 @@
 //
 
 /* \file
- fltk3::GlWindow widget . */
+ fltk3::GLWindow widget . */
 
 #ifndef Fltk3_Gl_Window_H
 #define Fltk3_Gl_Window_H
 
-#include "Window.h"
+#include <fltk3/Window.h>
 
 #ifndef GLContext
 /**
@@ -44,13 +44,13 @@ class Fl_Gl_Window;
 
 namespace fltk3 {
   
-  class GlChoice; // structure to hold result of glXChooseVisual
+  class GLChoice; // structure to hold result of glXChooseVisual
 
   /**
-   The fltk3::GlWindow widget sets things up so OpenGL works.
+   The fltk3::GLWindow widget sets things up so OpenGL works.
    
    It also keeps an OpenGL "context" for that window, so that changes to the
-   lighting and projection may be reused between redraws. fltk3::GlWindow
+   lighting and projection may be reused between redraws. fltk3::GLWindow
    also flushes the OpenGL streams and swaps buffers after draw() returns.
    
    OpenGL hardware typically provides some overlay bit planes, which
@@ -60,19 +60,19 @@ namespace fltk3 {
    very well for single-buffered.
    
    Please note that the FLTK drawing and clipping functions
-   will not work inside an fltk3::GlWindow. All drawing
+   will not work inside an fltk3::GLWindow. All drawing
    should be done using OpenGL calls exclusively.
-   Even though fltk3::GlWindow is derived from fltk3::Group, 
+   Even though fltk3::GLWindow is derived from fltk3::Group, 
    it is not useful to add other FLTK Widgets as children,
    unless those widgets are modified to draw using OpenGL calls.
    */
-  class FLTK3_EXPORT GlWindow : public fltk3::Window {
+  class FLTK3_EXPORT GLWindow : public fltk3::Window {
     
     friend class ::Fl_Gl_Window;
 
     int mode_;
     const int *alist;
-    GlChoice *g;
+    GLChoice *g;
     GLContext context_;
     char valid_f_;
     char damage1_; // damage() of back buffer
@@ -121,7 +121,7 @@ namespace fltk3 {
      */
     char valid() const {return valid_f_ & 1;}
     /**
-     See char fltk3::GlWindow::valid() const 
+     See char fltk3::GLWindow::valid() const 
      */
     void valid(char v) {if (v) valid_f_ |= 1; else valid_f_ &= 0xfe;}
     void invalidate();
@@ -129,12 +129,12 @@ namespace fltk3 {
     /**
      Will only be set if the 
      OpenGL context is created or recreated. It differs from
-     fltk3::GlWindow::valid() which is also set whenever the context
+     fltk3::GLWindow::valid() which is also set whenever the context
      changes size.
      */
     char context_valid() const {return valid_f_ & 2;}
     /**
-     See char fltk3::GlWindow::context_valid() const 
+     See char fltk3::GLWindow::context_valid() const 
      */
     void context_valid(char v) {if (v) valid_f_ |= 2; else valid_f_ &= 0xfd;}
     
@@ -213,26 +213,26 @@ namespace fltk3 {
     void make_overlay_current();
     
     // Note: Doxygen docs in Widget.h to avoid redundancy.
-    virtual fltk3::GlWindow* as_gl_window() {return this;}
+    virtual fltk3::GLWindow* as_gl_window() {return this;}
     
-    ~GlWindow();
+    ~GLWindow();
     /**
-     Creates a new fltk3::GlWindow widget using the given size, and label string. 
+     Creates a new fltk3::GLWindow widget using the given size, and label string. 
      The default boxtype is fltk3::NO_BOX. The default mode is fltk3::RGB|fltk3::DOUBLE|fltk3::DEPTH.
      */
-    GlWindow(int W, int H, const char *l=0) : fltk3::Window(W,H,l) {init();}
+    GLWindow(int W, int H, const char *l=0) : fltk3::Window(W,H,l) {init();}
     /**
-     Creates a new fltk3::GlWindow widget using the given position,
+     Creates a new fltk3::GLWindow widget using the given position,
      size, and label string. The default boxtype is fltk3::NO_BOX. The
      default mode is fltk3::RGB|fltk3::DOUBLE|fltk3::DEPTH.
      */
     
-    GlWindow(int X, int Y, int W, int H, const char *l=0)
+    GLWindow(int X, int Y, int W, int H, const char *l=0)
     : fltk3::Window(X,Y,W,H,l) {init();}
     
   protected:
     /**
-     Draws the fltk3::GlWindow.
+     Draws the fltk3::GLWindow.
      
      You \e \b must override the draw() method.
      */
@@ -244,5 +244,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: GlWindow.h 8157 2011-01-01 14:01:53Z AlbrechtS $".
+// End of "$Id: GLWindow.h 8157 2011-01-01 14:01:53Z AlbrechtS $".
 //

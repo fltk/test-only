@@ -128,7 +128,7 @@ namespace fltk3 {
    *
    fltk3::Printer allows to use all FLTK drawing, color, text, and clip functions, and to have them operate
    on printed page(s). There are two main, non exclusive, ways to use it.
-   <ul><li>Print any widget (standard, custom, fltk3::Window, fltk3::GlWindow) as it appears 
+   <ul><li>Print any widget (standard, custom, fltk3::Window, fltk3::GLWindow) as it appears 
    on screen, with optional translation, scaling and rotation. This is done by calling print_widget(),
    print_window() or print_window_part().
    <li>Use a series of FLTK graphics commands (e.g., font, text, lines, colors, clip, image) to

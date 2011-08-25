@@ -83,7 +83,7 @@ LIB32=link.exe -lib
 # Name "fltk3 - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl.cxx
+SOURCE=..\..\src\fltk3\run.cxx
 # End Source File
 # Begin Source File
 

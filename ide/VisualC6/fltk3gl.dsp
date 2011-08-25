@@ -83,47 +83,51 @@ LIB32=link.exe -lib
 # Name "fltk3gl - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Gl_Choice.cxx
+SOURCE=..\..\src\fltk3gl\GLChoice.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Gl_Device_Plugin.cxx
+SOURCE=..\..\src\fltk3gl\GLDevicePlugin.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Gl_Overlay.cxx
+SOURCE=..\..\src\fltk3gl\GLOverlay.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\Fl_Gl_Window.cxx
+SOURCE=..\..\src\fltk3gl\GLWindow.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\freeglut_geometry.cxx
+SOURCE=..\..\src\fltk3gl\freeglut_geometry.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\freeglut_stroke_mono_roman.cxx
+SOURCE=..\..\src\fltk3gl\freeglut_stroke_mono_roman.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\freeglut_stroke_roman.cxx
+SOURCE=..\..\src\fltk3gl\freeglut_stroke_roman.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\freeglut_teapot.cxx
+SOURCE=..\..\src\fltk3gl\freeglut_teapot.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\gl_draw.cxx
+SOURCE=..\..\src\fltk3gl\gl_draw.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\glut_compatability.cxx
+SOURCE=..\..\src\fltk3gl\gl_start.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\core\glut_font.cxx
+SOURCE=..\..\src\fltk3gl\glut_compatability.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3gl\glut_font.cxx
 # End Source File
 # End Target
 # End Project
