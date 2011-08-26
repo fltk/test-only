@@ -62,7 +62,7 @@
 #  include <fltk3/run.h>
 #  include <fltk3/draw.h>
 #  include <fltk3/x.h>
-#  include "Fl_XColor.H"
+#  include "xcolor.h"
 #  include "flstring.h"
 
 static XImage xi;	// template used to pass info to X

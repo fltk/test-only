@@ -44,7 +44,7 @@
 #include "print_panel.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/core/flstring.h"
+#include "flstring.h"
 #include <fltk3/Preferences.h>
 #include <fltk3/IntInput.h>
 

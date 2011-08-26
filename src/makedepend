@@ -1751,7 +1751,7 @@ fltk3gl/GLChoice.o: ../include/config.h ../include/fltk3/run.h
 fltk3gl/GLChoice.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 fltk3gl/GLChoice.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
 fltk3gl/GLChoice.o: ../include/fltk3/enumerations.h ../include/fltk3/x.h
-fltk3gl/GLChoice.o: ../include/fltk3/Window.h fltk3gl/GLChoice.H
+fltk3gl/GLChoice.o: ../include/fltk3/Window.h fltk3gl/GLChoice.h
 fltk3gl/GLChoice.o: ../include/fltk3gl/glDraw.h ../include/fltk3gl/gl.h
 fltk3gl/GLChoice.o: ../include/fltk3/enumerations.h fltk3/flstring.h
 fltk3gl/GLChoice.o: ../include/fltk3/Export.h ../include/fltk3/utf8.h
@@ -1776,13 +1776,13 @@ fltk3gl/GLDevicePlugin.o: ../include/fltk3/Rectangle.h
 fltk3gl/GLDevicePlugin.o: ../include/fltk3/draw.h
 fltk3gl/GLDevicePlugin.o: ../include/fltk3/enumerations.h
 fltk3gl/GLDevicePlugin.o: ../include/fltk3/PostScript.h
-fltk3gl/GLDevicePlugin.o: ../include/fltk3gl/GLWindow.h fltk3gl/GLChoice.H
+fltk3gl/GLDevicePlugin.o: ../include/fltk3gl/GLWindow.h fltk3gl/GLChoice.h
 fltk3gl/GLDevicePlugin.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 fltk3gl/GLOverlay.o: ../include/config.h ../include/fltk3/run.h
 fltk3gl/GLOverlay.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 fltk3gl/GLOverlay.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
 fltk3gl/GLOverlay.o: ../include/fltk3/enumerations.h ../include/fltk3/x.h
-fltk3gl/GLOverlay.o: ../include/fltk3/Window.h fltk3gl/GLChoice.H
+fltk3gl/GLOverlay.o: ../include/fltk3/Window.h fltk3gl/GLChoice.h
 fltk3gl/GLOverlay.o: ../include/fltk3gl/GLWindow.h ../include/fltk3/Window.h
 fltk3gl/GLOverlay.o: ../include/fltk3/Group.h ../include/fltk3/Widget.h
 fltk3gl/GLOverlay.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
@@ -1794,7 +1794,7 @@ fltk3gl/GLWindow.o: ../include/fltk3/Export.h ../include/fltk3/types.h
 fltk3gl/GLWindow.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
 fltk3gl/GLWindow.o: ../include/fltk3/run.h ../include/fltk3/utf8.h
 fltk3gl/GLWindow.o: ../include/fltk3/Xutf8.h ../include/fltk3/x.h
-fltk3gl/GLWindow.o: ../include/fltk3/Window.h fltk3gl/GLChoice.H
+fltk3gl/GLWindow.o: ../include/fltk3/Window.h fltk3gl/GLChoice.h
 fltk3gl/GLWindow.o: ../include/fltk3gl/GLWindow.h ../include/fltk3/Window.h
 fltk3gl/GLWindow.o: ../include/fltk3/Group.h ../include/fltk3/Widget.h
 fltk3gl/GLWindow.o: ../include/fltk3/utf8.h
@@ -1878,7 +1878,7 @@ fltk3gl/gl_draw.o: ../include/fltk3/Object.h ../include/fltk3/Plugin.h
 fltk3gl/gl_draw.o: ../include/fltk3/Preferences.h ../include/fltk3/Image.h
 fltk3gl/gl_draw.o: ../include/fltk3/Bitmap.h ../include/fltk3/Image.h
 fltk3gl/gl_draw.o: ../include/fltk3/Pixmap.h ../include/fltk3/RGBImage.h
-fltk3gl/gl_draw.o: fltk3gl/GLChoice.H fltk3/font.h ../include/fltk3/Xutf8.h
+fltk3gl/gl_draw.o: fltk3gl/GLChoice.h fltk3/font.h ../include/fltk3/Xutf8.h
 fltk3gl/gl_draw.o: ../include/fltk3/utf8.h
 fltk3gl/gl_start.o: ../include/config.h ../include/fltk3/run.h
 fltk3gl/gl_start.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
@@ -1893,7 +1893,7 @@ fltk3gl/gl_start.o: ../include/fltk3/Device.h ../include/fltk3/Object.h
 fltk3gl/gl_start.o: ../include/fltk3/Plugin.h ../include/fltk3/Preferences.h
 fltk3gl/gl_start.o: ../include/fltk3/Image.h ../include/fltk3/Bitmap.h
 fltk3gl/gl_start.o: ../include/fltk3/Image.h ../include/fltk3/Pixmap.h
-fltk3gl/gl_start.o: ../include/fltk3/RGBImage.h fltk3gl/GLChoice.H
+fltk3gl/gl_start.o: ../include/fltk3/RGBImage.h fltk3gl/GLChoice.h
 fltk3gl/glut_compatability.o: fltk3/flstring.h ../include/fltk3/Export.h
 fltk3gl/glut_compatability.o: ../include/config.h ../include/fltk3gl/glut.h
 fltk3gl/glut_compatability.o: ../include/fltk3gl/gl.h

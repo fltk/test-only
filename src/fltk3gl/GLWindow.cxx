@@ -38,7 +38,7 @@ static int temp = fl_gl_load_plugin;
 #ifdef __APPLE__
 #include <fltk3gl/gl.h>
 #endif
-#include "GLChoice.H"
+#include "GLChoice.h"
 #include <fltk3gl/GLWindow.h>
 #include <stdlib.h>
 #include <fltk3/utf8.h>

@@ -30,7 +30,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/x.h>
-#include "GLChoice.H"
+#include "GLChoice.h"
 #include <fltk3gl/GLWindow.h>
 #include <stdlib.h>
 

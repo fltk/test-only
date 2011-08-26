@@ -31,7 +31,7 @@
 #  include <fltk3/run.h>
 #  include <fltk3/x.h>
 #  include <stdlib.h>
-#  include "GLChoice.H"
+#  include "GLChoice.h"
 #  include <fltk3gl/glDraw.h>
 #  include "../fltk3/flstring.h"
 #  include <fltk3/utf8.h>

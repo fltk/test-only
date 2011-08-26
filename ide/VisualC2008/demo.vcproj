@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="Demo"
+	Name="demo"
 	ProjectGUID="{AAC13E91-C3A5-4742-8D97-26F6E3019AE4}"
-	RootNamespace="Demo"
+	RootNamespace="demo"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\test"
-			IntermediateDirectory=".\Demo_debug"
+			IntermediateDirectory=".\demo_debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -39,7 +39,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Demo_debug\Demo.tlb"
+				TypeLibraryName=".\demo_debug\demo.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -49,10 +49,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Demo_debug\Demo.pch"
-				AssemblerListingLocation=".\Demo_debug\"
-				ObjectFile=".\Demo_debug\"
-				ProgramDataBaseFileName=".\Demo_debug\"
+				PrecompiledHeaderFile=".\demo_debug\demo.pch"
+				AssemblerListingLocation=".\demo_debug\"
+				ObjectFile=".\demo_debug\"
+				ProgramDataBaseFileName=".\demo_debug\"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -71,13 +71,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltk3d.lib comctl32.lib"
-				OutputFile="..\..\test\Demod.exe"
+				OutputFile="..\..\test\demod.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Demo_debug\Demo.pdb"
+				ProgramDatabaseFile=".\demo_debug\demo.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -108,7 +108,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\test"
-			IntermediateDirectory=".\Demo_release"
+			IntermediateDirectory=".\demo_release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -129,7 +129,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Demo_release\Demo.tlb"
+				TypeLibraryName=".\demo_release\demo.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -141,10 +141,10 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Demo_release\Demo.pch"
-				AssemblerListingLocation=".\Demo_release\"
-				ObjectFile=".\Demo_release\"
-				ProgramDataBaseFileName=".\Demo_release\"
+				PrecompiledHeaderFile=".\demo_release\demo.pch"
+				AssemblerListingLocation=".\demo_release\"
+				ObjectFile=".\demo_release\"
+				ProgramDataBaseFileName=".\demo_release\"
 				SuppressStartupBanner="true"
 				CompileAs="0"
 			/>
@@ -162,12 +162,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltk3.lib comctl32.lib"
-				OutputFile="..\..\test\Demo.exe"
+				OutputFile="..\..\test\demo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib"
 				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Demo_release\Demo.pdb"
+				ProgramDatabaseFile=".\demo_release\demo.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"

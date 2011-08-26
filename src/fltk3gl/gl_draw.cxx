@@ -36,7 +36,7 @@
 #include <fltk3/x.h>
 #include <fltk3/draw.h>
 #include <fltk3/Device.h>
-#include "GLChoice.H"
+#include "GLChoice.h"
 #include "../fltk3/font.h"
 #include <fltk3/utf8.h>
 

@@ -210,7 +210,7 @@ cube.o: ../include/fltk3/PostScript.h
 CubeView.o: CubeView.h ../include/config.h ../include/fltk3/run.h
 CubeView.o: ../include/fltk3/utf8.h ../include/fltk3/Export.h
 CubeView.o: ../include/fltk3/types.h ../include/fltk3/Xutf8.h
-CubeView.o: ../include/fltk3/enumerations.h ../include/fltk3gl/GlWindow.h
+CubeView.o: ../include/fltk3/enumerations.h ../include/fltk3gl/GLWindow.h
 CubeView.o: ../include/fltk3/Window.h ../include/fltk3gl/gl.h
 CubeView.o: ../include/fltk3/enumerations.h
 CubeMain.o: ../include/config.h ../include/fltk3/run.h
@@ -223,7 +223,7 @@ CubeMain.o: ../include/fltk3/Rectangle.h ../include/fltk3/Object.h
 CubeMain.o: ../include/fltk3/Wrapper.h ../include/fltk3/Widget.h
 CubeMain.o: ../include/fltk3/Group.h ../include/fltk3/Roller.h
 CubeMain.o: ../include/fltk3/Valuator.h ../include/fltk3/Slider.h
-CubeMain.o: ../include/fltk3/Box.h CubeView.h ../include/fltk3gl/GlWindow.h
+CubeMain.o: ../include/fltk3/Box.h CubeView.h ../include/fltk3gl/GLWindow.h
 CubeMain.o: ../include/fltk3/Window.h ../include/fltk3gl/gl.h
 CubeMain.o: ../include/fltk3/enumerations.h ../include/fltk3/ValueSlider.h
 CubeMain.o: ../include/fltk3/Slider.h

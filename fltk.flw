@@ -12,7 +12,6 @@ workspace FLTK {open selected
   uuid_Xcode4_ReleaseBuildConfiguration {C5259E66-FBF8-43A2-B30F-8D59BBE3CF16}
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
-  build_env 1
 } {
   folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
@@ -3229,7 +3228,7 @@ workspace FLTK {open selected
   folder Tests {
     uuid_Xcode4_Group {5B388C4A-A5BB-4166-B79C-7335DA628E4D}
   } {
-    app_target Demo {
+    app_target demo {
       uuid_Xcode4_FluidBuildRule {2D727B96-E7A2-4AE3-9D7A-4F7F659C111E}
       uuid_Xcode4_CopyFilesBuildPhase {5CEA130D-C6C9-4262-85E4-33EDAE54E1AF}
       uuid_Xcode4_ProductFileReference {84AB5A59-0B0A-4F0C-8A1E-D4A51C07CE22}

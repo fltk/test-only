@@ -215,6 +215,8 @@ void Fl_Menu_Item_Type::write_static() {
       write_c("  ((%s*)(o", k);
       Fl_Type* t = parent; while (t->is_menu_item()) t = t->parent;
       Fl_Type *q = 0;
+      if (t && !strcmp(t->type_name(), "InputChoice"))
+        write_c("->parent()");
       for (t = t->parent; t && t->is_widget() && !is_class(); q = t, t = t->parent) 
         write_c("->parent()");
       if (!q || strcmp(q->type_name(), "widget_class"))

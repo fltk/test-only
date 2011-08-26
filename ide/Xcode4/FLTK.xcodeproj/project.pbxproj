@@ -4296,7 +4296,7 @@
 		F7D33A211C18D89A010BD86F /* demo.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demo.cxx; path = ../../test/demo.cxx; sourceTree = SOURCE_ROOT; };
 		ECA7517BC91AD72F47C2906D /* demo.menu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = demo.menu; path = ../../test/demo.menu; sourceTree = SOURCE_ROOT; };
 		3B0CB05A4901BC51AEEE2EF4 /* CoreFoundation.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		84AB5A5944065EBB1C07CE22 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84AB5A5944065EBB1C07CE22 /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D06E7D8CF94CB0498A70787 /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = adjuster.cxx; path = ../../test/adjuster.cxx; sourceTree = SOURCE_ROOT; };
 		A7E21FA5BAC62C721A556B3A /* adjuster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adjuster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD16450F6D272EFBF36C2AAF /* arc.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arc.cxx; path = ../../test/arc.cxx; sourceTree = SOURCE_ROOT; };
@@ -5157,7 +5157,7 @@
 				06A7B68E2100DB960872987D /* fltk3png.framework */,
 				C03975F619684D3461888340 /* fltk3jpeg.framework */,
 				AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */,
-				84AB5A5944065EBB1C07CE22 /* Demo.app */,
+				84AB5A5944065EBB1C07CE22 /* demo.app */,
 				A7E21FA5BAC62C721A556B3A /* adjuster.app */,
 				5DBEAD2FAC3F38E608805827 /* arc.app */,
 				4DC5C5FFB3FF63725C76B0BF /* ask.app */,
@@ -5901,7 +5901,7 @@
 			name = Dependencies;
 			sourceTree = "<group>";
 		};
-		4FE4FAD2FE23BEC9572EFB87 /* Demo */ = {
+		4FE4FAD2FE23BEC9572EFB87 /* demo */ = {
 			isa = PBXGroup;
 			children = (
 				F7D33A211C18D89A010BD86F /* demo.cxx */,
@@ -5909,7 +5909,7 @@
 				07C5E7CFC29D2362DB721D90 /* Dependencies */,
 				3B0CB05A4901BC51AEEE2EF4 /* CoreFoundation.framework */,
 			);
-			name = Demo;
+			name = demo;
 			sourceTree = "<group>";
 		};
 		2D1A26A5E5CDC4CC29939DA3 /* adjuster */ = {
@@ -6492,7 +6492,7 @@
 		5B388C4AE4DDC4A9DA628E4D /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				4FE4FAD2FE23BEC9572EFB87 /* Demo */,
+				4FE4FAD2FE23BEC9572EFB87 /* demo */,
 				2D1A26A5E5CDC4CC29939DA3 /* adjuster */,
 				CC5DA609F462A5BD2C1EFFEB /* arc */,
 				531972FCEFA0AF92CB9F7A71 /* ask */,
@@ -6920,9 +6920,9 @@
 			productReference = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		CDB664E8321BA71442DD3E90 /* Demo */ = {
+		CDB664E8321BA71442DD3E90 /* demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 107353D703161605FE85ABAA /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildConfigurationList = 107353D703161605FE85ABAA /* Build configuration list for PBXNativeTarget "demo" */;
 			buildPhases = (
 				21E86F07351623FACECE5432 /* Resources */,
 				B3C4660E4166F2F77A8F35F3 /* Sources */,
@@ -7003,9 +7003,9 @@
 				EAD2BC52B71CC15485F436FE /* valuators */,
 				984398501521C2EEA4EA4FE7 /* Fluid */,
 			);
-			name = Demo;
-			productName = Demo;
-			productReference = 84AB5A5944065EBB1C07CE22 /* Demo.app */;
+			name = demo;
+			productName = demo;
+			productReference = 84AB5A5944065EBB1C07CE22 /* demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4A3556DA840F389B5E85F061 /* adjuster */ = {
@@ -8444,7 +8444,7 @@
 				87465A7F0F0821C6F896CA29 /* fltk3png */,
 				E08AAC0C48D8A8B2784F6D46 /* fltk3jpeg */,
 				B5BA5465BD7A0C8F93B338C7 /* fltk3zlib */,
-				CDB664E8321BA71442DD3E90 /* Demo */,
+				CDB664E8321BA71442DD3E90 /* demo */,
 				4A3556DA840F389B5E85F061 /* adjuster */,
 				B31420D206B6B179619291E3 /* arc */,
 				9D55EB9DB0861FB9CA044623 /* ask */,
@@ -11472,10 +11472,10 @@
 					../../include/fltk3jpeg,
 					../../include/fltk3zlib,
 				);
-				INFOPLIST_FILE = "plists/Demo-Info.plist";
+				INFOPLIST_FILE = "plists/demo-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Demo";
+				PRODUCT_NAME = "demo";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -11507,10 +11507,10 @@
 					../../include/fltk3jpeg,
 					../../include/fltk3zlib,
 				);
-				INFOPLIST_FILE = "plists/Demo-Info.plist";
+				INFOPLIST_FILE = "plists/demo-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Demo";
+				PRODUCT_NAME = "demo";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -16507,7 +16507,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		107353D703161605FE85ABAA /* Build configuration list for PBXNativeTarget "Demo" */ = {
+		107353D703161605FE85ABAA /* Build configuration list for PBXNativeTarget "demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				06CF865E3E95FFAB371A7A0F /* Debug */,

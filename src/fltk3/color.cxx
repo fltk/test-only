@@ -106,7 +106,7 @@ static void figure_out_visual() {
 }
 
 static unsigned fl_cmap[256] = {
-#include "fl_cmap.h" // this is a file produced by "cmap.cxx":
+#include "cmap.h" // this is a file produced by "cmap.cxx":
 };
 
 #  if HAVE_OVERLAY

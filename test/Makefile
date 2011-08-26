@@ -102,7 +102,7 @@ CPPFILES = \
 	utf8.cxx
 
 ALL = \
-	Demo$(EXEEXT) \
+	demo$(EXEEXT) \
 	adjuster$(EXEEXT) \
 	arc$(EXEEXT) \
 	ask$(EXEEXT) \
@@ -268,7 +268,7 @@ uninstall-osx:
 # All demos depend on the FLTK library...
 $(ALL): $(FLTK3_LIBNAME)
 
-Demo$(EXEEXT): demo.o $(FLTK3_LIB_NAME)
+demo$(EXEEXT): demo.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINK_FLTK3) $(LDLIBS)
 

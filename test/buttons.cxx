@@ -101,7 +101,7 @@ int main(int argc, char ** argv) {
     o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_LEFT|fltk3::TIE_TOP));
     o->shortcut('=');
   } // fltk3::Button* o
-  fltk3::Box *tie = new fltk3::Box(180,170,120,60,"multiple buttons can be tied together visually using the fltk3::TIE_... flags with the box type");
+  fltk3::Box *tie = new fltk3::Box(180,180,120,60,"multiple buttons can be tied together visually using the fltk3::TIE_... flags with the box type");
   tie->align(fltk3::ALIGN_WRAP);
   tie->labelsize(11);
   
