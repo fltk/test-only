@@ -41,18 +41,18 @@ fl_no_label(const fltk3::Label*,int,int,int,int,fltk3::Align) {}
 void
 fl_normal_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
-  fltk3::font(o->font, o->size);
-  fltk3::color((fltk3::Color)o->color);
-  fltk3::draw(o->value, X, Y, W, H, align, o->image);
+  fltk3::font(o->labelfont(), o->labelsize());
+  fltk3::color((fltk3::Color)o->labelcolor());
+  fltk3::draw(o->label(), X, Y, W, H, align, (fltk3::Image*)o->image());
 }
 
 void
 fl_normal_measure(const fltk3::Label* o, int& W, int& H) {
-  fltk3::font(o->font, o->size);
-  fltk3::measure(o->value, W, H);
-  if (o->image) {
-    if (o->image->w() > W) W = o->image->w();
-    H += o->image->h();
+  fltk3::font(o->labelfont(), o->labelsize());
+  fltk3::measure(o->label(), W, H);
+  if (o->image()) {
+    if (o->image()->w() > W) W = o->image()->w();
+    H += o->image()->h();
   }
 }
 
@@ -101,8 +101,8 @@ void fltk3::set_labeltype(fltk3::Labeltype t,fltk3::LabelDrawF* f,fltk3::LabelMe
 
 /** Draws a label with arbitrary alignment in an arbitrary box. */
 void fltk3::Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
-  if (!value && !image) return;
-  table[type](this, X, Y, W, H, align);
+  if (!labeltext_ && !image()) return;
+  table[labeltype()](this, X, Y, W, H, align);
 }
 
 /** 
@@ -111,12 +111,12 @@ void fltk3::Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
          on return, this will contain the size needed to fit the label
 */
 void fltk3::Label::measure(int& W, int& H) const {
-  if (!value && !image) {
+  if (!labeltext_ && !image()) {
     W = H = 0;
     return;
   }
 
-  fltk3::LabelMeasureF* f = ::measure[type]; if (!f) f = fl_normal_measure;
+  fltk3::LabelMeasureF* f = ::measure[labeltype()]; if (!f) f = fl_normal_measure;
   f(this, W, H);
 }
 
@@ -144,10 +144,10 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
  */
 void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
   if (flags()&SHORTCUT_LABEL) fltk3::draw_shortcut = 1;
-  fltk3::Label l1 = label_;
+  fltk3::Label l1(*this);
   if (!active_r()) {
-    l1.color = fltk3::inactive((fltk3::Color)l1.color);
-    if (l1.deimage) l1.image = l1.deimage;
+    l1.labelcolor( fltk3::inactive((fltk3::Color)l1.labelcolor()) );
+    if (l1.deimage()) l1.image(l1.deimage());
   }
   l1.draw(X,Y,W,H,a);
   fltk3::draw_shortcut = 0;

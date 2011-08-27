@@ -73,33 +73,243 @@ namespace fltk3 {
    a similar fashion to widgets containing text. We also provide an easy
    interface for very complex labels, containing html or vector graphics.
    */
-  struct FLTK3_EXPORT Label {
+  class FLTK3_EXPORT Label : public Rectangle {
+  protected:
     /** label text */
-    const char* value;
-    /** optional image for an active label */
-    fltk3::Image* image;
-    /** optional image for a deactivated label */
-    fltk3::Image* deimage;
-    /** label font used in text */
-    fltk3::Font font;
-    /** size of label font */
-    fltk3::Fontsize size;
+    const char* labeltext_;
+    /** type of label. \see fltk3::Labeltype */
+    uchar labeltype_;
     /** text color */
-    fltk3::Color color;
+    fltk3::Color labelcolor_;
+    /** label font used in text */
+    fltk3::Font labelfont_;
+    /** size of label font */
+    fltk3::Fontsize labelsize_;
+    /** alignment of label */
+    fltk3::Align align_;
+    /** various flags for the label and derived classes */
+    unsigned int flags_;
     /** \internal The font used for the entire text. */
     fltk3::Font textfont_;
     /** \internal Height of the font used for the entire text. */
     fltk3::Fontsize textsize_;
     /** \internal color of the entire text */
     fltk3::Color textcolor_;
-    /** alignment of label */
-    fltk3::Align align_;
-    /** type of label. \see fltk3::Labeltype */
-    uchar type;
+    /** optional image for an active label */
+    fltk3::Image* image_;
+    /** optional image for a deactivated label */
+    fltk3::Image* deimage_;
+    
+  public:
+    
+    Label(int x, int y, int w, int h, const char *l=0L);
+    
+    Label(const Label &s);
+    
+    Label();
     
     /** Draws the label aligned to the given box */
     void draw(int,int,int,int, fltk3::Align) const ;
+    
     void measure(int &w, int &h) const ;
+    
+    /** Gets the current label text.
+     \return a pointer to the current label text
+     \see label(const char *), copy_label(const char *)
+     */
+    const char* label() const {return labeltext_;}
+    
+    /** Sets the current label pointer.
+     
+     The label is shown somewhere on or next to the widget. The passed pointer 
+     is stored unchanged in the widget (the string is \em not copied), so if 
+     you need to set the label to a formatted value, make sure the buffer is 
+     static, global, or allocated. The copy_label() method can be used 
+     to make a copy of the label string automatically.
+     \param[in] text pointer to new label text
+     \see copy_label()
+     */
+    void label(const char* text);
+    
+    /** Sets the current label. 
+     Unlike label(), this method allocates a copy of the label 
+     string instead of using the original string pointer.
+     
+     The internal copy will automatically be freed whenever you assign
+     a new label or when the widget is destroyed.
+     
+     \param[in] new_label the new label text
+     \see label()
+     */
+    void copy_label(const char *new_label);
+    
+    /** Shortcut to set the label text and type in one call.
+     \see label(const char *), labeltype(fltk3::Labeltype)
+     */
+    void label(fltk3::Labeltype a, const char* b) { Label::labeltype_ = a; labeltext_ = b; }
+    
+    /** Gets the label color. 
+     The default color is fltk3::FOREGROUND_COLOR. 
+     \return the current label color
+     */
+    fltk3::Color labelcolor() const {return labelcolor_;}
+    
+    /** Sets the label color. 
+     The default color is fltk3::FOREGROUND_COLOR. 
+     \param[in] c the new label color
+     */
+    void labelcolor(fltk3::Color c) {labelcolor_=c;}
+    
+    /** Gets the font to use. 
+     Fonts are identified by indexes into a table. The default value
+     uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
+     The function fltk3::set_font() can define new typefaces.
+     \return current font used by the label
+     \see fltk3::Font
+     */
+    fltk3::Font labelfont() const {return labelfont_;}
+    
+    /** Sets the font to use. 
+     Fonts are identified by indexes into a table. The default value
+     uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
+     The function fltk3::set_font() can define new typefaces.
+     \param[in] f the new font for the label
+     \see fltk3::Font
+     */
+    void labelfont(fltk3::Font f) {labelfont_=f;}
+    
+    /** Gets the font size in pixels. 
+     The default size is 14 pixels.
+     \return the current font size
+     */
+    fltk3::Fontsize labelsize() const {return labelsize_;}
+    
+    /** Sets the font size in pixels.
+     \param[in] pix the new font size
+     \see fltk3::Fontsize labelsize()
+     */
+    void labelsize(fltk3::Fontsize pix) {labelsize_=pix;}
+    
+    /** Gets the label type.
+     \return the current label type.
+     \see fltk3::Labeltype
+     */
+    fltk3::Labeltype labeltype() const {return (fltk3::Labeltype)labeltype_;}
+    
+    /** Sets the label type. 
+     The label type identifies the function that draws the label of the widget. 
+     This is generally used for special effects such as embossing or for using 
+     the label() pointer as another form of data such as an icon. The value 
+     fltk3::NORMAL_LABEL prints the label as plain text.
+     \param[in] a new label type
+     \see fltk3::Labeltype
+     */
+    void labeltype(int a) {labeltype_ = (fltk3::Labeltype)a;}
+    
+    /** Gets the label alignment.     
+     \return label alignment
+     \see label(), align(fltk3::Align), fltk3::Align
+     */
+    Align align() const {return align_;}
+    
+    /** Sets the label alignment.
+     This controls how the label is displayed next to or inside the widget. 
+     The default value is fltk3::ALIGN_CENTER, which centers the label inside 
+     the widget.
+     \param[in] alignment new label alignment
+     \see align(), fltk3::Align
+     */
+    void align(Align alignment) {align_ = alignment;}
+    
+    /** Gets the widget flags mask */
+    unsigned int flags() const {return flags_;}
+    
+    /** Sets a flag in the flags mask */
+    void set_flag(unsigned int c) {flags_ |= c;}
+    
+    /** Clears a flag in the flags mask */
+    void clear_flag(unsigned int c) {flags_ &= ~c;}
+    
+    /** flags possible values enumeration. */
+    enum {
+      INACTIVE        = 1<<0,   ///< the widget can't receive focus, and is disabled but potentially visible
+      SHORTCUT_LABEL  = 1<<6,   ///< the label contains a shortcut we need to draw
+      COPIED_LABEL    = 1<<10,  ///< the widget label is internally copied, its destruction is handled by the widget
+    };
+    
+    /** Schedules the drawing of the label.
+     Marks the widget or the parent as needing a redraw for the label area 
+     of a widget.
+     */
+    virtual void redraw_label() { }
+
+    /** Gets the font of the text in the input field.
+     \return the current fltk3::Font index */
+    fltk3::Font textfont() const {return textfont_;}
+    
+    /** Sets the font of the text in the input field.
+     The text font defaults to \c fltk3::HELVETICA.
+     \param [in] s the new text font */
+    void textfont(fltk3::Font s) {textfont_ = s;}
+    
+    /** Gets the size of the text in the input field.
+     \return the text height in pixels */
+    fltk3::Fontsize textsize() const {return textsize_;}
+    
+    /** Sets the size of the text in the input field.
+     The text height defaults to \c fltk3::NORMAL_SIZE.
+     \param [in] s the new font height in pixel units */
+    void textsize(fltk3::Fontsize s) {textsize_ = s;}
+    
+    /** Gets the color of the text in the input field.
+     \return the text color
+     \see textcolor(fltk3::Color) */
+    fltk3::Color textcolor() const {return textcolor_;}
+    
+    /** Sets the color of the text in the input field.
+     The text color defaults to \c fltk3::FOREGROUND_COLOR.
+     \param [in] n new text color
+     \see textcolor() */
+    void textcolor(fltk3::Color n) {textcolor_ = n;}
+
+    /** Gets the image that is used as part of the widget label.
+     This image is used when drawing the widget in the active state.
+     \return the current image
+     */
+    fltk3::Image* image() {return image_;}
+    const fltk3::Image* image() const {return image_;}
+    
+    /** Sets the image to use as part of the widget label.
+     This image is used when drawing the widget in the active state.
+     \param[in] img the new image for the label 
+     */
+    void image(fltk3::Image* img) {image_ = img;}
+    
+    /** Sets the image to use as part of the widget label.
+     This image is used when drawing the widget in the active state.
+     \param[in] img the new image for the label 
+     */
+    void image(fltk3::Image& img) {image_=&img;}
+    
+    /** Gets the image that is used as part of the widget label.  
+     This image is used when drawing the widget in the inactive state.
+     \return the current image for the deactivated widget
+     */
+    fltk3::Image* deimage() {return deimage_;}
+    const fltk3::Image* deimage() const {return deimage_;}
+    
+    /** Sets the image to use as part of the widget label.  
+     This image is used when drawing the widget in the inactive state.
+     \param[in] img the new image for the deactivated widget
+     */
+    void deimage(fltk3::Image* img) {deimage_=img;}
+    
+    /** Sets the image to use as part of the widget label.  
+     This image is used when drawing the widget in the inactive state.
+     \param[in] img the new image for the deactivated widget
+     */
+    void deimage(fltk3::Image& img) {deimage_=&img;}
+    
   };
   
   
@@ -115,14 +325,12 @@ namespace fltk3 {
    functions, even if they change the widget's appearance. It is up to the 
    user code to call redraw() after these.
    */
-  class FLTK3_EXPORT Widget : public Rectangle {
+  class FLTK3_EXPORT Widget : public Label {
     friend class Group;
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
     void* user_data_;
-    Label label_;
-    unsigned int flags_;
     Color color_;
     Color color2_;
     uchar type_;
@@ -139,27 +347,18 @@ namespace fltk3 {
     
   protected:
     
-    /** Gets the widget flags mask */
-    unsigned int flags() const {return flags_;}
-    /** Sets a flag in the flags mask */
-    void set_flag(unsigned int c) {flags_ |= c;}
-    /** Clears a flag in the flags mask */
-    void clear_flag(unsigned int c) {flags_ &= ~c;}
     /** flags possible values enumeration.
      See activate(), output(), visible(), changed(), set_visible_focus()
      */
     enum {
-      INACTIVE        = 1<<0,   ///< the widget can't receive focus, and is disabled but potentially visible
       INVISIBLE       = 1<<1,   ///< the widget is not drawn, but can receive a few special events
       OUTPUT          = 1<<2,   ///< for output only
       NOBORDER        = 1<<3,   ///< don't draw a decoration (fltk3::Window)
       FORCE_POSITION  = 1<<4,   ///< don't let the window manager position the window (fltk3::Window)
       NON_MODAL       = 1<<5,   ///< this is a hovering toolbar window (fltk3::Window)
-      SHORTCUT_LABEL  = 1<<6,   ///< the label contains a shortcut we need to draw
       CHANGED         = 1<<7,   ///< the widget value changed
       OVERRIDE        = 1<<8,   ///< position window on top (fltk3::Window)
       VISIBLE_FOCUS   = 1<<9,   ///< accepts keyboard focus navigation if the widget can have the focus
-      COPIED_LABEL    = 1<<10,  ///< the widget label is internally copied, its destruction is handled by the widget
       CLIP_CHILDREN   = 1<<11,  ///< all drawing within this widget will be clipped (fltk3::Group)
       MENU_WINDOW     = 1<<12,  ///< a temporary popup window, dismissed by clicking outside (fltk3::Window)
       TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (fltk3::Window)
@@ -316,22 +515,6 @@ namespace fltk3 {
      */
     void size(int W,int H) {resize(x_,y_,W,H);}
     
-    /** Gets the label alignment.
-     
-     \return label alignment
-     \see label(), align(fltk3::Align), fltk3::Align
-     */
-    Align align() const {return label_.align_;}
-    
-    /** Sets the label alignment.
-     This controls how the label is displayed next to or inside the widget. 
-     The default value is fltk3::ALIGN_CENTER, which centers the label inside 
-     the widget.
-     \param[in] alignment new label alignment
-     \see align(), fltk3::Align
-     */
-    void align(Align alignment) {label_.align_ = alignment;}
-    
     /** Gets the box type of the widget.
      \return the current box type
      \see box(fltk3::Boxtype), fltk3::Boxtype
@@ -389,137 +572,6 @@ namespace fltk3 {
      \see color(unsigned), selection_color(unsigned)
      */
     void color(fltk3::Color bg, fltk3::Color sel) {color_=bg; color2_=sel;}
-    
-    /** Gets the current label text.
-     \return a pointer to the current label text
-     \see label(const char *), copy_label(const char *)
-     */
-    const char* label() const {return label_.value;}
-    
-    /** Sets the current label pointer.
-     
-     The label is shown somewhere on or next to the widget. The passed pointer 
-     is stored unchanged in the widget (the string is \em not copied), so if 
-     you need to set the label to a formatted value, make sure the buffer is 
-     static, global, or allocated. The copy_label() method can be used 
-     to make a copy of the label string automatically.
-     \param[in] text pointer to new label text
-     \see copy_label()
-     */
-    void label(const char* text);
-    
-    /** Sets the current label. 
-     Unlike label(), this method allocates a copy of the label 
-     string instead of using the original string pointer.
-     
-     The internal copy will automatically be freed whenever you assign
-     a new label or when the widget is destroyed.
-     
-     \param[in] new_label the new label text
-     \see label()
-     */
-    void copy_label(const char *new_label);
-    
-    /** Shortcut to set the label text and type in one call.
-     \see label(const char *), labeltype(fltk3::Labeltype)
-     */
-    void label(fltk3::Labeltype a, const char* b) {label_.type = a; label_.value = b;}
-    
-    /** Gets the label type.
-     \return the current label type.
-     \see fltk3::Labeltype
-     */
-    fltk3::Labeltype labeltype() const {return (fltk3::Labeltype)label_.type;}
-    
-    /** Sets the label type. 
-     The label type identifies the function that draws the label of the widget. 
-     This is generally used for special effects such as embossing or for using 
-     the label() pointer as another form of data such as an icon. The value 
-     fltk3::NORMAL_LABEL prints the label as plain text.
-     \param[in] a new label type
-     \see fltk3::Labeltype
-     */
-    void labeltype(fltk3::Labeltype a) {label_.type = a;}
-    
-    /** Gets the label color. 
-     The default color is fltk3::FOREGROUND_COLOR. 
-     \return the current label color
-     */
-    fltk3::Color labelcolor() const {return label_.color;}
-    
-    /** Sets the label color. 
-     The default color is fltk3::FOREGROUND_COLOR. 
-     \param[in] c the new label color
-     */
-    void labelcolor(fltk3::Color c) {label_.color=c;}
-    
-    /** Gets the font to use. 
-     Fonts are identified by indexes into a table. The default value
-     uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
-     The function fltk3::set_font() can define new typefaces.
-     \return current font used by the label
-     \see fltk3::Font
-     */
-    fltk3::Font labelfont() const {return label_.font;}
-    
-    /** Sets the font to use. 
-     Fonts are identified by indexes into a table. The default value
-     uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
-     The function fltk3::set_font() can define new typefaces.
-     \param[in] f the new font for the label
-     \see fltk3::Font
-     */
-    void labelfont(fltk3::Font f) {label_.font=f;}
-    
-    /** Gets the font size in pixels. 
-     The default size is 14 pixels.
-     \return the current font size
-     */
-    fltk3::Fontsize labelsize() const {return label_.size;}
-    
-    /** Sets the font size in pixels.
-     \param[in] pix the new font size
-     \see fltk3::Fontsize labelsize()
-     */
-    void labelsize(fltk3::Fontsize pix) {label_.size=pix;}
-    
-    /** Gets the image that is used as part of the widget label.
-     This image is used when drawing the widget in the active state.
-     \return the current image
-     */
-    fltk3::Image* image() {return label_.image;}
-    const fltk3::Image* image() const {return label_.image;}
-    
-    /** Sets the image to use as part of the widget label.
-     This image is used when drawing the widget in the active state.
-     \param[in] img the new image for the label 
-     */
-    void image(fltk3::Image* img) {label_.image=img;}
-    
-    /** Sets the image to use as part of the widget label.
-     This image is used when drawing the widget in the active state.
-     \param[in] img the new image for the label 
-     */
-    void image(fltk3::Image& img) {label_.image=&img;}
-    
-    /** Gets the image that is used as part of the widget label.  
-     This image is used when drawing the widget in the inactive state.
-     \return the current image for the deactivated widget
-     */
-    fltk3::Image* deimage() {return label_.deimage;}
-    const fltk3::Image* deimage() const {return label_.deimage;}
-    
-    /** Sets the image to use as part of the widget label.  
-     This image is used when drawing the widget in the inactive state.
-     \param[in] img the new image for the deactivated widget
-     */
-    void deimage(fltk3::Image* img) {label_.deimage=img;}
-    
-    /** Sets the image to use as part of the widget label.  
-     This image is used when drawing the widget in the inactive state.
-     \param[in] img the new image for the deactivated widget
-     */
-    void deimage(fltk3::Image& img) {label_.deimage=&img;}
     
     /** Gets the current tooltip text.
      \return a pointer to the tooltip text or NULL
@@ -857,7 +909,7 @@ namespace fltk3 {
      Marks the widget or the parent as needing a redraw for the label area 
      of a widget.
      */
-    void redraw_label();
+    virtual void redraw_label();
     
     /** Returns non-zero if draw() needs to be called. 
      The damage value is actually a bit field that the widget 
@@ -901,7 +953,7 @@ namespace fltk3 {
     /** Sets width ww and height hh accordingly with the label size.
      Labels with images will return w() and h() of the image.
      */
-    void measure_label(int& ww, int& hh) const {label_.measure(ww, hh);}
+    void measure_label(int& ww, int& hh) const {Label::measure(ww, hh);}
     
     /** Returns a pointer to the primary fltk3::Window widget.
      \retval  NULL if no window is associated with this widget.  
@@ -969,37 +1021,7 @@ namespace fltk3 {
     /** For back compatibility only.
      \deprecated Use selection_color(unsigned) instead.
      */
-    void color2(unsigned a) {color2_ = a;}
-
-    /** Gets the font of the text in the input field.
-     \return the current fltk3::Font index */
-    fltk3::Font textfont() const {return label_.textfont_;}
-    
-    /** Sets the font of the text in the input field.
-     The text font defaults to \c fltk3::HELVETICA.
-     \param [in] s the new text font */
-    void textfont(fltk3::Font s) {label_.textfont_ = s;}
-    
-    /** Gets the size of the text in the input field.
-     \return the text height in pixels */
-    fltk3::Fontsize textsize() const {return label_.textsize_;}
-    
-    /** Sets the size of the text in the input field.
-     The text height defaults to \c fltk3::NORMAL_SIZE.
-     \param [in] s the new font height in pixel units */
-    void textsize(fltk3::Fontsize s) {label_.textsize_ = s;}
-    
-    /** Gets the color of the text in the input field.
-     \return the text color
-     \see textcolor(fltk3::Color) */
-    fltk3::Color textcolor() const {return label_.textcolor_;}
-    
-    /** Sets the color of the text in the input field.
-     The text color defaults to \c fltk3::FOREGROUND_COLOR.
-     \param [in] n new text color
-     \see textcolor() */
-    void textcolor(fltk3::Color n) {label_.textcolor_ = n;}
-    
+    void color2(unsigned a) {color2_ = a;}    
 };
   
   

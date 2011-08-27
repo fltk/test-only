@@ -40,10 +40,10 @@ static void innards(
   fltk3::Align a1 = align;
   if (a1 & fltk3::ALIGN_CLIP) {
     fltk3::push_clip(X, Y, W, H); a1 = (fltk3::Align)(a1&~fltk3::ALIGN_CLIP);}
-  fltk3::font((fltk3::Font)o->font, o->size);
+  fltk3::font((fltk3::Font)o->labelfont(), o->labelsize());
   for (int i = 0; i < n; i++) {
-    fltk3::color((fltk3::Color)(i < n-1 ? data[i][2] : o->color));
-    fltk3::draw(o->value, X+data[i][0], Y+data[i][1], W, H, a1);
+    fltk3::color((fltk3::Color)(i < n-1 ? data[i][2] : o->labelcolor()));
+    fltk3::draw(o->label(), X+data[i][0], Y+data[i][1], W, H, a1);
   }
   if (align & fltk3::ALIGN_CLIP) fltk3::pop_clip();
 }

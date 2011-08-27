@@ -480,8 +480,8 @@ void fl_icon_labeltype(const fltk3::Label *o,	// I - Label data
 
   (void)a;
 
-  icon = (fltk3::FileIcon *)(o->value);
-  if (icon) icon->draw(x, y, w, h, (fltk3::Color)(o->color));
+  icon = (fltk3::FileIcon *)(o->label());
+  if (icon) icon->draw(x, y, w, h, (fltk3::Color)(o->labelcolor()));
 }
 
 

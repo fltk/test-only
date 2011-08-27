@@ -137,13 +137,13 @@ extern char fltk3::draw_shortcut;
 */
 int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   fltk3::Label l;
-  l.value   = text;
-  l.image   = 0;
-  l.deimage = 0;
-  l.type    = labeltype_;
-  l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
-  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE;
-  l.color   = fltk3::FOREGROUND_COLOR; // this makes no difference?
+  l.label(text);
+  l.image(0);
+  l.deimage(0);
+  l.labeltype( labeltype_ );
+  l.labelfont( labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA) );
+  l.labelsize( labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE );
+  l.labelcolor( fltk3::FOREGROUND_COLOR ); // this makes no difference?
   fltk3::draw_shortcut = 1;
   int w = 0; int h = 0;
   l.measure(w, hp ? *hp : h);
@@ -156,14 +156,14 @@ int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
 void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 			int selected) const {
   fltk3::Label l;
-  l.value   = text;
-  l.image   = 0;
-  l.deimage = 0;
-  l.type    = labeltype_;
-  l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
-  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE;
-  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(fltk3::FOREGROUND_COLOR);
-  if (!active()) l.color = fltk3::inactive((fltk3::Color)l.color);
+  l.label(text);
+  l.image(0);
+  l.deimage(0);
+  l.labeltype( labeltype_ );
+  l.labelfont( labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA) );
+  l.labelsize( labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE );
+  l.labelcolor( labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(fltk3::FOREGROUND_COLOR) );
+  if (!active()) l.labelcolor( fltk3::inactive((fltk3::Color)l.labelcolor()) );
   fltk3::Color color = m ? m->color() : fltk3::GRAY;
   if (selected) {
     fltk3::Color r = m ? m->selection_color() : fltk3::SELECTION_COLOR;
@@ -174,10 +174,10 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 	b = m ? m->box() : fltk3::UP_BOX;
       } else {
 	r = (fltk3::Color)(fltk3::COLOR_CUBE-1); // white
-	l.color = fltk3::contrast((fltk3::Color)labelcolor_, r);
+	l.labelcolor( fltk3::contrast((fltk3::Color)labelcolor_, r) );
       }
     } else {
-      l.color = fltk3::contrast((fltk3::Color)labelcolor_, r);
+      l.labelcolor( fltk3::contrast((fltk3::Color)labelcolor_, r) );
     }
     if (selected == 2) { // menu title
       fltk3::draw_box(b, x, y, w, h, r);

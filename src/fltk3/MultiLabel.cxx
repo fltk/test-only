@@ -35,10 +35,10 @@
 
 void fl_multi_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a)
 {
-  fltk3::MultiLabel* b = (fltk3::MultiLabel*)(o->value);
+  fltk3::MultiLabel* b = (fltk3::MultiLabel*)(o->label());
   fltk3::Label local = *o;
-  local.value = b->labela;
-  local.type = b->typea;
+  local.label(b->labela);
+  local.labeltype(b->typea);
   int W = w; int H = h; local.measure(W, H);
   local.draw(x,y,w,h,a);
   if (a & fltk3::ALIGN_BOTTOM) h -= H;
@@ -46,20 +46,20 @@ void fl_multi_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3
   else if (a & fltk3::ALIGN_RIGHT) w -= W;
   else if (a & fltk3::ALIGN_LEFT) {x += W; w -= W;}
   else {int d = (h+H)/2; y += d; h -= d;}
-  local.value = b->labelb;
-  local.type = b->typeb;
+  local.label(b->labelb);
+  local.labeltype(b->typeb);
   local.draw(x,y,w,h,a);
 }
 
 // measurement is only correct for left-to-right appending...
 void fl_multi_measure(const fltk3::Label* o, int& w, int& h) {
-  fltk3::MultiLabel* b = (fltk3::MultiLabel*)(o->value);
+  fltk3::MultiLabel* b = (fltk3::MultiLabel*)(o->label());
   fltk3::Label local = *o;
-  local.value = b->labela;
-  local.type = b->typea;
+  local.label(b->labela);
+  local.labeltype(b->typea);
   local.measure(w,h);
-  local.value = b->labelb;
-  local.type = b->typeb;
+  local.label(b->labelb);
+  local.labeltype(b->typeb);
   int W = 0; int H = 0; local.measure(W,H);
   w += W; if (H>h) h = H;
 }

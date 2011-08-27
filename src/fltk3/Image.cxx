@@ -143,7 +143,7 @@ fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
   fltk3::Image	*img;				// Image pointer
   int		cx, cy;				// Image position
 
-  img = (fltk3::Image *)(lo->value);
+  img = (fltk3::Image *)(lo->label());
 
   if (la & fltk3::ALIGN_LEFT) cx = 0;
   else if (la & fltk3::ALIGN_RIGHT) cx = img->w() - lw;
@@ -153,7 +153,7 @@ fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
   else if (la & fltk3::ALIGN_BOTTOM) cy = img->h() - lh;
   else cy = (img->h() - lh) / 2;
 
-  fltk3::color((fltk3::Color)lo->color);
+  fltk3::color((fltk3::Color)lo->labelcolor());
 
   img->draw(lx, ly, lw, lh, cx, cy);
 }
@@ -164,7 +164,7 @@ fltk3::Image::measure(const fltk3::Label *lo,		// I - Label
 		  int            &lh) {		// O - Height of image
   fltk3::Image *img;				// Image pointer
 
-  img = (fltk3::Image *)(lo->value);
+  img = (fltk3::Image *)(lo->label());
 
   lw = img->w();
   lh = img->h();

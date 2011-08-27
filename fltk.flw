@@ -600,14 +600,6 @@ workspace FLTK {open selected
           list_env 124
           filename_and_path {include/fltk3/FloatInput.h}
         }
-        file_ref {forms.h} {
-          uuid_Xcode4_BuildFile {13BD0083-5C3A-4485-B0C4-76521CB9DCF9}
-          uuid_Xcode4_FileRef {BA378976-019A-40AC-9C07-D6A57A07A00A}
-          uuid_Xcode4_BuildFileInHeaders {0AEE62FF-5E0B-4D27-9E43-D21940004C32}
-          build_env 96
-          list_env 124
-          filename_and_path {include/fltk3/forms.h}
-        }
         file_ref {FormsBitmap.h} {
           uuid_Xcode4_BuildFile {16C8EAEF-18D0-4B67-B81A-EF35EB92559A}
           uuid_Xcode4_FileRef {11DF5111-EDFE-4B10-B251-852CAAFDB68B}

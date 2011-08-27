@@ -93,14 +93,14 @@ void fltk3::Choice::draw() {
 
     if ( fltk3::scheme()) {
       fltk3::Label l;
-      l.value = m.text;
-      l.image = 0;
-      l.deimage = 0;
-      l.type = m.labeltype_;
-      l.font = m.labelsize_ || m.labelfont_ ? m.labelfont_ : textfont();
-      l.size = m.labelsize_ ? m.labelsize_ : textsize();
-      l.color= m.labelcolor_ ? m.labelcolor_ : textcolor();
-      if (!m.active()) l.color = fltk3::inactive((fltk3::Color)l.color);
+      l.label(m.text);
+      l.image(0);
+      l.deimage(0);
+      l.labeltype( m.labeltype_ );
+      l.labelfont( m.labelsize_ || m.labelfont_ ? m.labelfont_ : textfont() );
+      l.labelsize( m.labelsize_ ? m.labelsize_ : textsize() );
+      l.labelcolor( m.labelcolor_ ? m.labelcolor_ : textcolor() );
+      if (!m.active()) l.labelcolor( fltk3::inactive((fltk3::Color)l.labelcolor()) );
       fltk3::draw_shortcut = 2; // hack value to make '&' disappear
       l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, fltk3::ALIGN_LEFT);
       fltk3::draw_shortcut = 0;

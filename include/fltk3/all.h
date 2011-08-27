@@ -28,6 +28,7 @@
 #ifndef FLTK3_ALL_H
 #define FLTK3_ALL_H
 
+#include "x.h"
 #include "Adjuster.h"
 #include "BMPImage.h"
 #include "Bitmap.h"
@@ -55,9 +56,6 @@
 #include "FillDial.h"
 #include "FillSlider.h"
 #include "FloatInput.h"
-#include "FormsBitmap.h"
-#include "FormsPixmap.h"
-#include "Free.h"
 #include "GIFImage.h"
 #include "Group.h"
 #include "HelpDialog.h"
@@ -75,8 +73,6 @@
 #include "JPEGImage.h"
 #include "LightButton.h"
 #include "LineDial.h"
-#include "Makefile"
-#include "Makefile.in"
 #include "Menu.h"
 #include "MenuBar.h"
 #include "MenuButton.h"
@@ -92,8 +88,6 @@
 #include "Object.h"
 #include "Output.h"
 #include "OverlayWindow.h"
-#include "PNGImage.h"
-#include "PNMImage.h"
 #include "PackedGroup.h"
 #include "PagedDevice.h"
 #include "Pixmap.h"
@@ -103,7 +97,6 @@
 #include "Preferences.h"
 #include "Printer.h"
 #include "Progress.h"
-#include "README.Xcode"
 #include "RGBImage.h"
 #include "RadioButton.h"
 #include "RadioLightButton.h"
@@ -152,7 +145,6 @@
 #include "Wrapper.h"
 #include "XBMImage.h"
 #include "XPMImage.h"
-#include "Xutf8.h"
 #include "ask.h"
 #include "dirent.h"
 #include "draw.h"
@@ -161,14 +153,11 @@
 #include "math.h"
 #include "message.h"
 #include "names.h"
-#include "osx.h"
 #include "run.h"
 #include "showInput.h"
 #include "show_colormap.h"
 #include "types.h"
 #include "utf8.h"
-#include "win32.h"
-#include "x.h"
 
 #endif // !FLTK3_ALL_H
 

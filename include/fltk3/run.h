@@ -47,7 +47,7 @@
 namespace fltk3 { 
   class Widget;
   class Window;
-  struct Label;
+  class Label;
   class Image;
   
   /** \defgroup  callback_functions Callback function typedefs
