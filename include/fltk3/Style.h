@@ -32,6 +32,51 @@
 #define FLTK3_STYLE_H
 
 
+#include "enumerations.h"
+
+
+namespace fltk3 {
+  
+  class Style {
+    
+  protected:
+    
+    static unsigned int current_;
+    
+    unsigned int version_;
+    Style *parent_;
+    
+    Font labelfont_;
+    Fontsize labelsize_;
+
+    unsigned int private_:1;
+    unsigned int labelfont_set_:1;
+    unsigned int labelsize_set_:1;
+    
+    void update();
+    void refresh() const { if (version_ != current_) ((Style*)this)->update(); }
+    void invalidate() { if (!private_) current_++; }
+    
+  public:
+    
+    Style();
+    Style(Style *parent);
+    ~Style();
+    
+    Font labelfont() const { refresh(); return labelfont_;}
+    void labelfont(fltk3::Font f) { labelfont_=f; labelfont_set_ = 1; invalidate(); }
+    void clear_labelfont() { labelfont_set_=0; invalidate(); }
+
+    Fontsize labelsize() const { refresh(); return labelsize_;}
+    void labelsize(fltk3::Fontsize s) { labelsize_=s; labelsize_set_ = 1; invalidate(); }
+    void clear_labelsize() { labelsize_set_=0; invalidate(); }
+
+    Style *make_private();
+  };
+
+  extern Style default_style;
+};
+
 #endif
 
 //

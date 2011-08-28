@@ -27,7 +27,66 @@
 
 #include <fltk3/Style.h>
 
-// nothing to see here yet
+unsigned int fltk3::Style::current_ = 0;
+
+fltk3::Style fltk3::default_style;
+
+
+fltk3::Style::Style() :
+  version_(current_),
+  parent_(0),
+  labelfont_(fltk3::HELVETICA),
+  labelsize_(fltk3::NORMAL_SIZE),
+  private_(0),
+  labelfont_set_(1),
+  labelsize_set_(1)
+{
+}
+
+
+fltk3::Style::Style(Style *parent) :
+  version_(current_),
+  parent_(parent),
+  labelfont_(parent->labelfont_),
+  labelsize_(parent->labelsize_),
+  private_(0),
+  labelfont_set_(0),
+  labelsize_set_(0)
+{
+}
+
+
+fltk3::Style::~Style()
+{
+}
+
+
+fltk3::Style *fltk3::Style::make_private() 
+{
+  if (private_)
+    return this;
+  else {
+    Style *s = new Style(this);
+    s->private_ = 1;
+    return s;
+  }
+}
+
+
+void fltk3::Style::update()
+{
+  if (version_==current_ || parent_==0L)
+    return;
+  parent_->refresh();
+  
+  if (!labelfont_set_)
+    labelfont_ = parent_->labelfont_;
+  if (!labelsize_set_)
+    labelsize_ = parent_->labelsize_;
+  
+  version_ = current_;
+}
+
 
 //
 // End of "$Id$".

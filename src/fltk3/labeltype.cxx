@@ -144,12 +144,14 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
  */
 void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
   if (flags()&SHORTCUT_LABEL) fltk3::draw_shortcut = 1;
-  fltk3::Label l1(*this);
   if (!active_r()) {
+    fltk3::Label l1(*this);
     l1.labelcolor( fltk3::inactive((fltk3::Color)l1.labelcolor()) );
     if (l1.deimage()) l1.image(l1.deimage());
+    l1.draw(X,Y,W,H,a);
+  } else {
+    Label::draw(X,Y,W,H,a);
   }
-  l1.draw(X,Y,W,H,a);
   fltk3::draw_shortcut = 0;
 }
 

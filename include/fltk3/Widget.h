@@ -33,6 +33,7 @@
 
 #include "enumerations.h"
 #include "Rectangle.h"
+#include "Style.h"
 
 /**
  \todo	typedef's fl_intptr_t and fl_uintptr_t should be documented.
@@ -56,6 +57,7 @@ namespace fltk3 {
   class Window;
   class Image;
   class GLWindow;
+  class Style;
 
   /** Default callback type definition for all fltk widgets (by far the most used) */
   typedef void (Callback)(Widget*, void*);
@@ -74,17 +76,16 @@ namespace fltk3 {
    interface for very complex labels, containing html or vector graphics.
    */
   class FLTK3_EXPORT Label : public Rectangle {
+    
   protected:
+    /** use all repeating graphics information from the style - never NULL */
+    Style *style_;
     /** label text */
     const char* labeltext_;
     /** type of label. \see fltk3::Labeltype */
     uchar labeltype_;
     /** text color */
     fltk3::Color labelcolor_;
-    /** label font used in text */
-    fltk3::Font labelfont_;
-    /** size of label font */
-    fltk3::Fontsize labelsize_;
     /** alignment of label */
     fltk3::Align align_;
     /** various flags for the label and derived classes */
@@ -109,6 +110,14 @@ namespace fltk3 {
     Label();
     
     ~Label();
+    
+    /** Returns the current style. */
+    Style *style() { return style_; }
+    const Style *style() const { return style_; }
+    Style *private_style() { return (style_ = style_->make_private()); }
+    
+    /** Set the current style. */
+    void style(Style *s) { style_ = s; }
     
     /** Draws the label aligned to the given box */
     void draw(int,int,int,int, fltk3::Align) const ;
@@ -169,7 +178,7 @@ namespace fltk3 {
      \return current font used by the label
      \see fltk3::Font
      */
-    fltk3::Font labelfont() const {return labelfont_;}
+    fltk3::Font labelfont() const {return style()->labelfont();}
     
     /** Sets the font to use. 
      Fonts are identified by indexes into a table. The default value
@@ -178,19 +187,19 @@ namespace fltk3 {
      \param[in] f the new font for the label
      \see fltk3::Font
      */
-    void labelfont(fltk3::Font f) {labelfont_=f;}
+    void labelfont(fltk3::Font f) {private_style()->labelfont(f);}
     
     /** Gets the font size in pixels. 
      The default size is 14 pixels.
      \return the current font size
      */
-    fltk3::Fontsize labelsize() const {return labelsize_;}
+    fltk3::Fontsize labelsize() const {return style()->labelsize();}
     
     /** Sets the font size in pixels.
      \param[in] pix the new font size
      \see fltk3::Fontsize labelsize()
      */
-    void labelsize(fltk3::Fontsize pix) {labelsize_=pix;}
+    void labelsize(fltk3::Fontsize pix) {private_style()->labelsize(pix);}
     
     /** Gets the label type.
      \return the current label type.
