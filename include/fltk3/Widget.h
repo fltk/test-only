@@ -108,6 +108,8 @@ namespace fltk3 {
     
     Label();
     
+    ~Label();
+    
     /** Draws the label aligned to the given box */
     void draw(int,int,int,int, fltk3::Align) const ;
     

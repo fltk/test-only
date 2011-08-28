@@ -107,7 +107,7 @@ static void cleanup_readqueue(fltk3::Widget *w) {
 fltk3::Label::Label(int X, int Y, int W, int H, const char* L) 
 : fltk3::Rectangle(X, Y, W, H),
   labeltext_(L),
-  labeltype_(fltk3::NORMAL_LABEL),
+labeltype_(fltk3::NORMAL_LABEL),
   labelcolor_(fltk3::FOREGROUND_COLOR),
   labelfont_(fltk3::HELVETICA),
   labelsize_(fltk3::NORMAL_SIZE),
@@ -123,7 +123,7 @@ fltk3::Label::Label(int X, int Y, int W, int H, const char* L)
 
 fltk3::Label::Label(const fltk3::Label &s) 
 : fltk3::Rectangle(s),
-  labeltext_(s.labeltext_), // FIXME: we must copy the label text!
+  labeltext_(0L),
   labeltype_(s.labeltype_),
   labelcolor_(s.labelcolor_),
   labelfont_(s.labelfont_),
@@ -136,6 +136,13 @@ fltk3::Label::Label(const fltk3::Label &s)
   image_(s.image_),
   deimage_(s.deimage_)
 {
+  if (s.labeltext_) {
+    if (s.flags() & COPIED_LABEL) {
+      copy_label(s.labeltext_);
+    } else {
+      labeltext_ = s.labeltext_;
+    }
+  }
 }
 
 fltk3::Label::Label() 
@@ -152,6 +159,11 @@ fltk3::Label::Label()
   image_(0),
   deimage_(0)
 {
+}
+
+fltk3::Label::~Label() {
+  if (flags() & COPIED_LABEL) 
+    free((void *)(labeltext_));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -211,7 +223,6 @@ extern void fl_throw_focus(fltk3::Widget*); // in Fl_x.cxx
 */
 fltk3::Widget::~Widget() {
   fltk3::clear_widget_pointer(this);
-  if (flags() & COPIED_LABEL) free((void *)(labeltext_));
   if (flags() & COPIED_TOOLTIP) free((void *)(tooltip_));
   // remove from parent group
   if (parent_) parent_->remove(this);
