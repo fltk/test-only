@@ -34,7 +34,7 @@
 
 /* #define GEN_TREES_H */
 
-#include "deflate.h"
+#include "fltk3zlib/deflate.h"
 
 #ifdef DEBUG
 #  include <ctype.h>
@@ -86,7 +86,7 @@ local const uch bl_order[BL_CODES]
 #define DIST_CODE_LEN  512 /* see definition of array dist_code below */
 
 #if defined(GEN_TREES_H) || !defined(STDC)
-/* non ANSI compilers may not accept trees.h */
+/* non ANSI compilers may not accept fltk3zlib/trees.h */
 
 local ct_data static_ltree[L_CODES+2];
 /* The static literal tree. Since the bit lengths are imposed, there is no
@@ -116,7 +116,7 @@ local int base_dist[D_CODES];
 /* First normalized distance for each code (0 = distance of 1) */
 
 #else
-#  include "trees.h"
+#  include "fltk3zlib/trees.h"
 #endif /* GEN_TREES_H */
 
 struct static_tree_desc_s {
@@ -319,7 +319,7 @@ local void tr_static_init()
 }
 
 /* ===========================================================================
- * Genererate the file trees.h describing the static trees.
+ * Genererate the file fltk3zlib/trees.h describing the static trees.
  */
 #ifdef GEN_TREES_H
 #  ifndef DEBUG
@@ -332,10 +332,10 @@ local void tr_static_init()
 
 void gen_trees_header()
 {
-    FILE *header = fopen("trees.h", "w");
+    FILE *header = fopen("fltk3zlib/trees.h", "w");
     int i;
 
-    Assert (header != NULL, "Can't open trees.h");
+    Assert (header != NULL, "Can't open fltk3zlib/trees.h");
     fprintf(header,
             "/* header created automatically with -DGEN_TREES_H */\n\n");
 

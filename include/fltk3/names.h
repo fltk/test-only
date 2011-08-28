@@ -94,25 +94,27 @@ const char * const fl_eventnames[] =
   }
   \endcode
  */
-const char * const fltk3::fontnames[] =
-{
-  "fltk3::HELVETICA",
-  "fltk3::HELVETICA_BOLD",
-  "fltk3::HELVETICA_ITALIC",
-  "fltk3::HELVETICA_BOLD_ITALIC",
-  "fltk3::COURIER",
-  "fltk3::COURIER_BOLD",
-  "fltk3::COURIER_ITALIC",
-  "fltk3::COURIER_BOLD_ITALIC",
-  "fltk3::TIMES",
-  "fltk3::TIMES_BOLD",
-  "fltk3::TIMES_ITALIC",
-  "fltk3::TIMES_BOLD_ITALIC",
-  "fltk3::SYMBOL",
-  "fltk3::SCREEN",
-  "fltk3::SCREEN_BOLD",
-  "fltk3::ZAPF_DINGBATS",
-};
+namespace fltk3 {
+  const char * const fontnames[] =
+  {
+    "fltk3::HELVETICA",
+    "fltk3::HELVETICA_BOLD",
+    "fltk3::HELVETICA_ITALIC",
+    "fltk3::HELVETICA_BOLD_ITALIC",
+    "fltk3::COURIER",
+    "fltk3::COURIER_BOLD",
+    "fltk3::COURIER_ITALIC",
+    "fltk3::COURIER_BOLD_ITALIC",
+    "fltk3::TIMES",
+    "fltk3::TIMES_BOLD",
+    "fltk3::TIMES_ITALIC",
+    "fltk3::TIMES_BOLD_ITALIC",
+    "fltk3::SYMBOL",
+    "fltk3::SCREEN",
+    "fltk3::SCREEN_BOLD",
+    "fltk3::ZAPF_DINGBATS",
+  };
+}
 
 /** @} */
 

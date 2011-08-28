@@ -10,10 +10,10 @@
    inflate_fast() can be used with either inflate.c or infback.c.
  */
 
-#include "zutil.h"
-#include "inftrees.h"
-#include "inflate.h"
-#include "inffast.h"
+#include "fltk3zlib/zutil.h"
+#include "fltk3zlib/inftrees.h"
+#include "fltk3zlib/inflate.h"
+#include "fltk3zlib/inffast.h"
 
 /* function prototypes */
 local void fixedtables OF((struct inflate_state FAR *state));
@@ -62,7 +62,7 @@ int stream_size;
 
 /*
    Return state with length and distance decoding tables and index sizes set to
-   fixed code decoding.  Normally this returns fixed tables from inffixed.h.
+   fixed code decoding.  Normally this returns fixed tables from fltk3zlib/inffixed.h.
    If BUILDFIXED is defined, then instead this routine builds the tables the
    first time it's called, and returns those tables the first time and
    thereafter.  This reduces the size of the code by about 2K bytes, in
@@ -105,7 +105,7 @@ struct inflate_state FAR *state;
         virgin = 0;
     }
 #else /* !BUILDFIXED */
-#   include "inffixed.h"
+#   include "fltk3zlib/inffixed.h"
 #endif /* BUILDFIXED */
     state->lencode = lenfix;
     state->lenbits = 9;
@@ -446,7 +446,7 @@ void FAR *out_desc;
             }
 
             /* build code tables -- note: do not change the lenbits or distbits
-               values here (9 and 6) without reading the comments in inftrees.h
+               values here (9 and 6) without reading the comments in fltk3zlib/inffltk3zlib/trees.h
                concerning the ENOUGH constants, which depend on those values */
             state->next = state->codes;
             state->lencode = (code const FAR *)(state->next);

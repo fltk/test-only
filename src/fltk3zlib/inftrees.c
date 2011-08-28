@@ -3,8 +3,8 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-#include "zutil.h"
-#include "inftrees.h"
+#include "fltk3zlib/zutil.h"
+#include "fltk3zlib/inftrees.h"
 
 #define MAXBITS 15
 
@@ -168,7 +168,7 @@ unsigned short FAR *work;
        used keeps track of how many table entries have been allocated from the
        provided *table space.  It is checked for LENS and DIST tables against
        the constants ENOUGH_LENS and ENOUGH_DISTS to guard against changes in
-       the initial root table size constants.  See the comments in inftrees.h
+       the initial root table size constants.  See the comments in fltk3zlib/inffltk3zlib/trees.h
        for more information.
 
        sym increments through all symbols, and the loop terminates when

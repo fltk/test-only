@@ -26,7 +26,7 @@
 #  endif /* !DYNAMIC_CRC_TABLE */
 #endif /* MAKECRCH */
 
-#include "zutil.h"      /* for STDC and FAR definitions */
+#include "fltk3zlib/zutil.h"      /* for STDC and FAR definitions */
 
 #define local static
 
@@ -156,13 +156,13 @@ local void make_crc_table()
     }
 
 #ifdef MAKECRCH
-    /* write out CRC tables to crc32.h */
+    /* write out CRC tables to fltk3zlib/crc32.h */
     {
         FILE *out;
 
-        out = fopen("crc32.h", "w");
+        out = fopen("fltk3zlib/crc32.h", "w");
         if (out == NULL) return;
-        fprintf(out, "/* crc32.h -- tables for rapid CRC calculation\n");
+        fprintf(out, "/* fltk3zlib/crc32.h -- tables for rapid CRC calculation\n");
         fprintf(out, " * Generated automatically by crc32.c\n */\n\n");
         fprintf(out, "local const unsigned long FAR ");
         fprintf(out, "crc_table[TBLS][256] =\n{\n  {\n");
@@ -198,7 +198,7 @@ local void write_table(out, table)
 /* ========================================================================
  * Tables of CRC-32s of all single-byte values, made by make_crc_table().
  */
-#include "crc32.h"
+#include "fltk3zlib/crc32.h"
 #endif /* DYNAMIC_CRC_TABLE */
 
 /* =========================================================================

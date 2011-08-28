@@ -5,7 +5,7 @@
 
 /* @(#) $Id$ */
 
-#include "zutil.h"
+#include "fltk3zlib/zutil.h"
 
 #define local static
 

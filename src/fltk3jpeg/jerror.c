@@ -19,9 +19,9 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jversion.h"
+#include "fltk3jpeg/jinclude.h"
+#include "fltk3jpeg/jpeglib.h"
+#include "fltk3jpeg/jversion.h"
 #include "jerror.h"
 
 #ifdef USE_WINDOWS_MESSAGEBOX

@@ -11,7 +11,7 @@
  * and license in png.h
  */
 
-#include "pngpriv.h"
+#include "fltk3png/pngpriv.h"
 
 /* Generate a compiler error if there is an old png.h in the search path. */
 typedef png_libpng_version_1_5_4 Your_png_h_is_not_version_1_5_4;
@@ -944,7 +944,7 @@ png_check_IHDR(png_structp png_ptr,
 #if defined(PNG_sCAL_SUPPORTED) || defined(PNG_pCAL_SUPPORTED)
 /* ASCII to fp functions */
 /* Check an ASCII formated floating point value, see the more detailed
- * comments in pngpriv.h
+ * comments in fltk3png/pngpriv.h
  */
 /* The following is used internally to preserve the sticky flags */
 #define png_fp_add(state, flags) ((state) |= (flags))

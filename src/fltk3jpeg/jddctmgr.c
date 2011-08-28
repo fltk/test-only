@@ -17,9 +17,9 @@
  */
 
 #define JPEG_INTERNALS
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "fltk3jpeg/jinclude.h"
+#include "fltk3jpeg/jpeglib.h"
+#include "fltk3jpeg/jdct.h"		/* Private declarations for DCT subsystem */
 
 
 /*

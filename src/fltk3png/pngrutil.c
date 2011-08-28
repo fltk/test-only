@@ -14,7 +14,7 @@
  * libpng itself during the course of reading an image.
  */
 
-#include "pngpriv.h"
+#include "fltk3png/pngpriv.h"
 
 #ifdef PNG_READ_SUPPORTED
 
@@ -288,9 +288,9 @@ png_inflate(png_structp png_ptr, png_bytep data, png_size_t size,
    /* zlib can't necessarily handle more than 65535 bytes at once (i.e. it can't
     * even necessarily handle 65536 bytes) because the type uInt is "16 bits or
     * more".  Consequently it is necessary to chunk the input to zlib.  This
-    * code uses ZLIB_IO_MAX, from pngpriv.h, as the maximum (the maximum value
+    * code uses ZLIB_IO_MAX, from fltk3png/pngpriv.h, as the maximum (the maximum value
     * that can be stored in a uInt.)  It is possible to set ZLIB_IO_MAX to a
-    * lower value in pngpriv.h and this may sometimes have a performance
+    * lower value in fltk3png/pngpriv.h and this may sometimes have a performance
     * advantage, because it forces access of the input data to be separated from
     * at least some of the use by some period of time.
     */

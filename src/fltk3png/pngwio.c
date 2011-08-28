@@ -18,7 +18,7 @@
  * them at run time with png_set_write_fn(...).
  */
 
-#include "pngpriv.h"
+#include "fltk3png/pngpriv.h"
 
 #ifdef PNG_WRITE_SUPPORTED
 

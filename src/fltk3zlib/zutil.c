@@ -5,7 +5,7 @@
 
 /* @(#) $Id$ */
 
-#include "zutil.h"
+#include "fltk3zlib/zutil.h"
 
 #ifndef NO_DUMMY_DECL
 struct internal_state      {int dummy;}; /* for buggy compilers */

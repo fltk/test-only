@@ -11,7 +11,7 @@
  * and license in png.h
  */
 
-#include "pngpriv.h"
+#include "fltk3png/pngpriv.h"
 
 #ifdef PNG_WRITE_SUPPORTED
 
@@ -3109,7 +3109,7 @@ png_write_filtered_row(png_structp png_ptr, png_bytep filtered_row)
 
       /* Record the number of bytes available - zlib supports at least 65535
        * bytes at one step, depending on the size of the zlib type 'uInt', the
-       * maximum size zlib can write at once is ZLIB_IO_MAX (from pngpriv.h).
+       * maximum size zlib can write at once is ZLIB_IO_MAX (from fltk3png/pngpriv.h).
        * Use this because on 16 bit systems 'rowbytes' can be up to 65536 (i.e.
        * one more than 16 bits) and, in this case 'rowbytes+1' can overflow a
        * uInt.  ZLIB_IO_MAX can be safely reduced to cause zlib to be called

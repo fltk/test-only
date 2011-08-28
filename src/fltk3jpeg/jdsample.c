@@ -20,8 +20,8 @@
  */
 
 #define JPEG_INTERNALS
-#include "jinclude.h"
-#include "jpeglib.h"
+#include "fltk3jpeg/jinclude.h"
+#include "fltk3jpeg/jpeglib.h"
 
 
 /* Pointer to routine to upsample a single component */

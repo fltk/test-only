@@ -29,7 +29,7 @@
 
 #if !defined(WIN32) && !defined(__APPLE__)
 
-#include "../../include/fltk3/Xutf8.h"
+#include "fltk3/Xutf8.h"
 
 /*** NOTE : all functions are LIMITED to 24 bits Unicode values !!! ***/
 
