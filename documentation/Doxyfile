@@ -25,7 +25,7 @@ DOXYFILE_ENCODING      = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded 
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = "FLTK 1.3.0"
+PROJECT_NAME           = "FLTK 3.0"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. 
 # This could be handy for archiving the generated documentation or 
@@ -565,7 +565,7 @@ INPUT                  = src/index.dox \
                          src/fluid.dox \
                          src/advanced.dox \
                          src/unicode.dox \
-                         ../FL \
+                         ../include \
                          ../src \
                          src/enumerations.dox \
                          src/glut.dox \
@@ -608,8 +608,14 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = ../src/fl_font_win32.cxx \
-                         ../src/fl_font_mac.cxx
+EXCLUDE                = ../include/FL \
+                         ../include/fltk \
+                         ../include/fltk3jpeg \
+                         ../include/fltk3png \
+                         ../include/fltk3zlib \
+                         ../src/fltk3jpeg \
+                         ../src/fltk3png \
+                         ../src/fltk3zlib
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
@@ -801,7 +807,7 @@ HTML_FOOTER            = src/html_footer
 # the style sheet file to the HTML output directory, so don't put your own 
 # stylesheet in the HTML output directory as well, or it will be erased!
 
-HTML_STYLESHEET        = src/html_stylesheet.css
+HTML_STYLESHEET        = 
 
 # If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes, 
 # files or namespaces will be aligned in HTML using tables. If set to 
