@@ -5,20 +5,11 @@
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+// This library is free software. Distribution and use rights are outlined in
+// the file "COPYING" which should have been included with this file.  If this
+// file is missing or damaged, see the license at:
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
+//     http://www.fltk.org/COPYING.php
 //
 // Please report all bugs and problems on the following page:
 //
@@ -904,61 +895,12 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
 
 static void	(*open_cb)(const char *) = 0;
 
-
 /*
  * Install an open documents event handler...
  */
-@interface FLAppleEventHandler : NSObject
-{
-}
-- (void)handleAppleEvent:(NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent;
-@end
-@implementation FLAppleEventHandler
-- (void)handleAppleEvent:(NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent
-{
-  NSAppleEventDescriptor *single = [event descriptorAtIndex:1];
-  const AEDesc *document = [single aeDesc];
-  long i, n;
-  FSRef fileRef;
-  AEKeyword keyWd;
-  DescType typeCd;
-  Size actSz;
-  char filename[1024];
-  // Lock access to FLTK in this thread...
-  fl_lock_function();
-  
-  // Open the documents via the callback...
-  if (AECountItems(document, &n) == noErr) {
-    for (i = 1; i <= n; i ++) {
-      AEGetNthPtr(document, i, typeFSRef, &keyWd, &typeCd,
-                  (Ptr)&fileRef, sizeof(fileRef),
-                  (actSz = sizeof(fileRef), &actSz));
-      FSRefMakePath( &fileRef, (UInt8*)filename, sizeof(filename) );
-      
-      (*open_cb)(filename);
-    }
-  }
-  // Unlock access to FLTK for all threads...
-  fl_unlock_function();
-}
-@end
-
 void fl_open_callback(void (*cb)(const char *)) {
-  static NSAppleEventManager *aeventmgr = nil;
-  static FLAppleEventHandler *handler;
   fl_open_display();
-  if (!aeventmgr) {
-    aeventmgr = [NSAppleEventManager sharedAppleEventManager];
-    handler = [[FLAppleEventHandler alloc] init];
-  }
-  
   open_cb = cb;
-  if (cb) {
-    [aeventmgr setEventHandler:handler andSelector:@selector(handleAppleEvent:withReplyEvent:) 
-                 forEventClass:kCoreEventClass andEventID:kAEOpenDocuments];
-  } else {
-    [aeventmgr removeEventHandlerForEventClass:kCoreEventClass andEventID:kAEOpenDocuments];  
-  }
 }
 
 
@@ -993,6 +935,7 @@ extern "C" {
 - (void)applicationWillHide:(NSNotification *)notify;
 - (void)applicationWillUnhide:(NSNotification *)notify;
 - (id)windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)client;
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
 @end
 @implementation FLDelegate
 - (void)windowDidMove:(NSNotification *)notif
@@ -1128,7 +1071,7 @@ extern "C" {
   for (x = Fl_X::first;x;x = x->next) {
     FLWindow *cw = (FLWindow*)x->xid;
     fltk3::Window *win = x->w;
-    if (win && cw) {
+    if (win && cw && [cw isVisible]) {
       if (win->modal()) {
         [cw setLevel:NSModalPanelWindowLevel];
         if (topModal) 
@@ -1172,7 +1115,7 @@ extern "C" {
   for (x = Fl_X::first;x;x = x->next) {
     FLWindow *cw = (FLWindow*)x->xid;
     fltk3::Window *win = x->w;
-    if (win && cw) {
+    if (win && cw && [cw isVisible]) {
       if (win->modal()) {
         [cw setLevel:NSNormalWindowLevel];
         if (top) [cw orderWindow:NSWindowAbove relativeTo:[top windowNumber]];
@@ -1183,7 +1126,7 @@ extern "C" {
   for (x = Fl_X::first;x;x = x->next) {
     FLWindow *cw = (FLWindow*)x->xid;
     fltk3::Window *win = x->w;
-    if (win && cw) {
+    if (win && cw && [cw isVisible]) {
       if (win->non_modal()) {
         [cw setLevel:NSNormalWindowLevel];
         if (top) [cw orderWindow:NSWindowAbove relativeTo:[top windowNumber]];
@@ -1209,7 +1152,6 @@ extern "C" {
   for (x = Fl_X::first;x;x = x->next) {
     fltk3::Window *w = x->w;
     if ( !w->parent() ) {
-      if ( w->border() || (!w->modal() && !w->tooltip_window()) ) fltk3::handle( fltk3::FOCUS, w);
       fltk3::handle( fltk3::SHOW, w);
       }
   }
@@ -1226,6 +1168,16 @@ extern "C" {
     return view;
   }
   return nil;
+}
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename
+{
+  if (open_cb) {
+    fl_lock_function();
+    (*open_cb)([filename UTF8String]);
+    fl_unlock_function();
+    return YES;
+  }
+  return NO;
 }
 @end
 
@@ -2674,7 +2626,11 @@ void Fl_X::relink(fltk3::Window *w, fltk3::Window *wp) {
 void Fl_X::destroy() {
   // subwindows share their xid with their parent window, so should not close it
   if (!subwindow && w && !w->parent() && xid) {
-    [[(NSWindow *)xid contentView] release];
+    NSView *topview = [(NSWindow *)xid contentView]; 
+    if ( [NSView focusView] == topview ) {
+      [topview unlockFocus];
+    }
+    [topview release];
     [(NSWindow *)xid close];
   }
 }
@@ -2893,6 +2849,7 @@ void Fl_X::set_cursor(fltk3::Cursor c)
     scale = (float)w/win->w();
     if ((float)h/wh < scale) scale = (float)h/wh;
     printer.scale(scale);
+    printer.printable_rect(&w, &h);
   }
 //#define ROTATE 1
 #ifdef ROTATE
@@ -2900,10 +2857,10 @@ void Fl_X::set_cursor(fltk3::Cursor c)
   printer.printable_rect(&w, &h);
   printer.origin(w/2, h/2 );
   printer.rotate(20.);
-  printer.print_window( win, - win->w()/2, - win->h()/2 );
 #else
-  printer.print_window(win);
+  printer.origin(w/2, h/2);
 #endif
+  printer.print_window( win, - ww/2, - wh/2 );
   printer.end_page();
   printer.end_job();
   fl_unlock_function();

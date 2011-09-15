@@ -217,7 +217,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT PostScriptFileDevice : public fltk3::PagedDevice {
 #ifdef __APPLE__
-    Fl_CGContextRef gc;
+    CGContextRef gc;
 #endif
   protected:
     fltk3::PostScriptGraphicsDriver *driver();

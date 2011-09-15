@@ -51,35 +51,30 @@ int fltk3::SystemPrinter::start_job (int pagecount, int *frompage, int *topage)
 //returns 0 iff OK
 {
   OSStatus status = 0;
+  fl_open_display();
   Fl_X::q_release_context();
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-  if( [NSPrintPanel instancesRespondToSelector:@selector(runModalWithPrintInfo:)] &&
-     [NSPrintInfo instancesRespondToSelector:@selector(PMPrintSession)] ) {
-    NSAutoreleasePool *localPool;
-    localPool = [[NSAutoreleasePool alloc] init]; 
+  if (fl_mac_os_version >= 100500) {
     NSPrintInfo *info = [NSPrintInfo sharedPrintInfo];
-    NSPageLayout *layout = [NSPageLayout pageLayout];
-    NSInteger retval = [layout runModal];
-    if(retval == NSOKButton) {
-      NSPrintPanel *panel = [NSPrintPanel printPanel];
-      retval = (NSInteger)[panel runModalWithPrintInfo:info];//from 10.5 only
-    }
+    NSPrintPanel *panel = [NSPrintPanel printPanel];
+    //from 10.5
+    [panel setOptions:NSPrintPanelShowsCopies | NSPrintPanelShowsPageRange | NSPrintPanelShowsPageSetupAccessory];
+    NSInteger retval = [panel runModalWithPrintInfo:info];//from 10.5
     if(retval != NSOKButton) {
-      fltk3::first_window()->show();
-      [localPool release];
+      fltk3::Window *w = fltk3::first_window();
+      if (w) w->show();
       return 1;
     }
-    printSession = (PMPrintSession)[info PMPrintSession];
-    pageFormat = (PMPageFormat)[info PMPageFormat];
-    printSettings = (PMPrintSettings)[info PMPrintSettings];
+    printSession = (PMPrintSession)[info PMPrintSession];//from 10.5
+    pageFormat = (PMPageFormat)[info PMPageFormat];//from 10.5
+    printSettings = (PMPrintSettings)[info PMPrintSettings];//from 10.5
     UInt32 from32, to32;
     PMGetFirstPage(printSettings, &from32); 
     if (frompage) *frompage = (int)from32;
     PMGetLastPage(printSettings, &to32); 
     if (topage) *topage = (int)to32;
     if(topage && *topage > pagecount) *topage = pagecount;
-    status = PMSessionBeginCGDocumentNoDialog(printSession, printSettings, pageFormat);
-    [localPool release];
+    status = PMSessionBeginCGDocumentNoDialog(printSession, printSettings, pageFormat);//from 10.4
   }
   else {
 #endif
@@ -298,7 +293,8 @@ void fltk3::SystemPrinter::end_job (void)
   PMSessionEndDocumentNoDialog(printSession);
   fltk3::DisplayDevice::display_device()->set_current();
   fl_gc = 0;
-  fltk3::first_window()->show();
+  fltk3::Window *w = fltk3::first_window();
+  if (w) w->show();
 }
 
 #endif // __APPLE__

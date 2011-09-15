@@ -65,9 +65,9 @@ namespace fltk3 {
     float scale_x;
     float scale_y;
     float angle; // rotation angle in radians
-    Fl_PMPrintSession  printSession;
-    Fl_PMPageFormat    pageFormat;
-    Fl_PMPrintSettings printSettings;
+    PMPrintSession  printSession;
+    PMPageFormat    pageFormat;
+    PMPrintSettings printSettings;
 #elif defined(WIN32)
     int   abortPrint;
     PRINTDLG      pd;
