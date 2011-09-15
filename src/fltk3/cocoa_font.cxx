@@ -354,7 +354,7 @@ if (fl_mac_os_version >= 100500) {
 
   // Here's my ATSU text measuring attempt... This seems to do the Right Thing
   // now collect our ATSU resources and measure our text string
-  layout = fltk3::fontsize->layout;
+  layout = fontsize->layout;
   // activate the current GC
   iSize = sizeof(CGContextRef);
   iTag = kATSUCGContextTag;
@@ -431,7 +431,7 @@ else {
 
 // Here's my ATSU text measuring attempt... This seems to do the Right Thing
   // now collect our ATSU resources and measure our text string
-  layout = fltk3::fontsize->layout;
+  layout = fontsize->layout;
         // activate the current GC
   iSize = sizeof(CGContextRef);
   iTag = kATSUCGContextTag;
