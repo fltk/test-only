@@ -118,18 +118,7 @@ void fltk3::Window::draw() {
   // on OS X, windows have no frame. To resize a window, we drag the lower right
   // corner. This code draws a little ribbed triangle for dragging.
   // Starting with 10.7, OS X windows have a hidden frame and the corner is no longer needed
-  static signed char showCorner = -1;
-  if (showCorner==-1) {
-    SInt32 majorVersion, minorVersion;
-    Gestalt(gestaltSystemVersionMajor, &majorVersion);
-    Gestalt(gestaltSystemVersionMinor, &minorVersion);
-    showCorner = 1;
-    if (majorVersion>10 || (majorVersion==10 && minorVersion>=7)) {
-      showCorner = 0;
-    }
-  }
-  if (showCorner==1) {
-    extern CGContextRef fl_gc;
+  if (fl_mac_os_version < 100700) {
     if (fl_gc && !parent() && resizable() && (!size_range_set || minh!=maxh || minw!=maxw)) {
       int dx = fltk3::box_dw(box())-fltk3::box_dx(box());
       int dy = fltk3::box_dh(box())-fltk3::box_dy(box());
