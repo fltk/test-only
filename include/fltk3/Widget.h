@@ -82,20 +82,8 @@ namespace fltk3 {
     Style *style_;
     /** label text */
     const char* labeltext_;
-    /** type of label. \see fltk3::Labeltype */
-    uchar labeltype_;
-    /** text color */
-    fltk3::Color labelcolor_;
-    /** alignment of label */
-    fltk3::Align align_;
     /** various flags for the label and derived classes */
     unsigned int flags_;
-    /** \internal The font used for the entire text. */
-    fltk3::Font textfont_;
-    /** \internal Height of the font used for the entire text. */
-    fltk3::Fontsize textsize_;
-    /** \internal color of the entire text */
-    fltk3::Color textcolor_;
     /** optional image for an active label */
     fltk3::Image* image_;
     /** optional image for a deactivated label */
@@ -157,19 +145,19 @@ namespace fltk3 {
     /** Shortcut to set the label text and type in one call.
      \see label(const char *), labeltype(fltk3::Labeltype)
      */
-    void label(fltk3::Labeltype a, const char* b) { Label::labeltype_ = a; labeltext_ = b; }
+    void label(fltk3::Labeltype a, const char* b) { labeltype(a); labeltext_ = b; }
     
     /** Gets the label color. 
      The default color is fltk3::FOREGROUND_COLOR. 
      \return the current label color
      */
-    fltk3::Color labelcolor() const {return labelcolor_;}
+    fltk3::Color labelcolor() const {return style()->labelcolor();}
     
     /** Sets the label color. 
      The default color is fltk3::FOREGROUND_COLOR. 
      \param[in] c the new label color
      */
-    void labelcolor(fltk3::Color c) {labelcolor_=c;}
+    void labelcolor(fltk3::Color c) { private_style()->labelcolor(c);}
     
     /** Gets the font to use. 
      Fonts are identified by indexes into a table. The default value
@@ -205,7 +193,7 @@ namespace fltk3 {
      \return the current label type.
      \see fltk3::Labeltype
      */
-    fltk3::Labeltype labeltype() const {return (fltk3::Labeltype)labeltype_;}
+    fltk3::Labeltype labeltype() const {return style()->labeltype();}
     
     /** Sets the label type. 
      The label type identifies the function that draws the label of the widget. 
@@ -215,13 +203,13 @@ namespace fltk3 {
      \param[in] a new label type
      \see fltk3::Labeltype
      */
-    void labeltype(int a) {labeltype_ = (fltk3::Labeltype)a;}
+    void labeltype(Labeltype a) { private_style()->labeltype(a); }
     
     /** Gets the label alignment.     
      \return label alignment
      \see label(), align(fltk3::Align), fltk3::Align
      */
-    Align align() const {return align_;}
+    Align align() const {return style()->align();}
     
     /** Sets the label alignment.
      This controls how the label is displayed next to or inside the widget. 
@@ -230,7 +218,7 @@ namespace fltk3 {
      \param[in] alignment new label alignment
      \see align(), fltk3::Align
      */
-    void align(Align alignment) {align_ = alignment;}
+    void align(Align alignment) { private_style()->align(alignment); }
     
     /** Gets the widget flags mask */
     unsigned int flags() const {return flags_;}
@@ -256,32 +244,32 @@ namespace fltk3 {
 
     /** Gets the font of the text in the input field.
      \return the current fltk3::Font index */
-    fltk3::Font textfont() const {return textfont_;}
+    fltk3::Font textfont() const { return style()->textfont(); }
     
     /** Sets the font of the text in the input field.
      The text font defaults to \c fltk3::HELVETICA.
      \param [in] s the new text font */
-    void textfont(fltk3::Font s) {textfont_ = s;}
+    void textfont(fltk3::Font s) { private_style()->textfont(s); }
     
     /** Gets the size of the text in the input field.
      \return the text height in pixels */
-    fltk3::Fontsize textsize() const {return textsize_;}
+    fltk3::Fontsize textsize() const { return style()->textsize(); }
     
     /** Sets the size of the text in the input field.
      The text height defaults to \c fltk3::NORMAL_SIZE.
      \param [in] s the new font height in pixel units */
-    void textsize(fltk3::Fontsize s) {textsize_ = s;}
+    void textsize(fltk3::Fontsize s) { private_style()->textsize(s); }
     
     /** Gets the color of the text in the input field.
      \return the text color
      \see textcolor(fltk3::Color) */
-    fltk3::Color textcolor() const {return textcolor_;}
+    fltk3::Color textcolor() const { return style()->textcolor(); }
     
     /** Sets the color of the text in the input field.
      The text color defaults to \c fltk3::FOREGROUND_COLOR.
      \param [in] n new text color
      \see textcolor() */
-    void textcolor(fltk3::Color n) {textcolor_ = n;}
+    void textcolor(fltk3::Color n) { private_style()->textcolor(n); }
 
     /** Gets the image that is used as part of the widget label.
      This image is used when drawing the widget in the active state.
@@ -344,9 +332,9 @@ namespace fltk3 {
     void* user_data_;
     Color color_;
     Color color2_;
+    Boxtype box_;
     uchar type_;
     uchar damage_;
-    Boxtype box_;
     uchar when_;
     
     const char *tooltip_;

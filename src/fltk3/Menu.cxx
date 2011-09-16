@@ -140,9 +140,9 @@ int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   l.label(text);
   l.image(0);
   l.deimage(0);
-  l.labeltype( labeltype_ );
-  l.labelfont( labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA) );
-  l.labelsize( labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE );
+  l.labeltype( labeltype() );
+  l.labelfont( labelsize() || labelfont() ? labelfont() : (m ? m->textfont() : fltk3::HELVETICA) );
+  l.labelsize( labelsize() ? labelsize() : m ? m->textsize() : fltk3::NORMAL_SIZE );
   l.labelcolor( fltk3::FOREGROUND_COLOR ); // this makes no difference?
   fltk3::draw_shortcut = 1;
   int w = 0; int h = 0;
@@ -159,10 +159,10 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
   l.label(text);
   l.image(0);
   l.deimage(0);
-  l.labeltype( labeltype_ );
-  l.labelfont( labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA) );
-  l.labelsize( labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE );
-  l.labelcolor( labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(fltk3::FOREGROUND_COLOR) );
+  l.labeltype( labeltype() );
+  l.labelfont( labelsize() || labelfont() ? labelfont() : (m ? m->textfont() : fltk3::HELVETICA) );
+  l.labelsize( labelsize() ? labelsize() : m ? m->textsize() : fltk3::NORMAL_SIZE );
+  l.labelcolor( labelcolor() ? labelcolor() : m ? m->textcolor() : int(fltk3::FOREGROUND_COLOR) );
   if (!active()) l.labelcolor( fltk3::inactive((fltk3::Color)l.labelcolor()) );
   fltk3::Color color = m ? m->color() : fltk3::GRAY;
   if (selected) {

@@ -42,17 +42,17 @@ static fltk3::Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height
 void fltk3::Adjuster::value_damage() {}
 
 void fltk3::Adjuster::draw() {
-  int dx, dy, W, H;
-  if (w()>=h()) {
+  int dx, dy, W, H, hor = (w()>=h());
+  if (hor) {
     dx = W = w()/3;
     dy = 0; H = h();
   } else {
     dx = 0; W = w();
     dy = H = h()/3;
   }
-  draw_box(drag==1?fltk3::DOWN_BOX:box(), x(),  y()+2*dy, W, H, color());
-  draw_box(drag==2?fltk3::DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
-  draw_box(drag==3?fltk3::DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
+  draw_box(Boxtype((drag==1?DOWN_BOX:box())|(hor?TIE_RIGHT:TIE_TOP)), x(),  y()+2*dy, W, H, color());
+  draw_box(Boxtype((drag==2?fltk3::DOWN_BOX:box())|(hor?TIE_LEFT|TIE_RIGHT:TIE_TOP|TIE_BOTTOM)), x()+dx, y()+dy, W, H, color());
+  draw_box(Boxtype((drag==3?fltk3::DOWN_BOX:box())|(hor?TIE_LEFT:TIE_BOTTOM)), x()+2*dx,  y(), W, H, color());
   if (active_r())
     fltk3::color(selection_color());
   else

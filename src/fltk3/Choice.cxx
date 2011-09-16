@@ -96,10 +96,10 @@ void fltk3::Choice::draw() {
       l.label(m.text);
       l.image(0);
       l.deimage(0);
-      l.labeltype( m.labeltype_ );
-      l.labelfont( m.labelsize_ || m.labelfont_ ? m.labelfont_ : textfont() );
-      l.labelsize( m.labelsize_ ? m.labelsize_ : textsize() );
-      l.labelcolor( m.labelcolor_ ? m.labelcolor_ : textcolor() );
+      l.labeltype( m.labeltype() );
+      l.labelfont( m.labelsize() || m.labelfont() ? m.labelfont() : textfont() );
+      l.labelsize( m.labelsize() ? m.labelsize() : textsize() );
+      l.labelcolor( m.labelcolor() ? m.labelcolor() : textcolor() );
       if (!m.active()) l.labelcolor( fltk3::inactive((fltk3::Color)l.labelcolor()) );
       fltk3::draw_shortcut = 2; // hack value to make '&' disappear
       l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, fltk3::ALIGN_LEFT);

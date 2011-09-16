@@ -60,7 +60,7 @@ void fltk3::Counter::draw() {
     xx[4] = 0;	         ww[4] = 0;
   }
 
-  draw_box(boxtype[0], xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
+  draw_box(Boxtype(boxtype[0]|TIE_LEFT|TIE_RIGHT), xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
   fltk3::font(textfont(), textsize());
   fltk3::color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
   char str[128]; format(str);
@@ -74,16 +74,22 @@ void fltk3::Counter::draw() {
     selcolor = fltk3::inactive(labelcolor());
 
   if (type() == fltk3::NORMAL_COUNTER) {
-    draw_box(boxtype[1], xx[1], y(), ww[1], h(), color());
+    draw_box(Boxtype(boxtype[1]|TIE_RIGHT), xx[1], y(), ww[1], h(), color());
     fltk3::draw_symbol("@-4<<", xx[1], y(), ww[1], h(), selcolor);
+    draw_box(Boxtype(boxtype[2]|TIE_LEFT|TIE_RIGHT), xx[2], y(), ww[2], h(), color());
+    fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
+  } else {
+    draw_box(Boxtype(boxtype[2]|TIE_RIGHT), xx[2], y(), ww[2], h(), color());
+    fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
   }
-  draw_box(boxtype[2], xx[2], y(), ww[2], h(), color());
-  fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
-  draw_box(boxtype[3], xx[3], y(), ww[3], h(), color());
-  fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
   if (type() == fltk3::NORMAL_COUNTER) {
-    draw_box(boxtype[4], xx[4], y(), ww[4], h(), color());
+    draw_box(Boxtype(boxtype[3]|TIE_LEFT|TIE_RIGHT), xx[3], y(), ww[3], h(), color());
+    fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
+    draw_box(Boxtype(boxtype[4]|TIE_LEFT), xx[4], y(), ww[4], h(), color());
     fltk3::draw_symbol("@-4>>", xx[4], y(), ww[4], h(), selcolor);
+  } else {
+    draw_box(Boxtype(boxtype[3]|TIE_LEFT), xx[3], y(), ww[3], h(), color());
+    fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
   }
 }
 

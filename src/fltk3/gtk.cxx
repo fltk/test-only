@@ -41,6 +41,12 @@ static const int tie_gap = 5;
 static const float tie_dk = 0.3f;
 static const float tie_lt = 0.45f;
 static const int use_tie_lt = 1;
+// a high number creates a very intense shadow and steep ramp,
+// a low number brightens the shadow and flattens the ramp
+static const float tie_dk_ramp = 0.25;
+// a high number creates a very intense highlight and steep ramp,
+// a low number lowers the highlight and flattens the ramp
+static const float tie_lt_ramp = 0.9;
 
 
 static fltk3::Color gtk_get_color(fltk3::Color c) {
@@ -61,9 +67,9 @@ fltk3::color(ol);
 
 
 static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt, fltk3::Color dk, fltk3::Boxtype t) {
-  float f = (dk==fltk3::WHITE) ? 0.2 : 0.5;
-  fltk3::Color ol = gtk_get_color(fltk3::color_average(fltk3::BLACK, c, f));
-  fltk3::Color hi = gtk_get_color(fltk3::color_average(lt, c, 0.5));
+  float f = (dk==fltk3::WHITE) ? tie_dk_ramp : tie_lt_ramp;
+  fltk3::Color ol = gtk_get_color(fltk3::color_average(fltk3::BLACK, c, 0.7f));
+  fltk3::Color hi = gtk_get_color(fltk3::color_average(lt, c, f));
   if (t & 0xff000000) {
     int r = x+w-1, b = y+h-1, xr = x+w/2, yb = y+h/2;
     fltk3::color(ol);
@@ -169,7 +175,13 @@ static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color 
 }
 
 static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt, fltk3::Color dk, fltk3::Boxtype t) {
-  float f = (dk==fltk3::WHITE) ? 0.5 : 1.0;
+  float f = (dk==fltk3::WHITE) ? tie_dk_ramp : tie_lt_ramp;
+  fltk3::Color tc1 = gtk_get_color(fltk3::color_average(lt, c, f*0.8f));
+  fltk3::Color tc2 = gtk_get_color(fltk3::color_average(lt, c, f*0.4f));
+  fltk3::Color tc3 = gtk_get_color(fltk3::color_average(lt, c, f*0.2f));
+  fltk3::Color bc1 = gtk_get_color(fltk3::color_average(dk, c, f*0.6f));
+  fltk3::Color bc2 = gtk_get_color(fltk3::color_average(dk, c, f*0.3f));
+  fltk3::Color bc3 = gtk_get_color(fltk3::color_average(dk, c, f*0.1f));
   draw_frame(x, y, w, h, c, lt, dk, t);
   if (t & 0xff000000) {
     int r = x+w-1, b = y+h-1;
@@ -191,11 +203,11 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
         fltk3::rectf(x2, y, r2-x2+2, 5);
       }
     } else {
-      gtk_color(fltk3::color_average(lt, c, 0.4f*f));
+      gtk_color(tc1);
       fltk3::xyline(x2, y+2, r2);
-      gtk_color(fltk3::color_average(lt, c, 0.2f*f));
+      gtk_color(tc2);
       fltk3::xyline(x2, y+3, r2);
-      gtk_color(fltk3::color_average(lt, c, 0.1f*f));
+      gtk_color(tc3);
       fltk3::xyline(x2, y+4, r2);
     }
     gtk_color(c);
@@ -209,11 +221,11 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
       fltk3::xyline(r-tie_gap+1, b, r2);
       fltk3::rectf(x2, y+h-4, r2-x2+1, 3);
     } else {
-      gtk_color(fltk3::color_average(dk, c, 0.025f/f));
+      gtk_color(bc3);
       fltk3::xyline(x2, b-3, r2);
-      gtk_color(fltk3::color_average(dk, c, 0.05f/f));
+      gtk_color(bc2);
       fltk3::xyline(x2, b-2, r2);
-      gtk_color(fltk3::color_average(dk, c, 0.1f/f));
+      gtk_color(bc1);
       fltk3::xyline(x2, b-1, r2);
     }
     if (t & fltk3::TIE_LEFT) {
@@ -233,19 +245,19 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
       fltk3::yxline(r-1, y2, b2);
     }
   } else {
-    gtk_color(fltk3::color_average(lt, c, 0.4f));
+    gtk_color(tc1);
     fltk3::xyline(x + 2, y + 2, x + w - 3);
-    gtk_color(fltk3::color_average(lt, c, 0.2f));
+    gtk_color(tc2);
     fltk3::xyline(x + 2, y + 3, x + w - 3);
-    gtk_color(fltk3::color_average(lt, c, 0.1f));
+    gtk_color(tc3);
     fltk3::xyline(x + 2, y + 4, x + w - 3);
     gtk_color(c);
     fltk3::rectf(x + 2, y + 5, w - 4, h - 7);
-    gtk_color(fltk3::color_average(dk, c, 0.025f));
+    gtk_color(bc3);
     fltk3::xyline(x + 2, y + h - 4, x + w - 3);
-    gtk_color(fltk3::color_average(dk, c, 0.05f));
+    gtk_color(bc2);
     fltk3::xyline(x + 2, y + h - 3, x + w - 3);
-    gtk_color(fltk3::color_average(dk, c, 0.1f));
+    gtk_color(bc1);
     fltk3::xyline(x + 2, y + h - 2, x + w - 3);
     fltk3::yxline(x + w - 2, y + 2, y + h - 3);
   }

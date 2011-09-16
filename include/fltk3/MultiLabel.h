@@ -36,8 +36,8 @@ namespace fltk3 {
   struct FLTK3_EXPORT MultiLabel {
     const char* labela;
     const char* labelb;
-    uchar typea;
-    uchar typeb;
+    Labeltype typea;
+    Labeltype typeb;
     void label(fltk3::Widget*);
     void label(fltk3::MenuItem*);
   };

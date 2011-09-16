@@ -108,13 +108,7 @@ fltk3::Label::Label(int X, int Y, int W, int H, const char* L)
 : fltk3::Rectangle(X, Y, W, H),
   style_(&fltk3::default_style),
   labeltext_(L),
-  labeltype_(fltk3::NORMAL_LABEL),
-  labelcolor_(fltk3::FOREGROUND_COLOR),
-  align_(fltk3::ALIGN_CENTER),
   flags_(0),
-  textfont_(0),
-  textsize_(0),
-  textcolor_(0),
   image_(0),
   deimage_(0)
 {
@@ -124,13 +118,7 @@ fltk3::Label::Label(const fltk3::Label &s)
 : fltk3::Rectangle(s),
   style_(s.style_), // FIXME: do not just link to private styles
   labeltext_(0L),
-  labeltype_(s.labeltype_),
-  labelcolor_(s.labelcolor_),
-  align_(s.align_),
   flags_(s.flags_),
-  textfont_(s.textfont_),
-  textsize_(s.textsize_),
-  textcolor_(s.textcolor_),
   image_(s.image_),
   deimage_(s.deimage_)
 {
@@ -146,13 +134,7 @@ fltk3::Label::Label(const fltk3::Label &s)
 fltk3::Label::Label() 
 : fltk3::Rectangle(),
   style_(&fltk3::default_style),
-  labeltype_(fltk3::NORMAL_LABEL),
-  labelcolor_(fltk3::FOREGROUND_COLOR),
-  align_(fltk3::ALIGN_CENTER),
   flags_(0),
-  textfont_(fltk3::HELVETICA),
-  textsize_(fltk3::NORMAL_SIZE),
-  textcolor_(fltk3::FOREGROUND_COLOR),
   image_(0),
   deimage_(0)
 {

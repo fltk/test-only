@@ -37,9 +37,21 @@ fltk3::Style::Style() :
   parent_(0),
   labelfont_(fltk3::HELVETICA),
   labelsize_(fltk3::NORMAL_SIZE),
+  labeltype_(fltk3::NORMAL_LABEL),
+  labelcolor_(fltk3::FOREGROUND_COLOR),
+  align_(fltk3::ALIGN_CENTER),
+  textfont_(fltk3::HELVETICA),
+  textsize_(fltk3::NORMAL_SIZE),
+  textcolor_(fltk3::FOREGROUND_COLOR),
   private_(0),
   labelfont_set_(1),
-  labelsize_set_(1)
+  labelsize_set_(1),
+  labeltype_set_(1),
+  labelcolor_set_(1),
+  align_set_(1),
+  textfont_set_(1),
+  textsize_set_(1),
+  textcolor_set_(1)
 {
 }
 
@@ -49,9 +61,21 @@ fltk3::Style::Style(Style *parent) :
   parent_(parent),
   labelfont_(parent->labelfont_),
   labelsize_(parent->labelsize_),
+  labeltype_(parent->labeltype_),
+  labelcolor_(parent->labelcolor_),
+  align_(parent->align_),
+  textfont_(parent->textfont_),
+  textsize_(parent->textsize_),
+  textcolor_(parent->textcolor_),
   private_(0),
   labelfont_set_(0),
-  labelsize_set_(0)
+  labelsize_set_(0),
+  labeltype_set_(0),
+  labelcolor_set_(0),
+  align_set_(0),
+  textfont_set_(0),
+  textsize_set_(0),
+  textcolor_set_(0)
 {
 }
 
@@ -83,6 +107,18 @@ void fltk3::Style::update()
     labelfont_ = parent_->labelfont_;
   if (!labelsize_set_)
     labelsize_ = parent_->labelsize_;
+  if (!labeltype_set_)
+    labeltype_ = parent_->labeltype_;
+  if (!labelcolor_set_)
+    labelcolor_ = parent_->labelcolor_;
+  if (!align_set_)
+    align_ = parent_->align_;
+  if (!textfont_set_)
+    textfont_ = parent_->textfont_;
+  if (!textsize_set_)
+    textsize_ = parent_->textsize_;
+  if (!textcolor_set_)
+    textcolor_ = parent_->textcolor_;
   
   version_ = current_;
 }
