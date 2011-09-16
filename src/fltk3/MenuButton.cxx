@@ -36,13 +36,13 @@ static fltk3::MenuButton	*pressed_menu_button_ = 0;
 void fltk3::MenuButton::draw() {
   FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (!box() || type()) return;
-  draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
-  draw_label();
-  if (fltk3::focus() == this) draw_focus();
-  // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
+  draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
+  draw_label(x(), y(), X-x(), h());
+  if (fltk3::focus() == this) draw_focus();
+  // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   fltk3::color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));
   fltk3::line(X+H/2, Y+H, X, Y, X+H, Y);
   fltk3::color(active_r() ? fltk3::LIGHT3 : fltk3::inactive(fltk3::LIGHT3));
