@@ -27,7 +27,7 @@
 // Contents:
 
 //
-//   fltk3::WizardGroup::fltk3::WizardGroup() - Create an fltk3::WizardGroup widget.
+//   fltk3::WizardGroup::WizardGroup() - Create an fltk3::WizardGroup widget.
 //   fltk3::WizardGroup::draw()      - Draw the wizard border and visible child.
 //   fltk3::WizardGroup::next()      - Show the next child.
 //   fltk3::WizardGroup::prev()      - Show the previous child.
@@ -45,7 +45,7 @@
 
 
 //
-// 'fltk3::WizardGroup::fltk3::WizardGroup()' - Create an fltk3::WizardGroup widget.
+// 'fltk3::WizardGroup::WizardGroup()' - Create an fltk3::WizardGroup widget.
 //
 
 /**

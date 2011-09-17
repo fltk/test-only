@@ -28,7 +28,7 @@
 //
 // Contents:
 //
-//   fltk3::FileIcon::fltk3::FileIcon()       - Create a new file icon.
+//   fltk3::FileIcon::FileIcon()       - Create a new file icon.
 //   fltk3::FileIcon::~Fl_File_Icon()      - Remove a file icon.
 //   fltk3::FileIcon::add()               - Add data to an icon.
 //   fltk3::FileIcon::find()              - Find an icon based upon a given file.

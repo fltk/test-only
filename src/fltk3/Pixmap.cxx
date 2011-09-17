@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \fn fltk3::Pixmap::fltk3::Pixmap(const char **data)
+/** \fn fltk3::Pixmap::Pixmap(const char **data)
   The constructors create a new pixmap from the specified XPM data.*/
 
-/** \fn fltk3::Pixmap::fltk3::Pixmap(const unsigned char * const *data)
+/** \fn fltk3::Pixmap::Pixmap(const unsigned char * const *data)
   The constructors create a new pixmap from the specified XPM data.*/
 
-/** \fn fltk3::Pixmap::fltk3::Pixmap(const unsigned char **data)
+/** \fn fltk3::Pixmap::Pixmap(const unsigned char **data)
   The constructors create a new pixmap from the specified XPM data.*/
 
 // Draws X pixmap data, keeping it stashed in a server pixmap so it

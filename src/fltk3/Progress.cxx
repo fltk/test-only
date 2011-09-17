@@ -28,7 +28,7 @@
 
 //
 //   fltk3::Progress::draw()        - Draw the check button.
-//   fltk3::Progress::fltk3::Progress() - Construct a fltk3::Progress widget.
+//   fltk3::Progress::Progress() - Construct a fltk3::Progress widget.
 //
 
 //

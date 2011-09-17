@@ -27,7 +27,7 @@
 // Contents:
 
 //
-//   fltk3::PNMImage::fltk3::PNMImage() - Load a PNM image...
+//   fltk3::PNMImage::PNMImage() - Load a PNM image...
 //
 
 //
@@ -43,7 +43,7 @@
 
 
 //
-// 'fltk3::PNMImage::fltk3::PNMImage()' - Load a PNM image...
+// 'fltk3::PNMImage::PNMImage()' - Load a PNM image...
 //
 
 /** 

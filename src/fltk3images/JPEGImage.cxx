@@ -27,7 +27,7 @@
 //
 // Contents:
 //
-//   fltk3::JPEGImage::fltk3::JPEGImage() - Load a JPEG image file.
+//   fltk3::JPEGImage::JPEGImage() - Load a JPEG image file.
 //
 
 //

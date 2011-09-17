@@ -391,7 +391,7 @@ fltk3::SharedImage* fltk3::SharedImage::find(const char *n, int W, int H) {
  \see fltk3::SharedImage::find(const char *n, int W, int H)
  \see fltk3::SharedImage::release() 
  \see fltk3::JPEGImage::JPEGImage(const char *name, const unsigned char *data)
- \see fltk3::PNGImage::fltk3::PNGImage (const char *name_png, const unsigned char *buffer, int maxsize)
+ \see fltk3::PNGImage::PNGImage (const char *name_png, const unsigned char *buffer, int maxsize)
 */
 fltk3::SharedImage* fltk3::SharedImage::get(const char *n, int W, int H) {
   fltk3::SharedImage	*temp;		// Image

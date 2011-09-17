@@ -28,7 +28,7 @@
 // Contents:
 
 //
-//   fltk3::PNGImage::fltk3::PNGImage() - Load a PNG image file.
+//   fltk3::PNGImage::PNGImage() - Load a PNG image file.
 //
 
 //

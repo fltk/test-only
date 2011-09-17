@@ -52,7 +52,7 @@ namespace fltk3 {
     /**
      @brief The constructor.
      *
-     * On Mac OS X, all arguments are unused. On other platforms they are used as by fltk3::MenuBar::fltk3::MenuBar().
+     * On Mac OS X, all arguments are unused. On other platforms they are used as by fltk3::MenuBar::MenuBar().
      */
     SysMenuBar(int x,int y,int w,int h,const char *l=0)
     : fltk3::MenuBar(x,y,w,h,l) {

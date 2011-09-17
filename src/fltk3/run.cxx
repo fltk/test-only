@@ -1929,7 +1929,7 @@ void fltk3::clear_widget_pointer(fltk3::Widget const *w)
 
  \param opt which option
  \return true or false
- \see enum fltk3::fltk3::Option
+ \see enum fltk3::Option
  \see fltk3::option(fltk3::Option, bool)
 
  \since FLTK 1.3.0
@@ -1987,7 +1987,7 @@ bool fltk3::option(fltk3::Option opt)
  
  \param opt which option
  \param val set to true or false
- \see enum fltk3::fltk3::Option
+ \see enum fltk3::Option
  \see bool fltk3::option(fltk3::Option)
  */
 void fltk3::option(fltk3::Option opt, bool val)

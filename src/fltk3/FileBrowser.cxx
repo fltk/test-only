@@ -30,7 +30,7 @@
 //   fltk3::FileBrowser::item_height()     - Return the height of a list item.
 //   fltk3::FileBrowser::item_width()      - Return the width of a list item.
 //   fltk3::FileBrowser::item_draw()       - Draw a list item.
-//   fltk3::FileBrowser::fltk3::FileBrowser() - Create a fltk3::FileBrowser widget.
+//   fltk3::FileBrowser::FileBrowser() - Create a fltk3::FileBrowser widget.
 //   fltk3::FileBrowser::load()            - Load a directory into the browser.
 //   fltk3::FileBrowser::filter()          - Set the filename filter.
 //
@@ -394,7 +394,7 @@ fltk3::FileBrowser::item_draw(void *p,	// I - List item data
 
 
 //
-// 'fltk3::FileBrowser::fltk3::FileBrowser()' - Create a fltk3::FileBrowser widget.
+// 'fltk3::FileBrowser::FileBrowser()' - Create a fltk3::FileBrowser widget.
 //
 
 fltk3::FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate

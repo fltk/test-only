@@ -26,7 +26,7 @@
 //
 // Contents:
 //
-//   fltk3::XBMImage::fltk3::XBMImage() - Load an XBM file.
+//   fltk3::XBMImage::XBMImage() - Load an XBM file.
 //
 
 //
@@ -41,7 +41,7 @@
 #include "flstring.h"
 
 //
-// 'fltk3::XBMImage::fltk3::XBMImage()' - Load an XBM file.
+// 'fltk3::XBMImage::XBMImage()' - Load an XBM file.
 //
 
 /**  

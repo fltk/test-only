@@ -119,7 +119,7 @@
 */
 /** @} */
 
-/** \fn fltk3::FileChooser::fltk3::FileChooser(const char *pathname, const char *pattern, int type, const char *title)
+/** \fn fltk3::FileChooser::FileChooser(const char *pathname, const char *pattern, int type, const char *title)
   The constructor creates the fltk3::FileChooser dialog shown.
   The pathname argument can be a directory name or a
   complete file name (in which case the corresponding file is highlighted

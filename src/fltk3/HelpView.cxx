@@ -41,7 +41,7 @@
 //   fltk3::HelpView::get_attr()        - Get an attribute value from the string.
 //   fltk3::HelpView::get_color()       - Get an alignment attribute.
 //   fltk3::HelpView::handle()          - Handle events in the widget.
-//   fltk3::HelpView::fltk3::HelpView()    - Build a fltk3::HelpView widget.
+//   fltk3::HelpView::HelpView()    - Build a fltk3::HelpView widget.
 //   fltk3::HelpView::~Fl_Help_View()   - Destroy a fltk3::HelpView widget.
 //   fltk3::HelpView::load()            - Load the specified file.
 //   fltk3::HelpView::resize()          - Resize the help widget.
