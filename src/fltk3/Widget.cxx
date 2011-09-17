@@ -368,7 +368,7 @@ fltk3::Label::copy_label(const char *a) {
 void
 fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
   fltk3::WidgetTracker wp(this);
-  if (o && o->pWrapper && o->callback_!=default_callback) {
+  if (o && o->pWrapper && o->callback_!=default_callback && o->callback_!=(CallbackPtr)Window::default_callback) {
     callback_((fltk3::Widget*)o->pWrapper, arg);
   } else {
     callback_(o,arg);

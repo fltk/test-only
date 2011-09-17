@@ -568,7 +568,7 @@ public: // should be private!
   }
   
   static Fl_Box_Draw_F *get_boxtype(Fl_Boxtype b) {
-    return (fltk3::BoxDrawF*)fltk3::get_boxtype(fltk3::_1to3_boxtype(b));
+    return 0; //(fltk3::BoxDrawF*)fltk3::get_boxtype(fltk3::_1to3_boxtype(b));
   }
   
   static void set_boxtype(Fl_Boxtype a, Fl_Box_Draw_F *b, uchar c, uchar d, uchar e, uchar f) {

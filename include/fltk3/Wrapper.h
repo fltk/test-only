@@ -218,8 +218,8 @@ virtual rtype proto { \
 
 
 #define FLTK3_WIDGET_VCALLS(type3) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, show(), hide(), Show) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, hide(), show(), Hide) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, show(), show(), Show) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, hide(), hide(), Hide) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw(), draw(), Draw) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
   FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, type3##_I, handle(int event), handle(event), Handle)
@@ -244,7 +244,7 @@ namespace fltk3 {
 	enum {
       pVCallDtor          = 1<<0,
     
-	  pVCallWidgetDraw    = 1<<1,
+      pVCallWidgetDraw    = 1<<1,
       pVCallWidgetHandle  = 1<<2,
       pVCallWidgetResize  = 1<<3,
       pVCallWidgetShow    = 1<<4,
@@ -285,7 +285,7 @@ namespace fltk3 {
     FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
     FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
     FLTK3_WRAPPER_VCALLS_OBJECT(Widget, hide(), hide(), Hide)
-    virtual void draw_overlay() {} // neede by overlay windows
+    virtual void draw_overlay() {} // needed by overlay windows
     virtual void *item_first() const { return 0; }
     virtual void *item_next(void *item) const { return 0; }
     virtual void *item_prev(void *item) const { return 0; }    
