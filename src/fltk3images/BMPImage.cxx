@@ -27,7 +27,7 @@
 //
 // Contents:
 //
-//   fltk3::BMPImage::fltk3::BMPImage() - Load a BMP image file.
+//   fltk3::BMPImage::BMPImage() - Load a BMP image file.
 //
 
 //

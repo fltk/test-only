@@ -60,7 +60,7 @@ namespace fltk3 {
      */
     Box(int X, int Y, int W, int H, const char *l=0)
     : fltk3::Widget(X,Y,W,H,l) {}
-    /**    See fltk3::Box::fltk3::Box(int x, int y, int w, int h, const char * = 0)   */
+    /**    See fltk3::Box::Box(int x, int y, int w, int h, const char * = 0)   */
     Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l)
     : fltk3::Widget(X,Y,W,H,l) {box(b);}
     
