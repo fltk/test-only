@@ -30,7 +30,7 @@
 #include "print_panel.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <FL/Fl_Preferences.H>
 extern Fl_Preferences fluid_prefs;
 

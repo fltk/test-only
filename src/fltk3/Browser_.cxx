@@ -336,7 +336,6 @@ void fltk3::Browser_::display(void* item) {
  Draws the list within the normal widget bounding box.
  */
 void fltk3::Browser_::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int drawsquare = 0;
   update_top();
   int full_width_ = full_width();
@@ -699,8 +698,6 @@ int fltk3::Browser_::select_only(void* item, int docallbacks) {
  \returns 1 if event was processed, 0 if not.
  */
 int fltk3::Browser_::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
-  
   // NOTE:
   // We use fltk3::WidgetTracker to test if the user has deleted
   // this widget in a callback. Callbacks can be called by:

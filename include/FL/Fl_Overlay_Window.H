@@ -33,18 +33,18 @@
 #include "Fl_Double_Window.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Overlay_Window, OverlayWindow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Overlay_Window, OverlayWindow)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Overlay_Window, OverlayWindow)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(OverlayWindow, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(OverlayWindow, hide(), hide(), Hide)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(OverlayWindow, show(), show(), Show)
+  FLTK3_WINDOW_VCALLS(OverlayWindow)
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(OverlayWindow, draw_overlay(), draw_overlay(), DrawOverlay)
-  
   void flush() {
     ((fltk3::OverlayWindow*)_p)->flush();
   }
@@ -60,12 +60,12 @@ public:
   Fl_Overlay_Window() {}
   
   Fl_Overlay_Window(int W, int H, const char *l=0) {
-    _p = new fltk3::OverlayWindow(W, H, l);
+    _p = new fltk3::OverlayWindow_I(W, H, l);
     _p->wrapper(this);
   }
   
   Fl_Overlay_Window(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::OverlayWindow(X, Y, W, H, l);
+    _p = new fltk3::OverlayWindow_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

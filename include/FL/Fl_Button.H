@@ -42,32 +42,29 @@
 class Fl_Widget_Tracker;
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Button, Button)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Button, Button)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Button : public Fl_Widget {
 
 protected:
   
   void simulate_key_action() {
-    ((fltk3::Button*)_p)->simulate_key_action();
+    ((fltk3::Button_I*)_p)->simulate_key_action();
   }
   
 public:
 
+  FLTK3_WIDGET_VCALLS(Button)
+  
   Fl_Button() {}
 
   Fl_Button(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::Button(x, y, w, h, label);
+    _p = new fltk3::Button_I(x, y, w, h, label);
     _p->wrapper(this);
   }
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(Button, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Button, hide(), hide(), Hide)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Button, show(), show(), Show)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Button, draw(), draw(), Draw)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Button, handle(int event), handle(event), Handle)
 
   int value(int v) {
     return ((fltk3::Button*)_p)->value(v);

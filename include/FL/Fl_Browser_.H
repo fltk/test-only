@@ -43,6 +43,11 @@
 #define FL_SORT_DESCENDING	1	/**< sort in descending order */
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Browser_, Browser_)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Browser_, Browser_)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 namespace fltk3 { class Browser; }
 inline fltk3::Browser *fl_new_browser(int, int, int, int, const char*);
 
@@ -50,94 +55,90 @@ class FL_EXPORT Fl_Browser_ : public Fl_Group {
 
 protected:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_first() const, item_first(), BrowserItemFirst)
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_next(void *item) const, item_next(item), BrowserItemNext);
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_prev(void *item) const, item_prev(item), BrowserItemPrev);
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void*, Browser_, item_last() const, item_last(), BrowserItemLast)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_height(void *item) const, item_height(item), BrowserItemHeight)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_width(void *item) const, item_width(item), BrowserItemWidth)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_quick_height(void *item) const, item_quick_height(item), BrowserItemQuickHeight)  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, item_draw(void *item, int X, int Y, int W, int H) const, item_draw(item, X, Y, W, H), BrowserItemDraw)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(const char *, Browser_, item_text(void *item) const, item_text(item), BrowserItemText)  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, item_swap(void *a, void *b), item_swap(a, b), BrowserItemSwap)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_at(int index) const, item_at(index), BrowserItemAt)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, full_width() const, full_width(), BrowserFullWidth)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, full_height() const, full_height(), BrowserFullHeight)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, incr_height() const, incr_height(), BrowserIncrHeight)  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, item_select(void *item, int val=1), item_select(item, val), BrowserItemSelect)  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_selected(void *item) const, item_selected(item), BrowserItemSelected)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser__I, item_first() const, item_first(), BrowserItemFirst)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser__I, item_next(void *item) const, item_next(item), BrowserItemNext);
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser__I, item_prev(void *item) const, item_prev(item), BrowserItemPrev);
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void*, Browser__I, item_last() const, item_last(), BrowserItemLast)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, item_height(void *item) const, item_height(item), BrowserItemHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, item_width(void *item) const, item_width(item), BrowserItemWidth)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, item_quick_height(void *item) const, item_quick_height(item), BrowserItemQuickHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser__I, item_draw(void *item, int X, int Y, int W, int H) const, item_draw(item, X, Y, W, H), BrowserItemDraw)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(const char *, Browser__I, item_text(void *item) const, item_text(item), BrowserItemText)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser__I, item_swap(void *a, void *b), item_swap(a, b), BrowserItemSwap)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser__I, item_at(int index) const, item_at(index), BrowserItemAt)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, full_width() const, full_width(), BrowserFullWidth)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, full_height() const, full_height(), BrowserFullHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, incr_height() const, incr_height(), BrowserIncrHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser__I, item_select(void *item, int val=1), item_select(item, val), BrowserItemSelect)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser__I, item_selected(void *item) const, item_selected(item), BrowserItemSelected)  
   
   void *top() const {
-    return ((fltk3::Browser_*)_p)->top();
+    return ((fltk3::Browser__I*)_p)->top();
   }
   
   void *selection() const { 
-    return ((fltk3::Browser_*)_p)->selection();
+    return ((fltk3::Browser__I*)_p)->selection();
   }
   
   void new_list() {
-    ((fltk3::Browser_*)_p)->new_list();
+    ((fltk3::Browser__I*)_p)->new_list();
   }
   
   void deleting(void *item) {
-    ((fltk3::Browser_*)_p)->deleting(item);
+    ((fltk3::Browser__I*)_p)->deleting(item);
   }
   
   void replacing(void *a,void *b) {
-    ((fltk3::Browser_*)_p)->replacing(a, b);
+    ((fltk3::Browser__I*)_p)->replacing(a, b);
   }
   
   void swapping(void *a,void *b) {
-    ((fltk3::Browser_*)_p)->swapping(a, b);
+    ((fltk3::Browser__I*)_p)->swapping(a, b);
   }
   
   void inserting(void *a,void *b) {
-    ((fltk3::Browser_*)_p)->inserting(a, b);
+    ((fltk3::Browser__I*)_p)->inserting(a, b);
   }
   
   int displayed(void *item) const {
-    return ((fltk3::Browser_*)_p)->displayed(item);
+    return ((fltk3::Browser__I*)_p)->displayed(item);
   }
   
   void redraw_line(void *item) {
-    ((fltk3::Browser_*)_p)->redraw_line(item);
+    ((fltk3::Browser__I*)_p)->redraw_line(item);
   }
   
   void redraw_lines() { 
-    ((fltk3::Browser_*)_p)->redraw_lines();
+    ((fltk3::Browser__I*)_p)->redraw_lines();
   }
   
   void bbox(int &X,int &Y,int &W,int &H) const {
-    ((fltk3::Browser_*)_p)->bbox(X, Y, W, H);
+    ((fltk3::Browser__I*)_p)->bbox(X, Y, W, H);
   }
   
   int leftedge() const {
-    return ((fltk3::Browser_*)_p)->leftedge();
+    return ((fltk3::Browser__I*)_p)->leftedge();
   }
   
   void *find_item(int ypos) {
-    return ((fltk3::Browser_*)_p)->find_item(ypos);
+    return ((fltk3::Browser__I*)_p)->find_item(ypos);
   }
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, draw(), draw(), Draw)
   
   Fl_Browser_() { /* empty */ }
 
   Fl_Browser_(int x, int y, int w, int h, const char *label=0) {
-    _p = (fltk3::Object*)fl_new_browser(x, y, w, h, label);
+    _p = new fltk3::Browser__I(x, y, w, h, label);
     _p->wrapper(this);
   }
  
 public:
 
+  FLTK3_WIDGET_VCALLS(Browser_)
+
   // FIXME: 123 Fl_Scrollbar scrollbar;
   
   // FIXME: 123 Fl_Scrollbar hscrollbar;
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, handle(int event), handle(event), Handle)
-
   int select(void *item,int val=1,int docallbacks=0) {
     return ((fltk3::Browser_*)_p)->select(item, val, docallbacks);
   }
@@ -240,13 +241,6 @@ public:
     ((fltk3::Browser_*)_p)->sort(flags);
   }
 };
-
-
-#include <fltk3/Browser.h>
-
-inline fltk3::Browser *fl_new_browser(int x, int y, int w, int h, const char *l) {
-  return new fltk3::Browser(x, y, w, h, l);
-}
 
 
 #endif

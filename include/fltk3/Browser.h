@@ -39,9 +39,6 @@
 #include "Image.h"
 
 
-class Fl_Browser;
-
-
 namespace fltk3 {
 
   struct BrowserLine_;
@@ -93,8 +90,6 @@ namespace fltk3 {
    For more info, see find_item(int).
    */
   class FLTK3_EXPORT Browser : public fltk3::Browser_ {
-    
-    friend class ::Fl_Browser;
     
     fltk3::BrowserLine_ *first;		// the array of lines
     fltk3::BrowserLine_ *last;

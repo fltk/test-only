@@ -29,7 +29,7 @@
 #ifndef Fl_Help_Dialog_H
 #define Fl_Help_Dialog_H
 
-#include <fltk3/HelpDialog.h>
+#include <fltk3images/HelpDialog.h>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
@@ -38,6 +38,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Help_View.H>
+
 
 class FL_EXPORT Fl_Help_Dialog : public fltk3::HelpDialog {
 

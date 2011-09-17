@@ -143,7 +143,9 @@ fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
   fltk3::Image	*img;				// Image pointer
   int		cx, cy;				// Image position
 
-  img = (fltk3::Image *)(lo->label());
+  img = (fltk3::Image *)(lo->label()); // FIXME: oh curse you, abuser of pointers
+  // the line above will return the address of a wrapper instead of the crrect pointer
+  // when using wrappers.
 
   if (la & fltk3::ALIGN_LEFT) cx = 0;
   else if (la & fltk3::ALIGN_RIGHT) cx = img->w() - lw;

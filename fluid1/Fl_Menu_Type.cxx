@@ -39,7 +39,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Text_Display.H>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 

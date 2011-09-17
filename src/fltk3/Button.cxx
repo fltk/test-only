@@ -73,7 +73,6 @@ void fltk3::Button::setonly() { // set this radio button on, turn others off
 }
 
 void fltk3::Button::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (type() == fltk3::HIDDEN_BUTTON) return;
   fltk3::Color col;
   if (value()) {
@@ -96,7 +95,6 @@ void fltk3::Button::draw() {
 }
 
 int fltk3::Button::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   int newval;
   switch (event) {
   case fltk3::ENTER: /* FALLTHROUGH */

@@ -39,7 +39,7 @@
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_Tree.H>
 #include <stdio.h>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include "undo.h"
 
 #include "Fl_Widget_Type.h"
@@ -1093,8 +1093,8 @@ static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )
     Fl_Multi_Label *ml = new Fl_Multi_Label;
     ml->labela = (char*)ic;
     ml->labelb = t1;
-    ml->typea = FL_IMAGE_LABEL;
-    ml->typeb = FL_NORMAL_LABEL;
+    ml->typea = fltk3::_1to3_labeltype(FL_IMAGE_LABEL);
+    ml->typeb = fltk3::_1to3_labeltype(FL_NORMAL_LABEL);
     ml->label( mi );
   }
   else if (txt!=mi->text)

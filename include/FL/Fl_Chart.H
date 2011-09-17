@@ -45,27 +45,31 @@
 #define FL_CHART_MAX		128
 #define FL_CHART_LABEL_MAX	18
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Chart, Chart)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Chart, Chart)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 struct FL_CHART_ENTRY {
    float val;
    unsigned col;
    char str[FL_CHART_LABEL_MAX+1];
 };
 
+
 class FL_EXPORT Fl_Chart : public Fl_Widget {
 
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Chart, draw(), draw(), Draw)
-  
 public:
   
+  FLTK3_WIDGET_VCALLS(Chart)
+
   Fl_chart() { /* empty */ }
   
   Fl_Chart(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::Chart(X, Y, W, H, L);
+    _p = new fltk3::Chart_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
-
 
   void clear() {
     ((fltk3::Chart*)_p)->clear();

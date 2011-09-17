@@ -32,14 +32,22 @@
 #include <fltk3/CheckButton.h>
 #include "Fl_Light_Button.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Check_Button, CheckButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Check_Button, CheckButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Check_Button : public Fl_Light_Button {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(CheckButton)
+  
   Fl_Check_Button() { /* empty */ }
     
   Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::CheckButton(X, Y, W, H, L);
+    _p = new fltk3::CheckButton_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
 

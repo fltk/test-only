@@ -38,22 +38,32 @@
 #define FL_DIGITAL_CLOCK FL_SQUARE_CLOCK
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Clock_Output, ClockOutput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Clock_Output, ClockOutput)
+void draw(int X, int Y, int W, int H) { ClockOutput::draw(X, Y, W, H); }
+FLTK3_WRAPPER_INTERFACE_END()
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Clock, Clock)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Clock, Clock)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Clock_Output : public Fl_Widget {
 
 protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(ClockOutput, draw(), draw(), Draw)
 
   void draw(int X, int Y, int W, int H) {
-    ((fltk3::ClockOutput*)_p)->draw(X, Y, W, H);
+    ((fltk3::ClockOutput_I*)_p)->draw(X, Y, W, H);
   }
   
 public:
 
+  FLTK3_WIDGET_VCALLS(ClockOutput)
+
   Fl_Clock_Output() { /* empty */ }
   
   Fl_Clock_Output(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::ClockOutput(X, Y, W, H, L);
+    _p = new fltk3::ClockOutput_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
 
@@ -87,12 +97,12 @@ class FL_EXPORT Fl_Clock : public Fl_Clock_Output {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Clock, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Clock)
 
   Fl_Clock() { /* empty */ }
   
   Fl_Clock(int X, int Y, int W, int H,  const char *L = 0) {
-    _p = new fltk3::Clock(X, Y, W, H, L);
+    _p = new fltk3::Clock_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
   

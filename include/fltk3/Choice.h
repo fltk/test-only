@@ -34,7 +34,6 @@
 #include "Menu_.h"
 #include <fltk3/Wrapper.h>
 
-class Fl_Choice;
 
 namespace fltk3 {
   
@@ -89,11 +88,12 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Choice : public fltk3::Menu_ {
 
-    friend class ::Fl_Choice;
-
   protected:
+    
     void draw();
+    
   public:
+    
     int handle(int);
     
     Choice(int X, int Y, int W, int H, const char *L = 0);

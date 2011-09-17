@@ -34,8 +34,6 @@
 #include "Widget.h"
 #include <fltk3/Wrapper.h>
 
-class Fl_Button;
-
 
 namespace fltk3 {
   // values for type()
@@ -85,8 +83,6 @@ namespace fltk3 {
    dragged around in and out of the button).
    */
   class FLTK3_EXPORT Button : public Widget {
-    
-    friend class ::Fl_Button;
     
     unsigned int shortcut_;
     char value_;

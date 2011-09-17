@@ -34,9 +34,6 @@
 #include "DoubleWindow.h"
 
 
-class Fl_Overlay_Window;
-
-
 namespace fltk3 {
   
   /**
@@ -51,8 +48,8 @@ namespace fltk3 {
    overlay will blink if you change the image in the window.
    */
   class FLTK3_EXPORT OverlayWindow : public fltk3::DoubleWindow {
-    friend class ::Fl_Overlay_Window;
     friend class _Fl_Overlay;
+  protected:  
     virtual void draw_overlay() { /* must be overridden */ }
     fltk3::Window *overlay_;
   public:

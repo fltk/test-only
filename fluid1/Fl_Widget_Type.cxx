@@ -35,7 +35,7 @@
 #include <FL/Fl_Slider.H>
 #include <FL/Fl_Spinner.H>
 #include <FL/Fl_Window.H>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 

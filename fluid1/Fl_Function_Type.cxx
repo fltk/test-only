@@ -32,7 +32,7 @@
 #include "Fl_Type.h"
 #include <FL/fl_show_input.H>
 #include <FL/Fl_File_Chooser.H>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 

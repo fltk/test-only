@@ -33,14 +33,22 @@
 #include "Fl.H"
 #include "Fl_Browser_.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Check_Browser, CheckBrowser)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Check_Browser, CheckBrowser)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
 
 public:
 
+  FLTK3_WIDGET_VCALLS(CheckBrowser)
+
   Fl_Check_Browser() { /* empty */ }
   
   Fl_Check_Browser(int x, int y, int w, int h, const char *l = 0) {
-    _p = new fltk3::CheckBrowser(x, y, w, h, l);
+    _p = new fltk3::CheckBrowser_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 
@@ -103,10 +111,6 @@ public:
   char *text(int item) const {
     return ((fltk3::CheckBrowser*)_p)->text(item);
   }
-
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, CheckBrowser, handle(int event), handle(event), Handle)
 
 };
 

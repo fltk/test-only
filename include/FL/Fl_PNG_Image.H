@@ -29,7 +29,7 @@
 #ifndef Fl_PNG_Image_H
 #define Fl_PNG_Image_H
 
-#include <fltk3/PNGImage.h>
+#include <fltk3images/PNGImage.h>
 #include "Fl_Image.H"
 
 

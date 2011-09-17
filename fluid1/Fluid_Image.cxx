@@ -29,7 +29,7 @@
 #include <FL/Fl_Widget.H>
 #include "Fl_Type.h"
 #include "Fluid_Image.h"
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>

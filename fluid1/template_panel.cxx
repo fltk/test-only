@@ -30,7 +30,7 @@
 #include "template_panel.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <errno.h>
 #include <FL/filename.H>
 #include <FL/fl_ask.H>

@@ -212,6 +212,15 @@ virtual rtype proto { \
         return type3::handle(event); \
       }
 
+#define FLTK3_WRAPPER_INTERFACE_WINDOW(type1, type3) \
+      void draw_overlay() { \
+        FLTK3_OBJECT_VCALLS_WRAPPER(draw_overlay(), DrawOverlay) \
+        type3::draw_overlay(); \
+      } \
+      type3##_I(int w, int h, const char *l) \
+      : type3(w, h, l) { }
+
+
 #define FLTK3_WRAPPER_INTERFACE_END() \
     }; \
   }
@@ -223,6 +232,11 @@ virtual rtype proto { \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw(), draw(), Draw) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
   FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, type3##_I, handle(int event), handle(event), Handle)
+
+
+#define FLTK3_WINDOW_VCALLS(type3) \
+  FLTK3_WIDGET_VCALLS(type3) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
 
 
 namespace fltk3 {

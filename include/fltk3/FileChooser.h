@@ -93,6 +93,7 @@ namespace fltk3 {
     static void cb_fileList(fltk3::FileBrowser*, void*);
     fltk3::Box *previewBox;
   public:
+    fltk3::FileBrowser *browser() { return fileList; }
     fltk3::CheckButton *previewButton;
   private:
     void cb_previewButton_i(fltk3::CheckButton*, void*);

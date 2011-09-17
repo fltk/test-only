@@ -33,18 +33,20 @@
 #include <fltk3/Choice.h>
 #include "Fl_Menu_.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Choice, Choice)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Choice, Choice)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Choice : public Fl_Menu_ {
-  
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Choice, draw(), draw(), Draw)
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Choice, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Choice)
 
   Fl_Choice(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::Choice(X, Y, W, H, L);
+    _p = new fltk3::Choice_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
 

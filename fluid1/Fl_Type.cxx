@@ -41,7 +41,7 @@
 #include <FL/Fl_Browser_.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
-#include "../src/flstring.h"
+#include "../src/fltk3/flstring.h"
 #include <stdio.h>
 
 #include "Fl_Type.h"
