@@ -33,20 +33,23 @@
 #include "Fl_Group.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Tile, TiledGroup)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Tile, TiledGroup)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Tile : public Fl_Group {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TiledGroup, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(TiledGroup)
   
   Fl_Tile() {}
   
   Fl_Tile(int X,int Y,int W,int H,const char*l=0) {
-    _p = new fltk3::TiledGroup(X, Y, W, H, l);
+    _p = new fltk3::TiledGroup_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(TiledGroup, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
   void position(int a, int b, int c, int d) {
     ((fltk3::TiledGroup*)_p)->position(a, b, c, d);

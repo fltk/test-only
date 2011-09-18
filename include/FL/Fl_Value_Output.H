@@ -33,18 +33,19 @@
 #include "Fl_Valuator.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Value_Output, ValueOutput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Value_Output, ValueOutput)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Value_Output : public Fl_Valuator {
-
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(ValueOutput, draw(), draw(), Draw)
 
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ValueOutput, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(ValueOutput)
   
   Fl_Value_Output(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::ValueOutput(x, y, w, h, l);
+    _p = new fltk3::ValueOutput_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

@@ -69,13 +69,8 @@ fltk3::WizardGroup::WizardGroup(int        xx,	// I - Lefthand position
 //
 /** Draws the wizard border and visible child. */
 void fltk3::WizardGroup::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
-
   fltk3::Widget	*kid;	// Visible child
-
-
   kid = value();
-
   if (damage() & fltk3::DAMAGE_ALL)
   {
     // Redraw everything...
@@ -86,7 +81,6 @@ void fltk3::WizardGroup::draw() {
     }
     else
       draw_box(box(), x(), y(), w(), h(), color());
-
   }
   else if (kid)
     update_child(*kid);

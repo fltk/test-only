@@ -1482,7 +1482,6 @@ fltk3::Window::~Window() {
 
 int fltk3::Window::handle(int ev)
 {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(ev), Handle)
   if (parent()) {
     switch (ev) {
     case fltk3::SHOW:

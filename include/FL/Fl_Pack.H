@@ -33,6 +33,11 @@
 #include <FL/Fl_Group.H>
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Pack, PackedGroup)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Pack, PackedGroup)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Pack : public Fl_Group {
 
 public:
@@ -42,16 +47,12 @@ public:
     HORIZONTAL = 1
   };
 
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(PackedGroup, draw(), draw(), Draw)
+  FLTK3_WIDGET_VCALLS(PackedGroup)
 
-public:
-  
   Fl_Pack() {}
   
   Fl_Pack(int x,int y,int w ,int h,const char *l = 0) {
-    _p = new fltk3::PackedGroup(x, y, w, h, l);
+    _p = new fltk3::PackedGroup_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

@@ -35,30 +35,31 @@
 #include "Fl_Scrollbar.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Scroll, ScrollGroup)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Scroll, ScrollGroup)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Scroll : public Fl_Group {
 
 protected:
 
   void bbox(int &x, int &y, int &w, int &h) {
-    ((fltk3::ScrollGroup*)_p)->bbox(x, y, w, h);
+    ((fltk3::ScrollGroup_I*)_p)->bbox(x, y, w, h);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(ScrollGroup, draw(), draw(), Draw)
-
 public:
+
+  FLTK3_WIDGET_VCALLS(ScrollGroup)
 
   // FIXME: 123 - Fl_Scrollbar scrollbar;
   
   // FIXME: 123 - Fl_Scrollbar hscrollbar;
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(ScrollGroup, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ScrollGroup, handle(int event), handle(event), Handle)
-
   Fl_Scroll() {}
   
   Fl_Scroll(int X,int Y,int W,int H,const char*l=0) {
-    _p = new fltk3::ScrollGroup(X, Y, W, H, l);
+    _p = new fltk3::ScrollGroup_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

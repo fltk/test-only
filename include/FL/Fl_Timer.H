@@ -37,18 +37,20 @@
 #define FL_HIDDEN_TIMER		2
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Timer, Timer)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Timer, Timer)
+  Timer_I(uchar t,int x,int y,int w,int h, const char *l) : Timer(t, x, y, w, h) {}
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Timer : public Fl_Widget {
-  
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Timer, draw(), draw(), Draw)
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Timer, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Timer)
   
   Fl_Timer(uchar t,int x,int y,int w,int h, const char *l) {
-    _p = new fltk3::Timer(t, x, y, w, h, l);
+    _p = new fltk3::Timer_I(t, x, y, w, h, l);
     _p->wrapper(this);
   }
   

@@ -55,7 +55,6 @@
 
 
 void fltk3::Input::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (input_type() == fltk3::HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
@@ -594,7 +593,6 @@ int fltk3::Input::handle_key() {
 }
 
 int fltk3::Input::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   static int dnd_save_position, dnd_save_mark, drag_start = -1, newpos;
   static fltk3::Widget *dnd_save_focus;
   switch (event) {

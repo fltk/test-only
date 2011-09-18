@@ -33,20 +33,21 @@
 #include "Fl_Menu_.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Menu_Bar, MenuBar)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Menu_Bar, MenuBar)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
-  
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(MenuBar, draw(), draw(), Draw)
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, MenuBar, handle(int event), handle(event), Handle)
-
+  FLTK3_WIDGET_VCALLS(MenuBar)
+  
   Fl_Menu_Bar() {}
 
   Fl_Menu_Bar(int X, int Y, int W, int H,const char *l=0) {
-    _p = new fltk3::MenuBar(X, Y, W, H, l);
+    _p = new fltk3::MenuBar_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

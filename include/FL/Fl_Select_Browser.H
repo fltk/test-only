@@ -33,14 +33,21 @@
 #include "Fl_Browser.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Select_Browser, SelectBrowser)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Select_Browser, SelectBrowser)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Select_Browser : public Fl_Browser {
 
 public:
 
+  FLTK3_WIDGET_VCALLS(SelectBrowser)
+
   Fl_Select_Browser() {}
   
   Fl_Select_Browser(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::SelectBrowser(X, Y, W, H, l);
+    _p = new fltk3::SelectBrowser_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

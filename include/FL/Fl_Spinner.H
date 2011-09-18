@@ -33,19 +33,24 @@
 #include <FL/Fl_Group.H>
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Spinner, Spinner)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Spinner, Spinner)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Spinner : public Fl_Group {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(Spinner)
+
   Fl_Spinner() {}
   
   Fl_Spinner(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::Spinner(X, Y, W, H, L);
+    _p = new fltk3::Spinner_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Spinner, handle(int event), handle(event), Handle)
-
   const char *format() { 
     return ((fltk3::Spinner*)_p)->format();
   }
@@ -74,8 +79,6 @@ public:
     ((fltk3::Spinner*)_p)->range(a, b);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Spinner, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-    
   double step() const {
     return ((fltk3::Spinner*)_p)->step();
   }

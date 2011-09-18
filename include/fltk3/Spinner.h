@@ -159,7 +159,6 @@ namespace fltk3 {
     void		format(const char *f) { format_ = f; update(); }
     
     int		handle(int event) {
-      FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
       switch (event) {
         case fltk3::KEYDOWN :
         case fltk3::SHORTCUT :

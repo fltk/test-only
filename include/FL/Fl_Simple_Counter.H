@@ -33,14 +33,21 @@
 #include "Fl_Counter.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Simple_Counter, SimpleCounter)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Simple_Counter, SimpleCounter)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Simple_Counter : public Fl_Counter {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(SimpleCounter)
+
   Fl_Simple_Counter() {}
   
   Fl_Simple_Counter(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::SimpleCounter(x, y, w, h, l);
+    _p = new fltk3::SimpleCounter_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

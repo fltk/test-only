@@ -33,14 +33,21 @@
 #include "Fl_Round_Button.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Radio_Round_Button, RadioRoundButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Radio_Round_Button, RadioRoundButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Radio_Round_Button : public Fl_Round_Button {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(RadioRoundButton)
+
   Fl_Radio_Round_Button() {}
   
   Fl_Radio_Round_Button(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::RadioRoundButton(x, y, w, h, l);
+    _p = new fltk3::RadioRoundButton_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

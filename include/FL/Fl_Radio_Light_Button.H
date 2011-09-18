@@ -33,14 +33,21 @@
 #include "Fl_Light_Button.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Radio_Light_Button, RadioLightButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Radio_Light_Button, RadioLightButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Radio_Light_Button : public Fl_Light_Button {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(RadioLightButton)
+
   Fl_Radio_Light_Button() { /* blank */ }
   
   Fl_Radio_Light_Button(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::RadioLightButton(X, Y, W, H, l);
+    _p = new fltk3::RadioLightButton_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

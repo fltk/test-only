@@ -34,22 +34,21 @@
 #include "Fl_Input.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Value_Input, ValueInput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Value_Input, ValueInput)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Value_Input : public Fl_Valuator {
   
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(ValueInput, draw(), draw(), Draw)
-
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ValueInput, handle(int event), handle(event), Handle)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(ValueInput, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
+  FLTK3_WIDGET_VCALLS(ValueInput)
+
   Fl_Value_Input() {}
   
   Fl_Value_Input(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::ValueInput(x, y, w, h, l);
+    _p = new fltk3::ValueInput_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

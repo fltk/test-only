@@ -1978,7 +1978,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\fltk3\Wizard.cxx"
+			RelativePath="..\..\src\fltk3\WizardGroup.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

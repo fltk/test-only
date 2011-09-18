@@ -33,7 +33,6 @@
 
 #include "Menu_.h"
 
-class Fl_Menu_Button;
 
 namespace fltk3 {
   
@@ -61,8 +60,6 @@ namespace fltk3 {
    instead.
    */
   class FLTK3_EXPORT MenuButton : public fltk3::Menu_ {
-
-    friend class ::Fl_Menu_Button;
 
   protected:
     void draw();

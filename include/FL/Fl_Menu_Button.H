@@ -33,11 +33,12 @@
 #include "Fl_Menu_.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Menu_Button, MenuButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Menu_Button, MenuButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Menu_Button : public Fl_Menu_ {
-  
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(MenuButton, draw(), draw(), Draw)
   
 public:
 
@@ -51,14 +52,14 @@ public:
     POPUP123
   };
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, MenuButton, handle(int e), handle(e), Handle)
-  
   const Fl_Menu_Item* popup() {
     return (Fl_Menu_Item*) ((fltk3::MenuButton*)_p)->popup();
   }
   
+  FLTK3_WIDGET_VCALLS(MenuButton)
+  
   Fl_Menu_Button(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::MenuButton(x, y, w, h, label);
+    _p = new fltk3::MenuButton_I(x, y, w, h, label);
     _p->wrapper(this);
   }
   

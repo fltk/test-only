@@ -36,7 +36,6 @@
 
 class Fl_X;
 
-class Fl_Window;
 
 namespace fltk3 {
   
@@ -62,7 +61,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Window : public Group {
 
-    friend class ::Fl_Window;
     friend class WidgetWrapper;
     
     static char *default_xclass_;

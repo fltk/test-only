@@ -75,9 +75,11 @@ struct FL_EXPORT Fl_Label {
 };
 #endif
 
+
 FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Widget, Widget)
 FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Widget, Widget)
 FLTK3_WRAPPER_INTERFACE_END()
+
 
 class FL_EXPORT Fl_Widget : public fltk3::WidgetWrapper {
   

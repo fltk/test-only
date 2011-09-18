@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -1409,7 +1409,7 @@ workspace FLTK {open
           filename_and_path {include/fltk3/XPMImage.h}
         }
       }
-      folder Sources {
+      folder Sources {open
         uuid_Xcode4_Group {91990322-0AF9-42F2-A077-713540EE5AB1}
       } {
         file_ref {cocoa.mm} {
@@ -1910,11 +1910,11 @@ workspace FLTK {open
           uuid_Xcode4_BuildFileInSources {E373B7F4-2FFB-4CEE-9357-7586F6D255E9}
           filename_and_path {src/fltk3/Window_iconize.cxx}
         }
-        file_ref {Wizard.cxx} {
+        file_ref {WizardGroup.cxx} {
           uuid_Xcode4_BuildFile {0ECB24E4-43CE-497B-AE79-CFB4AA24EE9F}
           uuid_Xcode4_FileRef {A84F1844-4DC5-4FCD-925E-20F4809D2871}
           uuid_Xcode4_BuildFileInSources {72DEB4A9-12C7-445B-82A8-8DB9C103EF90}
-          filename_and_path {src/fltk3/Wizard.cxx}
+          filename_and_path {src/fltk3/WizardGroup.cxx}
         }
         file_ref {XBMImage.cxx} {
           uuid_Xcode4_BuildFile {0331C1F4-F50E-40CE-A3DF-DBCE1026AEE5}
@@ -7044,7 +7044,7 @@ workspace FLTK {open
         file_ref {function_panel.cxx} {
           filename_and_path {fluid1/function_panel.cxx}
         }
-        file_ref {print_panel.cxx} {selected
+        file_ref {print_panel.cxx} {
           build_env 0
           filename_and_path {fluid1/print_panel.cxx}
         }

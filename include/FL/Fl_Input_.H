@@ -47,70 +47,75 @@
 #define FL_MULTILINE_OUTPUT_WRAP (FL_MULTILINE_INPUT | FL_INPUT_READONLY | FL_INPUT_WRAP)
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Input_, Input_)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Input_, Input_)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Input_ : public Fl_Widget {
 
 protected:
 
   int word_start(int i) const {
-    return ((fltk3::Input_*)_p)->word_start(i);
+    return ((fltk3::Input__I*)_p)->word_start(i);
   }
 
   int word_end(int i) const {
-    return ((fltk3::Input_*)_p)->word_end(i);
+    return ((fltk3::Input__I*)_p)->word_end(i);
   }
 
   int line_start(int i) const {
-    return ((fltk3::Input_*)_p)->line_start(i);
+    return ((fltk3::Input__I*)_p)->line_start(i);
   }
   
   int line_end(int i) const {
-    return ((fltk3::Input_*)_p)->line_end(i);
+    return ((fltk3::Input__I*)_p)->line_end(i);
   }
 
   void drawtext(int x, int y, int w, int h) {
-    ((fltk3::Input_*)_p)->drawtext(x, y, w, h);
+    ((fltk3::Input__I*)_p)->drawtext(x, y, w, h);
   }
 
   int up_down_position(int a, int b=0) {
-    return ((fltk3::Input_*)_p)->up_down_position(a, b);
+    return ((fltk3::Input__I*)_p)->up_down_position(a, b);
   }
 
   void handle_mouse(int a, int b, int c, int d, int e=0) {
-    ((fltk3::Input_*)_p)->handle_mouse(a, b, c, d, e);
+    ((fltk3::Input__I*)_p)->handle_mouse(a, b, c, d, e);
   }
 
   int handletext(int a, int b, int c, int d, int e) {
-    return ((fltk3::Input_*)_p)->handletext(a, b, c, d, e);
+    return ((fltk3::Input__I*)_p)->handletext(a, b, c, d, e);
   }
 
   void maybe_do_callback() {
-    ((fltk3::Input_*)_p)->maybe_do_callback();
+    ((fltk3::Input__I*)_p)->maybe_do_callback();
   }
 
   int xscroll() const {
-    return ((fltk3::Input_*)_p)->xscroll();
+    return ((fltk3::Input__I*)_p)->xscroll();
   }
 
   int yscroll() const {
-    return ((fltk3::Input_*)_p)->yscroll();
+    return ((fltk3::Input__I*)_p)->yscroll();
   }
 
   void yscroll(int y) { 
-    ((fltk3::Input_*)_p)->yscroll(y);
+    ((fltk3::Input__I*)_p)->yscroll(y);
   }
 
   int linesPerPage() {
-    return ((fltk3::Input_*)_p)->linesPerPage();
+    return ((fltk3::Input__I*)_p)->linesPerPage();
   }
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(Input_, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  FLTK3_WIDGET_VCALLS(Input_)
   
   Fl_Input_() { /* empty */ }
   
   Fl_Input_(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::Input_(x, y, w, h, label);
+    _p = new fltk3::Input__I(x, y, w, h, label);
     _p->wrapper(this);
   }
 

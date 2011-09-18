@@ -34,14 +34,21 @@
 #include "Fl_Dial.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Line_Dial, LineDial)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Line_Dial, LineDial)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Line_Dial : public Fl_Dial {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(LineDial)
+
   Fl_Line_Dial() { /* empty */ }
   
   Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::LineDial(x, y, w, h, l);
+    _p = new fltk3::LineDial_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

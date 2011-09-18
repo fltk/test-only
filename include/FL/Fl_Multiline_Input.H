@@ -33,14 +33,22 @@
 #include <fltk3/MultilineInput.h>
 #include "Fl_Input.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Multiline_Input, MultilineInput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Multiline_Input, MultilineInput)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Multiline_Input : public Fl_Input {
 
 public:
 
+  FLTK3_WIDGET_VCALLS(MultilineInput)
+  
   Fl_Multiline_Input() { /* empty */ }
   
   Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0) {
-    _p = new fltk3::MultilineInput(X, Y, W, H, l);
+    _p = new fltk3::MultilineInput_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

@@ -33,13 +33,17 @@
 #include "Fl_Single_Window.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Menu_Window, MenuWindow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Menu_Window, MenuWindow)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Menu_Window, MenuWindow)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Menu_Window : public Fl_Single_Window {
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(MenuWindow, hide(), hide(), Hide)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(MenuWindow, show(), show(), Show)
+  FLTK3_WINDOW_VCALLS(MenuWindow)
   
   void erase() {
     ((fltk3::MenuWindow*)_p)->erase();
@@ -64,12 +68,12 @@ public:
   Fl_Menu_Window() { /* empty */ }
   
   Fl_Menu_Window(int W, int H, const char *l = 0) {
-    _p = new fltk3::MenuWindow(W, H, l);
+    _p = new fltk3::MenuWindow_I(W, H, l);
     _p->wrapper(this);
   }
   
   Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0) {
-    _p = new fltk3::MenuWindow(X, Y, W, H, l);
+    _p = new fltk3::MenuWindow_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 };

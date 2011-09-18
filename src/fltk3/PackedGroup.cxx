@@ -80,7 +80,6 @@ void fltk3::PackedGroup::layout() {
 }
 
 void fltk3::PackedGroup::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int tx = x()+fltk3::box_dx(box());
   int ty = y()+fltk3::box_dy(box());
   int tw = w()-fltk3::box_dw(box());

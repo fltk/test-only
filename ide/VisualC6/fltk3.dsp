@@ -399,7 +399,7 @@ SOURCE=..\..\src\fltk3\Window_iconize.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\Wizard.cxx
+SOURCE=..\..\src\fltk3\WizardGroup.cxx
 # End Source File
 # Begin Source File
 

@@ -32,14 +32,22 @@
 #include <fltk3/HorValueSlider.h>
 #include "Fl_Value_Slider.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Hor_Value_Slider, HorValueSlider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Hor_Value_Slider, HorValueSlider)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Hor_Value_Slider : public Fl_Value_Slider {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(HorValueSlider)
+
   Fl_Hor_Value_Slider() {}
   
   Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::HorValueSlider(X, Y, W, H, l);
+    _p = new fltk3::HorValueSlider_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

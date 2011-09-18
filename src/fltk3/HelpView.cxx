@@ -437,7 +437,6 @@ fltk3::HelpView::do_align(fltk3::HelpBlock *block,	// I - Block to add to
 void
 fltk3::HelpView::draw()
 {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int			i;		// Looping var
   const fltk3::HelpBlock	*block;		// Pointer to current block
   const char		*ptr,		// Pointer to text in block
@@ -2945,7 +2944,6 @@ void fltk3::HelpView::end_selection(int clipboard)
 int				// O - 1 if we handled it, 0 otherwise
 fltk3::HelpView::handle(int event)	// I - Event to handle
 {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   static fltk3::HelpLink *linkp;   // currently clicked link
 
   int xx = fltk3::event_x() - x() + leftline_;

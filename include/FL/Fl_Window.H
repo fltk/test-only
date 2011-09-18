@@ -37,6 +37,13 @@
 #define FL_WINDOW 0xF0		///< window type id all subclasses have type() >= this
 #define FL_DOUBLE_WINDOW 0xF1   ///< double window type id
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Window, Window)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Window, Window)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Window, Window)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class Fl_X;
 
 class FL_EXPORT Fl_Window : public Fl_Group {
@@ -44,42 +51,32 @@ class FL_EXPORT Fl_Window : public Fl_Group {
 protected:
   
   void flush() {
-    ((fltk3::Window*)_p)->flush();
+    ((fltk3::Window_I*)_p)->flush();
   }
   
   void force_position(int force) {
-    ((fltk3::Window*)_p)->force_position(force);
+    ((fltk3::Window_I*)_p)->force_position(force);
   }
   
   int force_position() const {
-    return ((fltk3::Window*)_p)->force_position();
+    return ((fltk3::Window_I*)_p)->force_position();
   }
   
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(Window, draw_overlay(), draw_overlay(), DrawOverlay)
+  FLTK3_WINDOW_VCALLS(Window)
   
   Fl_Window() { /* empty */ }
   
   Fl_Window(int w, int h, const char* label = 0) {
-    _p = new fltk3::Window(w, h, label);
+    _p = new fltk3::Window_I(w, h, label);
     _p->wrapper(this);
   }
   
   Fl_Window(int x, int y, int w, int h, const char* label = 0) {
-    _p = new fltk3::Window(x, y, w, h, label);
+    _p = new fltk3::Window_I(x, y, w, h, label);
     _p->wrapper(this);
   }
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Window, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Window, hide(), hide(), Hide)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Window, show(), show(), Show)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Window, draw(), draw(), Draw)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Window, handle(int event), handle(event), Handle)
   
   void border(int b) {
     ((fltk3::Window*)_p)->border(b);

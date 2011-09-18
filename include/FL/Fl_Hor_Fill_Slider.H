@@ -32,13 +32,22 @@
 #include <fltk3/HorFillSlider.h>
 #include "Fl_Slider.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Hor_Fill_Slider, HorFillSlider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Hor_Fill_Slider, HorFillSlider)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Hor_Fill_Slider : public Fl_Slider {
 
 public:
+
+  FLTK3_WIDGET_VCALLS(HorFillSlider)
+  
   Fl_Hor_Fill_Slider() { /* empty */ }
     
   Fl_Hor_Fill_Slider(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::HorFillSlider(x, y, w, h, l);
+    _p = new fltk3::HorFillSlider_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

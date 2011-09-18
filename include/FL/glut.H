@@ -35,17 +35,17 @@
 #include "Fl_Gl_Window.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Glut_Window, GlutWindow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Glut_Window, GlutWindow)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Glut_Window, GlutWindow)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Glut_Window : public Fl_Gl_Window {
 
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(GlutWindow, draw(), draw(), Draw)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(GlutWindow, draw_overlay(), draw_overlay(), DrawOverlay)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, GlutWindow, handle(int event), handle(event), Handle)
-
 public:
+
+  FLTK3_WIDGET_VCALLS(GlutWindow)
 
   void make_current() {
     ((fltk3::GlutWindow*)_p)->make_current();
@@ -65,12 +65,12 @@ public:
 #endif
   
   Fl_Glut_Window(int w, int h, const char *l) {
-    _p = new fltk3::GlutWindow(w, h, l);
+    _p = new fltk3::GlutWindow_I(w, h, l);
     _p->wrapper(this);
   }
   
   Fl_Glut_Window(int x, int y, int w, int h, const char *l) {
-    _p = new fltk3::GlutWindow(x, y, w, h, l);
+    _p = new fltk3::GlutWindow_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

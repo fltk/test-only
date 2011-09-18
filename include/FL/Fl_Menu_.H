@@ -34,14 +34,21 @@
 #include "Fl_Menu_Item.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Menu_, Menu_)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Menu_, Menu_)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Menu_ : public Fl_Widget {
 
 public:
   
+  FLTK3_WIDGET_VCALLS(Menu_)
+
   Fl_Menu_() { /* empty */ }
   
   Fl_Menu_(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::Menu_(x, y, w, h, label);
+    _p = new fltk3::Menu__I(x, y, w, h, label);
     _p->wrapper(this);
   }
 

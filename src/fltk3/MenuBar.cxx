@@ -30,7 +30,6 @@
 #include <fltk3/draw.h>
 
 void fltk3::MenuBar::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box();
   if (!menu() || !menu()->text) return;
   const fltk3::MenuItem* m;
@@ -53,7 +52,6 @@ void fltk3::MenuBar::draw() {
 }
 
 int fltk3::MenuBar::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   const fltk3::MenuItem* v;
   if (menu() && menu()->text) switch (event) {
   case fltk3::ENTER:

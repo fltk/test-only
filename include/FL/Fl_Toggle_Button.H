@@ -33,14 +33,21 @@
 #include "Fl_Button.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Toggle_Button, ToggleButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Toggle_Button, ToggleButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Toggle_Button : public Fl_Button {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(ToggleButton)
+
   Fl_Toggle_Button() {}
   
   Fl_Toggle_Button(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::ToggleButton(X, Y, W, H, l);
+    _p = new fltk3::ToggleButton_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

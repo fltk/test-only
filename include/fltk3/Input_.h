@@ -34,9 +34,6 @@
 #include "Widget.h"
 
 
-class Fl_Input_;
-
-
 namespace fltk3 {
   
   const uchar NORMAL_INPUT	= 0;
@@ -105,8 +102,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Input_ : public fltk3::Widget {
    
-    friend class ::Fl_Input_;
- 
     /** \internal Storage for the text field. */
     const char* value_;
     

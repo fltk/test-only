@@ -166,8 +166,6 @@ void fltk3::TableRow::rows(int val) {
 
 // Handle events
 int fltk3::TableRow::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
-  
   //  fprintf(stderr, "** EVENT: %s: EVENT XY=%d,%d\n", 
   //      eventnames[event], fltk3::event_x(), fltk3::event_y());	// debugging
   

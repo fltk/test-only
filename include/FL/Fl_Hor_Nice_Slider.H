@@ -32,14 +32,22 @@
 #include <fltk3/HorNiceSlider.h>
 #include "Fl_Slider.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Hor_Nice_Slider, HorNiceSlider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Hor_Nice_Slider, HorNiceSlider)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Hor_Nice_Slider : public Fl_Slider {
   
 public:
-  
+
+  FLTK3_WIDGET_VCALLS(HorNiceSlider)
+
   Fl_Hor_Nice_Slider() {}
   
   Fl_Hor_Nice_Slider(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::HorNiceSlider(x, y, w, h, l);
+    _p = new fltk3::HorNiceSlider_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

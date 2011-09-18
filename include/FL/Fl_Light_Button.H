@@ -33,20 +33,23 @@
 #include "Fl_Button.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Light_Button, LightButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Light_Button, LightButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Light_Button : public Fl_Button {
   
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(LightButton, draw(), draw(), Draw)
-  
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, LightButton, handle(int event), handle(event), Handle)
-  
+  FLTK3_WIDGET_VCALLS(LightButton)
+
   Fl_Light_Button() { /* empty */ }
   
   Fl_Light_Button(int x,int y,int w,int h,const char *l = 0) {
-    _p = new fltk3::LightButton(x, y, w, h, l);
+    _p = new fltk3::LightButton_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

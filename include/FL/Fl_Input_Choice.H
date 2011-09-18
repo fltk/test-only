@@ -44,14 +44,21 @@
 #include <string.h>
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Input_Choice, InputChoice)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Input_Choice, InputChoice)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Input_Choice : public Fl_Group {
 
 public:
 
+  FLTK3_WIDGET_VCALLS(InputChoice)
+
   Fl_Input_Choice() { /* empty */ }
   
   Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) {
-    _p = new fltk3::InputChoice(x, y, w, h, l);
+    _p = new fltk3::InputChoice_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 
@@ -91,8 +98,6 @@ public:
   void menu(const Fl_Menu_Item *m) { 
     ((fltk3::InputChoice*)_p)->menu((fltk3::MenuItem*)m); 
   }
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(InputChoice, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
   Fl_Font textfont() const { 
     return fltk3::_3to1_font( ((fltk3::InputChoice*)_p)->textfont() ); 

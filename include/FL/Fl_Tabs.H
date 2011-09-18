@@ -33,19 +33,22 @@
 #include "Fl_Group.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Tabs, TabGroup)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Tabs, TabGroup)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Tabs : public Fl_Group {
 
 protected:
   
   void redraw_tabs() {
-    ((fltk3::TabGroup*)_p)->redraw_tabs();
+    ((fltk3::TabGroup_I*)_p)->redraw_tabs();
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(TabGroup, draw(), draw(), Draw)
-
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TabGroup, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(TabGroup)
   
   Fl_Widget *value() {
     return fltk3::_3to1_widget( ((fltk3::TabGroup*)_p)->value() );
@@ -66,7 +69,7 @@ public:
   Fl_Tabs() {}
   
   Fl_Tabs(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::TabGroup(x, y, w, h, label);
+    _p = new fltk3::TabGroup_I(x, y, w, h, label);
     _p->wrapper(this);
   }
   

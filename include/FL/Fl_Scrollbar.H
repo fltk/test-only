@@ -33,23 +33,24 @@
 #include "Fl_Slider.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Scrollbar, Scrollbar)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Scrollbar, Scrollbar)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Scrollbar : public Fl_Slider {
 
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Scrollbar, draw(), draw(), Draw)
-  
 public:
+
+  FLTK3_WIDGET_VCALLS(Scrollbar)
 
   Fl_Scrollbar() { /* empty */ }
   
   Fl_Scrollbar(int X,int Y,int W,int H, const char *L = 0) {
-    _p = new fltk3::Scrollbar(X, Y, W, H, L);
+    _p = new fltk3::Scrollbar_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
     
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Scrollbar, handle(int event), handle(event), Handle)
-
   int value() const {
     return ((fltk3::Scrollbar*)_p)->value();
   }

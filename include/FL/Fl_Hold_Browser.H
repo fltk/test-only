@@ -32,14 +32,22 @@
 #include <fltk3/HoldBrowser.h>
 #include "Fl_Browser.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Hold_Browser, HoldBrowser)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Hold_Browser, HoldBrowser)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Hold_Browser : public Fl_Browser {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(HoldBrowser)
+  
   Fl_Hold_Browser() { /* empty */ }
   
   Fl_Hold_Browser(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::HoldBrowser(X, Y, W, H, l);
+    _p = new fltk3::HoldBrowser_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

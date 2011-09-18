@@ -34,9 +34,6 @@
 #include "Valuator.h"
 
 
-class Fl_Value_Output;
-
-
 namespace fltk3 {
   
   /**
@@ -52,8 +49,6 @@ namespace fltk3 {
    \image latex  fltk3::ValueOutput.png "fltk3::ValueOutput" width=4cm
    */
   class FLTK3_EXPORT ValueOutput : public fltk3::Valuator {
-
-    friend class ::Fl_Value_Output;
 
     uchar soft_;
     

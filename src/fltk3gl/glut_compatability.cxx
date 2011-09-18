@@ -68,7 +68,6 @@ void fltk3::GlutWindow::make_current() {
 
 static int indraw;
 void fltk3::GlutWindow::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   glut_window = this;
   indraw = 1;
   if (!valid()) {reshape(w(),h()); valid(1);}
@@ -89,7 +88,6 @@ void fltk3::GlutWindow::draw_overlay() {
 static void domenu(int, int, int);
 
 int fltk3::GlutWindow::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   make_current();
   int ex = fltk3::event_x();
   int ey = fltk3::event_y();

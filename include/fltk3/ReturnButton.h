@@ -34,9 +34,6 @@
 #include "Button.h"
 
 
-class Fl_Return_Button;
-
-
 namespace fltk3 {
   /**
    The fltk3::ReturnButton is a subclass of fltk3::Button that
@@ -47,10 +44,9 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT ReturnButton : public Button {
 
-    friend class ::Fl_Return_Button;
-
   protected:
     void draw();
+    
   public:
     int handle(int);
     /**

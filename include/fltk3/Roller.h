@@ -34,9 +34,6 @@
 #include "Valuator.h"
 
 
-class Fl_Roller;
-
-
 namespace fltk3 {
   
   /**
@@ -47,10 +44,9 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Roller : public fltk3::Valuator {
 
-    friend class ::Fl_Roller;
-
   protected:
     void draw();
+
   public:
     int handle(int);
     Roller(int X,int Y,int W,int H,const char* L=0);

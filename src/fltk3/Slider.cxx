@@ -218,7 +218,6 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
 }
 
 void fltk3::Slider::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   draw(x()+fltk3::box_dx(box()),
        y()+fltk3::box_dy(box()),
@@ -357,7 +356,6 @@ int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
 }
 
 int fltk3::Slider::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();

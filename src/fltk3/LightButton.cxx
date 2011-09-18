@@ -38,7 +38,6 @@
 #include "flstring.h"
 
 void fltk3::LightButton::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::Color col;
   if (this==fltk3::pushed()) {
     col = fltk3::color_average(fltk3::BLACK, color(), 0.2f);
@@ -156,7 +155,6 @@ void fltk3::LightButton::draw() {
 }
 
 int fltk3::LightButton::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   switch (event) {
   case fltk3::RELEASE:
     if (box()) redraw();

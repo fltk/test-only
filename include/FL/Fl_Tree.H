@@ -49,6 +49,11 @@ enum Fl_Tree_Reason {
 };
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Tree, Tree)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Tree, Tree)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Tree : public Fl_Group {
 
 protected:
@@ -56,7 +61,7 @@ protected:
   // Fl_Scrollbar *_vscroll;
   
   void item_clicked(Fl_Tree_Item* val) {
-    ((fltk3::Tree*)_p)->item_clicked( (fltk3::TreeItem*)val );
+    ((fltk3::Tree_I*)_p)->item_clicked( (fltk3::TreeItem*)val );
   }
 
   //void do_callback_for_item(Fl_Tree_Item* item, Fl_Tree_Reason reason) {
@@ -65,14 +70,12 @@ protected:
 
 public:
   
+  FLTK3_WIDGET_VCALLS(Tree)
+
   Fl_Tree(int X, int Y, int W, int H, const char *L=0) {
-    _p = new fltk3::Widget(X, Y, W, H, L);
+    _p = new fltk3::Tree_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Tree, draw(), draw(), Draw)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Tree, handle(int event), handle(event), Handle)
   
   void root_label(const char *new_label) {
     ((fltk3::Tree*)_p)->root_label(new_label);

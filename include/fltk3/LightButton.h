@@ -33,7 +33,6 @@
 
 #include "Button.h"
 
-class Fl_Light_Button;
 
 namespace fltk3 {
   
@@ -49,7 +48,6 @@ namespace fltk3 {
    \image latex fltk3::LightButton.png "fltk3::LightButton" width=4cm
    */
   class FLTK3_EXPORT LightButton : public Button {
-    friend class ::Fl_Light_Button;    
   protected:
     virtual void draw();
   public:

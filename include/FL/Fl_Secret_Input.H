@@ -33,14 +33,21 @@
 #include "Fl_Input.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Secret_Input, SecretInput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Secret_Input, SecretInput)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Secret_Input : public Fl_Input {
 
 public:
+  
+  FLTK3_WIDGET_VCALLS(SecretInput)
 
   Fl_Secret_Input() {}
   
   Fl_Secret_Input(int X,int Y,int W,int H,const char *l = 0) {
-    _p = new fltk3::SecretInput(X, Y, W, H, l);
+    _p = new fltk3::SecretInput_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

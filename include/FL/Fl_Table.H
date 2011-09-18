@@ -48,6 +48,11 @@
 #include <FL/Fl_Scrollbar.H>
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Table, Table)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Table, Table)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Table : public Fl_Group {
   
 public:
@@ -93,8 +98,10 @@ protected:
   
 public:
   
+  FLTK3_WIDGET_VCALLS(Table)
+
   Fl_Table(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::Table(X, Y, W, H, l);
+    _p = new fltk3::Table_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

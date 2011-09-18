@@ -48,7 +48,6 @@ int fl_return_arrow(int x, int y, int w, int h) {
 }
 
 void fltk3::ReturnButton::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (type() == fltk3::HIDDEN_BUTTON) return;
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(),
 	   value() ? selection_color() : color());
@@ -60,7 +59,6 @@ void fltk3::ReturnButton::draw() {
 }
 
 int fltk3::ReturnButton::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (event == fltk3::SHORTCUT &&
       (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KPEnterKey)) {
     simulate_key_action();

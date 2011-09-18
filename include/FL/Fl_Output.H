@@ -33,14 +33,21 @@
 #include "Fl_Input.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Output, Output)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Output, Output)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class Fl_Output : public Fl_Input {
 
 public:
 
+  FLTK3_WIDGET_VCALLS(Output)
+
   Fl_Output() { /* empty */ }
 
   Fl_Output(int X,int Y,int W,int H, const char *l = 0) {
-    _p = new fltk3::Output(X, Y, W, H, l);
+    _p = new fltk3::Output_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

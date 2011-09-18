@@ -33,11 +33,18 @@
 #include "Fl_Window.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Single_Window, SingleWindow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Single_Window, SingleWindow)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Single_Window, SingleWindow)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
+
 class FL_EXPORT Fl_Single_Window : public Fl_Window {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(SingleWindow, show(), show(), Show)
+  FLTK3_WINDOW_VCALLS(SingleWindow)
   
   void show(int a, char **b) {
     ((fltk3::SingleWindow*)_p)->show(a, b);
@@ -50,12 +57,12 @@ public:
   Fl_Single_Window() {}
   
   Fl_Single_Window(int W, int H, const char *l=0) {
-    _p = new fltk3::SingleWindow(W, H, l);
+    _p = new fltk3::SingleWindow_I(W, H, l);
     _p->wrapper(this);
   }
 
   Fl_Single_Window(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::SingleWindow(X, Y, W, H, l);
+    _p = new fltk3::SingleWindow_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

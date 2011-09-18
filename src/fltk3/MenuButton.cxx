@@ -34,7 +34,6 @@
 static fltk3::MenuButton	*pressed_menu_button_ = 0;
 
 void fltk3::MenuButton::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (!box() || type()) return;
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
@@ -73,7 +72,6 @@ const fltk3::MenuItem* fltk3::MenuButton::popup() {
 }
 
 int fltk3::MenuButton::handle(int e) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(e), Handle)
   if (!menu() || !menu()->text) return 0;
   switch (e) {
   case fltk3::ENTER: /* FALLTHROUGH */

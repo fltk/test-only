@@ -33,14 +33,21 @@
 #include "Fl_Light_Button.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Round_Button, RoundButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Round_Button, RoundButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Round_Button : public Fl_Light_Button {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(RoundButton)
+
   Fl_Round_Button() {}
   
   Fl_Round_Button(int x,int y,int w,int h,const char *l = 0) {
-    _p = new fltk3::RoundButton(x, y, w, h, l);
+    _p = new fltk3::RoundButton_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

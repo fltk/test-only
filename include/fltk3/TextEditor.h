@@ -37,9 +37,6 @@
 #include "TextDisplay.h"
 
 
-class Fl_Text_Editor;
-
-
 namespace fltk3 {
 
   // key will match in any state
@@ -53,8 +50,6 @@ namespace fltk3 {
    class.
    */
   class FLTK3_EXPORT TextEditor : public fltk3::TextDisplay {
-
-    friend class ::Fl_Text_Editor;
 
   public:
     /** Key function binding callback type */

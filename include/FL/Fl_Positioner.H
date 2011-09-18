@@ -33,28 +33,33 @@
 #include "Fl_Widget.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Positioner, Positioner)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Positioner, Positioner)
+  void draw(int x, int y, int w, int h) { Positioner::draw(x, y, w, h); }
+  int handle(int e, int x, int y, int w, int h) { return Positioner::handle(e, x, y, w, h); }
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Positioner : public Fl_Widget {
 
 protected:
 
   void draw(int x, int y, int w, int h) {
-    ((fltk3::Positioner*)_p)->draw(x, y, w, h);
+    ((fltk3::Positioner_I*)_p)->draw(x, y, w, h);
   }
   
   int handle(int e, int x, int y, int w, int h) {
-    ((fltk3::Positioner*)_p)->handle(e, x, y, w, h);
+    ((fltk3::Positioner_I*)_p)->handle(e, x, y, w, h);
   }
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(Positioner, draw(), draw(), Draw)
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Positioner, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Positioner)
   
   Fl_Positioner() { }
   
   Fl_Positioner(int x,int y,int w,int h, const char *l=0) {
-    _p = new fltk3::Positioner(x, y, w, h, l);
+    _p = new fltk3::Positioner_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

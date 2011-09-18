@@ -32,20 +32,22 @@
 #include <fltk3/Input.h>
 #include "Fl_Input_.H"
 
-class FL_EXPORT Fl_Input : public Fl_Input_ {
 
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Input, draw(), draw(), Draw)
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Input, Input)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Input, Input)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
+class FL_EXPORT Fl_Input : public Fl_Input_ {
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Input, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Input)
   
   Fl_Input() { /* empty */ }
   
   Fl_Input(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::Input(x, y, w, h, label);
+    _p = new fltk3::Input_I(x, y, w, h, label);
     _p->wrapper(this);
   }
 };

@@ -43,6 +43,11 @@
 typedef const char *(Fl_Help_Func)(Fl_Widget *, const char *);
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Help_View, HelpView)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Help_View, HelpView)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 #if 0 // FIXME: 123
 
 struct Fl_Help_Block {
@@ -127,9 +132,11 @@ struct Fl_Help_Target {
 class FL_EXPORT Fl_Help_View : public Fl_Group {
 
 public:
-
+  
+  FLTK3_WIDGET_VCALLS(HelpView)
+  
   Fl_Help_View(int xx, int yy, int ww, int hh, const char *l = 0) {
-    _p = new fltk3::HelpView(xx, yy, ww, hh, l);
+    _p = new fltk3::HelpView_I(xx, yy, ww, hh, l);
     _p->wrapper(this);
   }
 
@@ -152,8 +159,6 @@ public:
   int load(const char *f) {
     return ((fltk3::HelpView*)_p)->load(f);
   }
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(HelpView, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
   int size() const {
     return ((fltk3::HelpView*)_p)->size();

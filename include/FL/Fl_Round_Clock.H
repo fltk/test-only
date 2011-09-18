@@ -33,12 +33,19 @@
 #include "Fl_Clock.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Round_Clock, RoundClock)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Round_Clock, RoundClock)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Round_Clock : public Fl_Clock {
   
 public:
 
+  FLTK3_WIDGET_VCALLS(RoundClock)
+
   Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::RoundClock(x, y, w, h, l);
+    _p = new fltk3::RoundClock_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

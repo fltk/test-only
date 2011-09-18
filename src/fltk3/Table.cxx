@@ -698,7 +698,6 @@ fprintf(stderr,"Table %s: ** Event: %s --\n", (label()?label():"none"), eventnam
 
 // Handle FLTK events
 int fltk3::Table::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   PRINTEVENT;
   int ret = Group::handle(event);	// let FLTK group handle events first
   if (ret) {
@@ -1118,7 +1117,6 @@ void fltk3::Table::set_selection(int row_top, int col_left, int row_bot, int col
 //    Then tell the group to draw over us.
 //
 void fltk3::Table::draw() {   
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   // Check if scrollbar size changed
   if ( ( vscrollbar && (SCROLLBAR_SIZE != vscrollbar->w()) ) || 
        ( hscrollbar && (SCROLLBAR_SIZE != hscrollbar->h()) ) ) {

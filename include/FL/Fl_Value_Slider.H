@@ -33,20 +33,21 @@
 #include "Fl_Slider.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Value_Slider, ValueSlider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Value_Slider, ValueSlider)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Value_Slider : public Fl_Slider {
 
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(ValueSlider, draw(), draw(), Draw)
-  
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ValueSlider, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(ValueSlider)
 
   Fl_Value_Slider() {}
   
   Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::ValueSlider(x, y, w, h, l);
+    _p = new fltk3::ValueSlider_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

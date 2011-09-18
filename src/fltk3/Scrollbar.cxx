@@ -73,7 +73,6 @@ void fltk3::Scrollbar::timeout_cb(void* v) {
 }
 
 int fltk3::Scrollbar::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   // area of scrollbar:
   int area;
   int X=x(); int Y=y(); int W=w(); int H=h();
@@ -208,7 +207,6 @@ int fltk3::Scrollbar::handle(int event) {
 }
 
 void fltk3::Scrollbar::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int X = x()+fltk3::box_dx(box());
   int Y = y()+fltk3::box_dy(box());

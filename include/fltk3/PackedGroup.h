@@ -34,9 +34,6 @@
 #include <fltk3/Group.h>
 
 
-class Fl_Pack;
-
-
 namespace fltk3 {
   
   /**
@@ -56,8 +53,6 @@ namespace fltk3 {
    <P>See also: fltk3::Group::resizable()
    */
   class FLTK3_EXPORT PackedGroup : public fltk3::Group {
-
-    friend class ::Fl_Pack;
 
     int spacing_;
     

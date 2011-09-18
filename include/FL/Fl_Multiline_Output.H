@@ -33,14 +33,21 @@
 #include "Fl_Output.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Multiline_Output, MultilineOutput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Multiline_Output, MultilineOutput)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Multiline_Output : public Fl_Output {
   
 public:
 
+  FLTK3_WIDGET_VCALLS(MultilineOutput)
+
   Fl_Multiline_Output() { /* emty */ }
   
   Fl_Multiline_Output(int X,int Y,int W,int H,const char *l = 0) {
-    _p = new fltk3::MultilineOutput(X, Y, W, H, l);
+    _p = new fltk3::MultilineOutput_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

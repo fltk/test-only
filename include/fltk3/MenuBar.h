@@ -33,7 +33,6 @@
 
 #include "Menu_.h"
 
-class Fl_Menu_Bar;
 
 namespace fltk3 {
   
@@ -65,12 +64,12 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT MenuBar : public fltk3::Menu_ {
 
-    friend class ::Fl_Menu_Bar;
-
   protected:
     void draw();
+    
   public:
     int handle(int);
+    
     /**
      Creates a new fltk3::MenuBar widget using the given position,
      size, and label string. The default boxtype is fltk3::UP_BOX.

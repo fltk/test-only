@@ -33,20 +33,21 @@
 #include "Fl_Valuator.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Roller, Roller)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Roller, Roller)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Roller : public Fl_Valuator {
 
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(Roller, draw(), draw(), Draw)
-  
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Roller, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Roller)
 
   Fl_Roller() {}
   
   Fl_Roller(int X,int Y,int W,int H,const char* L=0) {
-    _p = new fltk3::Roller(X, Y, W, H, L);
+    _p = new fltk3::Roller_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
   

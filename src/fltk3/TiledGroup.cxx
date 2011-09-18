@@ -122,7 +122,6 @@ static fltk3::Cursor cursors[4] = {
   fltk3::CURSOR_MOVE};
 
 int fltk3::TiledGroup::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   static int sdrag;
   static int sdx, sdy;
   static int sx, sy;

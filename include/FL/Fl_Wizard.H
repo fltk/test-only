@@ -33,12 +33,19 @@
 #include <FL/Fl_Group.H>
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Wizard, WizardGroup)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Wizard, WizardGroup)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Wizard : public Fl_Group {
 
 public:
 
+  FLTK3_WIDGET_VCALLS(WizardGroup)
+
   Fl_Wizard(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::WizardGroup(x, y, w, h, label);
+    _p = new fltk3::WizardGroup_I(x, y, w, h, label);
     _p->wrapper(this);
   }
 

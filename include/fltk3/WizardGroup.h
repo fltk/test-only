@@ -26,7 +26,7 @@
 //
 
 /* \file
-   fltk3::WizardGroup widget . */
+ fltk3::WizardGroup widget . */
 
 //
 // Include necessary header files...
@@ -37,33 +37,36 @@
 
 #  include <fltk3/Group.h>
 
+
 namespace fltk3 {
-
-/**
-    This widget is based off the fltk3::TabGroup
-    widget, but instead of displaying tabs it only changes "tabs" under
-    program control. Its primary purpose is to support "wizards" that
-    step a user through configuration or troubleshooting tasks.
-
-    <P>As with fltk3::TabGroup, wizard panes are composed of child (usually
-    fltk3::Group) widgets. Navigation buttons must be added separately.
-*/
-class FLTK3_EXPORT WizardGroup : public fltk3::Group {
-
-  fltk3::Widget *value_;
-
-  void draw();
-
+  
+  /**
+   This widget is based off the fltk3::TabGroup
+   widget, but instead of displaying tabs it only changes "tabs" under
+   program control. Its primary purpose is to support "wizards" that
+   step a user through configuration or troubleshooting tasks.
+   
+   <P>As with fltk3::TabGroup, wizard panes are composed of child (usually
+   fltk3::Group) widgets. Navigation buttons must be added separately.
+   */
+  class FLTK3_EXPORT WizardGroup : public fltk3::Group {
+    
+  protected:
+    
+    fltk3::Widget *value_;
+    
+    void draw();
+    
   public:
-
-  WizardGroup(int, int, int, int, const char * = 0);
-
-  void		next();
-  void		prev();
-  fltk3::Widget	*value();
-  void		value(fltk3::Widget *);
-};
-
+    
+    WizardGroup(int, int, int, int, const char * = 0);
+    
+    void		next();
+    void		prev();
+    fltk3::Widget	*value();
+    void		value(fltk3::Widget *);
+  };
+  
 }
 
 #endif // !_Fl_Wizard_H_

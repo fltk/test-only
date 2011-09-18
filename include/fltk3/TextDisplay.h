@@ -40,9 +40,6 @@
 #include "TextBuffer.h"
 
 
-class Fl_Text_Display;
-
-
 namespace fltk3 {
   
 /**
@@ -54,8 +51,6 @@ namespace fltk3 {
  can be displayed by multiple Text Displays.
  */
 class FLTK3_EXPORT TextDisplay: public fltk3::Group {
-
-friend class ::Fl_Text_Display;
 
 public:
   

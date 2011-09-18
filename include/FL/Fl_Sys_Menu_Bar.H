@@ -35,16 +35,20 @@
 
 #if defined(__APPLE__)
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Sys_Menu_Bar, SysMenuBar)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Sys_Menu_Bar, SysMenuBar)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
   
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(SysMenuBar, draw(), draw(), Draw)
- 
 public:
 
+  FLTK3_WIDGET_VCALLS(SysMenuBar)
+
   Fl_Sys_Menu_Bar(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::SysMenuBar(x, y, w, h, l);
+    _p = new fltk3::SysMenuBar_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

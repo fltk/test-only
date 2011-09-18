@@ -38,6 +38,11 @@
 #define FL_TEXT_EDITOR_ANY_STATE  (-1L)
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Text_Editor, TextEditor)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Text_Editor, TextEditor)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Text_Editor : public Fl_Text_Display {
   
 public:
@@ -51,14 +56,14 @@ public:
     Key_Binding* next;	///< next key binding in the list
   };
   
+  FLTK3_WIDGET_VCALLS(TextEditor)
+
   Fl_Text_Editor() { /* empty */ }
   
   Fl_Text_Editor(int X, int Y, int W, int H, const char* l = 0) {
-    _p = new fltk3::TextEditor(X, Y, W, H, l);
+    _p = new fltk3::TextEditor_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
-
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TextEditor, handle(int event), handle(event), Handle)
 
   void insert_mode(int b) {
     ((fltk3::TextEditor*)_p)->insert_mode(b);
@@ -212,11 +217,11 @@ public:
 protected:
   
   int handle_key() {
-    return ((fltk3::TextEditor*)_p)->handle_key();
+    return ((fltk3::TextEditor_I*)_p)->handle_key();
   }
   
   void maybe_do_callback() {
-    ((fltk3::TextEditor*)_p)->maybe_do_callback();
+    ((fltk3::TextEditor_I*)_p)->maybe_do_callback();
   }
   
 };

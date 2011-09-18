@@ -32,12 +32,20 @@
 #include <fltk3/NiceSlider.h>
 #include "Fl_Slider.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Nice_Slider, NiceSlider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Nice_Slider, NiceSlider)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Nice_Slider : public Fl_Slider {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(NiceSlider)
+
   Fl_Nice_Slider(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::NiceSlider(x, y, w, h, l);
+    _p = new fltk3::NiceSlider_I(x, y, w, h, l);
     _p->wrapper(this);
   }
 

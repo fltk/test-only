@@ -44,6 +44,7 @@
 #  include "SharedImage.h"
 #  include "filename.h"
 
+
 namespace fltk3 {
   
   //
@@ -209,6 +210,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT HelpView : public fltk3::Group {	// Help viewer widget
     
+  protected:
     enum { RIGHT = -1, CENTER, LEFT };	///< Alignments
     
     char		title_[1024];		///< Title string

@@ -33,13 +33,16 @@
 #include "Fl_Widget.H"
 
 
-class FL_EXPORT Fl_Progress : public Fl_Widget {
-  
-protected:
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Progress, Progress)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Progress, Progress)
+FLTK3_WRAPPER_INTERFACE_END()
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(Progress, draw(), draw(), Draw)
+
+class FL_EXPORT Fl_Progress : public Fl_Widget {
 
 public:
+  
+  FLTK3_WIDGET_VCALLS(Progress)
 
   Fl_Progress() { }
   

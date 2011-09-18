@@ -35,16 +35,21 @@
 #include "Fl_Button.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Repeat_Button, RepeatButton)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Repeat_Button, RepeatButton)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, RepeatButton, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(RepeatButton)
 
   Fl_Repeat_Button() {}
 
   Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::RepeatButton(X, Y, W, H, l);
+    _p = new fltk3::RepeatButton_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

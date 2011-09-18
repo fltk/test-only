@@ -105,7 +105,7 @@ FLTK3_CPPFILES = \
 	fltk3/Window_fullscreen.cxx \
 	fltk3/Window_hotspot.cxx \
 	fltk3/Window_iconize.cxx \
-	fltk3/Wizard.cxx \
+	fltk3/WizardGroup.cxx \
 	fltk3/XBMImage.cxx \
 	fltk3/XPMImage.cxx \
 	fltk3/abort.cxx \

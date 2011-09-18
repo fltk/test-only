@@ -159,8 +159,6 @@ void fltk3::TabGroup::redraw_tabs()
 }
 
 int fltk3::TabGroup::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
-
   fltk3::Widget *o;
   int i;
 
@@ -317,7 +315,6 @@ int fltk3::TabGroup::value(fltk3::Widget *newvalue) {
 enum {LEFT, RIGHT, SELECTED};
 
 void fltk3::TabGroup::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::Widget *v = value();
   int H = tab_height();
 

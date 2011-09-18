@@ -559,7 +559,6 @@ void fltk3::TextEditor::maybe_do_callback() {
 }
 
 int fltk3::TextEditor::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   static int dndCursorPos;
   
   if (!buffer()) return 0;

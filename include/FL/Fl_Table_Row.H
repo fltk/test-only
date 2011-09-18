@@ -35,6 +35,12 @@
 #include <fltk3/TableRow.h>
 #include "Fl_Table.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Table_Row, TableRow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Table_Row, TableRow)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Table_Row : public Fl_Table {
 
 public:
@@ -56,8 +62,10 @@ protected:
  
 public:
 
+  FLTK3_WIDGET_VCALLS(TableRow)
+
   Fl_Table_Row(int X, int Y, int W, int H, const char *l=0)  {
-    _p = new fltk3::TableRow(X, Y, W, H, l);
+    _p = new fltk3::TableRow_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   
@@ -86,11 +94,6 @@ public:
     return(_selectmode);
   }
   
-  /**
-   Checks to see if 'row' is selected. Returns 1 if selected, 0 if not. You can
-   change the selection of a row by clicking on it, or by using
-   select_row(row, flag)
-   */
 #endif
 
   int row_selected(int row) {

@@ -40,31 +40,39 @@
 #define FL_HOR_NICE_SLIDER	5
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Slider, Slider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Slider, Slider)
+  void draw(int x, int y, int w, int h) { Slider::draw(x, y, w, h); }
+  int handle(int e, int x, int y, int w, int h) { return Slider::handle(e, x, y, w, h); }
+  Slider_I(uchar t, int X,int Y,int W,int H, const char *L = 0) : Slider(t, X, Y, W, H, L) {}
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Slider : public Fl_Valuator {
 
 protected:
 
   void draw(int x, int y, int w, int h) {
-    ((fltk3::Slider*)_p)->draw(x, y, w, h);
+    ((fltk3::Slider_I*)_p)->draw(x, y, w, h);
   }
   
   int handle(int e, int x, int y, int w, int h) {
-    return ((fltk3::Slider*)_p)->handle(e, x, y, w, h);
+    return ((fltk3::Slider_I*)_p)->handle(e, x, y, w, h);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Slider, draw(), draw(), Draw)
-    
 public:
+  
+  FLTK3_WIDGET_VCALLS(Slider)
 
   Fl_Slider() { /* empty */ }
   
   Fl_Slider(int X,int Y,int W,int H, const char *L = 0) {
-    _p = new fltk3::Slider(X, Y, W, H, L);
+    _p = new fltk3::Slider_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
   
   Fl_Slider(uchar t, int X,int Y,int W,int H, const char *L = 0) {
-    _p = new fltk3::Slider(t, X, Y, W, H, L);
+    _p = new fltk3::Slider_I(t, X, Y, W, H, L);
     _p->wrapper(this);
   }
   
@@ -72,8 +80,6 @@ public:
     ((fltk3::Slider*)_p)->bounds(a, b);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Slider, handle(int event), handle(event), Handle)
-
   int scrollvalue(int pos,int size,int first,int total) {
     return ((fltk3::Slider*)_p)->scrollvalue(pos, size, first, total);
   }
