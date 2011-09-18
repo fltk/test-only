@@ -37,7 +37,7 @@
 #ifndef FL_gl_H
 #define FL_gl_H
 
-#include <fltk3/gl.h>
+#include <fltk3gl/gl.h>
 #include "Enumerations.H" // for color names
 
 #  ifdef __APPLE__

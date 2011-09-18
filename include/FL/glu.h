@@ -37,7 +37,7 @@
 #define FL_glu_H
 
 #include "Enumerations.H" // for color names
-#include <fltk3/glu.h>
+#include <fltk3gl/glu.h>
 
 #endif // !FL_glu_H
 

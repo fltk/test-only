@@ -67,12 +67,14 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT GLWindow : public fltk3::Window {
     
+  protected:
     int mode_;
     const int *alist;
     GLChoice *g;
     GLContext context_;
     char valid_f_;
     char damage1_; // damage() of back buffer
+    
     virtual void draw_overlay();
     void init();
     

@@ -29,7 +29,7 @@
 #ifndef Fl_glut_H
 #define Fl_glut_H
 
-#include <fltk3/glut.h>
+#include <fltk3gl/glut.h>
 #include "gl.h"
 #include "Fl.H"
 #include "Fl_Gl_Window.H"

@@ -54,7 +54,7 @@ public:
   Fl_Gl_Window() { /* empty */ }
 
   Fl_Gl_Window(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::GLWindow(_IX, Y, W, H, l);
+    _p = new fltk3::GLWindow_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   
