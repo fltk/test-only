@@ -32,14 +32,22 @@
 #include <fltk3/FillDial.h>
 #include "Fl_Dial.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Fill_Dial, FillDial)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Fill_Dial, FillDial)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Fill_Dial : public Fl_Dial {
   
 public:
 
+  FLTK3_WIDGET_VCALLS(FillDial)
+
   Fl_Fill_Dial() { /* empty */ } 
   
   Fl_Fill_Dial(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::FillDial(x, y, w, h, l);
+    _p = new fltk3::FillDial_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

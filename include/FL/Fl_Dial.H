@@ -36,28 +36,34 @@
 #define FL_LINE_DIAL	1
 #define FL_FILL_DIAL	2
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Dial, Dial)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Dial, Dial)
+void draw(int X, int Y, int W, int H) { Dial::draw(X, Y, W, H); }
+int handle(int event, int X, int Y, int W, int H) { return Dial::handle(event, X, Y, W, H); }
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Dial : public Fl_Valuator {
 
 protected:
 
   void draw(int X, int Y, int W, int H) {
-    ((fltk3::Dial*)_p)->draw(X, Y, W, H);
+    ((fltk3::Dial_I*)_p)->draw(X, Y, W, H);
   }
   
   int handle(int event, int X, int Y, int W, int H) {
-    return ((fltk3::Dial*)_p)->handle(event, X, Y, W, H);
+    return ((fltk3::Dial_I*)_p)->handle(event, X, Y, W, H);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Dial, draw(), draw(), Draw)
-
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Dial, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Dial)
 
   Fl_Dial() { /* empty */ }
   
   Fl_Dial(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::Dial(x, y, w, h, l);
+    _p = new fltk3::Dial_I(x, y, w, h, l);
     _p->wrapper(this);
   }
   

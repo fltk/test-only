@@ -36,7 +36,6 @@
 #include "Valuator.h"
 #include <fltk3/Wrapper.h>
 
-class Fl_Counter;
 
 namespace fltk3 {
   
@@ -59,8 +58,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Counter : public fltk3::Valuator {
 
-    friend class ::Fl_Counter;
-    
     double lstep_;
     uchar mouseobj;
     static void repeat_callback(void *);

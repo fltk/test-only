@@ -33,7 +33,6 @@
 
 #include "Window.h"
 
-class Fl_Double_Window;
 
 namespace fltk3 {
   
@@ -51,8 +50,6 @@ namespace fltk3 {
    does not exist for every visual.
    */
   class FLTK3_EXPORT DoubleWindow : public fltk3::Window {
-    
-    friend class ::Fl_Double_Window;
     
   protected:
     void flush(int eraseoverlay);

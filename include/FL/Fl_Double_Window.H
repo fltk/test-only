@@ -33,17 +33,23 @@
 #include "Fl_Window.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Double_Window, DoubleWindow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Double_Window, DoubleWindow)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Double_Window, DoubleWindow)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Double_Window : public Fl_Window {
   
 protected:
   
   void flush(int eraseoverlay) {
-    ((fltk3::DoubleWindow*)_p)->flush(eraseoverlay);
+    ((fltk3::DoubleWindow_I*)_p)->flush(eraseoverlay);
   }
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(DoubleWindow, show(), show(), Show)
+  FLTK3_WINDOW_VCALLS(DoubleWindow)
   
   void show(int a, char **b) {
     ((fltk3::DoubleWindow*)_p)->show(a, b);
@@ -53,19 +59,15 @@ public:
     ((fltk3::DoubleWindow*)_p)->flush();
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(DoubleWindow, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(DoubleWindow, hide(), hide(), Hide)
-
   Fl_Double_Window() { /* empty */ }
   
   Fl_Double_Window(int W, int H, const char *l = 0) {
-    _p = new fltk3::DoubleWindow(W, H, l);
+    _p = new fltk3::DoubleWindow_I(W, H, l);
     _p->wrapper(this);
   }
   
   Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0) {
-    _p = new fltk3::DoubleWindow(X, Y, W, H, l);
+    _p = new fltk3::DoubleWindow_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

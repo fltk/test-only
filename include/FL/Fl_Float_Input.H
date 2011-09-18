@@ -33,14 +33,21 @@
 #include "Fl_Input.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Float_Input, FloatInput)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Float_Input, FloatInput)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class Fl_Float_Input : public Fl_Input {
   
 public:
 
+  FLTK3_WIDGET_VCALLS(FloatInput)
+
   Fl_Float_Input() { /* empty */ }
   
   Fl_Float_Input(int X,int Y,int W,int H,const char *l = 0) {
-    _p = new fltk3::FloatInput(X, Y, W, H, l);
+    _p = new fltk3::FloatInput_I(X, Y, W, H, l);
     _p->wrapper(this);
   }
   

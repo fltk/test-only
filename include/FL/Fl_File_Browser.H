@@ -35,16 +35,23 @@
 #include "filename.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_File_Browser, FileBrowser)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_File_Browser, FileBrowser)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_File_Browser : public Fl_Browser {
   
 public:
+
+  FLTK3_WIDGET_VCALLS(FileBrowser)
 
   enum { FILES, DIRECTORIES };
 
   Fl_File_Browser() { /* empty */ }
 
   Fl_File_Browser(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::FileBrowser(x, y, w, h, label);
+    _p = new fltk3::FileBrowser_I(x, y, w, h, label);
     _p->wrapper(this);
   }
   

@@ -28,12 +28,18 @@
 #ifndef Fl_Gl_Window_H
 #define Fl_Gl_Window_H
 
-#include <fltk3/GlWindow.h>
+#include <fltk3gl/GLWindow.h>
 #include "Fl_Window.H"
 
 #ifndef GLContext
 typedef void* GLContext; // actually a GLXContext or HGLDC
 #endif
+
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Gl_Window, GLWindow)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Gl_Window, GLWindow)
+FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Gl_Window, GLWindow)
+FLTK3_WRAPPER_INTERFACE_END()
 
 
 class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
@@ -43,119 +49,109 @@ class FL_EXPORT Fl_Gl_Window : public Fl_Window {
 
 public:
   
+  FLTK3_WINDOW_VCALLS(GLWindow)
+
   Fl_Gl_Window() { /* empty */ }
 
   Fl_Gl_Window(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::GlWindow(X, Y, W, H, l);
+    _p = new fltk3::GLWindow(_IX, Y, W, H, l);
     _p->wrapper(this);
   }
   
   Fl_Gl_Window(int W, int H, const char *l=0) {
-    _p = new fltk3::GlWindow(W, H, l);
+    _p = new fltk3::GLWindow_I(W, H, l);
     _p->wrapper(this);
   }
   
   void show(int a, char **b) {
-    ((fltk3::GlWindow*)_p)->show(a, b);
+    ((fltk3::GLWindow*)_p)->show(a, b);
   }
   
   void flush() {
-    ((fltk3::GlWindow*)_p)->flush();
+    ((fltk3::GLWindow*)_p)->flush();
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, hide(), hide(), Hide)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, show(), show(), Show)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, GlWindow, handle(int event), handle(event), Handle)
-    
   char valid() const {
-    return ((fltk3::GlWindow*)_p)->valid();
+    return ((fltk3::GLWindow*)_p)->valid();
   }
   
   void valid(char v) {
-    ((fltk3::GlWindow*)_p)->valid(v);
+    ((fltk3::GLWindow*)_p)->valid(v);
   }
   
   void invalidate() {
-    ((fltk3::GlWindow*)_p)->invalidate();
+    ((fltk3::GLWindow*)_p)->invalidate();
   }
   
   char context_valid() const {
-    return ((fltk3::GlWindow*)_p)->context_valid();
+    return ((fltk3::GLWindow*)_p)->context_valid();
   }
   
   void context_valid(char v) {
-    ((fltk3::GlWindow*)_p)->context_valid(v);
+    ((fltk3::GLWindow*)_p)->context_valid(v);
   }
   
   static int can_do(int m) {
-    return fltk3::GlWindow::can_do(m);
+    return fltk3::GLWindow::can_do(m);
   }
   
   static int can_do(const int *m) {
-    return fltk3::GlWindow::can_do(m);
+    return fltk3::GLWindow::can_do(m);
   }
   
   int can_do() {
-    return ((fltk3::GlWindow*)_p)->can_do();
+    return ((fltk3::GLWindow*)_p)->can_do();
   }
   
   Fl_Mode mode() const {
-    return (Fl_Mode)((fltk3::GlWindow*)_p)->mode();
+    return (Fl_Mode)((fltk3::GLWindow*)_p)->mode();
   }
   
   int mode(int a) {
-    return ((fltk3::GlWindow*)_p)->mode(a);
+    return ((fltk3::GLWindow*)_p)->mode(a);
   }
   
   int mode(const int *a) {
-    return ((fltk3::GlWindow*)_p)->mode(a);
+    return ((fltk3::GLWindow*)_p)->mode(a);
   }
   
   void* context() const {
-    return ((fltk3::GlWindow*)_p)->context();
+    return ((fltk3::GLWindow*)_p)->context();
   }
   
   void context(void *a, int destroy_flag = 0) {
-    ((fltk3::GlWindow*)_p)->context(a, destroy_flag);
+    ((fltk3::GLWindow*)_p)->context(a, destroy_flag);
   }
   
   void make_current() {
-    ((fltk3::GlWindow*)_p)->make_current();
+    ((fltk3::GLWindow*)_p)->make_current();
   }
   
   void swap_buffers() {
-    ((fltk3::GlWindow*)_p)->swap_buffers();
+    ((fltk3::GLWindow*)_p)->swap_buffers();
   }
   
   void ortho() {
-    ((fltk3::GlWindow*)_p)->ortho();
+    ((fltk3::GLWindow*)_p)->ortho();
   }
   
   int can_do_overlay() {
-    return ((fltk3::GlWindow*)_p)->can_do_overlay();
+    return ((fltk3::GLWindow*)_p)->can_do_overlay();
   }
   
   void redraw_overlay() {
-    ((fltk3::GlWindow*)_p)->redraw_overlay();
+    ((fltk3::GLWindow*)_p)->redraw_overlay();
   }
   
   void hide_overlay() {
-    ((fltk3::GlWindow*)_p)->hide_overlay();
+    ((fltk3::GLWindow*)_p)->hide_overlay();
   }
   
   void make_overlay_current() {
-    ((fltk3::GlWindow*)_p)->make_overlay_current();
+    ((fltk3::GLWindow*)_p)->make_overlay_current();
   }
   
   virtual Fl_Gl_Window* as_gl_window() {return this;}
-
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, draw(), draw(), Draw)
   
 };
 

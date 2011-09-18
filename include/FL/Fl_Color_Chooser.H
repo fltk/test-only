@@ -38,10 +38,17 @@
 #include <FL/Fl_Value_Input.H>
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Color_Chooser, ColorChooser)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Color_Chooser, ColorChooser)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
 
 public:
   
+  FLTK3_WIDGET_VCALLS(ColorChooser)
+
   int mode() {
     return ((fltk3::ColorChooser*)_p)->mode();
   }
@@ -93,7 +100,7 @@ public:
   Fl_Color_Chooser() { /* empty */ }
   
   Fl_Color_Chooser(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::ColorChooser(X, Y, W, H, L);
+    _p = new fltk3::ColorChooser_I(X, Y, W, H, L);
     _p->wrapper(this);
   }
   

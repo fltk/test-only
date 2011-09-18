@@ -148,7 +148,6 @@ static int navkey() {
 }
 
 int fltk3::Group::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   fltk3::Widget*const* a = array();
   int i;
   fltk3::Widget* o;
@@ -739,7 +738,6 @@ void fltk3::Group::draw_children() {
 }
 
 void fltk3::Group::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (damage() & ~fltk3::DAMAGE_CHILD) { // redraw the entire thing:
     draw_box();
     draw_label();

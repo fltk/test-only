@@ -30,7 +30,6 @@
 #include <fltk3/draw.h>
 
 void fltk3::Counter::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int i; fltk3::Boxtype boxtype[5];
   fltk3::Color selcolor;
 
@@ -132,7 +131,6 @@ int fltk3::Counter::calc_mouseobj() {
 }
 
 int fltk3::Counter::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   int i;
   switch (event) {
   case fltk3::RELEASE:

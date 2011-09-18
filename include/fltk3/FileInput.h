@@ -35,7 +35,6 @@
 #  include <fltk3/Input.h>
 #include <fltk3/Wrapper.h>
 
-class Fl_File_Input;
 
 namespace fltk3 {
   
@@ -60,8 +59,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT FileInput : public fltk3::Input {
 
-    friend class ::Fl_File_Input;
-    
     fltk3::Color	errorcolor_;
     char		ok_entry_;
     uchar		down_box_;

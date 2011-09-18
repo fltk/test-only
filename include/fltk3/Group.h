@@ -34,7 +34,6 @@
 #include "Widget.h"
 #include <fltk3/Wrapper.h>
 
-class Fl_Group;
 
 namespace fltk3 {
   
@@ -46,9 +45,7 @@ namespace fltk3 {
    or to enforce resize behavior.
    */
   class FLTK3_EXPORT Group : public Widget {
-    
-    friend class ::Fl_Group;
-    
+        
     fltk3::Widget** array_;
     fltk3::Widget* savedfocus_;
     fltk3::Widget* resizable_;

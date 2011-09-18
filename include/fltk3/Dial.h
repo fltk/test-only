@@ -35,9 +35,6 @@
 #include <fltk3/Wrapper.h>
 
 
-class Fl_Dial;
-
-
 namespace fltk3 {
   
   // values for type():
@@ -60,8 +57,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Dial : public fltk3::Valuator {
 
-    friend class ::Fl_Dial;
-    
     short a1,a2;
     
   protected:

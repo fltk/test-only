@@ -40,7 +40,6 @@
 typedef void* GLContext; // actually a GLXContext or HGLDC
 #endif
 
-class Fl_Gl_Window;
 
 namespace fltk3 {
   
@@ -68,8 +67,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT GLWindow : public fltk3::Window {
     
-    friend class ::Fl_Gl_Window;
-
     int mode_;
     const int *alist;
     GLChoice *g;

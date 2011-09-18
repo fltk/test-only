@@ -36,15 +36,16 @@
 #define FL_SIMPLE_COUNTER	1
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Counter, Counter)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Counter, Counter)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Counter : public Fl_Valuator {
-
-protected:
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(Counter, draw(), draw(), Draw)
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Counter, handle(int event), handle(event), Handle)
+  FLTK3_WIDGET_VCALLS(Counter)
 
   Fl_Counter() { /* empty */ }
   

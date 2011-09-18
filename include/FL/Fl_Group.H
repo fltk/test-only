@@ -32,48 +32,46 @@
 #include <fltk3/Group.h>
 #include "Fl_Widget.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Group, Group)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Group, Group)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Group : public Fl_Widget {
 
 protected:  
   
   Fl_Group() { /* empty */ }
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(Group, draw(), draw(), Draw)
-  
   void draw_child(Fl_Widget& widget) const {
-    ((fltk3::Group*)_p)->draw_child(*(fltk3::_1to3_widget(&widget)));
+    ((fltk3::Group_I*)_p)->draw_child(*(fltk3::_1to3_widget(&widget)));
   }
   
   void draw_children() {
-    ((fltk3::Group*)_p)->draw_children();
+    ((fltk3::Group_I*)_p)->draw_children();
   }
   
   void draw_outside_label(const Fl_Widget& widget) const {
-    ((fltk3::Group*)_p)->draw_outside_label(*(fltk3::_1to3_widget((Fl_Widget*)&widget)));
+    ((fltk3::Group_I*)_p)->draw_outside_label(*(fltk3::_1to3_widget((Fl_Widget*)&widget)));
   }
   
   void update_child(Fl_Widget& widget) const {
-    ((fltk3::Group*)_p)->update_child(*(fltk3::_1to3_widget(&widget)));
+    ((fltk3::Group_I*)_p)->update_child(*(fltk3::_1to3_widget(&widget)));
   }
   
   int *sizes() {
-    return ((fltk3::Group*)_p)->sizes();
+    return ((fltk3::Group_I*)_p)->sizes();
   }
   
 public:
   
+  FLTK3_WIDGET_VCALLS(Group)
+
   Fl_Group(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::Group(x, y, w, h, label);
+    _p = new fltk3::Group_I(x, y, w, h, label);
     _p->wrapper(this);
   }
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(Group, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Group, hide(), hide(), Hide)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Group, show(), show(), Show)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Group, handle(int event), handle(event), Handle)
 
   void begin() {
     ((fltk3::Group*)_p)->begin();

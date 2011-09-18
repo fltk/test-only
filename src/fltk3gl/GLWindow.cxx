@@ -514,7 +514,6 @@ void fltk3::GLWindow::init() {
   be the same or different between the overlay and main window.
 */
 void fltk3::GLWindow::draw_overlay() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw_overlay(), DrawOverlay)
 }
 
 #endif
@@ -535,7 +534,6 @@ void fltk3::GLWindow::draw_overlay() {
   buffers are swapped after this function is completed.
 */
 void fltk3::GLWindow::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::fatal("fltk3::GLWindow::draw() *must* be overriden. Please refer to the documentation.");
 }
 
@@ -545,7 +543,6 @@ void fltk3::GLWindow::draw() {
  */
 int fltk3::GLWindow::handle(int event) 
 {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   return Window::handle(event);
 }
 

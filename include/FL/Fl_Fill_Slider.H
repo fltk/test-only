@@ -32,10 +32,18 @@
 #include <fltk3/FillSlider.h>
 #include "Fl_Slider.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Fill_Slider, FillSlider)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Fill_Slider, FillSlider)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Fill_Slider : public Fl_Slider {
   
 public:
   
+  FLTK3_WIDGET_VCALLS(FillSlider)
+
   Fl_Fill_Slider() { /* empty */ }
   
   Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0) {
