@@ -3350,8 +3350,6 @@ WindowRef Fl_X::window_ref()
 
 // so a CGRect matches exactly what is denoted x,y,w,h for clipping purposes
 CGRect fl_cgrectmake_cocoa(int x, int y, int w, int h) {
-  /*if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) return CGRectMake(x-0.5, y-0.5, w, h); 
-  return CGRectMake(x, y, w > 0 ? w - 0.9 : 0, h > 0 ? h - 0.9 : 0);*/
   return CGRectMake(x, y, w - 1, h - 1);
 }
 
