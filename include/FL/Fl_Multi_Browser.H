@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Multi_Browser : public Fl_Browser {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(MultiBrowser)
+  FLTK3_WIDGET_VCALLS(Fl_Multi_Browser, MultiBrowser)
 
   Fl_Multi_Browser() {}
   

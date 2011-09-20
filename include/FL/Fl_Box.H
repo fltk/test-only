@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Box : public Fl_Widget {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Box)
+  FLTK3_WIDGET_VCALLS(Fl_Box, Box)
 
   Fl_Box(int x, int y, int w, int h, const char *label=0) {
     _p = new fltk3::Box_I(x, y, w, h, label);

@@ -110,7 +110,7 @@ protected:
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Input_)
+  FLTK3_WIDGET_VCALLS(Fl_Input_, Input_)
   
   Fl_Input_() { /* empty */ }
   

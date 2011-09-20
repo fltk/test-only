@@ -1091,7 +1091,7 @@ static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )
     strcat(t1, "...");
     mi->image( ic );
     Fl_Multi_Label *ml = new Fl_Multi_Label;
-    ml->labela = (char*)ic;
+    ml->labela = (char*)ic->_p;
     ml->labelb = t1;
     ml->typea = fltk3::_1to3_labeltype(FL_IMAGE_LABEL);
     ml->typeb = fltk3::_1to3_labeltype(FL_NORMAL_LABEL);

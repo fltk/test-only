@@ -42,7 +42,7 @@ class Fl_Float_Input : public Fl_Input {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(FloatInput)
+  FLTK3_WIDGET_VCALLS(Fl_Float_Input, FloatInput)
 
   Fl_Float_Input() { /* empty */ }
   

@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Value_Input : public Fl_Valuator {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(ValueInput)
+  FLTK3_WIDGET_VCALLS(Fl_Value_Input, ValueInput)
 
   Fl_Value_Input() {}
   

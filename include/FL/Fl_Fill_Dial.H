@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Fill_Dial : public Fl_Dial {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(FillDial)
+  FLTK3_WIDGET_VCALLS(Fl_Fill_Dial, FillDial)
 
   Fl_Fill_Dial() { /* empty */ } 
   

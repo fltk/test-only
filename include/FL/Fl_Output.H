@@ -42,7 +42,7 @@ class Fl_Output : public Fl_Input {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Output)
+  FLTK3_WIDGET_VCALLS(Fl_Output, Output)
 
   Fl_Output() { /* empty */ }
 

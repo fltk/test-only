@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Scrollbar : public Fl_Slider {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Scrollbar)
+  FLTK3_WIDGET_VCALLS(Fl_Scrollbar, Scrollbar)
 
   Fl_Scrollbar() { /* empty */ }
   

@@ -62,7 +62,7 @@ class FL_EXPORT Fl_Chart : public Fl_Widget {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(Chart)
+  FLTK3_WIDGET_VCALLS(Fl_Chart, Chart)
 
   Fl_chart() { /* empty */ }
   

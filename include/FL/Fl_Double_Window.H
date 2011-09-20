@@ -49,7 +49,7 @@ protected:
   
 public:
   
-  FLTK3_WINDOW_VCALLS(DoubleWindow)
+  FLTK3_WINDOW_VCALLS(Fl_Double_Window, DoubleWindow)
   
   void show(int a, char **b) {
     ((fltk3::DoubleWindow*)_p)->show(a, b);

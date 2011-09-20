@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Fill_Slider : public Fl_Slider {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(FillSlider)
+  FLTK3_WIDGET_VCALLS(Fl_Fill_Slider, FillSlider)
 
   Fl_Fill_Slider() { /* empty */ }
   

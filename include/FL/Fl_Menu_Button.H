@@ -56,7 +56,7 @@ public:
     return (Fl_Menu_Item*) ((fltk3::MenuButton*)_p)->popup();
   }
   
-  FLTK3_WIDGET_VCALLS(MenuButton)
+  FLTK3_WIDGET_VCALLS(Fl_Menu_Button, MenuButton)
   
   Fl_Menu_Button(int x, int y, int w, int h, const char *label=0) {
     _p = new fltk3::MenuButton_I(x, y, w, h, label);

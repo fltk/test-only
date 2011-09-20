@@ -50,7 +50,7 @@ protected:
   
 public:
 
-  FLTK3_WIDGET_VCALLS(ScrollGroup)
+  FLTK3_WIDGET_VCALLS(Fl_Scroll, ScrollGroup)
 
   // FIXME: 123 - Fl_Scrollbar scrollbar;
   

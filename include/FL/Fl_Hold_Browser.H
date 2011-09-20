@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Hold_Browser : public Fl_Browser {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(HoldBrowser)
+  FLTK3_WIDGET_VCALLS(Fl_Hold_Browser, HoldBrowser)
   
   Fl_Hold_Browser() { /* empty */ }
   

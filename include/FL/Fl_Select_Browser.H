@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Select_Browser : public Fl_Browser {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(SelectBrowser)
+  FLTK3_WIDGET_VCALLS(Fl_Select_Browser, SelectBrowser)
 
   Fl_Select_Browser() {}
   

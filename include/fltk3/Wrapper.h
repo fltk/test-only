@@ -140,6 +140,14 @@
  
  */
 
+
+#define FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3) \
+virtual ~type1() { \
+  if ( !(pVCalls & pVCallDtor) ) { \
+    pVCalls |= pVCallDtor; \
+  } \
+}
+
 #define FLTK3_WRAPPER_VCALLS_OBJECT(klass, proto, call, flag) \
 virtual void proto { \
   if ( pVCalls & pVCallWidget##flag ) { \
@@ -163,6 +171,14 @@ virtual rtype proto { \
   } \
   return ret; \
 }
+
+
+#define FLTK3_OBJECT_VCALLS_WRAPPER_DTOR() \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallDtor) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCallDtor; \
+    delete ((WidgetWrapper*)pWrapper); \
+    return; \
+  }
 
 #define FLTK3_OBJECT_VCALLS_WRAPPER(call, flag) \
   if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
@@ -188,7 +204,10 @@ virtual rtype proto { \
       friend class ::type1; \
     public: \
       type3##_I(int x, int y, int w, int h, const char *l) \
-      : type3(x, y, w, h, l) { }
+      : type3(x, y, w, h, l) { } \
+      virtual ~type3##_I() { \
+        FLTK3_OBJECT_VCALLS_WRAPPER_DTOR() \
+      }
 
 #define FLTK3_WRAPPER_INTERFACE_WIDGET(type1, type3) \
       void show() { \
@@ -226,7 +245,8 @@ virtual rtype proto { \
   }
 
 
-#define FLTK3_WIDGET_VCALLS(type3) \
+#define FLTK3_WIDGET_VCALLS(type1, type3) \
+  FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, show(), show(), Show) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, hide(), hide(), Hide) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw(), draw(), Draw) \
@@ -234,8 +254,8 @@ virtual rtype proto { \
   FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, type3##_I, handle(int event), handle(event), Handle)
 
 
-#define FLTK3_WINDOW_VCALLS(type3) \
-  FLTK3_WIDGET_VCALLS(type3) \
+#define FLTK3_WINDOW_VCALLS(type1, type3) \
+  FLTK3_WIDGET_VCALLS(type1, type3) \
   FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
 
 

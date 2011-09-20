@@ -64,7 +64,7 @@ protected:
   
 public:
 
-  FLTK3_WINDOW_VCALLS(Window)
+  FLTK3_WINDOW_VCALLS(Fl_Window, Window)
   
   Fl_Window() { /* empty */ }
   

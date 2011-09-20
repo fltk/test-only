@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Secret_Input : public Fl_Input {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(SecretInput)
+  FLTK3_WIDGET_VCALLS(Fl_Secret_Input, SecretInput)
 
   Fl_Secret_Input() {}
   

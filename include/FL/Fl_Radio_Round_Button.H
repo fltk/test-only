@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Radio_Round_Button : public Fl_Round_Button {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(RadioRoundButton)
+  FLTK3_WIDGET_VCALLS(Fl_Radio_Round_Button, RadioRoundButton)
 
   Fl_Radio_Round_Button() {}
   

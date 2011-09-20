@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
 
 public:
 
-  FLTK3_WINDOW_VCALLS(OverlayWindow)
+  FLTK3_WINDOW_VCALLS(Fl_Overlay_Window, OverlayWindow)
 
   void flush() {
     ((fltk3::OverlayWindow*)_p)->flush();

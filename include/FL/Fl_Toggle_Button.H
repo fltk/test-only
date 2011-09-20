@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Toggle_Button : public Fl_Button {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(ToggleButton)
+  FLTK3_WIDGET_VCALLS(Fl_Toggle_Button, ToggleButton)
 
   Fl_Toggle_Button() {}
   

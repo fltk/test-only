@@ -47,7 +47,7 @@ class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(ColorChooser)
+  FLTK3_WIDGET_VCALLS(Fl_Color_Chooser, ColorChooser)
 
   int mode() {
     return ((fltk3::ColorChooser*)_p)->mode();

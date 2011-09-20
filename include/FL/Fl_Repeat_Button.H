@@ -44,7 +44,7 @@ class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(RepeatButton)
+  FLTK3_WIDGET_VCALLS(Fl_Repeat_Button, RepeatButton)
 
   Fl_Repeat_Button() {}
 

@@ -56,7 +56,7 @@ public:
     Key_Binding* next;	///< next key binding in the list
   };
   
-  FLTK3_WIDGET_VCALLS(TextEditor)
+  FLTK3_WIDGET_VCALLS(Fl_Text_Editor, TextEditor)
 
   Fl_Text_Editor() { /* empty */ }
   

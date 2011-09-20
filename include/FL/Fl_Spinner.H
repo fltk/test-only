@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(Spinner)
+  FLTK3_WIDGET_VCALLS(Fl_Spinner, Spinner)
 
   Fl_Spinner() {}
   

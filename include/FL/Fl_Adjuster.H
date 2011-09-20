@@ -48,7 +48,7 @@ protected:
   
 public:
   
-  FLTK3_WIDGET_VCALLS(Adjuster)
+  FLTK3_WIDGET_VCALLS(Fl_Adjuster, Adjuster)
   
   Fl_Adjuster() { /* empty */ }
   

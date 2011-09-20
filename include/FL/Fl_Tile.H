@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Tile : public Fl_Group {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(TiledGroup)
+  FLTK3_WIDGET_VCALLS(Fl_Tile, TiledGroup)
   
   Fl_Tile() {}
   

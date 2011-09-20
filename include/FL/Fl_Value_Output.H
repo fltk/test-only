@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Value_Output : public Fl_Valuator {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(ValueOutput)
+  FLTK3_WIDGET_VCALLS(Fl_Value_Output, ValueOutput)
   
   Fl_Value_Output(int x,int y,int w,int h,const char *l=0) {
     _p = new fltk3::ValueOutput_I(x, y, w, h, l);

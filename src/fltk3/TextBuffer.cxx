@@ -658,7 +658,7 @@ void fltk3::TextBuffer::add_modify_callback(fltk3::TextModifyCb bufModifiedCB,
 					 void *cbArg)
 {
   fltk3::TextModifyCb *newModifyProcs =
-  new fltk3::TextModifyCb[mNModifyProcs + 1];
+    new fltk3::TextModifyCb[mNModifyProcs + 1];
   void **newCBArgs = new void *[mNModifyProcs + 1];
   for (int i = 0; i < mNModifyProcs; i++) {
     newModifyProcs[i + 1] = mModifyProcs[i];

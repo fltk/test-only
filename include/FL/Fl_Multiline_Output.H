@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Multiline_Output : public Fl_Output {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(MultilineOutput)
+  FLTK3_WIDGET_VCALLS(Fl_Multiline_Output, MultilineOutput)
 
   Fl_Multiline_Output() { /* emty */ }
   

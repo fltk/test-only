@@ -47,7 +47,7 @@ class FL_EXPORT Fl_Timer : public Fl_Widget {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(Timer)
+  FLTK3_WIDGET_VCALLS(Fl_Timer, Timer)
   
   Fl_Timer(uchar t,int x,int y,int w,int h, const char *l) {
     _p = new fltk3::Timer_I(t, x, y, w, h, l);

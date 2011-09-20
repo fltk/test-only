@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Radio_Light_Button : public Fl_Light_Button {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(RadioLightButton)
+  FLTK3_WIDGET_VCALLS(Fl_Radio_Light_Button, RadioLightButton)
 
   Fl_Radio_Light_Button() { /* blank */ }
   

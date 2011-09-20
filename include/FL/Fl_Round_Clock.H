@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Round_Clock : public Fl_Clock {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(RoundClock)
+  FLTK3_WIDGET_VCALLS(Fl_Round_Clock, RoundClock)
 
   Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0) {
     _p = new fltk3::RoundClock_I(x, y, w, h, l);

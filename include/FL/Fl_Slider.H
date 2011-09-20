@@ -62,7 +62,7 @@ protected:
   
 public:
   
-  FLTK3_WIDGET_VCALLS(Slider)
+  FLTK3_WIDGET_VCALLS(Fl_Slider, Slider)
 
   Fl_Slider() { /* empty */ }
   

@@ -57,7 +57,7 @@ protected:
   
 public:
 
-  FLTK3_WIDGET_VCALLS(Button)
+  FLTK3_WIDGET_VCALLS(Fl_Button, Button)
   
   Fl_Button() {}
 

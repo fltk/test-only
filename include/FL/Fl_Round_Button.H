@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Round_Button : public Fl_Light_Button {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(RoundButton)
+  FLTK3_WIDGET_VCALLS(Fl_Round_Button, RoundButton)
 
   Fl_Round_Button() {}
   

@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Return_Button : public Fl_Button {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(ReturnButton)
+  FLTK3_WIDGET_VCALLS(Fl_Return_Button, ReturnButton)
 
   Fl_Return_Button() {}
   

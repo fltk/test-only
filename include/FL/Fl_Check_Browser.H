@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(CheckBrowser)
+  FLTK3_WIDGET_VCALLS(Fl_Check_Browser, CheckBrowser)
 
   Fl_Check_Browser() { /* empty */ }
   

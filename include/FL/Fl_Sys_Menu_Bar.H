@@ -45,7 +45,7 @@ class FL_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(SysMenuBar)
+  FLTK3_WIDGET_VCALLS(Fl_Sys_Menu_Bar, SysMenuBar)
 
   Fl_Sys_Menu_Bar(int x,int y,int w,int h,const char *l=0) {
     _p = new fltk3::SysMenuBar_I(x, y, w, h, l);

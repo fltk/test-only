@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Int_Input : public Fl_Input {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(IntInput)
+  FLTK3_WIDGET_VCALLS(Fl_Int_Input, IntInput)
 
   Fl_Int_Input() { /* empty */ }
   

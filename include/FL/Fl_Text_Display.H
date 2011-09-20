@@ -85,7 +85,7 @@ public:
     unsigned    attr;
   };
   
-  FLTK3_WIDGET_VCALLS(TextDisplay)
+  FLTK3_WIDGET_VCALLS(Fl_Text_Display, TextDisplay)
 
   Fl_Text_Display() {}
   

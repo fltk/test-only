@@ -58,7 +58,7 @@ protected:
   
 public:
 
-  FLTK3_WIDGET_VCALLS(Dial)
+  FLTK3_WIDGET_VCALLS(Fl_Dial, Dial)
 
   Fl_Dial() { /* empty */ }
   

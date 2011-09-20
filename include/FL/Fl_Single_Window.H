@@ -44,7 +44,7 @@ class FL_EXPORT Fl_Single_Window : public Fl_Window {
 
 public:
 
-  FLTK3_WINDOW_VCALLS(SingleWindow)
+  FLTK3_WINDOW_VCALLS(Fl_Single_Window, SingleWindow)
   
   void show(int a, char **b) {
     ((fltk3::SingleWindow*)_p)->show(a, b);

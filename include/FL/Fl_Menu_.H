@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Menu_ : public Fl_Widget {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(Menu_)
+  FLTK3_WIDGET_VCALLS(Fl_Menu_, Menu_)
 
   Fl_Menu_() { /* empty */ }
   

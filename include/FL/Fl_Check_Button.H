@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Check_Button : public Fl_Light_Button {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(CheckButton)
+  FLTK3_WIDGET_VCALLS(Fl_Check_Button, CheckButton)
   
   Fl_Check_Button() { /* empty */ }
     

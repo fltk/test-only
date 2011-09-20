@@ -45,7 +45,7 @@ class FL_EXPORT Fl_Counter : public Fl_Valuator {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Counter)
+  FLTK3_WIDGET_VCALLS(Fl_Counter, Counter)
 
   Fl_Counter() { /* empty */ }
   

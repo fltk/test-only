@@ -47,7 +47,7 @@ public:
     HORIZONTAL = 1
   };
 
-  FLTK3_WIDGET_VCALLS(PackedGroup)
+  FLTK3_WIDGET_VCALLS(Fl_Pack, PackedGroup)
 
   Fl_Pack() {}
   

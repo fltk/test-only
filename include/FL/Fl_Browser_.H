@@ -133,7 +133,7 @@ protected:
  
 public:
 
-  FLTK3_WIDGET_VCALLS(Browser_)
+  FLTK3_WIDGET_VCALLS(Fl_Browser_, Browser_)
 
   // FIXME: 123 Fl_Scrollbar scrollbar;
   

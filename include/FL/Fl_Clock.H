@@ -58,7 +58,7 @@ protected:
   
 public:
 
-  FLTK3_WIDGET_VCALLS(ClockOutput)
+  FLTK3_WIDGET_VCALLS(Fl_Clock_Output, ClockOutput)
 
   Fl_Clock_Output() { /* empty */ }
   
@@ -97,7 +97,7 @@ class FL_EXPORT Fl_Clock : public Fl_Clock_Output {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Clock)
+  FLTK3_WIDGET_VCALLS(Fl_Clock, Clock)
 
   Fl_Clock() { /* empty */ }
   

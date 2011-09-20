@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Menu_Window : public Fl_Single_Window {
   
 public:
   
-  FLTK3_WINDOW_VCALLS(MenuWindow)
+  FLTK3_WINDOW_VCALLS(Fl_Menu_Window, MenuWindow)
   
   void erase() {
     ((fltk3::MenuWindow*)_p)->erase();

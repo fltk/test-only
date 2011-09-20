@@ -48,7 +48,7 @@ protected:
   
 public:
   
-  FLTK3_WIDGET_VCALLS(TabGroup)
+  FLTK3_WIDGET_VCALLS(Fl_Tabs, TabGroup)
   
   Fl_Widget *value() {
     return fltk3::_3to1_widget( ((fltk3::TabGroup*)_p)->value() );

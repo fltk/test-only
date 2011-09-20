@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Choice : public Fl_Menu_ {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(Choice)
+  FLTK3_WIDGET_VCALLS(Fl_Choice, Choice)
 
   Fl_Choice(int X, int Y, int W, int H, const char *L = 0) {
     _p = new fltk3::Choice_I(X, Y, W, H, L);

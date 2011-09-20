@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Wizard : public Fl_Group {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(WizardGroup)
+  FLTK3_WIDGET_VCALLS(Fl_Wizard, WizardGroup)
 
   Fl_Wizard(int x, int y, int w, int h, const char *label = 0) {
     _p = new fltk3::WizardGroup_I(x, y, w, h, label);

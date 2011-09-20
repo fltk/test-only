@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Simple_Counter : public Fl_Counter {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(SimpleCounter)
+  FLTK3_WIDGET_VCALLS(Fl_Simple_Counter, SimpleCounter)
 
   Fl_Simple_Counter() {}
   

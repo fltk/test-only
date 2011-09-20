@@ -44,7 +44,7 @@ class FL_EXPORT Fl_File_Input : public Fl_Input {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(FileInput)
+  FLTK3_WIDGET_VCALLS(Fl_File_Input, FileInput)
 
   Fl_File_Input() { /* empty */ }
   

@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Hor_Value_Slider : public Fl_Value_Slider {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(HorValueSlider)
+  FLTK3_WIDGET_VCALLS(Fl_Hor_Value_Slider, HorValueSlider)
 
   Fl_Hor_Value_Slider() {}
   

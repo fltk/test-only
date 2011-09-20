@@ -54,7 +54,7 @@ protected:
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Positioner)
+  FLTK3_WIDGET_VCALLS(Fl_Positioner, Positioner)
   
   Fl_Positioner() { }
   

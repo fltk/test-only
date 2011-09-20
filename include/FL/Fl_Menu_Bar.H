@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(MenuBar)
+  FLTK3_WIDGET_VCALLS(Fl_Menu_Bar, MenuBar)
   
   Fl_Menu_Bar() {}
 

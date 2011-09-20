@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Progress : public Fl_Widget {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(Progress)
+  FLTK3_WIDGET_VCALLS(Fl_Progress, Progress)
 
   Fl_Progress() { }
   

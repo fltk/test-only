@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Roller : public Fl_Valuator {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Roller)
+  FLTK3_WIDGET_VCALLS(Fl_Roller, Roller)
 
   Fl_Roller() {}
   

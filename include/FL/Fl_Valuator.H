@@ -87,7 +87,7 @@ protected:
 
 public:
   
-  FLTK3_WIDGET_VCALLS(Valuator)
+  FLTK3_WIDGET_VCALLS(Fl_Valuator, Valuator)
 
   void bounds(double a, double b) {
     ((fltk3::Valuator_I*)_p)->bounds(a, b);

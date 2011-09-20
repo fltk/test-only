@@ -49,7 +49,7 @@ class FL_EXPORT Fl_Gl_Window : public Fl_Window {
 
 public:
   
-  FLTK3_WINDOW_VCALLS(GLWindow)
+  FLTK3_WINDOW_VCALLS(Fl_Gl_Window, GLWindow)
 
   Fl_Gl_Window() { /* empty */ }
 

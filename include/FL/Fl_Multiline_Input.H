@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Multiline_Input : public Fl_Input {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(MultilineInput)
+  FLTK3_WIDGET_VCALLS(Fl_Multiline_Input, MultilineInput)
   
   Fl_Multiline_Input() { /* empty */ }
   

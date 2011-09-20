@@ -44,7 +44,7 @@ class FL_EXPORT Fl_File_Browser : public Fl_Browser {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(FileBrowser)
+  FLTK3_WIDGET_VCALLS(Fl_File_Browser, FileBrowser)
 
   enum { FILES, DIRECTORIES };
 

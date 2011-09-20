@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Value_Slider : public Fl_Slider {
 
 public:
   
-  FLTK3_WIDGET_VCALLS(ValueSlider)
+  FLTK3_WIDGET_VCALLS(Fl_Value_Slider, ValueSlider)
 
   Fl_Value_Slider() {}
   

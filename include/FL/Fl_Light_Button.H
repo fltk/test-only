@@ -44,7 +44,7 @@ protected:
   
 public:
 
-  FLTK3_WIDGET_VCALLS(LightButton)
+  FLTK3_WIDGET_VCALLS(Fl_Light_Button, LightButton)
 
   Fl_Light_Button() { /* empty */ }
   

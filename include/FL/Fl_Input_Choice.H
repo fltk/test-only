@@ -53,7 +53,7 @@ class FL_EXPORT Fl_Input_Choice : public Fl_Group {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(InputChoice)
+  FLTK3_WIDGET_VCALLS(Fl_Input_Choice, InputChoice)
 
   Fl_Input_Choice() { /* empty */ }
   

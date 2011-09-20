@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Line_Dial : public Fl_Dial {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(LineDial)
+  FLTK3_WIDGET_VCALLS(Fl_Line_Dial, LineDial)
 
   Fl_Line_Dial() { /* empty */ }
   

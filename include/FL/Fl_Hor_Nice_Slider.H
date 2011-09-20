@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Hor_Nice_Slider : public Fl_Slider {
   
 public:
 
-  FLTK3_WIDGET_VCALLS(HorNiceSlider)
+  FLTK3_WIDGET_VCALLS(Fl_Hor_Nice_Slider, HorNiceSlider)
 
   Fl_Hor_Nice_Slider() {}
   

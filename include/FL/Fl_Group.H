@@ -66,7 +66,7 @@ protected:
   
 public:
   
-  FLTK3_WIDGET_VCALLS(Group)
+  FLTK3_WIDGET_VCALLS(Fl_Group, Group)
 
   Fl_Group(int x, int y, int w, int h, const char *label = 0) {
     _p = new fltk3::Group_I(x, y, w, h, label);

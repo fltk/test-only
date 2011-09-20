@@ -71,7 +71,7 @@ protected:
 
 public:
 
-  FLTK3_WIDGET_VCALLS(Browser)
+  FLTK3_WIDGET_VCALLS(Fl_Browser, Browser)
 
   void remove(int line) {
     ((fltk3::Browser*)_p)->remove(line);

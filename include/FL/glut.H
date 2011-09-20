@@ -45,7 +45,7 @@ class FL_EXPORT Fl_Glut_Window : public Fl_Gl_Window {
 
 public:
 
-  FLTK3_WIDGET_VCALLS(GlutWindow)
+  FLTK3_WIDGET_VCALLS(Fl_Glut_Window, GlutWindow)
 
   void make_current() {
     ((fltk3::GlutWindow*)_p)->make_current();

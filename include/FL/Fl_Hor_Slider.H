@@ -42,7 +42,7 @@ class Fl_Hor_Slider : public Fl_Slider {
   
 public:
   
-  FLTK3_WIDGET_VCALLS(HorSlider)
+  FLTK3_WIDGET_VCALLS(Fl_Hor_Slider, HorSlider)
 
   Fl_Hor_Slider() {}
   
