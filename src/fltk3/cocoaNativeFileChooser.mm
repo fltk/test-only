@@ -39,6 +39,7 @@
 
 
 #include <fltk3/run.h>
+#include <fltk3/x.h>
 #include <fltk3/NativeFileChooser.h>
 #include <fltk3/FileChooser.h>
 #include <fltk3/filename.h>
@@ -349,9 +350,6 @@ int fltk3::NativeFileChooser::filters() const {
 
 #import <Cocoa/Cocoa.h>
 #define UNLIKELYPREFIX "___fl_very_unlikely_prefix_"
-#ifndef MAC_OS_X_VERSION_10_6
-#define MAC_OS_X_VERSION_10_6 1060
-#endif
 
 int fltk3::NativeFileChooser::get_saveas_basename(void) {
   char *q = strdup( [[(NSSavePanel*)_panel filename] fileSystemRepresentation] );

@@ -152,9 +152,6 @@ extern Window fl_window;
 
 #endif // FL_LIBRARY || FLTK3_INTERNALS
 
-#ifndef MAC_OS_X_VERSION_10_3
-#define MAC_OS_X_VERSION_10_3 1030
-#endif
 #ifndef MAC_OS_X_VERSION_10_4
 #define MAC_OS_X_VERSION_10_4 1040
 #endif
