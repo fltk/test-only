@@ -584,7 +584,7 @@ namespace fltk3 {
   /** \addtogroup  fl_drawings
    @{ */
   /**
-   Draws a nul-terminated string starting at the given location.
+   Draws a nul-terminated UTF-8 string starting at the given \p x, \p y location.
    
    Text is aligned to the left and to the baseline of the font.
    To align to the bottom, subtract fltk3::descent() from \p y.
@@ -595,7 +595,7 @@ namespace fltk3 {
    */
   FLTK3_EXPORT void draw(const char* str, int x, int y);
   /**
-   Draws a nul-terminated string starting at the given location and 
+   Draws a nul-terminated UTF-8 string starting at the given \p x, \p y location and 
    rotating \p angle degrees counter-clockwise.
    This version of fltk3::draw provides direct access to the text drawing
    function of the underlying OS and is supported by Xft, Win32 and MacOS
@@ -603,17 +603,17 @@ namespace fltk3 {
    */
   FLTK3_EXPORT void draw(int angle, const char* str, int x, int y);
   /**
-   Draws an array of \p n characters starting at the given location.
+   Draws starting at the given \p x, \p y location a UTF-8 string of length \p n bytes.
    */
   inline void draw(const char* str, int n, int x, int y) {fltk3::graphics_driver->draw(str,n,x,y); }
   /**
-   Draws an array of \p n characters starting at the given location,
+   Draws at the given \p x, \p y location a UTF-8 string of length \p n bytes 
    rotating \p angle degrees counter-clockwise.
    */
-  inline void draw(int angle,const char* str, int n, int x, int y) {fltk3::graphics_driver->draw(angle,str,n,x,y); }
+  inline void draw(int angle, const char* str, int n, int x, int y) {fltk3::graphics_driver->draw(angle,str,n,x,y); }
   
   /**
-   Draws an array of \p n characters right to left starting at given location.
+   Draws a UTF-8 string of length \p n bytes right to left starting at the given \p x, \p y location.
    */
   inline void rtl_draw(const char* str, int n, int x, int y) {fltk3::graphics_driver->rtl_draw(str,n,x,y); }
   FLTK3_EXPORT void measure(const char* str, int& x, int& y,
