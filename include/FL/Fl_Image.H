@@ -45,6 +45,15 @@ namespace fltk3 {
 }
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Image, Image)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Image, Image)
+FLTK3_WRAPPER_INTERFACE_END()
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_RGB_Image, RGBImage)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_RGB_Image, RGBImage)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Image : public fltk3::Wrapper {
   
 protected:
@@ -84,6 +93,8 @@ protected:
 
 public:
 
+  FLTK3_IMAGE_VCALLS(Fl_Image, Image)
+
   Fl_Image() { }
   
   Fl_Image(fltk3::Image *img) {
@@ -120,34 +131,13 @@ public:
     _p->wrapper(this);
   }
   
-  // FIXME: 123 - virtual
-  Fl_Image *copy(int W, int H) {
-    return new Fl_Image( ((fltk3::Image*)_p)->copy(W, H) );
-  }
-  
   Fl_Image *copy() { 
     return new Fl_Image( ((fltk3::Image*)_p)->copy() );
-  }
-  
-  // FIXME: 123 - virtual
-  void color_average(Fl_Color c, float i) {
-    ((fltk3::Image*)_p)->color_average(fltk3::_1to3_color(c), i);
   }
   
   void inactive() {
     ((fltk3::Image*)_p)->inactive();
   }
-
-  // FIXME: 123 - virtual
-  virtual void desaturate() {}
-  // FIXME: 123 - virtual
-  virtual void label(Fl_Widget*w) {}
-  // FIXME: 123 - virtual
-  virtual void label(Fl_Menu_Item*m) {}
-  // FIXME: 123 - virtual
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0) {}
-  // FIXME: 123 - virtual
-  virtual void uncache() {}
 
   void draw(int X, int Y) {
     ((fltk3::Image*)_p)->draw(X, Y);
@@ -160,10 +150,12 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
 
 public:
 
+  FLTK3_IMAGE_VCALLS(Fl_RGB_Image, RGBImage)
+  
   Fl_RGB_Image() { /* empty */ }
 
   Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0) {
-    _p = new fltk3::RGBImage(bits, W, H, D, LD);
+    _p = new fltk3::RGBImage_I(bits, W, H, D, LD);
     _p->wrapper(this);
   }
   
@@ -180,21 +172,6 @@ public:
     ((fltk3::Image*)_p)->draw(X, Y);
   }
   
-  // FIXME: 123 - virtual
-  virtual Fl_Image *copy(int W, int H) { return 0L; }
-  // FIXME: 123 - virtual
-  virtual void color_average(Fl_Color c, float i) {}
-  // FIXME: 123 - virtual
-  virtual void desaturate() {}
-  // FIXME: 123 - virtual
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0) {}
-  // FIXME: 123 - virtual
-  virtual void label(Fl_Widget*w) {}
-  // FIXME: 123 - virtual
-  virtual void label(Fl_Menu_Item*m) {}
-  // FIXME: 123 - virtual
-  virtual void uncache() {}
-    
 };
 
 

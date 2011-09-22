@@ -42,9 +42,14 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT PNGImage : public fltk3::RGBImage {
     
+  protected:
+    
+    PNGImage(const uchar *a, int b, int c, int d=3, int e=0) : RGBImage(a, b, c, d, e) {}
+
   public:
     
     PNGImage(const char* filename);
+    
     PNGImage (const char *name_png, const unsigned char *buffer, int datasize);
   private:
     void load_png_(const char *name_png, const unsigned char *buffer_png, int datasize);

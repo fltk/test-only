@@ -1409,7 +1409,7 @@ workspace FLTK {open
           filename_and_path {include/fltk3/XPMImage.h}
         }
       }
-      folder Sources {
+      folder Sources {open
         uuid_Xcode4_Group {91990322-0AF9-42F2-A077-713540EE5AB1}
       } {
         file_ref {cocoa.mm} {
@@ -2077,6 +2077,18 @@ workspace FLTK {open
           uuid_Xcode4_FileRef {02716487-AA34-406A-9C95-983284DE5A34}
           uuid_Xcode4_BuildFileInSources {E5A3C248-605C-4BC2-BA7A-9BF5550D91DA}
           filename_and_path {src/fltk3/color.cxx}
+        }
+        file_ref {compatibility1.cxx} {
+          uuid_Xcode4_BuildFile {9C8449A4-A244-4446-8C45-505FC5CB6BBC}
+          uuid_Xcode4_FileRef {431E7120-F9CF-45AF-8ED0-2F44115A35F4}
+          uuid_Xcode4_BuildFileInSources {663B1DC0-F7F0-45EB-AA2A-D076ECC9BD80}
+          filename_and_path {src/fltk3/compatibility1.cxx}
+        }
+        file_ref {compatibility2.cxx} {selected
+          uuid_Xcode4_BuildFile {37A73287-8FDA-400A-A597-BF17053185D8}
+          uuid_Xcode4_FileRef {426D3CC1-AC4D-4B89-B45D-15F1B62C5673}
+          uuid_Xcode4_BuildFileInSources {DA40E720-2FBF-47C0-8E9B-AA2709518643}
+          filename_and_path {src/fltk3/compatibility2.cxx}
         }
         file_ref {cursor.cxx} {
           uuid_Xcode4_BuildFile {191125BA-A890-4754-AB59-D8FB26F9328A}
@@ -3565,10 +3577,10 @@ workspace FLTK {open
           uuid_Xcode4_FileRef {8F2D71CD-3735-4A56-A2C7-C2876BD826EE}
           filename_and_path {include/fltk/StatusBarGroup.h}
         }
-        file_ref {string.h} {
+        file_ref {flstring.h} {
           uuid_Xcode4_BuildFileInHeaders {F5EA06AA-685C-47F1-A65B-527B48912D4F}
           uuid_Xcode4_FileRef {45D8FA73-A188-4643-8297-1FACA9DE712B}
-          filename_and_path {include/fltk/string.h}
+          filename_and_path {include/fltk/flstring.h}
         }
         file_ref {StringList.h} {
           uuid_Xcode4_BuildFileInHeaders {BA668F5A-8E7C-4770-A31A-5E1A3D6823B0}
@@ -8245,7 +8257,7 @@ workspace FLTK {open
       target_path test2
       makefile_path test2
     } {
-      file_ref {hello.cxx} {selected
+      file_ref {hello.cxx} {
         uuid_Xcode4_BuildFileInSources {596D0220-667F-49D6-AAEF-064F398E401D}
         uuid_Xcode4_FileRef {1B2AA7BD-88B7-4C6E-80D0-89EEAD63680B}
         build_env 64

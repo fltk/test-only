@@ -44,7 +44,7 @@ namespace fltk3 {
   class GDIGraphicsDriver;
   class XlibGraphicsDriver;
   class Widget; 
-  struct Label;
+  class Label;
   struct MenuItem;
   
   /**
@@ -137,6 +137,7 @@ namespace fltk3 {
      1 to 4 for color images.
      */
     Image(int W, int H, int D) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
+    Image(const uchar*, int W, int H, int D=3, int =0) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
     virtual ~Image();
     virtual fltk3::Image *copy(int W, int H);
     /**

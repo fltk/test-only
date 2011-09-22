@@ -57,6 +57,8 @@ namespace fltk3 {
     
   protected:
     
+    SharedImage(const uchar *a, int b, int c, int d=3, int e=0) : Image(a, b, c, d, e) {}
+
     static fltk3::SharedImage **images_;	// Shared images
     static int	num_images_;		// Number of shared images
     static int	alloc_images_;		// Allocated shared images

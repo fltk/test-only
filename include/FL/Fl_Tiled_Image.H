@@ -33,6 +33,12 @@
 #include <fltk3/TiledImage.h>
 #include "Fl_Image.H"
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Image, Image)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Image, Image)
+FLTK3_WRAPPER_INTERFACE_END()
+FLTK3_IMAGE_VCALLS(Fl_Image, Image)
+
+
 class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
 
 public:

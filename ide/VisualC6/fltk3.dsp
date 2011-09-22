@@ -511,6 +511,14 @@ SOURCE=..\..\src\fltk3\color.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\compatibility1.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\compatibility2.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\cursor.cxx
 # End Source File
 # Begin Source File

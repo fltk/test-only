@@ -32,16 +32,21 @@
 #include <fltk3/Pixmap.h>
 #include "Fl_Image.H"
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Pixmap, Pixmap)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Pixmap, Pixmap)
+FLTK3_WRAPPER_INTERFACE_END()
 
 class FL_EXPORT Fl_Pixmap : public Fl_Image {
   
 protected:
 
   void measure() {
-    ((fltk3::Pixmap*)_p)->measure();
+    ((fltk3::Pixmap_I*)_p)->measure();
   }
   
 public:
+  
+  FLTK3_IMAGE_VCALLS(Fl_Pixmap, Pixmap)
   
   Fl_Pixmap() {}
 
@@ -65,6 +70,9 @@ public:
     _p->wrapper(this);
   }
   
+  void draw(int x, int y) { 
+    ((fltk3::Pixmap*)_p)->draw(x, y);
+  }
 };
 
 

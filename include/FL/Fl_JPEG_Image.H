@@ -31,7 +31,13 @@
 
 #ifndef Fl_JPEG_Image_H
 #define Fl_JPEG_Image_H
-#  include "Fl_Image.H"
+
+#include "Fl_Image.H"
+#include <fltk3/JPEGImage.h>
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_JPEG_Image, JPEGImage)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_JPEG_Image, JPEGImage)
+FLTK3_WRAPPER_INTERFACE_END()
 
 /**
   The Fl_JPEG_Image class supports loading, caching,
@@ -43,8 +49,17 @@ class FL_EXPORT Fl_JPEG_Image : public Fl_RGB_Image {
 
 public:
 
-  Fl_JPEG_Image(const char *filename);
-  Fl_JPEG_Image(const char *name, const unsigned char *data);
+  FLTK3_IMAGE_VCALLS(Fl_JPEG_Image, JPEGImage)
+
+  Fl_JPEG_Image(const char *filename) {
+    _p = new fltk3::JPEGImage_I(filename);
+    _p->wrapper(this);
+  }
+  
+  Fl_JPEG_Image(const char *name, const unsigned char *data) {
+    _p = new fltk3::JPEGImage_I(name, data);
+    _p->wrapper(this);
+  }
 };
 
 #endif

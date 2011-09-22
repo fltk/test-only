@@ -35,6 +35,10 @@
 
 typedef fltk3::SharedHandler Fl_Shared_Handler;
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Shared_Image, SharedImage)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Shared_Image, SharedImage)
+FLTK3_WRAPPER_INTERFACE_END()
+
 
 class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   
@@ -68,6 +72,8 @@ protected:
 
 public:
 
+  FLTK3_IMAGE_VCALLS(Fl_Shared_Image, SharedImage)
+
 #if 0
   /** Returns the filename of the shared image */
   const char	*name() { return name_; }
@@ -80,15 +86,13 @@ public:
   }
 
 #if 0
+  
   void		reload();
 
-  virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
-  virtual void desaturate();
-  virtual void draw(int X, int Y, int W, int H, int cx, int cy);
+  
   void draw(int X, int Y) { draw(X, Y, w(), h(), 0, 0); }
-  virtual void uncache();
+  
 #endif
 
   static Fl_Shared_Image *find(const char *n, int W = 0, int H = 0) {

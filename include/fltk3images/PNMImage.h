@@ -42,6 +42,10 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT PNMImage : public fltk3::RGBImage {
     
+  protected:
+    
+    PNMImage(const uchar *a, int b, int c, int d=3, int e=0) : RGBImage(a, b, c, d, e) {}
+
   public:
     
     PNMImage(const char* filename);

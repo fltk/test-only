@@ -31,7 +31,13 @@
 
 #ifndef Fl_BMP_Image_H
 #define Fl_BMP_Image_H
-#  include "Fl_Image.H"
+
+#include "Fl_Image.H"
+#include <fltk3/BMPImage.h>
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_BMP_Image, BMPImage)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_BMP_Image, BMPImage)
+FLTK3_WRAPPER_INTERFACE_END()
 
 /**
   The Fl_BMP_Image class supports loading, caching,
@@ -39,9 +45,14 @@
 */
 class FL_EXPORT Fl_BMP_Image : public Fl_RGB_Image {
 
-  public:
+public:
 
-  Fl_BMP_Image(const char* filename);
+  FLTK3_IMAGE_VCALLS(Fl_BMP_Image, BMPImage)
+
+  Fl_BMP_Image(const char* filename) {
+    _p = new fltk3::BMPImage_I(filename);
+    _p->wrapper(this);
+  }
 };
 
 #endif

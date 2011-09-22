@@ -154,6 +154,8 @@
 		7CD1A5049849133DFB39DF46 /* boxtype.cxx in Sources */ = {isa = PBXBuildFile; fileRef = BC14596F24E305FE8CE39DAF /* boxtype.cxx */; };
 		36978A2B5576E54EDA3F8D90 /* call_main.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8B35EF2F662F706A2B46BDD7 /* call_main.cxx */; };
 		E5A3C2482B9E218F550D91DA /* color.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 02716487EA5E04A784DE5A34 /* color.cxx */; };
+		663B1DC0B21B7A5CECC9BD80 /* compatibility1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 431E7120BC60A194115A35F4 /* compatibility1.cxx */; };
+		DA40E720687F24BC09518643 /* compatibility2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 426D3CC1E7C4A1ACB62C5673 /* compatibility2.cxx */; };
 		79967B56F476337DA7A830CF /* cursor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C832D220ECF843E28FBAFED8 /* cursor.cxx */; };
 		B234111841F3CC33C32E75A1 /* curve.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 53EC964ED2E6DE4CBF80B206 /* curve.cxx */; };
 		2BF486109B69CFEFB5C7950E /* diamond_box.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5557266E1C9D440172D5DF09 /* diamond_box.cxx */; };
@@ -425,7 +427,7 @@
 		29688AAEA3EB297DC7B47F93 /* show_colormap.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E00EC66E8BA9A47020F002 /* show_colormap.h */; };
 		9F216D256F1AC0557F642917 /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 30A114397E4FE063CE15D42B /* Slider.h */; };
 		A9215601B05227986C5320CF /* StatusBarGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F2D71CD7D6360406BD826EE /* StatusBarGroup.h */; };
-		F5EA06AA2FADF42048912D4F /* string.h in Headers */ = {isa = PBXBuildFile; fileRef = 45D8FA73E7CB9D3BA9DE712B /* string.h */; };
+		F5EA06AA2FADF42048912D4F /* flstring.h in Headers */ = {isa = PBXBuildFile; fileRef = 45D8FA73E7CB9D3BA9DE712B /* flstring.h */; };
 		BA668F5AC90CFD003D6823B0 /* StringList.h in Headers */ = {isa = PBXBuildFile; fileRef = FB5D0EAD0BDAF6D273F3BFC3 /* StringList.h */; };
 		DEB79DB845005E420B911D17 /* Style.h in Headers */ = {isa = PBXBuildFile; fileRef = F262223061A642A36DA0F2CE /* Style.h */; };
 		E0C148897BA7219A3747CDAF /* StyleSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A96A83F6E90B629D88D9B9E /* StyleSet.h */; };
@@ -4607,6 +4609,8 @@
 		BC14596F24E305FE8CE39DAF /* boxtype.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boxtype.cxx; path = ../../src/fltk3/boxtype.cxx; sourceTree = SOURCE_ROOT; };
 		8B35EF2F662F706A2B46BDD7 /* call_main.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = call_main.cxx; path = ../../src/fltk3/call_main.cxx; sourceTree = SOURCE_ROOT; };
 		02716487EA5E04A784DE5A34 /* color.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color.cxx; path = ../../src/fltk3/color.cxx; sourceTree = SOURCE_ROOT; };
+		431E7120BC60A194115A35F4 /* compatibility1.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = compatibility1.cxx; path = ../../src/fltk3/compatibility1.cxx; sourceTree = SOURCE_ROOT; };
+		426D3CC1E7C4A1ACB62C5673 /* compatibility2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = compatibility2.cxx; path = ../../src/fltk3/compatibility2.cxx; sourceTree = SOURCE_ROOT; };
 		C832D220ECF843E28FBAFED8 /* cursor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursor.cxx; path = ../../src/fltk3/cursor.cxx; sourceTree = SOURCE_ROOT; };
 		53EC964ED2E6DE4CBF80B206 /* curve.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = curve.cxx; path = ../../src/fltk3/curve.cxx; sourceTree = SOURCE_ROOT; };
 		5557266E1C9D440172D5DF09 /* diamond_box.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diamond_box.cxx; path = ../../src/fltk3/diamond_box.cxx; sourceTree = SOURCE_ROOT; };
@@ -4887,7 +4891,7 @@
 		E1E00EC66E8BA9A47020F002 /* show_colormap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = show_colormap.h; path = ../../include/fltk/show_colormap.h; sourceTree = SOURCE_ROOT; };
 		30A114397E4FE063CE15D42B /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Slider.h; path = ../../include/fltk/Slider.h; sourceTree = SOURCE_ROOT; };
 		8F2D71CD7D6360406BD826EE /* StatusBarGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatusBarGroup.h; path = ../../include/fltk/StatusBarGroup.h; sourceTree = SOURCE_ROOT; };
-		45D8FA73E7CB9D3BA9DE712B /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = ../../include/fltk/string.h; sourceTree = SOURCE_ROOT; };
+		45D8FA73E7CB9D3BA9DE712B /* flstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = flstring.h; path = ../../include/fltk/flstring.h; sourceTree = SOURCE_ROOT; };
 		FB5D0EAD0BDAF6D273F3BFC3 /* StringList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringList.h; path = ../../include/fltk/StringList.h; sourceTree = SOURCE_ROOT; };
 		F262223061A642A36DA0F2CE /* Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Style.h; path = ../../include/fltk/Style.h; sourceTree = SOURCE_ROOT; };
 		5A96A83F6E90B629D88D9B9E /* StyleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyleSet.h; path = ../../include/fltk/StyleSet.h; sourceTree = SOURCE_ROOT; };
@@ -6445,6 +6449,8 @@
 				BC14596F24E305FE8CE39DAF /* boxtype.cxx */,
 				8B35EF2F662F706A2B46BDD7 /* call_main.cxx */,
 				02716487EA5E04A784DE5A34 /* color.cxx */,
+				431E7120BC60A194115A35F4 /* compatibility1.cxx */,
+				426D3CC1E7C4A1ACB62C5673 /* compatibility2.cxx */,
 				C832D220ECF843E28FBAFED8 /* cursor.cxx */,
 				53EC964ED2E6DE4CBF80B206 /* curve.cxx */,
 				5557266E1C9D440172D5DF09 /* diamond_box.cxx */,
@@ -6746,7 +6752,7 @@
 				E1E00EC66E8BA9A47020F002 /* show_colormap.h */,
 				30A114397E4FE063CE15D42B /* Slider.h */,
 				8F2D71CD7D6360406BD826EE /* StatusBarGroup.h */,
-				45D8FA73E7CB9D3BA9DE712B /* string.h */,
+				45D8FA73E7CB9D3BA9DE712B /* flstring.h */,
 				FB5D0EAD0BDAF6D273F3BFC3 /* StringList.h */,
 				F262223061A642A36DA0F2CE /* Style.h */,
 				5A96A83F6E90B629D88D9B9E /* StyleSet.h */,
@@ -8128,7 +8134,7 @@
 				29688AAEA3EB297DC7B47F93 /* show_colormap.h in FLTK2CompatibilityHeaders */,
 				9F216D256F1AC0557F642917 /* Slider.h in FLTK2CompatibilityHeaders */,
 				A9215601B05227986C5320CF /* StatusBarGroup.h in FLTK2CompatibilityHeaders */,
-				F5EA06AA2FADF42048912D4F /* string.h in FLTK2CompatibilityHeaders */,
+				F5EA06AA2FADF42048912D4F /* flstring.h in FLTK2CompatibilityHeaders */,
 				BA668F5AC90CFD003D6823B0 /* StringList.h in FLTK2CompatibilityHeaders */,
 				DEB79DB845005E420B911D17 /* Style.h in FLTK2CompatibilityHeaders */,
 				E0C148897BA7219A3747CDAF /* StyleSet.h in FLTK2CompatibilityHeaders */,
@@ -10874,6 +10880,8 @@
 				7CD1A5049849133DFB39DF46 /* boxtype.cxx in Sources */,
 				36978A2B5576E54EDA3F8D90 /* call_main.cxx in Sources */,
 				E5A3C2482B9E218F550D91DA /* color.cxx in Sources */,
+				663B1DC0B21B7A5CECC9BD80 /* compatibility1.cxx in Sources */,
+				DA40E720687F24BC09518643 /* compatibility2.cxx in Sources */,
 				79967B56F476337DA7A830CF /* cursor.cxx in Sources */,
 				B234111841F3CC33C32E75A1 /* curve.cxx in Sources */,
 				2BF486109B69CFEFB5C7950E /* diamond_box.cxx in Sources */,

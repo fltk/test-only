@@ -37,9 +37,16 @@
 class Fl_Widget;
 struct Fl_Menu_Item;
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Bitmap, Bitmap)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Bitmap, Bitmap)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Bitmap : public Fl_Image {
 
 public:
+  
+  FLTK3_IMAGE_VCALLS(Fl_Bitmap, Bitmap)
   
   const uchar *get_array() { 
     return ((fltk3::Bitmap*)_p)->array;
@@ -52,38 +59,18 @@ public:
   Fl_Bitmap() {}
 
   Fl_Bitmap(const uchar *bits, int W, int H) {
-    _p = new fltk3::Bitmap(bits, W, H);
+    _p = new fltk3::Bitmap_I(bits, W, H);
     _p->wrapper(this);
   }
 
   Fl_Bitmap(const char *bits, int W, int H) {
-    _p = new fltk3::Bitmap(bits, W, H);
+    _p = new fltk3::Bitmap_I(bits, W, H);
     _p->wrapper(this);
   }
 
-  // FIXME: 123 - virtual funciton!
-  virtual Fl_Image *copy(int W, int H) {
-    return 0;
-  }
-  
-  // FIXME: 123 - virtual function! Creates a new object!
-  Fl_Image *copy() { return 0L; }
-  
-  // FIXME: 123 - virtual function!
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0) { }
-  
   void draw(int X, int Y) {
     ((fltk3::Bitmap*)_p)->draw(X, Y);
   }
-  
-  // FIXME: 123 - virtual function!
-  virtual void label(Fl_Widget*w) { }
-  
-  // FIXME: 123 - virtual function!
-  virtual void label(Fl_Menu_Item*m) {}
-  
-  // FIXME: 123 - virtual function!
-  virtual void uncache() { }
 };
 
 #endif

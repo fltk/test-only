@@ -173,6 +173,8 @@ protected:
   
 public:
 
+  FLTK3_WIDGET_VCALLS(Fl_Widget, Widget);
+  
   Fl_Widget() { /*blank */ }
 
   Fl_Widget(int x, int y, int w, int h, const char *label=0L) {
@@ -180,16 +182,6 @@ public:
     _p->wrapper(this);
   }
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, hide(), hide(), Hide)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget_I, draw(), draw(), Draw)
-
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Widget, handle(int event), handle(event), Handle)
-  
   virtual Fl_Group* as_group() {return 0;}
   
   virtual Fl_Window* as_window() {return 0;}

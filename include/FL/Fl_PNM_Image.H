@@ -29,13 +29,20 @@
 #ifndef Fl_PNM_Image_H
 #define Fl_PNM_Image_H
 
-#include <fltk3/PNMImage.h>
+#include <fltk3images/PNMImage.h>
 #include "Fl_Image.H"
+
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_PNM_Image, PNMImage)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_PNM_Image, PNMImage)
+FLTK3_WRAPPER_INTERFACE_END()
 
 
 class FL_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
 
 public:
+
+  FLTK3_IMAGE_VCALLS(Fl_PNM_Image, PNMImage)
 
   Fl_PNM_Image(const char* filename) {
     _p = new fltk3::PNMImage(filename);

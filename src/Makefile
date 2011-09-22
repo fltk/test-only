@@ -133,6 +133,8 @@ FLTK3_CPPFILES = \
 	fltk3/boxtype.cxx \
 	fltk3/call_main.cxx \
 	fltk3/color.cxx \
+	fltk3/compatibility1.cxx \
+	fltk3/compatibility2.cxx \
 	fltk3/cursor.cxx \
 	fltk3/curve.cxx \
 	fltk3/diamond_box.cxx \

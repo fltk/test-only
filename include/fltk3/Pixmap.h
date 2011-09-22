@@ -66,6 +66,8 @@ namespace fltk3 {
     
   protected:
     
+    Pixmap(const uchar *a, int b, int c, int d=3, int e=0) : Image(a, b, c, d, e) {}
+
     void measure();
     
   public:

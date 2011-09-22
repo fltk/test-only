@@ -32,7 +32,7 @@
 #define FLTK3_Wrapper_H
 
 #include <fltk3/Widget.h>
-#include <fltk3/Wrapper.h>
+#include <fltk3/Image.h>
 
 /*
  
@@ -148,54 +148,68 @@ virtual ~type1() { \
   } \
 }
 
-#define FLTK3_WRAPPER_VCALLS_OBJECT(klass, proto, call, flag) \
+#define FLTK3_WRAPPER_VCALLS_OBJECT(type, klass, proto, call, flag) \
 virtual void proto { \
-  if ( pVCalls & pVCallWidget##flag ) { \
+  if ( pVCalls & pVCall##type##flag ) { \
     ((fltk3::klass*)_p)->call; \
   } else { \
-    pVCalls |= pVCallWidget##flag; \
+    pVCalls |= pVCall##type##flag; \
     ((fltk3::klass*)_p)->call; \
-    pVCalls &= ~pVCallWidget##flag; \
+    pVCalls &= ~pVCall##type##flag; \
   } \
 }
+#define FLTK3_WRAPPER_VCALLS_WIDGET(klass, proto, call, flag) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, klass, proto, call, flag)
+#define FLTK3_WRAPPER_VCALLS_IMAGE(klass, proto, call, flag) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(Image, klass, proto, call, flag)
 
-#define FLTK3_WRAPPER_VCALLS_OBJECT_RET(rtype, klass, proto, call, flag) \
+#define FLTK3_WRAPPER_VCALLS_OBJECT_RET(type, rtype, klass, proto, call, flag) \
 virtual rtype proto { \
   rtype ret = 0; \
-  if ( pVCalls & pVCallWidget##flag ) { \
+  if ( pVCalls & pVCall##type##flag ) { \
     ret = ((fltk3::klass*)_p)->call; \
   } else { \
-    pVCalls |= pVCallWidget##flag; \
+    pVCalls |= pVCall##type##flag; \
     ret = ((fltk3::klass*)_p)->call; \
-    pVCalls &= ~pVCallWidget##flag; \
+    pVCalls &= ~pVCall##type##flag; \
   } \
   return ret; \
 }
-
+#define FLTK3_WRAPPER_VCALLS_WIDGET_RET(rtype, klass, proto, call, flag) \
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(Widget, rtype, klass, proto, call, flag)
+#define FLTK3_WRAPPER_VCALLS_IMAGE_RET(rtype, klass, proto, call, flag) \
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(Image, rtype, klass, proto, call, flag)
 
 #define FLTK3_OBJECT_VCALLS_WRAPPER_DTOR() \
   if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallDtor) ) { \
     pWrapper->pVCalls |= Wrapper::pVCallDtor; \
-    delete ((WidgetWrapper*)pWrapper); \
+    delete ((Wrapper*)pWrapper); \
     return; \
   }
 
-#define FLTK3_OBJECT_VCALLS_WRAPPER(call, flag) \
-  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
-    pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
-    ((WidgetWrapper*)pWrapper)->call; \
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
+#define FLTK3_OBJECT_VCALLS_WRAPPER(type, call, flag) \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCall##type##flag) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCall##type##flag; \
+    ((type##Wrapper*)pWrapper)->call; \
+    pWrapper->pVCalls &= ~Wrapper::pVCall##type##flag; \
     return; \
   }
+#define FLTK3_WIDGET_VCALLS_WRAPPER(call, flag) \
+  FLTK3_OBJECT_VCALLS_WRAPPER(Widget, call, flag)
+#define FLTK3_IMAGE_VCALLS_WRAPPER(call, flag) \
+  FLTK3_OBJECT_VCALLS_WRAPPER(Image, call, flag)
 
-#define FLTK3_OBJECT_VCALLS_WRAPPER_RET(rtype, call, flag) \
-  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
-    pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
-    rtype ret = ((WidgetWrapper*)pWrapper)->call; \
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
+#define FLTK3_OBJECT_VCALLS_WRAPPER_RET(type, rtype, call, flag) \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCall##type##flag) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCall##type##flag; \
+    rtype ret = ((type##Wrapper*)pWrapper)->call; \
+    pWrapper->pVCalls &= ~Wrapper::pVCall##type##flag; \
     return ret; \
   }
-
+#define FLTK3_WIDGET_VCALLS_WRAPPER_RET(rtype, call, flag) \
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(Widget, rtype, call, flag)
+#define FLTK3_IMAGE_VCALLS_WRAPPER_RET(rtype, call, flag) \
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(Image, rtype, call, flag)
 
 #define FLTK3_WRAPPER_INTERFACE_BEGIN(type1, type3) \
   class type1; \
@@ -203,42 +217,73 @@ virtual rtype proto { \
     class type3##_I : public type3 { \
       friend class ::type1; \
     public: \
-      type3##_I(int x, int y, int w, int h, const char *l) \
-      : type3(x, y, w, h, l) { } \
       virtual ~type3##_I() { \
         FLTK3_OBJECT_VCALLS_WRAPPER_DTOR() \
       }
 
 #define FLTK3_WRAPPER_INTERFACE_WIDGET(type1, type3) \
+      type3##_I(int x, int y, int w, int h, const char *l) \
+      : type3(x, y, w, h, l) { } \
       void show() { \
-        FLTK3_OBJECT_VCALLS_WRAPPER(show(), Show) \
+        FLTK3_WIDGET_VCALLS_WRAPPER(show(), Show) \
         type3::show(); \
       } \
       void hide() { \
-        FLTK3_OBJECT_VCALLS_WRAPPER(hide(), Hide) \
+        FLTK3_WIDGET_VCALLS_WRAPPER(hide(), Hide) \
         type3::hide(); \
       } \
       void resize(int X, int Y, int W, int H) { \
-        FLTK3_OBJECT_VCALLS_WRAPPER(resize(X, Y, W, H), Resize) \
+        FLTK3_WIDGET_VCALLS_WRAPPER(resize(X, Y, W, H), Resize) \
         type3::resize(X, Y, W, H); \
       } \
       void draw() { \
-        FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw) \
+        FLTK3_WIDGET_VCALLS_WRAPPER(draw(), Draw) \
         type3::draw(); \
       } \
       int handle(int event) { \
-        FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle) \
+        FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, handle(event), Handle) \
         return type3::handle(event); \
       }
 
 #define FLTK3_WRAPPER_INTERFACE_WINDOW(type1, type3) \
       void draw_overlay() { \
-        FLTK3_OBJECT_VCALLS_WRAPPER(draw_overlay(), DrawOverlay) \
+        FLTK3_WIDGET_VCALLS_WRAPPER(draw_overlay(), DrawOverlay) \
         type3::draw_overlay(); \
       } \
       type3##_I(int w, int h, const char *l) \
       : type3(w, h, l) { }
 
+#define FLTK3_WRAPPER_INTERFACE_IMAGE(type1, type3) \
+      type3##_I(const uchar *bits, int W, int H, int D=3, int LD=0) \
+      : type3(bits, W, H, D, LD) { } \
+      Image *copy(int W, int H) { \
+        FLTK3_IMAGE_VCALLS_WRAPPER_RET(Image *, copy(W, H), CopyWH) \
+        return type3::copy(W, H); \
+      } \
+      void color_average(Color c, float i) { \
+        FLTK3_IMAGE_VCALLS_WRAPPER(color_average(c, i), ColorAverage) \
+        type3::color_average(c, i); \
+      } \
+      void desaturate() { \
+        FLTK3_IMAGE_VCALLS_WRAPPER(desaturate(), Desaturate) \
+        type3::desaturate(); \
+      } \
+      void label(Widget *w) { \
+        FLTK3_IMAGE_VCALLS_WRAPPER(label(w), LabelW) \
+        type3::label(w); \
+      } \
+      void label(MenuItem *w) { \
+        FLTK3_IMAGE_VCALLS_WRAPPER(label(w), LabelM) \
+        type3::label(w); \
+      } \
+      void draw(int X, int Y, int W, int H, int cx=0, int cy=0) { \
+        FLTK3_IMAGE_VCALLS_WRAPPER(draw(X, Y, W, H, cx, cy), Draw) \
+        type3::draw(X, Y, W, H, cx, cy); \
+      } \
+      void uncache() { \
+        FLTK3_IMAGE_VCALLS_WRAPPER(uncache(), Uncache) \
+        type3::uncache(); \
+      }
 
 #define FLTK3_WRAPPER_INTERFACE_END() \
     }; \
@@ -247,16 +292,26 @@ virtual rtype proto { \
 
 #define FLTK3_WIDGET_VCALLS(type1, type3) \
   FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, show(), show(), Show) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, hide(), hide(), Hide) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw(), draw(), Draw) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, type3##_I, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, show(), show(), Show) \
+  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, hide(), hide(), Hide) \
+  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, draw(), draw(), Draw) \
+  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
+  FLTK3_WRAPPER_VCALLS_WIDGET_RET(int, type3##_I, handle(int event), handle(event), Handle)
 
 
 #define FLTK3_WINDOW_VCALLS(type1, type3) \
   FLTK3_WIDGET_VCALLS(type1, type3) \
-  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
+  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
+
+#define FLTK3_IMAGE_VCALLS(type1, type3) \
+  FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
+  FLTK3_WRAPPER_VCALLS_IMAGE_RET(fltk3::Image *, type3##_I, copy(int w, int h), copy(w, h), CopyWH) \
+  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, color_average(Fl_Color c, float i), color_average(fltk3::_1to3_color(c), i), ColorAverage) \
+  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, desaturate(), desaturate(), Desaturate) \
+  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Widget *w), label(fltk3::_1to3_widget(w)), LabelW) \
+  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Menu_Item *w), label((fltk3::MenuItem*)w), LabelM) \
+  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, draw(int X, int Y, int W, int H, int cx=0, int cy=0), draw(X, Y, W, H, cx, cy), Draw) \
+  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, uncache(), uncache(), Uncache)
 
 
 namespace fltk3 {
@@ -314,11 +369,11 @@ namespace fltk3 {
   class WidgetWrapper : public Wrapper {
   public:
     virtual ~WidgetWrapper() {}
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
-    FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Widget, handle(int event), handle(event), Handle)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, hide(), hide(), Hide)
+    FLTK3_WRAPPER_VCALLS_WIDGET(Widget, draw(), draw(), Draw)
+    FLTK3_WRAPPER_VCALLS_WIDGET_RET(int, Widget, handle(int event), handle(event), Handle)
+    FLTK3_WRAPPER_VCALLS_WIDGET(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+    FLTK3_WRAPPER_VCALLS_WIDGET(Widget, show(), show(), Show)
+    FLTK3_WRAPPER_VCALLS_WIDGET(Widget, hide(), hide(), Hide)
     virtual void draw_overlay() {} // needed by overlay windows
     virtual void *item_first() const { return 0; }
     virtual void *item_next(void *item) const { return 0; }
@@ -341,16 +396,14 @@ namespace fltk3 {
   
   class ImageWrapper : public Wrapper {
   public:
-    /*
-    virtual ~Image();
-    virtual fltk3::Image *copy(int W, int H);
-    virtual void color_average(fltk3::Color c, float i);
-    virtual void desaturate();
-    virtual void label(fltk3::Widget*w);
-    virtual void label(fltk3::MenuItem*m);
-    virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0); // platform dependent
-    virtual void uncache();
-     */
+    virtual ~ImageWrapper();
+    FLTK3_WRAPPER_VCALLS_IMAGE_RET(Image *, Image, copy(int w, int h), copy(w, h), CopyWH)
+    FLTK3_WRAPPER_VCALLS_IMAGE(Image, color_average(Color c, float i), color_average(c, i), ColorAverage);
+    FLTK3_WRAPPER_VCALLS_IMAGE(Image, desaturate(), desaturate(), Desaturate);
+    FLTK3_WRAPPER_VCALLS_IMAGE(Image, label(Widget *w), label(w), LabelW);
+    FLTK3_WRAPPER_VCALLS_IMAGE(Image, label(MenuItem *w), label(w), LabelM);
+    FLTK3_WRAPPER_VCALLS_IMAGE(Image, draw(int X, int Y, int W, int H, int cx=0, int cy=0), draw(X, Y, W, H, cx, cy), Draw);
+    FLTK3_WRAPPER_VCALLS_IMAGE(Image, uncache(), uncache(), Uncache);
   };
   
 }; // namespace fltk3

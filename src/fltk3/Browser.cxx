@@ -71,12 +71,12 @@ namespace fltk3 {
 
 
 void fltk3::Browser::item_swap(void *a, void *b) { 
-  FLTK3_OBJECT_VCALLS_WRAPPER(item_swap(a, b), BrowserItemSwap) 
+  FLTK3_WIDGET_VCALLS_WRAPPER(item_swap(a, b), BrowserItemSwap) 
   swap((fltk3::BrowserLine_*)a, (fltk3::BrowserLine_*)b); 
 }
 
 void *fltk3::Browser::item_at(int line) const { 
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_at(line), BrowserItemAt) 
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_at(line), BrowserItemAt) 
   return (void*)find_line(line);
 }
 
@@ -93,7 +93,7 @@ void *fltk3::Browser::item_at(int line) const {
   \see item_first(), item_last(), item_next(), item_prev()
 */
 void* fltk3::Browser::item_first() const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_first(), BrowserItemFirst) 
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_first(), BrowserItemFirst) 
   return first;
 }
 
@@ -104,7 +104,7 @@ void* fltk3::Browser::item_first() const {
   \see item_first(), item_last(), item_next(), item_prev()
 */
 void* fltk3::Browser::item_next(void* item) const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_next(item), BrowserItemNext) 
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_next(item), BrowserItemNext) 
   return ((fltk3::BrowserLine_*)item)->next;
 }
 
@@ -115,7 +115,7 @@ void* fltk3::Browser::item_next(void* item) const {
   \see item_first(), item_last(), item_next(), item_prev()
 */
 void* fltk3::Browser::item_prev(void* item) const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_prev(item), BrowserItemPrev) 
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_prev(item), BrowserItemPrev) 
   return ((fltk3::BrowserLine_*)item)->prev;
 }
 
@@ -132,7 +132,7 @@ void* fltk3::Browser::item_prev(void* item) const {
   \see item_first(), item_last(), item_next(), item_prev()
 */
 void* fltk3::Browser::item_last() const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_last(), BrowserItemLast) 
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_last(), BrowserItemLast) 
   return last;
 }
 
@@ -143,7 +143,7 @@ void* fltk3::Browser::item_last() const {
   \see select(), selected(), value(), item_select(), item_selected()
 */
 int fltk3::Browser::item_selected(void* item) const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_selected(item), BrowserItemSelected)
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_selected(item), BrowserItemSelected)
   return ((fltk3::BrowserLine_*)item)->flags&SELECTED;
 }
 /**
@@ -153,7 +153,7 @@ int fltk3::Browser::item_selected(void* item) const {
   \see select(), selected(), value(), item_select(), item_selected()
 */
 void fltk3::Browser::item_select(void *item, int val) {
-  FLTK3_OBJECT_VCALLS_WRAPPER(item_select(item, val), BrowserItemSelect)
+  FLTK3_WIDGET_VCALLS_WRAPPER(item_select(item, val), BrowserItemSelect)
   if (val) ((fltk3::BrowserLine_*)item)->flags |= SELECTED;
   else     ((fltk3::BrowserLine_*)item)->flags &= ~SELECTED;
 }
@@ -164,7 +164,7 @@ void fltk3::Browser::item_select(void *item, int val) {
   \returns The item's text string. (Can be NULL)
 */
 const char *fltk3::Browser::item_text(void *item) const { 
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(const char *, item_text(item), BrowserItemText)
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(const char *, item_text(item), BrowserItemText)
   return ((fltk3::BrowserLine_*)item)->txt;
 }
 
@@ -399,7 +399,7 @@ void fltk3::Browser::data(int line, void* d) {
        incr_height(), full_height()
 */
 int fltk3::Browser::item_height(void *item) const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_height(item), BrowserItemHeight) 
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_height(item), BrowserItemHeight) 
   fltk3::BrowserLine_* l = (fltk3::BrowserLine_*)item;
   if (l->flags & NOTDISPLAYED) return 0;
 
@@ -461,7 +461,7 @@ int fltk3::Browser::item_height(void *item) const {
        incr_height(), full_height()
 */
 int fltk3::Browser::item_width(void *item) const {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_width(item), BrowserItemWidth)
+  FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_width(item), BrowserItemWidth)
   fltk3::BrowserLine_* l=(fltk3::BrowserLine_*)item;
   char* str = l->txt;
   const int* i = column_widths();
@@ -546,7 +546,7 @@ int fltk3::Browser::incr_height() const {
   \param[in] X,Y,W,H position and size.
 */
 void fltk3::Browser::item_draw(void* item, int X, int Y, int W, int H) const {
-  FLTK3_OBJECT_VCALLS_WRAPPER(item_draw(item, X, Y, W, H), BrowserItemDraw)
+  FLTK3_WIDGET_VCALLS_WRAPPER(item_draw(item, X, Y, W, H), BrowserItemDraw)
   fltk3::BrowserLine_* l = (fltk3::BrowserLine_*)item;
   char* str = l->txt;
   const int* i = column_widths();

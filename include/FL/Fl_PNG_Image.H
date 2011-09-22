@@ -32,10 +32,15 @@
 #include <fltk3images/PNGImage.h>
 #include "Fl_Image.H"
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_PNG_Image, PNGImage)
+FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_PNG_Image, PNGImage)
+FLTK3_WRAPPER_INTERFACE_END()
 
 class FL_EXPORT Fl_PNG_Image : public Fl_RGB_Image {
 
 public:
+
+  FLTK3_IMAGE_VCALLS(Fl_PNG_Image, PNGImage)
 
   Fl_PNG_Image(const char* filename) {
     _p = new fltk3::PNGImage(filename);
