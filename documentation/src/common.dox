@@ -10,9 +10,9 @@ attributes.
 
 FLTK provides many types of buttons:
 
-\li Fl_Button - A standard push button.
+\li fltk3::Button - A standard push button.
 
-\li Fl_Check_Button - A button with a check box.
+\li fltk3::CheckButton - A button with a check box.
 
 \li Fl_Light_Button - A push button with a light.
 
@@ -643,3 +643,4 @@ combined with any modifiers like \p Shift , \p Alt , and \p Control.
 \endhtmlonly
 
 */
+

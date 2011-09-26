@@ -37,8 +37,8 @@ all: makeinclude
 
 install: makeinclude
 	-mkdir -p $(DESTDIR)$(bindir)
-	$(RM) $(DESTDIR)$(bindir)/fltk-config
-	$(INSTALL_SCRIPT) fltk-config $(DESTDIR)$(bindir)
+	$(RM) $(DESTDIR)$(bindir)/fltk3-config
+	$(INSTALL_SCRIPT) fltk3-config $(DESTDIR)$(bindir)
 	for dir in FL $(DIRS); do\
 		echo "=== installing $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) install) || exit 1;\
@@ -50,7 +50,7 @@ install-desktop: makeinclude
 	cd test; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
 
 uninstall: makeinclude
-	$(RM) $(DESTDIR)$(bindir)/fltk-config
+	$(RM) $(DESTDIR)$(bindir)/fltk3-config
 	for dir in FL $(DIRS); do\
 		echo "=== uninstalling $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) uninstall) || exit 1;\
@@ -76,7 +76,7 @@ clean:
 
 distclean: clean
 	$(RM) config.*
-	$(RM) fltk-config fltk.list makeinclude
+	$(RM) fltk3-config fltk.list makeinclude
 	$(RM) fltk.spec
 	$(RM) FL/Makefile
 	$(RM) documentation/*.$(CAT1EXT)
@@ -98,7 +98,7 @@ makeinclude: configure configh.in makeinclude.in
 		./configure; \
 	fi
 	touch config.h
-	chmod +x fltk-config
+	chmod +x fltk3-config
 
 configure: configure.in
 	autoconf

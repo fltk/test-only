@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# "$Id$"
+# "$Id: fltk3-config.in 6614 2009-01-01 16:11:32Z matt $"
 #
 # FLTK configuration utility.
 #
@@ -28,40 +28,40 @@
 #      http://www.fltk.org/str.php
 #
 
-MAJOR_VERSION=@FL_MAJOR_VERSION@
-MINOR_VERSION=@FL_MINOR_VERSION@
-PATCH_VERSION=@FL_PATCH_VERSION@
-VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
-APIVERSION="$MAJOR_VERSION.$MINOR_VERSION"
+MAJOR_VERSION=@FLTK_VERSION_MAJOR@
+MINOR_VERSION=@FLTK_VERSION_MINOR@
+PATCH_VERSION=@FLTK_VERSION_PATCH@
+VERSION=@FLTK_VERSION_FULL@
+APIVERSION=@FLTK_VERSION@
 
-### BEGIN fltk-config
+### BEGIN fltk3-config
 selfdir=`dirname "$0"`
 
-prefix=@prefix@
-exec_prefix=@exec_prefix@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
 exec_prefix_set=no
-bindir=@bindir@
-includedir=@includedir@
-libdir=@libdir@
-srcdir=@srcdir@
+bindir=@PREFIX_BIN@
+includedir=@PREFIX_INCLUDE@
+libdir=@PREFIX_LIB@
+srcdir=.
 
 # compiler names
 CC="@CC@"
 CXX="@CXX@"
 
 # flags for C++ compiler:
-ARCHFLAGS="@ARCHFLAGS@"
-CFLAGS="@CFLAGS@ @LARGEFILE@ @PTHREAD_FLAGS@"
-CXXFLAGS="@CXXFLAGS@ @LARGEFILE@ @PTHREAD_FLAGS@"
+ARCHFLAGS="@OPTION_ARCHFLAGS@"
+CFLAGS="@C_FLAGS@"
+CXXFLAGS="@CAIROFLAGS@@C_FLAGS@"
 LDFLAGS="@LDFLAGS@"
-LDLIBS="@LIBS@"
-OPTIM="@OPTIM@"
+LDLIBS="@LD_LIBS@"
+OPTIM="@OPTION_OPTIM@"
 CAIROFLAGS="@CAIROFLAGS@"
 
 # Check for local invocation, and update paths accordingly...
-if test -f "$selfdir/FL/Fl_Window.H"; then
-	bindir="$selfdir/fluid"
-	includedir="$selfdir"
+if test -f "$selfdir/bin/UseFLTK.cmake"; then
+	bindir="$selfdir/bin/fluid"
+	includedir="@FLTK_SOURCE_DIR@"
 	libdir="$selfdir/lib"
 
 	if test -f "$libdir/libfltk_jpeg.a"; then
@@ -101,7 +101,7 @@ SHAREDSUFFIX="@SHAREDSUFFIX@"
 
 usage ()
 {
-    echo "Usage: fltk-config [OPTIONS]
+    echo "Usage: fltk3-config [OPTIONS]
 Options:
 	[--version]
 	[--api-version]
@@ -307,7 +307,7 @@ if test -n "$post"; then
 
 	    # Make a shell script that runs the bundled executable
 	    echo "#!/bin/sh" >"$post"
-	    echo 'dir="`dirname \"$0\"`"' >>"$post"
+	    echo 'dir="`dirname '"'"'$0'"'"'`"' >>"$post"
 	    echo 'exec "$dir/'"$post.app/Contents/MacOS/$post"'" "$@"' >>"$post"
 	    chmod +x "$post"
 
@@ -402,5 +402,5 @@ if test "$echo_includedir" = "yes"; then
 fi
 
 #
-# End of "$Id$".
+# End of "$Id: fltk3-config.in 6614 2009-01-01 16:11:32Z matt $".
 #

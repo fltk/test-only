@@ -1,4 +1,32 @@
 
+CHANGES IN FLTK 3.0.0
+
+	  Porting FLTK 1.3
+
+	- Changed naming scheme of all classes on most functions
+	- Changes macros into const where possible
+	- Changed all header and source filenames
+	- Moved headers and sources into new path structure
+
+	  FLTK 1 COMPATIBILITY
+
+	- Created fltk3::Wrapper and fltk3::Object classes
+	- Created wrapper classes or aliases for all FLTK 1 classes
+	- Created wrappers for most FLTK 1 functions
+	- Verified wrapper using Fluid1 and other tests
+
+	  FLTK 2 COMPATIBILITY
+
+	- Created very crude FLTK2 support for test/hello.cxx
+
+	  BUILD ENVIRONMENT
+
+	- Updated Fluid3 to generate FLTK 3 code
+	- Added the apility to create large parts of the build environment 
+	  from within Fluid3.
+	- Renamed fltk-config to fltk3-config
+
+
 CHANGES IN FLTK 1.3.0
 
 	  New Features

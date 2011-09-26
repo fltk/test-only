@@ -160,8 +160,11 @@ int main(int argc, char **argv) {
   new fltk3::Input(160,310,140,25,"input1:");
   new fltk3::Input(160,340,140,25,"input2:");
   (new fltk3::MenuButton(5,150,80,25,"menu&1"))->add(bigmess);
-  testwindow *subwindow =
-    new testwindow(fltk3::DOWN_BOX,100,100,200,200,"inner");
+  //testwindow *subwindow =
+  //  new testwindow(fltk3::DOWN_BOX,100,100,200,200,"inner");
+  fltk3::Group *subwindow = 
+    new fltk3::Group(100,100,200,200,"inner");
+  subwindow->box(fltk3::DOWN_BOX);
   new fltk3::ToggleButton(110,110,80,80,"&inner");
   new EnterExit(10,110,80,80,"enterexit");
   (new fltk3::MenuButton(50,20,80,25,"menu&2"))->add(bigmess);
@@ -170,7 +173,7 @@ int main(int argc, char **argv) {
   subwindow->resizable(subwindow);
   window->resizable(subwindow);
   subwindow->end();
-  subwindow->use_cursor(fltk3::CURSOR_HAND);
+  //subwindow->use_cursor(fltk3::CURSOR_HAND);
   (new fltk3::Box(fltk3::NO_BOX,0,0,400,100,
 	     "A child fltk3::Window with children of its own may "
 	     "be useful for imbedding controls into a GL or display "

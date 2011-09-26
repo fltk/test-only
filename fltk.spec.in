@@ -93,7 +93,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 
 %dir %{prefix}/bin
-%{prefix}/bin/fltk-config
+%{prefix}/bin/fltk3-config
 %{prefix}/bin/fluid
 
 %dir %{prefix}/include/FL

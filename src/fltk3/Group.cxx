@@ -363,13 +363,16 @@ int fltk3::Group::navigation(int key) {
 ////////////////////////////////////////////////////////////////
 
 fltk3::Group::Group(int X,int Y,int W,int H,const char *l)
-: fltk3::Widget(X,Y,W,H,l) {
+: fltk3::Widget(X,Y,W,H,l),
+  array_(0L),
+  savedfocus_(0L),
+  resizable_(0L),
+  children_(0),
+  sizes_(0L)
+{
   align(fltk3::ALIGN_TOP);
-  children_ = 0;
-  array_ = 0;
-  savedfocus_ = 0;
   resizable_ = this;
-  sizes_ = 0; // this is allocated when first resize() is done
+  //set_flag(GROUP_RELATIVE); // not yet implemented - don't set
   // Subclasses may want to construct child objects as part of their
   // constructor, so make sure they are add()'d to this object.
   // But you must end() the object!
@@ -742,7 +745,14 @@ void fltk3::Group::draw() {
     draw_box();
     draw_label();
   }
-  draw_children();
+  if (flags()&GROUP_RELATIVE) {
+    push_matrix();
+    translate(x(), y());
+    draw_children();
+    pop_matrix();
+  } else {
+    draw_children();
+  }
 }
 
 /**

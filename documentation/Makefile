@@ -29,7 +29,7 @@
 include ../makeinclude
 
 # make sure that all docs are (re-)created independent of missing deps
-.PHONY: pdf html refman.pdf
+.PHONY: pdf html refman3.pdf
 
 SRC_DOCDIR      = 	./src
 
@@ -45,7 +45,7 @@ HTMLFILES	= 	 \
                          $(SRC_DOCDIR)/events.dox \
                          $(SRC_DOCDIR)/subclassing.dox \
                          $(SRC_DOCDIR)/opengl.dox \
-                         $(SRC_DOCDIR)/fluid.dox \
+                         $(SRC_DOCDIR)/fluid3.dox \
                          $(SRC_DOCDIR)/advanced.dox \
                          $(SRC_DOCDIR)/unicode.dox \
                          $(SRC_DOCDIR)/enumerations.dox \
@@ -58,8 +58,8 @@ HTMLFILES	= 	 \
                          $(SRC_DOCDIR)/license.dox \
                          $(SRC_DOCDIR)/examples.dox
 
-MANPAGES =	$(SRC_DOCDIR)/fltk.$(CAT3EXT) $(SRC_DOCDIR)/fltk-config.$(CAT1EXT) \
-		$(SRC_DOCDIR)/fluid.$(CAT1EXT) $(SRC_DOCDIR)/blocks.$(CAT6EXT) \
+MANPAGES =	$(SRC_DOCDIR)/fltk3.$(CAT3EXT) $(SRC_DOCDIR)/fltk3-config.$(CAT1EXT) \
+		$(SRC_DOCDIR)/fluid3.$(CAT1EXT) $(SRC_DOCDIR)/blocks.$(CAT6EXT) \
 		$(SRC_DOCDIR)/checkers.$(CAT6EXT) $(SRC_DOCDIR)/sudoku.$(CAT6EXT)
 
 all:	$(MANPAGES)
@@ -72,7 +72,7 @@ dist:	all html pdf
 alldocs: dist
 
 clean:
-	$(RM) fltk.pdf refman.pdf
+	$(RM) fltk3.pdf refman3.pdf
 	$(RMDIR) html latex
 	$(RM) *~ *.bck *.bak *.log
 	$(RM) $(MANPAGES) $(SRC_DOCDIR)/*.0
@@ -87,21 +87,21 @@ install: $(MANPAGES)
 		$(INSTALL_DATA) $$file $(DESTDIR)$(docdir); \
 	  done \
 	fi
-	if test -f fltk.pdf ; then \
-	  echo "Installing fltk.pdf in $(DESTDIR)$(docdir) ..."; \
-	  $(INSTALL_DATA) fltk.pdf $(DESTDIR)$(docdir); \
+	if test -f fltk3.pdf ; then \
+	  echo "Installing fltk3.pdf in $(DESTDIR)$(docdir) ..."; \
+	  $(INSTALL_DATA) fltk3.pdf $(DESTDIR)$(docdir); \
 	fi
 	echo "Installing man pages in $(DESTDIR)$(mandir) ..."
 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/cat1
-	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid.$(CAT1EXT) $(DESTDIR)$(mandir)/cat1
-	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk-config.$(CAT1EXT) $(DESTDIR)$(mandir)/cat1
+	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid3.$(CAT1EXT) $(DESTDIR)$(mandir)/cat1
+	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk3-config.$(CAT1EXT) $(DESTDIR)$(mandir)/cat1
 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/cat3
-	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk.$(CAT3EXT) $(DESTDIR)$(mandir)/cat3
+	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk3.$(CAT3EXT) $(DESTDIR)$(mandir)/cat3
 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid.man $(DESTDIR)$(mandir)/man1/fluid.1
-	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk-config.man $(DESTDIR)$(mandir)/man1/fltk-config.1
+	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid3.man $(DESTDIR)$(mandir)/man1/fluid3.1
+	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk3-config.man $(DESTDIR)$(mandir)/man1/fltk3-config.1
 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/man3
-	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk.man $(DESTDIR)$(mandir)/man3/fltk.3
+	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk3.man $(DESTDIR)$(mandir)/man3/fltk3.3
 
 install-linux install-osx:
 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/cat6
@@ -116,12 +116,12 @@ install-linux install-osx:
 
 uninstall:
 	$(RMDIR) $(DESTDIR)$(docdir)
-	$(RM) $(DESTDIR)$(mandir)/cat1/fluid.$(CAT1EXT)
-	$(RM) $(DESTDIR)$(mandir)/man1/fluid.1
-	$(RM) $(DESTDIR)$(mandir)/cat1/fltk-config.$(CAT1EXT)
-	$(RM) $(DESTDIR)$(mandir)/man1/fltk-config.1
-	$(RM) $(DESTDIR)$(mandir)/cat3/fltk.$(CAT3EXT)
-	$(RM) $(DESTDIR)$(mandir)/man3/fltk.3
+	$(RM) $(DESTDIR)$(mandir)/cat1/fluid3.$(CAT1EXT)
+	$(RM) $(DESTDIR)$(mandir)/man1/fluid3.1
+	$(RM) $(DESTDIR)$(mandir)/cat1/fltk3-config.$(CAT1EXT)
+	$(RM) $(DESTDIR)$(mandir)/man1/fltk3-config.1
+	$(RM) $(DESTDIR)$(mandir)/cat3/fltk3.$(CAT3EXT)
+	$(RM) $(DESTDIR)$(mandir)/man3/fltk3.3
 
 uninstall-linux uninstall-osx:
 	$(RM) $(DESTDIR)$(mandir)/cat6/blocks.$(CAT6EXT)
@@ -153,23 +153,23 @@ html-online: html
 	echo "Stripping HTML files for online documentation upload..."
 	./strip_tags
 
-pdf:	refman.pdf
-	cp -f latex/refman.pdf fltk.pdf
+pdf:	refman3.pdf
+	cp -f latex/refman3.pdf fltk3.pdf
 
-refman.pdf: $(HTMLFILES) Doxybook
+refman3.pdf: $(HTMLFILES) Doxybook
 	-$(RMDIR) latex
 	echo "Generating PDF documentation ..."
 	$(DOXYDOC) Doxybook ;\
 	(cd latex ;\
-	pdflatex --interaction=nonstopmode refman.tex ;\
-	makeindex refman.idx ;\
-	pdflatex --interaction=nonstopmode refman.tex ;\
+	pdflatex --interaction=nonstopmode refman3.tex ;\
+	makeindex refman3.idx ;\
+	pdflatex --interaction=nonstopmode refman3.tex ;\
 	latex_count=5;\
-	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman.log \
+	while egrep -s 'Rerun (LaTeX|to get cross-references right)' refman3.log \
 		&& [ $$latex_count -gt 0 ] ;\
 	    do \
 	      echo "Rerunning latex ..." ;\
-	      pdflatex --interaction=nonstopmode refman.tex ;\
+	      pdflatex --interaction=nonstopmode refman3.tex ;\
 	      latex_count=`expr $$latex_count - 1` ;\
 	    done ; \
 	cd ..) > pdfall.log 2>&1

@@ -593,7 +593,7 @@ configure_file(
    @ONLY
 )
 
-# generate fltk-config
+# generate fltk3-config
 get_filename_component(CC ${CMAKE_C_COMPILER} NAME)
 get_filename_component(CXX ${CMAKE_CXX_COMPILER} NAME)
 
@@ -605,12 +605,12 @@ endif(X11_Xext_FOUND)
 string(REPLACE ";" " " LD_LIBS "${FLTK_LDLIBS}")
 
 configure_file(
-   "${FLTK_SOURCE_DIR}/fltk-config.cmake.in"
-   "${FLTK_BINARY_DIR}/fltk-config"
+   "${FLTK_SOURCE_DIR}/fltk3-config.cmake.in"
+   "${FLTK_BINARY_DIR}/fltk3-config"
    @ONLY
 )
 if(UNIX)
-   execute_process(COMMAND chmod 755 fltk-config
+   execute_process(COMMAND chmod 755 fltk3-config
       WORKING_DIRECTORY "${FLTK_BINARY_DIR}"
    )
 endif(UNIX)
@@ -653,7 +653,7 @@ if(OPTION_CREATE_LINKS)
    install(SCRIPT ${FLTK_BINARY_DIR}/install-symlinks.cmake)
 endif(OPTION_CREATE_LINKS)
 
-install(PROGRAMS ${FLTK_BINARY_DIR}/fltk-config
+install(PROGRAMS ${FLTK_BINARY_DIR}/fltk3-config
    DESTINATION ${PREFIX_BIN}
    OPTIONAL
 )
@@ -681,7 +681,7 @@ if(CMAKE_HOST_UNIX)
    endmacro(INSTALL_MAN FILE LEVEL)
 
    INSTALL_MAN(fluid 1)
-   INSTALL_MAN(fltk-config 1)
+   INSTALL_MAN(fltk3-config 1)
    INSTALL_MAN(fltk 3)
    INSTALL_MAN(blocks 6)
    INSTALL_MAN(checkers 6)

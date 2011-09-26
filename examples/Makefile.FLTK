@@ -5,8 +5,8 @@
 #    the 'FLTKCONFIG' setting to point to where it's installed
 #    on your system. Common examples:
 #
-#	FLTKCONFIG = /usr/local/bin/fltk-config
-#       FLTKCONFIG = /usr/local/src/fltk-1.3.x-svn/fltk-config
+#	FLTKCONFIG = /usr/local/bin/fltk3-config
+#       FLTKCONFIG = /usr/local/src/fltk-1.3.x-svn/fltk3-config
 #
 #    Set .SILENT in your Makefile if you want 'quieter' builds.
 #
@@ -15,7 +15,7 @@ ifeq '$(OS)' "Windows_NT"
 EXEEXT = .exe
 endif
 
-FLTKCONFIG   = ../fltk-config
+FLTKCONFIG   = ../fltk3-config
 CXX          = $(shell $(FLTKCONFIG) --cxx)
 CXXFLAGS     = $(shell $(FLTKCONFIG) --cxxflags) -Wall -I.
 LINKFLTK     = $(shell $(FLTKCONFIG) --ldstaticflags)

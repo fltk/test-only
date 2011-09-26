@@ -252,15 +252,15 @@ installation path to a location within the user account by adding the
  3.6  Creating new Projects
 ----------------------------
 
-FLTK provides a neat script named "fltk-config" that can provide all the flags 
+FLTK provides a neat script named "fltk3-config" that can provide all the flags 
 needed to build FLTK applications using the same flags that were used to build
-the library itself. Running "fltk-config" without arguments will print a list
+the library itself. Running "fltk3-config" without arguments will print a list
 options. The easiest call to compile an FLTK application from a single source 
 file is: 
 
-  fltk-config --compile myProgram.cxx
+  fltk3-config --compile myProgram.cxx
 
-"fltk-config" and "fluid" will be installed in "/usr/local/bin/" by default. I
+"fltk3-config" and "fluid" will be installed in "/usr/local/bin/" by default. I
 recommend that you add it to the command search path.
 
 
@@ -290,10 +290,10 @@ images, OpenGL, GLUT, or Forms, add the corresponding flags --use-images,
 The flags are located in the "Project Build Options" dialog. To change the 
 compiler flags, select your project in the tree view, then select the
 "Compiler Settings" tab, then "Other Options" and add the flags to 
-`fltk-config --cxxflags` in front of the second "`". 
+`fltk3-config --cxxflags` in front of the second "`". 
 
 The linker flags are located in the "Linker Settings" tab under "Other Linker
-Options". Add the flags to `fltk-config --ldstaticflags` in front of the 
+Options". Add the flags to `fltk3-config --ldstaticflags` in front of the 
 second "`".
 
 

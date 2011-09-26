@@ -123,7 +123,7 @@ d 0555 root sys /Applications/fluid.app/Contents/MacOS -
 l 0555 root sys /Applications/fluid.app/Contents/MacOS/fluid $bindir/fluid
 d 0555 root sys /Applications/fluid.app/Contents/Resources -
 f 0444 root sys /Applications/fluid.app/Contents/Resources/fluid.icns fluid/fluid.app/Contents/Resources/fluid.icns
-%postinstall $bindir/fltk-config --post $bindir/fluid
+%postinstall $bindir/fltk3-config --post $bindir/fluid
 %postremove /bin/rm -rf /Applications/fluid.app
 
 %system !darwin
@@ -139,14 +139,14 @@ f 0444 root sys /usr/share/mimelnk/application/x-fluid.desktop fluid/x-fluid.des
 
 # FLUID
 f 0555 root sys $bindir/fluid fluid/$FLUID
-f 0555 root sys $bindir/fltk-config fltk-config
+f 0555 root sys $bindir/fltk3-config fltk3-config
 
 # Man pages
 f 0444 root sys $mandir/cat1/fluid.$CAT1EXT documentation/src/fluid.$CAT1EXT
-f 0444 root sys $mandir/cat1/fltk-config.$CAT1EXT documentation/src/fltk-config.$CAT1EXT
+f 0444 root sys $mandir/cat1/fltk3-config.$CAT1EXT documentation/src/fltk3-config.$CAT1EXT
 f 0444 root sys $mandir/cat3/fltk.$CAT3EXT documentation/src/fltk.$CAT3EXT
 f 0444 root sys $mandir/man1/fluid.1 documentation/src/fluid.man
-f 0444 root sys $mandir/man1/fltk-config.1 documentation/src/fltk-config.man
+f 0444 root sys $mandir/man1/fltk3-config.1 documentation/src/fltk3-config.man
 f 0444 root sys $mandir/man3/fltk.3 documentation/src/fltk.man
 
 # Library files

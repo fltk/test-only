@@ -589,10 +589,10 @@ also compile it using a standard compiler with:
 CC -o editor editor.cxx -lfltk -lXext -lX11 -lm
 \endcode
 
-or by using the \p fltk-config script with:
+or by using the \p fltk3-config script with:
 
 \code
-fltk-config --compile editor.cxx
+fltk3-config --compile editor.cxx
 \endcode
 
 As noted in \ref basics_standard_compiler, you may need to

@@ -1156,7 +1156,7 @@ if test -n "$GCC"; then
     # bugs in the X headers up through Solaris 7.
     #
     # Unlike the other compiler/optimization settings, this one is placed
-    # in CFLAGS and CXXFLAGS so that fltk-config will provide the option
+    # in CFLAGS and CXXFLAGS so that fltk3-config will provide the option
     # to clients - otherwise client apps will not compile properly...
     if test "$uname" = SunOS; then
         AC_MSG_CHECKING(if GCC supports -fpermissive)
@@ -1371,10 +1371,10 @@ fi
 
 dnl Write all of the files...
 AC_CONFIG_HEADER(include/config.h:include/configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec include/fltk3/Makefile)
+AC_OUTPUT(makeinclude fltk.list fltk3-config fltk.spec include/fltk3/Makefile)
 
-dnl Make sure the fltk-config script is executable...
-chmod +x fltk-config
+dnl Make sure the fltk3-config script is executable...
+chmod +x fltk3-config
 
 dnl
 dnl End of "$Id$".

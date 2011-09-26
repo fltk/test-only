@@ -29,7 +29,7 @@ include makeinclude
 
 DIRS = $(IMAGEDIRS) src $(CAIRODIR) fluid test documentation
 
-all: makeinclude fltk-config
+all: makeinclude fltk3-config
 	for dir in $(DIRS); do\
 		echo "=== making $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS)) || exit 1;\
@@ -37,8 +37,8 @@ all: makeinclude fltk-config
 
 install: makeinclude
 	-mkdir -p $(DESTDIR)$(bindir)
-	$(RM) $(DESTDIR)$(bindir)/fltk-config
-	$(INSTALL_SCRIPT) fltk-config $(DESTDIR)$(bindir)
+	$(RM) $(DESTDIR)$(bindir)/fltk3-config
+	$(INSTALL_SCRIPT) fltk3-config $(DESTDIR)$(bindir)
 	for dir in FL $(DIRS); do\
 		echo "=== installing $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) install) || exit 1;\
@@ -50,7 +50,7 @@ install-desktop: makeinclude
 	cd test; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
 
 uninstall: makeinclude
-	$(RM) $(DESTDIR)$(bindir)/fltk-config
+	$(RM) $(DESTDIR)$(bindir)/fltk3-config
 	for dir in FL $(DIRS); do\
 		echo "=== uninstalling $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) uninstall) || exit 1;\
@@ -76,7 +76,7 @@ clean:
 
 distclean: clean
 	$(RM) include/config.*
-	$(RM) fltk-config fltk.list makeinclude
+	$(RM) fltk3-config fltk.list makeinclude
 	$(RM) fltk.spec
 	$(RM) include/Makefile
 	$(RM) documentation/*.$(CAT1EXT)
@@ -89,7 +89,7 @@ distclean: clean
 		$(RM) test/`basename $$file .fl`.h; \
 	done
 
-fltk-config: configure include/configh.in fltk-config.in
+fltk3-config: configure include/configh.in fltk3-config.in
 	if test -f config.status; then \
 		./config.status --recheck; \
 		./config.status; \
@@ -97,7 +97,7 @@ fltk-config: configure include/configh.in fltk-config.in
 		./configure; \
 	fi
 	touch include/config.h
-	chmod +x fltk-config
+	chmod +x fltk3-config
 
 makeinclude: configure include/configh.in makeinclude.in
 	if test -f config.status; then \
@@ -107,7 +107,7 @@ makeinclude: configure include/configh.in makeinclude.in
 		./configure; \
 	fi
 	touch include/config.h
-	chmod +x fltk-config
+	chmod +x fltk3-config
 
 configure: configure.in
 	autoconf

@@ -1387,7 +1387,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "    # bugs in the X headers up through Solaris 7.\n");
   fprintf(out, "    #\n");
   fprintf(out, "    # Unlike the other compiler/optimization settings, this one is placed\n");
-  fprintf(out, "    # in CFLAGS and CXXFLAGS so that fltk-config will provide the option\n");
+  fprintf(out, "    # in CFLAGS and CXXFLAGS so that fltk3-config will provide the option\n");
   fprintf(out, "    # to clients - otherwise client apps will not compile properly...\n");
   fprintf(out, "    if test \"$uname\" = SunOS; then\n");
   fprintf(out, "        AC_MSG_CHECKING(if GCC supports -fpermissive)\n");
@@ -1602,10 +1602,10 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\n");
   fprintf(out, "dnl Write all of the files...\n");
   fprintf(out, "AC_CONFIG_HEADER(include/config.h:include/configh.in)\n");
-  fprintf(out, "AC_OUTPUT(makeinclude fltk.list fltk-config fltk.spec include/fltk3/Makefile)\n");
+  fprintf(out, "AC_OUTPUT(makeinclude fltk.list fltk3-config fltk.spec include/fltk3/Makefile)\n");
   fprintf(out, "\n");
-  fprintf(out, "dnl Make sure the fltk-config script is executable...\n");
-  fprintf(out, "chmod +x fltk-config\n");
+  fprintf(out, "dnl Make sure the fltk3-config script is executable...\n");
+  fprintf(out, "chmod +x fltk3-config\n");
   write_footer(out, "dnl");
   return 0;
 }

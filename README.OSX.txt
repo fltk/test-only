@@ -139,18 +139,18 @@ installation path to a location within the user account by adding the
  2.7  Creating new Projects
 ----------------------------
 
-FLTK provides a neat script named "fltk-config" that can provide all the flags 
+FLTK provides a neat script named "fltk3-config" that can provide all the flags 
 needed to build FLTK applications using the same flags that were used to build
 the library itself. Architecture flags (e.g., -arch i386) used to build the 
-library, though, are not provided by the fltk-config script. This allows to
+library, though, are not provided by the fltk3-config script. This allows to
 build universal libraries and to produce applications of any architecture
-from them. Running "fltk-config" without arguments will print a list
+from them. Running "fltk3-config" without arguments will print a list
 of options. The easiest call to compile an FLTK application from a single source 
 file is: 
 
-  fltk-config --compile myProgram.cxx
+  fltk3-config --compile myProgram.cxx
 
-"fltk-config" and "fluid" will be installed in "/usr/local/bin/" by default. I
+"fltk3-config" and "fluid" will be installed in "/usr/local/bin/" by default. I
 recommend that you add it to the command search path.
 
 
@@ -315,4 +315,4 @@ Oct 29 2010 - matt: removed warnings
 Oct 24 2010 - matt: restructured entire document and verified instructions
 Dec 19 2010 - Manolo: corrected typos
 Dec 29 2010 - Manolo: removed reference to AudioToolbox.framework that's no longer needed
-Feb 24 2011 - Manolo: architecture flags are not propagated to the fltk-config script.
+Feb 24 2011 - Manolo: architecture flags are not propagated to the fltk3-config script.

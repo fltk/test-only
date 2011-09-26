@@ -280,15 +280,15 @@ to the "./configure" command.
  Creating new Projects
 -----------------------
 
-FLTK provides a neat script named "fltk-config" that can provide all the flags
+FLTK provides a neat script named "fltk3-config" that can provide all the flags
 needed to build FLTK applications using the same flags that were used to build
-the library itself. Running "fltk-config" without arguments will print a list
+the library itself. Running "fltk3-config" without arguments will print a list
 of options. The easiest call to compile an FLTK application from a single
 source file is:
 
-  fltk-config --compile myProgram.cxx
+  fltk3-config --compile myProgram.cxx
 
-"fltk-config" and "fluid" will be installed in "/usr/local/bin/" by default.
+"fltk3-config" and "fluid" will be installed in "/usr/local/bin/" by default.
 I recommend that you add it to the command search path.
 
 

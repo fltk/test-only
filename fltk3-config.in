@@ -1,10 +1,10 @@
 #!/bin/sh
 #
-# "$Id: fltk-config.in 6614 2009-01-01 16:11:32Z matt $"
+# "$Id$"
 #
-# FLTK configuration utility.
+# FLTK 3 configuration utility.
 #
-# Copyright 2000-2010 by Bill Spitzak and others.
+# Copyright 2000-2011 by Bill Spitzak and others.
 # Original version Copyright 2000 by James Dean Palmer
 # Adapted by Vincent Penne and Michael Sweet
 #
@@ -28,64 +28,59 @@
 #      http://www.fltk.org/str.php
 #
 
-MAJOR_VERSION=@FLTK_VERSION_MAJOR@
-MINOR_VERSION=@FLTK_VERSION_MINOR@
-PATCH_VERSION=@FLTK_VERSION_PATCH@
-VERSION=@FLTK_VERSION_FULL@
-APIVERSION=@FLTK_VERSION@
+MAJOR_VERSION=@FL_MAJOR_VERSION@
+MINOR_VERSION=@FL_MINOR_VERSION@
+PATCH_VERSION=@FL_PATCH_VERSION@
+VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
+APIVERSION="$MAJOR_VERSION.$MINOR_VERSION"
 
-### BEGIN fltk-config
+### BEGIN fltk3-config
 selfdir=`dirname "$0"`
 
-prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=${prefix}
+prefix=@prefix@
+exec_prefix=@exec_prefix@
 exec_prefix_set=no
-bindir=@PREFIX_BIN@
-includedir=@PREFIX_INCLUDE@
-libdir=@PREFIX_LIB@
-srcdir=.
+bindir=@bindir@
+includedir=@includedir@
+libdir=@libdir@
+srcdir=@srcdir@
 
 # compiler names
 CC="@CC@"
 CXX="@CXX@"
 
 # flags for C++ compiler:
-ARCHFLAGS="@OPTION_ARCHFLAGS@"
-CFLAGS="@C_FLAGS@"
-CXXFLAGS="@CAIROFLAGS@@C_FLAGS@"
+ARCHFLAGS="@ARCHFLAGS@"
+CFLAGS="@CFLAGS@ @LARGEFILE@ @PTHREAD_FLAGS@"
+CXXFLAGS="@CXXFLAGS@ @LARGEFILE@ @PTHREAD_FLAGS@"
 LDFLAGS="@LDFLAGS@"
-LDLIBS="@LD_LIBS@"
-OPTIM="@OPTION_OPTIM@"
+LDLIBS="@LIBS@"
+OPTIM="@OPTIM@"
 CAIROFLAGS="@CAIROFLAGS@"
 
 # Check for local invocation, and update paths accordingly...
-if test -f "$selfdir/bin/UseFLTK.cmake"; then
-	bindir="$selfdir/bin/fluid"
-	includedir="@FLTK_SOURCE_DIR@"
+if test -f "$selfdir/include/fltk3/Window.h"; then
+	bindir="$selfdir/fluid"
+	includedir="$selfdir/include"
 	libdir="$selfdir/lib"
 
-	if test -f "$libdir/libfltk_jpeg.a"; then
+	if test -f "$libdir/libfltk3jpeg.a"; then
 		CFLAGS="-I$includedir/jpeg $CFLAGS"
 		CXXFLAGS="-I$includedir/jpeg $CXXFLAGS"
 	fi
 
-	if test -f "$libdir/libfltk_z.a"; then
+	if test -f "$libdir/libfltk3z.a"; then
 		CFLAGS="-I$includedir/zlib $CFLAGS"
 		CXXFLAGS="-I$includedir/zlib $CXXFLAGS"
 	fi
 
-	if test -f "$libdir/libfltk_png.a"; then
+	if test -f "$libdir/libfltk3png.a"; then
 		CFLAGS="-I$includedir/png $CFLAGS"
 		CXXFLAGS="-I$includedir/png $CXXFLAGS"
 	fi
 fi
 
-if test -d $includedir/FL/images; then
-	CFLAGS="-I$includedir/FL/images $CFLAGS"
-	CXXFLAGS="-I$includedir/FL/images $CXXFLAGS"
-fi
-
-if test -f "$libdir/libfltk_cairo.a"; then
+if test -f "$libdir/libfltk3cairo.a"; then
 	CFLAGS="$CAIROFLAGS $CFLAGS"
 	CXXFLAGS="$CAIROFLAGS $CXXFLAGS"
 fi
@@ -101,7 +96,7 @@ SHAREDSUFFIX="@SHAREDSUFFIX@"
 
 usage ()
 {
-    echo "Usage: fltk-config [OPTIONS]
+    echo "Usage: fltk3-config [OPTIONS]
 Options:
 	[--version]
 	[--api-version]
@@ -110,7 +105,6 @@ Options telling what we are doing:
 	[--use-gl]        use GL
 	[--use-images]    use extra image formats (PNG, JPEG)
 	[--use-glut]      use glut compatibility layer
-	[--use-forms]     use forms compatibility layer
 	[--use-cairo]     use cairo graphics lib
 
 Options telling what information we request:
@@ -175,9 +169,6 @@ do
 	--use-gl | --use-glut)
 	    use_gl=yes
 	    ;;
-	--use-forms)
-	    use_forms=yes
-	    ;;
 	--use-images)
 	    use_images=yes
 	    ;;
@@ -239,25 +230,21 @@ else
 fi
 
 # Calculate needed libraries
-LDSTATIC="$libdir/libfltk.a $LDLIBS"
-LDLIBS="-lfltk$SHAREDSUFFIX $LDLIBS"
+LDSTATIC="$libdir/libfltk3.a $LDLIBS"
+LDLIBS="-lfltk3$SHAREDSUFFIX $LDLIBS"
 
-if test x$use_forms = xyes; then
-    LDLIBS="-lfltk_forms$SHAREDSUFFIX $LDLIBS"
-    LDSTATIC="$libdir/libfltk_forms.a $LDSTATIC"
-fi
 if test x$use_gl = xyes; then
-    LDLIBS="-lfltk_gl$SHAREDSUFFIX @GLLIB@ $LDLIBS"
-    LDSTATIC="$libdir/libfltk_gl.a @GLLIB@ $LDSTATIC"
+    LDLIBS="-lfltk3gl$SHAREDSUFFIX @GLLIB@ $LDLIBS"
+    LDSTATIC="$libdir/libfltk3gl.a @GLLIB@ $LDSTATIC"
 fi
 if test x$use_images = xyes; then
-    LDLIBS="-lfltk_images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
-    LDSTATIC="$libdir/libfltk_images.a $STATICIMAGELIBS $LDSTATIC"
+    LDLIBS="-lfltk3images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
+    LDSTATIC="$libdir/libfltk3images.a $STATICIMAGELIBS $LDSTATIC"
 fi
 
 if test x$use_cairo = xyes; then
-    LDLIBS="-lfltk_cairo$SHAREDSUFFIX $CAIROLIBS $LDLIBS"
-    LDSTATIC="$libdir/libfltk_cairo.a $CAIROLIBS $LDSTATIC"
+    LDLIBS="-lfltk3cairo$SHAREDSUFFIX $CAIROLIBS $LDLIBS"
+    LDSTATIC="$libdir/libfltk3cairo.a $CAIROLIBS $LDSTATIC"
 fi
 
 LDLIBS="$DSOLINK $LDFLAGS $libs $LDLIBS"
@@ -307,7 +294,7 @@ if test -n "$post"; then
 
 	    # Make a shell script that runs the bundled executable
 	    echo "#!/bin/sh" >"$post"
-	    echo 'dir="`dirname '"'"'$0'"'"'`"' >>"$post"
+	    echo 'dir="`dirname \"$0\"`"' >>"$post"
 	    echo 'exec "$dir/'"$post.app/Contents/MacOS/$post"'" "$@"' >>"$post"
 	    chmod +x "$post"
 
@@ -366,24 +353,20 @@ if test "$echo_ldstaticflags" = "yes"; then
 fi
 
 if test "$echo_libs" = "yes"; then
-    USELIBS="$libdir/libfltk.a"
-
-    if test x$use_forms = xyes; then
-        USELIBS="$libdir/libfltk_forms.a $USELIBS"
-    fi
+    USELIBS="$libdir/libfltk3.a"
 
     if test x$use_gl = xyes; then
-        USELIBS="$libdir/libfltk_gl.a $USELIBS"
+        USELIBS="$libdir/libfltk3gl.a $USELIBS"
     fi
 
     if test x$use_cairo = xyes; then
-        USELIBS="$libdir/libfltk_cairo.a $USELIBS"
+        USELIBS="$libdir/libfltk3cairo.a $USELIBS"
     fi
 
     if test x$use_images = xyes; then
-        USELIBS="$libdir/libfltk_images.a $USELIBS"
+        USELIBS="$libdir/libfltk3images.a $USELIBS"
 
-        for lib in fltk_jpeg fltk_png fltk_z; do
+        for lib in fltk3jpeg fltk3png fltk3z; do
             if test -f $libdir/lib$lib.a; then
                 USELIBS="$libdir/lib$lib.a $USELIBS"
             fi
@@ -402,5 +385,5 @@ if test "$echo_includedir" = "yes"; then
 fi
 
 #
-# End of "$Id: fltk-config.in 6614 2009-01-01 16:11:32Z matt $".
+# End of "$Id$".
 #
