@@ -9,7 +9,8 @@ that use FLTK.
 
 All programs must include the file <tt><fltk3/run.h></tt>.
 In addition the program must include a header file for each
-FLTK class it uses. If your compiler supports precompiled headres, it may be faster to include all headers at once using <tt><fltk3/fltk3.h></tt>.
+FLTK class it uses. If your compiler supports precompiled headres, 
+it may be faster to include all headers at once using <tt><fltk3/fltk3.h></tt>.
 
 Listing 1 shows a simple "Hello, World!" program that uses FLTK 
 to display the window.
@@ -244,8 +245,8 @@ Similarly, when linking your application you will need to tell the
 compiler to use the FLTK library:
 
 \code
-CC  ... -L/usr/local/lib Ðlfltk3 -lXext -lX11 -lm
-gcc ... -L/usr/local/lib Ðlfltk3 -lXext -lX11 -lm
+CC  ... -L/usr/local/lib -lfltk3 -lXext -lX11 -lm
+gcc ... -L/usr/local/lib -lfltk3 -lXext -lX11 -lm
 \endcode
 
 Aside from the "fltk3" library, there is also an "fltk3gl" for the
