@@ -565,7 +565,7 @@ void fltk3::message_title(const char *title) {
 */
 void fltk3::message_title_default(const char *title) {
   if (message_title_default_) {
-    free ((void *)message_title_default);
+    free ((void *)message_title_default_);
     message_title_default_ = 0;
   }
   if (title)
