@@ -27,20 +27,20 @@ the design of our GUI. Obviously the first thing that we need is a
 window, which we'll place inside a class called \p EditorWindow:
 
 \code
-class EditorWindow : public Fl_Double_Window {
+class EditorWindow : public fltk3::DoubleWindow {
   public:
     EditorWindow(int w, int h, const char* t);
     ~EditorWindow();
 
-    Fl_Window          *replace_dlg;
-    Fl_Input           *replace_find;
-    Fl_Input           *replace_with;
-    Fl_Button          *replace_all;
-    Fl_Return_Button   *replace_next;
-    Fl_Button          *replace_cancel;
+    fltk3::Window          *replace_dlg;
+    fltk3::Input           *replace_find;
+    fltk3::Input           *replace_with;
+    fltk3::Button          *replace_all;
+    fltk3::ReturnButton    *replace_next;
+    fltk3::Button          *replace_cancel;
 
-    Fl_Text_Editor     *editor;
-    char               search[256];
+    fltk3::TextEditor      *editor;
+    char                   search[256];
 };
 \endcode
 
@@ -49,9 +49,9 @@ class EditorWindow : public Fl_Double_Window {
 Our text editor will need some global variables to keep track of things:
 
 \code
-int            changed = 0;
-char           filename[256] = "";
-Fl_Text_Buffer *textbuf;
+int                changed = 0;
+char               filename[256] = "";
+fltk3::TextBuffer  *textbuf;
 \endcode
 
 The \p textbuf variable is the text editor buffer for
@@ -61,35 +61,35 @@ variables as we build the application.
 \section editor_menubars Menubars and Menus
 
 The first goal requires us to use a menubar and menus that
-define each function the editor needs to perform. The Fl_Menu_Item
+define each function the editor needs to perform. The fltk3::MenuItem
 structure is used to define the menus and items in a menubar:
 
 \code
-Fl_Menu_Item menuitems[] = {
-  { "&File",              0, 0, 0, FL_SUBMENU },
-    { "&New File",        0, (Fl_Callback *)new_cb },
-    { "&Open File...",    FL_COMMAND + 'o', (Fl_Callback *)open_cb },
-    { "&Insert File...",  FL_COMMAND + 'i', (Fl_Callback *)insert_cb, 0, FL_MENU_DIVIDER },
-    { "&Save File",       FL_COMMAND + 's', (Fl_Callback *)save_cb },
-    { "Save File &As...", FL_COMMAND + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
-    { "New &View", FL_ALT + 'v', (Fl_Callback *)view_cb, 0 },
-    { "&Close View", FL_COMMAND + 'w', (Fl_Callback *)close_cb, 0, FL_MENU_DIVIDER },
-    { "E&xit", FL_COMMAND + 'q', (Fl_Callback *)quit_cb, 0 },
+fltk3::MenuItem menuitems[] = {
+  { "&File",              0, 0, 0, fltk3::SUBMENU },
+    { "&New File",        0, (fltk3::Callback *)new_cb },
+    { "&Open File...",    fltk3::COMMAND + 'o', (fltk3::Callback *)open_cb },
+    { "&Insert File...",  fltk3::COMMAND + 'i', (fltk3::Callback *)insert_cb, 0, fltk3::MENU_DIVIDER },
+    { "&Save File",       fltk3::COMMAND + 's', (fltk3::Callback *)save_cb },
+    { "Save File &As...", fltk3::COMMAND + fltk3::SHIFT + 's', (fltk3::Callback *)saveas_cb, 0, fltk3::MENU_DIVIDER },
+    { "New &View", fltk3::ALT + 'v', (fltk3::Callback *)view_cb, 0 },
+    { "&Close View", fltk3::COMMAND + 'w', (fltk3::Callback *)close_cb, 0, fltk3::MENU_DIVIDER },
+    { "E&xit", fltk3::COMMAND + 'q', (fltk3::Callback *)quit_cb, 0 },
     { 0 },
 
-  { "&Edit", 0, 0, 0, FL_SUBMENU },
-    { "&Undo",       FL_COMMAND + 'z', (Fl_Callback *)undo_cb, 0, FL_MENU_DIVIDER },
-    { "Cu&t",        FL_COMMAND + 'x', (Fl_Callback *)cut_cb },
-    { "&Copy",       FL_COMMAND + 'c', (Fl_Callback *)copy_cb },
-    { "&Paste",      FL_COMMAND + 'v', (Fl_Callback *)paste_cb },
-    { "&Delete",     0, (Fl_Callback *)delete_cb },
+  { "&Edit", 0, 0, 0, fltk3::SUBMENU },
+    { "&Undo",       fltk3::COMMAND + 'z', (fltk3::Callback *)undo_cb, 0, fltk3::MENU_DIVIDER },
+    { "Cu&t",        fltk3::COMMAND + 'x', (fltk3::Callback *)cut_cb },
+    { "&Copy",       fltk3::COMMAND + 'c', (fltk3::Callback *)copy_cb },
+    { "&Paste",      fltk3::COMMAND + 'v', (fltk3::Callback *)paste_cb },
+    { "&Delete",     0, (fltk3::Callback *)delete_cb },
     { 0 },
 
-  { "&Search", 0, 0, 0, FL_SUBMENU },
-    { "&Find...",       FL_COMMAND + 'f', (Fl_Callback *)find_cb },
-    { "F&ind Again",    FL_COMMAND + 'g', find2_cb },
-    { "&Replace...",    FL_COMMAND + 'r', replace_cb },
-    { "Re&place Again", FL_COMMAND + 't', replace2_cb },
+  { "&Search", 0, 0, 0, fltk3::SUBMENU },
+    { "&Find...",       fltk3::COMMAND + 'f', (fltk3::Callback *)find_cb },
+    { "F&ind Again",    fltk3::COMMAND + 'g', find2_cb },
+    { "&Replace...",    fltk3::COMMAND + 'r', replace_cb },
+    { "Re&place Again", fltk3::COMMAND + 't', replace2_cb },
     { 0 },
 
   { 0 }
@@ -97,10 +97,10 @@ Fl_Menu_Item menuitems[] = {
 \endcode
 
 Once we have the menus defined we can create the
-Fl_Menu_Bar widget and assign the menus to it with:
+fltk3::MenuBar widget and assign the menus to it with:
 
 \code
-Fl_Menu_Bar *m = new Fl_Menu_Bar(0, 0, 640, 30);
+fltk3::MenuBar *m = new fltk3::MenuBar(0, 0, 640, 30);
 m->copy(menuitems);
 \endcode
 
@@ -109,10 +109,10 @@ We'll define the callback functions later.
 \section editor_editing Editing the Text
 
 To keep things simple our text editor will use the
-Fl_Text_Editor widget to edit the text:
+fltk3::TextEditor widget to edit the text:
 
 \code
-w->editor = new Fl_Text_Editor(0, 30, 640, 370);
+w->editor = new fltk3::TextEditor(0, 30, 640, 370);
 w->editor->buffer(textbuf);
 \endcode
 
@@ -124,10 +124,10 @@ textbuf->add_modify_callback(changed_cb, w);
 textbuf->call_modify_callbacks();
 \endcode
 
-Finally, we want to use a mono-spaced font like \p FL_COURIER:
+Finally, we want to use a mono-spaced font like \p fltk3::COURIER:
 
 \code
-w->editor->textfont(FL_COURIER);
+w->editor->textfont(fltk3::COURIER);
 \endcode
 
 \section editor_replace_dialog The Replace Dialog
@@ -138,21 +138,21 @@ custom window.  To keep things simple we will have a
 "find" string, a "replace" string, and
 "replace all", "replace next", and
 "cancel" buttons.  The strings are just
-Fl_Input widgets, the "replace all" and
-"cancel" buttons are Fl_Button widgets, and
+fltk3::Input widgets, the "replace all" and
+"cancel" buttons are fltk3::Button widgets, and
 the "replace next " button is a
-Fl_Return_Button widget:
+fltk3::ReturnButton widget:
 
 \image html editor-replace.png "Figure 4-1: The search and replace dialog"
 \image latex editor-replace.png "The search and replace dialog" width=10cm
 
 \code
-Fl_Window *replace_dlg = new Fl_Window(300, 105, "Replace");
-Fl_Input *replace_find = new Fl_Input(70, 10, 200, 25, "Find:");
-Fl_Input *replace_with = new Fl_Input(70, 40, 200, 25, "Replace:");
-Fl_Button *replace_all = new Fl_Button(10, 70, 90, 25, "Replace All");
-Fl_Button *replace_next = new Fl_Button(105, 70, 120, 25, "Replace Next");
-Fl_Button *replace_cancel = new Fl_Button(230, 70, 60, 25, "Cancel");
+fltk3::Window *replace_dlg = new fltk3::Window(300, 105, "Replace");
+fltk3::Input *replace_find = new fltk3::Input(70, 10, 200, 25, "Find:");
+fltk3::Input *replace_with = new fltk3::Input(70, 40, 200, 25, "Replace:");
+fltk3::Button *replace_all = new fltk3::Button(10, 70, 90, 25, "Replace All");
+fltk3::Button *replace_next = new fltk3::Button(105, 70, 120, 25, "Replace Next");
+fltk3::Button *replace_cancel = new fltk3::Button(230, 70, 60, 25, "Cancel");
 \endcode
 
 \section editor_callbacks Callbacks
@@ -181,35 +181,35 @@ title bar.
 
 \subsection editor_copy_cb copy_cb()
 
-This callback function will call Fl_Text_Editor::kf_copy()
+This callback function will call fltk3::Text_Editor::kf_copy()
 to copy the currently selected text to the clipboard:
 
 \code
-void copy_cb(Fl_Widget*, void* v) {
+void copy_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  Fl_Text_Editor::kf_copy(0, e->editor);
+  fltk3::TextEditor::kf_copy(0, e->editor);
 }
 \endcode
 
 \subsection editor_cut_cb cut_cb()
 
-This callback function will call Fl_Text_Editor::kf_cut()
+This callback function will call fltk3::TextEditor::kf_cut()
 to cut the currently selected text to the clipboard:
 
 \code
-void cut_cb(Fl_Widget*, void* v) {
+void cut_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  Fl_Text_Editor::kf_cut(0, e->editor);
+  fltk3::TextEditor::kf_cut(0, e->editor);
 }
 \endcode
 
 \subsection editor_delete_cb delete_cb()
 
-This callback function will call Fl_Text_Buffer::remove_selection()
+This callback function will call fltk3::TextBuffer::remove_selection()
 to delete the currently selected text to the clipboard:
 
 \code
-void delete_cb(Fl_Widget*, void* v) {
+void delete_cb(fltk3::Widget*, void* v) {
   textbuf->remove_selection();
 }
 \endcode
@@ -217,15 +217,15 @@ void delete_cb(Fl_Widget*, void* v) {
 \subsection editor_find_cb find_cb()
 
 This callback function asks for a search string using the
-fl_input() convenience function and then calls the \p find2_cb()
+fltk3::input() convenience function and then calls the \p find2_cb()
 function to find the string:
 
 \code
-void find_cb(Fl_Widget* w, void* v) {
+void find_cb(fltk3::Widget* w, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *val;
 
-  val = fl_input("Search String:", e->search);
+  val = fltk3::input("Search String:", e->search);
   if (val != NULL) {
     // User entered a string - go find it!
     strcpy(e->search, val);
@@ -240,7 +240,7 @@ string. If the search string is blank then we want to pop up the
 search dialog:
 
 \code
-void find2_cb(Fl_Widget* w, void* v) {
+void find2_cb(fltk3::Widget* w, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   if (e->search[0] == '\0') {
     // Search string is blank; get a new one...
@@ -256,11 +256,11 @@ void find2_cb(Fl_Widget* w, void* v) {
     e->editor->insert_position(pos+strlen(e->search));
     e->editor->show_insert_position();
   }
-  else fl_alert("No occurrences of \'%s\' found!", e->search);
+  else fltk3::alert("No occurrences of \'%s\' found!", e->search);
 }
 \endcode
 
-If the search string cannot be found we use the fl_alert()
+If the search string cannot be found we use the fltk3::alert()
 convenience function to display a message to that effect.
 
 \subsection editor_new_cb new_cb()
@@ -270,7 +270,7 @@ filename. It also calls the \p check_save() function to give the
 user the opportunity to save the current file first as needed:
 
 \code
-void new_cb(Fl_Widget*, void*) {
+void new_cb(fltk3::Widget*, void*) {
   if (!check_save()) return;
 
   filename[0] = '\0';
@@ -289,10 +289,10 @@ calls the \p check_save() function to give the user the
 opportunity to save the current file first as needed:
 
 \code
-void open_cb(Fl_Widget*, void*) {
+void open_cb(fltk3::Widget*, void*) {
   if (!check_save()) return;
 
-  char *newfile = fl_file_chooser("Open File?", "*", filename);
+  char *newfile = fltk3::file_chooser("Open File?", "*", filename);
   if (newfile != NULL) load_file(newfile, -1);
 }
 \endcode
@@ -301,13 +301,13 @@ We call the \p load_file() function to actually load the file.
 
 \subsection editor_paste_cb paste_cb()
 
-This callback function will call Fl_Text_Editor::kf_paste()
+This callback function will call fltk3::Text_Editor::kf_paste()
 to paste the clipboard at the current position:
 
 \code
-void paste_cb(Fl_Widget*, void* v) {
+void paste_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  Fl_Text_Editor::kf_paste(0, e->editor);
+  fltk3::TextEditor::kf_paste(0, e->editor);
 }
 \endcode
 
@@ -318,7 +318,7 @@ modified, and if so give the user a chance to save it. It then exits
 from the program:
 
 \code
-void quit_cb(Fl_Widget*, void*) {
+void quit_cb(fltk3::Widget*, void*) {
   if (changed && !check_save())
     return;
 
@@ -331,7 +331,7 @@ void quit_cb(Fl_Widget*, void*) {
 The replace callback just shows the replace dialog:
 
 \code
-void replace_cb(Fl_Widget*, void* v) {
+void replace_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   e->replace_dlg->show();
 }
@@ -344,7 +344,7 @@ string. If nothing has been entered for the replacement string, then
 the replace dialog is displayed instead:
 
 \code
-void replace2_cb(Fl_Widget*, void* v) {
+void replace2_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *find = e->replace_find->value();
   const char *replace = e->replace_with->value();
@@ -369,7 +369,7 @@ void replace2_cb(Fl_Widget*, void* v) {
     e->editor->insert_position(pos+strlen(replace));
     e->editor->show_insert_position();
   }
-  else fl_alert("No occurrences of \'%s\' found!", find);
+  else fltk3::alert("No occurrences of \'%s\' found!", find);
 }
 \endcode
 
@@ -379,7 +379,7 @@ This callback will replace all occurrences of the search
 string in the file:
 
 \code
-void replall_cb(Fl_Widget*, void* v) {
+void replall_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *find = e->replace_find->value();
   const char *replace = e->replace_with->value();
@@ -412,8 +412,8 @@ void replall_cb(Fl_Widget*, void* v) {
     }
   }
 
-  if (times) fl_message("Replaced %d occurrences.", times);
-  else fl_alert("No occurrences of \'%s\' found!", find);
+  if (times) fltk3::message("Replaced %d occurrences.", times);
+  else fltk3::alert("No occurrences of \'%s\' found!", find);
 }
 \endcode
 
@@ -422,7 +422,7 @@ void replall_cb(Fl_Widget*, void* v) {
 This callback just hides the replace dialog:
 
 \code
-void replcan_cb(Fl_Widget*, void* v) {
+void replcan_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   e->replace_dlg->hide();
 }
@@ -455,7 +455,7 @@ This callback asks the user for a filename and saves the current file:
 void saveas_cb(void) {
   char *newfile;
 
-  newfile = fl_file_chooser("Save File As?", "*", filename);
+  newfile = fltk3::file_chooser("Save File As?", "*", filename);
   if (newfile != NULL) save_file(newfile);
 }
 \endcode
@@ -477,7 +477,7 @@ so, it asks the user if they want to save it:
 int check_save(void) {
   if (!changed) return 1;
 
-  int r = fl_choice("The current file has not been saved.\n"
+  int r = fltk3::choice("The current file has not been saved.\n"
                     "Would you like to save it now?",
                     "Cancel", "Save", "Discard");
 
@@ -505,7 +505,7 @@ void load_file(char *newfile, int ipos) {
   if (!insert) r = textbuf->loadfile(newfile);
   else r = textbuf->insertfile(newfile, ipos);
   if (r)
-    fl_alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
+    fltk3::alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
   else
     if (!insert) strcpy(filename, newfile);
   loading = 0;
@@ -513,9 +513,9 @@ void load_file(char *newfile, int ipos) {
 }
 \endcode
 
-When loading the file we use the Fl_Text_Buffer::loadfile()
+When loading the file we use the fltk3::TextBuffer::loadfile()
 method to "replace" the text in the buffer, or the
-Fl_Text_Buffer::insertfile()
+fltk3::TextBuffer::insertfile()
 method to insert text in the buffer from the named file.
 
 \subsection editor_save_file save_file()
@@ -525,7 +525,7 @@ This function saves the current buffer to the specified file:
 \code
 void save_file(char *newfile) {
   if (textbuf->savefile(newfile))
-    fl_alert("Error writing to file \'%s\':\n%s.", newfile, strerror(errno));
+    fltk3::alert("Error writing to file \'%s\':\n%s.", newfile, strerror(errno));
   else
     strcpy(filename, newfile);
   changed = 0;
@@ -538,7 +538,7 @@ void save_file(char *newfile) {
 This function checks the \p changed variable and updates the
 window label accordingly:
 \code
-void set_title(Fl_Window* w) {
+void set_title(fltk3::Window* w) {
   if (filename[0] == '\0') strcpy(title, "Untitled");
   else {
     char *slash;
@@ -566,15 +566,15 @@ the command-line (if any), and then enters the FLTK event loop:
 
 \code
 int main(int argc, char **argv) {
-  textbuf = new Fl_Text_Buffer;
+  textbuf = new fltk3::Text_Buffer;
 
-  Fl_Window* window = new_view();
+  fltk3::Window* window = new_view();
 
   window->show(1, argv);
 
   if (argc > 1) load_file(argv[1], -1);
 
-  return Fl::run();
+  return fltk3::run();
 }
 \endcode
 
@@ -586,7 +586,7 @@ workspace include the necessary rules to build the editor.  You can
 also compile it using a standard compiler with:
 
 \code
-CC -o editor editor.cxx -lfltk -lXext -lX11 -lm
+CC -o editor editor.cxx -lfltk3 -lXext -lX11 -lm
 \endcode
 
 or by using the \p fltk3-config script with:
@@ -613,11 +613,11 @@ The final editor window should look like the image in Figure 4-2.
 
 Now that we've implemented the basic functionality, it is
 time to show off some of the advanced features of the
-Fl_Text_Editor widget.
+fltk3::Text_Editor widget.
 
 \subsection editor_syntax Syntax Highlighting
 
-The Fl_Text_Editor widget supports highlighting
+The fltk3::TextEditor widget supports highlighting
 of text with different fonts, colors, and sizes. The
 implementation is based on the excellent
 <A HREF="http://www.nedit.org/">NEdit</A>
@@ -626,13 +626,13 @@ uses a parallel "style" buffer which tracks the font, color, and
 size of the text that is drawn.
 
 Styles are defined using the
-Fl_Text_Display::Style_Table_Entry structure
-defined in <tt><FL/Fl_Text_Display.H></tt>:
+fltk3::TextDisplay::StyleTableEntry structure
+defined in <tt><FL/fltk3::TextDisplay.H></tt>:
 
 \code
-struct Style_Table_Entry {
-  Fl_Color color;
-  Fl_Font  font;
+struct StyleTableEntry {
+  fltk3::Color color;
+  fltk3::Font  font;
   int      size;
   unsigned attr;
 };
@@ -647,14 +647,14 @@ For our text editor we'll define 7 styles for plain code,
 comments, keywords, and preprocessor directives:
 
 \code
-Fl_Text_Display::Style_Table_Entry styletable[] = {     // Style table
-  { FL_BLACK,      FL_COURIER,        FL_NORMAL_SIZE }, // A - Plain
-  { FL_DARK_GREEN, FL_COURIER_ITALIC, FL_NORMAL_SIZE }, // B - Line comments
-  { FL_DARK_GREEN, FL_COURIER_ITALIC, FL_NORMAL_SIZE }, // C - Block comments
-  { FL_BLUE,       FL_COURIER,        FL_NORMAL_SIZE }, // D - Strings
-  { FL_DARK_RED,   FL_COURIER,        FL_NORMAL_SIZE }, // E - Directives
-  { FL_DARK_RED,   FL_COURIER_BOLD,   FL_NORMAL_SIZE }, // F - Types
-  { FL_BLUE,       FL_COURIER_BOLD,   FL_NORMAL_SIZE }  // G - Keywords
+fltk3::Text_Display::Style_Table_Entry styletable[] = {     // Style table
+  { fltk3::BLACK,      fltk3::COURIER,        fltk3::NORMAL_SIZE }, // A - Plain
+  { fltk3::DARK_GREEN, fltk3::COURIER_ITALIC, fltk3::NORMAL_SIZE }, // B - Line comments
+  { fltk3::DARK_GREEN, fltk3::COURIER_ITALIC, fltk3::NORMAL_SIZE }, // C - Block comments
+  { fltk3::BLUE,       fltk3::COURIER,        fltk3::NORMAL_SIZE }, // D - Strings
+  { fltk3::DARK_RED,   fltk3::COURIER,        fltk3::NORMAL_SIZE }, // E - Directives
+  { fltk3::DARK_RED,   fltk3::COURIER_BOLD,   fltk3::NORMAL_SIZE }, // F - Types
+  { fltk3::BLUE,       fltk3::COURIER_BOLD,   fltk3::NORMAL_SIZE }  // G - Keywords
 };
 \endcode
 
@@ -666,7 +666,7 @@ You call the \p highlight_data() method to associate the
 style data and buffer with the text editor widget:
 
 \code
-Fl_Text_Buffer *stylebuf;
+fltk3::Text_Buffer *stylebuf;
 
 w->editor->highlight_data(stylebuf, styletable,
                           sizeof(styletable) / sizeof(styletable[0]),
@@ -742,7 +742,7 @@ style_update(int        pos,          // I - Position of update
   style_parse(text, style, end - start);
 
   stylebuf->replace(start, end, style);
-  ((Fl_Text_Editor *)cbArg)->redisplay_range(start, end);
+  ((fltk3::Text_Editor *)cbArg)->redisplay_range(start, end);
 
   if (last != style[end - start - 1]) {
     // The last character on the line changed styles, so reparse the
@@ -757,7 +757,7 @@ style_update(int        pos,          // I - Position of update
     style_parse(text, style, end - start);
 
     stylebuf->replace(start, end, style);
-    ((Fl_Text_Editor *)cbArg)->redisplay_range(start, end);
+    ((fltk3::Text_Editor *)cbArg)->redisplay_range(start, end);
   }
 
   free(text);

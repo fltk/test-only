@@ -340,7 +340,7 @@ void fltk3::message(const char *fmt, ...) {
 
 void fltk3::vmessage(const char *fmt, va_list ap) {
   if (avoidRecursion) return;
-  fltk3::beep(fltk3::BEEP_MESSAGE);
+  //fltk3::beep(fltk3::BEEP_MESSAGE);
   iconlabel = "i";
   innards(fmt, ap, 0, fltk3::close, 0);
   iconlabel = "?";
@@ -363,7 +363,7 @@ void fltk3::alert(const char *fmt, ...) {
 
 void fltk3::valert(const char *fmt, va_list ap) {
   if (avoidRecursion) return;
-  fltk3::beep(fltk3::BEEP_ERROR);
+  //fltk3::beep(fltk3::BEEP_ERROR);
   iconlabel = "!";
   innards(fmt, ap, 0, fltk3::close, 0);
   iconlabel = "?";
@@ -390,7 +390,7 @@ int fltk3::ask(const char *fmt, ...) {
 
 int fltk3::vask(const char *fmt, va_list ap) {
   if (avoidRecursion) return 0;
-  fltk3::beep(fltk3::BEEP_QUESTION);
+  //fltk3::beep(fltk3::BEEP_QUESTION);
   int r = innards(fmt, ap, fltk3::no, fltk3::yes, 0);
   return r;
 }
@@ -420,7 +420,7 @@ int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,..
   
 int fltk3::vchoice(const char*fmt,const char *b0,const char *b1,const char *b2, va_list ap) {
   if (avoidRecursion) return 0;
-  fltk3::beep(fltk3::BEEP_QUESTION);
+  //fltk3::beep(fltk3::BEEP_QUESTION);
   int r = innards(fmt, ap, b0, b1, b2);
   return r;
 }
@@ -467,7 +467,7 @@ const char* fltk3::input(const char *fmt, const char *defstr, ...) {
 
 const char* fltk3::vinput(const char *fmt, const char *defstr, va_list ap) {
   if (avoidRecursion) return 0;
-  fltk3::beep(fltk3::BEEP_QUESTION);
+  //fltk3::beep(fltk3::BEEP_QUESTION);
   const char* r = input_innards(fmt, ap, defstr, fltk3::NORMAL_INPUT);
   return r;
 }
@@ -495,7 +495,7 @@ const char *fltk3::password(const char *fmt, const char *defstr, ...) {
 
 const char *fltk3::vpassword(const char *fmt, const char *defstr, va_list ap) {
   if (avoidRecursion) return 0;
-  fltk3::beep(fltk3::BEEP_PASSWORD);
+  //fltk3::beep(fltk3::BEEP_PASSWORD);
   const char* r = input_innards(fmt, ap, defstr, fltk3::SECRET_INPUT);
   return r;
 }

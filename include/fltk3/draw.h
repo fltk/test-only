@@ -718,7 +718,8 @@ namespace fltk3 {
    Draws a gray-scale image using a callback function to generate image data.
    \see fltk3::draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D)
    */
-  FLTK3_EXPORT void draw_image_mono(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=1);
+  inline void draw_image_mono(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=1)
+  { fltk3::graphics_driver->draw_image_mono(cb, data, X, Y, W, H, D); }
   
   /**
    Checks whether platform supports true alpha blending for RGBA images.

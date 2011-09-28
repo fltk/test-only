@@ -148,7 +148,7 @@ int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   int w = 0; int h = 0;
   l.measure(w, hp ? *hp : h);
   fltk3::draw_shortcut = 0;
-  if (flags & (fltk3::MENU_TOGGLE|fltk3::MENU_RADIO)) w += 14;
+  if (flags & (fltk3::MENU_TOGGLE|fltk3::MENU_RADIO)) w += fltk3::NORMAL_SIZE;
   return w;
 }
 
@@ -197,11 +197,8 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
       if (value()) {
 	int tW = (W - fltk3::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
-	int td = fltk3::box_dx(fltk3::ROUND_DOWN_BOX) + 1;
+	int td = (W - tW) / 2;
         if (!fltk3::scheme() || !strcmp(fltk3::scheme(), "classic")) {
-	  // Offset the radio circle...
-	  td ++;
-
 	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
@@ -335,7 +332,8 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
     int hh; 
     int w1 = m->measure(&hh, button);
     if (hh+LEADING>itemheight) itemheight = hh+LEADING;
-    if (m->flags&(fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) w1 += 14;
+    if (m->flags&(fltk3::SUBMENU|fltk3::SUBMENU_POINTER))
+      w1 += fltk3::NORMAL_SIZE;
     if (w1 > W) W = w1;
     // calculate the maximum width of all shortcuts
     if (m->shortcut_) {

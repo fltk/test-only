@@ -616,6 +616,7 @@ void fltk3::TextDisplay::insert_position( int newPos ) {
  */
 void fltk3::TextDisplay::show_cursor(int b) {
   mCursorOn = b;
+  if (!buffer()) return;
   redisplay_range(buffer()->prev_char_clipped(mCursorPos), buffer()->next_char(mCursorPos));
 }
 
@@ -3142,6 +3143,7 @@ void fltk3::TextDisplay::wrapped_line_counter(fltk3::TextBuffer *buf, int startP
           break;
         }
       }
+      if (b<lineStart) b = lineStart;
       if (!foundBreak) { /* no whitespace, just break at margin */
         newLineStart = max(p, buf->next_char(lineStart));
         const char *s = buf->address(b);
