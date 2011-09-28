@@ -300,7 +300,9 @@ int fltk3::scheme(const char *s) {
 
   if (s) {
     if (!strcasecmp(s, "none") || !strcasecmp(s, "base") || !strcasecmp(s, "gtk+") || !*s) s = 0;
-    else s = strdup(s);
+    else if (!strcasecmp(s, "classic")) s = strdup("classic");
+    else if (!strcasecmp(s, "plastic")) s = strdup("plastic");
+    else s = 0;
   }
   if (scheme_) free((void*)scheme_);
   scheme_ = s;
