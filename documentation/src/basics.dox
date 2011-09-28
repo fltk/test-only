@@ -9,7 +9,7 @@ that use FLTK.
 
 All programs must include the file <tt><fltk3/run.h></tt>.
 In addition the program must include a header file for each
-FLTK class it uses. If your compiler supports precompiled headres, 
+FLTK class it uses. If your compiler supports precompiled headers, 
 it may be faster to include all headers at once using <tt><fltk3/fltk3.h></tt>.
 
 Listing 1 shows a simple "Hello, World!" program that uses FLTK 
