@@ -352,7 +352,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
     // figure the scrollbars
     if (scrollbar_width()) {
       /* Decide if the vertical scrollbar needs to be visible */
-      int vbvis = mVScrollBar->visible();
+      uchar vbvis = mVScrollBar->visible();
       if (scrollbar_align() & (fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT) &&
           mNBufferLines >= mNVisibleLines - 1)
       {
@@ -395,7 +395,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
       if (scrollbar_align() & (fltk3::ALIGN_TOP|fltk3::ALIGN_BOTTOM) &&
           (mVScrollBar->visible() || longest_vline() > text_area.w))
       {
-        char wrap_at_bounds = mContinuousWrap && (mWrapMarginPix==0);
+        char wrap_at_bounds = mContinuousWrap && (mWrapMarginPix<text_area.w);
         if (!mHScrollBar->visible() && !wrap_at_bounds) {
           mHScrollBar->set_visible();
           again = 1; // loop again to see if we now need vert. & recalc sizes
