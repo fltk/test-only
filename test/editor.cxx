@@ -785,7 +785,6 @@ fltk3::Window* new_view() {
     w->editor->highlight_data(stylebuf, styletable,
                               sizeof(styletable) / sizeof(styletable[0]),
 			      'A', style_unfinished_cb, 0);
-    w->editor->wrap_mode(fltk3::TextDisplay::WRAP_AT_BOUNDS, 80);
   textbuf->text();
   style_init();
   w->end();
