@@ -294,7 +294,11 @@ namespace fltk3 {
      If the widget returns 1, it will receive the data in the immediately 
      following fltk3::PASTE event.
      */
-    DND_RELEASE	= 23
+    DND_RELEASE	= 23,
+    /** The screen configuration (number, positions) was changed.
+     Use fltk3::add_handler() to be notified of this event.
+     */
+    SCREEN_CONFIGURATION_CHANGED = 24
   };
   
   

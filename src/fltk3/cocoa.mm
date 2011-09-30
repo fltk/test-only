@@ -110,6 +110,7 @@ int fl_mac_os_version = 0;		// the version number of the running Mac OS X (e.g.,
 // forward declarations of variables in this file
 static int got_events = 0;
 static fltk3::Window* resize_from_system;
+static int main_screen_height; // height of menubar-containing screen used to convert between Cocoa and FLTK global screen coordinates
 
 #if CONSOLIDATE_MOTION
 static fltk3::Window* send_motion;
@@ -685,7 +686,7 @@ static void update_e_xy_and_e_xy_root(NSWindow *nsw)
   fltk3::e_y = int([[nsw contentView] frame].size.height - pt.y);
   pt = [NSEvent mouseLocation];
   fltk3::e_x_root = int(pt.x);
-  fltk3::e_y_root = int([[nsw screen] frame].size.height - pt.y);
+  fltk3::e_y_root = int(main_screen_height - pt.y);
 }
 
 /*
@@ -904,16 +905,6 @@ void fl_open_callback(void (*cb)(const char *)) {
 }
 
 
-/*
- * initialize the Mac toolboxes, dock status, and set the default menubar
- */
-
-extern "C" {
-  extern OSErr CPSEnableForegroundOperation(ProcessSerialNumber *psn, UInt32 _arg2,
-                                            UInt32 _arg3, UInt32 _arg4, UInt32 _arg5);
-}
-
-
 @interface FLDelegate : NSObject 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 <NSWindowDelegate, NSApplicationDelegate>
@@ -931,6 +922,7 @@ extern "C" {
 - (void)anywindowwillclosenotif:(NSNotification *)notif;
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)sender;
 - (void)applicationDidBecomeActive:(NSNotification *)notify;
+- (void)applicationDidChangeScreenParameters:(NSNotification *)aNotification;
 - (void)applicationWillResignActive:(NSNotification *)notify;
 - (void)applicationWillHide:(NSNotification *)notify;
 - (void)applicationWillUnhide:(NSNotification *)notify;
@@ -948,7 +940,7 @@ extern "C" {
   pt.y = [[nsw contentView] frame].size.height;
   pt2 = [nsw convertBaseToScreen:pt];
   update_e_xy_and_e_xy_root(nsw);
-  window->position((int)pt2.x, (int)([[nsw screen] frame].size.height - pt2.y));
+  window->position((int)pt2.x, (int)(main_screen_height - pt2.y));
   if ([nsw containsGLsubwindow] ) {
     [nsw display];// redraw window after moving if it contains OpenGL subwindows
   }
@@ -967,7 +959,7 @@ extern "C" {
   resize_from_system = window;
   update_e_xy_and_e_xy_root(nsw);
   window->resize((int)pt2.x, 
-                 (int)([[nsw screen] frame].size.height - pt2.y),
+                 (int)(main_screen_height - pt2.y),
 		 (int)r.size.width,
 		 (int)r.size.height);
   fl_unlock_function();
@@ -1094,6 +1086,22 @@ extern "C" {
   }
   fl_unlock_function();
 }
+- (void)applicationDidChangeScreenParameters:(NSNotification *)unused
+{ // react to changes in screen numbers and positions
+  main_screen_height = [[[NSScreen screens] objectAtIndex:0] frame].size.height;
+  fltk3::call_screen_init();
+  // FLTK windows have already been notified they were moved,
+  // but they had the old main_screen_height, so they must be notified again.
+  NSArray *windows = [NSApp windows];
+  int count = [windows count];
+  for (int i = 0; i < count; i++) {
+    NSWindow *win = [windows objectAtIndex:i];
+    if ([win isKindOfClass:[FLWindow class]]) {
+      [[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidMoveNotification object:win];
+    }
+  }
+  fltk3::handle(fltk3::SCREEN_CONFIGURATION_CHANGED, NULL);
+}
 - (void)applicationWillResignActive:(NSNotification *)notify
 {
   fl_lock_function();
@@ -1215,7 +1223,10 @@ extern "C" {
 }
 @end
 
-static FLDelegate *mydelegate;
+extern "C" {
+  OSErr CPSEnableForegroundOperation(ProcessSerialNumber *psn, UInt32 _arg2,
+				     UInt32 _arg3, UInt32 _arg4, UInt32 _arg5);
+}
 
 void fl_open_display() {
   static char beenHereDoneThat = 0;
@@ -1226,8 +1237,7 @@ void fl_open_display() {
     if (need_new_nsapp) [NSApplication sharedApplication];
     NSAutoreleasePool *localPool;
     localPool = [[NSAutoreleasePool alloc] init]; // never released
-    mydelegate = [[FLDelegate alloc] init];
-    [NSApp setDelegate:mydelegate];
+    [NSApp setDelegate:[[FLDelegate alloc] init]];
     if (need_new_nsapp) [NSApp finishLaunching];
 
     // empty the event queue but keep system events for drag&drop of files at launch
@@ -1268,17 +1278,12 @@ void fl_open_display() {
         // both TransformProcessType and CPSEnableForegroundOperation, the following
         // conditional code compiled on 10.2 will still work on newer releases...
         OSErr err;
-#if __LP64__
-        err = TransformProcessType(&cur_psn, kProcessTransformToForegroundApplication);
-#else
-        
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
         if (TransformProcessType != NULL) {
           err = TransformProcessType(&cur_psn, kProcessTransformToForegroundApplication);
         } else
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
           err = CPSEnableForegroundOperation(&cur_psn, 0x03, 0x3C, 0x2C, 0x1103);
-#endif // __LP64__
         if (err == noErr) {
           SetFrontProcess( &cur_psn );
         }
@@ -1287,10 +1292,11 @@ void fl_open_display() {
     if (![NSApp servicesMenu]) createAppleMenu();
     fl_system_menu = [NSApp mainMenu];
     
-    [[NSNotificationCenter defaultCenter] addObserver:mydelegate 
+    [[NSNotificationCenter defaultCenter] addObserver:[NSApp delegate] 
 	       selector:@selector(anywindowwillclosenotif:) 
 		   name:NSWindowWillCloseNotification 
 		 object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSApplicationDidChangeScreenParametersNotification object:NSApp];
   }
 }
 
@@ -1321,38 +1327,46 @@ static void get_window_frame_sizes(int &bx, int &by, int &bt) {
 }
 
 /*
- * smallest x ccordinate in screen space
+ * smallest x coordinate in screen space of work area of menubar-containing display
  */
 int fltk3::x() {
-  return int([[NSScreen mainScreen] visibleFrame].origin.x);
+  return int([[[NSScreen screens] objectAtIndex:0] visibleFrame].origin.x);
 }
 
 
 /*
- * smallest y coordinate in screen space
+ * smallest y coordinate in screen space of work area of menubar-containing display
  */
 int fltk3::y() {
-  NSRect all = [[NSScreen mainScreen] frame];
-  NSRect visible = [[NSScreen mainScreen] visibleFrame];
-  return int(all.size.height - (visible.origin.y + visible.size.height));
+  NSRect visible = [[[NSScreen screens] objectAtIndex:0] visibleFrame];
+  return int(main_screen_height - (visible.origin.y + visible.size.height));
 }
 
 
 /*
- * screen width
+ * width of work area of menubar-containing display
  */
 int fltk3::w() {
-  return int([[NSScreen mainScreen] visibleFrame].size.width);
+  return int([[[NSScreen screens] objectAtIndex:0] visibleFrame].size.width);
 }
 
 
 /*
- * screen height
+ * height of work area of menubar-containing display
  */
 int fltk3::h() {
-  return int([[NSScreen mainScreen] visibleFrame].size.height);
+  return int([[[NSScreen screens] objectAtIndex:0] visibleFrame].size.height);
 }
 
+// computes the work area of the nth screen (screen #0 has the menubar)
+void Fl_X::screen_work_area(int &X, int &Y, int &W, int &H, int n)
+{
+  NSRect r = [[[NSScreen screens] objectAtIndex:n] visibleFrame];
+  X   = int(r.origin.x);
+  Y   = main_screen_height - int(r.origin.y + r.size.height);
+  W   = int(r.size.width);
+  H   = int(r.size.height);
+}
 
 /*
  * get the current mouse pointer world coordinates
@@ -1362,7 +1376,7 @@ void fltk3::get_mouse(int &x, int &y)
   fl_open_display();
   NSPoint pt = [NSEvent mouseLocation];
   x = int(pt.x);
-  y = int([[NSScreen mainScreen] frame].size.height - pt.y);
+  y = int(main_screen_height - pt.y);
 }
 
 
@@ -1440,7 +1454,7 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   NSArray *a = [NSScreen screens]; int count = (int)[a count]; NSRect r; int i;
   for( i = 0; i < count; i++) {
     r = [[a objectAtIndex:i] frame];
-    cy = int(r.size.height - cy);
+    r.origin.y = main_screen_height - (r.origin.y + r.size.height); // use FLTK's multiscreen coordinates
     if (   cx >= r.origin.x && cx <= r.origin.x + r.size.width
         && cy >= r.origin.y && cy <= r.origin.y + r.size.height)
       break;
@@ -1451,8 +1465,9 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   if (!gd) {
     for( i = 0; i < count; i++) {
       r = [[a objectAtIndex:i] frame];
+      r.origin.y = main_screen_height - (r.origin.y + r.size.height); // use FLTK's multiscreen coordinates
       if (    X >= r.origin.x && X <= r.origin.x + r.size.width
-          && r.size.height - Y >= r.origin.y  && r.size.height - Y <= r.origin.y + r.size.height)
+          && Y >= r.origin.y  && Y <= r.origin.y + r.size.height)
         break;
     }
     if (i < count) gd = [a objectAtIndex:i];
@@ -1461,8 +1476,9 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   if (!gd) {
     for( i = 0; i < count; i++) {
       r = [[a objectAtIndex:i] frame];
+      r.origin.y = main_screen_height - (r.origin.y + r.size.height); // use FLTK's multiscreen coordinates
       if (    R >= r.origin.x && R <= r.origin.x + r.size.width
-          && r.size.height - Y >= r.origin.y  && r.size.height - Y <= r.origin.y + r.size.height)
+          && Y >= r.origin.y  && Y <= r.origin.y + r.size.height)
         break;
     }
     if (i < count) gd = [a objectAtIndex:i];
@@ -1471,8 +1487,9 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   if (!gd) {
     for( i = 0; i < count; i++) {
       r = [[a objectAtIndex:i] frame];
+      r.origin.y = main_screen_height - (r.origin.y + r.size.height); // use FLTK's multiscreen coordinates
       if (    X >= r.origin.x && X <= r.origin.x + r.size.width
-          && Y-H >= r.origin.y  && Y-H <= r.origin.y + r.size.height)
+          && Y+H >= r.origin.y  && Y+H <= r.origin.y + r.size.height)
         break;
     }
     if (i < count) gd = [a objectAtIndex:i];
@@ -1481,8 +1498,9 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   if (!gd) {
     for( i = 0; i < count; i++) {
       r = [[a objectAtIndex:i] frame];
+      r.origin.y = main_screen_height - (r.origin.y + r.size.height); // use FLTK's multiscreen coordinates
       if (    R >= r.origin.x && R <= r.origin.x + r.size.width
-          && Y-H >= r.origin.y  && Y-H <= r.origin.y + r.size.height)
+          && Y+H >= r.origin.y  && Y+H <= r.origin.y + r.size.height)
         break;
     }
     if (i < count) gd = [a objectAtIndex:i];
@@ -1492,11 +1510,11 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   if (!gd) gd = [a objectAtIndex:0];
   if (gd) {
     r = [gd visibleFrame];
-    int sh = int([gd frame].size.height);
+    r.origin.y = main_screen_height - (r.origin.y + r.size.height); // use FLTK's multiscreen coordinates
     if ( R > r.origin.x + r.size.width ) X -= int(R - (r.origin.x + r.size.width));
-    if ( B > sh - r.origin.y ) Y -= int(B - (sh - r.origin.y));
+    if ( B > r.size.height + r.origin.y ) Y -= int(B - (r.size.height + r.origin.y));
     if ( X < r.origin.x ) X = int(r.origin.x);
-    if ( Y < sh - (r.origin.y + r.size.height) ) Y = int(sh - (r.origin.y + r.size.height));
+    if ( Y < r.origin.y ) Y = int(r.origin.y);
   }
   
   // Return the client area's top left corner in (X,Y)
@@ -2031,7 +2049,7 @@ void Fl_X::make(fltk3::Window* w)
       hp += 2*by+bt;
     }
     if (!(w->flags() & fltk3::Window::FORCE_POSITION)) {
-      // use the Carbon functions below for default window positioning
+      // default window positioning on the main screen
       w->x(xyPos+fltk3::x());
       w->y(xyPos+fltk3::y());
       xyPos += 25;
@@ -2061,10 +2079,9 @@ void Fl_X::make(fltk3::Window* w)
     x->xidNext = 0;
     x->gc = 0;
 	  
-    NSRect srect = [[NSScreen mainScreen] frame];
     NSRect crect;
     crect.origin.x = w->x(); 
-    crect.origin.y = srect.size.height - (w->y() + w->h());
+    crect.origin.y = main_screen_height - (w->y() + w->h());
     crect.size.width=w->w(); 
     crect.size.height=w->h();
     FLWindow *cw = [[FLWindow alloc] initWithFl_W:w 
@@ -2112,7 +2129,7 @@ void Fl_X::make(fltk3::Window* w)
     w->set_visible();
     if ( w->border() || (!w->modal() && !w->tooltip_window()) ) fltk3::handle(fltk3::FOCUS, w);
     fltk3::first_window(w);
-    [cw setDelegate:mydelegate];
+    [cw setDelegate:[NSApp delegate]];
     if (fl_show_iconic) { 
       fl_show_iconic = 0;
       [cw miniaturize:nil];
@@ -2125,8 +2142,7 @@ void Fl_X::make(fltk3::Window* w)
     w->h(int(crect.size.height));
     crect = [cw frame];
     w->x(int(crect.origin.x));
-    srect = [[cw screen] frame];
-    w->y(int(srect.size.height - (crect.origin.y + w->h())));
+    w->y(int(main_screen_height - (crect.origin.y + w->h())));
     
     int old_event = fltk3::e_number;
     w->handle(fltk3::e_number = fltk3::SHOW);
@@ -2242,14 +2258,14 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
       else get_window_frame_sizes(bx, by, bt);
       NSRect dim;
       dim.origin.x = X;
-      dim.origin.y = [[(NSWindow*)i->xid screen] frame].size.height - (Y + H);
+      dim.origin.y = main_screen_height - (Y + H);
       dim.size.width = W;
       dim.size.height = H + bt;
       [(NSWindow*)i->xid setFrame:dim display:YES];
     } else {
       NSPoint pt; 
       pt.x = X; 
-      pt.y = [[(NSWindow*)i->xid screen] frame].size.height - (Y + h());
+      pt.y = main_screen_height - (Y + h());
       [(NSWindow*)i->xid setFrameOrigin:pt];
     }
   }
@@ -3355,7 +3371,7 @@ WindowRef Fl_X::window_ref()
 
 // so a CGRect matches exactly what is denoted x,y,w,h for clipping purposes
 CGRect fl_cgrectmake_cocoa(int x, int y, int w, int h) {
-  return CGRectMake(x, y, w - 1, h - 1);
+  return CGRectMake(x, y, w > 0 ? w - 0.9 : 0, h > 0 ? h - 0.9 : 0);
 }
 
 Window fl_xid(const fltk3::Window* w)

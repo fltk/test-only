@@ -137,6 +137,7 @@ namespace fltk3 {
   extern fltk3::Window* modal_;
   extern fltk3::Window* grab_;
   extern int compose_state;
+  void call_screen_init(); // recompute screen number and dimensions
 #endif
   /**
    If true then flush() will do something.
@@ -761,14 +762,14 @@ namespace fltk3 {
    fl global screen functions declared in <fltk3/run.h>
    @{ */
   // screen size:
-  /** Returns the origin of the current screen work area, where 0 indicates the left side of the screen. */
-  int x(); // platform dependent
-  /** Returns the origin of the current screen work area, where 0 indicates the top edge of the screen. */
-  int y(); // platform dependent
-  /** Returns the width of the screen work area in pixels. */
-  int w(); // platform dependent
-  /** Returns the height of the screen work area in pixels. */
-  int h(); // platform dependent
+  /** Returns the leftmost x coordinate of the main screen work area. */
+  int x(); 
+  /** Returns the topmost y coordinate of the main screen work area. */
+  int y(); 
+  /** Returns the width in pixels of the main screen work area. */
+  int w();
+  /** Returns the height in pixels of the main screen work area. */
+  int h();
   
   // multi-head support:
   int screen_count();
@@ -783,6 +784,16 @@ namespace fltk3 {
   void screen_dpi(float &h, float &v, int n=0);
   inline void screen_xywh(int &X, int &Y, int &W, int &H) {
     screen_xywh(X, Y, W, H, e_x_root, e_y_root);
+  }
+  void screen_work_area(int &X, int &Y, int &W, int &H, int mx, int my);
+  void screen_work_area(int &X, int &Y, int &W, int &H, int n);
+  /** 
+   Gets the bounding box of the work area of the screen that contains the mouse pointer.
+   \param[out]  X,Y,W,H the work area bounding box
+   \see void screen_work_area(int &x, int &y, int &w, int &h, int mx, int my) 
+   */
+  inline void screen_work_area(int &X, int &Y, int &W, int &H) {
+    screen_work_area(X, Y, W, H, e_x_root, e_y_root);
   }
   
   /**   @} */
