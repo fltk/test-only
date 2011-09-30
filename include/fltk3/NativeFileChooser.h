@@ -29,54 +29,6 @@
 /** \file
  fltk3::NativeFileChooser widget. */
 
-/**
- \class fltk3::NativeFileChooser
- 
- This class lets an FLTK application easily and consistently access 
- the operating system's native file chooser. Some operating systems 
- have very complex and specific file choosers that many users want 
- access to specifically, instead of FLTK's default file chooser(s). 
- 
- In cases where there is no native file browser, FLTK's own file browser
- is used instead.
- 
- To use this widget correctly, use the following include in your code:
- \code
- #include <fltk3/NativeFileChooser.h>
- \endcode
- 
- The following example shows how to pick a single file:
- \code
- // Create and post the local native file chooser
- #include <fltk3/NativeFileChooser.h>
- [..]
- fltk3::NativeFileChooser fnfc;
- fnfc.title("Pick a file");
- fnfc.type(fltk3::NativeFileChooser::BROWSE_FILE);
- fnfc.filter("Text\t*.txt\n"
- "C Files\t*.{cxx,h,c}");
- fnfc.directory("/var/tmp");           // default directory to use
- // Show native chooser
- switch ( fnfc.show() ) {
- case -1: printf("ERROR: %s\n", fnfc.errmsg());    break;  // ERROR
- case  1: printf("CANCEL\n");                      break;  // CANCEL
- default: printf("PICKED: %s\n", fnfc.filename()); break;  // FILE CHOSEN
- }
- \endcode
- 
- <B>Platform Specific Caveats</B>
- 
- - Under X windows, it's best if you call fltk3::FileIcon::load_system_icons()
- at the start of main(), to enable the nicer looking file browser widgets.
- Use the static public attributes of class fltk3::FileChooser to localize
- the browser.
- - Some operating systems support certain OS specific options; see 
- fltk3::NativeFileChooser::options() for a list.
- 
- \image html fltk3::NativeFileChooser.png "The fltk3::NativeFileChooser on different platforms."
- \image latex fltk3::NativeFileChooser.png "The fltk3::NativeFileChooser on different platforms" width=14cm
- 
- */
 #ifndef FLtk3_NATIVE_FILE_CHOOSER_H
 #define FLtk3_NATIVE_FILE_CHOOSER_H
 
