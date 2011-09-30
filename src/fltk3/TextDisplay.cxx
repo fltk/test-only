@@ -305,6 +305,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
   text_area.y = Y+TOP_MARGIN;
   text_area.w = W-LEFT_MARGIN-RIGHT_MARGIN;
   text_area.h = H-TOP_MARGIN-BOTTOM_MARGIN;
+  const int oldTAWidth = text_area.w;
   int i;
   
   /* Find the new maximum font height for this text display */
@@ -324,7 +325,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
     /* In continuous wrap mode, a change in width affects the total number of
      lines in the buffer, and can leave the top line number incorrect, and
      the top character no longer pointing at a valid line start */
-    if (mContinuousWrap && !mWrapMarginPix && W!=oldWidth) {
+    if (mContinuousWrap && !mWrapMarginPix && (W!=oldWidth || text_area.w!=oldTAWidth)) {
       int oldFirstChar = mFirstChar;
       mNBufferLines = count_lines(0, buffer()->length(), true);
       mFirstChar = line_start(mFirstChar);
@@ -351,6 +352,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
     // figure the scrollbars
     if (scrollbar_width()) {
       /* Decide if the vertical scrollbar needs to be visible */
+      int vbvis = mVScrollBar->visible();
       if (scrollbar_align() & (fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT) &&
           mNBufferLines >= mNVisibleLines - 1)
       {
@@ -367,7 +369,7 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
                               scrollbar_width(), text_area.h+TOP_MARGIN+BOTTOM_MARGIN);
         }
       }
-      
+      if (vbvis != mVScrollBar->visible()) again = 1;
       /*
        Decide if the horizontal scrollbar needs to be visible. If the text
        wraps at the right edge, do not draw a horizontal scrollbar. Otherwise, if there
