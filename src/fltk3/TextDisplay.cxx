@@ -1381,6 +1381,10 @@ void fltk3::TextDisplay::previous_word() {
  
  Callback attached to the text buffer to receive delete information before
  the modifications are actually made.
+
+ This callback can be used to adjust 
+ the display or update other setting. It is not advisable to change any 
+ buffers or text in this callback, or line counting may get out of sync.
  
  \param pos starting index of deletion
  \param nDeleted number of bytes we will delete (must be UTF-8 aligned!)
@@ -1410,6 +1414,10 @@ void fltk3::TextDisplay::buffer_predelete_cb(int pos, int nDeleted, void *cbArg)
  \brief This is called whenever the buffer is modified.
  
  Callback attached to the text buffer to receive modification information
+
+ This callback can be used to adjust 
+ the display or update other setting. It is not advisable to change any 
+ buffers or text in this callback, or line counting may get out of sync.
 
  \param pos starting index of modification
  \param nInserted number of bytes we inserted (must be UTF-8 aligned!)
