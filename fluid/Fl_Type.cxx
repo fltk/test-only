@@ -358,9 +358,13 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
       *p++ = '"';
-      for (int i = 20; i--;) {
-        if (! (*c & -32)) break;
-        *p++ = *c++;
+      int b,l=strlen(c);           // size in bytes
+      for (int i = 20; i>0;i--) {  // maximum 20 characters
+        if (*c==0) break;          // end of string
+        fltk3::utf8decode(c, c+l, &b); // b=size of char in bytes
+        if (b==-1) break;          // some error - leave
+        l-=b;                      // l = bytes left in string
+        while (b--)*p++ = *c++;    // copy that character into the buffer
       }
       if (*c) {strcpy(p,"..."); p+=3;}
       *p++ = '"';
