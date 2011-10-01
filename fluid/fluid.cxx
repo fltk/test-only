@@ -94,7 +94,7 @@ extern "C"
 
 static fltk3::HelpDialog *help_dialog = 0;
 
-fltk3::Preferences fluid_prefs(fltk3::Preferences::USER, "fltk.org", "fluid");
+fltk3::Preferences fluid_prefs(fltk3::Preferences::USER, "fltk.org", "fluid3");
 int gridx = 5;
 int gridy = 5;
 int snap = 1;
@@ -1335,7 +1335,7 @@ void make_main_window() {
 
   if (!main_window) {
     fltk3::Widget *o;
-    main_window = new fltk3::DoubleWindow(WINWIDTH,WINHEIGHT,"fluid");
+    main_window = new fltk3::DoubleWindow(WINWIDTH,WINHEIGHT,"fluid3");
     main_window->box(fltk3::NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
     o->box(fltk3::FLAT_BOX);
