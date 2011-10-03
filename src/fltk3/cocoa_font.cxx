@@ -297,7 +297,6 @@ static CGFloat surrogate_width(const UniChar *txt, Fl_Font_Descriptor *fontsize)
 static double fl_mac_width(const UniChar* txt, int n, Fl_Font_Descriptor *fontsize) {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   if (fl_mac_os_version >= 100500) {
-    static int nEx = 0;
     double retval = 0;
     UniChar uni;
     int i;
@@ -319,41 +318,36 @@ static double fl_mac_width(const UniChar* txt, int n, Fl_Font_Descriptor *fontsi
         CGSize advance_size;
         CGGlyph glyph;
         for (int j = 0; j < block; j++) { // loop over the block
-          CTFontRef font2 = fontsize->fontref;
-          bool must_release = false;
           // ii spans all characters of this block
-          bool b = CTFontGetGlyphsForCharacters(font2, &ii, &glyph, 1);
+          bool b = CTFontGetGlyphsForCharacters(fontsize->fontref, &ii, &glyph, 1);
           if (b) 
-            CTFontGetAdvancesForGlyphs(font2, kCTFontHorizontalOrientation, &glyph, &advance_size, 1);
+            CTFontGetAdvancesForGlyphs(fontsize->fontref, kCTFontHorizontalOrientation, &glyph, &advance_size, 1);
           else 
             advance_size.width = -1e9; // calculate this later
           // the width of one character of this block of characters
           fontsize->width[r][j] = advance_size.width;
-          if (must_release) CFRelease(font2);
           ii++;
         }
       }
       // sum the widths of all characters of txt
       double wdt = fontsize->width[r][uni & (block-1)];
-      if (wdt==-1e9) {
-        UniChar ii = uni;
+      if (wdt == -1e9) {
         CGSize advance_size;
         CGGlyph glyph;
 	CTFontRef font2 = fontsize->fontref;
 	bool must_release = false;
-	// ii spans all characters of this block
-	bool b = CTFontGetGlyphsForCharacters(font2, &ii, &glyph, 1);
+	bool b = CTFontGetGlyphsForCharacters(font2, &uni, &glyph, 1);
 	if (!b) { // the current font doesn't contain this char
-          CFStringRef str = CFStringCreateWithCharactersNoCopy(NULL, &ii, 1, kCFAllocatorNull);
+          CFStringRef str = CFStringCreateWithCharactersNoCopy(NULL, &uni, 1, kCFAllocatorNull);
           // find a font that contains it
           font2 = CTFontCreateForString(font2, str, CFRangeMake(0,1));
           must_release = true;
           CFRelease(str);
-          b = CTFontGetGlyphsForCharacters(font2, &ii, &glyph, 1);
+          b = CTFontGetGlyphsForCharacters(font2, &uni, &glyph, 1);
         }
 	if (b) CTFontGetAdvancesForGlyphs(font2, kCTFontHorizontalOrientation, &glyph, &advance_size, 1);
 	else advance_size.width = 0.;
-	// the width of one character of this block of characters
+	// the width of the 'uni' character
 	wdt = fontsize->width[r][uni & (block-1)] = advance_size.width;
 	if (must_release) CFRelease(font2);
       }
