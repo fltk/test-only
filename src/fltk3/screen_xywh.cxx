@@ -234,7 +234,7 @@ void fltk3::screen_work_area(int &X, int &Y, int &W, int &H, int mx, int my) {
 /**
  Gets the bounding box of the work area of the given screen.
  \param[out]  X,Y,W,H the work area bounding box
- \param[in] n the screen number (0 to Fl::screen_count() - 1)
+ \param[in] n the screen number (0 to fltk3::screen_count() - 1)
  \see void screen_xywh(int &x, int &y, int &w, int &h, int mx, int my)
  */
 void fltk3::screen_work_area(int &X, int &Y, int &W, int &H, int n) {
@@ -249,10 +249,10 @@ void fltk3::screen_work_area(int &X, int &Y, int &W, int &H, int n) {
   Fl_X::screen_work_area(X, Y, W, H, n);
 #else
   if (n == 0) { // for the main screen, these return the work area
-    X = Fl::x();
-    Y = Fl::y();
-    W = Fl::w();
-    H = Fl::h();
+    X = fltk3::x();
+    Y = fltk3::y();
+    W = fltk3::w();
+    H = fltk3::h();
   }
   else { // for other screens, work area is full screen,
     screen_xywh(X, Y, W, H, n);
@@ -264,7 +264,7 @@ void fltk3::screen_work_area(int &X, int &Y, int &W, int &H, int n) {
  Gets the screen bounding rect for the given screen. 
  Under MSWindows, Mac OS X, and the Gnome desktop, screen #0 contains the menubar/taskbar
  \param[out]  X,Y,W,H the corresponding screen bounding box
- \param[in] n the screen number (0 to Fl::screen_count() - 1)
+ \param[in] n the screen number (0 to fltk3::screen_count() - 1)
  \see void screen_xywh(int &x, int &y, int &w, int &h, int mx, int my) 
  */
 void fltk3::screen_xywh(int &X, int &Y, int &W, int &H, int n) {
