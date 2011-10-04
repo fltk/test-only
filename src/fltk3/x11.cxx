@@ -53,9 +53,13 @@
 #  include <X11/Xlocale.h>
 #  include <X11/Xlib.h>
 #  include <X11/keysym.h>
-#ifdef HAVE_XRANDR
-#include <X11/extensions/Xrandr.h>
-static int randrEventBase = -1;
+#define USE_XRANDR 1 // means attempt to dynamically load libXrandr.so
+#if USE_XRANDR
+#include <dlfcn.h>
+#define RRScreenChangeNotifyMask  (1L << 0) // from X11/extensions/Xrandr.h
+#define RRScreenChangeNotify	0           // from X11/extensions/Xrandr.h
+static void *libxrandr_addr;                // run-time address of libXrandr.so
+static int randrEventBase;                  // base of RandR-defined events
 #endif
 
 static fltk3::XlibGraphicsDriver fl_xlib_driver;
@@ -653,11 +657,18 @@ void fl_open_display(Display* d) {
 #if !USE_COLORMAP
   fltk3::visual(fltk3::RGB);
 #endif
-#ifdef HAVE_XRANDR
-  int error_base;
-  if (XRRQueryExtension(d, &randrEventBase, &error_base))
-    XRRSelectInput(d, RootWindow(d, fl_screen), RRScreenChangeNotifyMask);
-  else randrEventBase = -1;
+#if USE_XRANDR
+  libxrandr_addr = dlopen("libXrandr.so", RTLD_LAZY);
+  if (libxrandr_addr) {
+    int error_base;
+    typedef Bool (*XRRQueryExtension_type)(Display*, int*, int*);
+    typedef void (*XRRSelectInput_type)(Display*, Window, int);
+    XRRQueryExtension_type XRRQueryExtension_f = (XRRQueryExtension_type)dlsym(libxrandr_addr, "XRRQueryExtension");
+    XRRSelectInput_type XRRSelectInput_f = (XRRSelectInput_type)dlsym(libxrandr_addr, "XRRSelectInput");
+    if (XRRQueryExtension_f && XRRSelectInput_f && XRRQueryExtension_f(d, &randrEventBase, &error_base))
+      XRRSelectInput_f(d, RootWindow(d, fl_screen), RRScreenChangeNotifyMask);
+    else libxrandr_addr = NULL;
+  }
 #endif
 }
 
@@ -943,9 +954,8 @@ int fl_handle(const XEvent& thisevent)
   if ( XFilterEvent((XEvent *)&xevent, 0) )
       return(1);
 
-#ifdef HAVE_XRANDR  
-  if( randrEventBase >= 0 && xevent.type == randrEventBase + RRScreenChangeNotify) {
-    XRRUpdateConfiguration (&xevent);
+#if USE_XRANDR  
+  if( libxrandr_addr && xevent.type == randrEventBase + RRScreenChangeNotify) {
     fltk3::call_screen_init();
     fl_init_workarea();
     fltk3::handle(fltk3::SCREEN_CONFIGURATION_CHANGED, NULL);
