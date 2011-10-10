@@ -75,6 +75,7 @@ const char * const fl_eventnames[] =
   "fltk3::DND_DRAG",
   "fltk3::DND_LEAVE",
   "fltk3::DND_RELEASE",
+  "fltk3::SCREEN_CONFIGURATION_CHANGED",
 };
 
 /**
