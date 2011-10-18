@@ -578,7 +578,21 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
 	      contentRect:(NSRect)rect 
 		styleMask:(NSUInteger)windowStyle 
 {
-  self = [super initWithContentRect:rect styleMask:windowStyle backing:NSBackingStoreBuffered defer:NO];
+  NSScreen *gd = nil; // gd will point to the screen containing the bottom-left of rect
+  NSArray *a = [NSScreen screens]; 
+  for(NSUInteger i = 0; i < [a count]; i++) {
+    NSRect r = [[a objectAtIndex:i] frame];
+    if (rect.origin.x >= r.origin.x && rect.origin.x <= r.origin.x + r.size.width
+        && rect.origin.y >= r.origin.y && rect.origin.y <= r.origin.y + r.size.height) {
+      gd = [a objectAtIndex:i];
+      rect.origin.x -= r.origin.x; // express rect relatively to gd's origin
+      rect.origin.y -= r.origin.y;
+      break;
+    }
+  }
+  // attempt to create the window on screen gd
+  self = [super initWithContentRect:rect styleMask:windowStyle backing:NSBackingStoreBuffered defer:NO
+	  screen:gd];
   if (self) {
     w = flw;
     containsGLsubwindow = NO;
@@ -1963,7 +1977,6 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
  */
 void Fl_X::make(fltk3::Window* w)
 {
-  static int xyPos = 100;
   if ( w->parent() ) {		// create a subwindow
     fltk3::Group::current(0);
     // our subwindow needs this structure to know about its clipping. 
@@ -2048,13 +2061,7 @@ void Fl_X::make(fltk3::Window* w)
       wp += 2*bx;
       hp += 2*by+bt;
     }
-    if (!(w->flags() & fltk3::Window::FORCE_POSITION)) {
-      // default window positioning on the main screen
-      w->x(xyPos+fltk3::x());
-      w->y(xyPos+fltk3::y());
-      xyPos += 25;
-      if (xyPos>200) xyPos = 100;
-    } else {
+    if (w->flags() & fltk3::Window::FORCE_POSITION) {
       if (!fltk3::grab()) {
         xp = xwm; yp = ywm;
         w->x(xp);w->y(yp);
