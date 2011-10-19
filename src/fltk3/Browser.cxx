@@ -412,7 +412,6 @@ int fltk3::Browser::item_height(void *item) const {
     if (hh > hmax) hmax = hh;
   } else {
     const int* i = column_widths();
-    long int dummy;
     // do each column separately as they may all set different fonts:
     for (char* str = l->txt; str && *str; str++) {
       fltk3::Font font = textfont(); // default font
@@ -427,7 +426,7 @@ int fltk3::Browser::item_height(void *item) const {
 	case 'i': font = (fltk3::Font)(font|fltk3::ITALIC); break;
 	case 'f': case 't': font = fltk3::COURIER; break;
 	case 'B':
-	case 'C': dummy = strtol(str, &str, 10); break;// skip a color number
+	case 'C': while (isdigit(*str & 255)) str++; break;// skip a color number
 	case 'F': font = (fltk3::Font)strtol(str,&str,10); break;
 	case 'S': tsize = strtol(str,&str,10); break;
 	case 0: case '@': str--;
@@ -481,7 +480,6 @@ int fltk3::Browser::item_width(void *item) const {
   int done = 0;
 
   while (*str == format_char_ && str[1] && str[1] != format_char_) {
-    long int dummy;
     str ++;
     switch (*str++) {
     case 'l': case 'L': tsize = 24; break;
@@ -491,7 +489,7 @@ int fltk3::Browser::item_width(void *item) const {
     case 'i': font = (fltk3::Font)(font|fltk3::ITALIC); break;
     case 'f': case 't': font = fltk3::COURIER; break;
     case 'B':
-    case 'C': dummy = strtol(str, &str, 10); break;// skip a color number
+    case 'C': while (isdigit(*str & 255)) str++; break;// skip a color number
     case 'F': font = (fltk3::Font)strtol(str, &str, 10); break;
     case 'S': tsize = strtol(str, &str, 10); break;
     case '.':
@@ -577,7 +575,6 @@ void fltk3::Browser::item_draw(void* item, int X, int Y, int W, int H) const {
     //#warning FIXME This maybe needs to be more UTF8 aware now...?
     //#endif /*__GNUC__*/
     while (*str == format_char() && *++str && *str != format_char()) {
-      long int dummy;
       switch (*str++) {
       case 'l': case 'L': tsize = 24; break;
       case 'm': case 'M': tsize = 18; break;
@@ -591,7 +588,7 @@ void fltk3::Browser::item_draw(void* item, int X, int Y, int W, int H) const {
 	if (!(l->flags & SELECTED)) {
 	  fltk3::color((fltk3::Color)strtol(str, &str, 10));
 	  fltk3::rectf(X, Y, w1, H);
-	} else dummy = strtol(str, &str, 10);
+	} else while (isdigit(*str & 255)) str++; // skip digits
         break;
       case 'C':
 	lcol = (fltk3::Color)strtol(str, &str, 10);
