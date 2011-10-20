@@ -34,7 +34,12 @@
 #  error "Never use <fltk3/osx.h> directly; include <fltk3/x.h> instead."
 #endif // !Fltk3_X_H
 
-typedef void* Window;	    // this is really a pointer to the subclass FLWindow of NSWindow
+#ifdef __OBJC__
+  @class FLWindow; // a subclass of the NSWindow Cocoa class
+  typedef FLWindow *Window;
+#else
+  typedef class FLWindow_subclass_of_ObjectiveC_NSWindow_class *Window;
+#endif // __OBJC__
 
 #if !(defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)) // this part is used when compiling an application program
 #include <fltk3/Widget.h>
@@ -65,7 +70,7 @@ namespace fltk3 {
   } *Region;  // a region is the union of a series of rectangles
 }
 
-#  include "Window.h"
+#  include <fltk3/Window.h>
 
 // Some random X equivalents
 struct XPoint { int x, y; };

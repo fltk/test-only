@@ -266,7 +266,7 @@ int fltk3::SystemPrinter::start_page (void)
   CGContextSaveGState(fl_gc);
   CGContextSaveGState(fl_gc);
   fltk3::line_style(fltk3::SOLID);
-  fl_window = (void *)1; // TODO: something better
+  fl_window = (::Window)1; // TODO: something better
   fltk3::clip_region(0);
   if( status == noErr) gc = fl_gc;
   return status != noErr;
