@@ -541,6 +541,7 @@ int fltk3::NativeFileChooser::post() {
   }
   
   // SHOW THE DIALOG
+  NSWindow *key = [NSApp keyWindow];
   if ( [(NSSavePanel*)_panel isKindOfClass:[NSOpenPanel class]] ) {
     NSPopUpButton *popup = nil;
     if (_filt_total) {
@@ -618,6 +619,7 @@ int fltk3::NativeFileChooser::post() {
     [preset release];
     if ( retval == NSOKButton ) get_saveas_basename();
   }
+  [key makeKeyWindow];
   [localPool release];
   return (retval == NSOKButton ? 0 : 1);
 }
