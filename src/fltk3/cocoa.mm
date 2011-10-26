@@ -95,7 +95,6 @@ fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&f
 fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_quartz_display; // the platform display
 
 // public variables
-int fl_screen;
 CGContextRef fl_gc = 0;
 void *fl_system_menu;                   // this is really a NSMenu*
 fltk3::SysMenuBar *fltk3::sys_menu_bar = 0;
