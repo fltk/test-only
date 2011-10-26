@@ -42,11 +42,6 @@ static unsigned fl_cmap[256] = {
 #include "cmap.h" // this is a file produced by "cmap.cxx":
 };
 
-// Translations to mac data structures:
-Fl_XMap fl_xmap[256];
-
-Fl_XMap* fl_current_xmap;
-
 void fltk3::QuartzGraphicsDriver::color(fltk3::Color i) {
   fltk3::GraphicsDriver::color(i);
   int index;
