@@ -162,9 +162,11 @@ int fltk3::Button::handle(int event) {
       set_changed();
     triggered_by_keyboard:
       fltk3::WidgetTracker wp(this);
-      if (type() == fltk3::RADIO_BUTTON && !value_) {
-	setonly();
-	if (when() & fltk3::WHEN_CHANGED) do_callback();
+      if (type() == fltk3::RADIO_BUTTON) {
+	if (!value_) {
+	  setonly();
+	  if (when() & fltk3::WHEN_CHANGED) do_callback();
+	}
       } else if (type() == fltk3::TOGGLE_BUTTON) {
 	value(!value());
 	if (when() & fltk3::WHEN_CHANGED) do_callback();
