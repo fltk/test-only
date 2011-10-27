@@ -1021,16 +1021,15 @@ void fl_open_callback(void (*cb)(const char *)) {
 - (void)windowWillClose:(NSNotification *)notif
 {
   fl_lock_function();
-  fltk3::Window *w = fltk3::first_window();
-  if (w) {
-    NSWindow *cw = (NSWindow*)Fl_X::i(w)->xid;
-    if ( ![cw isMiniaturized] && ([cw styleMask] & NSTitledWindowMask) ) {
-      if (![cw isKeyWindow]) {	// always make fltk3::first_window() the key widow
-	[cw makeKeyAndOrderFront:nil];
-      }
-      if (![cw isMainWindow]) {	// always make fltk3::first_window() the main widow
-	[cw makeMainWindow];
-      }
+  if ([[notif object] isKeyWindow]) {
+    // If the closing window is the key window,
+    // find a bordered top-level window to become the new key window
+    fltk3::Window *w = fltk3::first_window();
+    while (w && (w->parent() || !w->border() || !w->visible())) {
+      w = fltk3::next_window(w);
+    }
+    if (w) {
+      [(FLWindow*)Fl_X::i(w)->xid makeKeyAndOrderFront:nil];
     }
   }
   fl_unlock_function();
