@@ -149,7 +149,7 @@ fltk3::PostScriptFileDevice::~PostScriptFileDevice() {
 #ifndef FLTK3_DOXYGEN
 
 #if ! (defined(__APPLE__) || defined(WIN32) )
-  #include "print_panel.cxx"
+#  include "print_panel.cxx"
 #endif
 
 //  Prolog string 
@@ -1546,8 +1546,34 @@ int fltk3::PostScriptPrinter::start_job(int pages, int *firstpage, int *lastpage
     return 1;
 
   // get options
-
-  format = print_page_size->value() ? fltk3::PagedDevice::A4 : fltk3::PagedDevice::LETTER;
+  switch (print_page_size->value()) {
+    case 0:
+      format = fltk3::Paged_Device::LETTER;
+      break;
+    case 2:
+      format = fltk3::Paged_Device::LEGAL;
+      break;
+    case 3:
+      format = fltk3::Paged_Device::EXECUTIVE;
+      break;
+    case 4:
+      format = fltk3::Paged_Device::A3;
+      break;
+    case 5:
+      format = fltk3::Paged_Device::A5;
+      break;
+    case 6:
+      format = fltk3::Paged_Device::B5;
+      break;
+    case 7:
+      format = fltk3::Paged_Device::ENVELOPE;
+      break;
+    case 8:
+      format = fltk3::Paged_Device::DLE;
+      break;
+    default:
+      format = fltk3::Paged_Device::A4;
+  }
   { // page range choice
     int from = 1, to = pages;
     if (print_pages->value()) {
