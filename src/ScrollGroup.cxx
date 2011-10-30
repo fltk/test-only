@@ -518,7 +518,100 @@ int ScrollGroup::handle(int event) {
       }
     }
 
-  case KEY:
+  case SHORTCUT:
+   {
+#define CURSOR_STEP 8
+	int scroll_x = hscrollbar.value();
+	int scroll_y = scrollbar.value();
+
+	if(hscrollbar.visible())
+  {
+	if(event_key() == LeftKey)
+ {
+	if(scroll_x == 0) return 1;
+
+	if((scroll_x = hscrollbar.value() - CURSOR_STEP) < 0) scroll_x = 0;
+
+	scrollTo(scroll_x, scroll_y);
+
+	return 1;
+ }
+	if(event_key() == RightKey) 
+ {
+	if(scroll_x == max_x_scroll_) return 1;
+
+	if((scroll_x = hscrollbar.value() + CURSOR_STEP) > max_x_scroll_) 
+	 scroll_x = max_x_scroll_;
+
+	scrollTo(scroll_x, scroll_y);
+
+	return 1;
+ }
+  }
+	if(scrollbar.visible())
+  {
+	if(event_key() == UpKey)
+ {
+	if(scroll_y == 0) return 1;
+
+	if((scroll_y = scrollbar.value() - CURSOR_STEP) < 0) scroll_y = 0;
+
+	scrollTo(scroll_x,scroll_y);
+
+	return 1;
+ }
+	if(event_key() == DownKey)
+ {
+	if(scroll_y == max_y_scroll_) return 1;
+
+	if((scroll_y = scrollbar.value() + CURSOR_STEP) > max_y_scroll_) 
+	 scroll_y = max_y_scroll_;
+
+	scrollTo(scroll_x,scroll_y);
+
+	return 1;
+ }
+	if(event_key() == HomeKey)
+ {
+	if(scroll_y > 0)
+	 scrollTo(scroll_x, 0);
+
+	return 1;
+ }
+	if(event_key() == EndKey)
+ {
+	if(scroll_y < max_y_scroll_)
+	 scrollTo(scroll_x, max_y_scroll_);
+
+	return 1;
+ }
+	if(event_key() == PageUpKey)
+ {
+	if(scroll_y == 0) return 1;
+
+	if((scroll_y = scrollbar.value() - scrollbar.pagesize()) < 0) 
+	 scroll_y = 0;
+
+	scrollTo(scroll_x, scroll_y);
+
+	return 1;
+ }
+	if(event_key() == PageDownKey)
+ {
+	if(scroll_y == max_y_scroll_) return 1;
+
+	if((scroll_y = scrollbar.value() + scrollbar.pagesize()) > max_y_scroll_)
+	 scroll_y = max_y_scroll_;
+
+	scrollTo(scroll_x, scroll_y);
+
+	return 1;
+ }
+  }
+   }
+	break;
+
+  case KEY: 
     if (scrollbar.send(event)) return 1;
     if (hscrollbar.send(event)) return 1;
     break;
