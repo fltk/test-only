@@ -101,9 +101,9 @@ int main(int argc, char ** argv) {
   box.box(fltk3::THIN_DOWN_BOX);
   c = fullcolor_cell;
   box.color(c);
-  fltk3::Button b1(140,120,120,30,"fltk3::show_colormap");
+  fltk3::Button b1(140,120,140,30,"fltk3::show_colormap");
   b1.callback(cb1,&box);
-  fltk3::Button b2(140,160,120,30,"fltk3::choose_color");
+  fltk3::Button b2(140,160,140,30,"fltk3::color_chooser");
   b2.callback(cb2,&box);
   fltk3::Box image_box(140,200,120,120,0);
   make_image();
