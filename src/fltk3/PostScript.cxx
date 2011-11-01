@@ -1548,31 +1548,31 @@ int fltk3::PostScriptPrinter::start_job(int pages, int *firstpage, int *lastpage
   // get options
   switch (print_page_size->value()) {
     case 0:
-      format = fltk3::Paged_Device::LETTER;
+      format = fltk3::PagedDevice::LETTER;
       break;
     case 2:
-      format = fltk3::Paged_Device::LEGAL;
+      format = fltk3::PagedDevice::LEGAL;
       break;
     case 3:
-      format = fltk3::Paged_Device::EXECUTIVE;
+      format = fltk3::PagedDevice::EXECUTIVE;
       break;
     case 4:
-      format = fltk3::Paged_Device::A3;
+      format = fltk3::PagedDevice::A3;
       break;
     case 5:
-      format = fltk3::Paged_Device::A5;
+      format = fltk3::PagedDevice::A5;
       break;
     case 6:
-      format = fltk3::Paged_Device::B5;
+      format = fltk3::PagedDevice::B5;
       break;
     case 7:
-      format = fltk3::Paged_Device::ENVELOPE;
+      format = fltk3::PagedDevice::ENVELOPE;
       break;
     case 8:
-      format = fltk3::Paged_Device::DLE;
+      format = fltk3::PagedDevice::DLE;
       break;
     default:
-      format = fltk3::Paged_Device::A4;
+      format = fltk3::PagedDevice::A4;
   }
   { // page range choice
     int from = 1, to = pages;
