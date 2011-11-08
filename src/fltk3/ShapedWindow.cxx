@@ -137,7 +137,7 @@ namespace {
 
 }
 #elif defined(__APPLE__)
-# error I have no idea what to do here. Perhaps one of the more mac-knowing dev.s does?
+//# error I have no idea what to do here. Perhaps one of the more mac-knowing dev.s does?
 #endif
 
 namespace {
@@ -170,7 +170,7 @@ void fltk3::ShapedWindow::draw() {
 #elif defined(__APPLE__)
     // not yet implemented for Apple
     // see earlier #error
-#error Not implemented!
+//#error Not implemented!
 #else 
     // any other window managers that FLTK3 supports will be added here
 #endif
