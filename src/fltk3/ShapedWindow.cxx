@@ -62,6 +62,7 @@ namespace {
 
   HRGN bitmap2region(fltk3::Image* image) {
     HRGN hRgn = 0;
+    /* Does this need to be dynamically determined, perhaps? */
     const int ALLOC_UNIT = 100;
     DWORD maxRects = ALLOC_UNIT;
 
