@@ -62,7 +62,7 @@ namespace {
 
   HRGN bitmap2region(fltk3::Image* image) {
     HRGN hRgn = 0;
-    const int alloc_unit = 100;
+    const int ALLOC_UNIT = 100;
     DWORD maxRects = ALLOC_UNIT;
 
     RGNDATA* pData = (RGNDATA*)malloc(sizeof(RGNDATAHEADER)+(sizeof(RECT)*maxRects));
