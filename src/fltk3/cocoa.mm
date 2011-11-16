@@ -577,21 +577,7 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
 	      contentRect:(NSRect)rect 
 		styleMask:(NSUInteger)windowStyle 
 {
-  NSScreen *gd = nil; // gd will point to the screen containing the bottom-left of rect
-  NSArray *a = [NSScreen screens]; 
-  for(NSUInteger i = 0; i < [a count]; i++) {
-    NSRect r = [[a objectAtIndex:i] frame];
-    if (rect.origin.x >= r.origin.x && rect.origin.x <= r.origin.x + r.size.width
-        && rect.origin.y >= r.origin.y && rect.origin.y <= r.origin.y + r.size.height) {
-      gd = [a objectAtIndex:i];
-      rect.origin.x -= r.origin.x; // express rect relatively to gd's origin
-      rect.origin.y -= r.origin.y;
-      break;
-    }
-  }
-  // attempt to create the window on screen gd
-  self = [super initWithContentRect:rect styleMask:windowStyle backing:NSBackingStoreBuffered defer:NO
-	  screen:gd];
+  self = [super initWithContentRect:rect styleMask:windowStyle backing:NSBackingStoreBuffered defer:NO];
   if (self) {
     w = flw;
     containsGLsubwindow = NO;
@@ -1029,7 +1015,7 @@ void fl_open_callback(void (*cb)(const char *)) {
       w = fltk3::next_window(w);
     }
     if (w) {
-      [(FLWindow*)Fl_X::i(w)->xid makeKeyWindow];
+      [Fl_X::i(w)->xid makeKeyWindow];
     }
   }
   fl_unlock_function();
@@ -1060,7 +1046,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   Fl_X *x;
   FLWindow *top = 0, *topModal = 0, *topNonModal = 0;
   for (x = Fl_X::first;x;x = x->next) {
-    FLWindow *cw = (FLWindow*)x->xid;
+    FLWindow *cw = x->xid;
     fltk3::Window *win = x->w;
     if (win && cw && [cw isVisible]) {
       if (win->modal()) {
@@ -1108,7 +1094,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   FLWindow *top = 0;
   // sort in all regular windows
   for (x = Fl_X::first;x;x = x->next) {
-    FLWindow *cw = (FLWindow*)x->xid;
+    FLWindow *cw = x->xid;
     fltk3::Window *win = x->w;
     if (win && cw) {
       if (win->modal()) {
@@ -1120,7 +1106,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   }
   // now sort in all modals
   for (x = Fl_X::first;x;x = x->next) {
-    FLWindow *cw = (FLWindow*)x->xid;
+    FLWindow *cw = x->xid;
     fltk3::Window *win = x->w;
     if (win && cw && [cw isVisible]) {
       if (win->modal()) {
@@ -1131,7 +1117,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   }
   // finally all non-modals
   for (x = Fl_X::first;x;x = x->next) {
-    FLWindow *cw = (FLWindow*)x->xid;
+    FLWindow *cw = x->xid;
     fltk3::Window *win = x->w;
     if (win && cw && [cw isVisible]) {
       if (win->non_modal()) {
@@ -1992,7 +1978,7 @@ void Fl_X::make(fltk3::Window* w)
     }
     if (w->as_gl_window()) { // if creating a sub-GL-window
       while (win->window()) win = win->window();
-      [(FLWindow*)Fl_X::i(win)->xid setContainsGLsubwindow:YES];
+      [Fl_X::i(win)->xid setContainsGLsubwindow:YES];
     }
     fl_show_iconic = 0;
   }
@@ -2078,9 +2064,14 @@ void Fl_X::make(fltk3::Window* w)
     FLWindow *cw = [[FLWindow alloc] initWithFl_W:w 
 				      contentRect:crect  
 					styleMask:winstyle];
+    [cw setFrameOrigin:crect.origin];
     [cw setHasShadow:YES];
     [cw setAcceptsMouseMovedEvents:YES];
     x->xid = cw;
+    x->w = w; w->i = x;
+    x->wait_for_expose = 1;
+    x->next = Fl_X::first;
+    Fl_X::first = x;
     FLView *myview = [[FLView alloc] init];
     [cw setContentView:myview];
     [cw setLevel:winlevel];
@@ -2099,10 +2090,6 @@ void Fl_X::make(fltk3::Window* w)
     if(w->menu_window()) { // make menu windows slightly transparent
       [cw setAlphaValue:0.97];
     }
-    x->w = w; w->i = x;
-    x->wait_for_expose = 1;
-    x->next = Fl_X::first;
-    Fl_X::first = x;
     // Install DnD handlers 
     [myview registerForDraggedTypes:[NSArray arrayWithObjects:
                                      NSStringPboardType,  NSFilenamesPboardType, nil]];
@@ -2154,8 +2141,8 @@ void fltk3::Window::size_range_() {
   NSSize minSize = { minw, minh + bt };
   NSSize maxSize = { maxw?maxw:32000, maxh?maxh + bt:32000 };
   if (i && i->xid) {
-    [(NSWindow*)i->xid setMinSize:minSize];
-    [(NSWindow*)i->xid setMaxSize:maxSize];
+    [i->xid setMinSize:minSize];
+    [i->xid setMaxSize:maxSize];
   }
 }
 
@@ -2188,8 +2175,7 @@ void fltk3::Window::label(const char *name, const char *mininame) {
   fltk3::Widget::label(name);
   iconlabel_ = mininame;
   if (shown() || i) {
-    NSWindow* nsw = (NSWindow*)i->xid;
-    q_set_window_title(nsw, name, mininame);
+    q_set_window_title(i->xid, name, mininame);
   }
 }
 
@@ -2210,12 +2196,12 @@ void fltk3::Window::show() {
     Fl_X::make(this);
   } else {
     if ( !parent() ) {
-      if ([(NSWindow*)i->xid isMiniaturized]) {
+      if ([i->xid isMiniaturized]) {
 	i->w->redraw();
-	[(NSWindow*)i->xid deminiaturize:nil];
+	[i->xid deminiaturize:nil];
       }
       if (!fl_capture) {
-	[(NSWindow*)i->xid makeKeyAndOrderFront:nil];
+	[i->xid makeKeyAndOrderFront:nil];
       }
     }
   }
@@ -2252,12 +2238,12 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
       dim.origin.y = main_screen_height - (Y + H);
       dim.size.width = W;
       dim.size.height = H + bt;
-      [(NSWindow*)i->xid setFrame:dim display:YES];
+      [i->xid setFrame:dim display:YES];
     } else {
       NSPoint pt; 
       pt.x = X; 
       pt.y = main_screen_height - (Y + h());
-      [(NSWindow*)i->xid setFrameOrigin:pt];
+      [i->xid setFrameOrigin:pt];
     }
   }
   resize_from_system = 0;
@@ -2294,7 +2280,7 @@ void fltk3::Window::make_current()
   NSView *current_focus = [NSView focusView]; 
   // sometimes current_focus is set to a non-FLTK view: don't touch that
   if ( [current_focus isKindOfClass:[FLView class]] ) [current_focus unlockFocus];
-  [[(NSWindow*)i->xid contentView]  lockFocus];
+  [[i->xid contentView]  lockFocus];
   i->gc = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
   fl_gc = i->gc;
   fltk3::Region fl_window_region = XRectangleRegion(0,0,w(),h());
@@ -2311,7 +2297,7 @@ void fltk3::Window::make_current()
   // and escapes even clipping!!!
   // it gets activated when needed (e.g., draw text)
   CGContextSetShouldAntialias(fl_gc, false);  
-  CGFloat hgt = [[(NSWindow*)fl_window contentView] frame].size.height;
+  CGFloat hgt = [[fl_window contentView] frame].size.height;
   CGContextTranslateCTM(fl_gc, 0.5, hgt-0.5f);
   CGContextScaleCTM(fl_gc, 1.0f, -1.0f); // now 0,0 is top-left point of the window
   win = this;
@@ -2638,18 +2624,18 @@ void Fl_X::relink(fltk3::Window *w, fltk3::Window *wp) {
 void Fl_X::destroy() {
   // subwindows share their xid with their parent window, so should not close it
   if (!subwindow && w && !w->parent() && xid) {
-    NSView *topview = [(NSWindow *)xid contentView]; 
+    NSView *topview = [xid contentView]; 
     if ( [NSView focusView] == topview ) {
       [topview unlockFocus];
     }
     [topview release];
-    [(NSWindow *)xid close];
+    [xid close];
   }
 }
 
 void Fl_X::map() {
   if (w && xid) {
-    [(NSWindow *)xid orderFront:nil];
+    [xid orderFront:nil];
   }
   //+ link to window list
   if (w && w->parent()) {
@@ -2660,7 +2646,7 @@ void Fl_X::map() {
 
 void Fl_X::unmap() {
   if (w && !w->parent() && xid) {
-    [(NSWindow *)xid orderOut:nil];
+    [xid orderOut:nil];
   }
   if (w && Fl_X::i(w)) 
     Fl_X::i(w)->unlink();
@@ -2738,7 +2724,7 @@ fltk3::Region Fl_X::intersect_region_and_rect(fltk3::Region current, int x,int y
 }
 
 void Fl_X::collapse() {
-  [(NSWindow *)xid miniaturize:nil];
+  [xid miniaturize:nil];
 }
 
 static NSImage *CGBitmapContextToNSImage(CGContextRef c)
@@ -3185,7 +3171,7 @@ void *fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::menuOrItemOper
 
 void Fl_X::set_key_window()
 {
-  [(NSWindow*)xid makeKeyWindow];
+  [xid makeKeyWindow];
 }
 
 static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
@@ -3269,7 +3255,7 @@ int fltk3::dnd(void)
   } else { 
     while(win->window()) win = win->window();
   }
-  NSView *myview = [(NSWindow*)Fl_X::i(win)->xid contentView];
+  NSView *myview = [Fl_X::i(win)->xid contentView];
   NSEvent *theEvent = [NSApp currentEvent];
   
   int width, height;
@@ -3357,7 +3343,7 @@ CGImageRef Fl_X::CGImage_from_window_rect(fltk3::Window *win, int x, int y, int 
 
 WindowRef Fl_X::window_ref()
 {
-  return (WindowRef)[(FLWindow*)xid windowRef];
+  return (WindowRef)[xid windowRef];
 }
 
 // so a CGRect matches exactly what is denoted x,y,w,h for clipping purposes
