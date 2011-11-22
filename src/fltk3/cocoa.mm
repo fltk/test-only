@@ -591,10 +591,12 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
 - (BOOL)windowShouldClose:(FLWindow *)fl
 {
   fl_lock_function();
-  fltk3::handle( fltk3::CLOSE, [fl getFl_Window] ); // this might or might not close the window
+  fltk3::Window *to_close = [fl getFl_Window];
+  fltk3::handle( fltk3::CLOSE, to_close ); // this might or might not close the window
+  fltk3::do_widget_deletion();
   if (!Fl_X::first) return YES;
   fltk3::Window *l = fltk3::first_window();
-  while( l != NULL && l != [fl getFl_Window]) l = fltk3::next_window(l);
+  while( l != NULL && l != to_close) l = fltk3::next_window(l);
   fl_unlock_function();
   return (l == NULL ? YES : NO);
 }
@@ -938,6 +940,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   pt.y = [[nsw contentView] frame].size.height;
   pt2 = [nsw convertBaseToScreen:pt];
   update_e_xy_and_e_xy_root(nsw);
+  resize_from_system = window;
   window->position((int)pt2.x, (int)(main_screen_height - pt2.y));
   if ([nsw containsGLsubwindow] ) {
     [nsw display];// redraw window after moving if it contains OpenGL subwindows
@@ -1027,6 +1030,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   while ( Fl_X::first ) {
     Fl_X *x = Fl_X::first;
     fltk3::handle( fltk3::CLOSE, x->w );
+    fltk3::do_widget_deletion();
     if ( Fl_X::first == x ) {
       reply = NSTerminateCancel; // FLTK has not closed all windows, so we return to the main program now
       break;
@@ -2238,13 +2242,14 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
       dim.origin.y = main_screen_height - (Y + H);
       dim.size.width = W;
       dim.size.height = H + bt;
-      [i->xid setFrame:dim display:YES];
+      [i->xid setFrame:dim display:YES]; // calls windowDidResize
     } else {
       NSPoint pt; 
       pt.x = X; 
       pt.y = main_screen_height - (Y + h());
-      [i->xid setFrameOrigin:pt];
+      [i->xid setFrameOrigin:pt]; // calls windowDidMove
     }
+    return;
   }
   resize_from_system = 0;
   if (is_a_resize) {
