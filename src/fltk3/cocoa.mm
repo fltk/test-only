@@ -559,7 +559,9 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
   breakMacEventLoop();
 }
 
-@interface FLWindow : NSWindow {
+@interface FLWindow : NSWindow 
+{
+  @private
   fltk3::Window *w;
   BOOL containsGLsubwindow;
 }
@@ -598,8 +600,6 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
 @end
 
 @interface FLApplication : NSObject
-{
-}
 + (void)sendEvent:(NSEvent *)theEvent;
 @end
 
@@ -810,8 +810,8 @@ static void cocoaMouseHandler(NSEvent *theEvent)
 
 @interface FLTextView : NSTextView 
 // this subclass is needed under OS X <= 10.5 but not under >= 10.6 where the base class is enough
-{
-}
+- (void)insertText:(id)aString;
+- (void)doCommandBySelector:(SEL)aSelector;
 @end
 @implementation FLTextView
 - (void)insertText:(id)aString
@@ -897,8 +897,6 @@ void fl_open_callback(void (*cb)(const char *)) {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 <NSWindowDelegate, NSApplicationDelegate>
 #endif
-{
-}
 - (void)windowDidMove:(NSNotification *)notif;
 - (void)windowDidResize:(NSNotification *)notif;
 - (void)windowDidResignKey:(NSNotification *)notif;
@@ -1531,7 +1529,9 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 
-@interface FLView : NSView <NSTextInput> {
+@interface FLView : NSView <NSTextInput> 
+{
+  @private
   int next_compose_length;
   bool in_key_event;
 }
@@ -2811,8 +2811,6 @@ void Fl_X::set_cursor(fltk3::Cursor c)
 }
 
 @interface FLaboutItemTarget : NSObject 
-{
-}
 - (void)showPanel;
 - (void)printPanel;
 @end
@@ -2942,8 +2940,7 @@ static void createAppleMenu(void)
   [menuItem release];
 }
 
-@interface FLMenuItem : NSMenuItem {
-}
+@interface FLMenuItem : NSMenuItem 
 - (void) doCallback:(id)unused;
 - (void) directCallback:(id)unused;
 @end
