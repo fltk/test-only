@@ -338,6 +338,7 @@ void fltk3::DoubleWindow::flush() {flush(0);}
 void fltk3::DoubleWindow::flush(int eraseoverlay) {
   make_current(); // make sure fl_gc is non-zero
   Fl_X *myi = Fl_X::i(this);
+  if (!myi) return; // window not yet created
   if (!myi->other_xid) {
 #if USE_XDBE
     if (can_xdbe()) {
