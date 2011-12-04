@@ -102,8 +102,8 @@ fltk::filename_absolute(char *output, int length, const char *input, const char*
     // current directory
     if (pwd) prefix = pwd;
     else {
-      prefix = getenv("PWD");
-      if (!prefix) prefix = getcwd(output, length);
+      prefix = getcwd(output, length);
+      if (!prefix) prefix = getenv("PWD");
     }
     prefixlen = strlen(prefix);
   }
@@ -144,8 +144,8 @@ fltk::filename_relative(char *to, int tolen, const char* from, const char* cwd) 
   }
 
   if (!cwd) {
-    cwd = getenv("PWD");
-    if (!cwd) cwd = getcwd(to, tolen);
+    cwd = getcwd(to, tolen);
+    if (!cwd) cwd = getenv("PWD");
   }
 
   const char* slash = from;
