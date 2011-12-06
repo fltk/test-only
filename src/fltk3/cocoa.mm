@@ -2030,7 +2030,7 @@ void Fl_X::make(fltk3::Window* w)
       wp += 2*bx;
       hp += 2*by+bt;
     }
-    if (w->flags() & fltk3::Window::FORCE_POSITION) {
+    if (w->force_position()) {
       if (!fltk3::grab()) {
         xp = xwm; yp = ywm;
         w->x(xp);w->y(yp);
@@ -2076,7 +2076,7 @@ void Fl_X::make(fltk3::Window* w)
     [cw setLevel:winlevel];
     
     q_set_window_title(cw, w->label(), w->iconlabel());
-    if (!(w->flags() & fltk3::Window::FORCE_POSITION)) {
+    if (!w->force_position()) {
       if (w->modal()) {
         [cw center];
       } else if (w->non_modal()) {
@@ -2217,7 +2217,10 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
   //  printf("fltk3::Window::resize(X=%d, Y=%d, W=%d, H=%d), is_a_resize=%d, resize_from_system=%p, this=%p\n",
   //         X, Y, W, H, is_a_resize, resize_from_system, this);
   if (X != x() || Y != y()) set_flag(FORCE_POSITION);
-  else if (!is_a_resize) return;
+  else if (!is_a_resize) {
+    resize_from_system = 0;
+    return;
+    }
   if ( (resize_from_system!=this) && (!parent()) && shown()) {
     if (is_a_resize) {
       if (resizable()) {
