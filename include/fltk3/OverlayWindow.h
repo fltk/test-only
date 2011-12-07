@@ -48,8 +48,16 @@ namespace fltk3 {
    overlay will blink if you change the image in the window.
    */
   class FLTK3_EXPORT OverlayWindow : public fltk3::DoubleWindow {
+#ifndef FLTK3_DOXYGEN
     friend class _Fl_Overlay;
+#endif
   protected:  
+    /** 
+     You must subclass fltk3::OverlayWindow and provide this method.
+     It is just like a draw() method, except it draws the overlay.
+     The overlay will have already been "cleared" when this is called.  You
+     can use any of the routines described in &lt;fltk3/draw.h&gt;.
+     */
     virtual void draw_overlay() { /* must be overridden */ }
     fltk3::Window *overlay_;
   public:
@@ -58,18 +66,19 @@ namespace fltk3 {
     void hide();
     void resize(int,int,int,int);
     ~OverlayWindow();
+    /** Returns non-zero if there's hardware overlay support */
     int can_do_overlay();
     void redraw_overlay();
+    /**
+     See fltk3::OverlayWindow::OverlayWindow(int X, int Y, int W, int H, const char *l)
+     */
+    OverlayWindow(int W, int H, const char *l=0)
+    : fltk3::DoubleWindow(W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
     /**
      Creates a new fltk3::OverlayWindow widget using the given
      position, size, and label (title) string. If the 
      positions (x,y) are not given, then the window manager
      will choose them.
-     */
-    OverlayWindow(int W, int H, const char *l=0)
-    : fltk3::DoubleWindow(W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
-    /**
-     See fltk3::OverlayWindow::OverlayWindow(int W, int H, const char *l=0)
      */
     OverlayWindow(int X, int Y, int W, int H, const char *l=0)
     : fltk3::DoubleWindow(X,Y,W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }

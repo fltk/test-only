@@ -25,13 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \fn virtual void fltk3::OverlayWindow::draw_overlay() = 0
-  You must subclass fltk3::OverlayWindow and provide this method.
-  It is just like a draw() method, except it draws the overlay.
-  The overlay will have already been "cleared" when this is called.  You
-  can use any of the routines described in &lt;fltk3/draw.h&gt;.
-*/
-
 // A window using double-buffering and able to draw an overlay
 // on top of that.  Uses the hardware to draw the overlay if
 // possible, otherwise it just draws in the front buffer.

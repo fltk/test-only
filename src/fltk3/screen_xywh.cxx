@@ -181,7 +181,7 @@ static void screen_init() {
 }
 #endif // WIN32
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 void fltk3::call_screen_init() {
   screen_init();
 }
