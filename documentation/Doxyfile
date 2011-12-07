@@ -1242,7 +1242,7 @@ INCLUDE_FILE_PATTERNS  =
 # undefined via #undef or recursively expanded use the := operator 
 # instead of the = operator.
 
-PREDEFINED             = FL_DOXYGEN \
+PREDEFINED             = FLTK3_DOXYGEN \
                          FLTK_HAVE_CAIRO \
                          HAVE_GL \
                          HAVE_GL_OVERLAY \
