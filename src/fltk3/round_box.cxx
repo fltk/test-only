@@ -57,7 +57,6 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
   int d = w <= h ? w : h;
   if (d <= 1) return;
   fltk3::color(color);
-  fltk3::line_style(0,1);
   void (*f)(int,int,int,int,double,double);
   f = (which==FILL) ? fltk3::pie : arc_i;
   if (which >= CLOSED) {
@@ -84,7 +83,6 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
       if (which != LOWER_RIGHT) fltk3::xyline(x+d/2-1, y, x+w-d/2+1);
     }
   }
-  fltk3::line_style(0);
 }
 
 void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype) {
