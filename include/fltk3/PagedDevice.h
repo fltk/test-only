@@ -118,9 +118,9 @@ namespace fltk3 {
     int y_offset;
     /** \brief The constructor */
     PagedDevice() : fltk3::SurfaceDevice(NULL) {};
+  public:
     /** \brief The destructor */
     virtual ~PagedDevice() {};
-  public:
     static const char *class_id;
     const char *class_name() {return class_id;};
     virtual int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);

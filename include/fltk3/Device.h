@@ -173,18 +173,18 @@ namespace fltk3 {
     /** \brief see fltk3::line(int x, int y, int x1, int y1, int x2, int y2). */
     virtual void line(int x, int y, int x1, int y1, int x2, int y2);
     /** \brief see fltk3::draw(const char *str, int n, int x, int y). */
-    virtual void draw(const char *str, int n, int x, int y) = 0;
+    virtual void draw(const char *str, int n, int x, int y) {}
 #ifdef __APPLE__
-    virtual void draw(const char *str, int n, float x, float y) = 0;
+    virtual void draw(const char *str, int n, float x, float y) { draw(str, n, (int)(x+0.5), (int)(y+0.5));}
 #endif
     /** \brief see fltk3::draw(int angle, const char *str, int n, int x, int y). */
-    virtual void draw(int angle, const char *str, int n, int x, int y) = 0;
+    virtual void draw(int angle, const char *str, int n, int x, int y) {}
     /** \brief see fltk3::rtl_draw(const char *str, int n, int x, int y). */
-    virtual void rtl_draw(const char *str, int n, int x, int y) = 0;
+    virtual void rtl_draw(const char *str, int n, int x, int y) {}
     /** \brief see fltk3::color(fltk3::Color c). */
     virtual void color(fltk3::Color c) {color_ = c;}
     /** \brief see fltk3::color(uchar r, uchar g, uchar b). */
-    virtual void color(uchar r, uchar g, uchar b) = 0;
+    virtual void color(uchar r, uchar g, uchar b) {}
     /** \brief see fltk3::point(int x, int y). */
     virtual void point(int x, int y);
     /** \brief see fltk3::loop(int x0, int y0, int x1, int y1, int x2, int y2). */
@@ -273,32 +273,32 @@ namespace fltk3 {
     
     // Images
     /** \brief see fltk3::draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
-    virtual   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0) = 0;
+    virtual   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0) {}
     /** \brief see fltk3::draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
-    virtual   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0) = 0;
+    virtual   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0) {}
     /** \brief see fltk3::draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D). */
-    virtual   void draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=3) = 0;
+    virtual   void draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=3) {}
     /** \brief see fltk3::draw_image_mono(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D). */
-    virtual   void draw_image_mono(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=1) = 0;
+    virtual   void draw_image_mono(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=1) {}
     // Image classes
     /** \brief Draws an fltk3::RGBImage object to the device. 
      *
      Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
      the image offset by the cx and cy arguments.
      */
-    virtual   void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+    virtual   void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy) {}
     /** \brief Draws an fltk3::Pixmap object to the device. 
      *
      Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
      the image offset by the cx and cy arguments.
      */
-    virtual   void draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+    virtual   void draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy) {}
     /** \brief Draws an fltk3::Bitmap object to the device. 
      *
      Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
      the image offset by the cx and cy arguments.
      */
-    virtual void draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+    virtual void draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {}
     
   public:
     static const char *class_id;
@@ -310,15 +310,15 @@ namespace fltk3 {
     /** \brief see fltk3::size(). */
     fltk3::Fontsize size() {return size_; }
     /** \brief see fltk3::width(const char *str, int n). */
-    virtual double width(const char *str, int n) = 0;
+    virtual double width(const char *str, int n) {return 0;}
     /** \brief see fltk3::width(unsigned int n). */
     virtual inline double width(unsigned int c) { char ch = (char)c; return width(&ch, 1); }
     /** \brief see fltk3::text_extents(const char*, int n, int& dx, int& dy, int& w, int& h). */
     virtual void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
     /** \brief see fltk3::height(). */
-    virtual int height() = 0;
+    virtual int height() {return size();}
     /** \brief see fltk3::descent(). */
-    virtual int descent() = 0;
+    virtual int descent() {return 0;}
     /** \brief see fltk3::color(void). */
     fltk3::Color color() {return color_;}
     /** Returns a pointer to the current Fl_Font_Descriptor for the graphics driver */
