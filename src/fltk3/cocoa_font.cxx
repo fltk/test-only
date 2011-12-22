@@ -26,9 +26,7 @@
 //
 
 #include <config.h>
-
-/* from fl_utf.c */
-extern unsigned fltk3::utf8toUtf16(const char* src, unsigned srclen, unsigned short* dst, unsigned dstlen);
+#include <fltk3/utf8.h>
 
 static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
