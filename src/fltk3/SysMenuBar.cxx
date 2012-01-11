@@ -109,46 +109,46 @@ static void setMenuFlags( MenuHandle mh, int miCnt, const fltk3::MenuItem *m )
 /*
  * create a sub menu for a specific menu handle
  */
-static void createSubMenu( void * mh, pFl_Menu_Item &mm )
+static void createSubMenu( void * mh, pFl_Menu_Item &mm,  const fltk3::MenuItem *mitem )
 {
   void *submenu;
   int miCnt, flags;
   
   void *menuItem;
-  submenu = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::initWithTitle, mm->text);
+  submenu = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::initWithTitle, mitem->text);
   int cnt;
   fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::numberOfItems, mh, &cnt);
   cnt--;
   menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, cnt);
   fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setSubmenu, menuItem, submenu);
-  if ( mm->flags & fltk3::MENU_INACTIVE ) {
-    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setEnabled, menuItem, 0);
-  }
-  mm++;
   
   while ( mm->text )
   {
-    int flRank = mm - fltk3::sys_menu_bar->fltk3::Menu_::menu();
-    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, submenu, flRank, &miCnt);
+    char visible = mm->visible() ? 1 : 0;
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, submenu, mm, &miCnt);
     setMenuFlags( submenu, miCnt, mm );
     setMenuShortcut( submenu, miCnt, mm );
-    if ( mm->flags & fltk3::MENU_INACTIVE ) {
+    if ( mm->flags & fltk3::MENU_INACTIVE || mitem->flags & fltk3::MENU_INACTIVE) {
       void *item = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, submenu, miCnt);
       fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setEnabled, item, 0);
     }
     flags = mm->flags;
     if ( mm->flags & fltk3::SUBMENU )
     {
-      createSubMenu( submenu, mm );
+      mm++;
+      createSubMenu( submenu, mm, mm - 1 );
     }
     else if ( mm->flags & fltk3::SUBMENU_POINTER )
     {
       const fltk3::MenuItem *smm = (fltk3::MenuItem*)mm->user_data_;
-      createSubMenu( submenu, smm );
+      createSubMenu( submenu, smm, mm );
     }
     if ( flags & fltk3::MENU_DIVIDER ) {
       fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addSeparatorItem, submenu);
       }
+    if ( !visible ) {
+      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::removeItem, submenu, miCnt);
+    }
     mm++;
   }
 }
@@ -156,10 +156,11 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
 
 /*
  * convert a complete fltk3::MenuItem array into a series of menus in the top menu bar
- * ALL PREVIOUS SYSTEM MENUS, EXCEPT APPLICATION MENU, ARE REPLACED BY THE NEW DATA
+ * ALL PREVIOUS SYSTEM MENUS, EXCEPT THE APPLICATION MENU, ARE REPLACED BY THE NEW DATA
  */
 static void convertToMenuBar(const fltk3::MenuItem *mm)
 {
+  int rank;
   int count;//first, delete all existing system menus
   fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::numberOfItems, fl_system_menu, &count);
   for(int i = count - 1; i > 0; i--) {
@@ -171,17 +172,18 @@ static void convertToMenuBar(const fltk3::MenuItem *mm)
     if ( !mm || !mm->text )
       break;
     char visible = mm->visible() ? 1 : 0;
-    int flRank = mm - fltk3::sys_menu_bar->fltk3::Menu_::menu();
-    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, fl_system_menu, flRank, NULL);
-		
-    if ( mm->flags & fltk3::SUBMENU )
-      createSubMenu( fl_system_menu, mm );
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, fl_system_menu, mm, &rank);
+    
+    if ( mm->flags & fltk3::SUBMENU ) {
+      mm++;
+      createSubMenu( fl_system_menu, mm, mm - 1);
+    }
     else if ( mm->flags & fltk3::SUBMENU_POINTER ) {
       const fltk3::MenuItem *smm = (fltk3::MenuItem*)mm->user_data_;
-      createSubMenu( fl_system_menu, smm );
+      createSubMenu( fl_system_menu, smm, mm);
     }
-    if ( visible ) {
-      //      InsertMenu( mh, 0 );
+    if ( !visible ) {
+      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::removeItem, fl_system_menu, rank);
     }
     mm++;
   }

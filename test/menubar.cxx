@@ -28,7 +28,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Box.h>
 #include <fltk3/DoubleWindow.h>
-#include <fltk3/MenuBar.h>
+#include <fltk3/SysMenuBar.h>
 #include <fltk3/ToggleButton.h>
 #include <fltk3/MenuButton.h>
 #include <fltk3/Choice.h>
@@ -179,6 +179,33 @@ fltk3::MenuItem pulldown[] = {
   {0}
 };
 
+#ifdef __APPLE__
+fltk3::MenuItem menu_location[] = {
+  {"Window menu bar",	0, 0, 0, fltk3::MENU_VALUE},
+  {"System menu bar",	},
+  {0}
+};
+
+fltk3::SysMenuBar* smenubar;
+
+void menu_location_cb(fltk3::Widget* w, void* data) 
+{
+  fltk3::MenuBar *menubar = (fltk3::MenuBar*)data;
+  if (((fltk3::Choice*)w)->value() == 1) { // switch to system menu bar
+    menubar->hide();
+    const fltk3::MenuItem *menu = menubar->menu();
+    smenubar = new  fltk3::SysMenuBar(0,0,0,30); 
+    smenubar->menu(menu);
+    smenubar->callback(test_cb);
+  }
+  else { // switch to window menu bar
+    smenubar->clear();
+    delete smenubar;
+    menubar->show();
+  }
+}
+#endif // __APPLE__
+
 #define WIDTH 700
 
 fltk3::Menu_* menus[4];
@@ -213,6 +240,11 @@ int main(int argc, char **argv) {
   fltk3::Box b(200,200,200,100,"Press right button\nfor a pop-up menu");
   window.resizable(&mb);
   window.size_range(300,400,0,400);
+#ifdef __APPLE__
+  fltk3::Choice ch2(500,100,150,25,"Use:"); 
+  ch2.menu(menu_location);
+  ch2.callback(menu_location_cb, &menubar);
+#endif
   window.end();
   window.show(argc, argv);
   return fltk3::run();

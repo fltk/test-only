@@ -2946,29 +2946,40 @@ static void createAppleMenu(void)
 @interface FLMenuItem : NSMenuItem 
 - (void) doCallback:(id)unused;
 - (void) directCallback:(id)unused;
+- (const fltk3::MenuItem*) getFlItem;
 @end
 @implementation FLMenuItem
+- (const fltk3::MenuItem*) getFlItem
+{
+  return *(const fltk3::MenuItem **)[(NSData*)[self representedObject] bytes];
+}
 - (void) doCallback:(id)unused
 {
   fl_lock_function();
-  int flRank = [self tag];
-  const fltk3::MenuItem *items = fltk3::sys_menu_bar->fltk3::Menu_::menu();
-  const fltk3::MenuItem *item = items + flRank;
+  const fltk3::MenuItem *item = [self getFlItem];
+  NSMenu* menu = [self menu];
+  NSInteger flRank = [menu indexOfItem:self];
+  NSInteger last = [menu numberOfItems];
   if (item) {
     fltk3::sys_menu_bar->picked(item);
     if ( item->flags & fltk3::MENU_TOGGLE ) {	// update the menu toggle symbol
       [self setState:(item->value() ? NSOnState : NSOffState)];
     }
     else if ( item->flags & fltk3::MENU_RADIO ) {	// update the menu radio symbols
+      const fltk3::MenuItem *item2;
       int from = flRank;
-      while( from > 0 && items[from - 1].label() && (items[from - 1].flags & fltk3::MENU_RADIO) &&
-            !(items[from - 1].flags & fltk3::MENU_DIVIDER) ) {
-        from--;
+      while(from > 0) {
+	if ([[menu itemAtIndex:from-1] isSeparatorItem]) break;
+	item2 = [(FLMenuItem*)[menu itemAtIndex:from-1] getFlItem];
+	if ( !(item2->flags & fltk3::MENU_RADIO) ) break;
+	from--;
       }
       int to = flRank;
-      while( !(items[to].flags & fltk3::MENU_DIVIDER) && items[to + 1].label() && 
-            (items[to + 1].flags & fltk3::MENU_RADIO) ) {
-        to++;
+      while (to+1 < last) {
+	if ([[menu itemAtIndex:to+1] isSeparatorItem]) break;
+	item2 = [(FLMenuItem*)[menu itemAtIndex:to+1] getFlItem];
+	if (!(item2->flags & fltk3::MENU_RADIO)) break;
+	to++;
       }
       NSMenu *nsmenu = [self menu];
       int nsrank = (int)[nsmenu indexOfItem:self];
@@ -3122,20 +3133,21 @@ void *fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::menuOrItemOper
     value = va_arg(ap, int);
     [menu removeItem:[menu itemAtIndex:value]];
   }
-  else if (operation == fltk3::SysMenuBar::addNewItem) {		// arguments: NSMenu *menu, int flrank, int *prank
+  else if (operation == fltk3::SysMenuBar::addNewItem) {		// arguments: NSMenu *menu, flk3::MenuItem flrank, int *prank
     // creates a new menu item at the end of 'menu'
-    // attaches the item of rank flrank (counted in fltk3::Menu_) of fltk3::sys_menu_bar to it
+    // attaches the item of fltk3::sys_menu_bar to it
     // upon return, puts the rank (counted in NSMenu) of the new item in *prank unless prank is NULL
     menu = va_arg(ap, NSMenu*);
-    int flRank = va_arg(ap, int);
-    char *name = remove_ampersand( (fltk3::sys_menu_bar->fltk3::Menu_::menu() + flRank)->label());
+    fltk3::MenuItem *mitem = va_arg(ap, fltk3::MenuItem *);
     int *prank = va_arg(ap, int*);
+    char *name = remove_ampersand(mitem->label());
     CFStringRef cfname = CFStringCreateWithCString(NULL, name, kCFStringEncodingUTF8);
     free(name);
     FLMenuItem *item = [[FLMenuItem alloc] initWithTitle:(NSString*)cfname 
 						  action:@selector(doCallback:) 
 					   keyEquivalent:@""];
-    [item setTag:flRank];
+    NSData *pointer = [NSData dataWithBytes:&mitem length:sizeof(fltk3::MenuItem*)];
+    [item setRepresentedObject:pointer];
     [menu addItem:item];
     CFRelease(cfname);
     [item setTarget:item];
