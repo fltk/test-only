@@ -3148,28 +3148,6 @@ void *fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::menuOrItemOper
     if (prank != NULL) *prank = [menu indexOfItem:item];
     [item release];
   }
-  else if (operation == fltk3::SysMenuBar::renameItem) {		// arguments: int rank, const char *newname
-    // renames the system menu item numbered rank in fltk3::sys_menu_bar->menu()
-    int rank = va_arg(ap, int);
-    char *newname = remove_ampersand( va_arg(ap, const char *) );
-    int countmenus = [[NSApp mainMenu] numberOfItems];
-    bool found = NO;
-    NSMenuItem *macitem = 0;
-    for(int i = 1; (!found) && i < countmenus; i++) {
-      NSMenuItem *item = [[NSApp mainMenu] itemAtIndex:i];
-      NSMenu *submenu = [item submenu];
-      if (submenu == nil) continue;
-      int countitems = [submenu numberOfItems];
-      for(int j = 0; j < countitems; j++) {
-	macitem = [submenu itemAtIndex:j];
-	if ([macitem tag] == rank) { found = YES; break; }
-      }
-    }
-    if (found) {
-      [macitem setTitle:[[[NSString alloc] initWithUTF8String:newname] autorelease]];
-    }
-    free(newname);
-  }
   va_end(ap);
   [localPool release];
   return retval;

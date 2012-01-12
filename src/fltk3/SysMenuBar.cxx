@@ -270,8 +270,8 @@ void fltk3::SysMenuBar::remove(int rank)
  */
 void fltk3::SysMenuBar::replace(int rank, const char *name)
 {
-  doMenuOrItemOperation(renameItem, rank, name);
-  fltk3::sys_menu_bar->fltk3::Menu_::replace(rank, name);
+  fltk3::Menu_::replace(rank, name);
+  convertToMenuBar(fltk3::Menu_::menu());
 }
 
 
