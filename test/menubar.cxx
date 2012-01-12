@@ -199,7 +199,6 @@ void menu_location_cb(fltk3::Widget* w, void* data)
     smenubar->callback(test_cb);
   }
   else { // switch to window menu bar
-    smenubar->clear();
     delete smenubar;
     menubar->show();
   }

@@ -59,6 +59,11 @@ namespace fltk3 {
       deactivate();			// don't let the old area take events
       fltk3::sys_menu_bar = this;
     }
+    /** The destructor */
+    ~SysMenuBar() {
+      clear();
+      fltk3::sys_menu_bar = NULL;
+      }
     void menu(const fltk3::MenuItem *m);
     int add(const char* label, unsigned int shortcut, fltk3::Callback*, void *user_data=0, int flags=0);
     int insert(int index, const char* label, unsigned int shortcut, fltk3::Callback *cb, void *user_data=0, int flags=0);
