@@ -97,7 +97,6 @@ inline void XDestroyRegion(fltk3::Region r) {
     free(r);
   }
 }
-extern void *fl_system_menu;
 extern void *fl_default_cursor;
 
 // This object contains all mac-specific stuff about a window:
@@ -169,9 +168,6 @@ namespace fltk3 {
   }
 
 extern CGContextRef fl_gc;
-namespace fltk3 {
-  extern class SysMenuBar *sys_menu_bar;
-}
 
 extern Window fl_xid(const fltk3::Window*);
 extern fltk3::Window* fl_find(Window xid);
@@ -203,14 +199,6 @@ extern void fl_open_display();
  */
 extern void fl_open_callback(void (*cb)(const char *));
 
-/** 
- * \brief Attaches a callback to the "About myprog" item of the system application menu.
- *
- * \param cb   a callback that will be called by "About myprog" menu item
- *		   with NULL 1st argument.
- * \param user_data   a pointer transmitted as 2nd argument to the callback.
- * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., fltk3::META+'a')
- */
 extern void fl_mac_set_about( fltk3::Callback *cb, void *user_data, unsigned int shortcut = 0);
 
 /** \brief The version number of the running Mac OS X (e.g., 100604 for 10.6.4)

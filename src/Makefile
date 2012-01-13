@@ -83,7 +83,6 @@ FLTK3_CPPFILES = \
 	fltk3/SingleWindow.cxx \
 	fltk3/Slider.cxx \
 	fltk3/Style.cxx \
-	fltk3/SysMenuBar.cxx \
 	fltk3/Table.cxx \
 	fltk3/TableRow.cxx \
 	fltk3/TabGroup.cxx \
@@ -202,7 +201,8 @@ FLTK3IMAGES_CPPFILES = \
 FLTK3_OBJCPPFILES = \
 	fltk3/cocoa.mm \
 	fltk3/cocoaNativeFileChooser.mm \
-	fltk3/cocoaQuartzPrinter.mm
+	fltk3/cocoaQuartzPrinter.mm \
+	fltk3/cocoaSysMenuBar.mm
 
 FLTK3_CFILES = \
 	fltk3/flstring.c \

@@ -36,6 +36,7 @@ class Fl_Sys_Menu_Bar;
 namespace fltk3 {
   
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
+  extern class SysMenuBar *sys_menu_bar;
   
   /**
    @brief A class to create, modify and delete menus that appear on Mac OS X in the menu bar at the top of the screen.
@@ -71,12 +72,6 @@ namespace fltk3 {
     void replace(int rank, const char *name);
     void clear();
     int clear_submenu(int index);
-#if ! defined(FLTK3_DOXYGEN)
-    enum menuOrItemOperation { itemAtIndex, setKeyEquivalent, setKeyEquivalentModifierMask, setState, initWithTitle,
-      numberOfItems, setSubmenu, setEnabled, addSeparatorItem, setTitle, removeItem, addNewItem };
-    // function doMenuOrItemOperation is in file F|_cocoa.mm because it contains objective-c code
-    static void *doMenuOrItemOperation( menuOrItemOperation operation, ...);
-#endif
   };
   
 #else

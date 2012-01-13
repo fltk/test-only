@@ -54,6 +54,8 @@
 
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
 
+#import <Cocoa/Cocoa.h>
+
 #include <fltk3/x.h>
 #include <fltk3/run.h>
 #include <fltk3/SysMenuBar.h>
@@ -63,74 +65,212 @@
 #include <ctype.h>
 #include <stdarg.h>
 
-#define MenuHandle void *
-
 typedef const fltk3::MenuItem *pFl_Menu_Item;
+
+fltk3::SysMenuBar *fltk3::sys_menu_bar = 0;
+
+extern void (*fl_lock_function)();
+extern void (*fl_unlock_function)();
+
+
+@interface FLMenuItem : NSMenuItem 
+- (const fltk3::MenuItem*) getFlItem;
+- (void) doCallback:(id)unused;
+- (void) directCallback:(id)unused;
+- (void)setFLKeyEquivalentModifierMask:(unsigned)value;
+@end
+@implementation FLMenuItem
+- (const fltk3::MenuItem*) getFlItem
+{
+  return *(const fltk3::MenuItem **)[(NSData*)[self representedObject] bytes];
+}
+- (void) doCallback:(id)unused
+{
+  fl_lock_function();
+  const fltk3::MenuItem *item = [self getFlItem];
+  fltk3::sys_menu_bar->picked(item);
+  if ( item->flags & fltk3::MENU_TOGGLE ) {	// update the menu toggle symbol
+    [self setState:(item->value() ? NSOnState : NSOffState)];
+  }
+  else if ( item->flags & fltk3::MENU_RADIO ) {	// update the menu radio symbols
+    NSMenu* menu = [self menu];
+    int flRank = [menu indexOfItem:self];
+    int last = [menu numberOfItems] - 1;
+    int from = flRank;
+    while (from > 0) {
+      if ([[menu itemAtIndex:from-1] isSeparatorItem]) break;
+      item = [(FLMenuItem*)[menu itemAtIndex:from-1] getFlItem];
+      if ( !(item->flags & fltk3::MENU_RADIO) ) break;
+      from--;
+    }
+    int to = flRank;
+    while (to < last) {
+      if ([[menu itemAtIndex:to+1] isSeparatorItem]) break;
+      item = [(FLMenuItem*)[menu itemAtIndex:to+1] getFlItem];
+      if (!(item->flags & fltk3::MENU_RADIO)) break;
+      to++;
+    }
+    for (int i =  from; i <= to; i++) {
+      NSMenuItem *nsitem = [menu itemAtIndex:i];
+      [nsitem setState:(nsitem != self ? NSOffState : NSOnState)];
+    }
+  }
+  fl_unlock_function();
+}
+- (void) directCallback:(id)unused
+{
+  fl_lock_function();
+  fltk3::MenuItem *item = (fltk3::MenuItem *)[(NSData*)[self representedObject] bytes];
+  if ( item && item->callback() ) item->do_callback(NULL);
+  fl_unlock_function();
+}
+- (void)setFLKeyEquivalentModifierMask:(unsigned)value
+{
+  NSUInteger macMod = 0;
+  if ( value & fltk3::META ) macMod = NSCommandKeyMask;
+  if ( value & fltk3::SHIFT || isupper(value) ) macMod |= NSShiftKeyMask;
+  if ( value & fltk3::ALT ) macMod |= NSAlternateKeyMask;
+  if ( value & fltk3::CTRL ) macMod |= NSControlKeyMask;
+  [super setKeyEquivalentModifierMask:macMod];
+}
+@end
+
+// creates a new menu item at the end of 'menu'
+// attaches the item of fltk3::sys_menu_bar to it
+//  returns the rank (counted in NSMenu) of the new item
+static int addNewItem(NSMenu *menu, const fltk3::MenuItem *mitem, NSString* cfname)
+{
+  FLMenuItem *item = [[FLMenuItem alloc] initWithTitle:cfname 
+						action:@selector(doCallback:) 
+					 keyEquivalent:@""];
+  NSData *pointer = [NSData dataWithBytes:&mitem length:sizeof(fltk3::MenuItem*)];
+  [item setRepresentedObject:pointer];
+  [menu addItem:item];
+  [item setTarget:item];
+  [item release];
+  return [menu indexOfItem:item];
+}
+
+/** 
+ * \brief Attaches a callback to the "About myprog" item of the system application menu.
+ *
+ * \param cb   a callback that will be called by "About myprog" menu item
+ *		   with NULL 1st argument.
+ * \param user_data   a pointer transmitted as 2nd argument to the callback.
+ * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., fltk3::META+'a')
+ */
+void fl_mac_set_about( fltk3::Callback *cb, void *user_data, unsigned int shortcut) 
+{
+  fl_open_display();
+  fltk3::MenuItem aboutItem;
+  memset(&aboutItem, 0, sizeof(fltk3::MenuItem));
+  aboutItem.callback(cb);
+  aboutItem.user_data(user_data);
+  aboutItem.shortcut(shortcut);
+  NSMenu *appleMenu = [[[NSApp mainMenu] itemAtIndex:0] submenu];
+  CFStringRef cfname = CFStringCreateCopy(NULL, (CFStringRef)[[appleMenu itemAtIndex:0] title]);
+  [appleMenu removeItemAtIndex:0];
+  FLMenuItem *item = [[[FLMenuItem alloc] initWithTitle:(NSString*)cfname 
+						 action:@selector(directCallback:) 
+					  keyEquivalent:@""] autorelease];
+  if (aboutItem.shortcut()) {
+    char sc = aboutItem.shortcut() & 0xff;
+    NSString *equiv = [[NSString alloc] initWithBytes:&sc length:1 encoding:NSASCIIStringEncoding];
+    [item setKeyEquivalent:equiv];
+    [equiv release];
+    [item setFLKeyEquivalentModifierMask:aboutItem.shortcut()];
+  }
+  NSData *pointer = [NSData dataWithBytes:&aboutItem length:sizeof(fltk3::MenuItem)];
+  [item setRepresentedObject:pointer];
+  [appleMenu insertItem:item atIndex:0];
+  CFRelease(cfname);
+  [item setTarget:item];
+}
+
+
+static NSString* remove_ampersand(const char *s)
+{
+  char *ret = strdup(s);
+  const char *p = s;
+  char *q = ret;
+  while(*p != 0) {
+    if (p[0]=='&') {
+      if (p[1]=='&') {
+        *q++ = '&'; p+=2;
+      } else {
+        p++;
+      }
+    } else {
+      *q++ = *p++;
+    }
+  }
+  *q = 0;
+  NSString* rets = [NSString stringWithUTF8String:ret];
+  free(ret);
+  return rets;
+}
  
 
 /*
  * Set a shortcut for an Apple menu item using the FLTK shortcut descriptor.
  */
-static void setMenuShortcut( MenuHandle mh, int miCnt, const fltk3::MenuItem *m )
+static void setMenuShortcut( NSMenu* mh, int miCnt, const fltk3::MenuItem *m )
 {
-  if ( !m->shortcut_ ) 
+  if ( !m->shortcut() ) 
     return;
   if ( m->flags & fltk3::SUBMENU )
     return;
   if ( m->flags & fltk3::SUBMENU_POINTER )
     return;
-  char key = m->shortcut_ & 0xff;
+  char key = m->shortcut() & 0xff;
   if ( !isalnum( key ) )
     return;
   
-  void *menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, miCnt);
-  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setKeyEquivalent, menuItem, m->shortcut_ & 0xff );
-  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setKeyEquivalentModifierMask, menuItem, m->shortcut_ );
+  FLMenuItem *menuItem = (FLMenuItem*)[mh itemAtIndex:miCnt];
+  char sc = m->shortcut() & 0xff;
+  NSString *equiv = [[NSString alloc] initWithBytes:&sc length:1 encoding:NSASCIIStringEncoding];
+  [menuItem setKeyEquivalent:equiv];
+  [equiv release];
+  [menuItem setFLKeyEquivalentModifierMask:m->shortcut()];
 }
 
 
 /*
  * Set the Toggle and Radio flag based on FLTK flags
  */
-static void setMenuFlags( MenuHandle mh, int miCnt, const fltk3::MenuItem *m )
+static void setMenuFlags( NSMenu* mh, int miCnt, const fltk3::MenuItem *m )
 {
-  if ( m->flags & fltk3::MENU_TOGGLE )
-  {
-	void *menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, miCnt);
-	fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
-  }
-  else if ( m->flags & fltk3::MENU_RADIO ) {
-    void *menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, miCnt);
-    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
-  }
+  if ( m->flags & fltk3::MENU_TOGGLE || m->flags & fltk3::MENU_RADIO ) {
+    [[mh itemAtIndex:miCnt] setState:(m->flags & fltk3::MENU_VALUE ? NSOnState : NSOffState)];
+    }
 }
 
 
 /*
  * create a sub menu for a specific menu handle
  */
-static void createSubMenu( void * mh, pFl_Menu_Item &mm,  const fltk3::MenuItem *mitem )
+static void createSubMenu( NSMenu * mh, pFl_Menu_Item &mm,  const fltk3::MenuItem *mitem )
 {
-  void *submenu;
+  NSMenu *submenu;
   int miCnt, flags;
   
-  void *menuItem;
-  submenu = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::initWithTitle, mitem->text);
+  NSMenuItem *menuItem;
+  submenu = [[NSMenu alloc] initWithTitle:remove_ampersand(mitem->text)];
+  [submenu setAutoenablesItems:NO];
   int cnt;
-  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::numberOfItems, mh, &cnt);
-  cnt--;
-  menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, cnt);
-  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setSubmenu, menuItem, submenu);
+  cnt = [mh numberOfItems] - 1;
+  menuItem = [mh itemAtIndex:cnt];
+  [menuItem setSubmenu:submenu];
+  [submenu release];
   
   while ( mm->text )
   {
     char visible = mm->visible() ? 1 : 0;
-    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, submenu, mm, &miCnt);
+    miCnt = addNewItem(submenu, mm, remove_ampersand(mm->label()));
     setMenuFlags( submenu, miCnt, mm );
     setMenuShortcut( submenu, miCnt, mm );
     if ( mm->flags & fltk3::MENU_INACTIVE || mitem->flags & fltk3::MENU_INACTIVE) {
-      void *item = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, submenu, miCnt);
-      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setEnabled, item, 0);
+      [[submenu itemAtIndex:miCnt] setEnabled:NO];
     }
     flags = mm->flags;
     if ( mm->flags & fltk3::SUBMENU )
@@ -144,10 +284,10 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm,  const fltk3::MenuItem 
       createSubMenu( submenu, smm, mm );
     }
     if ( flags & fltk3::MENU_DIVIDER ) {
-      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addSeparatorItem, submenu);
+      [submenu addItem:[NSMenuItem separatorItem]];
       }
     if ( !visible ) {
-      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::removeItem, submenu, miCnt);
+      [submenu removeItem:[submenu itemAtIndex:miCnt]];
     }
     mm++;
   }
@@ -162,9 +302,10 @@ static void convertToMenuBar(const fltk3::MenuItem *mm)
 {
   int rank;
   int count;//first, delete all existing system menus
-  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::numberOfItems, fl_system_menu, &count);
+  NSMenu* fl_system_menu = [NSApp mainMenu];
+  count = [fl_system_menu numberOfItems];
   for(int i = count - 1; i > 0; i--) {
-	  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::removeItem, fl_system_menu, i);
+    [fl_system_menu removeItem:[fl_system_menu itemAtIndex:i]];
   }
   //now convert FLTK stuff into MacOS menus
   for (;;)
@@ -172,8 +313,8 @@ static void convertToMenuBar(const fltk3::MenuItem *mm)
     if ( !mm || !mm->text )
       break;
     char visible = mm->visible() ? 1 : 0;
-    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, fl_system_menu, mm, &rank);
-    
+    rank = addNewItem(fl_system_menu, mm, remove_ampersand(mm->label()));
+   
     if ( mm->flags & fltk3::SUBMENU ) {
       mm++;
       createSubMenu( fl_system_menu, mm, mm - 1);
@@ -183,7 +324,7 @@ static void convertToMenuBar(const fltk3::MenuItem *mm)
       createSubMenu( fl_system_menu, smm, mm);
     }
     if ( !visible ) {
-      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::removeItem, fl_system_menu, rank);
+      [fl_system_menu removeItem:[fl_system_menu itemAtIndex:rank]];
     }
     mm++;
   }
