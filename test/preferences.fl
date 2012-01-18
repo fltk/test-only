@@ -23,6 +23,12 @@ decl {void readPrefs();} {public local
 decl {void writePrefs();} {public local
 } 
 
+decl {const char *project = "fltk.org";} {private local
+} 
+
+decl {const char *application = "test/preferences";} {private local
+} 
+
 Function {closeWindowCB( fltk3::Widget*, void* )} {open private return_type void
 } {
   code {fltk3::delete_widget(myWindow);} {}
@@ -195,7 +201,7 @@ int intValue;
 char buffer[80];
 double doubleValue;
 
-fltk3::Preferences app( fltk3::Preferences::USER, "fltk.org", "test/preferences" );
+fltk3::Preferences app( fltk3::Preferences::USER, project, application );
 
   char path[ FLTK3_PATH_MAX ];
   app.getUserdataPath( path, sizeof(path) );
@@ -268,7 +274,7 @@ fltk3::Preferences app( fltk3::Preferences::USER, "fltk.org", "test/preferences"
 
 Function {writePrefs()} {open return_type void
 } {
-  code {fltk3::Preferences app( fltk3::Preferences::USER, "fltk.org", "test/preferences" );
+  code {fltk3::Preferences app( fltk3::Preferences::USER, project, application );
 
   fltk3::Preferences bed( app, "Bed" );
 
