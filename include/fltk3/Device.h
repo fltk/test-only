@@ -326,7 +326,7 @@ namespace fltk3 {
     /** Sets the current Fl_Font_Descriptor for the graphics driver */
     inline void font_descriptor(Fl_Font_Descriptor *d) { font_descriptor_ = d;}
     /** \brief The destructor */
-    virtual ~GraphicsDriver() {};
+    virtual ~GraphicsDriver() { if (p) free(p); };
   };
   
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
