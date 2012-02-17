@@ -40,6 +40,7 @@
 #include <fltk3/Bitmap.h>
 #include <fltk3/Pixmap.h>
 #include <fltk3/RGBImage.h>
+#include <stdlib.h>
 
 // typedef what the x,y fields in a point are:
 #ifdef WIN32
@@ -326,7 +327,7 @@ namespace fltk3 {
     /** Sets the current Fl_Font_Descriptor for the graphics driver */
     inline void font_descriptor(Fl_Font_Descriptor *d) { font_descriptor_ = d;}
     /** \brief The destructor */
-    virtual ~GraphicsDriver() { if (p) free(p); };
+    virtual ~GraphicsDriver() { if (p) free(p); }
   };
   
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
