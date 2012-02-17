@@ -141,7 +141,7 @@ void fltk3::GraphicsDriver::end_points() {
 
 void fltk3::GraphicsDriver::end_line() {
   if (n < 2) {
-    fltk3::end_points();
+    end_points();
     return;
   }
 #if defined(USE_X11)
@@ -167,14 +167,14 @@ void fltk3::GraphicsDriver::fixloop() {  // remove equal points from closed path
 
 void fltk3::GraphicsDriver::end_loop() {
   fixloop();
-  if (n>2) fltk3::transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
-  fltk3::end_line();
+  if (n>2) transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
+  end_line();
 }
 
 void fltk3::GraphicsDriver::end_polygon() {
   fixloop();
   if (n < 3) {
-    fltk3::end_line();
+    end_line();
     return;
   }
 #if defined(USE_X11)
@@ -199,7 +199,7 @@ void fltk3::GraphicsDriver::end_polygon() {
 }
 
 void fltk3::GraphicsDriver::begin_complex_polygon() {
-  fltk3::begin_polygon();
+  begin_polygon();
   gap_ = 0;
 #if defined(WIN32)
   numcount = 0;
@@ -209,7 +209,7 @@ void fltk3::GraphicsDriver::begin_complex_polygon() {
 void fltk3::GraphicsDriver::gap() {
   while (n>gap_+2 && p[n-1].x == p[gap_].x && p[n-1].y == p[gap_].y) n--;
   if (n > gap_+2) {
-    fltk3::transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
+    transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
 #if defined(WIN32)
     counts[numcount++] = n-gap_;
 #endif
@@ -220,9 +220,9 @@ void fltk3::GraphicsDriver::gap() {
 }
 
 void fltk3::GraphicsDriver::end_complex_polygon() {
-  fltk3::gap();
+  gap();
   if (n < 3) {
-    fltk3::end_line();
+    end_line();
     return;
   }
 #if defined(USE_X11)
@@ -251,8 +251,8 @@ void fltk3::GraphicsDriver::end_complex_polygon() {
 // See fltk3::arc.c for portable version.
 
 void fltk3::GraphicsDriver::circle(double x, double y,double r) {
-  double xt = fltk3::transform_x(x,y);
-  double yt = fltk3::transform_y(x,y);
+  double xt = transform_x(x,y);
+  double yt = transform_y(x,y);
   double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));
   double ry = r * (m.b ? sqrt(m.b*m.b+m.d*m.d) : fabs(m.d));
   int llx = (int)rint(xt-rx);
