@@ -264,7 +264,7 @@ XFontStruct* Fl_XFont_On_Demand::value() {
   return ptr;
 }
 
-void Fl_Xlib_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
+void fltk3::XlibGraphicsDriver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   if (fnum==-1) {
     fltk3::GraphicsDriver::font(0, 0);
     return;
@@ -279,27 +279,27 @@ void Fl_Xlib_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   }
 }
 
-int Fl_Xlib_Graphics_Driver::height() {
+int fltk3::XlibGraphicsDriver::height() {
   if (font_descriptor()) return font_descriptor()->font->ascent + font_descriptor()->font->descent;
   else return -1;
 }
 
-int Fl_Xlib_Graphics_Driver::descent() {
+int fltk3::XlibGraphicsDriver::descent() {
   if (font_descriptor()) return font_descriptor()->font->descent;
   else return -1;
 }
 
-double Fl_Xlib_Graphics_Driver::width(const char* c, int n) {
+double fltk3::XlibGraphicsDriver::width(const char* c, int n) {
   if (font_descriptor()) return (double) XUtf8TextWidth(font_descriptor()->font, c, n);
   else return -1;
 }
 
-double Fl_Xlib_Graphics_Driver::width(unsigned int c) {
+double fltk3::XlibGraphicsDriver::width(unsigned int c) {
   if (font_descriptor()) return (double) XUtf8UcsWidth(font_descriptor()->font, c);
   else return -1;
 }
 
-void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy, int &W, int &H) {
+void fltk3::XlibGraphicsDriver::text_extents(const char *c, int n, int &dx, int &dy, int &W, int &H) {
   if (font_gc != fl_gc) {
     if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
     font_gc = fl_gc;
@@ -317,7 +317,7 @@ void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &d
 //  dy = fltk3::descent() - H;
 }
 
-void Fl_Xlib_Graphics_Driver::draw(const char* c, int n, int x, int y) {
+void fltk3::XlibGraphicsDriver::draw(const char* c, int n, int x, int y) {
   if (font_gc != fl_gc) {
     if (!font_descriptor()) this->font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
     font_gc = fl_gc;
@@ -326,12 +326,12 @@ void Fl_Xlib_Graphics_Driver::draw(const char* c, int n, int x, int y) {
   if (fl_gc) XUtf8DrawString(fl_display, fl_window, font_descriptor()->font, fl_gc, x, y, c, n);
 }
 
-void Fl_Xlib_Graphics_Driver::draw(int angle, const char *str, int n, int x, int y) {
+void fltk3::XlibGraphicsDriver::draw(int angle, const char *str, int n, int x, int y) {
   fprintf(stderr,"ROTATING TEXT NOT IMPLEMENTED\n");
   this->draw(str, n, (int)x, (int)y);
 }
 
-void Fl_Xlib_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
+void fltk3::XlibGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {
   if (font_gc != fl_gc) {
     if (!font_descriptor()) this->font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
     font_gc = fl_gc;
