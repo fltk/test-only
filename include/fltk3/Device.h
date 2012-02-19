@@ -147,6 +147,9 @@ namespace fltk3 {
 #endif
     void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt);
     void fixloop();
+    fltk3::Region prep_restore_clip();
+    inline fltk3::Region stack_top_region() { return rstack[rstackptr]; }
+    void region_stack_push(fltk3::Region r);
 #endif
     
   public:
@@ -164,27 +167,27 @@ namespace fltk3 {
     /** \brief The constructor. */
     GraphicsDriver();
     /** \brief see fltk3::rect(int x, int y, int w, int h). */
-    virtual void rect(int x, int y, int w, int h);
+    virtual void rect(int x, int y, int w, int h) {}
     /** \brief see fltk3::rectf(int x, int y, int w, int h). */
-    virtual void rectf(int x, int y, int w, int h);
+    virtual void rectf(int x, int y, int w, int h) {}
     /** \brief see fltk3::line_style(int style, int width, char* dashes). */
     virtual void line_style(int style, int width=0, char* dashes=0);
     /** \brief see fltk3::xyline(int x, int y, int x1). */
-    virtual void xyline(int x, int y, int x1);
+    virtual void xyline(int x, int y, int x1) {}
     /** \brief see fltk3::xyline(int x, int y, int x1, int y2). */
-    virtual void xyline(int x, int y, int x1, int y2);
+    virtual void xyline(int x, int y, int x1, int y2) {}
     /** \brief see fltk3::xyline(int x, int y, int x1, int y2, int x3). */
-    virtual void xyline(int x, int y, int x1, int y2, int x3);
+    virtual void xyline(int x, int y, int x1, int y2, int x3) {}
     /** \brief see fltk3::yxline(int x, int y, int y1). */
-    virtual void yxline(int x, int y, int y1);
+    virtual void yxline(int x, int y, int y1) {}
     /** \brief see fltk3::yxline(int x, int y, int y1, int x2). */
-    virtual void yxline(int x, int y, int y1, int x2);
+    virtual void yxline(int x, int y, int y1, int x2) {}
     /** \brief see fltk3::yxline(int x, int y, int y1, int x2, int y3). */
-    virtual void yxline(int x, int y, int y1, int x2, int y3);
+    virtual void yxline(int x, int y, int y1, int x2, int y3) {}
     /** \brief see fltk3::line(int x, int y, int x1, int y1). */
-    virtual void line(int x, int y, int x1, int y1);
+    virtual void line(int x, int y, int x1, int y1) {}
     /** \brief see fltk3::line(int x, int y, int x1, int y1, int x2, int y2). */
-    virtual void line(int x, int y, int x1, int y1, int x2, int y2);
+    virtual void line(int x, int y, int x1, int y1, int x2, int y2) {}
     /** \brief see fltk3::draw(const char *str, int n, int x, int y). */
     virtual void draw(const char *str, int n, int x, int y) {}
 #ifdef __APPLE__
@@ -199,15 +202,15 @@ namespace fltk3 {
     /** \brief see fltk3::color(uchar r, uchar g, uchar b). */
     virtual void color(uchar r, uchar g, uchar b) {}
     /** \brief see fltk3::point(int x, int y). */
-    virtual void point(int x, int y);
+    virtual void point(int x, int y) {}
     /** \brief see fltk3::loop(int x0, int y0, int x1, int y1, int x2, int y2). */
-    virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2);
+    virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2) {}
     /** \brief see fltk3::loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
-    virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+    virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {}
     /** \brief see fltk3::polygon(int x0, int y0, int x1, int y1, int x2, int y2). */
-    virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2);
+    virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2) {}
     /** \brief see fltk3::polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
-    virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+    virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {}
     /** \brief see fltk3::begin_points(). */
     virtual void begin_points();
     /** \brief see fltk3::begin_line(). */
@@ -245,11 +248,11 @@ namespace fltk3 {
     /** \brief see fltk3::transformed_vertex(double xf, double yf). */
     virtual void transformed_vertex(double xf, double yf);
     /** \brief see fltk3::push_clip(int x, int y, int w, int h). */
-    virtual void push_clip(int x, int y, int w, int h);
+    virtual void push_clip(int x, int y, int w, int h) {}
     /** \brief see fltk3::clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H). */
-    virtual int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
+    virtual int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H) { return 0;}
     /** \brief see fltk3::not_clipped(int x, int y, int w, int h). */
-    virtual int not_clipped(int x, int y, int w, int h);
+    virtual int not_clipped(int x, int y, int w, int h) { return 1;}
     /** \brief see fltk3::push_no_clip(). */
     virtual void push_no_clip();
     /** \brief see fltk3::pop_clip(). */
@@ -282,7 +285,7 @@ namespace fltk3 {
     /** \brief see fltk3::clip_region(fltk3::Region r). */
     void clip_region(fltk3::Region r);
     /** \brief see fltk3::restore_clip(). */
-    void restore_clip();
+    virtual void restore_clip() {}
     
     // Images
     /** \brief see fltk3::draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
@@ -379,6 +382,25 @@ namespace fltk3 {
     void circle(double x, double y, double r);
     void arc(int x,int y,int w,int h,double a1,double a2);
     void pie(int x,int y,int w,int h,double a1,double a2);
+    void rect(int x, int y, int w, int h);
+    void rectf(int x, int y, int w, int h);
+    void xyline(int x, int y, int x1);
+    void xyline(int x, int y, int x1, int y2);
+    void xyline(int x, int y, int x1, int y2, int x3);
+    void yxline(int x, int y, int y1);
+    void yxline(int x, int y, int y1, int x2);
+    void yxline(int x, int y, int y1, int x2, int y3);
+    void line(int x, int y, int x1, int y1);
+    void line(int x, int y, int x1, int y1, int x2, int y2);
+    void loop(int x, int y, int x1, int y1, int x2, int y2);
+    void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+    void polygon(int x0, int y0, int x1, int y1, int x2, int y2);
+    void polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3);
+    void point(int x, int y);
+    void restore_clip();
+    void push_clip(int x, int y, int w, int h);
+    int not_clipped(int x, int y, int w, int h);
+    int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
   };
 #endif
   
@@ -417,6 +439,25 @@ namespace fltk3 {
     void circle(double x, double y, double r);
     void arc(int x,int y,int w,int h,double a1,double a2);
     void pie(int x,int y,int w,int h,double a1,double a2);
+    void rect(int x, int y, int w, int h);
+    void rectf(int x, int y, int w, int h);
+    void xyline(int x, int y, int x1);
+    void xyline(int x, int y, int x1, int y2);
+    void xyline(int x, int y, int x1, int y2, int x3);
+    void yxline(int x, int y, int y1);
+    void yxline(int x, int y, int y1, int x2);
+    void yxline(int x, int y, int y1, int x2, int y3);
+    void line(int x, int y, int x1, int y1);
+    void line(int x, int y, int x1, int y1, int x2, int y2);
+    void loop(int x, int y, int x1, int y1, int x2, int y2);
+    void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+    void polygon(int x0, int y0, int x1, int y1, int x2, int y2);
+    void polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3);
+    void point(int x, int y);
+    void restore_clip();
+    void push_clip(int x, int y, int w, int h);
+    int not_clipped(int x, int y, int w, int h);
+    int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
   };
 #endif
   
@@ -455,6 +496,25 @@ namespace fltk3 {
     void circle(double x, double y, double r);
     void arc(int x,int y,int w,int h,double a1,double a2);
     void pie(int x,int y,int w,int h,double a1,double a2);
+    void rect(int x, int y, int w, int h);
+    void rectf(int x, int y, int w, int h);
+    void xyline(int x, int y, int x1);
+    void xyline(int x, int y, int x1, int y2);
+    void xyline(int x, int y, int x1, int y2, int x3);
+    void yxline(int x, int y, int y1);
+    void yxline(int x, int y, int y1, int x2);
+    void yxline(int x, int y, int y1, int x2, int y3);
+    void line(int x, int y, int x1, int y1);
+    void line(int x, int y, int x1, int y1, int x2, int y2);
+    void loop(int x, int y, int x1, int y1, int x2, int y2);
+    void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+    void polygon(int x0, int y0, int x1, int y1, int x2, int y2);
+    void polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3);
+    void point(int x, int y);
+    void restore_clip();
+    void push_clip(int x, int y, int w, int h);
+    int not_clipped(int x, int y, int w, int h);
+    int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
   };
 #endif
   
