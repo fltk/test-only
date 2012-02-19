@@ -131,7 +131,6 @@ namespace fltk3 {
     matrix m;
     int n, p_size, gap_;
     XPOINT *p;
-    int fl_clip_state_number;
     int rstackptr;
     enum { region_stack_max = REGION_STACK_SIZE - 1 };
     fltk3::Region rstack[REGION_STACK_SIZE];
@@ -141,14 +140,13 @@ namespace fltk3 {
 #ifndef FLTK3_DOXYGEN
     enum {LINE, LOOP, POLYGON, POINT_};
     int what;
+    int fl_clip_state_number;
 #ifdef WIN32
     int numcount;
     int counts[20];
 #endif
     void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt);
     void fixloop();
-    fltk3::Region prep_restore_clip();
-    inline fltk3::Region stack_top_region() { return rstack[rstackptr]; }
     void region_stack_push(fltk3::Region r);
 #endif
     
@@ -281,7 +279,7 @@ namespace fltk3 {
     /** \brief see fltk3::transform_dy(double x, double y). */
     double transform_dy(double x, double y);
     /** \brief see fltk3::clip_region(). */
-    fltk3::Region clip_region();
+    inline fltk3::Region clip_region() { return rstack[rstackptr]; }
     /** \brief see fltk3::clip_region(fltk3::Region r). */
     void clip_region(fltk3::Region r);
     /** \brief see fltk3::restore_clip(). */

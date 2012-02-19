@@ -576,14 +576,11 @@ fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
 }
 #endif
 
-fltk3::Region fltk3::GraphicsDriver::prep_restore_clip() {
-  fl_clip_state_number++;
-  return rstack[rstackptr];
-}
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::restore_clip() {
-  fltk3::Region r = prep_restore_clip();
+  fl_clip_state_number++;
+  fltk3::Region r = clip_region();
   if ( fl_window ) { // clipping for a true window
     Fl_X::q_clear_clipping();
     Fl_X::q_fill_context();//flip coords if bitmap context
@@ -601,12 +598,14 @@ void fltk3::QuartzGraphicsDriver::restore_clip() {
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::restore_clip() {
-  fltk3::Region r = prep_restore_clip();
+  fl_clip_state_number++;
+  fltk3::Region r = clip_region();
   SelectClipRgn(fl_gc, r); //if r is NULL, clip is automatically cleared
 }
 #else
 void fltk3::XlibGraphicsDriver::restore_clip() {
-  fltk3::Region r = prep_restore_clip();
+  fl_clip_state_number++;
+  fltk3::Region r = clip_region();
   if (r) XSetRegion(fl_display, fl_gc, r);
   else XSetClipMask(fl_display, fl_gc, 0);
 }
@@ -620,10 +619,6 @@ void fltk3::GraphicsDriver::clip_region(fltk3::Region r) {
   restore_clip();
 }
 
-fltk3::Region fltk3::GraphicsDriver::clip_region() {
-  return rstack[rstackptr];
-}
-
 void fltk3::GraphicsDriver::region_stack_push(fltk3::Region r) {
   if (rstackptr < region_stack_max) rstack[++rstackptr] = r;
   else fltk3::warning("fltk3::push_clip: clip stack overflow!\n");
@@ -634,7 +629,7 @@ void fltk3::QuartzGraphicsDriver::push_clip(int x, int y, int w, int h) {
   fltk3::Region r;
   if (w > 0 && h > 0) {
     r = XRectangleRegion(x,y,w,h);
-    fltk3::Region current = stack_top_region();
+    fltk3::Region current = clip_region();
     if (current) {
       XDestroyRegion(r);
       r = Fl_X::intersect_region_and_rect(current, x,y,w,h);
@@ -650,7 +645,7 @@ void fltk3::GDIGraphicsDriver::push_clip(int x, int y, int w, int h) {
   fltk3::Region r;
   if (w > 0 && h > 0) {
     r = XRectangleRegion(x,y,w,h);
-    fltk3::Region current = stack_top_region();
+    fltk3::Region current = clip_region();
     if (current) {
       CombineRgn(r,r,current,RGN_AND);
     }
@@ -665,7 +660,7 @@ void fltk3::XlibGraphicsDriver::push_clip(int x, int y, int w, int h) {
   fltk3::Region r;
   if (w > 0 && h > 0) {
     r = XRectangleRegion(x,y,w,h);
-    fltk3::Region current = stack_top_region();
+    fltk3::Region current = clip_region();
     if (current) {
       fltk3::Region temp = XCreateRegion();
       XIntersectRegion(current, r, temp);
@@ -701,7 +696,7 @@ void fltk3::GraphicsDriver::pop_clip() {
 #if defined(__APPLE_QUARTZ__)
 int fltk3::QuartzGraphicsDriver::not_clipped(int x, int y, int w, int h) {
   if (x+w <= 0 || y+h <= 0) return 0;
-  fltk3::Region r = stack_top_region();
+  fltk3::Region r = clip_region();
   if (!r) return 1;
   CGRect arg = fl_cgrectmake_cocoa(x, y, w, h);
   for (int i = 0; i < r->count; i++) {
@@ -713,7 +708,7 @@ int fltk3::QuartzGraphicsDriver::not_clipped(int x, int y, int w, int h) {
 #elif defined(WIN32)
 int fltk3::GDIGraphicsDriver::not_clipped(int x, int y, int w, int h) {
   if (x+w <= 0 || y+h <= 0) return 0;
-  fltk3::Region r = stack_top_region();
+  fltk3::Region r = clip_region();
   if (!r) return 1;
   RECT rect;
   if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) { // in case of print context, convert coords from logical to device
@@ -728,7 +723,7 @@ int fltk3::GDIGraphicsDriver::not_clipped(int x, int y, int w, int h) {
 #else
 int fltk3::XlibGraphicsDriver::not_clipped(int x, int y, int w, int h) {
   if (x+w <= 0 || y+h <= 0) return 0;
-  fltk3::Region r = stack_top_region();
+  fltk3::Region r = clip_region();
   if (!r) return 1;
   // get rid of coordinates outside the 16-bit range the X calls take.
   if (clip_to_short(x,y,w,h)) return 0;	// clipped
@@ -741,7 +736,7 @@ int fltk3::XlibGraphicsDriver::not_clipped(int x, int y, int w, int h) {
 #if defined(__APPLE_QUARTZ__)
 int fltk3::QuartzGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
   X = x; Y = y; W = w; H = h;
-  fltk3::Region r = stack_top_region();
+  fltk3::Region r = clip_region();
   if (!r) return 0;
   CGRect arg = fl_cgrectmake_cocoa(x, y, w, h);
   CGRect u = CGRectMake(0,0,0,0);
@@ -763,7 +758,7 @@ int fltk3::QuartzGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, in
 #elif defined(WIN32)
 int fltk3::GDIGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
   X = x; Y = y; W = w; H = h;
-  fltk3::Region r = stack_top_region();
+  fltk3::Region r = clip_region();
   if (!r) return 0;
   // The win32 API makes no distinction between partial and complete
   // intersection, so we have to check for partial intersection ourselves.
@@ -797,7 +792,7 @@ int fltk3::GDIGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& 
 #else
 int fltk3::XlibGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
   X = x; Y = y; W = w; H = h;
-  fltk3::Region r = stack_top_region();
+  fltk3::Region r = clip_region();
   if (!r) return 0;
   switch (XRectInRegion(r, x, y, w, h)) {
     case 0: // completely outside
