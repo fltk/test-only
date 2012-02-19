@@ -65,6 +65,7 @@ fltk3::GraphicsDriver::GraphicsDriver() {
   p = (XPOINT *)0;
   font_descriptor_ = NULL;
   p_size = 0;
+  n = 0;
 };
 
 void fltk3::GraphicsDriver::text_extents(const char*t, int n, int& dx, int& dy, int& w, int& h)

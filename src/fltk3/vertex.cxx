@@ -121,12 +121,16 @@ void fltk3::GraphicsDriver::vertex(double x,double y) {
   transformed_vertex0(COORD_T(x*m.a + y*m.c + m.x), COORD_T(x*m.b + y*m.d + m.y));
 }
 
-void fltk3::GraphicsDriver::end_points() {
-#if defined(USE_X11)
-  if (n>1) XDrawPoints(fl_display, fl_window, fl_gc, p, n, 0);
-#elif defined(WIN32)
+#ifdef WIN32
+void fltk3::GDIGraphicsDriver::end_points() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
   for (int i=0; i<n; i++) SetPixel(fl_gc, p[i].x, p[i].y, fl_RGB());
-#elif defined(__APPLE_QUARTZ__)
+}
+#elif defined(__APPLE__)
+void fltk3::QuartzGraphicsDriver::end_points() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
   if (fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   for (int i=0; i<n; i++) { 
     CGContextMoveToPoint(fl_gc, p[i].x, p[i].y);
@@ -134,21 +138,23 @@ void fltk3::GraphicsDriver::end_points() {
     CGContextStrokePath(fl_gc);
   }
   if (fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
-#else
-# error unsupported platform
-#endif
 }
+#else
+void fltk3::XlibGraphicsDriver::end_points() {
+  int n = vertex_no();
+  if (n > 1) XDrawPoints(fl_display, fl_window, fl_gc, vertices(), n, 0);
+}
+#endif
 
-void fltk3::GraphicsDriver::end_line() {
+
+#if defined(__APPLE_QUARTZ__)
+void fltk3::QuartzGraphicsDriver::end_line() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
   if (n < 2) {
     end_points();
     return;
   }
-#if defined(USE_X11)
-  if (n>1) XDrawLines(fl_display, fl_window, fl_gc, p, n, 0);
-#elif defined(WIN32)
-  if (n>1) Polyline(fl_gc, p, n);
-#elif defined(__APPLE_QUARTZ__)
   if (n<=1) return;
   CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, p[0].x, p[0].y);
@@ -156,10 +162,28 @@ void fltk3::GraphicsDriver::end_line() {
     CGContextAddLineToPoint(fl_gc, p[i].x, p[i].y);
   CGContextStrokePath(fl_gc);
   CGContextSetShouldAntialias(fl_gc, false);
-#else
-# error unsupported platform
-#endif
 }
+#elif defined(WIN32)
+void fltk3::GDIGraphicsDriver::end_line() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  if (n < 2) {
+    end_points();
+    return;
+  }
+  if (n>1) Polyline(fl_gc, p, n);
+}
+#else
+void fltk3::XlibGraphicsDriver::end_line() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  if (n < 2) {
+    end_points();
+    return;
+  }
+  if (n>1) XDrawLines(fl_display, fl_window, fl_gc, p, n, 0);
+}
+#endif
 
 void fltk3::GraphicsDriver::fixloop() {  // remove equal points from closed path
   while (n>2 && p[n-1].x == p[0].x && p[n-1].y == p[0].y) n--;
@@ -171,20 +195,15 @@ void fltk3::GraphicsDriver::end_loop() {
   end_line();
 }
 
-void fltk3::GraphicsDriver::end_polygon() {
+#if defined(__APPLE_QUARTZ__)
+void fltk3::QuartzGraphicsDriver::end_polygon() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
   fixloop();
   if (n < 3) {
     end_line();
     return;
   }
-#if defined(USE_X11)
-  if (n>2) XFillPolygon(fl_display, fl_window, fl_gc, p, n, Convex, 0);
-#elif defined(WIN32)
-  if (n>2) {
-    SelectObject(fl_gc, fl_brush());
-    Polygon(fl_gc, p, n);
-  }
-#elif defined(__APPLE_QUARTZ__)
   if (n<=1) return;
   CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, p[0].x, p[0].y);
@@ -193,10 +212,33 @@ void fltk3::GraphicsDriver::end_polygon() {
   CGContextClosePath(fl_gc);
   CGContextFillPath(fl_gc);
   CGContextSetShouldAntialias(fl_gc, false);
-#else
-# error unsupported platform
-#endif
 }
+#elif defined(WIN32)
+void fltk3::GDIGraphicsDriver::end_polygon() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  fixloop();
+  if (n < 3) {
+    end_line();
+    return;
+  }
+  if (n>2) {
+    SelectObject(fl_gc, fl_brush());
+    Polygon(fl_gc, p, n);
+  }
+}
+#else
+void fltk3::XlibGraphicsDriver::end_polygon() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  fixloop();
+  if (n < 3) {
+    end_line();
+    return;
+  }
+  if (n>2) XFillPolygon(fl_display, fl_window, fl_gc, p, n, Convex, 0);
+}
+#endif
 
 void fltk3::GraphicsDriver::begin_complex_polygon() {
   begin_polygon();
@@ -219,20 +261,15 @@ void fltk3::GraphicsDriver::gap() {
   }
 }
 
-void fltk3::GraphicsDriver::end_complex_polygon() {
+#if defined(__APPLE_QUARTZ__)
+void fltk3::QuartzGraphicsDriver::end_complex_polygon() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
   gap();
   if (n < 3) {
     end_line();
     return;
   }
-#if defined(USE_X11)
-  if (n>2) XFillPolygon(fl_display, fl_window, fl_gc, p, n, 0, 0);
-#elif defined(WIN32)
-  if (n>2) {
-    SelectObject(fl_gc, fl_brush());
-    PolyPolygon(fl_gc, p, counts, numcount);
-  }
-#elif defined(__APPLE_QUARTZ__)
   if (n<=1) return;
   CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, p[0].x, p[0].y);
@@ -241,46 +278,82 @@ void fltk3::GraphicsDriver::end_complex_polygon() {
   CGContextClosePath(fl_gc);
   CGContextFillPath(fl_gc);
   CGContextSetShouldAntialias(fl_gc, false);
+}
+#elif defined(WIN32)
+void fltk3::GDIGraphicsDriver::end_complex_polygon() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  gap();
+  if (n < 3) {
+    end_line();
+    return;
+  }
+  if (n>2) {
+    SelectObject(fl_gc, fl_brush());
+    PolyPolygon(fl_gc, p, counts, numcount);
+  }
+}
 #else
-# error unsupported platform
+void fltk3::XlibGraphicsDriver::end_complex_polygon() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  gap();
+  if (n < 3) {
+    end_line();
+    return;
+  }
+  if (n>2) XFillPolygon(fl_display, fl_window, fl_gc, p, n, 0, 0);
+}
 #endif
+
+void fltk3::GraphicsDriver::prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt)
+{
+  xt = transform_x(x,y);
+  yt = transform_y(x,y);
+  double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));
+  double ry = r * (m.b ? sqrt(m.b*m.b+m.d*m.d) : fabs(m.d));
+  llx = (int)rint(xt-rx);
+  w = (int)rint(xt+rx)-llx;
+  lly = (int)rint(yt-ry);
+  h = (int)rint(yt+ry)-lly;
 }
 
 // shortcut the closed circles so they use XDrawArc:
 // warning: these do not draw rotated ellipses correctly!
 // See fltk3::arc.c for portable version.
 
-void fltk3::GraphicsDriver::circle(double x, double y,double r) {
-  double xt = transform_x(x,y);
-  double yt = transform_y(x,y);
-  double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));
-  double ry = r * (m.b ? sqrt(m.b*m.b+m.d*m.d) : fabs(m.d));
-  int llx = (int)rint(xt-rx);
-  int w = (int)rint(xt+rx)-llx;
-  int lly = (int)rint(yt-ry);
-  int h = (int)rint(yt+ry)-lly;
-
-#if defined(USE_X11)
-  (what == POLYGON ? XFillArc : XDrawArc)
-    (fl_display, fl_window, fl_gc, llx, lly, w, h, 0, 360*64);
-#elif defined(WIN32)
-  if (what==POLYGON) {
-    SelectObject(fl_gc, fl_brush());
-    Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
-  } else
-    Arc(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
-#elif defined(__APPLE_QUARTZ__)
+#if defined(__APPLE_QUARTZ__)
+void fltk3::QuartzGraphicsDriver::circle(double x, double y, double r) {
+  int llx, lly, w, h;
+  double xt, yt;
+  prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
   // Quartz warning: circle won't scale to current matrix!
   // Last argument must be 0 (counter-clockwise) or it draws nothing under __LP64__ !!!!
   CGContextSetShouldAntialias(fl_gc, true);
   CGContextAddArc(fl_gc, xt, yt, (w+h)*0.25f, 0, 2.0f*M_PI, 0);
   (what == POLYGON ? CGContextFillPath : CGContextStrokePath)(fl_gc);
   CGContextSetShouldAntialias(fl_gc, false);
-#else
-# error unsupported platform
-#endif
 }
-
+#elif defined(WIN32)
+void fltk3::GDIGraphicsDriver::circle(double x, double y, double r) {
+  int llx, lly, w, h;
+  double xt, yt;
+  prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
+  if (what==POLYGON) {
+    SelectObject(fl_gc, fl_brush());
+    Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
+  } else
+    Arc(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
+}
+#else
+void fltk3::XlibGraphicsDriver::circle(double x, double y, double r) {
+  int llx, lly, w, h;
+  double xt, yt;
+  prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
+  (what == POLYGON ? XFillArc : XDrawArc)
+  (fl_display, fl_window, fl_gc, llx, lly, w, h, 0, 360*64);
+}
+#endif
 //
 // End of "$Id$".
 //

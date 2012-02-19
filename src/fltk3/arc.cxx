@@ -75,16 +75,10 @@ void fltk3::GraphicsDriver::arc(double x, double y, double r, double start, doub
     do {
       double Xnew =  cos_e*X + sin_e*Y;
 		Y = -sin_e*X + cos_e*Y;
-      fltk3::vertex(x + (X=Xnew), y + Y);
+      vertex(x + (X=Xnew), y + Y);
     } while (--i);
   }
 }
-
-#if 0 // portable version.  X-specific one in fltk3::vertex.cxx
-void fltk3::circle(double x,double y,double r) {
-  _fl_arc(x, y, r, r, 0, 360);
-}
-#endif
 
 //
 // End of "$Id$".

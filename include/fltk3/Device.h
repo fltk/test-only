@@ -125,29 +125,41 @@ namespace fltk3 {
     fltk3::Font font_; // current font
     fltk3::Fontsize size_; // current font size
     fltk3::Color color_; // current color
-    enum {LINE, LOOP, POLYGON, POINT_};
     int sptr;
     enum { matrix_stack_size = MATRIX_STACK_SIZE };
     matrix stack[MATRIX_STACK_SIZE];
     matrix m;
     int n, p_size, gap_;
     XPOINT *p;
-    int what;
     int fl_clip_state_number;
     int rstackptr;
     enum { region_stack_max = REGION_STACK_SIZE - 1 };
     fltk3::Region rstack[REGION_STACK_SIZE];
+    Fl_Font_Descriptor *font_descriptor_;
+    void transformed_vertex0(COORD_T x, COORD_T y);
+  protected:
+#ifndef FLTK3_DOXYGEN
+    enum {LINE, LOOP, POLYGON, POINT_};
+    int what;
 #ifdef WIN32
     int numcount;
     int counts[20];
 #endif
-    Fl_Font_Descriptor *font_descriptor_;
-    void transformed_vertex0(COORD_T x, COORD_T y);
+    void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt);
     void fixloop();
+#endif
     
   public:
     
     matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
+    /** Gives the number of vertices in the current path.
+     Useful when writing Fl_Graphics_Driver subclasses.
+     */
+    int vertex_no() { return n; }
+    /** Array of vertices in the current path.
+     Useful when writing Fl_Graphics_Driver subclasses. XPOINT is a system-dependent type.
+     */
+    XPOINT *vertices() { return p; }
     
     /** \brief The constructor. */
     GraphicsDriver();
@@ -209,27 +221,27 @@ namespace fltk3 {
     /** \brief see fltk3::curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3). */
     virtual void curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3);
     /** \brief see fltk3::circle(double x, double y, double r). */
-    virtual void circle(double x, double y, double r);
+    virtual void circle(double x, double y, double r) {}
     /** \brief see fltk3::arc(double x, double y, double r, double start, double end). */
     virtual void arc(double x, double y, double r, double start, double end);
     /** \brief see fltk3::arc(int x, int y, int w, int h, double a1, double a2). */
-    virtual void arc(int x, int y, int w, int h, double a1, double a2);
+    virtual void arc(int x, int y, int w, int h, double a1, double a2) {}
     /** \brief see fltk3::pie(int x, int y, int w, int h, double a1, double a2). */
-    virtual void pie(int x, int y, int w, int h, double a1, double a2);
+    virtual void pie(int x, int y, int w, int h, double a1, double a2) {}
     /** \brief see fltk3::end_points(). */
-    virtual void end_points();
+    virtual void end_points() {}
     /** \brief see fltk3::end_line(). */
-    virtual void end_line();
+    virtual void end_line() {}
     /** \brief see fltk3::end_loop(). */
     virtual void end_loop();
     /** \brief see fltk3::end_polygon(). */
-    virtual void end_polygon();
+    virtual void end_polygon() {}
     /** \brief see fltk3::begin_complex_polygon(). */
     virtual void begin_complex_polygon();
     /** \brief see fltk3::gap(). */
     virtual void gap();
     /** \brief see fltk3::end_complex_polygon(). */
-    virtual void end_complex_polygon();
+    virtual void end_complex_polygon() {}
     /** \brief see fltk3::transformed_vertex(double xf, double yf). */
     virtual void transformed_vertex(double xf, double yf);
     /** \brief see fltk3::push_clip(int x, int y, int w, int h). */
@@ -301,7 +313,6 @@ namespace fltk3 {
      */
     virtual void draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {}
     
-  public:
     static const char *class_id;
     virtual const char *class_name() {return class_id;};
     /** \brief see fltk3::font(fltk3::Font face, fltk3::Fontsize size). */
@@ -361,6 +372,13 @@ namespace fltk3 {
     void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
     int height();
     int descent();
+    void end_points();
+    void end_line();
+    void end_polygon();
+    void end_complex_polygon();
+    void circle(double x, double y, double r);
+    void arc(int x,int y,int w,int h,double a1,double a2);
+    void pie(int x,int y,int w,int h,double a1,double a2);
   };
 #endif
   
@@ -392,6 +410,13 @@ namespace fltk3 {
     void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
     int height();
     int descent();
+    void end_points();
+    void end_line();
+    void end_polygon();
+    void end_complex_polygon();
+    void circle(double x, double y, double r);
+    void arc(int x,int y,int w,int h,double a1,double a2);
+    void pie(int x,int y,int w,int h,double a1,double a2);
   };
 #endif
   
@@ -423,6 +448,13 @@ namespace fltk3 {
     void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
     int height();
     int descent();
+    void end_points();
+    void end_line();
+    void end_polygon();
+    void end_complex_polygon();
+    void circle(double x, double y, double r);
+    void arc(int x,int y,int w,int h,double a1,double a2);
+    void pie(int x,int y,int w,int h,double a1,double a2);
   };
 #endif
   
