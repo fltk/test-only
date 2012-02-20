@@ -140,7 +140,7 @@ void fltk3::PagedDevice::print_window_part(fltk3::Window *win, int x, int y, int
   image_data = fltk3::read_image(NULL, x, y, w, h);
   if (save_front != win) save_front->show();
   current->set_current();
-  fltk3::draw_image(image_data, delta_x, delta_y, w, h, 3);
+  current->driver()->draw_image(image_data, delta_x, delta_y, w, h, 3);
   delete[] image_data;
 #ifdef WIN32
   fl_gc = GetDC(fl_xid(win));

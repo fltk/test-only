@@ -173,8 +173,6 @@ namespace fltk3 {
     void untranslate(void);
     int end_page (void);
     void end_job (void);
-    void print_widget(fltk3::Widget* widget, int delta_x=0, int delta_y=0);
-    void print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x=0, int delta_y=0);
     void set_current(void);
     fltk3::GraphicsDriver* driver(void);
     /** \brief The destructor */

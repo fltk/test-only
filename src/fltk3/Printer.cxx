@@ -171,16 +171,6 @@ void fltk3::Printer::end_job (void)
   printer->end_job();
 }
 
-void fltk3::Printer::print_widget(fltk3::Widget* widget, int delta_x, int delta_y)
-{
-  printer->print_widget(widget, delta_x, delta_y);
-}
-
-void fltk3::Printer::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
-{
-  printer->print_window_part(win, x, y, w, h, delta_x, delta_y);
-}
-
 void fltk3::Printer::set_current(void)
 {
   printer->set_current();
