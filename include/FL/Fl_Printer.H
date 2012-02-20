@@ -35,7 +35,7 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_RGB_Image.H>
-#include <FL/Fl_Bitmap.H>
+//#include <FL/Fl_Bitmap.H>
 #include <stdio.h>
 #if !(defined(__APPLE__) || defined(WIN32))
 #include <FL/Fl_PostScript.H>
@@ -102,15 +102,7 @@ public:
   }
   
   void end_job (void) {
-    end_job();
-  }
-  
-  void print_widget(Fl_Widget* widget, int delta_x=0, int delta_y=0) {
-    ((fltk3::Printer*)_p)->print_widget(fltk3::_1to3_widget(widget), delta_x, delta_y);
-  }
-  
-  void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x=0, int delta_y=0) {
-    ((fltk3::Printer*)_p)->print_window_part(fltk3::_1to3_window(win), x, y, w, h, delta_x, delta_y);
+    ((fltk3::Printer*)_p)->end_job();
   }
   
   void set_current(void) {

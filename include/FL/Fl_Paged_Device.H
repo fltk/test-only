@@ -137,7 +137,7 @@ public:
     ((fltk3::PagedDevice*)_p)->untranslate();
   }
   
-  virtual void print_widget(Fl_Widget* widget, int delta_x = 0, int delta_y = 0) {
+  void print_widget(Fl_Widget* widget, int delta_x = 0, int delta_y = 0) {
     ((fltk3::PagedDevice*)_p)->print_widget(fltk3::_1to3_widget(widget), delta_x, delta_y);
   }
   
@@ -145,7 +145,7 @@ public:
     ((fltk3::PagedDevice*)_p)->print_window(fltk3::_1to3_window(win), x_offset, y_offset);
   }
   
-  virtual void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0) {
+  void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0) {
     ((fltk3::PagedDevice*)_p)->print_window_part(fltk3::_1to3_window(win), x, y, w, h, delta_x, delta_y);
   }
   
