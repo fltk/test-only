@@ -129,25 +129,21 @@ namespace fltk3 {
     enum { matrix_stack_size = MATRIX_STACK_SIZE };
     matrix stack[MATRIX_STACK_SIZE];
     matrix m;
-    int n, p_size, gap_;
-    XPOINT *p;
     int rstackptr;
     enum { region_stack_max = REGION_STACK_SIZE - 1 };
     fltk3::Region rstack[REGION_STACK_SIZE];
     Fl_Font_Descriptor *font_descriptor_;
-    void transformed_vertex0(COORD_T x, COORD_T y);
   protected:
 #ifndef FLTK3_DOXYGEN
+    int n, p_size, gap_;
+    XPOINT *p;
     enum {LINE, LOOP, POLYGON, POINT_};
     int what;
     int fl_clip_state_number;
-#ifdef WIN32
-    int numcount;
-    int counts[20];
-#endif
     void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt);
     void fixloop();
     void region_stack_push(fltk3::Region r);
+    void transformed_vertex0(COORD_T x, COORD_T y);
 #endif
     
   public:
@@ -169,7 +165,7 @@ namespace fltk3 {
     /** \brief see fltk3::rectf(int x, int y, int w, int h). */
     virtual void rectf(int x, int y, int w, int h) {}
     /** \brief see fltk3::line_style(int style, int width, char* dashes). */
-    virtual void line_style(int style, int width=0, char* dashes=0);
+    virtual void line_style(int style, int width=0, char* dashes=0) {}
     /** \brief see fltk3::xyline(int x, int y, int x1). */
     virtual void xyline(int x, int y, int x1) {}
     /** \brief see fltk3::xyline(int x, int y, int x1, int y2). */
@@ -230,7 +226,7 @@ namespace fltk3 {
     /** \brief see fltk3::pie(int x, int y, int w, int h, double a1, double a2). */
     virtual void pie(int x, int y, int w, int h, double a1, double a2) {}
     /** \brief see fltk3::end_points(). */
-    virtual void end_points() {}
+    virtual void end_points();
     /** \brief see fltk3::end_line(). */
     virtual void end_line() {}
     /** \brief see fltk3::end_loop(). */
@@ -399,6 +395,8 @@ namespace fltk3 {
     void push_clip(int x, int y, int w, int h);
     int not_clipped(int x, int y, int w, int h);
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
+    void line_style(int style, int width=0, char* dashes=0);
+    void transformed_vertex(double xf, double yf);
   };
 #endif
   
@@ -409,6 +407,8 @@ namespace fltk3 {
    This class is implemented only on the MSWindows platform.
    */
   class FLTK3_EXPORT GDIGraphicsDriver : public fltk3::GraphicsDriver {
+    int numcount;
+    int counts[20];
   public:
     static const char *class_id;
     const char *class_name() {return class_id;};
@@ -433,6 +433,8 @@ namespace fltk3 {
     void end_points();
     void end_line();
     void end_polygon();
+    void begin_complex_polygon();
+    void gap();
     void end_complex_polygon();
     void circle(double x, double y, double r);
     void arc(int x,int y,int w,int h,double a1,double a2);
@@ -456,6 +458,7 @@ namespace fltk3 {
     void push_clip(int x, int y, int w, int h);
     int not_clipped(int x, int y, int w, int h);
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
+    void line_style(int style, int width=0, char* dashes=0);
   };
 #endif
   
@@ -513,6 +516,7 @@ namespace fltk3 {
     void push_clip(int x, int y, int w, int h);
     int not_clipped(int x, int y, int w, int h);
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
+    void line_style(int style, int width=0, char* dashes=0);
   };
 #endif
   

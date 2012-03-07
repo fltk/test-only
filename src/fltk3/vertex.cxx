@@ -110,17 +110,23 @@ void fltk3::GraphicsDriver::transformed_vertex0(COORD_T x, COORD_T y) {
 }
 
 void fltk3::GraphicsDriver::transformed_vertex(double xf, double yf) {
-#ifdef __APPLE_QUARTZ__
-  transformed_vertex0(COORD_T(xf), COORD_T(yf));
-#else
   transformed_vertex0(COORD_T(rint(xf)), COORD_T(rint(yf)));
-#endif
 }
+#ifdef __APPLE__
+void fltk3::QuartzGraphicsDriver::transformed_vertex(double xf, double yf) {
+  transformed_vertex0(COORD_T(xf), COORD_T(yf));
+}
+#endif
 
 void fltk3::GraphicsDriver::vertex(double x,double y) {
   transformed_vertex0(COORD_T(x*m.a + y*m.c + m.x), COORD_T(x*m.b + y*m.d + m.y));
 }
 
+void fltk3::GraphicsDriver::end_points() {
+  int n = vertex_no();
+  XPOINT *p = vertices();
+  for (int i=0; i<n; i++) point(p[i].x, p[i].y);
+}
 #ifdef WIN32
 void fltk3::GDIGraphicsDriver::end_points() {
   int n = vertex_no();
@@ -243,23 +249,36 @@ void fltk3::XlibGraphicsDriver::end_polygon() {
 void fltk3::GraphicsDriver::begin_complex_polygon() {
   begin_polygon();
   gap_ = 0;
-#if defined(WIN32)
-  numcount = 0;
-#endif
 }
+#if defined(WIN32)
+void fltk3::GDIGraphicsDriver::begin_complex_polygon() {
+  fltk3::GraphicsDriver::begin_complex_polygon();
+  numcount = 0;
+}
+#endif
+
 
 void fltk3::GraphicsDriver::gap() {
   while (n>gap_+2 && p[n-1].x == p[gap_].x && p[n-1].y == p[gap_].y) n--;
   if (n > gap_+2) {
     transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
-#if defined(WIN32)
-    counts[numcount++] = n-gap_;
-#endif
     gap_ = n;
   } else {
     n = gap_;
   }
 }
+#if defined(WIN32)
+void fltk3::GDIGraphicsDriver::gap() {
+  while (n>gap_+2 && p[n-1].x == p[gap_].x && p[n-1].y == p[gap_].y) n--;
+  if (n > gap_+2) {
+    transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
+    counts[numcount++] = n-gap_;
+    gap_ = n;
+  } else {
+    n = gap_;
+  }
+}
+#endif
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::end_complex_polygon() {
