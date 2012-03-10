@@ -144,6 +144,7 @@ public:
   static CGContextRef none_cursor_image(void);
   static void *get_carbon_function(const char *name);
   static void screen_work_area(int &X, int &Y, int &W, int &H, int n); // compute work area of a given screen
+  static unsigned short *compute_macKeyLookUp();
 private:
   static void relink(fltk3::Window*, fltk3::Window*);
   bool subwindow;

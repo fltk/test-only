@@ -132,36 +132,8 @@ void fltk3::set_status(int x, int y, int w, int h)
 
 /*
  * Mac keyboard lookup table
- * See also the inverse converter vktab in Fl_get_key_mac.cxx
  */
-static unsigned short macKeyLookUp[128] =
-{
-  'a', 's', 'd', 'f', 'h', 'g', 'z', 'x',
-  'c', 'v', '^', 'b', 'q', 'w', 'e', 'r',
-  
-  'y', 't', '1', '2', '3', '4', '6', '5',
-  '=', '9', '7', '-', '8', '0', ']', 'o',
-  
-  'u', '[', 'i', 'p', fltk3::EnterKey, 'l', 'j', '\'',
-  'k', ';', '\\', ',', '/', 'n', 'm', '.',
-  
-  fltk3::TabKey, ' ', '`', fltk3::BackSpaceKey, 
-  fltk3::KPEnterKey, fltk3::EscapeKey, fltk3::MetaRKey, fltk3::MetaLKey,
-  fltk3::ShiftLKey, fltk3::CapsLockKey, fltk3::AltLKey, fltk3::ControlLKey, 
-  fltk3::ShiftRKey, fltk3::AltRKey, fltk3::ControlRKey, 0/*fltk3::FKey*/,
-  
-  0, fltk3::KPKey+'.', fltk3::RightKey, fltk3::KPKey+'*', 0, fltk3::KPKey+'+', fltk3::LeftKey, fltk3::NumLockKey,
-  fltk3::DownKey, 0, 0, fltk3::KPKey+'/', fltk3::KPEnterKey, fltk3::UpKey, fltk3::KPKey+'-', 0,
-  
-  0, fltk3::KPKey+'=', fltk3::KPKey+'0', fltk3::KPKey+'1', fltk3::KPKey+'2', fltk3::KPKey+'3', fltk3::KPKey+'4', fltk3::KPKey+'5',
-  fltk3::KPKey+'6', fltk3::KPKey+'7', 0, fltk3::KPKey+'8', fltk3::KPKey+'9', 0, 0, 0,
-  
-  fltk3::FKey+5, fltk3::FKey+6, fltk3::FKey+7, fltk3::FKey+3, fltk3::FKey+8, fltk3::FKey+9, 0, fltk3::FKey+11,
-  0, fltk3::FKey+13, fltk3::FKey+16, fltk3::FKey+14, 0, fltk3::FKey+10, fltk3::MenuKey, fltk3::FKey+12,
-  
-  0, fltk3::FKey+15, fltk3::HelpKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::FKey+4, fltk3::EndKey,
-  fltk3::FKey+2, fltk3::PageDownKey, fltk3::FKey+1, fltk3::LeftKey, fltk3::RightKey, fltk3::DownKey, fltk3::UpKey, 0/*FL_Power*/,
-};
+static unsigned short *macKeyLookUp = Fl_X::compute_macKeyLookUp();
 
 /*
  * convert the current mouse chord into the FLTK modifier state
