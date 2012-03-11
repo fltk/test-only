@@ -59,6 +59,7 @@ fltk3::GraphicsDriver::GraphicsDriver() {
   font_ = 0;
   size_ = 0;
   sptr=0; rstackptr=0; 
+  rstack[0] = NULL;
   fl_clip_state_number=0;
   m = m0; 
   fl_matrix = &m; 
