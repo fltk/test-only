@@ -79,7 +79,6 @@ typedef unsigned int NSUInteger;
 
 // external functions
 extern void fl_fix_focus();
-extern fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h);
 
 // forward definition of functions in this file
 // converting cr lf converter function
@@ -2938,7 +2937,7 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
   }
   height = nl * fltk3::height() + 3;
   width += 6;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(width, height);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(width, height);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,width,height);
@@ -2967,7 +2966,7 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
 static NSImage *defaultDragImage(int *pwidth, int *pheight)
 {
   const int width = 16, height = 16;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(width, height);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(width, height);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,width,height);

@@ -177,7 +177,7 @@ static void fl_copy_offscreen_to_display(int x,int y,int w,int h,HBITMAP bitmap,
   DeleteDC(new_gc);
 }
 
-void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
+void fltk3::GDIGraphicsDriver::copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
   HDC new_gc = CreateCompatibleDC(fl_gc);
   int save = SaveDC(new_gc);
   SelectObject(new_gc, bitmap);
@@ -204,7 +204,7 @@ char fltk3::can_do_alpha_blending() {
   return 1;
 }
 
-fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h) {
+fltk3::Offscreen fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(int w, int h) {
   void *data = calloc(w*h,4);
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
   CGContextRef ctx = CGBitmapContextCreate(

@@ -134,13 +134,10 @@ void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color c1, fltk3::Color c2) {
 # error "Either __LITTLE_ENDIAN__ or __BIG_ENDIAN__ must be defined"
 #endif
 
-extern fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h);
-
-
 CGContextRef Fl_X::help_cursor_image(void)
 {
   int w = 20, h = 20;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(w, h);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,w,h);
@@ -154,7 +151,7 @@ CGContextRef Fl_X::help_cursor_image(void)
 CGContextRef Fl_X::none_cursor_image(void)
 {
   int w = 20, h = 20;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(w, h);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,w,h);
@@ -167,7 +164,7 @@ CGContextRef Fl_X::watch_cursor_image(void)
   int w, h, r = 5;
   w = 2*r+6;
   h = 4*r;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(w, h);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,w,h);
@@ -191,7 +188,7 @@ CGContextRef Fl_X::nesw_cursor_image(void)
 {
   int c = 7, r = 2*c;
   int w = r, h = r;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(w, h);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,w,h);
@@ -211,7 +208,7 @@ CGContextRef Fl_X::nwse_cursor_image(void)
 {
   int c = 7, r = 2*c;
   int w = r, h = r;
-  fltk3::Offscreen off = fl_create_offscreen_with_alpha(w, h);
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,w,h);

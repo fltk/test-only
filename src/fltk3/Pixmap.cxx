@@ -57,10 +57,6 @@
 extern void fl_release_dc(HWND, HDC);      // located in Fl_win32.cxx
 #endif
 
-#ifdef __APPLE_QUARTZ__
-extern fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h);
-#endif
-
 extern uchar **fl_mask_bitmap; // used by fltk3::draw_pixmap.cxx to store mask
 
 namespace fltk3 {
@@ -118,7 +114,7 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int W
     return;
     }
   if (!pxm->id_) {
-    pxm->id_ = fl_create_offscreen_with_alpha(pxm->w(), pxm->h());
+    pxm->id_ = create_offscreen_with_alpha(pxm->w(), pxm->h());
     fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
     fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
     fl_end_offscreen();
