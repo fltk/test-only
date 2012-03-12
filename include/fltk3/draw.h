@@ -749,6 +749,8 @@ namespace fltk3 {
   /* note: doxygen comment here to avoid triplication in os-speciic files */
   FLTK3_EXPORT uchar *read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
   
+  FLTK3_EXPORT void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
+
   // pixmaps:
   FLTK3_EXPORT int draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color=fltk3::GRAY);
   FLTK3_EXPORT int draw_pixmap(const char* const* cdata, int x,int y,fltk3::Color=fltk3::GRAY);

@@ -119,7 +119,7 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int W
     fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
     fl_end_offscreen();
     }
-  fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+  copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
 }
 
 #elif defined(WIN32)
@@ -173,7 +173,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
       fl_delete_offscreen(tmp_id);
     }
     else {
-      fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+      copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
     }
   }
   else if (pxm->mask_) {
@@ -186,7 +186,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else {
-    fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
   }
 }
 
@@ -224,7 +224,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP,
     int oy = Y-cy; if (oy < 0) oy += pxm->h();
     XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
   }
-  fl_copy_offscreen(X, Y, W, H, pxm->id_, cx, cy);
+  copy_offscreen(X, Y, W, H, pxm->id_, cx, cy);
   if (pxm->mask_) {
     // put the old clip region back
     XSetClipOrigin(fl_display, fl_gc, 0, 0);

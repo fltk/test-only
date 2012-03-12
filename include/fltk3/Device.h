@@ -334,6 +334,8 @@ namespace fltk3 {
     inline Fl_Font_Descriptor *font_descriptor() { return font_descriptor_;}
     /** Sets the current Fl_Font_Descriptor for the graphics driver */
     inline void font_descriptor(Fl_Font_Descriptor *d) { font_descriptor_ = d;}
+    /** see fltk3::copy_offscreen() */
+    virtual void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
     /** \brief The destructor */
     virtual ~GraphicsDriver() { if (p) free(p); }
   };
@@ -397,6 +399,7 @@ namespace fltk3 {
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
     void line_style(int style, int width=0, char* dashes=0);
     void transformed_vertex(double xf, double yf);
+    void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
 #if ! defined(FLTK3_DOXYGEN)
     static fltk3::Offscreen create_offscreen_with_alpha(int w, int h);
 #endif
@@ -462,6 +465,7 @@ namespace fltk3 {
     int not_clipped(int x, int y, int w, int h);
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
     void line_style(int style, int width=0, char* dashes=0);
+    void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
 #if ! defined(FLTK3_DOXYGEN)
     void copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #endif
@@ -523,6 +527,7 @@ namespace fltk3 {
     int not_clipped(int x, int y, int w, int h);
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
     void line_style(int style, int width=0, char* dashes=0);
+    void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
   };
 #endif
   

@@ -113,7 +113,6 @@ namespace fltk3 {
 #    define fl_end_offscreen() \
   fltk3::pop_clip(); fl_window = _sw; _ss->set_current()
 
-extern void fl_copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
 #    define fl_delete_offscreen(pixmap) XFreePixmap(fl_display, pixmap)
 
 // Bitmap masks

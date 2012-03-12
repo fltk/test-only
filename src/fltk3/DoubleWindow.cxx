@@ -69,8 +69,6 @@ void fltk3::DoubleWindow::show() {
   Window::show();
 }
 
-static void fl_copy_offscreen_to_display(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
-
 /** \addtogroup fl_drawings
  @{
  */
@@ -80,23 +78,22 @@ static void fl_copy_offscreen_to_display(int x, int y, int w, int h, fltk3::Offs
  \param pixmap  offscreen buffer containing the rectangle to copy
  \param srcx,srcy origin in offscreen buffer of rectangle to copy
  */
-void fl_copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
-  if (fltk3::graphics_driver->class_name() == fltk3::DisplayDevice::display_device()->driver()->class_name()) {
-  fl_copy_offscreen_to_display(x, y, w, h, pixmap, srcx, srcy);
-  }
-  else { // when copy is not to the display
-    fl_begin_offscreen(pixmap);
-    uchar *img = fltk3::read_image(NULL, srcx, srcy, w, h, 0);
-    fl_end_offscreen();
-    fltk3::draw_image(img, x, y, w, h, 3, 0);
-    delete[] img;
-  }
+void fltk3::copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
+  fltk3::graphics_driver->copy_offscreen(x, y, w, h, pixmap, srcx, srcy);
 }
 /** @} */
 
+void fltk3::GraphicsDriver::copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
+  fl_begin_offscreen(pixmap);
+  uchar *img = fltk3::read_image(NULL, srcx, srcy, w, h, 0);
+  fl_end_offscreen();
+  fltk3::draw_image(img, x, y, w, h, 3, 0);
+  delete[] img;
+}
+
 #if defined(USE_X11)
 
-static void fl_copy_offscreen_to_display(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
+void fltk3::XlibGraphicsDriver::copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
   XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x, y);
 }
 
@@ -168,7 +165,7 @@ HDC fl_makeDC(HBITMAP bitmap) {
   return new_gc;
 }
 
-static void fl_copy_offscreen_to_display(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
+void fltk3::GDIGraphicsDriver::copy_offscreen(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
   HDC new_gc = CreateCompatibleDC(fl_gc);
   int save = SaveDC(new_gc);
   SelectObject(new_gc, bitmap);
@@ -237,7 +234,7 @@ static void bmProviderRelease (void *src, const void *data, size_t size) {
   if(count == 1) free((void*)data);
 }
 
-static void fl_copy_offscreen_to_display(int x,int y,int w,int h,fltk3::Offscreen osrc,int srcx,int srcy) {
+void fltk3::QuartzGraphicsDriver::copy_offscreen(int x,int y,int w,int h,fltk3::Offscreen osrc,int srcx,int srcy) {
   CGContextRef src = (CGContextRef)osrc;
   void *data = CGBitmapContextGetData(src);
   int sw = CGBitmapContextGetWidth(src);
@@ -249,8 +246,7 @@ static void fl_copy_offscreen_to_display(int x,int y,int w,int h,fltk3::Offscree
   CFRetain(src);
   CGDataProviderRef src_bytes = CGDataProviderCreateWithData( src, data, sw*sh*4, bmProviderRelease);
   CGImageRef img = CGImageCreate( sw, sh, 8, 4*8, 4*sw, lut, alpha,
-    src_bytes, 0L, false, kCGRenderingIntentDefault);
-  // fltk3::push_clip();
+				 src_bytes, 0L, false, kCGRenderingIntentDefault);
   CGRect rect = { { x, y }, { w, h } };
   Fl_X::q_begin_image(rect, srcx, srcy, sw, sh);
   CGContextDrawImage(fl_gc, rect, img);
@@ -416,7 +412,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
   // on Irix (at least) it is faster to reduce the area copied to
   // the current clip region:
   int X,Y,W,H; fltk3::clip_box(0,0,w(),h(),X,Y,W,H);
-  if (myi->other_xid) fl_copy_offscreen(X, Y, W, H, myi->other_xid, X, Y);
+  if (myi->other_xid) fltk3::copy_offscreen(X, Y, W, H, myi->other_xid, X, Y);
 }
 
 void fltk3::DoubleWindow::resize(int X,int Y,int W,int H) {

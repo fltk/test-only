@@ -180,7 +180,7 @@ extern fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *data);
 extern fltk3::Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
 extern void fl_delete_bitmask(fltk3::Bitmask bm);
 extern fltk3::Offscreen fl_create_offscreen(int w, int h);
-extern void fl_copy_offscreen(int x,int y,int w,int h, fltk3::Offscreen gWorld, int srcx,int srcy);
+//extern void fltk3::copy_offscreen(int x,int y,int w,int h, fltk3::Offscreen gWorld, int srcx,int srcy);
 extern void fl_delete_offscreen(fltk3::Offscreen gWorld);
 extern void fl_begin_offscreen(fltk3::Offscreen gWorld);
 extern void fl_end_offscreen();

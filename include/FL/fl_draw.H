@@ -495,6 +495,10 @@ inline int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color c)
   return fltk3::draw_symbol(label, x, y, w, h, fltk3::_1to3_color(c));
 }
 
+inline void fl_copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
+  fltk3::copy_offscreen(x, y, w, h, pixmap, srcx, srcy);
+}
+
 #if 0 // FIXME: 123
 
 FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
