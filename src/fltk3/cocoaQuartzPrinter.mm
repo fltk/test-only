@@ -3,7 +3,7 @@
 //
 // Mac OS X-specific printing support (objective-c++) for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2010 by Bill Spitzak and others.
+// Copyright 2010-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,10 +41,12 @@ fltk3::SystemPrinter::SystemPrinter(void)
   y_offset = 0;
   scale_x = scale_y = 1.;
   gc = 0;
-  driver(fltk3::DisplayDevice::display_device()->driver());
+  driver(new QuartzGraphicsDriver);
 }
 
-fltk3::SystemPrinter::~SystemPrinter(void) {}
+fltk3::SystemPrinter::~SystemPrinter(void) {
+  delete driver();
+}
 
 int fltk3::SystemPrinter::start_job (int pagecount, int *frompage, int *topage)
 //printing using a Quartz graphics context

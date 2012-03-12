@@ -3,7 +3,7 @@
 //
 // Support for WIN32 printing for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2010 by Bill Spitzak and others.
+// Copyright 2010-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,11 +36,12 @@ extern HWND fl_window;
 
 fltk3::SystemPrinter::SystemPrinter(void) : fltk3::PagedDevice() {
   hPr = NULL;
-  driver(fltk3::DisplayDevice::display_device()->driver());
+  driver(new GDIGraphicsDriver);
 }
 
 fltk3::SystemPrinter::~SystemPrinter(void) {
   if (hPr) end_job();
+  delete driver();
 }
 
 static void WIN_SetupPrinterDeviceContext(HDC prHDC)
