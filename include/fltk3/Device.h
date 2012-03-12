@@ -336,6 +336,8 @@ namespace fltk3 {
     inline void font_descriptor(Fl_Font_Descriptor *d) { font_descriptor_ = d;}
     /** see fltk3::copy_offscreen() */
     virtual void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
+    /** see fltk3::can_do_alpha_blending() */
+    virtual char can_do_alpha_blending() {return 0;}
     /** \brief The destructor */
     virtual ~GraphicsDriver() { if (p) free(p); }
   };
@@ -400,6 +402,7 @@ namespace fltk3 {
     void line_style(int style, int width=0, char* dashes=0);
     void transformed_vertex(double xf, double yf);
     void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
+    char can_do_alpha_blending();
 #if ! defined(FLTK3_DOXYGEN)
     static fltk3::Offscreen create_offscreen_with_alpha(int w, int h);
 #endif
@@ -466,6 +469,7 @@ namespace fltk3 {
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
     void line_style(int style, int width=0, char* dashes=0);
     void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
+    char can_do_alpha_blending();
 #if ! defined(FLTK3_DOXYGEN)
     void copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #endif
@@ -528,6 +532,7 @@ namespace fltk3 {
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
     void line_style(int style, int width=0, char* dashes=0);
     void copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
+    char can_do_alpha_blending();
   };
 #endif
   

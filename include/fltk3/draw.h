@@ -726,8 +726,9 @@ namespace fltk3 {
    \returns 1 if true alpha blending supported by platform
    \returns 0 not supported so FLTK will use screen door transparency
    */
-  /* note: doxygen comment here to avoid triplication in os-speciic files */
-  FLTK3_EXPORT char can_do_alpha_blending();
+  inline char can_do_alpha_blending() {
+    return fltk3::graphics_driver->can_do_alpha_blending();
+    }
   
   /**
    Reads an RGB(A) image from the current window or off-screen buffer.

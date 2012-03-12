@@ -421,12 +421,14 @@ inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int
   fltk3::draw_image(cb, data, X, Y, W, H, D); 
 }
 
+inline char fl_can_do_alpha_blending() {
+  return fltk3::can_do_alpha_blending();
+}
 
 #if 0 // FIXME: 123
 
 FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
 
-FL_EXPORT char fl_can_do_alpha_blending();
 
 #endif
 

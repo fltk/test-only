@@ -99,7 +99,7 @@ void fltk3::XlibGraphicsDriver::copy_offscreen(int x, int y, int w, int h, fltk3
 
 
 // maybe someone feels inclined to implement alpha blending on X11?
-char fltk3::can_do_alpha_blending() {
+char fltk3::XlibGraphicsDriver::can_do_alpha_blending() {
   return 0;
 }
 #elif defined(WIN32)
@@ -118,7 +118,7 @@ static FL_BLENDFUNCTION blendfunc = { 0, 0, 255, 1};
  * curently run on supports alpha blending for bitmap transfers
  * and finds the required function if so.
  */
-char fltk3::can_do_alpha_blending() {
+char fltk3::GDIGraphicsDriver::can_do_alpha_blending() {
   static char been_here = 0;
   static char can_do = 0;
   // do this test only once
@@ -182,8 +182,8 @@ void fltk3::GDIGraphicsDriver::copy_offscreen_with_alpha(int x,int y,int w,int h
   // first try to alpha blend
   // if to printer, always try alpha_blend
   int to_display = fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id; // true iff display output
-  if ( (to_display && fltk3::can_do_alpha_blending()) || fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
-    alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
+  if ( (to_display && can_do_alpha_blending()) || fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
+    if (fl_alpha_blend) alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
   }
   // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1
   if (!alpha_ok) {
@@ -197,7 +197,7 @@ extern void fltk3::restore_clip();
 
 #elif defined(__APPLE_QUARTZ__) || defined(FLTK3_DOXYGEN)
 
-char fltk3::can_do_alpha_blending() {
+char fltk3::QuartzGraphicsDriver::can_do_alpha_blending() {
   return 1;
 }
 
