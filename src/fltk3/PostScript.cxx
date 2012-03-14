@@ -39,8 +39,6 @@
 #endif
 #endif
 
-const char *fltk3::PostScriptGraphicsDriver::class_id = "fltk3::PostScriptGraphicsDriver";
-const char *fltk3::PostScriptFileDevice::class_id = "fltk3::PostScriptFileDevice";
 /** \brief Label of the PostScript file chooser window */
 const char *fltk3::PostScriptFileDevice::file_chooser_title = "Select a .ps file";
 

@@ -48,10 +48,6 @@ class Fl_Printer : public Fl_Paged_Device {
   
 public:
   
-  const char *class_name() {
-    return ((fltk3::Printer*)_p)->class_name();
-  }
-
   Fl_Printer() {
     _p = new fltk3::Printer();
     _p->wrapper(this);

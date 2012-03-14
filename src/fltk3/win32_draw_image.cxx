@@ -178,7 +178,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   int blocking = h;
   {int size = linesize*h;
   // when printing, don't limit buffer size not to get a crash in StretchDIBits
-  if (size > MAXBUFFER && fltk3::SurfaceDevice::surface()->class_name() != fltk3::Printer::class_id) {
+  if (size > MAXBUFFER && fltk3::SurfaceDevice::to_display()) {
     size = MAXBUFFER;
     blocking = MAXBUFFER/linesize;
   }
@@ -256,7 +256,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         }            
       }
     }
-    if(fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
+    if(!fltk3::SurfaceDevice::to_display()) {
       // if print context, device and logical units are not equal, so SetDIBitsToDevice
       // does not do the expected job, whereas StretchDIBits does it.
       StretchDIBits(fl_gc, x, y+j-k, w, k, 0, 0, w, k,

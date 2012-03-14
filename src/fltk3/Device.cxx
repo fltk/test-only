@@ -29,29 +29,19 @@
 #include <fltk3/Device.h>
 #include <fltk3/Image.h>
 
-const char *fltk3::Device::class_id = "fltk3::Device";
-const char *fltk3::SurfaceDevice::class_id = "fltk3::SurfaceDevice";
-const char *fltk3::DisplayDevice::class_id = "fltk3::DisplayDevice";
-const char *fltk3::GraphicsDriver::class_id = "fltk3::GraphicsDriver";
-#if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
-const char *fltk3::QuartzGraphicsDriver::class_id = "fltk3::QuartzGraphicsDriver";
-#endif
-#if defined(WIN32) || defined(FLTK3_DOXYGEN)
-const char *fltk3::GDIGraphicsDriver::class_id = "fltk3::GDIGraphicsDriver";
-#endif
-#if !(defined(__APPLE__) || defined(WIN32))
-namespace fltk3 {
-  const char *XlibGraphicsDriver::class_id = "fltk3::XlibGraphicsDriver";
-}
-#endif
-
-
 /** \brief Use this drawing surface for future graphics requests. */
 void fltk3::SurfaceDevice::set_current(void)
 {
   fltk3::graphics_driver = _driver;
   _surface = this;
 }
+
+bool fltk3::SurfaceDevice::to_display() { 
+  return fltk3::SurfaceDevice::surface() == fltk3::DisplayDevice::display_device();
+}
+
+fltk3::SurfaceDevice::~SurfaceDevice() { }
+
 
 const fltk3::GraphicsDriver::matrix fltk3::GraphicsDriver::m0 = {1, 0, 0, 1, 0, 0};
 
@@ -88,7 +78,6 @@ fltk3::DisplayDevice::DisplayDevice(fltk3::GraphicsDriver *graphics_driver) : fl
   fl_mac_os_version = versionMajor * 10000 + versionMinor * 100 + versionBugFix;
 #endif
 };
-
 
 //
 // End of "$Id$".

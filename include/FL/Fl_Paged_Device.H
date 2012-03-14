@@ -93,10 +93,6 @@ protected:
   
 public:
   
-  const char *class_name() {
-    return ((fltk3::PagedDevice*)_p)->class_name();
-  }
-  
   virtual int start_job(int pagecount, int *frompage = NULL, int *topage = NULL) {
     return ((fltk3::PagedDevice*)_p)->start_job(pagecount, frompage, topage);
   }

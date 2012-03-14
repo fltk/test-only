@@ -65,8 +65,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT PostScriptGraphicsDriver : public fltk3::GraphicsDriver {
   public: 
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     PostScriptGraphicsDriver();
 #ifndef FLTK3_DOXYGEN
     enum SHAPE{NONE=0, LINE, LOOP, POLYGON, POINTS};
@@ -222,8 +220,6 @@ namespace fltk3 {
   protected:
     fltk3::PostScriptGraphicsDriver *driver();
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     PostScriptFileDevice();
     ~PostScriptFileDevice();
     int start_job(int pagecount, enum fltk3::PagedDevice::Page_Format format = fltk3::PagedDevice::A4, 
@@ -244,7 +240,6 @@ namespace fltk3 {
 #ifdef __APPLE__
     void set_current() { fl_gc = gc; fltk3::PagedDevice::set_current(); }
 #endif
-    
     static const char *file_chooser_title; 
   };
   

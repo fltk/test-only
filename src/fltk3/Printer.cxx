@@ -76,14 +76,6 @@ const char *fltk3::Printer::property_save = "Save";
 /** [this text may be customized at run-time] */
 const char *fltk3::Printer::property_cancel = "Cancel";
 
-const char *fltk3::Printer::class_id = "fltk3::Printer";
-#if defined(__APPLE__) || defined(WIN32) || defined(FLTK3_DOXYGEN)
-const char *fltk3::SystemPrinter::class_id = fltk3::Printer::class_id;
-#endif
-#if !( defined(__APPLE__) || defined(WIN32) )
-const char *fltk3::PostScriptPrinter::class_id = fltk3::Printer::class_id;
-#endif
-
 #if defined(__APPLE__) || defined(WIN32)
 void fltk3::SystemPrinter::set_current(void)
 {

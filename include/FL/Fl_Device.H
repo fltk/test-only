@@ -78,10 +78,6 @@ protected:
   Fl_Device() { /* don't call me */ }
 
 public:
-
-  virtual const char *class_name() {
-    return ((fltk3::Device*)_p)->class_name();
-  }  
   
 };
 
@@ -362,8 +358,6 @@ protected:
   virtual void draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) = 0;
     
 public:
-  static const char *class_id;
-  virtual const char *class_name() {return class_id;};
   /** \brief see fl_font(Fl_Font face, Fl_Fontsize size). */
   virtual void font(Fl_Font face, Fl_Fontsize size) {font_ = face; size_ = size;}
   /** \brief see fl_font(void). */
@@ -398,8 +392,6 @@ public:
  */
 class FL_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
 public:
-  static const char *class_id;
-  const char *class_name() {return class_id;};
   void color(Fl_Color c);
   void color(uchar r, uchar g, uchar b);
   void draw(const char* str, int n, int x, int y);
@@ -431,8 +423,6 @@ public:
  */
 class FL_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
 public:
-  static const char *class_id;
-  const char *class_name() {return class_id;};
   void color(Fl_Color c);
   void color(uchar r, uchar g, uchar b);
   void draw(const char* str, int n, int x, int y);
@@ -461,8 +451,6 @@ public:
  */
 class Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
 public:
-  static const char *class_id;
-  const char *class_name() {return class_id;};
   void color(Fl_Color c);
   void color(uchar r, uchar g, uchar b);
   void draw(const char* str, int n, int x, int y);
@@ -496,10 +484,6 @@ protected:
 
 public:
   
-  const char *class_name() {
-    return ((fltk3::SurfaceDevice*)_p)->class_name();
-  }
-  
   virtual void set_current(void) {
     ((fltk3::SurfaceDevice*)_p)->set_current();
   }
@@ -526,8 +510,6 @@ public:
 class FL_EXPORT Fl_Display_Device : public Fl_Surface_Device {
   static Fl_Display_Device *_display; // the platform display device
 public:
-  static const char *class_id;
-  const char *class_name() {return class_id;};
   /** \brief A constructor that sets the graphics driver used by the display */
   Fl_Display_Device(Fl_Graphics_Driver *graphics_driver);
   /** Returns the platform display device. */

@@ -102,7 +102,7 @@ namespace fltk3 {
 }
 #   define fl_create_offscreen(w,h) \
   XCreatePixmap(fl_display, \
-	      (fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id ? \
+	      (fltk3::SurfaceDevice::to_display() ? \
 	      fl_window : fl_xid(fltk3::first_window()) ) , \
 	      w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:

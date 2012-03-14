@@ -32,9 +32,6 @@
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
 
-const char *fltk3::PagedDevice::class_id = "fltk3::PagedDevice";
-
-
 /**
  @brief Draws the widget on the printed page.
  *

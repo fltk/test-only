@@ -147,7 +147,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
     }
     fl_end_offscreen();
   }
-  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
+  if (!fltk3::SurfaceDevice::to_display()) {
     typedef BOOL (WINAPI* fl_transp_func)  (HDC,int,int,int,int,HDC,int,int,int,int,UINT);
     static HMODULE hMod = NULL;
     static fl_transp_func fl_TransparentBlt = NULL;

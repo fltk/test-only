@@ -459,6 +459,11 @@ static int start(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int w, in
 }
 
 #ifdef __APPLE__
+static void imgProviderReleaseData (void *info, const void *data, size_t size)
+{
+  delete[] (unsigned char *)data;
+}
+
 void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   // Don't draw an empty image...
@@ -471,12 +476,24 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int
   }
   if (!img->id_) {
     CGColorSpaceRef lut = 0;
+    CGDataProviderReleaseDataCallback release_cb = NULL;
+    const uchar* img_bytes = img->array;
+    int ld = img->ld();
+    if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) {
+      // when printing, duplicate the image data so it can be deleted later, at page end
+      release_cb = imgProviderReleaseData;
+      fltk3::RGBImage* img2 = (fltk3::RGBImage*)img->copy();
+      img2->alloc_array = 0;
+      img_bytes = img2->array;
+      ld = 0;
+      delete img2;
+    }
     if (img->d()<=2)
       lut = CGColorSpaceCreateDeviceGray();
     else
       lut = CGColorSpaceCreateDeviceRGB();
-    CGDataProviderRef src = CGDataProviderCreateWithData( 0L, img->array, img->w()*img->h()*img->d(), 0L);
-    img->id_ = CGImageCreate( img->w(), img->h(), 8, img->d()*8, img->ld()?img->ld():img->w()*img->d(),
+    CGDataProviderRef src = CGDataProviderCreateWithData( NULL, img_bytes, img->w()*img->h()*img->d(), release_cb);
+    img->id_ = CGImageCreate( img->w(), img->h(), 8, img->d()*8, ld?ld:img->w()*img->d(),
 			lut, (img->d()&1)?kCGImageAlphaNone:kCGImageAlphaLast,
 			src, 0L, false, kCGRenderingIntentDefault);
     CGColorSpaceRelease(lut);

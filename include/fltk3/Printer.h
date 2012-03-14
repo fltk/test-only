@@ -81,8 +81,6 @@ namespace fltk3 {
     /** \brief The constructor */
     SystemPrinter(void);
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);
     int start_page (void);
     int printable_rect(int *w, int *h);
@@ -115,8 +113,6 @@ namespace fltk3 {
     /** The constructor */
     PostScriptPrinter(void) {};
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     int start_job(int pages, int *firstpage = NULL, int *lastpage = NULL);
   };
   
@@ -157,8 +153,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Printer : public fltk3::PagedDevice {
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     /** \brief The constructor */
     Printer(void);
     int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);

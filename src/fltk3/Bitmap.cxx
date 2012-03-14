@@ -304,7 +304,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, i
   HDC tempdc;
   int save;
   BOOL use_print_algo = false;
-  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
+  if (!fltk3::SurfaceDevice::to_display()) {
     static HMODULE hMod = NULL;
     if (!hMod) {
       hMod = LoadLibrary("MSIMG32.DLL");
@@ -313,8 +313,6 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, i
     if (fl_TransparentBlt) use_print_algo = true;
   }
   if (use_print_algo) { // algorithm for bitmap output to Fl_GDI_Printer
-    fltk3::Offscreen tmp_id = fl_create_offscreen(W, H);
-    fl_begin_offscreen(tmp_id);
     fltk3::Color save_c = fltk3::color(); // save bitmap's desired color
     uchar r, g, b;
     fltk3::get_color(save_c, r, g, b);
@@ -322,6 +320,8 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, i
     g = 255-g;
     b = 255-b;
     fltk3::Color background = fltk3::rgb_color(r, g, b); // a color very different from the bitmap's
+    fltk3::Offscreen tmp_id = fl_create_offscreen(W, H);
+    fl_begin_offscreen(tmp_id);
     fltk3::color(background);
     fltk3::rectf(0,0,W,H); // use this color as offscreen background
     fltk3::color(save_c); // back to bitmap's color

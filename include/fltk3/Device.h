@@ -1,7 +1,7 @@
 //
 // "$Id: Device.h 8529 2011-03-23 12:49:30Z AlbrechtS $"
 //
-// Definition of classes fltk3::Device, fltk3::GraphicsDriver, fltk3::SurfaceDevice, fltk3::DisplayDevice
+// Definition of classes fltk3::GraphicsDriver, fltk3::SurfaceDevice, fltk3::DisplayDevice
 // for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2010-2011 by Bill Spitzak and others.
@@ -26,7 +26,7 @@
 //     http://www.fltk.org/str.php
 //
 /** \file Device.h 
- \brief declaration of classes fltk3::Device, fltk3::GraphicsDriver, fltk3::SurfaceDevice, 
+ \brief declaration of classes fltk3::GraphicsDriver, fltk3::SurfaceDevice, 
  fltk3::DisplayDevice, fltk3::DevicePlugin.
  */
 
@@ -76,33 +76,7 @@ namespace fltk3 {
    to this buffer.
    */
   typedef void (*DrawImageCb)(void* data,int x,int y,int w,uchar* buf);
-  
-  /**
-   \brief All graphical output devices and all graphics systems.
-   */
-  class FLTK3_EXPORT Device : public Object {
-  public:
-    /** A string that identifies each subclass of fltk3::Device.
-     Function class_name() applied to a device of this class returns this string.
-     */
-    static const char *class_id;
-    /** 
-     Returns the name of the class of this object. 
-     The class of an instance of an fltk3::Device subclass can be checked with code such as:
-     \code
-     if ( instance->class_name() == fltk3::Printer::class_id ) { ... }
-     \endcode
-     */
-    virtual const char *class_name() {return class_id;};
-    /** 
-     Virtual destructor.
-     
-     The destructor of fltk3::Device must be virtual to make the destructors of
-     derived classes being called correctly on destruction.
-     */
-    virtual ~Device() {};
-  };
-  
+    
   const int REGION_STACK_SIZE = 10;
   const int MATRIX_STACK_SIZE = 32;
   
@@ -114,7 +88,7 @@ namespace fltk3 {
    <br> The public API for drawing operations is functionally presented in \ref drawing and as function lists
    in the \ref fl_drawings and \ref fl_attributes modules. 
    */
-  class FLTK3_EXPORT GraphicsDriver : public fltk3::Device {
+  class FLTK3_EXPORT GraphicsDriver : public Object {
     friend void ::gl_start();
   public:
     /** A 2D coordinate transformation matrix
@@ -310,8 +284,6 @@ namespace fltk3 {
      */
     virtual void draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {}
     
-    static const char *class_id;
-    virtual const char *class_name() {return class_id;};
     /** \brief see fltk3::font(fltk3::Font face, fltk3::Fontsize size). */
     virtual void font(fltk3::Font face, fltk3::Fontsize size) {font_ = face; size_ = size;}
     /** \brief see fltk3::font(void). */
@@ -350,8 +322,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT QuartzGraphicsDriver : public fltk3::GraphicsDriver {
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     void color(fltk3::Color c);
     void color(uchar r, uchar g, uchar b);
     void draw(const char* str, int n, int x, int y);
@@ -419,8 +389,6 @@ namespace fltk3 {
     int numcount;
     int counts[20];
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     void color(fltk3::Color c);
     void color(uchar r, uchar g, uchar b);
     void draw(const char* str, int n, int x, int y);
@@ -484,8 +452,6 @@ namespace fltk3 {
    */
   class XlibGraphicsDriver : public fltk3::GraphicsDriver {
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     void color(fltk3::Color c);
     void color(uchar r, uchar g, uchar b);
     void draw(const char* str, int n, int x, int y);
@@ -539,7 +505,7 @@ namespace fltk3 {
   /**
    \brief A surface that's susceptible to receive graphical output.
    */
-  class FLTK3_EXPORT SurfaceDevice : public fltk3::Device {
+  class FLTK3_EXPORT SurfaceDevice : public Object {
     /** \brief The graphics driver in use by this surface. */
     fltk3::GraphicsDriver *_driver;
     static SurfaceDevice *_surface; // the surface that currently receives graphics output
@@ -547,17 +513,17 @@ namespace fltk3 {
     /** \brief Constructor that sets the graphics driver to use for the created surface. */
     SurfaceDevice(fltk3::GraphicsDriver *graphics_driver) {_driver = graphics_driver; };
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     virtual void set_current(void);
     /** \brief Sets the graphics driver of this drawing surface. */
     inline void driver(fltk3::GraphicsDriver *graphics_driver) {_driver = graphics_driver;};
     /** \brief Returns the graphics driver of this drawing surface. */
     inline fltk3::GraphicsDriver *driver() {return _driver; };
     /** \brief the surface that currently receives graphics output */
-    static inline fltk3::SurfaceDevice *surface() {return _surface; }; 
+    static inline fltk3::SurfaceDevice *surface() {return _surface; };
+    /** returns true if the current output surface is the system's display, and false otherwise */
+    static bool to_display();
     /** \brief The destructor. */
-    virtual ~SurfaceDevice() {}
+    virtual ~SurfaceDevice();
   };
   
   /**
@@ -566,8 +532,6 @@ namespace fltk3 {
   class FLTK3_EXPORT DisplayDevice : public fltk3::SurfaceDevice {
     static DisplayDevice *_display; // the platform display device
   public:
-    static const char *class_id;
-    const char *class_name() {return class_id;};
     /** \brief A constructor that sets the graphics driver used by the display */
     DisplayDevice(fltk3::GraphicsDriver *graphics_driver);
     /** Returns the platform display device. */

@@ -3130,23 +3130,14 @@ void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_of
   fltk3::check();
   win->make_current();
   this->set_current(); // back to the fltk3::PagedDevice
-  if (driver()->class_name() == fltk3::QuartzGraphicsDriver::class_id) {
-    // capture as transparent image the window title bar from screen
-    CGImageRef img = Fl_X::CGImage_from_window_rect(win, 0, -bt, win->w(), bt);
-    CGRect rect = { { x_offset, y_offset }, { win->w(), bt } }; // print the title bar
-    Fl_X::q_begin_image(rect, 0, 0, win->w(), bt);
-    CGContextDrawImage(fl_gc, rect, img);
-    Fl_X::q_end_image();
-    CGImageRelease(img);
-  }
-  else {
-    // capture the window title bar from screen
-    uchar *top_image = fltk3::read_image(NULL, 0, -bt, win->w(), bt);
-    if (top_image) { // print the title bar
-      fltk3::draw_image(top_image, x_offset, y_offset, win->w(), bt, 3);
-      delete[] top_image;
-    }
-  }
+  int bpp;
+  // capture the window title bar as an RGBA image
+  unsigned char *top_image = Fl_X::bitmap_from_window_rect(win, 0, -bt, win->w(), bt, &bpp);
+  fltk3::RGBImage* rgba = new fltk3::RGBImage(top_image, win->w(), bt, bpp);
+  // and print it
+  rgba->draw(x_offset, y_offset);
+  delete rgba;
+  delete[] top_image;
   this->print_widget(win, x_offset, y_offset + bt); // print the window inner part
 }
 

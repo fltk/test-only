@@ -3378,7 +3378,7 @@ void fltk3::TextDisplay::draw(void) {
   // draw the non-text, non-scrollbar areas.
   if (damage() & fltk3::DAMAGE_ALL) {
     //    printf("drawing all (box = %d)\n", box());
-    if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
+    if (!fltk3::SurfaceDevice::to_display()) {
       // if to printer, draw the background
       fltk3::rectf(text_area.x, text_area.y, text_area.w, text_area.h, color() );
     }
