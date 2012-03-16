@@ -341,7 +341,7 @@ int fltk3::draw_pixmap(const char*const* cdata, int x, int y, fltk3::Color bg) {
 #endif
   
 #ifdef  __APPLE_QUARTZ__
-  if ( fltk3::SurfaceDevice::to_display() ) {
+  if ( fltk3::SurfaceDevice::uses_display_driver() ) {
     U32 *array = new U32[d.w * d.h], *q = array;
     for (int Y = 0; Y < d.h; Y++) {
       const uchar* p = data[Y];

@@ -93,6 +93,7 @@ namespace fltk3 {
     void untranslate(void);
     int end_page (void);
     void end_job (void);
+    int has_display_driver();
     /** \brief The destructor */
     ~SystemPrinter(void);
   }; // class fltk3::SystemPrinter

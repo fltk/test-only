@@ -92,6 +92,11 @@ void fltk3::SystemPrinter::origin(int *x, int *y)
   PagedDevice::origin(x, y);
 }
 
+int fltk3::SystemPrinter::has_display_driver()
+{
+  return 1;
+}
+
 #endif
 
 fltk3::Printer::Printer(void) {

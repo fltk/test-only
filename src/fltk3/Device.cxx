@@ -41,9 +41,17 @@ void fltk3::SurfaceDevice::set_current(void)
   _surface = this;
 }
 
-bool fltk3::SurfaceDevice::to_display() { 
+/** returns true if the current output surface is the platform display, and false otherwise */
+int fltk3::SurfaceDevice::to_display() { 
   return fltk3::SurfaceDevice::surface() == fltk3::DisplayDevice::display_device();
 }
+
+/** returns true if this surface uses the same graphics driver 
+ as the platform display, and false otherwise */
+int fltk3::SurfaceDevice::has_display_driver() { 
+  return 0;
+}
+
 
 fltk3::SurfaceDevice::~SurfaceDevice() { }
 
@@ -86,6 +94,10 @@ fltk3::DisplayDevice::DisplayDevice(fltk3::GraphicsDriver *graphics_driver) : fl
   _display = this;
 };
 
+int fltk3::DisplayDevice::has_display_driver()
+{
+  return 1;
+}
 //
 // End of "$Id$".
 //

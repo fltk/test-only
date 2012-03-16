@@ -520,8 +520,11 @@ namespace fltk3 {
     inline fltk3::GraphicsDriver *driver() {return _driver; };
     /** \brief the surface that currently receives graphics output */
     static inline fltk3::SurfaceDevice *surface() {return _surface; };
-    /** returns true if the current output surface is the system's display, and false otherwise */
-    static bool to_display();
+    static int to_display();
+    virtual int has_display_driver();
+    /** returns true if the current output surface uses the same graphics driver 
+    as the platform display, and false otherwise */
+    static inline int uses_display_driver() { return fltk3::SurfaceDevice::surface()->has_display_driver(); };
     /** \brief The destructor. */
     virtual ~SurfaceDevice();
   };
@@ -536,6 +539,7 @@ namespace fltk3 {
     DisplayDevice(fltk3::GraphicsDriver *graphics_driver);
     /** Returns the platform display device. */
     static inline DisplayDevice *display_device() {return _display;};
+    int has_display_driver();
   };
   
   /**
