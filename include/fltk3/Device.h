@@ -64,7 +64,7 @@ class Fl_Font_Descriptor;
 namespace fltk3 {
   
   class GraphicsDriver;
-  /** \brief Points to the driver that currently receives all graphics requests */
+  /** Pointer to the fltk3::GraphicsDriver object that currently handles all graphics operation */
   FLTK3_EXPORT extern GraphicsDriver *graphics_driver;
   
   /**

@@ -89,9 +89,6 @@ static void cocoaMouseHandler(NSEvent *theEvent);
 
 static fltk3::QuartzGraphicsDriver fl_quartz_driver;
 static fltk3::DisplayDevice fl_quartz_display(&fl_quartz_driver);
-FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_quartz_driver; // the current target device of graphics operations
-fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_quartz_display; // the current target surface of graphics operations
-fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_quartz_display; // the platform display
 
 // public variables
 CGContextRef fl_gc = 0;

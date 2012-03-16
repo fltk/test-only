@@ -94,9 +94,6 @@
 
 static fltk3::GDIGraphicsDriver fl_gdi_driver;
 static fltk3::DisplayDevice fl_gdi_display(&fl_gdi_driver);
-FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_gdi_driver; // the current target driver of graphics operations
-fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_gdi_display; // the current target surface of graphics operations
-fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_gdi_display; // the platform display
 
 // dynamic wsock dll handling api:
 #if defined(__CYGWIN__) && !defined(SOCKET)

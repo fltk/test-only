@@ -64,9 +64,6 @@ static int randrEventBase;                  // base of RandR-defined events
 
 static fltk3::XlibGraphicsDriver fl_xlib_driver;
 static fltk3::DisplayDevice fl_xlib_display(&fl_xlib_driver);
-FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_xlib_driver; // the current target device of graphics operations
-fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_xlib_display; // the current target surface of graphics operations
-fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_xlib_display;// the platform display
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:

@@ -29,6 +29,11 @@
 #include <fltk3/Device.h>
 #include <fltk3/Image.h>
 
+// Pointer to the fltk3::GraphicsDriver object that currently handles all graphics operations
+FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver; 
+fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface; // the current target surface of graphics operations
+fltk3::DisplayDevice *fltk3::DisplayDevice::_display; // the platform display
+
 /** \brief Use this drawing surface for future graphics requests. */
 void fltk3::SurfaceDevice::set_current(void)
 {
@@ -77,6 +82,8 @@ fltk3::DisplayDevice::DisplayDevice(fltk3::GraphicsDriver *graphics_driver) : fl
   Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
   fl_mac_os_version = versionMajor * 10000 + versionMinor * 100 + versionBugFix;
 #endif
+  this->set_current();
+  _display = this;
 };
 
 //
