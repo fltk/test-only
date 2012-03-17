@@ -46,8 +46,7 @@ int fltk3::SurfaceDevice::to_display() {
   return fltk3::SurfaceDevice::surface() == fltk3::DisplayDevice::display_device();
 }
 
-/** returns true if this surface uses the same graphics driver 
- as the platform display, and false otherwise */
+// returns whether this surface uses the same graphics driver as the platform display
 int fltk3::SurfaceDevice::has_display_driver() { 
   return 0;
 }

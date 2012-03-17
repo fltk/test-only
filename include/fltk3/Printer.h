@@ -77,6 +77,7 @@ namespace fltk3 {
     int top_margin;
     void absolute_printable_rect(int *x, int *y, int *w, int *h);
 #endif
+    int has_display_driver();
   protected:
     /** \brief The constructor */
     SystemPrinter(void);
@@ -93,7 +94,6 @@ namespace fltk3 {
     void untranslate(void);
     int end_page (void);
     void end_job (void);
-    int has_display_driver();
     /** \brief The destructor */
     ~SystemPrinter(void);
   }; // class fltk3::SystemPrinter

@@ -509,6 +509,7 @@ namespace fltk3 {
     /** \brief The graphics driver in use by this surface. */
     fltk3::GraphicsDriver *_driver;
     static SurfaceDevice *_surface; // the surface that currently receives graphics output
+    virtual int has_display_driver();
   protected:
     /** \brief Constructor that sets the graphics driver to use for the created surface. */
     SurfaceDevice(fltk3::GraphicsDriver *graphics_driver) {_driver = graphics_driver; };
@@ -521,7 +522,6 @@ namespace fltk3 {
     /** \brief the surface that currently receives graphics output */
     static inline fltk3::SurfaceDevice *surface() {return _surface; };
     static int to_display();
-    virtual int has_display_driver();
     /** returns true if the current output surface uses the same graphics driver 
     as the platform display, and false otherwise */
     static inline int uses_display_driver() { return fltk3::SurfaceDevice::surface()->has_display_driver(); };
@@ -534,12 +534,12 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT DisplayDevice : public fltk3::SurfaceDevice {
     static DisplayDevice *_display; // the platform display device
+    int has_display_driver();
   public:
     /** \brief A constructor that sets the graphics driver used by the display */
     DisplayDevice(fltk3::GraphicsDriver *graphics_driver);
     /** Returns the platform display device. */
     static inline DisplayDevice *display_device() {return _display;};
-    int has_display_driver();
   };
   
   /**
