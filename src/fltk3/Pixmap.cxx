@@ -162,6 +162,10 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
       fl_mask_bitmap = &bitmap;
       // draw pixmap to offscreen
       fltk3::draw_pixmap(pxm->data(), 0, 0); 
+      fl_mask_bitmap = 0;
+      if (bitmap) {
+	delete[] bitmap;
+      }
       fl_end_offscreen();
       HDC new_gc = CreateCompatibleDC(fl_gc);
       int save = SaveDC(new_gc);
