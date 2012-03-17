@@ -156,25 +156,13 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
       if(hMod) fl_TransparentBlt = (fl_transp_func)GetProcAddress(hMod, "TransparentBlt");
     }
     if (fl_TransparentBlt) {
-      fltk3::Offscreen tmp_id = fl_create_offscreen(pxm->w(), pxm->h());
-      fl_begin_offscreen(tmp_id);
-      uchar *bitmap = 0;
-      fl_mask_bitmap = &bitmap;
-      // draw pixmap to offscreen
-      fltk3::draw_pixmap(pxm->data(), 0, 0); 
-      fl_mask_bitmap = 0;
-      if (bitmap) {
-	delete[] bitmap;
-      }
-      fl_end_offscreen();
       HDC new_gc = CreateCompatibleDC(fl_gc);
       int save = SaveDC(new_gc);
-      SelectObject(new_gc, (void*)tmp_id);
+      SelectObject(new_gc, (void*)pxm->id_);
       // print all of offscreen but its parts in background color
       fl_TransparentBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, pxm->w(), pxm->h(), win_pixmap_bg_color );
       RestoreDC(new_gc,save);
       DeleteDC(new_gc);
-      fl_delete_offscreen(tmp_id);
     }
     else {
       copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
