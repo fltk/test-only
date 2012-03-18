@@ -104,21 +104,42 @@ static int start(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int 
   return 0;
 }
 
+int fltk3::Pixmap::prepare(int XP, int YP, int WP, int HP, int cx, int cy,
+			   int &X, int &Y, int &W, int &H) {
+  if (w() < 0) measure();
+  int code = start(this, XP, YP, WP, HP, w(), h(), cx, cy, X, Y, W, H);
+  if (code) {
+    if (code == 2) draw_empty(XP, YP);
+    return 1;
+  }
+  if (!id_) {
+#ifdef __APPLE__
+    id_ = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(w(), h());
+#else
+    id_ = fl_create_offscreen(w(), h());
+#endif
+    fl_begin_offscreen((fltk3::Offscreen)id_);
+#ifndef __APPLE__
+    uchar *bitmap = 0;
+    fl_mask_bitmap = &bitmap;
+#endif
+    fltk3::draw_pixmap(data(), 0, 0, fltk3::BLACK);
+#ifndef __APPLE__
+    fl_mask_bitmap = 0;
+    if (bitmap) {
+      mask_ = fl_create_bitmask(w(), h(), bitmap);
+      delete[] bitmap;
+    }
+#endif
+    fl_end_offscreen();
+  }
+  return 0;
+}  
+
 #ifdef __APPLE__
 void fltk3::QuartzGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
-  if (pxm->w() < 0) pxm->measure();
-  int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
-  if (code) {
-    if (code == 2) pxm->draw_empty(XP, YP);
-    return;
-    }
-  if (!pxm->id_) {
-    pxm->id_ = create_offscreen_with_alpha(pxm->w(), pxm->h());
-    fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
-    fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
-    fl_end_offscreen();
-    }
+  if (pxm->prepare(XP, YP, WP, HP, cx, cy, X, Y, W, H)) return;
   copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
 }
 
@@ -128,47 +149,8 @@ extern UINT win_pixmap_bg_color; // computed by fltk3::draw_pixmap()
 
 void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
-  if (pxm->w() < 0) pxm->measure();
-  int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
-  if (code) {
-    if (code == 2) pxm->draw_empty(XP, YP);
-    return;
-  }
-  if (!pxm->id_) {
-    pxm->id_ = fl_create_offscreen(pxm->w(), pxm->h());
-    fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
-    uchar *bitmap = 0;
-    fl_mask_bitmap = &bitmap;
-    fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
-    fl_mask_bitmap = 0;
-    if (bitmap) {
-      pxm->mask_ = fl_create_bitmask(pxm->w(), pxm->h(), bitmap);
-      delete[] bitmap;
-    }
-    fl_end_offscreen();
-  }
-  if (!fltk3::SurfaceDevice::to_display()) {
-    typedef BOOL (WINAPI* fl_transp_func)  (HDC,int,int,int,int,HDC,int,int,int,int,UINT);
-    static HMODULE hMod = NULL;
-    static fl_transp_func fl_TransparentBlt = NULL;
-    if (!hMod) {
-      hMod = LoadLibrary("MSIMG32.DLL");
-      if(hMod) fl_TransparentBlt = (fl_transp_func)GetProcAddress(hMod, "TransparentBlt");
-    }
-    if (fl_TransparentBlt) {
-      HDC new_gc = CreateCompatibleDC(fl_gc);
-      int save = SaveDC(new_gc);
-      SelectObject(new_gc, (void*)pxm->id_);
-      // print all of offscreen but its parts in background color
-      fl_TransparentBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, pxm->w(), pxm->h(), win_pixmap_bg_color );
-      RestoreDC(new_gc,save);
-      DeleteDC(new_gc);
-    }
-    else {
-      copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
-    }
-  }
-  else if (pxm->mask_) {
+  if (pxm->prepare(XP, YP, WP, HP, cx, cy, X, Y, W, H)) return;
+  if (pxm->mask_) {
     HDC new_gc = CreateCompatibleDC(fl_gc);
     int save = SaveDC(new_gc);
     SelectObject(new_gc, (void*)pxm->mask_);
@@ -182,28 +164,34 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
   }
 }
 
+void fltk3::GDIPrinterGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+  int X, Y, W, H;
+  if (pxm->prepare(XP, YP, WP, HP, cx, cy, X, Y, W, H)) return;
+  typedef BOOL (WINAPI* fl_transp_func)  (HDC,int,int,int,int,HDC,int,int,int,int,UINT);
+  static HMODULE hMod = NULL;
+  static fl_transp_func fl_TransparentBlt = NULL;
+  if (!hMod) {
+    hMod = LoadLibrary("MSIMG32.DLL");
+    if(hMod) fl_TransparentBlt = (fl_transp_func)GetProcAddress(hMod, "TransparentBlt");
+  }
+  if (fl_TransparentBlt) {
+    HDC new_gc = CreateCompatibleDC(fl_gc);
+    int save = SaveDC(new_gc);
+    SelectObject(new_gc, (void*)pxm->id_);
+    // print all of offscreen but its parts in background color
+    fl_TransparentBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, pxm->w(), pxm->h(), win_pixmap_bg_color );
+    RestoreDC(new_gc,save);
+    DeleteDC(new_gc);
+  }
+  else {
+    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+  }
+}
+
 #else // Xlib
 void fltk3::XlibGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
-  if (pxm->w() < 0) pxm->measure();
-  int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
-  if (code) {
-    if (code == 2) pxm->draw_empty(XP, YP);
-    return;
-  }
-  if (!pxm->id_) {
-    pxm->id_ = fl_create_offscreen(pxm->w(), pxm->h());
-    fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
-    uchar *bitmap = 0;
-    fl_mask_bitmap = &bitmap;
-    fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
-    fl_mask_bitmap = 0;
-    if (bitmap) {
-      pxm->mask_ = fl_create_bitmask(pxm->w(), pxm->h(), bitmap);
-      delete[] bitmap;
-    }
-    fl_end_offscreen();
-  }
+  if (pxm->prepare(XP, YP, WP, HP, cx, cy, X, Y, W, H)) return;
   if (pxm->mask_) {
     // I can't figure out how to combine a mask with existing region,
     // so cut the image down to a clipped rectangle:

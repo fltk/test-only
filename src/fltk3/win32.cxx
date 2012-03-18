@@ -1957,7 +1957,7 @@ void fl_cleanup_dc_list(void) {          // clean up the list
 }
 
 fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
-  if (fltk3::SurfaceDevice::to_display()) return CreateRectRgn(x,y,x+w,y+h);
+  if (fltk3::SurfaceDevice::surface() == fltk3::DisplayDevice::display_device()) return CreateRectRgn(x,y,x+w,y+h);
   // because rotation may apply, the rectangle becomes a polygon in device coords
   POINT pt[4] = { {x, y}, {x + w, y}, {x + w, y + h}, {x, y + h} };
   LPtoDP(fl_gc, pt, 4);

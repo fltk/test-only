@@ -64,7 +64,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 
   const void *array = buf;
   uchar *tmpBuf = 0;
-  if (cb || !fltk3::SurfaceDevice::to_display()) {
+  if (cb || fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) {
     tmpBuf = new uchar[ H*W*delta ];
     if (cb) {
       for (int i=0; i<H; i++) {

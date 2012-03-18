@@ -36,7 +36,7 @@ extern HWND fl_window;
 
 fltk3::SystemPrinter::SystemPrinter(void) : fltk3::PagedDevice() {
   hPr = NULL;
-  driver(new GDIGraphicsDriver);
+  driver(new GDIPrinterGraphicsDriver);
 }
 
 fltk3::SystemPrinter::~SystemPrinter(void) {

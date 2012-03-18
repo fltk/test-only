@@ -288,7 +288,10 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP
 }
 
 #elif defined(WIN32)
-void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+// implements fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap*,...) with an extra parameter
+// to distinguish betwen display and printer
+void fltk3::GDIGraphicsDriver::draw_bitmap(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy,
+					   int to_display) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);
@@ -304,7 +307,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, i
   HDC tempdc;
   int save;
   BOOL use_print_algo = false;
-  if (!fltk3::SurfaceDevice::to_display()) {
+  if (!to_display) {
     static HMODULE hMod = NULL;
     if (!hMod) {
       hMod = LoadLibrary("MSIMG32.DLL");
@@ -312,7 +315,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, i
     }
     if (fl_TransparentBlt) use_print_algo = true;
   }
-  if (use_print_algo) { // algorithm for bitmap output to Fl_GDI_Printer
+  if (use_print_algo) { // algorithm for bitmap output to printer
     fltk3::Color save_c = fltk3::color(); // save bitmap's desired color
     uchar r, g, b;
     fltk3::get_color(save_c, r, g, b);

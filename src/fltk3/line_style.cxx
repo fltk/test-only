@@ -69,7 +69,7 @@ void fltk3::QuartzGraphicsDriver::line_style(int style, int width, char* dashes)
   fl_quartz_line_width_ = (float)width; 
   fl_quartz_line_cap_ = Cap[(style>>8)&3];
   // when printing kCGLineCapSquare seems better for solid lines
-  if ( (!fltk3::SurfaceDevice::to_display()) && style == fltk3::SOLID && dashes == NULL ) {
+  if ( fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() && style == fltk3::SOLID && dashes == NULL ) {
     fl_quartz_line_cap_ = kCGLineCapSquare;
     }
   fl_quartz_line_join_ = Join[(style>>12)&3];

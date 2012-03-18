@@ -166,10 +166,10 @@ static int clip_x (int x) {
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
-  if ( fltk3::SurfaceDevice::to_display() && fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if ( fltk3::SurfaceDevice::surface() == fltk3::DisplayDevice::display_device() && fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGRect rect = CGRectMake(x, y, w-1, h-1);
   CGContextStrokeRect(fl_gc, rect);
-  if ( fltk3::SurfaceDevice::to_display() && fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if ( fltk3::SurfaceDevice::surface() == fltk3::DisplayDevice::display_device() && fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::rect(int x, int y, int w, int h) {
@@ -214,11 +214,11 @@ void fltk3::XlibGraphicsDriver::rectf(int x, int y, int w, int h) {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::xyline(int x, int y, int x1) {
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, x, y);
   CGContextAddLineToPoint(fl_gc, x1, y);
   CGContextStrokePath(fl_gc);
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::xyline(int x, int y, int x1) {
@@ -233,12 +233,12 @@ void fltk3::XlibGraphicsDriver::xyline(int x, int y, int x1) {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::xyline(int x, int y, int x1, int y2) {
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, x, y);
   CGContextAddLineToPoint(fl_gc, x1, y);
   CGContextAddLineToPoint(fl_gc, x1, y2);
   CGContextStrokePath(fl_gc);
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::xyline(int x, int y, int x1, int y2) {
@@ -260,13 +260,13 @@ void fltk3::XlibGraphicsDriver::xyline(int x, int y, int x1, int y2) {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::xyline(int x, int y, int x1, int y2, int x3) {
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, x, y);
   CGContextAddLineToPoint(fl_gc, x1, y);
   CGContextAddLineToPoint(fl_gc, x1, y2);
   CGContextAddLineToPoint(fl_gc, x3, y2);
   CGContextStrokePath(fl_gc);
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::xyline(int x, int y, int x1, int y2, int x3) {
@@ -290,11 +290,11 @@ void fltk3::XlibGraphicsDriver::xyline(int x, int y, int x1, int y2, int x3) {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::yxline(int x, int y, int y1) {
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, x, y);
   CGContextAddLineToPoint(fl_gc, x, y1);
   CGContextStrokePath(fl_gc);
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::yxline(int x, int y, int y1) {
@@ -311,12 +311,12 @@ void fltk3::XlibGraphicsDriver::yxline(int x, int y, int y1) {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::yxline(int x, int y, int y1, int x2) {
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, x, y);
   CGContextAddLineToPoint(fl_gc, x, y1);
   CGContextAddLineToPoint(fl_gc, x2, y1);
   CGContextStrokePath(fl_gc);
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::yxline(int x, int y, int y1, int x2) {
@@ -338,13 +338,13 @@ void fltk3::XlibGraphicsDriver::yxline(int x, int y, int y1, int x2) {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::yxline(int x, int y, int y1, int x2, int y3) {
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, true);
   CGContextMoveToPoint(fl_gc, x, y);
   CGContextAddLineToPoint(fl_gc, x, y1);
   CGContextAddLineToPoint(fl_gc, x2, y1);
   CGContextAddLineToPoint(fl_gc, x2, y3);
   CGContextStrokePath(fl_gc);
-  if (!fltk3::SurfaceDevice::to_display() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() || fl_quartz_line_width_ > 1.5f) CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::yxline(int x, int y, int y1, int x2, int y3) {
@@ -710,7 +710,7 @@ int fltk3::GDIGraphicsDriver::not_clipped(int x, int y, int w, int h) {
   fltk3::Region r = clip_region();
   if (!r) return 1;
   RECT rect;
-  if (!fltk3::SurfaceDevice::to_display()) { // in case of print context, convert coords from logical to device
+  if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) { // in case of print context, convert coords from logical to device
     POINT pt[2] = { {x, y}, {x + w, y + h} };
     LPtoDP(fl_gc, pt, 2);
     rect.left = pt[0].x; rect.top = pt[0].y; rect.right = pt[1].x; rect.bottom = pt[1].y;
@@ -774,7 +774,7 @@ int fltk3::GDIGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& 
   } else {	// partial intersection
     RECT rect;
     GetRgnBox(temp, &rect);
-    if (!fltk3::SurfaceDevice::to_display()) { // if print context, convert coords from device to logical
+    if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) { // if print context, convert coords from device to logical
       POINT pt[2] = { {rect.left, rect.top}, {rect.right, rect.bottom} };
       DPtoLP(fl_gc, pt, 2);
       X = pt[0].x; Y = pt[0].y; W = pt[1].x - X; H = pt[1].y - Y;

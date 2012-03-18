@@ -77,7 +77,6 @@ namespace fltk3 {
     int top_margin;
     void absolute_printable_rect(int *x, int *y, int *w, int *h);
 #endif
-    int has_display_driver();
   protected:
     /** \brief The constructor */
     SystemPrinter(void);

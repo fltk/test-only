@@ -386,8 +386,10 @@ namespace fltk3 {
    This class is implemented only on the MSWindows platform.
    */
   class FLTK3_EXPORT GDIGraphicsDriver : public fltk3::GraphicsDriver {
+    friend class GDIPrinterGraphicsDriver;
     int numcount;
     int counts[20];
+    void draw_bitmap(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy, int to_display);
   public:
     void color(fltk3::Color c);
     void color(uchar r, uchar g, uchar b);
@@ -396,7 +398,9 @@ namespace fltk3 {
     void rtl_draw(const char* str, int n, int x, int y);
     void font(fltk3::Font face, fltk3::Fontsize size);
     void draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-    void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+    void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+      draw_bitmap(pxm, XP, YP, WP, HP, cx, cy, 1);
+      }
     void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
     void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
     void draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=3);
@@ -441,6 +445,14 @@ namespace fltk3 {
 #if ! defined(FLTK3_DOXYGEN)
     void copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #endif
+  };
+  
+  class FLTK3_EXPORT GDIPrinterGraphicsDriver : public fltk3::GDIGraphicsDriver {
+  private:
+    void draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+    void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+      draw_bitmap(pxm, XP, YP, WP, HP, cx, cy, 0);
+    }
   };
 #endif
   
@@ -509,7 +521,6 @@ namespace fltk3 {
     /** \brief The graphics driver in use by this surface. */
     fltk3::GraphicsDriver *_driver;
     static SurfaceDevice *_surface; // the surface that currently receives graphics output
-    virtual int has_display_driver();
   protected:
     /** \brief Constructor that sets the graphics driver to use for the created surface. */
     SurfaceDevice(fltk3::GraphicsDriver *graphics_driver) {_driver = graphics_driver; };
@@ -521,10 +532,6 @@ namespace fltk3 {
     inline fltk3::GraphicsDriver *driver() {return _driver; };
     /** \brief the surface that currently receives graphics output */
     static inline fltk3::SurfaceDevice *surface() {return _surface; };
-    static int to_display();
-    /** returns true if the current output surface uses the same graphics driver 
-    as the platform display, and false otherwise */
-    static inline int uses_display_driver() { return fltk3::SurfaceDevice::surface()->has_display_driver(); };
     /** \brief The destructor. */
     virtual ~SurfaceDevice();
   };
@@ -534,7 +541,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT DisplayDevice : public fltk3::SurfaceDevice {
     static DisplayDevice *_display; // the platform display device
-    int has_display_driver();
   public:
     /** \brief A constructor that sets the graphics driver used by the display */
     DisplayDevice(fltk3::GraphicsDriver *graphics_driver);
