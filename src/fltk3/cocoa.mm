@@ -563,6 +563,10 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
 {
   containsGLsubwindow = contains;
 }
+- (BOOL)canBecomeKeyWindow
+{
+  return YES;
+}
 @end
 
 @interface FLApplication : NSObject
