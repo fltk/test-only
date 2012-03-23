@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Box.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
+// "$Id$"
 //
 // Define your own values for box() on a widget by making one of these.
 //
@@ -73,5 +73,5 @@ public:
 #endif
 
 //
-// End of "$Id: Box.h 8636 2011-05-06 08:01:12Z bgbnbigben $".
+// End of "$Id$".
 //

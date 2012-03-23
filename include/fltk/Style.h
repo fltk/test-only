@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
+// "$Id$"
 //
 // Style structure used by Widgets
 //
@@ -232,5 +232,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Style.h 8636 2011-05-06 08:01:12Z bgbnbigben $".
+// End of "$Id$".
 //

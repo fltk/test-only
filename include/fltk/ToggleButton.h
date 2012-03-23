@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: ToggleButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Button that clicks on and off. You get the state with value().
 //
@@ -43,5 +43,5 @@ public:
 #endif
 
 //
-// End of "$Id: ToggleButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

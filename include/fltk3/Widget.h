@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h 8623 2011-04-24 17:09:41Z AlbrechtS $"
+// "$Id$"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -1035,5 +1035,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Widget.h 8623 2011-04-24 17:09:41Z AlbrechtS $".
+// End of "$Id$".
 //

@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: RadioLightButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // LightButton that toggles off all others in the group when turned on.
 //
@@ -44,5 +44,5 @@ public:
 #endif
 
 //
-// End of "$Id: RadioLightButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

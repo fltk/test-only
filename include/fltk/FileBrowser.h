@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: FileBrowser.h 8507 2011-03-06 10:18:05Z bgbnbigben $"
+// "$Id$"
 //
 // FileBrowser definitions.
 //
@@ -92,5 +92,5 @@ private:
 #endif // !_Fl_File_Browser_H_
 
 //
-// End of "$Id: FileBrowser.h 8507 2011-03-06 10:18:05Z bgbnbigben $".
+// End of "$Id$".
 //

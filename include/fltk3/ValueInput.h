@@ -1,5 +1,5 @@
 //
-// "$Id: ValueInput.h 8337 2011-01-30 09:04:59Z manolo $"
+// "$Id$"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -141,5 +141,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: ValueInput.h 8337 2011-01-30 09:04:59Z manolo $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: FileIcon.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // fltk3::FileIcon definitions.
 //
@@ -167,5 +167,5 @@ namespace fltk3 {
 #endif // !_Fl_Fl_File_Icon_H_
 
 //
-// End of "$Id: FileIcon.h 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h 8593 2011-04-15 21:38:05Z manolo $"
+// "$Id$"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -476,5 +476,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Window.h 8593 2011-04-15 21:38:05Z manolo $".
+// End of "$Id$".
 //

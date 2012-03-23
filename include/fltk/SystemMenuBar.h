@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id:$"
+// "$Id$"
 //
 // MacOS system menu bar header file for the Fast Light Tool Kit (FLTK2).
 //
@@ -59,5 +59,5 @@ typedef MenuBar SystemMenuBar;
 #endif
 
 //
-// End of "$Id:$".
+// End of "$Id$".
 //

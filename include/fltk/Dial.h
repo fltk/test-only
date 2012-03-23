@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Dial.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Rotating value control
 //
@@ -63,5 +63,5 @@ private:
 #endif
 
 //
-// End of "$Id: Dial.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

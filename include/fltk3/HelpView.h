@@ -1,5 +1,5 @@
 //
-// "$Id: HelpView.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // Help Viewer widget definitions.
 //
@@ -403,5 +403,5 @@ namespace fltk3 {
 #endif // !Fltk3_Help_View_H
 
 //
-// End of "$Id: HelpView.h 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //

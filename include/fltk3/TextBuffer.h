@@ -1,5 +1,5 @@
 //
-// "$Id: TextBuffer.h 8148 2010-12-31 22:38:03Z matt $"
+// "$Id$"
 //
 // Header file for fltk3::TextBuffer class.
 //
@@ -775,5 +775,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: TextBuffer.h 8148 2010-12-31 22:38:03Z matt $".
+// End of "$Id$".
 //

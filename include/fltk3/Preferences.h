@@ -1,5 +1,5 @@
 //
-// "$Id: Preferences.h 7949 2010-12-05 00:38:16Z greg.ercolano $"
+// "$Id$"
 //
 // Preferences .
 //
@@ -277,5 +277,5 @@ namespace fltk3 {
 #endif // !Fltk3_Preferences_H
 
 //
-// End of "$Id: Preferences.h 7949 2010-12-05 00:38:16Z greg.ercolano $".
+// End of "$Id$".
 //

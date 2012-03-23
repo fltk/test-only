@@ -1,5 +1,5 @@
 //
-// "$Id: TableRow.h 8301 2011-01-22 22:40:11Z AlbrechtS $"
+// "$Id$"
 //
 
 #ifndef _FLtk3_TABLE_ROW_H
@@ -211,5 +211,5 @@ namespace fltk3 {
 #endif /*_FL_TABLE_ROW_H*/
 
 //
-// End of "$Id: TableRow.h 8301 2011-01-22 22:40:11Z AlbrechtS $".
+// End of "$Id$".
 //

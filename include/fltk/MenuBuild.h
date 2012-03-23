@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: MenuBuild.h 4319 2005-05-08 19:18:50Z spitzak $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -36,5 +36,5 @@
 #endif
 
 //
-// End of "$Id: Menu.h 4319 2005-05-08 19:18:50Z spitzak $".
+// End of "$Id$".
 //

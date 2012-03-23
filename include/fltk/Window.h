@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -178,5 +178,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

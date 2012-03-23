@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: forms.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -852,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

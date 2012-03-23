@@ -1,5 +1,5 @@
 /*
- * "$Id: filename.h 8073 2010-12-20 13:35:43Z ianmacarthur $"
+ * "$Id$"
  *
  * Filename header file for the Fast Light Tool Kit (FLTK).
  *
@@ -160,5 +160,5 @@ namespace fltk3 {
 /** @} */
 
 /*
- * End of "$Id: filename.h 8073 2010-12-20 13:35:43Z ianmacarthur $".
+ * End of "$Id$".
  */

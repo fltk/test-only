@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h 8338 2011-01-30 09:24:40Z manolo $"
+// "$Id$"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -227,5 +227,5 @@ namespace fltk3 {
 #endif // !Fltk3_Image_H
 
 //
-// End of "$Id: Image.h 8338 2011-01-30 09:24:40Z manolo $".
+// End of "$Id$".
 //

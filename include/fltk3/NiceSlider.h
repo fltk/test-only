@@ -1,5 +1,5 @@
 //
-// "$Id: NiceSlider.h 8022 2010-12-12 23:21:03Z AlbrechtS $"
+// "$Id$"
 //
 // "Nice" slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -46,5 +46,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: NiceSlider.h 8022 2010-12-12 23:21:03Z AlbrechtS $".
+// End of "$Id$".
 //

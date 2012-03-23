@@ -1,5 +1,5 @@
 //
-// "$Id: Progress.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // Progress bar widget definitions.
 //
@@ -81,5 +81,5 @@ namespace fltk3 {
 #endif // !_Fl_Progress_H_
 
 //
-// End of "$Id: Progress.h 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //

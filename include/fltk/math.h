@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: math.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -91,5 +91,5 @@
 #endif
 
 //
-// End of "$Id: math.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

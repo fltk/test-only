@@ -1,5 +1,5 @@
 //
-// "$Id: message.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // Standard message header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,5 +28,5 @@
 #include "ask.h"
 
 //
-// End of "$Id: message.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: pnmImage.h 4288 2005-04-16 00:13:17Z mike $"
+// "$Id$"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -43,4 +43,4 @@ public:
 
 #endif
 
-// End of "$Id: pnmImage.h 4288 2005-04-16 00:13:17Z mike $".
+// End of "$Id$".

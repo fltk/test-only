@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: WizardGroup.h 4288 2005-04-16 00:13:17Z mike $"
+// "$Id$"
 //
 // WizardGroup widget definitions.
 //
@@ -56,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: WizardGroup.h 4288 2005-04-16 00:13:17Z mike $".
+// End of "$Id$".
 //

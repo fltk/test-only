@@ -1,5 +1,5 @@
 //
-// "$Id: run.h 8548 2011-03-30 12:07:52Z AlbrechtS $"
+// "$Id$"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -1177,5 +1177,5 @@ namespace fltk3 {
 #endif // !Fltk3_H
 
 //
-// End of "$Id: run.h 8548 2011-03-30 12:07:52Z AlbrechtS $".
+// End of "$Id$".
 //

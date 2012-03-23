@@ -1,5 +1,5 @@
 //
-// "$Id: PNGImage.h 8287 2011-01-17 20:51:12Z manolo $"
+// "$Id$"
 //
 // PNG image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -60,5 +60,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: PNGImage.h 8287 2011-01-17 20:51:12Z manolo $".
+// End of "$Id$".
 //

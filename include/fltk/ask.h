@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: ask.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Copyright 2008 by Bill Spitzak and others.
 //
@@ -79,5 +79,5 @@ extern FL_API const char* cancel;
 #endif
 
 //
-// End of "$Id: ask.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

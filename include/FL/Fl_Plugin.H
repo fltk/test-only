@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Plugin.H 6995 2010-01-12 08:48:55Z matt $"
+// "$Id$"
 //
 // A Plugin system for FLTK, implemented in Fl_Plugin_Manager.cxx.
 // FLTK 123 wrapper completed
@@ -63,5 +63,5 @@ public:
 #endif // !Fl_Plugin_Manager_H
 
 //
-// End of "$Id: Fl_Plugin_Manager.H 6995 2010-01-12 08:48:55Z matt $".
+// End of "$Id$".
 //

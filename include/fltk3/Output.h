@@ -1,5 +1,5 @@
 //
-// "$Id: Output.h 8132 2010-12-28 18:33:46Z yuri $"
+// "$Id$"
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -77,5 +77,5 @@ namespace fltk3 {
 #endif 
 
 //
-// End of "$Id: Output.h 8132 2010-12-28 18:33:46Z yuri $".
+// End of "$Id$".
 //

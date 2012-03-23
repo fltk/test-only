@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Slider.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Slider value control. By default it moves vertically with the
 // minimum number at the bottom. See HorizontalSlider for one that
@@ -94,5 +94,5 @@ public:
 #endif
 
 //
-// End of "$Id: Slider.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

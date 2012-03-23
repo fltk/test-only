@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: Widget.h 5600 2007-01-13 00:04:55Z spitzak $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 // Original code Copyright Chris Warren-Smith.  Permission to distribute under
@@ -93,4 +93,4 @@ class AnsiWidget : public Widget {
 
 #endif
 
-// $Id: Fl_Ansi_Window.h,v 1.23 2006/08/03 10:28:12 zeeb90au Exp $
+// $Id$

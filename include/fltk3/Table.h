@@ -1,5 +1,5 @@
 //
-// "$Id: Table.h 8301 2011-01-22 22:40:11Z AlbrechtS $"
+// "$Id$"
 //
 // fltk3::Table -- A table widget
 //
@@ -1090,5 +1090,5 @@ namespace fltk3 {
 #endif /*_FL_TABLE_H*/
 
 //
-// End of "$Id: Table.h 8301 2011-01-22 22:40:11Z AlbrechtS $".
+// End of "$Id$".
 //

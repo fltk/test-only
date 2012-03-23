@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: x.h 5140 2006-05-22 04:46:07Z spitzak $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //

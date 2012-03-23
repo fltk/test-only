@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: GlWindow.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // OpenGL window. You must subclass this and implement draw() if
 // you want this to work.
@@ -107,5 +107,5 @@ private:
 #endif
 
 //
-// End of "$Id: GlWindow.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

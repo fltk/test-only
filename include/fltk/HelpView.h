@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: HelpView.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Help Viewer widget definitions.
 //
@@ -200,5 +200,5 @@ public:
 #endif // !HelpView_H
 
 //
-// End of "$Id: HelpView.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

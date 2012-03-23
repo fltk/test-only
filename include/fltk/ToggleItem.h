@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: ToggleItem.h 588 2003-06-24 21:10:19Z spitzak $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //

@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: gl.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // You must include this instead of GL/gl.h to get the Microsoft
@@ -113,5 +113,5 @@ FL_GL_API void gldrawimage(const uchar *, int x,int y,int w,int h, int d=3, int 
 #endif
 
 //
-// End of "$Id: gl.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

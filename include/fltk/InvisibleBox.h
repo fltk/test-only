@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: InvisibleBox.h 5698 2007-02-19 05:40:36Z spitzak $"
+// "$Id$"
 //
 // This is a box that is invisible due to not having a box. The
 // label still prints so it can be used to position labels. Also
@@ -27,5 +27,5 @@ public:
 #endif
 
 //
-// End of "$Id: InvisibleBox.h 5698 2007-02-19 05:40:36Z spitzak $".
+// End of "$Id$".
 //

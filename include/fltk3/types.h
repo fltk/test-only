@@ -1,5 +1,5 @@
 /*
- * "$Id: types.h 7903 2010-11-28 21:06:39Z matt $"
+ * "$Id$"
  *
  * Simple "C"-style types for the Fast Light Tool Kit (FLTK).
  *
@@ -66,5 +66,5 @@ namespace fltk3 {
 #endif
 
 /*
- * End of "$Id: types.h 7903 2010-11-28 21:06:39Z matt $".
+ * End of "$Id$".
  */

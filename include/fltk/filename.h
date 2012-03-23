@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: filename.h 8507 2011-03-06 10:18:05Z bgbnbigben $"
+// "$Id$"
 
 /* Copyright 1998-2006 by Bill Spitzak and others.
  *
@@ -146,4 +146,4 @@ FL_API int filename_list(const char *d, dirent ***list); // uses numericsort
 
 #endif
 
-// End of "$Id: filename.h 8507 2011-03-06 10:18:05Z bgbnbigben $".
+// End of "$Id$".

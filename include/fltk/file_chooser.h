@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: file_chooser.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -47,5 +47,5 @@ FL_API const char *file_and_dir_chooser(const char *message, const char *pattern
 #endif
 
 //
-// End of "$Id: file_chooser.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

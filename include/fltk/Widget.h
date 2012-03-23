@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -328,5 +328,5 @@ namespace fltk {
 #endif
 
 //
-// End of "$Id: Widget.h 8636 2011-05-06 08:01:12Z bgbnbigben $".
+// End of "$Id$".
 //

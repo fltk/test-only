@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: PopupMenu.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Setting the type to POPUP* will make an invisible widget that can
 // overlap any other widgets and provides a popup menu. The default
@@ -55,5 +55,5 @@ protected:
 #endif
 
 //
-// End of "$Id: PopupMenu.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

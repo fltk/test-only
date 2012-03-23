@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: TiledImage.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // A tiled image completely fills the bounding box passed to it with
 // replications of the internal Image passed to it.
@@ -49,5 +49,5 @@ public:
 #endif
 
 //
-// End of "$Id: TiledImage.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// End of "$Id$"
 //

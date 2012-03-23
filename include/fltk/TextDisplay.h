@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: TextDisplay.h 5432 2006-09-16 02:03:04Z spitzak $"
+// "$Id$"
 //
 // Header file for TextDisplay class.
 //
@@ -354,6 +354,6 @@ protected:
 #endif
 
 //
-// End of "$Id: TextDisplay.h 5432 2006-09-16 02:03:04Z spitzak $".
+// End of "$Id$".
 //
 

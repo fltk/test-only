@@ -1,5 +1,5 @@
 //
-// "$Id: InputChoice.h 8022 2010-12-12 23:21:03Z AlbrechtS $"
+// "$Id$"
 //
 // An input/chooser widget.
 //            ______________  ____
@@ -223,5 +223,5 @@ namespace fltk3 {
 #endif // !Fltk3_Input_Choice_H
 
 //
-// End of "$Id: InputChoice.h 8022 2010-12-12 23:21:03Z AlbrechtS $".
+// End of "$Id$".
 //

@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: dirent.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Directory header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,5 +30,5 @@
 #include "filename.h"
 
 //
-// End of "$Id: dirent.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

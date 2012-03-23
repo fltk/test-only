@@ -1,5 +1,5 @@
 //
-// "$Id: Tooltip.h 8405 2011-02-08 20:59:46Z manolo $"
+// "$Id$"
 //
 // Tooltip header file for the Fast Light Tool Kit (FLTK).
 //
@@ -114,5 +114,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Tooltip.h 8405 2011-02-08 20:59:46Z manolo $".
+// End of "$Id$".
 //

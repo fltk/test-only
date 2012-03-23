@@ -1,5 +1,5 @@
 //
-// "$Id: ValueOutput.h 7989 2010-12-09 12:19:03Z greg.ercolano $"
+// "$Id$"
 //
 // Value output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -81,5 +81,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: ValueOutput.h 7989 2010-12-09 12:19:03Z greg.ercolano $".
+// End of "$Id$".
 //

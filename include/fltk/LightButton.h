@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: LightButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Forms/XForms/Flame style button with indicator light on left
 //
@@ -44,5 +44,5 @@ public:
 #endif
 
 //
-// End of "$Id: LightButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

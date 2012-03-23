@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: PixelType.h 1399 2006-08-11 02:15:20Z spitzak $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //

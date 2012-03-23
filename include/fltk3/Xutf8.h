@@ -1,4 +1,4 @@
-/* "$Id: Xutf8.h 8399 2011-02-07 22:22:16Z ianmacarthur $"
+/* "$Id$"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
  * Copyright 2000-2010 by O'ksi'D.
@@ -185,5 +185,5 @@ XUtf8Toupper(
 #endif
 
 /*
- *  End of "$Id: Xutf8.h 8399 2011-02-07 22:22:16Z ianmacarthur $".
+ *  End of "$Id$".
  */

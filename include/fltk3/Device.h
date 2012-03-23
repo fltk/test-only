@@ -1,5 +1,5 @@
 //
-// "$Id: Device.h 8529 2011-03-23 12:49:30Z AlbrechtS $"
+// "$Id$"
 //
 // Definition of classes fltk3::GraphicsDriver, fltk3::SurfaceDevice, fltk3::DisplayDevice
 // for the Fast Light Tool Kit (FLTK).
@@ -575,5 +575,5 @@ namespace fltk3 {
 #endif // Fltk3_Device_H
 
 //
-// End of "$Id: Device.h 8529 2011-03-23 12:49:30Z AlbrechtS $".
+// End of "$Id$".
 //

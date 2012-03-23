@@ -1,5 +1,5 @@
 //
-// "$Id: glDraw.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,5 +31,5 @@ extern FLTK3_EXPORT void gl_remove_displaylist_fonts();
 
 
 //
-// End of "$Id: glDraw.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

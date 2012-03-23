@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: SecretInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // One-line text input field that draws asterisks instead of the
 // letters. It also prevents the user from cutting or copying the
@@ -46,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: SecretInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Output.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // One-line text output, the user can select text and copy it
 // to other applications.
@@ -48,5 +48,5 @@ public:
 #endif 
 
 //
-// End of "$Id: Output.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

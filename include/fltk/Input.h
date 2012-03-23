@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Input.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // One-line text input field.
 //
@@ -131,5 +131,5 @@ private:
 #endif
 
 //
-// End of "$Id: Input.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

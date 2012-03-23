@@ -1,5 +1,5 @@
 //
-// "$Id: osx.h 8657 2011-05-12 11:50:43Z manolo $"
+// "$Id$"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -230,6 +230,6 @@ public:
 /** @} */
 
 //
-// End of "$Id: osx.h 8657 2011-05-12 11:50:43Z manolo $".
+// End of "$Id$".
 //
 

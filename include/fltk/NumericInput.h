@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: NumericInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // One-line text input field, which handles up/down arrows to
 // change the digit to the right of the cursor. This still allows
@@ -51,5 +51,5 @@ class FL_API NumericInput : public Input {
 #endif
 
 //
-// End of "$Id: NumericInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// End of "$Id$"
 //

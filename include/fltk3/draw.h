@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h 8621 2011-04-23 15:46:30Z AlbrechtS $"
+// "$Id$"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -791,5 +791,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: draw.h 8621 2011-04-23 15:46:30Z AlbrechtS $".
+// End of "$Id$".
 //

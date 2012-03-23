@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: ValueOutput.h 5197 2006-06-14 07:43:46Z spitzak $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -42,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: ValueOutput.h 5197 2006-06-14 07:43:46Z spitzak $".
+// End of "$Id$".
 //

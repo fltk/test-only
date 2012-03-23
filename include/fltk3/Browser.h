@@ -1,5 +1,5 @@
 //
-// "$Id: Browser.h 8623 2011-04-24 17:09:41Z AlbrechtS $"
+// "$Id$"
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -325,5 +325,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Browser.h 8623 2011-04-24 17:09:41Z AlbrechtS $".
+// End of "$Id$".
 //

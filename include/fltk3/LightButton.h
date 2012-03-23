@@ -1,5 +1,5 @@
 //
-// "$Id: LightButton.h 8178 2011-01-04 14:09:37Z manolo $"
+// "$Id$"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -60,5 +60,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: LightButton.h 8178 2011-01-04 14:09:37Z manolo $".
+// End of "$Id$".
 //

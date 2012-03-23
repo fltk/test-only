@@ -1,5 +1,5 @@
 //
-// "$Id: run.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 // Copyright 1998-2006 by Bill Spitzak and others.

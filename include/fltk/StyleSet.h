@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: StyleSet.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Saves and restores all the styles used by Widget constructors. Fluid
 // uses this so you can preview a style without fluid's own control

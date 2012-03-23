@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: ShapedWindow.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -56,5 +56,5 @@ class FL_API ShapedWindow : public Window {
 #endif
 
 //
-// End of "$Id: ShapedWindow.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// End of "$Id$"
 //

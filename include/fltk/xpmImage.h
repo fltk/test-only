@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: xpmImage.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -58,5 +58,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: PackedGroup.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // Pack header file for the Fast Light Tool Kit (FLTK).
 //
@@ -88,5 +88,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: PackedGroup.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

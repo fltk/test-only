@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: HighlightButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // This button highlights even if the default style does not do so.
 //
@@ -44,5 +44,5 @@ public:
 #endif
 
 //
-// End of "$Id: HighlightButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

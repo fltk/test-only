@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: LabelType.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // A LabelType determines how to draw the text of the label. This
 // is not used very much, it can be used to draw engraved or shadowed

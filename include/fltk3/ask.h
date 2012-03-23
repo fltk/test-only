@@ -1,5 +1,5 @@
 //
-// "$Id: ask.h 8441 2011-02-18 08:52:48Z AlbrechtS $"
+// "$Id$"
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
 //
@@ -96,5 +96,5 @@ namespace fltk3 {
 #endif // !fltk3::ask_H
 
 //
-// End of "$Id: ask.h 8441 2011-02-18 08:52:48Z AlbrechtS $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: FileBrowser.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // FileBrowser definitions.
 //
@@ -120,5 +120,5 @@ namespace fltk3 {
 #endif // !_Fl_File_Browser_H_
 
 //
-// End of "$Id: FileBrowser.h 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //

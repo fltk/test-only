@@ -1,4 +1,4 @@
-/* "$Id: utf8.h 8585 2011-04-13 15:43:22Z ianmacarthur $"
+/* "$Id$"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
  * Copyright 2000-2010 by O'ksi'D.
@@ -261,5 +261,5 @@ namespace fltk3 {
 #endif /* _HAVE_FL_UTF8_HDR_ */
 
 /*
- * End of "$Id: utf8.h 8585 2011-04-13 15:43:22Z ianmacarthur $".
+ * End of "$Id$".
  */

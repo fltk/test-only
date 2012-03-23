@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: BarGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // The BarGroup is a closable strip that can be put in the edges of a Pack,
 // usually it contains toolbars or buttons.
@@ -59,5 +59,5 @@ public:
 #endif
 
 //
-// End of "$Id: BarGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

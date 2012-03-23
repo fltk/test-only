@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Scrollbar.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Scrollbar, controls an integer position of a window of a given
 // size inside a data set of a given total size.
@@ -63,5 +63,5 @@ private:
 #endif
 
 //
-// End of "$Id: Scrollbar.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

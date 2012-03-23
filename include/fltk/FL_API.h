@@ -1,4 +1,4 @@
-// "$Id: FL_API.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // This file is included by all FLTK header files. Originally it was to
 // get that damn dllimport/export stuff on Windows. It now also turns
@@ -36,5 +36,5 @@
 #endif
 
 //
-// End of "$Id: FL_API.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

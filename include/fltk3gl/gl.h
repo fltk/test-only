@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h 8623 2011-04-24 17:09:41Z AlbrechtS $"
+// "$Id$"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -109,5 +109,5 @@ FLTK3_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3,
 #endif // !FLtk3_gl_H
 
 //
-// End of "$Id: gl.h 8623 2011-04-24 17:09:41Z AlbrechtS $".
+// End of "$Id$".
 //

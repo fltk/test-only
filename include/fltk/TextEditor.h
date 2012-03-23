@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: TextEditor.h 4899 2006-04-04 13:53:37Z fabien $"
+// "$Id$"
 //
 // Header file for TextEditor class.
 //
@@ -117,7 +117,7 @@ protected:
 #endif
 
 //
-// End of "$Id: TextEditor.h 4899 2006-04-04 13:53:37Z fabien $".
+// End of "$Id$".
 //
 
 

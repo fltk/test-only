@@ -1,5 +1,5 @@
 //
-// "$Id: FileChooser.h 8286 2011-01-17 09:39:14Z manolo $"
+// "$Id$"
 //
 // fltk3::FileChooser dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -250,5 +250,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: FileChooser.h 8286 2011-01-17 09:39:14Z manolo $".
+// End of "$Id$".
 //

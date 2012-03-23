@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: FileInput.h 8316 2011-01-26 14:59:50Z bgbnbigben $"
+// "$Id$"
 //
 // File_Input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -68,5 +68,5 @@ public:
 
 
 //
-// End of "$Id: FileInput.h 8316 2011-01-26 14:59:50Z bgbnbigben $".
+// End of "$Id$".
 //

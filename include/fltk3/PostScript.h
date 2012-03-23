@@ -1,5 +1,5 @@
 //
-// "$Id: PostScript.h 8528 2011-03-22 17:41:23Z manolo $"
+// "$Id$"
 //
 // Support for graphics output to PostScript file for the Fast Light Tool Kit (FLTK).
 //
@@ -248,5 +248,5 @@ namespace fltk3 {
 #endif // Fltk3_PostScript_H
 
 //
-// End of "$Id: PostScript.h 8528 2011-03-22 17:41:23Z manolo $"
+// End of "$Id$"
 //

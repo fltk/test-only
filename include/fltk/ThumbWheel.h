@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: ThumbWheel.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Inventor-style thumbwheel control for a single floating point value.
 //
@@ -53,5 +53,5 @@ protected:
 #endif
 
 //
-// End of "$Id: ThumbWheel.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

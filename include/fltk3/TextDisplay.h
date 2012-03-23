@@ -1,5 +1,5 @@
 //
-// "$Id: TextDisplay.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // Header file for fltk3::TextDisplay class.
 //
@@ -462,5 +462,5 @@ protected:
 #endif
 
 //
-// End of "$Id: TextDisplay.h 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //

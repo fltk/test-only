@@ -1,5 +1,5 @@
 //
-// "$Id: MenuItem.h 7983 2010-12-09 00:04:06Z AlbrechtS $"
+// "$Id$"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -429,5 +429,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: MenuItem.h 7983 2010-12-09 00:04:06Z AlbrechtS $".
+// End of "$Id$".
 //

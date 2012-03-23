@@ -1,5 +1,5 @@
 //
-// "$Id: Group.h 8157 2011-01-01 14:01:53Z AlbrechtS $"
+// "$Id$"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -230,5 +230,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Group.h 8157 2011-01-01 14:01:53Z AlbrechtS $".
+// End of "$Id$".
 //

@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: FloatInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // NumericInput modified to only allow floating point to by
 // typed. Currently this is implemented by the base class by checking
@@ -50,5 +50,5 @@ public:
 #endif
 
 //
-// End of "$Id: FloatInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

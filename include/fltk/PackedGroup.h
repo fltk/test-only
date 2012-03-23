@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: PackedGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Group that places all it's child widgets packed against the
 // edges. The edge is decided by the PACK_VERTICAL flag stored on
@@ -69,5 +69,5 @@ public:
 #endif
 
 //
-// End of "$Id: PackedGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

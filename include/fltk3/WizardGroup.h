@@ -1,5 +1,5 @@
 //
-// "$Id: WizardGroup.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // fltk3::WizardGroup widget definitions.
 //
@@ -72,5 +72,5 @@ namespace fltk3 {
 #endif // !_Fl_Wizard_H_
 
 //
-// End of "$Id: WizardGroup.h 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //

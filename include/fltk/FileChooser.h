@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: FileChooser.h 8507 2011-03-06 10:18:05Z bgbnbigben $"
+// "$Id$"
 //
 // FileChooser dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -230,5 +230,5 @@ public:
 #endif
 
 //
-// End of "$Id: FileChooser.h 8507 2011-03-06 10:18:05Z bgbnbigben $".
+// End of "$Id$".
 //

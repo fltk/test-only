@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: RepeatButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // This button does it's callback repeatedly (about 10/second) while
 // the user holds the button down.
@@ -46,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: RepeatButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

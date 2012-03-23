@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: RadioButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Button with a circle indicator to it's left, turning it on turns
 // off all other radio buttons in the same Group.
@@ -45,5 +45,5 @@ public:
 #endif
 
 //
-// End of "$Id: RadioButton.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

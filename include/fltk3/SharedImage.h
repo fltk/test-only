@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // Shared image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -119,5 +119,5 @@ namespace fltk3 {
 #endif // !Fltk3_Shared_Image_H
 
 //
-// End of "$Id: SharedImage.h 8306 2011-01-24 17:04:22Z matt $"
+// End of "$Id$"
 //

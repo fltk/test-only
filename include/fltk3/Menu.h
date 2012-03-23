@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // Old menu header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,5 +29,5 @@
 #include "MenuItem.h"
 
 //
-// End of "$Id: Menu.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

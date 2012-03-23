@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: Image.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
+// "$Id$"
 //
 // Copyright 1998-2005 by Bill Spitzak and others.
 //
@@ -116,5 +116,5 @@ public:
 #endif
 
 //
-// End of "$Id: Image.h 8636 2011-05-06 08:01:12Z bgbnbigben $".
+// End of "$Id$".
 //

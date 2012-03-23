@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: Choice.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Popup list of items that the user can choose one of. Based on Motif
 // but modern equivalent is the OS/X popup choices.
@@ -51,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Choice.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

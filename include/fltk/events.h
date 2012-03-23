@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: events.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -337,5 +337,5 @@ const char  *event_name(int event); /// see STR #508
 #endif
 
 //
-// $Id: events.h 8500 2011-03-03 09:20:46Z bgbnbigben $
+// $Id$
 //

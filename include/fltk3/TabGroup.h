@@ -1,5 +1,5 @@
 //
-// "$Id: TabGroup.h 8101 2010-12-22 13:06:03Z AlbrechtS $"
+// "$Id$"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
 //
@@ -94,5 +94,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: TabGroup.h 8101 2010-12-22 13:06:03Z AlbrechtS $".
+// End of "$Id$".
 //

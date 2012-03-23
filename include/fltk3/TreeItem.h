@@ -1,5 +1,5 @@
 //
-// "$Id: TreeItem.h 8340 2011-01-30 20:22:06Z greg.ercolano $"
+// "$Id$"
 //
 
 #ifndef FLtk3_TREE_ITEM_H
@@ -337,5 +337,5 @@ namespace fltk3 {
 #endif /*fltk3::TREE_ITEM_H*/
 
 //
-// End of "$Id: TreeItem.h 8340 2011-01-30 20:22:06Z greg.ercolano $".
+// End of "$Id$".
 //

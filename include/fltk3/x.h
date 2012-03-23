@@ -1,5 +1,5 @@
 //
-// "$Id: x.h 8381 2011-02-06 10:24:23Z manolo $"
+// "$Id$"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -208,5 +208,5 @@ extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar&
 #endif
 
 //
-// End of "$Id: x.h 8381 2011-02-06 10:24:23Z manolo $".
+// End of "$Id$".
 //

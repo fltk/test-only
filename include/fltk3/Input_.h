@@ -1,5 +1,5 @@
 //
-// "$Id: Input_.h 8068 2010-12-20 07:48:59Z greg.ercolano $"
+// "$Id$"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -461,5 +461,5 @@ namespace fltk3 {
 #endif 
 
 //
-// End of "$Id: Input_.h 8068 2010-12-20 07:48:59Z greg.ercolano $".
+// End of "$Id$".
 //

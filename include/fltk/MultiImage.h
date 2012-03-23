@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: MultiImage.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Image type that draws a different image depending on the flags,
 // for instace VALUE or SELECTED or HIGHLIGHT.
@@ -102,5 +102,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiImage.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

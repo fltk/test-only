@@ -1,5 +1,5 @@
 //
-// "$Id: Adjuster.h 7981 2010-12-08 23:53:04Z greg.ercolano $"
+// "$Id$"
 //
 // Adjuster widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -83,5 +83,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Adjuster.h 7981 2010-12-08 23:53:04Z greg.ercolano $".
+// End of "$Id$".
 //

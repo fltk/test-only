@@ -1,5 +1,5 @@
 //
-// "$Id: CheckBrowser.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // fltk3::CheckBrowser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -123,6 +123,6 @@ namespace fltk3 {
 #endif // Fltk3_Check_Browser_H
 
 //
-// End of "$Id: CheckBrowser.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //
 

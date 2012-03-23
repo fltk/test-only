@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: glut.h 6521 2008-11-12 20:49:58Z spitzak $"
+// "$Id$"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -487,5 +487,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* !__glut_h__ */
 
 //
-// End of "$Id: glut.h 6521 2008-11-12 20:49:58Z spitzak $".
+// End of "$Id$".
 //

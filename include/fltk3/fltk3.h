@@ -1,5 +1,5 @@
 //
-// "$Id: all.h 8623 2011-04-24 17:09:41Z AlbrechtS $"
+// "$Id$"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,5 +33,5 @@
 #endif // !FLTK3_FLTK3_H
 
 //
-// End of "$Id: gl.h 8623 2011-04-24 17:09:41Z AlbrechtS $".
+// End of "$Id$".
 //

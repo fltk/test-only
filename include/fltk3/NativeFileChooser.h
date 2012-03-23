@@ -1,5 +1,5 @@
 //
-// "$Id: NativeFileChooser.h 8380 2011-02-06 10:07:28Z manolo $"
+// "$Id$"
 //
 // FLTK native OS file chooser widget
 //
@@ -253,5 +253,5 @@ namespace fltk3 {
 #endif /*FLtk3_NATIVE_FILE_CHOOSER_H*/
 
 //
-// End of "$Id: NativeFileChooser.h 8380 2011-02-06 10:07:28Z manolo $".
+// End of "$Id$".
 //

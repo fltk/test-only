@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: TabGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // For making a "tabbed dialog box". Each child widget creates a tab.
 // Only one is visible at a time. This works best if all the children
@@ -140,5 +140,5 @@ private:
 #endif
 
 //
-// End of "$Id: TabGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

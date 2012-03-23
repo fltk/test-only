@@ -1,5 +1,5 @@
 //
-// "$Id: Spinner.h 8339 2011-01-30 12:50:19Z ianmacarthur $"
+// "$Id$"
 //
 // Spinner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -270,5 +270,5 @@ namespace fltk3 {
 #endif // !Fltk3_Spinner_H
 
 //
-// End of "$Id: Spinner.h 8339 2011-01-30 12:50:19Z ianmacarthur $".
+// End of "$Id$".
 //

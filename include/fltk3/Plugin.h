@@ -1,5 +1,5 @@
 //
-// "$Id: Plugin.h 6995 2010-01-12 08:48:55Z matt $"
+// "$Id$"
 //
 // A Plugin system for FLTK, implemented in fltk3::Preferences.cxx.
 //
@@ -102,5 +102,5 @@ namespace fltk3 {
 #endif // !Fltk3_Preferences_H
 
 //
-// End of "$Id: Preferences.h 6995 2010-01-12 08:48:55Z matt $".
+// End of "$Id$".
 //

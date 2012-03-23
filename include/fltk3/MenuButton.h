@@ -1,5 +1,5 @@
 //
-// "$Id: MenuButton.h 8016 2010-12-12 11:19:12Z manolo $"
+// "$Id$"
 //
 // Menu button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -88,5 +88,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: MenuButton.h 8016 2010-12-12 11:19:12Z manolo $".
+// End of "$Id$".
 //

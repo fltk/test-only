@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: TiledGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // The child widgets are expected to be all laid out to touch each other
 // and fill this group. The user can then move the boundaries between
@@ -49,5 +49,5 @@ public:
 #endif
 
 //
-// End of "$Id: TiledGroup.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

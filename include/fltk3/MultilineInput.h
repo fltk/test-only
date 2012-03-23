@@ -1,5 +1,5 @@
 //
-// "$Id: MultilineInput.h 8068 2010-12-20 07:48:59Z greg.ercolano $"
+// "$Id$"
 //
 // Multiline input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -76,5 +76,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: MultilineInput.h 8068 2010-12-20 07:48:59Z greg.ercolano $".
+// End of "$Id$".
 //

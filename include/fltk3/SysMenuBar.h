@@ -1,5 +1,5 @@
 //
-// "$Id: SysMenuBar.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // MacOS system menu bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,9 @@
 #include "MenuBar.h"
 #include "x.h"
 
-//class Fl_Sys_Menu_Bar;
+#if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
+class Fl_Sys_Menu_Bar;
+#endif
 
 namespace fltk3 {
 
@@ -85,5 +87,5 @@ namespace fltk3 {
 #endif // Fltk3_Sys_Menu_Bar_H
 
 //
-// End of "$Id: SysMenuBar.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

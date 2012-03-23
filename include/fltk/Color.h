@@ -1,5 +1,5 @@
 //
-// "$Id: Color.h 6233 2008-09-14 07:54:06Z spitzak $"
+// "$Id$"
 //
 // Color value. These are 32-bit unsigned numbers with RGB as the
 // upper 3 bytes. The lowest-order byte is treated as an "index"
@@ -131,5 +131,5 @@ FL_API Color nearest_index(Color);
 #endif
 
 //
-// End of "$Id: Color.h 6233 2008-09-14 07:54:06Z spitzak $".
+// End of "$Id$".
 //

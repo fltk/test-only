@@ -1,5 +1,5 @@
 //
-// "$Id: Group.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Group is the base class for all container widgets. For historical
 // reasons it also provides a default version of layout.
@@ -132,5 +132,5 @@ private:
 #endif
 
 //
-// End of "$Id: Group.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

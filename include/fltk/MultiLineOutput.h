@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: MultiLineOutput.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Displays a multi-line sequence of text, the user can select text
 // and copy it to other programs. Does not have any scrollbars.
@@ -46,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiLineOutput.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

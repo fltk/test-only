@@ -1,5 +1,5 @@
 //
-// "$Id: PagedDevice.h 8593 2011-04-15 21:38:05Z manolo $"
+// "$Id$"
 //
 // Printing support for the Fast Light Tool Kit (FLTK).
 //
@@ -150,6 +150,6 @@ namespace fltk3 {
 #endif // Fltk3_Paged_Device_H
 
 //
-// End of "$Id: PagedDevice.h 8593 2011-04-15 21:38:05Z manolo $"
+// End of "$Id$"
 //
 

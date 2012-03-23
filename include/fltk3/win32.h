@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h 8375 2011-02-05 16:55:04Z AlbrechtS $"
+// "$Id$"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -170,5 +170,5 @@ inline void fl_open_callback(void (*)(const char *)) {}
 extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 #endif // FLTK3_DOXYGEN
 //
-// End of "$Id: win32.h 8375 2011-02-05 16:55:04Z AlbrechtS $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Choice.h 7981 2010-12-08 23:53:04Z greg.ercolano $"
+// "$Id$"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -114,5 +114,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: Choice.h 7981 2010-12-08 23:53:04Z greg.ercolano $".
+// End of "$Id$".
 //

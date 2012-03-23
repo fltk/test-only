@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -114,5 +114,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Flags.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

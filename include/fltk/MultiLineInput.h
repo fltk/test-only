@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: MultiLineInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
+// "$Id$"
 //
 // Allows you to edit a *small* number of lines of text. Does not have
 // any scrollbars. You may want a TextEditor instead, it is designed for
@@ -47,5 +47,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiLineInput.h 8500 2011-03-03 09:20:46Z bgbnbigben $".
+// End of "$Id$".
 //

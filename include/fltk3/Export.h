@@ -1,5 +1,5 @@
 /*
- * "$Id: Export.h 7903 2010-11-28 21:06:39Z matt $"
+ * "$Id$"
  *
  * WIN32 DLL export .
  *
@@ -45,5 +45,5 @@
 #endif /* !Fltk3_Export_H */
 
 /*
- * End of "$Id: Export.h 7903 2010-11-28 21:06:39Z matt $".
+ * End of "$Id$".
  */

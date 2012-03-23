@@ -1,5 +1,5 @@
 //
-// "$Id: HelpDialog.h 8063 2010-12-19 21:20:10Z matt $"
+// "$Id$"
 //
 // fltk3::HelpDialog dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -96,5 +96,5 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: HelpDialog.h 8063 2010-12-19 21:20:10Z matt $".
+// End of "$Id$".
 //

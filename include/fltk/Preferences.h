@@ -1,5 +1,5 @@
 #error header has not been ported to 3.0 yet
-// "$Id: Preferences.H 4458 2005-07-26 07:59:01Z matt $"
+// "$Id$"
 //
 // Copyright 2002-2005 by Matthias Melcher.
 //
@@ -107,4 +107,4 @@ private:
 
 #endif
 
-// End of "$Id: Preferences.H 4458 2005-07-26 07:59:01Z matt $".
+// End of "$Id$".

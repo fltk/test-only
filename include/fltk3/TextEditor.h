@@ -1,5 +1,5 @@
 //
-// "$Id: TextEditor.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // Header file for fltk3::TextEditor class.
 //
@@ -143,6 +143,6 @@ namespace fltk3 {
 #endif
 
 //
-// End of "$Id: TextEditor.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //
 

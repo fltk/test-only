@@ -1,6 +1,6 @@
 #error header has not been ported to 3.0 yet
 //
-// "$Id: ValueInput.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
+// "$Id$"
 //
 // Text field for inputing a floating-point number
 //
@@ -58,5 +58,5 @@ private:
 #endif
 
 //
-// End of "$Id: ValueInput.h 8636 2011-05-06 08:01:12Z bgbnbigben $".
+// End of "$Id$".
 //

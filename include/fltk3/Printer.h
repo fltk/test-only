@@ -1,5 +1,5 @@
 //
-// "$Id: Printer.h 8565 2011-04-06 13:43:09Z manolo $"
+// "$Id$"
 //
 // Printing support for the Fast Light Tool Kit (FLTK).
 //
@@ -208,5 +208,5 @@ namespace fltk3 {
 #endif // Fltk3_Printer_H
 
 //
-// End of "$Id: Printer.h 8565 2011-04-06 13:43:09Z manolo $"
+// End of "$Id$"
 //
