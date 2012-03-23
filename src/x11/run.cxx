@@ -1631,50 +1631,7 @@ bool fltk::handle()
       recent_keycode = keycode;
     }
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
-    static char* buffer = 0;
-    static int buffer_len;
-    if (!buffer) buffer = new char[buffer_len = 20];
-    int len;
-    KeySym keysym;
-#if USE_XIM
-    if (!fl_xim_ic)
-        fl_new_ic(xevent.xany.window);
-    if (fl_xim_ic) {
-      Status status;
-    RETRY:
-      buffer[0] = 0;
-      keysym = 0;
-#ifdef __sgi
-#define Xutf8LookupString XmbLookupString
-#endif
-      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-			      buffer, buffer_len-1, &keysym, &status);
-      switch (status) {
-      case XBufferOverflow:
-	delete[] buffer;
-	buffer = new char[buffer_len = len+1];
-	goto RETRY;
-      case XLookupChars:
-      case XLookupKeySym:
-      case XLookupBoth:
-	break;
-      default:
-	goto NO_XIM;
-      }
-    } else {
-    NO_XIM:
-#endif
-      len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
-#if USE_XIM
-    }
-#endif
-    // Make ctrl+dash produce ^_ like it used to:
-    if (len==1 && xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
-    buffer[len] = 0;
-    e_text = buffer;
-    e_length = len;
     event = KEY;
-    fl_actual_keysym = int(keysym);
     goto GET_KEYSYM;}
 
   case KeyRelease: {
@@ -1726,7 +1683,50 @@ bool fltk::handle()
     // we always return the unshifted keysym, except for the keypad where
     // if numlock is off we return the function keys to match Windows:
     unsigned keycode = xevent.xkey.keycode;
-    KeySym keysym = XKeycodeToKeysym(xdisplay, keycode, 0);
+    static char* buffer = 0;
+    static int buffer_len;
+    if (!buffer) buffer = new char[buffer_len = 20];
+    int len;
+    KeySym keysym;
+#if USE_XIM
+    if (!fl_xim_ic)
+        fl_new_ic(xevent.xany.window);
+    if (fl_xim_ic) {
+      Status status;
+    RETRY:
+      buffer[0] = 0;
+      keysym = 0;
+#ifdef __sgi
+#define Xutf8LookupString XmbLookupString
+#endif
+      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+			      buffer, buffer_len-1, &keysym, &status);
+      switch (status) {
+      case XBufferOverflow:
+	delete[] buffer;
+	buffer = new char[buffer_len = len+1];
+	goto RETRY;
+      case XLookupChars:
+      case XLookupKeySym:
+      case XLookupBoth:
+	break;
+      default:
+	goto NO_XIM;
+      }
+    } else {
+    NO_XIM:
+#endif
+      len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
+#if USE_XIM
+    }
+#endif
+    // Make ctrl+dash produce ^_ like it used to:
+    if (len==1 && xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
+    buffer[len] = 0;
+    e_text = buffer;
+    e_length = len;
+    fl_actual_keysym = int(keysym);
+    keysym = XKeycodeToKeysym(xdisplay, keycode, 0);
     if (!keysym) {
       // X did not map this key, return keycode with 0x8000:
       keysym = keycode|0x8000;
