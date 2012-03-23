@@ -40,6 +40,7 @@ CPPFILES = \
 	buttons.cxx \
 	checkers.cxx \
 	clock.cxx \
+	colbrowser.cxx \
 	color_chooser.cxx \
 	cube.cxx \
 	CubeView.cxx \
@@ -91,7 +92,6 @@ CPPFILES = \
 	unittests.cxx \
 	utf8.cxx
 
-#	colbrowser.cxx \
 #	shapedwindow.cxx \
 #	unittest_about.cxx \
 #	unittest_circles.cxx \
@@ -117,6 +117,7 @@ ALL = \
 	buttons$(EXEEXT) \
 	checkers$(EXEEXT) \
 	clock$(EXEEXT) \
+	colbrowser$(EXEEXT) \
 	color_chooser$(EXEEXT) \
 	cube$(EXEEXT) \
 	CubeView$(EXEEXT) \
@@ -174,7 +175,6 @@ ALL = \
 	utf8$(EXEEXT) \
 	valuators$(EXEEXT)
 
-#	colbrowser$(EXEEXT) \
 #	shapedwindow$(EXEEXT) \
 
 GLALL =
