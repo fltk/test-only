@@ -3,7 +3,7 @@
 //
 // MacOS system menu bar header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,13 +31,13 @@
 #include "MenuBar.h"
 #include "x.h"
 
-class Fl_Sys_Menu_Bar;
+//class Fl_Sys_Menu_Bar;
 
 namespace fltk3 {
-  
+
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
   extern class SysMenuBar *sys_menu_bar;
-  
+
   /**
    @brief A class to create, modify and delete menus that appear on Mac OS X in the menu bar at the top of the screen.
    *
@@ -73,13 +73,13 @@ namespace fltk3 {
     void clear();
     int clear_submenu(int index);
   };
-  
+
 #else
-  
+
   typedef MenuBar SysMenuBar;
-  
+
 #endif // defined(__APPLE__) || defined(FLTK3_DOXYGEN)
-  
+
 }
 
 #endif // Fltk3_Sys_Menu_Bar_H
