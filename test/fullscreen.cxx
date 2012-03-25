@@ -34,7 +34,7 @@
 // can avoid this by making the fltk3::GLWindow a child of a normal
 // window.
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -60,8 +60,10 @@
 #include <fltk3/run.h>
 #include <fltk3/SingleWindow.h>
 #include <fltk3/HorSlider.h>
+#include <fltk3/Input.h>
 #include <fltk3/LightButton.h>
 #include <fltk3/math.h>
+#include <fltk3/ask.h>
 #include <stdio.h>
 
 #if HAVE_GL
@@ -124,6 +126,26 @@ void shape_window::draw() {
 
 #endif
 
+class fullscreen_window : public fltk3::SingleWindow {
+  public:
+  fullscreen_window(int W, int H, const char *t=0);
+  int handle (int e);
+  fltk3::LightButton *b3;
+
+};
+
+fullscreen_window::fullscreen_window(int W, int H, const char *t) : fltk3::SingleWindow(W, H, t) {
+}
+
+int fullscreen_window::handle(int e) {
+  if (e == fltk3::FULLSCREEN) {
+    printf("Received fltk3::FULLSCREEN event\n");
+    b3->value(fullscreen_active());
+  }
+  if (fltk3::SingleWindow::handle(e)) return 1;
+  return 0;
+}
+
 void sides_cb(fltk3::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   sw->sides = int(((fltk3::Slider *)o)->value());
@@ -161,13 +183,13 @@ void fullscreen_cb(fltk3::Widget *o, void *p) {
     py = w->y();
     pw = w->w();
     ph = w->h();
-#ifndef WIN32//necessary because fullscreen removes border
-	border_button->value(0);
-	border_button->do_callback();
-#endif
     w->fullscreen();
+    w->override();
+#ifndef WIN32 // update our border state in case border was turned off
+    border_button->value(w->border());
+#endif
   } else {
-    w->fullscreen_off(px,py,pw,ph);
+    w->fullscreen_off();
   }
 }
 
@@ -177,7 +199,7 @@ void exit_cb(fltk3::Widget *, void *) {
   exit(0);
 }
 
-#define NUMB 5
+#define NUMB 6
 
 int twowindow = 0;
 int initfull = 0;
@@ -193,9 +215,10 @@ int main(int argc, char **argv) {
   if (fltk3::args(argc,argv,i,arg) < argc)
     fltk3::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",fltk3::help);
 
-  fltk3::SingleWindow window(300,300+30*NUMB); window.end();
+  fullscreen_window window(300,300+30*NUMB); window.end();
 
   shape_window sw(10,10,window.w()-20,window.h()-30*NUMB-20);
+  
 #if HAVE_GL
   sw.mode(fltk3::RGB);
 #endif
@@ -227,6 +250,10 @@ int main(int argc, char **argv) {
   fltk3::LightButton b1(50,y,window.w()-60,30,"Double Buffered");
   b1.callback(double_cb,&sw);
   y+=30;
+  
+  fltk3::Input i1(50,y,window.w()-60,30, "Input");
+  y+=30;
+
 
   fltk3::LightButton b2(50,y,window.w()-60,30,"Border");
   b2.callback(border_cb,w);
@@ -234,15 +261,15 @@ int main(int argc, char **argv) {
   border_button = &b2;
   y+=30;
 
-  fltk3::LightButton b3(50,y,window.w()-60,30,"FullScreen");
-  b3.callback(fullscreen_cb,w);
+  window.b3 = new fltk3::LightButton(50,y,window.w()-60,30,"FullScreen");
+  window.b3->callback(fullscreen_cb,w);
   y+=30;
 
   fltk3::Button eb(50,y,window.w()-60,30,"Exit");
   eb.callback(exit_cb);
   y+=30;
 
-  if (initfull) {b3.set(); b3.do_callback();}
+  if (initfull) {window.b3->set(); window.b3->do_callback();}
 
   window.end();
   window.show(argc,argv);

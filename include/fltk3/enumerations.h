@@ -298,7 +298,9 @@ namespace fltk3 {
     /** The screen configuration (number, positions) was changed.
      Use fltk3::add_handler() to be notified of this event.
      */
-    SCREEN_CONFIGURATION_CHANGED = 24
+    SCREEN_CONFIGURATION_CHANGED = 24,
+    /** The fullscreen state of the window has changed */
+    FULLSCREEN         = 25
   };
   
   

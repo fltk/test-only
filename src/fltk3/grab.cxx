@@ -3,7 +3,7 @@
 //
 // Grab/release code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -51,6 +51,15 @@ extern void *fl_capture;
 #endif
 
 void fltk3::grab(fltk3::Window* win) {
+#if USE_X11
+  fltk3::Window *fullscreen_win = NULL;
+  for (fltk3::Window *W = fltk3::first_window(); W; W = fltk3::next_window(W)) {
+  if (W->fullscreen_active()) {
+    fullscreen_win = W;
+    break;
+    }
+  }
+#endif
   if (win) {
     if (!grab_) {
 #ifdef WIN32
@@ -60,8 +69,9 @@ void fltk3::grab(fltk3::Window* win) {
       fl_capture = Fl_X::i(first_window())->xid;
       Fl_X::i(first_window())->set_key_window();
 #else
+      ::Window xid = fullscreen_win ? fl_xid(fullscreen_win) : fl_xid(first_window());
       XGrabPointer(fl_display,
-		   fl_xid(first_window()),
+		   xid,
 		   1,
 		   ButtonPressMask|ButtonReleaseMask|
 		   ButtonMotionMask|PointerMotionMask,
@@ -71,7 +81,7 @@ void fltk3::grab(fltk3::Window* win) {
 		   0,
 		   fl_event_time);
       XGrabKeyboard(fl_display,
-		    fl_xid(first_window()),
+		    xid,
 		    1,
 		    GrabModeAsync,
 		    GrabModeAsync, 
@@ -87,7 +97,10 @@ void fltk3::grab(fltk3::Window* win) {
 #elif defined(__APPLE__)
       fl_capture = 0;
 #else
-      XUngrabKeyboard(fl_display, fl_event_time);
+      // We must keep the grab in the non-EWMH fullscreen case
+      if (!fullscreen_win || Fl_X::ewmh_supported()) {
+	XUngrabKeyboard(fl_display, fl_event_time);
+	}
       XUngrabPointer(fl_display, fl_event_time);
       // this flush is done in case the picked menu item goes into
       // an infinite loop, so we don't leave the X server locked up:

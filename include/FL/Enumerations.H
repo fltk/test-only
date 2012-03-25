@@ -95,7 +95,9 @@ typedef enum {
   FL_DND_ENTER		= 20,
   FL_DND_DRAG		= 21,
   FL_DND_LEAVE		= 22,
-  FL_DND_RELEASE	= 23
+  FL_DND_RELEASE	= 23,
+  FL_SCREEN_CONFIGURATION_CHANGED = 24,
+  FL_FULLSCREEN         = 25
 } Fl_Event;
 
 namespace fltk3 {

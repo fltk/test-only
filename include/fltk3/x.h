@@ -179,6 +179,7 @@ public:
   void flush() {w->flush();}
   static void x(fltk3::Window* wi, int X) {wi->x(X);}
   static void y(fltk3::Window* wi, int Y) {wi->y(Y);}
+  static int ewmh_supported();
 };
 
 extern FLTK3_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()

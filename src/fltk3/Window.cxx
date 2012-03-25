@@ -60,6 +60,10 @@ void fltk3::Window::_Fl_Window() {
   resizable(0);
   size_range_set = 0;
   minw = maxw = minh = maxh = 0;
+  no_fullscreen_x = 0;
+  no_fullscreen_y = 0;
+  no_fullscreen_w = w();
+  no_fullscreen_h = h();
   callback((fltk3::Callback*)default_callback);
 }
 

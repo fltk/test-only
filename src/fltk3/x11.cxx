@@ -3,7 +3,7 @@
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -336,6 +336,9 @@ Atom fl_XaUtf8String;
 Atom fl_XaTextUriList;
 Atom fl_NET_WM_NAME;			// utf8 aware window label
 Atom fl_NET_WM_ICON_NAME;		// utf8 aware window icon name
+Atom fl_NET_SUPPORTING_WM_CHECK;
+Atom fl_NET_WM_STATE;
+Atom fl_NET_WM_STATE_FULLSCREEN;
 
 /*
   X defines 32-bit-entities to have a format value of max. 32,
@@ -633,7 +636,10 @@ void fl_open_display(Display* d) {
   fl_XaTextUriList      = XInternAtom(d, "text/uri-list",       0);
   fl_NET_WM_NAME        = XInternAtom(d, "_NET_WM_NAME",        0);
   fl_NET_WM_ICON_NAME   = XInternAtom(d, "_NET_WM_ICON_NAME",   0);
-
+  fl_NET_SUPPORTING_WM_CHECK = XInternAtom(d, "_NET_SUPPORTING_WM_CHECK", 0);
+  fl_NET_WM_STATE       = XInternAtom(d, "_NET_WM_STATE",       0);
+  fl_NET_WM_STATE_FULLSCREEN = XInternAtom(d, "_NET_WM_STATE_FULLSCREEN", 0);
+  
   if (sizeof(Atom) < 4)
     atom_bits = sizeof(Atom) * 8;
 
@@ -792,6 +798,29 @@ void fl_sendClientMessage(::Window window, Atom message,
   e.xclient.data.l[3] = (long)d3;
   e.xclient.data.l[4] = (long)d4;
   XSendEvent(fl_display, window, 0, 0, &e);
+}
+
+/*
+     Get window property value (32 bit format)
+     Returns zero on success, -1 on error
+*/
+static int get_xwinprop(Window wnd, Atom prop, long max_length,
+			                         unsigned long *nitems, unsigned long **data) {
+  Atom actual;
+  int format;
+  unsigned long bytes_after;
+  
+  if (Success != XGetWindowProperty(fl_display, wnd, prop, 0, max_length,
+				    False, AnyPropertyType, &actual, &format,
+				    nitems, &bytes_after, (unsigned char**)data)) {
+    return -1;
+  }
+  
+  if (actual == None || format != 32) {
+    return -1;
+  }
+  
+  return 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1490,6 +1519,31 @@ int fl_handle(const XEvent& thisevent)
     in_a_window = true;
     break;
 
+  case PropertyNotify:
+    if (xevent.xproperty.atom == fl_NET_WM_STATE) {
+      int fullscreen_state = 0;
+      if (xevent.xproperty.state != PropertyDelete) {
+	unsigned long nitems;
+	unsigned long *words = 0;
+	if (0 == get_xwinprop(xid, fl_NET_WM_STATE, 64, &nitems, &words) ) {
+	  for (unsigned long item = 0; item < nitems; item++) {
+	    if (words[item] == fl_NET_WM_STATE_FULLSCREEN) {
+	      fullscreen_state = 1;
+	    }
+	  }
+	}
+      }
+      if (window->fullscreen_active() && !fullscreen_state) {
+	window->_clear_fullscreen();
+	event = fltk3::FULLSCREEN;
+      }
+      if (!window->fullscreen_active() && fullscreen_state) {
+	window->_set_fullscreen();
+	event = fltk3::FULLSCREEN;
+      }
+    }
+   break;
+      
   case MotionNotify:
     set_event_xy();
 #  if CONSOLIDATE_MOTION
@@ -1629,6 +1683,74 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
 
 ////////////////////////////////////////////////////////////////
 
+#define _NET_WM_STATE_REMOVE        0  /* remove/unset property */
+#define _NET_WM_STATE_ADD           1  /* add/set property */
+#define _NET_WM_STATE_TOGGLE        2  /* toggle property  */
+
+static void send_wm_state_event(Window wnd, int add, Atom prop) {
+  XEvent e;
+  e.xany.type = ClientMessage;
+  e.xany.window = wnd;
+  e.xclient.message_type = fl_NET_WM_STATE;
+  e.xclient.format = 32;
+  e.xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
+  e.xclient.data.l[1] = prop;
+  e.xclient.data.l[2] = 0;
+  e.xclient.data.l[3] = 0;
+  e.xclient.data.l[4] = 0;
+  XSendEvent(fl_display, RootWindow(fl_display, fl_screen),
+	    0, SubstructureNotifyMask | SubstructureRedirectMask, &e);
+  }
+
+int Fl_X::ewmh_supported() {
+  static int result = -1;
+
+  if (result == -1) {
+    result = 0;
+    unsigned long nitems;
+    unsigned long *words = 0;
+    if (0 == get_xwinprop(XRootWindow(fl_display, fl_screen), fl_NET_SUPPORTING_WM_CHECK, 64,
+				      &nitems, &words) && nitems == 1) {
+	Window child = words[0];
+	if (0 == get_xwinprop(child, fl_NET_SUPPORTING_WM_CHECK, 64,
+			      &nitems, &words) && nitems == 1) {
+	  result = (child == words[0]);
+	}
+     }
+   }
+
+  return result;
+}
+
+/* Change an existing window to fullscreen */
+void fltk3::Window::fullscreen_x() {
+  if (Fl_X::ewmh_supported()) {
+    send_wm_state_event(fl_xid(this), 1, fl_NET_WM_STATE_FULLSCREEN);
+  } else {
+    _set_fullscreen();
+    hide();
+    show();
+    /* We want to grab the window, not a widget, so we cannot use Fl::grab */
+    XGrabKeyboard(fl_display, fl_xid(this), 1, GrabModeAsync, GrabModeAsync, fl_event_time);
+    fltk3::handle(fltk3::FULLSCREEN, this);
+  }
+}
+
+void fltk3::Window::fullscreen_off_x(int X, int Y, int W, int H) {
+  if (Fl_X::ewmh_supported()) {
+    send_wm_state_event(fl_xid(this), 0, fl_NET_WM_STATE_FULLSCREEN);
+  } else {
+    _clear_fullscreen();
+    /* The grab will be lost when the window is destroyed */
+    hide();
+    resize(X,Y,W,H);
+    show();
+    fltk3::handle(fltk3::FULLSCREEN, this);
+  }
+}
+
+////////////////////////////////////////////////////////////////
+
 // A subclass of fltk3::Window may call this to associate an X window it
 // creates with the fltk3::Window:
 
@@ -1664,6 +1786,7 @@ ExposureMask|StructureNotifyMask
 |KeyPressMask|KeyReleaseMask|KeymapStateMask|FocusChangeMask
 |ButtonPressMask|ButtonReleaseMask
 |EnterWindowMask|LeaveWindowMask
+|PropertyChangeMask
 |PointerMotionMask;
 
 void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
@@ -1735,6 +1858,16 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
     attr.save_under = 1; mask |= CWSaveUnder;
     if (!win->border()) {attr.override_redirect = 1; mask |= CWOverrideRedirect;}
   }
+  // For the non-EWMH fullscreen case, we cannot use the code above,
+  // since we do not want save_under, do not want to turn off the
+  // border, and cannot grab without an existing window. Besides,
+  // there is no clear_override().
+  if (win->flags() & fltk3::Widget::FULLSCREEN && !Fl_X::ewmh_supported()) {
+    attr.override_redirect = 1;
+    mask |= CWOverrideRedirect;
+    fltk3::screen_xywh(X, Y, W, H, X, Y, W, H);
+  }
+
   if (fl_background_pixel >= 0) {
     attr.background_pixel = fl_background_pixel;
     fl_background_pixel = -1;
@@ -1795,6 +1928,12 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
           PropModeAppend, (unsigned char*) &net_wm_state_skip_taskbar, 1);
     }
 
+    // If asked for, create fullscreen
+    if (win->flags() & fltk3::Widget::FULLSCREEN && Fl_X::ewmh_supported()) {
+      XChangeProperty (fl_display, xp->xid, fl_NET_WM_STATE, XA_ATOM, 32,
+		      PropModeAppend, (unsigned char*) &fl_NET_WM_STATE_FULLSCREEN, 1);
+    }
+
     // Make it receptive to DnD:
     long version = 4;
     XChangeProperty(fl_display, xp->xid, fl_XdndAware,
@@ -1832,6 +1971,11 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
     fltk3::e_number = old_event;
     win->redraw();
   }
+  // non-EWMH fullscreen case, need grab
+  if (win->flags() & fltk3::Widget::FULLSCREEN && !Fl_X::ewmh_supported()) {
+    XGrabKeyboard(fl_display, xp->xid, 1, GrabModeAsync, GrabModeAsync, fl_event_time);
+  }
+
 }
 
 ////////////////////////////////////////////////////////////////

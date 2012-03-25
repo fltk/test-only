@@ -1325,6 +1325,11 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   X+=xoff;
   Y+=yoff;
 
+  if (w->flags() & fltk3::Widget::FULLSCREEN) {
+    X = Y = 0;
+    bx = by = bt = 0;
+  }
+  
   return ret;
 }
 
@@ -1373,6 +1378,57 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
     if (H<=0) H = 1;
     SetWindowPos(i->xid, 0, X, Y, W, H, flags);
   }
+}
+
+static void make_fullscreen(fltk3::Window *w, Window xid, int X, int Y, int W, int H) {
+  int sx, sy, sw, sh;
+  fltk3::screen_xywh(sx, sy, sw, sh, X, Y, W, H);
+  DWORD flags = GetWindowLong(xid, GWL_STYLE);
+  flags = flags & ~(WS_THICKFRAME|WS_CAPTION);
+  SetWindowLong(xid, GWL_STYLE, flags);
+  // SWP_NOSENDCHANGING is so that we can override size limits
+  SetWindowPos(xid, HWND_TOP, sx, sy, sw, sh, SWP_NOSENDCHANGING | SWP_FRAMECHANGED);
+}
+
+void fltk3::Window::fullscreen_x() {
+  _set_fullscreen();
+  make_fullscreen(this, fl_xid(this), x(), y(), w(), h());
+  fltk3::handle(fltk3::FULLSCREEN, this);
+}
+
+void fltk3::Window::fullscreen_off_x(int X, int Y, int W, int H) {
+  _clear_fullscreen();
+  DWORD style = GetWindowLong(fl_xid(this), GWL_STYLE);
+  // Remove the xid temporarily so that Fl_X::fake_X_wm() behaves like it
+  // does in Fl_X::make().
+  HWND xid = fl_xid(this);
+  Fl_X::i(this)->xid = NULL;
+  int wx, wy, bt, bx, by;
+  switch (Fl_X::fake_X_wm(this, wx, wy, bt, bx, by)) {
+    case 0:
+      break;
+    case 1:
+      style |= WS_CAPTION;
+      break;
+    case 2:
+      if (border()) {
+	  style |= WS_THICKFRAME | WS_CAPTION;
+	}
+     break;
+    }
+   Fl_X::i(this)->xid = xid;
+  // Adjust for decorations (but not if that puts the decorations
+  // outside the screen)
+  if ((X != x()) || (Y != y())) {
+    X -= bx;
+    Y -= by+bt;
+  }
+  W += bx*2;
+  H += by*2+bt;
+  SetWindowLong(fl_xid(this), GWL_STYLE, style);
+  SetWindowPos(fl_xid(this), 0, X, Y, W, H,
+		               SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED);
+  fltk3::handle(fltk3::FULLSCREEN, this);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1504,18 +1560,26 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
     int xwm = xp , ywm = yp , bt, bx, by;
     switch (fake_X_wm(w, xwm, ywm, bt, bx, by)) {
       // No border (used for menus)
-      case 0: style |= WS_POPUP;
-              styleEx |= WS_EX_TOOLWINDOW;
-	      break;
+      case 0:
+	style |= WS_POPUP;
+	styleEx |= WS_EX_TOOLWINDOW;
+	break;
 
       // Thin border and title bar
-      case 1: style |= WS_DLGFRAME | WS_CAPTION; break;
-
+      case 1:
+	style |= WS_DLGFRAME | WS_CAPTION;
+	if (!w->modal())
+	  style |= WS_SYSMENU | WS_MINIMIZEBOX;
+	break;
+	
       // Thick, resizable border and title bar, with maximize button
-      case 2: style |= WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CAPTION ; break;
+      case 2:
+	style |= WS_THICKFRAME | WS_SYSMENU | WS_MAXIMIZEBOX | WS_CAPTION;
+	if (!w->modal())
+	  style |= WS_MINIMIZEBOX;
+	break;
     }
     if (by+bt) {
-      if (!w->modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
       wp += 2*bx;
       hp += 2*by+bt;
     }
@@ -1571,6 +1635,18 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
   );
   if (lab) free(lab);
 
+  if (w->flags() & fltk3::Widget::FULLSCREEN) {
+  /* We need to make sure that the fullscreen is created on the
+   default monitor, ie the desktop where the shortcut is located
+  etc. This requires that CreateWindow is called with CW_USEDEFAULT
+  for x and y. We can then use GetWindowRect to determine which
+  monitor the window was placed on. */
+    RECT rect;
+    GetWindowRect(x->xid, &rect);
+    make_fullscreen(w, x->xid, rect.left, rect.top,
+		  rect.right - rect.left, rect.bottom - rect.top);
+  }
+
   x->next = Fl_X::first;
   Fl_X::first = x;
 
@@ -1586,7 +1662,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
   // If we've captured the mouse, we dont want to activate any
   // other windows from the code, or we lose the capture.
   ShowWindow(x->xid, !showit ? SW_SHOWMINNOACTIVE :
-	     (fltk3::grab() || (style & WS_POPUP)) ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
+	      (fltk3::grab() || (styleEx & WS_EX_TOOLWINDOW)) ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
 
   // Register all windows for potential drag'n'drop operations
   fl_OleInitialize();

@@ -787,9 +787,13 @@ static handler_link *handlers = 0;
   them returns non-zero then the event is ignored.  Events that cause
   this to be called are:
   
-  - fltk3::SHORTCUT events that are not recognized by any widget.
+  - \ref fltk3::SHORTCUT events that are not recognized by any widget.
     This lets you provide global shortcut keys.
- -  fltk3::SCREEN_CONFIGURATION_CHANGED events.
+  - \ref fltk3::SCREEN_CONFIGURATION_CHANGED events.
+  Under X11, this event requires the libXrandr.so shared library to be
+  loadable at run-time and the X server to implement the RandR extension.
+  - \ref fltk3::FULLSCREEN events sent to a window that enters of leaves
+    fullscreen mode.
   - System events that FLTK does not recognize.  See fl_xevent.
   - \e Some other events when the widget FLTK selected returns
     zero from its handle() method.  Exactly which ones may change

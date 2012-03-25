@@ -134,6 +134,7 @@ protected:
         NO_OVERLAY      = 1<<15,
         GROUP_RELATIVE  = 1<<16,
         COPIED_TOOLTIP  = 1<<17,
+	FULLSCREEN      = 1<<18,
         USERFLAG3       = 1<<29,
         USERFLAG2       = 1<<30,
         USERFLAG1       = 1<<31
@@ -507,6 +508,13 @@ public:
     return ((fltk3::Widget_I*)_p)->test_shortcut();
   }
 
+  void _set_fullscreen() {
+    ((fltk3::Widget_I*)_p)->_set_fullscreen();
+  }
+  void _clear_fullscreen() {
+    ((fltk3::Widget_I*)_p)->_clear_fullscreen();
+  }
+  
   static unsigned int label_shortcut(const char *t) {
     return fltk3::Widget_I::label_shortcut(t);
   }

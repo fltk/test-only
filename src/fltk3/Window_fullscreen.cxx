@@ -60,37 +60,41 @@ void fltk3::Window::border(int b) {
 #endif
 }
 
+/* Note: The previous implementation toggled border(). With this new
+     implementation this is not necessary. Additionally, if we do that,
+     the application may lose focus when switching out of fullscreen
+     mode with some window managers. Besides, the API does not say that
+     the FLTK border state should be toggled; it only says that the
+     borders should not be *visible*.
+*/
 void fltk3::Window::fullscreen() {
-#ifndef WIN32
-  //this would clobber the fake wm, since it relies on the border flags to
-  //determine its thickness
-  border(0);
-#endif
-#if defined(__APPLE__) || defined(WIN32) || defined(USE_X11)
-  int sx, sy, sw, sh;
-  fltk3::screen_xywh(sx, sy, sw, sh, x(), y(), w(), h());
-  // if we are on the main screen, we will leave the system menu bar unobstructed
-  if (fltk3::x()>=sx && fltk3::y()>=sy && fltk3::x()+fltk3::w()<=sx+sw && fltk3::y()+fltk3::h()<=sy+sh) {
-    sx = fltk3::x(); sy = fltk3::y(); 
-    sw = fltk3::w(); sh = fltk3::h();
+  no_fullscreen_x = x();
+  no_fullscreen_y = y();
+  no_fullscreen_w = w();
+  no_fullscreen_h = h();
+  if (shown() && !(flags() & fltk3::Widget::FULLSCREEN)) {
+    fullscreen_x();
+  } else {
+    set_flag(FULLSCREEN);
   }
-  if (x()==sx) x(sx+1); // make sure that we actually execute the resize
-#if defined(USE_X11)
-  resize(0, 0, w(), h()); // work around some quirks in X11
-#endif
-  resize(sx, sy, sw, sh);
-#else
-  if (!x()) x(1); // make sure that we actually execute the resize
-  resize(0,0,fltk3::w(),fltk3::h());
-#endif
 }
 
 void fltk3::Window::fullscreen_off(int X,int Y,int W,int H) {
-  // this order produces less blinking on IRIX:
-  resize(X,Y,W,H);
-#ifndef WIN32
-  border(1);
-#endif
+  if (shown() && (flags() & fltk3::Widget::FULLSCREEN)) {
+    fullscreen_off_x(X, Y, W, H);
+  } else {
+    clear_flag(FULLSCREEN);
+  }
+  no_fullscreen_x = no_fullscreen_y = no_fullscreen_w = no_fullscreen_h = 0;
+}
+
+void fltk3::Window::fullscreen_off() {
+  if (!no_fullscreen_x && !no_fullscreen_y) {
+    // Window was initially created fullscreen - default to current monitor
+    no_fullscreen_x = x();
+    no_fullscreen_y = y();
+  }
+  fullscreen_off(no_fullscreen_x, no_fullscreen_y, no_fullscreen_w, no_fullscreen_h);
 }
 
 //

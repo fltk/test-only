@@ -365,6 +365,7 @@ namespace fltk3 {
       NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (fltk3::MenuWindow)
       GROUP_RELATIVE  = 1<<16,  ///< position this widget relative to the parent group, not to the window
       COPIED_TOOLTIP  = 1<<17,  ///< the widget tooltip is internally copied, its destruction is handled by the widget
+      FULLSCREEN      = 1<<18,  ///< a fullscreen window (Fl_Window)
                                 // (space for more flags)
       USERFLAG3       = 1<<29,  ///< reserved for 3rd party extensions
       USERFLAG2       = 1<<30,  ///< reserved for 3rd party extensions
@@ -879,6 +880,8 @@ namespace fltk3 {
     
     /* Internal use only. */
     int test_shortcut();
+    void _set_fullscreen() {flags_ |= FULLSCREEN;}
+    void _clear_fullscreen() {flags_ &= ~FULLSCREEN;}
     /* Internal use only. */
     static unsigned int label_shortcut(const char *t);
     /* Internal use only. */
