@@ -5,20 +5,11 @@
 //
 // Copyright 1998-2012 by Bill Spitzak and others.
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+// This library is free software. Distribution and use rights are outlined in
+// the file "COPYING" which should have been included with this file.  If this
+// file is missing or damaged, see the license at:
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
+//     http://www.fltk.org/COPYING.php
 //
 // Please report all bugs and problems on the following page:
 //
@@ -35,10 +26,11 @@
 
 
 class Fl_X;
+class Fl_Window;
 
 
 namespace fltk3 {
-  
+
   const uchar WINDOW = 0xF0;		///< window type id all subclasses have type() >= this
   const uchar DOUBLE_WINDOW = 0xF1;   ///< double window type id
 
@@ -47,14 +39,14 @@ namespace fltk3 {
    window, with a border and title and all the window management controls,
    or a "subwindow" inside a window.  This is controlled by whether or not
    the window has a parent().
-   
-   Once you create a window, you usually add children fltk3::Widget
-   's to it by using window->add(child) for each new widget.
+
+   Once you create a window, you usually add children fltk3::Widget's
+   to it by using window->add(child) for each new widget.
    See fltk3::Group for more information on how to add and remove children.
-   
+
    There are several subclasses of fltk3::Window that provide
    double-buffering, overlay, menu, and OpenGL support.
-   
+
    The window's callback is done if the user tries to close a window
    using the window manager and fltk3::modal() is zero or equal to the
    window. fltk3::Window has a default callback that calls fltk3::Window::hide().
@@ -62,12 +54,13 @@ namespace fltk3 {
   class FLTK3_EXPORT Window : public Group {
 
     friend class WidgetWrapper;
-    
+
     static char *default_xclass_;
-    
+
+    friend class ::Fl_Window;
     friend class ::Fl_X;
     Fl_X *i; // points at the system-specific stuff
-    
+
     const char* iconlabel_;
     char* xclass_;
     const void* icon_;
@@ -88,9 +81,9 @@ namespace fltk3 {
     // unimplemented copy ctor and assignment operator
     Window(const Window&);
     Window& operator=(const Window&);
-    
+
   protected:
-    
+
     /** Stores the last window that was made current. See current() const */
     static Window *current_;
     virtual void draw();
@@ -100,13 +93,13 @@ namespace fltk3 {
 
     /** Forces the window to be drawn, this window is also made current and calls draw(). */
     virtual void flush();
-    
+
     /**
      Sets an internal flag that tells FLTK and the window manager to
      honor position requests.
-     
+
      This is used internally and should not be needed by user code.
-     
+
      \param[in] force 1 to set the FORCE_POSITION flag, 0 to clear it
      */
     void force_position(int force) {
@@ -115,21 +108,21 @@ namespace fltk3 {
     }
     /**
      Returns the internal state of the window's FORCE_POSITION flag.
-     
+
      \retval 1 if flag is set
      \retval 0 otherwise
-     
+
      \see force_position(int)
      */
     int force_position() const { return ((flags() & FORCE_POSITION)?1:0); }
-    
+
   public:
-    
+
     /**
-     Creates a window from the given size and title. 
-     If fltk3::Group::current() is not NULL, the window is created as a 
+     Creates a window from the given size and title.
+     If fltk3::Group::current() is not NULL, the window is created as a
      subwindow of the parent window.
-     
+
      The (w,h) form of the constructor creates a top-level window
      and asks the window manager to position the window. The (x,y,w,h)
      form of the constructor either creates a subwindow or a
@@ -138,53 +131,53 @@ namespace fltk3 {
      window, the window manager will pick a place to show the window
      or allow the user to pick a location. Use position(x,y)
      or hotspot() before calling show() to request a
-     position on the screen. See fltk3::Window::resize() 
+     position on the screen. See fltk3::Window::resize()
      for some more details on positioning windows.
-     
+
      Top-level windows initially have visible() set to 0
      and parent() set to NULL. Subwindows initially
      have visible() set to 1 and parent() set to
      the parent window pointer.
-     
+
      fltk3::Widget::box() defaults to fltk3::FLAT_BOX. If you plan to
      completely fill the window with children widgets you should
      change this to fltk3::NO_BOX. If you turn the window border off
      you may want to change this to fltk3::UP_BOX.
-     
+
      \see fltk3::Window(int x, int y, int w, int h, const char* title)
      */
     Window(int w, int h, const char* title= 0);
     /** Creates a window from the given position, size and title.
-     
+
      \see fltk3::Window(int w, int h, const char *title)
      */
     Window(int x, int y, int w, int h, const char* title = 0);
     /**
      The destructor <I>also deletes all the children</I>. This allows a
      whole tree to be deleted at once, without having to keep a pointer to
-     all the children in the user code. A kludge has been done so the 
+     all the children in the user code. A kludge has been done so the
      fltk3::Window and all of its children can be automatic (local)
      variables, but you must declare the fltk3::Window <I>first</I> so
      that it is destroyed last.
      */
     virtual ~Window();
-    
+
     virtual int handle(int);
-    
+
     /**
      Changes the size and position of the window.  If shown() is true,
      these changes are communicated to the window server (which may
      refuse that size and cause a further resize).  If shown() is
      false, the size and position are used when show() is called.
      See fltk3::Group for the effect of resizing on the child widgets.
-     
+
      You can also call the fltk3::Widget methods size(x,y) and position(w,h),
      which are inline wrappers for this virtual function.
-     
-     A top-level window can not force, but merely suggest a position and 
-     size to the operating system. The window manager may not be willing or 
-     able to display a window at the desired position or with the given 
-     dimensions. It is up to the application developer to verify window 
+
+     A top-level window can not force, but merely suggest a position and
+     size to the operating system. The window manager may not be willing or
+     able to display a window at the desired position or with the given
+     dimensions. It is up to the application developer to verify window
      parameters after the resize request.
      */
     virtual void resize(int,int,int,int);
@@ -227,49 +220,49 @@ namespace fltk3 {
     void set_non_modal()	{set_flag(NON_MODAL);}
     /**  Returns true if this window is modal or non-modal. */
     unsigned int non_modal() const {return flags() & (NON_MODAL|MODAL);}
-    
+
     /**
      Marks the window as a menu window.
-     
+
      This is intended for internal use, but it can also be used if you
      write your own menu handling. However, this is not recommended.
-     
+
      This flag is used for correct "parenting" of windows in communication
      with the windowing system. Modern X window managers can use different
      flags to distinguish menu and tooltip windows from normal windows.
-     
+
      This must be called before the window is shown and cannot be changed
      later.
      */
     void set_menu_window()	{set_flag(MENU_WINDOW);}
-    
+
     /**  Returns true if this window is a menu window. */
     unsigned int menu_window() const {return flags() & MENU_WINDOW;}
-    
+
     /**
      Marks the window as a tooltip window.
-     
+
      This is intended for internal use, but it can also be used if you
      write your own tooltip handling. However, this is not recommended.
-     
+
      This flag is used for correct "parenting" of windows in communication
      with the windowing system. Modern X window managers can use different
      flags to distinguish menu and tooltip windows from normal windows.
-     
+
      This must be called before the window is shown and cannot be changed
      later.
-     
+
      \note Since fltk3::TooltipWindow is derived from fltk3::MenuWindow, this
      also \b clears the menu_window() state.
      */
-    void set_tooltip_window() { 
+    void set_tooltip_window() {
       set_flag(TOOLTIP_WINDOW);
-      clear_flag(MENU_WINDOW); 
+      clear_flag(MENU_WINDOW);
     }
-    
+
     /**  Returns true if this window is a tooltip window. */
     unsigned int tooltip_window() const {return flags() & TOOLTIP_WINDOW;}
-    
+
     /**
      Positions the window so that the mouse is pointing at the given
      position, or at the center of the given widget, which may be the
@@ -282,13 +275,13 @@ namespace fltk3 {
     void hotspot(const fltk3::Widget*, int offscreen = 0);
     /** See void fltk3::Window::hotspot(int x, int y, int offscreen = 0) */
     void hotspot(const fltk3::Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
-    
+
     /**
      Undoes the effect of a previous resize() or show() so that the next time
      show() is called the window manager is free to position the window.
-     
+
      This is for Forms compatibility only.
-     
+
      \deprecated please use force_position(0) instead
      */
     void free_position()	{clear_flag(FORCE_POSITION);}
@@ -311,7 +304,7 @@ namespace fltk3 {
      the same aspect ratio (ignored on WIN32 and by many X window managers).
      </LI>
      </UL>
-     
+
      If this function is not called, FLTK tries to figure out the range
      from the setting of resizable():
      <UL>
@@ -324,13 +317,13 @@ namespace fltk3 {
      <LI>If either dimension of resizable() is zero, then that is also the
      maximum size (so the window cannot resize in that direction).</LI>
      </UL>
-     
+
      It is undefined what happens if the current size does not fit in the
      constraints passed to size_range().
      */
     void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0, int g=0) {
       minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; aspect=g; size_range_();}
-    
+
     /** See void fltk3::Window::label(const char*)   */
     const char* label() const {return Widget::label();}
     /**  See void fltk3::Window::iconlabel(const char*)   */
@@ -342,14 +335,14 @@ namespace fltk3 {
     /** Sets the icon label. */
     void label(const char* label, const char* iconlabel); // platform dependent
     void copy_label(const char* a);
-    
+
     static void default_xclass(const char*);
     static const char *default_xclass();
     const char* xclass() const;
     void xclass(const char* c);
     const void* icon() const;
     void icon(const void * ic);
-    
+
     /**
      Returns non-zero if show() has been called (but not hide()
      ). You can tell if a window is iconified with (w->shown()
@@ -359,16 +352,16 @@ namespace fltk3 {
     /**
      Puts the window on the screen. Usually (on X) this has the side
      effect of opening the display.
-     
+
      If the window is already shown then it is restored and raised to the
      top.  This is really convenient because your program can call show()
      at any time, even if the window is already up.  It also means that
      show() serves the purpose of raise() in other toolkits.
-     
+
      fltk3::Window::show(int argc, char **argv) is used for top-level
      windows and allows standard arguments to be parsed from the
      command-line.
-     
+
      \see fltk3::Window::show(int argc, char **argv)
      */
     virtual void show();
@@ -379,22 +372,22 @@ namespace fltk3 {
     virtual void hide();
     /**
      Puts the window on the screen and parses command-line arguments.
-     
+
      Usually (on X) this has the side effect of opening the display.
-     
+
      This form should be used for top-level windows, at least for the
      first (main) window. It allows standard arguments to be parsed
      from the command-line. You can use \p argc and \p argv from
      main(int argc, char **argv) for this call.
-     
+
      The first call also sets up some system-specific internal
      variables like the system colors.
-     
+
      \todo explain which system parameters are set up.
-     
+
      \param argc command-line argument count, usually from main()
      \param argv command-line argument vector, usually from main()
-     
+
      \see virtual void fltk3::Window::show()
      */
     void show(int argc, char **argv);
@@ -410,7 +403,7 @@ namespace fltk3 {
     /** Turns off any side effects of fullscreen() */
     void fullscreen_off();
     /**
-     Turns off any side effects of fullscreen() and does 
+     Turns off any side effects of fullscreen() and does
      resize(x,y,w,h).
      */
     void fullscreen_off(int,int,int,int);
@@ -420,22 +413,22 @@ namespace fltk3 {
      Iconifies the window.  If you call this when shown() is false
      it will show() it as an icon.  If the window is already
      iconified this does nothing.
-     
+
      Call show() to restore the window.
-     
+
      When a window is iconified/restored (either by these calls or by the
-     user) the handle() method is called with fltk3::HIDE and 
+     user) the handle() method is called with fltk3::HIDE and
      fltk3::SHOW events and visible() is turned on and off.
-     
+
      There is no way to control what is drawn in the icon except with the
      string passed to fltk3::Window::xclass().  You should not rely on
      window managers displaying the icons.
      */
     void iconize();
-    
+
     int x_root() const ;
     int y_root() const ;
-    
+
     static Window *current();
     /**
      Sets things up so that the drawing functions in <fltk3/draw.h> will go
@@ -443,45 +436,45 @@ namespace fltk3 {
      as in an idle callback, which will make your program behave much better
      if it draws a slow graphic. <B>Danger: incremental update is very hard to
      debug and maintain!</B>
-     
+
      This method only works for the fltk3::Window and fltk3::GLWindow derived classes.
      */
     void make_current();
-    
+
     // Note: Doxygen docs in Widget.h to avoid redundancy.
     virtual Window* as_window() { return this; }
-    
+
     /**
      Changes the cursor for this window.  This always calls the system, if
      you are changing the cursor a lot you may want to keep track of how
      you set it in a static variable and call this only if the new cursor
      is different.
-     
+
      The type fltk3::Cursor is an enumeration defined in <fltk3/enumerations.h>.
-     (Under X you can get any XC_cursor value by passing 
+     (Under X you can get any XC_cursor value by passing
      fltk3::Cursor((XC_foo/2)+1)).  The colors only work on X, they are
      not implemented on WIN32.
-     
+
      For back compatibility only.
      */
     void cursor(fltk3::Cursor, fltk3::Color=fltk3::BLACK, fltk3::Color=fltk3::WHITE); // platform dependent
     void default_cursor(fltk3::Cursor, fltk3::Color=fltk3::BLACK, fltk3::Color=fltk3::WHITE);
     static void default_callback(Window*, void* v);
-    
+
     /** Returns the window width including any frame added by the window manager.
-     
+
      Same as w() if applied to a subwindow.
      */
     int decorated_w();
-    /** Returns the window height including any window title bar and any frame 
+    /** Returns the window height including any window title bar and any frame
      added by the window manager.
-     
+
      Same as h() if applied to a subwindow.
      */
     int decorated_h();
-    
+
   };
-  
+
 } // namespace
 
 #endif
