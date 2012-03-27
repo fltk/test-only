@@ -108,7 +108,7 @@ public:
   // FIXME: 123 - can't traslate easily! Fl_Widget* const* array() const;
   
   void add(Fl_Widget &o) {
-    ((fltk3::Group*)_p)->find(*(fltk3::_1to3_widget(&o)));
+    ((fltk3::Group*)_p)->add(fltk3::_1to3_widget(&o));
   }
   
   void add(Fl_Widget* o) {
