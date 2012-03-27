@@ -197,16 +197,6 @@ public:
     ((fltk3::Window*)_p)->show(argc, argv);
   }
 
-//  void fullscreen_x() {
-//    ((fltk3::Window*)_p)->fullscreen_x();
-//  }
-
-//  void fullscreen_off_x() {
-//    ((fltk3::Window*)_p)->fullscreen_off_x();
-//  }
-
-//  void fullscreen_off_x(int X, int Y, int W, int H);
-
   void fullscreen() {
     ((fltk3::Window*)_p)->fullscreen();
   }
