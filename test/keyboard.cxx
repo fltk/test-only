@@ -69,6 +69,7 @@ struct keycode_table{unsigned n; const char* text;} table[] = {
   {fltk3::EscapeKey,      "fltk3::EscapeKey"},
   {fltk3::BackSpaceKey,   "fltk3::BackSpaceKey"},
   {fltk3::TabKey,         "fltk3::TabKey"},
+  {fltk3::IsoKey,         "fltk3::IsoKey"},
   {fltk3::EnterKey,       "fltk3::EnterKey"},
   {fltk3::PrintKey,       "fltk3::PrintKey"},
   {fltk3::ScrollLockKey,  "fltk3::ScrollLockKey"},

@@ -73,6 +73,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {VK_BACK,	fltk3::BackSpaceKey},
   {VK_TAB,	fltk3::TabKey},
   {VK_CLEAR,	0xff0b/*XK_Clear*/},
+  {0xe2 /*VK_OEM_102*/, fltk3::IsoKey},
   {VK_RETURN,	fltk3::EnterKey},
   {VK_PAUSE,	fltk3::PauseKey},
   {VK_SCROLL,	fltk3::ScrollLockKey},

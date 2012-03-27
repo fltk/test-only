@@ -343,6 +343,7 @@ namespace fltk3 {
   const unsigned int MouseButton	= 0xfee8;	///< A mouse button; use fltk3::Button + n for mouse button n.
   const unsigned int BackSpaceKey	= 0xff08;	///< The backspace key.
   const unsigned int TabKey	= 0xff09;	///< The tab key.
+  const unsigned int IsoKey	= 0xff0c;	///< The additional key of ISO keyboards.
   const unsigned int EnterKey	= 0xff0d;	///< The enter key. 
   const unsigned int PauseKey	= 0xff13;	///< The pause key.
   const unsigned int ScrollLockKey= 0xff14;	///< The scroll lock key.

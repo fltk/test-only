@@ -124,6 +124,7 @@ namespace fltk3 {
 #define FL_Button	0xfee8
 #define FL_BackSpace	0xff08
 #define FL_Tab		0xff09
+#define FL_Iso_Key      0xff0c
 #define FL_Enter	0xff0d
 #define FL_Pause	0xff13
 #define FL_Scroll_Lock	0xff14

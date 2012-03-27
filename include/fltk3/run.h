@@ -641,7 +641,7 @@ namespace fltk3 {
    \li All other keys on the keypad have a symbol: fltk3::EscapeKey,
    fltk3::BackSpaceKey, fltk3::TabKey, fltk3::EnterKey, fltk3::PrintKey, fltk3::ScrollLockKey, fltk3::PauseKey,
    fltk3::InsertKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::EndKey, fltk3::PageDownKey,
-   fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey, fltk3::DownKey, fltk3::ShiftLKey, fltk3::ShiftRKey,
+   fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey, fltk3::DownKey, fltk3::IsoKey, fltk3::ShiftLKey, fltk3::ShiftRKey,
    fltk3::ControlLKey, fltk3::ControlRKey, fltk3::CapsLockKey, fltk3::AltLKey, fltk3::AltRKey,
    fltk3::MetaLKey, fltk3::MetaRKey, fltk3::MenuKey, fltk3::NumLockKey, fltk3::KPEnterKey.  Be
    careful not to confuse these with the very similar, but all-caps,
