@@ -253,37 +253,49 @@ virtual rtype proto { \
       type3##_I(int w, int h, const char *l) \
       : type3(w, h, l) { }
 
+#define FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_5ARGS(type3) \
+  type3##_I(const uchar *bits, int W, int H, int D=3, int LD=0) : type3(bits, W, H, D, LD) { } 
+
+#define FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_3ARGS(type3) \
+  type3##_I(const uchar *bits, int W, int H) : type3(bits, W, H) { } 
+
+#define FLTK3_WRAPPER_INTERFACE_IMAGE_BODY(type3) \
+  Image *copy(int W, int H) { \
+  FLTK3_IMAGE_VCALLS_WRAPPER_RET(Image *, copy(W, H), CopyWH) \
+  return type3::copy(W, H); \
+  } \
+  void color_average(Color c, float i) { \
+  FLTK3_IMAGE_VCALLS_WRAPPER(color_average(c, i), ColorAverage) \
+  type3::color_average(c, i); \
+  } \
+  void desaturate() { \
+  FLTK3_IMAGE_VCALLS_WRAPPER(desaturate(), Desaturate) \
+  type3::desaturate(); \
+  } \
+  void label(Widget *w) { \
+  FLTK3_IMAGE_VCALLS_WRAPPER(label(w), LabelW) \
+  type3::label(w); \
+  } \
+  void label(MenuItem *w) { \
+  FLTK3_IMAGE_VCALLS_WRAPPER(label(w), LabelM) \
+  type3::label(w); \
+  } \
+  void draw(int X, int Y, int W, int H, int cx=0, int cy=0) { \
+  FLTK3_IMAGE_VCALLS_WRAPPER(draw(X, Y, W, H, cx, cy), Draw) \
+  type3::draw(X, Y, W, H, cx, cy); \
+  } \
+  void uncache() { \
+  FLTK3_IMAGE_VCALLS_WRAPPER(uncache(), Uncache) \
+  type3::uncache(); \
+  }
+
 #define FLTK3_WRAPPER_INTERFACE_IMAGE(type1, type3) \
-      type3##_I(const uchar *bits, int W, int H, int D=3, int LD=0) \
-      : type3(bits, W, H, D, LD) { } \
-      Image *copy(int W, int H) { \
-        FLTK3_IMAGE_VCALLS_WRAPPER_RET(Image *, copy(W, H), CopyWH) \
-        return type3::copy(W, H); \
-      } \
-      void color_average(Color c, float i) { \
-        FLTK3_IMAGE_VCALLS_WRAPPER(color_average(c, i), ColorAverage) \
-        type3::color_average(c, i); \
-      } \
-      void desaturate() { \
-        FLTK3_IMAGE_VCALLS_WRAPPER(desaturate(), Desaturate) \
-        type3::desaturate(); \
-      } \
-      void label(Widget *w) { \
-        FLTK3_IMAGE_VCALLS_WRAPPER(label(w), LabelW) \
-        type3::label(w); \
-      } \
-      void label(MenuItem *w) { \
-        FLTK3_IMAGE_VCALLS_WRAPPER(label(w), LabelM) \
-        type3::label(w); \
-      } \
-      void draw(int X, int Y, int W, int H, int cx=0, int cy=0) { \
-        FLTK3_IMAGE_VCALLS_WRAPPER(draw(X, Y, W, H, cx, cy), Draw) \
-        type3::draw(X, Y, W, H, cx, cy); \
-      } \
-      void uncache() { \
-        FLTK3_IMAGE_VCALLS_WRAPPER(uncache(), Uncache) \
-        type3::uncache(); \
-      }
+  FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_5ARGS(type3) \
+  FLTK3_WRAPPER_INTERFACE_IMAGE_BODY(type3)
+
+#define FLTK3_WRAPPER_INTERFACE_BITMAP(type1, type3) \
+  FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_3ARGS(type3) \
+  FLTK3_WRAPPER_INTERFACE_IMAGE_BODY(type3)
 
 #define FLTK3_WRAPPER_INTERFACE_END() \
     }; \

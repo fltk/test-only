@@ -38,7 +38,7 @@ class Fl_Widget;
 struct Fl_Menu_Item;
 
 FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Bitmap, Bitmap)
-FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Bitmap, Bitmap)
+FLTK3_WRAPPER_INTERFACE_BITMAP(Fl_Bitmap, Bitmap)
 FLTK3_WRAPPER_INTERFACE_END()
 
 
@@ -64,7 +64,7 @@ public:
   }
 
   Fl_Bitmap(const char *bits, int W, int H) {
-    _p = new fltk3::Bitmap_I(bits, W, H);
+    _p = new fltk3::Bitmap_I((const uchar *)bits, W, H);
     _p->wrapper(this);
   }
 
