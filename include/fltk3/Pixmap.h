@@ -31,7 +31,9 @@
 #ifndef Fltk3_Pixmap_H
 #define Fltk3_Pixmap_H
 #  include "Image.h"
-
+#if defined(WIN32)
+#  include "x.h"
+#endif
 
 class Fl_Pixmap;
 
@@ -79,6 +81,9 @@ namespace fltk3 {
     
   private:
     
+#if defined(WIN32)
+    UINT pixmap_bg_color; // RGB color used for pixmap background
+#endif // WIN32
 #if defined(__APPLE__) || defined(WIN32)
     void *id_; // for internal use
     void *mask_; // for internal use (mask bitmap)
