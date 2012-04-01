@@ -329,7 +329,7 @@ public:
   }
   
   void image(Fl_Image* img) {
-    ((fltk3::Widget_I*)_p)->image( (fltk3::Image*)(img->_p) );
+    ((fltk3::Widget_I*)_p)->image( img?(fltk3::Image*)(img->_p):0 );
   }
   
   void image(Fl_Image& img) {

@@ -93,6 +93,18 @@ protected:
 
 public:
 
+  virtual Fl_Image* copy(int w, int h) {
+    fltk3::Image* ret = 0;
+    if ( pVCalls & pVCallImageCopyWH ) {
+      ret = ((fltk3::Image_I*)_p)->copy(w, h);
+    } else {
+      pVCalls |= pVCallImageCopyWH;
+      ret = ((fltk3::Image_I*)_p)->copy(w, h);
+      pVCalls &= ~pVCallImageCopyWH;
+    }
+    return new Fl_Image( ret );
+  }
+  
   FLTK3_IMAGE_VCALLS(Fl_Image, Image)
 
   Fl_Image() { }

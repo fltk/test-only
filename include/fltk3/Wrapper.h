@@ -315,6 +315,7 @@ virtual rtype proto { \
   FLTK3_WIDGET_VCALLS(type1, type3) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
 
+/*
 #define FLTK3_IMAGE_VCALLS(type1, type3) \
   FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
   FLTK3_WRAPPER_VCALLS_IMAGE_RET(fltk3::Image *, type3##_I, copy(int w, int h), copy(w, h), CopyWH) \
@@ -324,6 +325,15 @@ virtual rtype proto { \
   FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Menu_Item *w), label((fltk3::MenuItem*)w), LabelM) \
   FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, draw(int X, int Y, int W, int H, int cx=0, int cy=0), draw(X, Y, W, H, cx, cy), Draw) \
   FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, uncache(), uncache(), Uncache)
+*/
+#define FLTK3_IMAGE_VCALLS(type1, type3) \
+FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
+FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, color_average(Fl_Color c, float i), color_average(fltk3::_1to3_color(c), i), ColorAverage) \
+FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, desaturate(), desaturate(), Desaturate) \
+FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Widget *w), label(fltk3::_1to3_widget(w)), LabelW) \
+FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Menu_Item *w), label((fltk3::MenuItem*)w), LabelM) \
+FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, draw(int X, int Y, int W, int H, int cx=0, int cy=0), draw(X, Y, W, H, cx, cy), Draw) \
+FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, uncache(), uncache(), Uncache)
 
 
 namespace fltk3 {
