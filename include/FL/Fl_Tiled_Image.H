@@ -33,15 +33,15 @@
 #include <fltk3/TiledImage.h>
 #include "Fl_Image.H"
 
-FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Image, Image)
-FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Image, Image)
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Tiled_Image, TiledImage)
+FLTK3_WRAPPER_INTERFACE_TILED(Fl_Tiled_Image, TiledImage)
 FLTK3_WRAPPER_INTERFACE_END()
-FLTK3_IMAGE_VCALLS(Fl_Image, Image)
 
 
 class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
 
 public:
+  FLTK3_IMAGE_VCALLS(Fl_Tiled_Image, TiledImage)
 
   Fl_Tiled_Image(Fl_Image *i, int W = 0, int H = 0) {
     _p = new fltk3::TiledImage(fltk3::_1to3_image(i), W, H);

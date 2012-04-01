@@ -259,6 +259,9 @@ virtual rtype proto { \
 #define FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_3ARGS(type3) \
   type3##_I(const uchar *bits, int W, int H) : type3(bits, W, H) { } 
 
+#define FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_TILED(type3) \
+  type3##_I(fltk3::Image* bits, int W, int H) : type3(bits, W, H) { } 
+
 #define FLTK3_WRAPPER_INTERFACE_IMAGE_BODY(type3) \
   Image *copy(int W, int H) { \
   FLTK3_IMAGE_VCALLS_WRAPPER_RET(Image *, copy(W, H), CopyWH) \
@@ -295,6 +298,10 @@ virtual rtype proto { \
 
 #define FLTK3_WRAPPER_INTERFACE_BITMAP(type1, type3) \
   FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_3ARGS(type3) \
+  FLTK3_WRAPPER_INTERFACE_IMAGE_BODY(type3)
+
+#define FLTK3_WRAPPER_INTERFACE_TILED(type1, type3) \
+  FLTK3_WRAPPER_INTERFACE_IMAGE_CTOR_TILED(type3) \
   FLTK3_WRAPPER_INTERFACE_IMAGE_BODY(type3)
 
 #define FLTK3_WRAPPER_INTERFACE_END() \
