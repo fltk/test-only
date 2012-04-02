@@ -384,8 +384,11 @@ namespace fltk3 {
      The callback is called with the stored user_data() as its second argument.
      You must first check that callback() is non-zero before calling this.
      */
-    void do_callback(fltk3::Widget* o) const {callback_(o, user_data_);}
-    
+    //void do_callback(fltk3::Widget* o) const {callback_(o, user_data_);}
+    void do_callback(fltk3::Widget* o) const {
+      callback_( o->wrapper() ? (fltk3::Widget*)o->wrapper() : o, user_data_);
+    }
+
     /**
      Calls the fltk3::MenuItem item's callback, and provides the fltk3::Widget argument.
      This call overrides the callback's second argument with the given value \p arg.

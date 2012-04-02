@@ -34,6 +34,18 @@
 
 typedef fltk3::Region Fl_Region;
 
+inline ::Window fl_xid(const Fl_Window* w) { 
+  return fl_xid( (fltk3::Window*)fltk3::_1to3_widget((Fl_Widget*)w) );
+}
+
+#ifdef __APPLE__
+#include <FL/Fl_Widget.H>
+inline void fl_mac_set_about( Fl_Callback *cb, void *user_data, int shortcut = 0) {
+  fl_mac_set_about( (fltk3::Callback*)cb, user_data, shortcut);
+  }
+
+#endif
+
 #if 0 // FIXME: 123
 
 FL_EXPORT void fl_open_display();

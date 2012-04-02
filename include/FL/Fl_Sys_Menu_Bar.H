@@ -40,6 +40,7 @@ FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Sys_Menu_Bar, SysMenuBar)
 FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Sys_Menu_Bar, SysMenuBar)
 FLTK3_WRAPPER_INTERFACE_END()
 
+#define fl_sys_menu_bar ((Fl_Sys_Menu_Bar*)(fltk3::sys_menu_bar->wrapper()))
 
 class FL_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
   

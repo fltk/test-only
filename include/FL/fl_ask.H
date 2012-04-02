@@ -98,9 +98,11 @@ inline const char *fl_password(const char *label, const char *deflt = 0, ...) {
 inline Fl_Widget *fl_message_icon();
 extern inline Fl_Font fl_message_font_;
 extern inline Fl_Fontsize fl_message_size_;
-inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {
-  fl_message_font_ = f; fl_message_size_ = s;}
 #endif
+
+inline void fl_message_font(Fl_Font f, Fl_Fontsize s) { 
+  fltk3::message_font(fltk3::_1to3_font(f), fltk3::_1to3_fontsize(s)); 
+}
 
 inline void fl_message_hotspot(int enable) {
   fltk3::message_hotspot(enable);
