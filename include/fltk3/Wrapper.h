@@ -141,12 +141,15 @@
  */
 
 
+#define FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3) ~type1() { }
+/*
 #define FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3) \
 virtual ~type1() { \
   if ( !(pVCalls & pVCallDtor) ) { \
     pVCalls |= pVCallDtor; \
   } \
 }
+*/
 
 #define FLTK3_WRAPPER_VCALLS_OBJECT(type, klass, proto, call, flag) \
 virtual void proto { \
