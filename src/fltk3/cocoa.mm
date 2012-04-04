@@ -565,7 +565,7 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
 }
 - (BOOL)canBecomeKeyWindow
 {
-  return YES;
+  return !w->tooltip_window();
 }
 @end
 
