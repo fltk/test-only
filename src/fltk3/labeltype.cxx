@@ -146,9 +146,11 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const
   if (flags()&SHORTCUT_LABEL) fltk3::draw_shortcut = 1;
   if (!active_r()) {
     fltk3::Label l1(*this);
+    fltk3::Color c = l1.labelcolor();
     l1.labelcolor( fltk3::inactive((fltk3::Color)l1.labelcolor()) );
     if (l1.deimage()) l1.image(l1.deimage());
     l1.draw(X,Y,W,H,a);
+    l1.labelcolor(c); // necessary because l1 and this share the same style
   } else {
     Label::draw(X,Y,W,H,a);
   }
