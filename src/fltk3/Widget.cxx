@@ -400,6 +400,9 @@ fltk3::Wrapper::~Wrapper() {
     pVCalls |= pVCallDtor;
     delete _p;
   }
+  else if (_p) {
+    _p->wrapper(NULL);
+    }
 }
 
 
