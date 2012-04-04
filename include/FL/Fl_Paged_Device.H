@@ -34,6 +34,7 @@
 #include <FL/Fl_Window.H>
 
 #define NO_PAGE_FORMATS 30 /* MSVC6 compilation fix */
+#define page_formats fltk3::PagedDevice::page_formats
 
 
 class Fl_Paged_Device : public Fl_Surface_Device {
