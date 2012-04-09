@@ -1316,10 +1316,10 @@ int fltk3::Preferences::Node::write( FILE *f ) {
     char *src = entry_[i].value;
     if ( src ) {		// hack it into smaller pieces if needed
       fprintf( f, "%s:", entry_[i].name );
-      size_t cnt, written;
+      size_t cnt, written = 0;
       for ( cnt = 0; cnt < 60; cnt++ )
 	if ( src[cnt]==0 ) break;
-      written = fwrite( src, cnt, 1, f );
+      written += fwrite( src, cnt, 1, f );
       fprintf( f, "\n" );
       src += cnt;
       for (;*src;) {
