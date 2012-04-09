@@ -40,7 +40,7 @@
 namespace fltk3 {
 
   // key will match in any state
-  const unsigned int TEXT_EDITOR_ANY_STATE = -1L;
+  const unsigned int TEXT_EDITOR_ANY_STATE = (unsigned)(-1);
   
   /**
    This is the FLTK text editor widget. It allows the user to
