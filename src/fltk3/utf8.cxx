@@ -250,8 +250,8 @@ int fltk3::utf_strncasecmp(const char *s1, const char *s2, int n)
  */
 int fltk3::utf_strcasecmp(const char *s1, const char *s2)
 {
-  int s1_l = strlen(s1);
-  int s2_l = strlen(s2);
+  int s1_l = (int)strlen(s1);
+  int s2_l = (int)strlen(s2);
   
   if (s1_l < s2_l) {
     return -1;
@@ -477,19 +477,19 @@ char * fltk3::utf2mbcs(const char *s)
 {
   if (!s) return NULL;
 #if defined(WIN32) && !defined(__CYGWIN__)
-  int l = strlen(s);
+  int l = (int)strlen(s);
   static char *buf = NULL;
   
   //	mbwbuf = (xchar*)realloc(mbwbuf, (l+6) * sizeof(xchar));
   //	l = fl_utf2unicode((unsigned char*)s, l, mbwbuf);
   //	mbwbuf[l] = 0;
-  unsigned wn = fltk3::utf8toUtf16(s, l, NULL, 0) + 7; // Query length
+  unsigned wn = fltk3::utf8toUtf16(s, (unsigned)l, NULL, 0) + 7; // Query length
   mbwbuf = (xchar*)realloc(mbwbuf, sizeof(xchar)*wn);
-  l = fltk3::utf8toUtf16(s, l, (unsigned short *)mbwbuf, wn); // Convert string
+  l = fltk3::utf8toUtf16(s, (unsigned)l, (unsigned short *)mbwbuf, wn); // Convert string
   mbwbuf[l] = 0;
   
-  buf = (char*)realloc(buf, l * 6 + 1);
-  l = wcstombs(buf, mbwbuf, l * 6);
+  buf = (char*)realloc(buf, (unsigned)(l * 6 + 1));
+  l = (unsigned)wcstombs(buf, mbwbuf, (unsigned)l * 6);
   buf[l] = 0;
   return buf;
 #else
@@ -530,22 +530,22 @@ static xchar *wbuf1 = NULL;
 char *fltk3::getenv(const char* v)
 {
 #if defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(v);
+  size_t l = strlen(v);
   //	static xchar* wbuf = NULL;
   //	wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //	wbuf[fl_utf2unicode((const unsigned char*)v, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(v, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(v, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(v, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(v, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   xchar *ret = ::_wgetenv(wbuf);
   static char *buf = NULL;
   if (ret) {
-    l = wcslen(ret);
-    wn = fltk3::utf8fromwc(NULL, 0, ret, l) + 1; // query length
+    l = (unsigned)wcslen(ret);
+    wn = fltk3::utf8fromwc(NULL, 0, ret, (unsigned)l) + 1; // query length
     buf = (char*) realloc(buf, wn);
     //		buf[fl_unicode2utf(ret, l, buf)] = 0;
-    wn = fltk3::utf8fromwc(buf, wn, ret, l); // convert string
+    wn = fltk3::utf8fromwc(buf, wn, ret, (unsigned)l); // convert string
     buf[wn] = 0;
     return buf;
   } else {
@@ -569,7 +569,7 @@ int fltk3::vopen(const char* f, int oflags, va_list ap) {
   int pmode;
   pmode = va_arg(ap, int);
 #if defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  unsigned l = (unsigned)strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
   unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
@@ -587,19 +587,19 @@ int fltk3::vopen(const char* f, int oflags, va_list ap) {
 FILE *fltk3::fopen(const char* f, const char *mode)
 {
 #if  defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   l = strlen(mode);
   //		wbuf1 = (xchar*)realloc(wbuf1, sizeof(xchar) * (l+1));
   //		wbuf1[fl_utf2unicode((const unsigned char*)mode, l, wbuf1)] = 0;
-  wn = fltk3::utf8toUtf16(mode, l, NULL, 0) + 1; // Query length
+  wn = fltk3::utf8toUtf16(mode, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf1 = (xchar*)realloc(wbuf1, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(mode, l, (unsigned short *)wbuf1, wn); // Convert string
+  wn = fltk3::utf8toUtf16(mode, (unsigned)l, (unsigned short *)wbuf1, wn); // Convert string
   wbuf1[wn] = 0;
   return ::_wfopen(wbuf, wbuf1);
 #else
@@ -613,12 +613,12 @@ int fltk3::system(const char* f)
 #  ifdef __MINGW32__
   return system(fltk3::utf2mbcs(f));
 #  else
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_wsystem(wbuf);
 #  endif
@@ -633,14 +633,14 @@ int fltk3::execvp(const char *file, char *const *argv)
 #ifdef __MINGW32__
   return _execvp(fltk3::utf2mbcs(file), argv);
 #else
-  int l = strlen(file);
+  size_t l = strlen(file);
   int i, n, ret;
   xchar **ar;
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)file, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(file, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(file, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(file, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(file, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   
   i = 0; n = 0;
@@ -652,9 +652,9 @@ int fltk3::execvp(const char *file, char *const *argv)
     l = strlen(argv[i]);
     //			ar[i] = (xchar *)malloc(sizeof(xchar) * (l+1));
     //			ar[i][fl_utf2unicode((const unsigned char*)argv[i], l, ar[i])] = 0;
-    wn = fltk3::utf8toUtf16(argv[i], l, NULL, 0) + 1; // Query length
+    wn = fltk3::utf8toUtf16(argv[i], (unsigned)l, NULL, 0) + 1; // Query length
     ar[i] = (xchar *)malloc(sizeof(xchar)*wn);
-    wn = fltk3::utf8toUtf16(argv[i], l, (unsigned short *)ar[i], wn); // Convert string
+    wn = fltk3::utf8toUtf16(argv[i], (unsigned)l, (unsigned short *)ar[i], wn); // Convert string
     ar[i][wn] = 0;
     i++;
   }
@@ -678,12 +678,12 @@ int fltk3::execvp(const char *file, char *const *argv)
 int fltk3::chmod(const char* f, int mode)
 {
 #if  defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_wchmod(wbuf, mode);
 #else
@@ -694,12 +694,12 @@ int fltk3::chmod(const char* f, int mode)
 int fltk3::access(const char* f, int mode)
 {
 #if defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_waccess(wbuf, mode);
 #else
@@ -711,12 +711,12 @@ int fltk3::access(const char* f, int mode)
 int fltk3::stat(const char* f, struct stat *b)
 {
 #if defined(WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_wstat(wbuf, (struct _stat*)b);
 #else
@@ -736,9 +736,9 @@ char *fltk3::getcwd(char* b, int l)
   xchar *ret = ::_wgetcwd(wbuf, l);
   if (ret) {
     unsigned dstlen = l;
-    l = wcslen(wbuf);
+    l = (int)wcslen(wbuf);
     //			b[fl_unicode2utf(wbuf, l, b)] = 0;
-    dstlen = fltk3::utf8fromwc(b, dstlen, wbuf, l);
+    dstlen = fltk3::utf8fromwc(b, dstlen, wbuf, (unsigned)l);
     b[dstlen] = 0;
     return b;
   } else {
@@ -753,12 +753,12 @@ char *fltk3::getcwd(char* b, int l)
 int fltk3::unlink(const char* f)
 {
 #if defined(WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_wunlink(wbuf);
 #else
@@ -769,12 +769,12 @@ int fltk3::unlink(const char* f)
 int fltk3::mkdir(const char* f, int mode)
 {
 #if defined(WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(short) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_wmkdir(wbuf);
 #else
@@ -786,12 +786,12 @@ int fltk3::mkdir(const char* f, int mode)
 int fltk3::rmdir(const char* f)
 {
 #if defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
+  size_t l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
   //		wbuf[fl_utf2unicode((const unsigned char*)f, l, wbuf)] = 0;
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   return ::_wrmdir(wbuf);
 #else
@@ -802,15 +802,15 @@ int fltk3::rmdir(const char* f)
 int fltk3::rename(const char* f, const char *n)
 {
 #if defined (WIN32) && !defined(__CYGWIN__)
-  int l = strlen(f);
-  unsigned wn = fltk3::utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+  size_t l = strlen(f);
+  unsigned wn = fltk3::utf8toUtf16(f, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+  wn = fltk3::utf8toUtf16(f, (unsigned)l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   l = strlen(n);
-  wn = fltk3::utf8toUtf16(n, l, NULL, 0) + 1; // Query length
+  wn = fltk3::utf8toUtf16(n, (unsigned)l, NULL, 0) + 1; // Query length
   wbuf1 = (xchar*)realloc(wbuf1, sizeof(xchar)*wn);
-  wn = fltk3::utf8toUtf16(n, l, (unsigned short *)wbuf1, wn); // Convert string
+  wn = fltk3::utf8toUtf16(n, (unsigned)l, (unsigned short *)wbuf1, wn); // Convert string
   wbuf1[wn] = 0;
   return ::_wrename(wbuf, wbuf1);
 #else
@@ -823,7 +823,7 @@ char fltk3::make_path( const char *path ) {
   if (fltk3::access(path, 0)) {
     const char *s = strrchr( path, '/' );
     if ( !s ) return 0;
-    int len = s-path;
+    size_t len = (size_t)(s-path);
     char *p = (char*)malloc( len+1 );
     memcpy( p, path, len );
     p[len] = 0;
@@ -839,7 +839,7 @@ void fltk3::make_path_for_file( const char *path )
 {
   const char *s = strrchr( path, '/' );
   if ( !s ) return;
-  int len = s-path;
+  size_t len = s-path;
   char *p = (char*)malloc( len+1 );
   memcpy( p, path, len );
   p[len] = 0;

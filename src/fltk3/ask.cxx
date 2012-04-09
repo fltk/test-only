@@ -71,7 +71,7 @@ static char avoidRecursion = 0;
 // pointer to one of the buttons or an fltk3::Window* pointer to the
 // message window (message_form).
 static void button_cb(fltk3::Widget *, void *val) {
-  ret_val = (fl_intptr_t)val;
+  ret_val = (int)(fl_intptr_t)val;
   message_form->hide();
 }
 

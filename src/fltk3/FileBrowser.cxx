@@ -581,7 +581,7 @@ fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
 
 #if (defined(WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
     strlcpy(filename, directory_, sizeof(filename));
-    i = strlen(filename) - 1;
+    i = (int)strlen(filename) - 1;
 
     if (i == 2 && filename[1] == ':' &&
         (filename[2] == '/' || filename[2] == '\\'))

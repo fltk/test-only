@@ -190,7 +190,7 @@ fltk3::Clock::Clock(uchar t, int X, int Y, int W, int H, const char *L)
 }
 
 static void tick(void *v) {
-  ((fltk3::Clock*)v)->value(time(0));
+  ((fltk3::Clock*)v)->value( (ulong)time(0) );
   fltk3::add_timeout(1.0, tick, v);
 }
 

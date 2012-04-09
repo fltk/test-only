@@ -77,7 +77,7 @@ fltk3::XPMImage::XPMImage(const char *name) : fltk3::Pixmap((char *const*)0) {
       if (*q == '\\') switch (*++q) {
       case '\r':
       case '\n':
-	if (!fgets(q,(buffer+MAXSIZE+20)-q,f)) { /* no problem if we hit EOF */ } break;
+	if (!fgets(q, (int)(buffer+MAXSIZE+20-q), f)) { /* no problem if we hit EOF */ } break;
       case 0:
 	break;
       case 'x': {

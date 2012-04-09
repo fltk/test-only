@@ -92,7 +92,7 @@ static int dnulllen(const char *wp) {
 //
 static void dnullcat(char*&wp, const char *string, int n = -1 ) {
   //DEBUG printf("DEBUG: dnullcat IN: <"); dnullprint(wp); printf(">\n");
-  int inlen = ( n < 0 ) ? strlen(string) : n;
+  size_t inlen = ( n < 0 ) ? strlen(string) : n;
   if ( ! wp ) {
     wp = new char[inlen + 4];
     *(wp+0) = '\0';
@@ -120,7 +120,7 @@ static void dnullcat(char*&wp, const char *string, int n = -1 ) {
     }
   }
 
-  if ( n == -1 ) n = strlen(string);
+  if ( n == -1 ) n = (int)strlen(string);
   strncpy(wp2, string, n);
 
   // Leave string double-null terminated
@@ -314,7 +314,7 @@ int fltk3::NativeFileChooser::showfile() {
   }
   // SPACE FOR RETURNED FILENAME
   _ofn.lpstrFile    = new WCHAR[fsize];
-  _ofn.nMaxFile     = fsize-1;
+  _ofn.nMaxFile     = (DWORD)fsize-1;
   _ofn.lpstrFile[0] = 0;
   _ofn.lpstrFile[1] = 0;		// dnull
   // PARENT WINDOW
@@ -333,7 +333,7 @@ int fltk3::NativeFileChooser::showfile() {
     const char *p = _parsedfilt;
     while(*(p + strlen(p) + 1) != 0) p += strlen(p) + 1;
     p += strlen(p) + 2;
-    MultiByteToWideChar(CP_UTF8, 0, _parsedfilt, p - _parsedfilt, wpattern, MAX_PATH);
+    MultiByteToWideChar(CP_UTF8, 0, _parsedfilt, (int)(p - _parsedfilt), wpattern, MAX_PATH);
     _ofn.lpstrFilter = wpattern;
   } else {
     _ofn.lpstrFilter = NULL;
@@ -405,7 +405,7 @@ int fltk3::NativeFileChooser::showfile() {
     case BROWSE_MULTI_FILE: {
       // EXTRACT MULTIPLE FILENAMES
       const WCHAR *dirname = _ofn.lpstrFile;
-      int dirlen = wcslen(dirname);
+      size_t dirlen = wcslen(dirname);
       if ( dirlen > 0 ) {
 	// WALK STRING SEARCHING FOR 'DOUBLE-NULL'
 	//     eg. "/dir/name\0foo1\0foo2\0foo3\0\0"

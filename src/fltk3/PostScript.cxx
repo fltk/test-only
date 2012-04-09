@@ -942,7 +942,7 @@ void fltk3::PostScriptGraphicsDriver::font(int f, int s) {
   Fl_Font_Descriptor *desc = driver->font_descriptor();
   this->font_descriptor(desc);
   if (f < fltk3::FREE_FONT) {
-    float ps_size = s;
+    float ps_size = (float)s;
     fprintf(output, "/%s SF\n" , _fontNames[f]);
 #if defined(USE_X11) 
 #if USE_XFT

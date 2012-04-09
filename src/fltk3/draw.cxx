@@ -127,7 +127,7 @@ fltk3::expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     if (!c || c == ' ' || c == '\n') {
       // test for word-wrap:
       if (word_start < p && wrap) {
-	double newwidth = w + fltk3::width(word_end, o-word_end);
+	double newwidth = w + fltk3::width(word_end, (int)(o-word_end));
 	if (word_end > buf && newwidth > maxw) { // break before this word
 	  o = word_end;
 	  p = word_start;
@@ -144,7 +144,7 @@ fltk3::expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     if (o > e) break; // don't overflow buffer
 
     if (c == '\t') {
-      for (c = fltk3::utf_nb_char((uchar*)buf, o-buf)%8; c<8 && o<e; c++) 
+      for (c = fltk3::utf_nb_char( (uchar*)buf, (int)(o-buf) )%8; c<8 && o<e; c++) 
            *o++ = ' ';
     } else if (c == '&' && fltk3::draw_shortcut && *(p+1)) {
       if (*(p+1) == '&') {p++; *o++ = '&';}
@@ -169,9 +169,9 @@ fltk3::expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     }
   }
 
-  width = w + fltk3::width(word_end, o-word_end);
+  width = w + fltk3::width(word_end, (int)(o-word_end));
   *o = 0;
-  n = o-buf;
+  n = (int)(o-buf);
   return p;
 }
 
@@ -312,7 +312,7 @@ void fltk3::draw(
       callthis(buf,buflen,xpos,ypos-desc);
 
       if (underline_at && underline_at >= buf && underline_at < (buf + buflen))
-	callthis("_",1,xpos+int(fltk3::width(buf,underline_at-buf)),ypos-desc);
+	callthis("_", 1, xpos + int(fltk3::width(buf, (int)(underline_at-buf))), ypos-desc);
 
       if (!*e || (*e == '@' && e[1] != '@')) break;
       p = e;

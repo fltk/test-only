@@ -180,7 +180,7 @@ public:
       }
       *b = 0;
       fltk3::e_text = currDragData;
-      fltk3::e_length = b - currDragData;
+      fltk3::e_length = (int)(b - currDragData);
       fltk3::belowmouse()->handle(fltk3::e_number = fltk3::PASTE); // e_text will be invalid after this call
       fltk3::e_number = old_event;
       SetForegroundWindow( hwnd );
@@ -259,7 +259,7 @@ private:
 	q += len;
 	}
       *q = 0;
-      currDragSize = q - currDragData;
+      currDragSize = (int)(q - currDragData);
       currDragData = (char*)realloc(currDragData, currDragSize + 1);
       GlobalUnlock( medium.hGlobal );
       ReleaseStgMedium( &medium );

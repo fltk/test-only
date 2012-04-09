@@ -247,7 +247,7 @@ int fltk3::Tree::item_pathname(char *pathname, int pathnamelen, const fltk3::Tre
     if ( item->is_root() && showroot() == 0 ) break;		// don't include root in path if showroot() off
                                                                 // Find name of current item
     const char *name = item->label() ? item->label() : "???";	// name for this item
-    int len = strlen(name);
+    int len = (int)strlen(name);
     // Add name to end of pathname[]
     for ( --len; len>=0; len-- ) {
       SAFE_RCAT(name[len]);					// rcat name of item
@@ -930,7 +930,7 @@ void fltk3::Tree::display(fltk3::TreeItem *item) {
  */
 void fltk3::Tree::load(fltk3::Preferences &prefs) 
 {
-  int i, j, n, pn = strlen(prefs.path());
+  int i, j, n, pn = (int)strlen(prefs.path());
   char *p;
   const char *path = prefs.path();
   if (strcmp(path, ".")==0)
@@ -947,21 +947,21 @@ void fltk3::Tree::load(fltk3::Preferences &prefs)
   for (i=0; i<n; i++) {
     // We must remove all fwd slashes in the key and value strings. Replace with backslash.
     char *key = strdup(prefs.entry(i));
-    int kn = strlen(key);
+    int kn = (int)strlen(key);
     for (j=0; j<kn; j++) {
       if (key[j]=='/') key[j]='\\'; 
     }
     char *val;  prefs.get(key, val, "");
-    int vn = strlen(val);
+    int vn = (int)strlen(val);
     for (j=0; j<vn; j++) {
       if (val[j]=='/') val[j]='\\'; 
     }
     if (vn<40) {
-      int sze = pn + strlen(key) + vn;
+      size_t sze = pn + strlen(key) + vn;
       p = (char*)malloc(sze+5);
       sprintf(p, "%s/%s = %s", path, key, val);
     } else {
-      int sze = pn + strlen(key) + 40;
+      size_t sze = pn + strlen(key) + 40;
       p = (char*)malloc(sze+5);
       sprintf(p, "%s/%s = %.40s...", path, key, val);
     }

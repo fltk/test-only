@@ -250,7 +250,7 @@ static int fd_array_size = 0;
 static struct FD {
   int fd;
   short events;
-  void (*cb)(int, void*);
+  void (*cb)(fltk3::SOCKET, void*);
   void* arg;
 } *fd = 0;
 
@@ -284,7 +284,7 @@ void fltk3::set_status(int x, int y, int w, int h)
 {
 }
 
-void fltk3::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void fltk3::add_fd(int n, int events, void (*cb)(fltk3::SOCKET, void*), void *v) {
   remove_fd(n,events);
   int i = nfds++;
   if (i >= fd_array_size) {
@@ -302,7 +302,7 @@ void fltk3::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   if (n > maxfd) maxfd = n;
 }
 
-void fltk3::add_fd(int fd, void (*cb)(int, void*), void* v) {
+void fltk3::add_fd(int fd, void (*cb)(fltk3::SOCKET, void*), void* v) {
   fltk3::add_fd(fd, fltk3::READ, cb, v);
 }
 
@@ -597,7 +597,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
       else *o++ = *i++;
     }
     *o = 0;
-    fltk3::e_length = o - fltk3::e_text;
+    fltk3::e_length = (int)(o - fltk3::e_text);
     receiver.handle(fltk3::PASTE);
     delete [] fltk3::e_text;
     fltk3::e_text = 0;
@@ -606,9 +606,9 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
     HANDLE h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
       wchar_t *memLock = (wchar_t*) GlobalLock(h);
-      int utf16_len = wcslen(memLock);
+      size_t utf16_len = wcslen(memLock);
       fltk3::e_text = (char*) malloc (utf16_len * 4 + 1);
-      int utf8_len = fltk3::utf8fromwc(fltk3::e_text, utf16_len * 4, memLock, utf16_len);
+      unsigned utf8_len = fltk3::utf8fromwc(fltk3::e_text, utf16_len * 4, memLock, utf16_len);
       *(fltk3::e_text + utf8_len) = 0;
       LPSTR a,b;
       a = b = fltk3::e_text;
@@ -617,7 +617,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
         else *b++ = *a++;
       }
       *b = 0;
-      fltk3::e_length = b - fltk3::e_text;
+      fltk3::e_length = (int)(b - fltk3::e_text);
       receiver.handle(fltk3::PASTE);
       GlobalUnlock(h);
       free(fltk3::e_text);
@@ -779,7 +779,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {0xde,	'\''},
   {VK_OEM_102, fltk3::IsoKey}
 };
-static int ms2fltk(int vk, int extended) {
+static int ms2fltk(WPARAM vk, int extended) {
   static unsigned short vklut[256];
   static unsigned short extendedlut[256];
   if (!vklut[1]) { // init the table
@@ -1326,7 +1326,7 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   X+=xoff;
   Y+=yoff;
 
-  if (w->flags() & fltk3::Widget::FULLSCREEN) {
+  if (w->is_fullscreen()) {
     X = Y = 0;
     bx = by = bt = 0;
   }
@@ -1498,9 +1498,10 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
 
   // convert UTF-8 class_name to wchar_t for RegisterClassExW and CreateWindowExW
 
-  fltk3::utf8toUtf16(class_name,strlen(class_name),		// in
+  fltk3::utf8toUtf16(class_name,
+		 (unsigned)strlen(class_name),		// in
 		 (unsigned short*)class_namew,		// out
-		 sizeof(class_namew)/sizeof(wchar_t));	// max. size
+		 (unsigned)(sizeof(class_namew)/sizeof(wchar_t)));	// max. size
 
   if (!class_name_list.has_name(class_name)) {
     WNDCLASSEXW wcw;
@@ -1615,14 +1616,14 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
 
   WCHAR *lab = NULL;
   if (w->label()) {
-    int l = strlen(w->label());
+    int l = (int)strlen(w->label());
 //  lab = (WCHAR*) malloc((l + 1) * sizeof(short));
 //  l = fl_utf2unicode((unsigned char*)w->label(), l, (xchar*)lab);
 //  lab[l] = 0;
-    unsigned wlen = fltk3::utf8toUtf16(w->label(), l, NULL, 0); // Pass NULL to query length
+    unsigned wlen = fltk3::utf8toUtf16(w->label(), (unsigned)l, NULL, 0); // Pass NULL to query length
     wlen++;
     lab = (WCHAR *) malloc(sizeof(WCHAR)*wlen);
-    wlen = fltk3::utf8toUtf16(w->label(), l, (unsigned short*)lab, wlen);
+    wlen = fltk3::utf8toUtf16(w->label(), (unsigned)l, (unsigned short*)lab, wlen);
     lab[wlen] = 0;
   }
   x->xid = CreateWindowExW(
@@ -1636,7 +1637,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
   );
   if (lab) free(lab);
 
-  if (w->flags() & fltk3::Widget::FULLSCREEN) {
+  if (w->is_fullscreen()) {
   /* We need to make sure that the fullscreen is created on the
    default monitor, ie the desktop where the shortcut is located
   etc. This requires that CreateWindow is called with CW_USEDEFAULT
@@ -1695,7 +1696,7 @@ static LRESULT CALLBACK s_TimerProc(HWND hwnd, UINT msg,
   switch (msg) {
   case WM_TIMER:
     {
-      unsigned int id = wParam - 1;
+      unsigned int id = (unsigned)(wParam - 1);
       if (id < (unsigned int)win32_timer_used && win32_timers[id].handle) {
         fltk3::TimeoutHandler cb   = win32_timers[id].callback;
         void*              data = win32_timers[id].data;
@@ -1845,13 +1846,13 @@ void fltk3::Window::label(const char *name,const char *iname) {
   iconlabel_ = iname;
   if (shown() && !parent()) {
     if (!name) name = "";
-    int l = strlen(name);
+    int l = (int)strlen(name);
 //  WCHAR *lab = (WCHAR*) malloc((l + 1) * sizeof(short));
 //  l = fl_utf2unicode((unsigned char*)name, l, (xchar*)lab);
-    unsigned wlen = fltk3::utf8toUtf16(name, l, NULL, 0); // Pass NULL to query length
+    unsigned wlen = fltk3::utf8toUtf16(name, (unsigned)l, NULL, 0); // Pass NULL to query length
     wlen++;
     unsigned short * lab = (unsigned short*)malloc(sizeof(unsigned short)*wlen);
-    wlen = fltk3::utf8toUtf16(name, l, lab, wlen);
+    wlen = fltk3::utf8toUtf16(name, (unsigned)l, lab, wlen);
     lab[wlen] = 0;
     SetWindowTextW(i->xid, (WCHAR *)lab);
     free(lab);

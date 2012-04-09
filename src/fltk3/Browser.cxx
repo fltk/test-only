@@ -324,7 +324,7 @@ void fltk3::Browser::insert(int line, fltk3::BrowserLine_* item) {
   \param[in] d Optional pointer to user data to be associated with the new line.
 */
 void fltk3::Browser::insert(int line, const char* newtext, void* d) {
-  int l = strlen(newtext);
+  int l = (int)strlen(newtext);
   fltk3::BrowserLine_* t = (fltk3::BrowserLine_*)malloc(sizeof(fltk3::BrowserLine_)+l);
   t->length = (short)l;
   t->flags = 0;
@@ -359,7 +359,7 @@ void fltk3::Browser::move(int to, int from) {
 void fltk3::Browser::text(int line, const char* newtext) {
   if (line < 1 || line > lines) return;
   fltk3::BrowserLine_* t = find_line(line);
-  int l = strlen(newtext);
+  int l = (int)strlen(newtext);
   if (l > t->length) {
     fltk3::BrowserLine_* n = (fltk3::BrowserLine_*)malloc(sizeof(fltk3::BrowserLine_)+l);
     replacing(t, n);

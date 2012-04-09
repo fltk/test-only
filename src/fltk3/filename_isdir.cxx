@@ -63,7 +63,7 @@ int fltk3::filename_isdir(const char* n) {
   char		fn[FLTK3_PATH_MAX];
   int		length;
 
-  length = strlen(n);
+  length = (int)strlen(n);
 
 #ifdef WIN32
   // This workaround brought to you by the fine folks at Microsoft!

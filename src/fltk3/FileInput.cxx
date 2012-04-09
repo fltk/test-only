@@ -131,7 +131,7 @@ void fltk3::FileInput::update_buttons() {
 
     end ++;
 
-    buttons_[i] = (short)fltk3::width(start, end - start);
+    buttons_[i] = (short)fltk3::width(start, (int)(end - start));
     if (!i) buttons_[i] += fltk3::box_dx(box()) + 6;
   }
 
@@ -284,7 +284,7 @@ fltk3::FileInput::handle_button(int event)		// I - Event
   if (i < 0) {
     // Found the end; truncate the value and update the buttons...
     *start = '\0';
-    value(newvalue, start - newvalue);
+    value(newvalue, (int)(start - newvalue));
 
     // Then do the callbacks, if necessary...
     set_changed();

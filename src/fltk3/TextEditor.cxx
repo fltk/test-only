@@ -321,7 +321,7 @@ int fltk3::TextEditor::kf_shift_move(unsigned c, fltk3::TextEditor* e) {
   fltk3::text_drag_me(e->insert_position(), e);
   char *copy = e->buffer()->selection_text();
   if (copy) {
-    fltk3::copy(copy, strlen(copy), 0);
+    fltk3::copy(copy, (int)strlen(copy), 0);
     free(copy);
     }
   return 1;
@@ -471,7 +471,7 @@ int fltk3::TextEditor::kf_delete(unsigned int, fltk3::TextEditor* e) {
 int fltk3::TextEditor::kf_copy(unsigned int, fltk3::TextEditor* e) {
   if (!e->buffer()->selected()) return 1;
   const char *copy = e->buffer()->selection_text();
-  if (*copy) fltk3::copy(copy, strlen(copy), 1);
+  if (*copy) fltk3::copy(copy, (int)strlen(copy), 1);
   free((void*)copy);
   e->show_insert_position();
   return 1;
@@ -500,7 +500,7 @@ int fltk3::TextEditor::kf_paste(unsigned int, fltk3::TextEditor* e) {
 int fltk3::TextEditor::kf_select_all(unsigned int, fltk3::TextEditor* e) {
   e->buffer()->select(0, e->buffer()->length());
   const char *copy = e->buffer()->selection_text();
-  if (*copy) fltk3::copy(copy, strlen(copy), 0);
+  if (*copy) fltk3::copy(copy, (int)strlen(copy), 0);
   free((void*)copy);
   return 1;
 }

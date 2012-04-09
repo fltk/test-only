@@ -44,7 +44,7 @@ int fltk3::MenuItem::size() const {
   int nest = 0;
   for (;;) {
     if (!m->text) {
-      if (!nest) return (m-this+1);
+      if (!nest) return (int)(m-this+1);
       nest--;
     } else if (m->flags & fltk3::SUBMENU) {
       nest++;
@@ -340,9 +340,9 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
       // s is a pointerto the utf8 string for the entire shortcut
       // k points only to the key part (minus the modifier keys)
       const char *k, *s = fltk3::shortcut_label(m->shortcut_, &k);
-      if (fltk3::utf_nb_char((const unsigned char*)k, strlen(k))<=4) {
+      if (fltk3::utf_nb_char((const unsigned char*)k, (int)strlen(k))<=4) {
         // a regular shortcut has a right-justified modifier followed by a left-justified key
-        w1 = int(fltk3::width(s, k-s));
+        w1 = int(fltk3::width(s, (int)(k-s)));
         if (w1 > hotModsw) hotModsw = w1;
         w1 = int(fltk3::width(k))+4;
         if (w1 > hotKeysw) hotKeysw = w1;
@@ -463,7 +463,7 @@ void menuwindow::drawentry(const fltk3::MenuItem* m, int n, int eraseit) {
     fltk3::font(f, m->labelsize_ ? m->labelsize_ :
                    button ? button->textsize() : fltk3::NORMAL_SIZE);
     const char *k, *s = fltk3::shortcut_label(m->shortcut_, &k);
-    if (fltk3::utf_nb_char((const unsigned char*)k, strlen(k))<=4) {
+    if (fltk3::utf_nb_char((const unsigned char*)k, (int)strlen(k))<=4) {
       // righ-align the modifiers and left-align the key
       char buf[32]; strcpy(buf, s); buf[k-s] = 0;
       fltk3::draw(buf, xx, yy, ww-shortcutWidth, hh, fltk3::ALIGN_RIGHT);

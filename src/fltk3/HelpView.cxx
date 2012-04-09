@@ -263,8 +263,8 @@ void fltk3::HelpView::hv_draw(const char *t, int x, int y)
     int w = (int)fltk3::width(t);
     if (mouse_x>=x && mouse_x<x+w) {
       if (mouse_y>=y-fltk3::height()+fltk3::descent()&&mouse_y<=y+fltk3::descent()) {
-        int f = current_pos;
-        int l = f+strlen(t); // use 'quote_char' to calculate the true length of the HTML string
+        int f = (int) current_pos;
+        int l = (int)(f+strlen(t)); // use 'quote_char' to calculate the true length of the HTML string
         if (draw_mode==1) {
           selection_push_first = f;
           selection_push_last = l;
@@ -551,7 +551,7 @@ fltk3::HelpView::draw()
               fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                xx + x() - leftline_ + ww + xtra_ww);
             }
-            current_pos = ptr-value_;
+            current_pos = (int)(ptr - value_);
 
             xx += ww;
 	    if ((fsize + 2) > hh)
@@ -573,7 +573,7 @@ fltk3::HelpView::draw()
 	                        	 xx + x() - leftline_ +
 					     (int)fltk3::width(buf));
 
-                current_pos = ptr-value_;
+                current_pos = (int)(ptr - value_);
 		if (line < 31)
 	          line ++;
 		xx = block->line[line];
@@ -605,7 +605,7 @@ fltk3::HelpView::draw()
 	      if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                               xx + x() - leftline_ + ww);
               xx += ww;
-              current_pos = ptr-value_;
+              current_pos = (int)(ptr - value_);
 	    }
 
 	    needspace = 0;
@@ -616,7 +616,7 @@ fltk3::HelpView::draw()
 
 	    while (isspace((*ptr)&255))
               ptr ++;
-            current_pos = ptr-value_;
+            current_pos = (int)(ptr - value_);
 	  }
 	}
 
@@ -654,7 +654,7 @@ fltk3::HelpView::draw()
             ptr ++;
 
           // end of command reached, set the supposed start of printed eord here
-          current_pos = ptr-value_;
+          current_pos = (int)(ptr - value_);
 	  if (strcasecmp(buf, "HEAD") == 0)
             head = 1;
 	  else if (strcasecmp(buf, "BR") == 0)
@@ -910,7 +910,7 @@ fltk3::HelpView::draw()
 	  needspace = 0;
 
 	  ptr ++;
-          current_pos = ptr-value_;
+          current_pos = (int)(ptr - value_);
 	}
 	else if (isspace((*ptr)&255))
 	{
@@ -927,7 +927,7 @@ fltk3::HelpView::draw()
 	  }
 
           ptr ++;
-          if (!pre) current_pos = ptr-value_;
+          if (!pre) current_pos = (int)(ptr - value_);
 	  needspace = 1;
 	}
 	else if (*ptr == '&')
@@ -982,7 +982,7 @@ fltk3::HelpView::draw()
         hv_draw(buf, xx + x() - leftline_, yy + y());
 	if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                         xx + x() - leftline_ + ww);
-        current_pos = ptr-value_;
+        current_pos = (int)(ptr - value_);
       }
     }
 
@@ -1044,7 +1044,7 @@ fltk3::HelpView::find(const char *s,		// I - String to find
     if (!*sp) {
       // Found a match!
       topline(b->y - b->h);
-      return (b->end - value_);
+      return (int)(b->end - value_);
     }
   }
 
@@ -1526,7 +1526,7 @@ void fltk3::HelpView::format() {
 	  yy        = block->y + block->h - 4;
 	  hh        = 0;
           block     = add_block(start, xx, yy, hsize_, 0);
-	  row       = block - blocks_;
+	  row       = (int)(block - blocks_);
 	  needspace = 0;
 	  column    = 0;
 	  line      = 0;
@@ -1611,7 +1611,7 @@ void fltk3::HelpView::format() {
 	  newalign  = get_align(attrs, tolower(buf[1]) == 'h' ? CENTER : LEFT);
 	  talign    = newalign;
 
-          cells[column] = block - blocks_;
+          cells[column] = (int)(block - blocks_);
 
 	  column += colspan;
 
@@ -2761,7 +2761,7 @@ void fltk3::HelpView::select_all()
   clear_global_selection();
   if (!value_) return;
   current_view = this;
-  selection_drag_last = selection_last = strlen(value_);
+  selection_drag_last = selection_last = (int)strlen(value_);
   selected = 1;
 }
 
@@ -2867,7 +2867,7 @@ void fltk3::HelpView::end_selection(int clipboard)
   // convert the select part of our html text into some kind of somewhat readable ASCII
   // and store it in the selection buffer
   char p = 0, pre = 0;;
-  int len = strlen(value_);
+  int len = (int)strlen(value_);
   char *txt = (char*)malloc(len+1), *d = txt;
   const char *s = value_, *cmd, *src;
   for (;;) {
@@ -2907,7 +2907,7 @@ void fltk3::HelpView::end_selection(int clipboard)
         case CMD('d','t', 0 , 0 ): src = "\n "; break;
         case CMD('d','d', 0 , 0 ): src = "\n - "; break;
       }
-      int n = s-value_;
+      int n = (int)(s - value_);
       if (src && n>selection_first && n<=selection_last) {
         while (*src) {
           *d++ = *src++;
@@ -2936,7 +2936,7 @@ void fltk3::HelpView::end_selection(int clipboard)
     }
   }
   *d = 0;
-  fltk3::copy(txt, strlen(txt), clipboard);
+  fltk3::copy(txt, (int)strlen(txt), clipboard);
   free(txt);
 }
 

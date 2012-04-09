@@ -750,7 +750,7 @@ char fltk3::Preferences::set( const char *key, const char *text ) {
 
 // convert a hex string to binary data
 static void *decodeHex( const char *src, int &size ) {
-  size = strlen( src )/2;
+  size = (int)strlen( src )/2;
   unsigned char *data = (unsigned char*)malloc( size ), *d = data;
   const char *s = src;
   for ( int i=size; i>0; i-- ) {
@@ -857,7 +857,7 @@ char fltk3::Preferences::set( const char *key, const void *data, int dsize ) {
  */
 int fltk3::Preferences::size( const char *key ) {
   const char *v = node->get( key );
-  return v ? strlen( v ) : 0 ;
+  return v ? (int)strlen( v ) : 0 ;
 }
 
 /**
@@ -965,7 +965,7 @@ static char makePath( const char *path ) {
   if (access(path, 0)) {
     const char *s = strrchr( path, '/' );
     if ( !s ) return 0;
-    int len = s-path;
+    size_t len = s-path;
     char *p = (char*)malloc( len+1 );
     memcpy( p, path, len );
     p[len] = 0;
@@ -1006,7 +1006,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
 #ifdef WIN32
 #  define FLPREFS_RESOURCE	"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
 #  define FLPREFS_RESOURCEW	L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
-  int appDataLen = strlen(vendor) + strlen(application) + 8;
+  size_t appDataLen = strlen(vendor) + strlen(application) + 8;
   DWORD type, nn;
   LONG err;
   HKEY key;
@@ -1015,7 +1015,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     case SYSTEM:
       err = RegOpenKeyW( HKEY_LOCAL_MACHINE, FLPREFS_RESOURCEW, &key );
       if (err == ERROR_SUCCESS) {
-        nn = FLTK3_PATH_MAX - appDataLen; 
+        nn = (DWORD)(FLTK3_PATH_MAX - appDataLen); 
         err = RegQueryValueExW( key, L"Common AppData", 0L, &type,
                                 (BYTE*)filename, &nn ); 
         if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) ) {
@@ -1028,7 +1028,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     case USER:
       err = RegOpenKeyW( HKEY_CURRENT_USER, FLPREFS_RESOURCEW, &key );
       if (err == ERROR_SUCCESS) {
-        nn = FLTK3_PATH_MAX - appDataLen;
+        nn = (DWORD)(FLTK3_PATH_MAX - appDataLen);
         err = RegQueryValueExW( key, L"AppData", 0L, &type,
                                 (BYTE*)filename, &nn ); 
         if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) ) {
@@ -1052,7 +1052,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     wcscpy(b, (xchar *) filename);
 #endif
     //  filename[fl_unicode2utf(b, wcslen((xchar*)b), filename)] = 0;
-    unsigned len = fltk3::utf8fromwc(filename, (FLTK3_PATH_MAX-1), b, wcslen(b));
+    unsigned len = fltk3::utf8fromwc(filename, (FLTK3_PATH_MAX-1), b, (unsigned)wcslen(b));
     filename[len] = 0;
     free(b);
   }
@@ -1167,17 +1167,17 @@ int fltk3::Preferences::RootNode::read() {
   for (;;) {
     if ( !fgets( buf, 1024, f ) ) break;	// EOF or Error
     if ( buf[0]=='[' ) {			// read a new group
-      int end = strcspn( buf+1, "]\n\r" );
+      size_t end = strcspn( buf+1, "]\n\r" );
       buf[ end+1 ] = 0;
       nd = prefs_->node->find( buf+1 );
     } else if ( buf[0]=='+' ) {			// value of previous name/value pair spans multiple lines
-      int end = strcspn( buf+1, "\n\r" );
+      size_t end = strcspn( buf+1, "\n\r" );
       if ( end != 0 ) {				// if entry is not empty
 	buf[ end+1 ] = 0;
 	nd->add( buf+1 );
       }
     } else {					 // read a name/value pair
-      int end = strcspn( buf, "\n\r" );
+      size_t end = strcspn( buf, "\n\r" );
       if ( end != 0 ) {				// if entry is not empty
 	buf[ end ] = 0;
 	nd->set( buf );
@@ -1316,7 +1316,7 @@ int fltk3::Preferences::Node::write( FILE *f ) {
     char *src = entry_[i].value;
     if ( src ) {		// hack it into smaller pieces if needed
       fprintf( f, "%s:", entry_[i].name );
-      int cnt, written;
+      size_t cnt, written;
       for ( cnt = 0; cnt < 60; cnt++ )
 	if ( src[cnt]==0 ) break;
       written = fwrite( src, cnt, 1, f );
@@ -1408,7 +1408,7 @@ void fltk3::Preferences::Node::set( const char *line ) {
   } else {
     const char *c = strchr( line, ':' );
     if ( c ) {
-      unsigned int len = c-line+1;
+      size_t len = c-line+1;
       if ( len >= sizeof( nameBuffer ) )
         len = sizeof( nameBuffer );
       strlcpy( nameBuffer, line, len );
@@ -1424,8 +1424,8 @@ void fltk3::Preferences::Node::set( const char *line ) {
 void fltk3::Preferences::Node::add( const char *line ) {
   if ( lastEntrySet<0 || lastEntrySet>=nEntry_ ) return;
   char *&dst = entry_[ lastEntrySet ].value;
-  int a = strlen( dst );
-  int b = strlen( line );
+  size_t a = strlen( dst );
+  size_t b = strlen( line );
   dst = (char*)realloc( dst, a+b+1 );
   memcpy( dst+a, line, b+1 );
   dirty_ = 1;
@@ -1461,7 +1461,7 @@ char fltk3::Preferences::Node::deleteEntry( const char *name ) {
 // - this method will always return a valid node (except for memory allocation problems)
 // - if the node was not found, 'find' will create the required branch
 fltk3::Preferences::Node *fltk3::Preferences::Node::find( const char *path ) {
-  int len = strlen( path_ );
+  int len = (int)strlen( path_ );
   if ( strncmp( path, path_, len ) == 0 ) {
     if ( path[ len ] == 0 )
       return this;
@@ -1503,9 +1503,9 @@ fltk3::Preferences::Node *fltk3::Preferences::Node::search( const char *path, in
 	return nn->search( path+2, 2 ); // do a relative search on the root node
       }
     }
-    offset = strlen( path_ ) + 1;
+    offset = (int)strlen( path_ ) + 1;
   }
-  int len = strlen( path_ );
+  int len = (int)strlen( path_ );
   if ( len < offset-1 ) return 0;
   len -= offset;
   if ( ( len <= 0 ) || ( strncmp( path, path_+offset, len ) == 0 ) ) {

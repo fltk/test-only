@@ -183,7 +183,7 @@ void fltk3::TextBuffer::text(const char *t)
   free((void *) mBuf);
   
   /* Start a new buffer with a gap of mPreferredGapSize at the end */
-  int insertedLength = strlen(t);
+  int insertedLength = (int)strlen(t);
   mBuf = (char *) malloc(insertedLength + mPreferredGapSize);
   mLength = insertedLength;
   mGapStart = insertedLength;
@@ -1126,7 +1126,7 @@ int fltk3::TextBuffer::insert_(int pos, const char *text)
   if (!text || !*text)
     return 0;
   
-  int insertedLength = strlen(text);
+  int insertedLength = (int)strlen(text);
   
   /* Prepare the buffer to receive the new text.  If the new text fits in
    the current buffer, just move the gap (if necessary) to where
@@ -1572,7 +1572,7 @@ static int general_input_filter(char *buffer, int buflen,
   q = buffer;
   while (q < buffer + buflen) {
     if (p >= endline) {
-      r = fread(line, 1, sline, fp);
+      r = (int)fread(line, 1, sline, fp);
       endline = line + r; 
       if (r == 0) return q - buffer;
       p = line;
@@ -1610,16 +1610,16 @@ static int utf8_input_filter(char *buffer, int buflen, char *line, int sline, ch
   q = buffer;
   while (q < buffer + buflen) {
     if (p >= endline) {
-      r = fread(line, 1, sline, fp);
+      r = (int)fread(line, 1, sline, fp);
       endline = line + r; 
-      if (r == 0) return q - buffer;
+      if (r == 0) return (int)(q - buffer);
       p = line;
     }
     l = fltk3::utf8len1(*p);
     if (p + l > endline) {
       memmove(line, p, endline - p);
       endline -= (p - line);
-      r = fread(endline, 1, sline - (endline - line), fp);
+      r = (int)fread(endline, 1, sline - (endline - line), fp);
       endline += r;
       p = line;
       if (endline - line < l) break;
@@ -1631,7 +1631,7 @@ static int utf8_input_filter(char *buffer, int buflen, char *line, int sline, ch
       if (q + lq > buffer + buflen) {
 	memmove(line, p, endline - p);
 	endline -= (p - line);
-	return q - buffer;
+	return (int)(q - buffer);
       }
       memcpy(q, multibyte, lq);
       q += lq; 
@@ -1641,7 +1641,7 @@ static int utf8_input_filter(char *buffer, int buflen, char *line, int sline, ch
   }
   memmove(line, p, endline - p);
   endline -= (p - line);
-  return q - buffer;
+  return (int)(q - buffer);
 }
 
 const char *fltk3::TextBuffer::file_encoding_warning_message = 
@@ -1704,7 +1704,7 @@ int fltk3::TextBuffer::outputfile(const char *file,
     return 1;
   for (int n; (n = min(end - start, buflen)); start += n) {
     const char *p = text_range(start, start + n);
-    int r = fwrite(p, 1, n, fp);
+    int r = (int)fwrite(p, 1, n, fp);
     free((void *) p);
     if (r != n)
       break;

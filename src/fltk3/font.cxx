@@ -67,20 +67,20 @@
 namespace fltk3 {
   
   double width(const char* c) {
-    if (c) return width(c, strlen(c));
+    if (c) return width(c, (int)strlen(c));
     else return 0.0f;
   }
   
   void draw(const char* str, int x, int y) {
-    draw(str, strlen(str), x, y);
+    draw(str, (int)strlen(str), x, y);
   }
   
   void draw(int angle, const char* str, int x, int y) {
-    draw(angle, str, strlen(str), x, y);//must be fixed!
+    draw(angle, str, (int)strlen(str), x, y);//must be fixed!
   }
   
   void text_extents(const char *c, int &dx, int &dy, int &w, int &h) {
-    if (c)  fltk3::text_extents(c, strlen(c), dx, dy, w, h);
+    if (c)  fltk3::text_extents(c, (int)strlen(c), dx, dy, w, h);
     else {
       w = 0; h = 0;
       dx = 0; dy = 0;

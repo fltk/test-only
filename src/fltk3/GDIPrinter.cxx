@@ -220,7 +220,7 @@ void fltk3::SystemPrinter::rotate (float rot_angle)
 {
   XFORM mat;
   float angle;
-  angle = - rot_angle * M_PI / 180.;
+  angle = - (float) (rot_angle * M_PI / 180.);
   mat.eM11 = cos(angle);
   mat.eM12 = sin(angle);
   mat.eM21 = - mat.eM12;
@@ -256,8 +256,8 @@ static void do_translate(int x, int y)
   XFORM tr;
   tr.eM11 = tr.eM22 = 1;
   tr.eM12 = tr.eM21 = 0;
-  tr.eDx =  x;
-  tr.eDy =  y;
+  tr.eDx =  (FLOAT) x;
+  tr.eDy =  (FLOAT) y;
   ModifyWorldTransform(fl_gc, &tr, MWT_LEFTMULTIPLY);
 }
 

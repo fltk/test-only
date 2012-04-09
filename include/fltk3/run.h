@@ -50,6 +50,18 @@ namespace fltk3 {
   class Label;
   class Image;
   
+// Keep avoiding having the socket deps at that level but make sure it will work in both 32 & 64 bit builds
+#if defined(WIN32) && !defined(__CYGWIN__)
+# if defined(_WIN64)
+  typedef  unsigned __int64 SOCKET;
+# else
+  typedef int SOCKET;
+# endif
+#else
+  typedef int SOCKET;
+#endif
+	  
+  
   /** \defgroup  callback_functions Callback function typedefs
    \brief Typedefs defined in <fltk3/run.h> for callback or handler functions passed as function parameters.
    
@@ -87,7 +99,7 @@ namespace fltk3 {
   typedef void (*OldIdleHandler)();
   
   /** Signature of add_fd functions passed as parameters */
-  typedef void (*FDHandler)(int fd, void *data);
+  typedef void (*FDHandler)(fltk3::SOCKET fd, void *data);
   
   /** Signature of add_handler functions passed as parameters */
   typedef int (*EventHandler)(int event);

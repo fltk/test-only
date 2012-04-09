@@ -732,7 +732,7 @@ void fltk3::TextDisplay::insert(const char* text) {
   
   int pos = mCursorPos;
   
-  mCursorToHint = pos + strlen( text );
+  mCursorToHint = (int)(pos + strlen( text ));
   mBuffer->insert( pos, text );
   mCursorToHint = NO_HINT;
 }
@@ -752,7 +752,7 @@ void fltk3::TextDisplay::overstrike(const char* text) {
   int startPos = mCursorPos;
   fltk3::TextBuffer *buf = mBuffer;
   int lineStart = buf->line_start( startPos );
-  int textLen = strlen( text );
+  int textLen = (int)strlen( text );
   int i, p, endPos, indent, startIndent, endIndent;
   const char *c;
   unsigned int ch;
@@ -3601,13 +3601,13 @@ void fltk3::TextDisplay::handle_menu_event() {
     switch (mi->argument()) {
       case 1:
         copy = buf->selection_text();
-        if (*copy) fltk3::copy(copy, strlen(copy), 1);
+        if (*copy) fltk3::copy(copy, (int)strlen(copy), 1);
         free((void*)copy);
         buf->remove_selection();
         break;
       case 2: 
         copy = buf->selection_text();
-        if (*copy) fltk3::copy(copy, strlen(copy), 1);
+        if (*copy) fltk3::copy(copy, (int)strlen(copy), 1);
         free((void*)copy);
         break;
       case 3: 
