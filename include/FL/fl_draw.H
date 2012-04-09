@@ -436,11 +436,15 @@ inline uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0) {
   return fltk3::read_image(p, X, Y, W, H, alpha);
 }
 
+inline int fl_draw_pixmap(char* const* data, int x,int y, Fl_Color bg=FL_GRAY) {
+  return fltk3::draw_pixmap(data, x, y, bg);
+}
+
+inline int fl_draw_pixmap(const char* const* data, int x,int y, Fl_Color bg=FL_GRAY) {
+  return fltk3::draw_pixmap(data, x, y, bg);
+}
+
 #if 0
-
-FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color=FL_GRAY);
-
-FL_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,Fl_Color=FL_GRAY);
 
 FL_EXPORT int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h);
 
