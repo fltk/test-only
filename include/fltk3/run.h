@@ -672,16 +672,16 @@ namespace fltk3 {
   int get_key(unsigned int key); // platform dependent
   /** 
    Returns the text associated with the current event, including fltk3::PASTE or fltk3::DND_RELEASE events.
-   This can be used in response to fltk3::KEYUP, fltk3::KEYDOWN, fltk3::PASTE, fltk3::DND_RELEASE.
-   
+   This can be used in response to fltk3::KEYUP, fltk3::KEYDOWN, fltk3::PASTE, and fltk3::DND_RELEASE.
+
    When responding to fltk3::KEYUP/fltk3::KEYDOWN, use this function instead of fltk3::event_key()
    to get the text equivalent of keystrokes suitable for inserting into strings 
    and text widgets.
-   
-   The returned string is guaranteed to be be NULL terminated.
+
+   The returned string is guaranteed to be NULL terminated.
    However, see fltk3::event_length() for the actual length of the string,
    in case the string itself contains NULLs that are part of the text data.
-   
+
    \returns A NULL terminated text string equivalent of the last keystroke.
    */
   inline const char* event_text() {return e_text;}
