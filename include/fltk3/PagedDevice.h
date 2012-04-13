@@ -117,7 +117,7 @@ namespace fltk3 {
     /** \brief vertical offset to the origin of graphics coordinates */
     int y_offset;
     /** \brief The constructor */
-    PagedDevice() : fltk3::SurfaceDevice(NULL) {};
+    PagedDevice() : fltk3::SurfaceDevice(NULL), x_offset(0), y_offset(0) {};
   public:
     /** \brief The destructor */
     virtual ~PagedDevice() {};
