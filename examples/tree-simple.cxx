@@ -44,6 +44,12 @@ void TreeCallback(Fl_Widget *w, void *data) {
       fprintf(stderr, "TreeCallback: Item selected='%s', Full pathname='%s'\n", item->label(), pathname);
       break;
     }
+    case FL_TREE_REASON_RESELECTED: {
+      char pathname[256];
+      tree->item_pathname(pathname, sizeof(pathname), item);
+      fprintf(stderr, "TreeCallback: Item reselected='%s', Full pathname='%s'\n", item->label(), pathname);
+      break;
+    }
     case FL_TREE_REASON_DESELECTED:
       // fprintf(stderr, "TreeCallback: Item '%s' deselected\n", item->label());
       break;

@@ -44,10 +44,10 @@ enum Fl_Tree_Reason {
   FL_TREE_REASON_NONE=0,
   FL_TREE_REASON_SELECTED,
   FL_TREE_REASON_DESELECTED,
+  FL_TREE_REASON_RESELECTED,
   FL_TREE_REASON_OPENED,
   FL_TREE_REASON_CLOSED
 };
-
 
 FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Tree, Tree)
 FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Tree, Tree)
@@ -55,6 +55,29 @@ FLTK3_WRAPPER_INTERFACE_END()
 
 
 class FL_EXPORT Fl_Tree : public Fl_Group {
+
+public:
+  /// \enum Fl_Tree_Item_Select_Mode
+  /// Defines the ways an item can be (re) selected.
+  ///
+  enum Fl_Tree_Item_Reselect_Mode
+  {
+    FL_TREE_SELECTABLE_ONCE=0, /// backward compatible default: an item can only be selected once
+    FL_TREE_SELECTABLE_ALWAYS  /// needed for new RESELECT feature
+  };
+	
+  //! Returns the current item re/selection mode
+  Fl_Tree_Item_Reselect_Mode item_reselect_mode() const {
+	return _itemReselectMode;
+  }
+  
+  //! Sets the item re/selection mode
+  void item_reselect_mode(Fl_Tree_Item_Reselect_Mode mode) {
+	_itemReselectMode = mode;
+  }
+
+private:
+	Fl_Tree_Item_Reselect_Mode _itemReselectMode;
 
 protected:
 

@@ -127,6 +127,7 @@ namespace fltk3 {
   ///   switch ( tree->callback_reason() ) {
   ///     case fltk3::TREE_REASON_SELECTED: [..]
   ///     case fltk3::TREE_REASON_DESELECTED: [..]
+  ///     case fltk3::TREE_REASON_RESELECTED: [..]
   ///     case fltk3::TREE_REASON_OPENED: [..]
   ///     case fltk3::TREE_REASON_CLOSED: [..]
   ///   }
@@ -194,6 +195,7 @@ namespace fltk3 {
     TREE_REASON_NONE=0,	///< unknown reason
     TREE_REASON_SELECTED,	///< an item was selected
     TREE_REASON_DESELECTED,	///< an item was de-selected
+    TREE_REASON_RESELECTED,	///< an item was re-selected
     TREE_REASON_OPENED,	///< an item was opened
     TREE_REASON_CLOSED		///< an item was closed
   };
@@ -207,7 +209,30 @@ namespace fltk3 {
     fltk3::TreeReason _callback_reason;		// reason for the callback
     fltk3::TreePrefs  _prefs;			// all the tree's settings
     int            _scrollbar_size;		// size of scrollbar trough
+  
+  public:
+    /// \enum Fl_Tree_Item_Select_Mode
+    /// Defines the ways an item can be (re) selected.
+    ///
+    enum Tree_Item_Reselect_Mode
+    {
+      TREE_SELECTABLE_ONCE=0, /// backward compatible default: an item can only be selected once
+      TREE_SELECTABLE_ALWAYS, /// needed for new RESELECT feature
+    };
     
+    //! Returns the current item re/selection mode
+    Tree_Item_Reselect_Mode item_reselect_mode() const {
+      return _itemReselectMode;
+    }
+  
+    //! Sets the item re/selection mode
+    void item_reselect_mode(Tree_Item_Reselect_Mode mode) {
+      _itemReselectMode = mode;
+    }
+
+  private:
+    Tree_Item_Reselect_Mode _itemReselectMode;
+
   protected:
     /// Vertical scrollbar
     fltk3::Scrollbar *_vscroll;
@@ -526,11 +551,14 @@ namespace fltk3 {
     ///     -   0 - item was already selected, no change was made
     ///
     int select(fltk3::TreeItem *item, int docallback=1) {
-      if ( ! item->is_selected() ) {
-        item->select();
-        set_changed();
-        if ( docallback ) {
-          do_callback_for_item(item, fltk3::TREE_REASON_SELECTED);
+      int alreadySelected = item->is_selected();
+  
+      if ( !alreadySelected || item_reselect_mode()== TREE_SELECTABLE_ALWAYS ) {
+	item->select();
+	set_changed();
+	if ( docallback ) {
+	  do_callback_for_item(item, alreadySelected ? 
+			       TREE_REASON_RESELECTED : TREE_REASON_SELECTED);
         }
         redraw();
         return(1);

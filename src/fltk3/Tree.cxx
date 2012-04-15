@@ -104,6 +104,8 @@ fltk3::Tree::Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,
   _callback_item   = 0;
   _callback_reason = fltk3::TREE_REASON_NONE;
   _scrollbar_size  = 0;				// 0: uses fltk3::scrollbar_size()
+  _itemReselectMode = TREE_SELECTABLE_ONCE;
+
   box(fltk3::DOWN_BOX);
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   when(fltk3::WHEN_CHANGED);
@@ -796,7 +798,8 @@ int fltk3::Tree::select_only(fltk3::TreeItem *selitem, int docallback) {
   int changed = 0;
   for ( fltk3::TreeItem *item = first(); item; item = item->next() ) {
     if ( item == selitem ) {
-      if ( item->is_selected() ) continue;	// don't count if already selected
+      if ( item->is_selected() &&  item_reselect_mode()!=TREE_SELECTABLE_ALWAYS
+) continue;	// don't count if already selected
       select(item, docallback);
       ++changed;
     } else {
