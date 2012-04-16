@@ -30,85 +30,18 @@
 #define Fl_Printer_H
 
 #include <fltk3/Printer.h>
-#include <FL/x.H>
 #include <FL/Fl_Paged_Device.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_RGB_Image.H>
-//#include <FL/Fl_Bitmap.H>
-#include <stdio.h>
-#if !(defined(__APPLE__) || defined(WIN32))
 #include <FL/Fl_PostScript.H>
-#elif defined(WIN32)
-#include <commdlg.h>
-#endif
-
 
 class Fl_Printer : public Fl_Paged_Device {
-  
 public:
-  
   Fl_Printer() {
+    _p->wrapper(NULL);
+    delete _p;
     _p = new fltk3::Printer();
     _p->wrapper(this);
   }
   
-  int start_job(int pagecount, int *frompage = NULL, int *topage = NULL) {
-    return ((fltk3::Printer*)_p)->start_job(pagecount, frompage, topage);
-  }
-  
-  int start_page(void) {
-    return ((fltk3::Printer*)_p)->start_page();
-  }
-  
-  int printable_rect(int *w, int *h) {
-    return ((fltk3::Printer*)_p)->printable_rect(w, h);
-  }
-  
-  void margins(int *left, int *top, int *right, int *bottom) {
-    ((fltk3::Printer*)_p)->margins(left, top, right, bottom);
-  }
-  
-  void origin(int *x, int *y) {
-    ((fltk3::Printer*)_p)->origin(x, y);
-  }
-  
-  void origin(int x, int y) {
-    ((fltk3::Printer*)_p)->origin(x, y);
-  }
-  
-  void scale(float scale_x, float scale_y = 0.) {
-    ((fltk3::Printer*)_p)->scale(scale_x, scale_y);
-  }
-  
-  void rotate(float angle) {
-    ((fltk3::Printer*)_p)->rotate(angle);
-  }
-  
-  void translate(int x, int y) {
-    ((fltk3::Printer*)_p)->translate(x, y);
-  }
-  
-  void untranslate(void) {
-    ((fltk3::Printer*)_p)->untranslate();
-  }
-  
-  int end_page (void) {
-    return ((fltk3::Printer*)_p)->end_page();
-  }
-  
-  void end_job (void) {
-    ((fltk3::Printer*)_p)->end_job();
-  }
-  
-  void set_current(void) {
-    ((fltk3::Printer*)_p)->set_current();
-  }
-  
-  Fl_Graphics_Driver* driver(void) {
-    return (Fl_Graphics_Driver*)((fltk3::Printer*)_p)->driver();
-  }
-
 #if 0 // can't wrap!
   static const char *dialog_title; 
   static const char *dialog_printer; 
@@ -131,7 +64,6 @@ public:
   static const char *property_cancel;
 #endif
 };
-
 
 #endif // Fl_Printer_H
 

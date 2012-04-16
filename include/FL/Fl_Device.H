@@ -5,7 +5,7 @@
 // Fl_Display_Device for the Fast Light Tool Kit (FLTK).
 // FLTK 123 wrapper started
 //
-// Copyright 2010-2011 by Bill Spitzak and others.
+// Copyright 2010-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,28 +32,446 @@
 
 #include <fltk3/Device.h>
 #include <fltk3/Wrapper.h>
-
-#if 0 // FIXME: 123
-
-#include <FL/x.H>
-#include <FL/Fl_Plugin.H>
-#include <FL/Fl_Image.H>
+#include <fltk3/run.h>
 #include <FL/Fl_Bitmap.H>
 #include <FL/Fl_Pixmap.H>
-#include <FL/Fl_RGB_Image.H>
 
-#endif
+typedef fltk3::Offscreen Fl_Offscreen;
+typedef fltk3::DrawImageCb Fl_Draw_Image_Cb;
+typedef fltk3::Region Fl_Region;
 
-class Fl_Graphics_Driver;
+namespace fltk3 { 
+    
+class GraphicsDriverWrapper : public fltk3::Wrapper {
+public:
+  virtual ~GraphicsDriverWrapper() {}
+  
+  virtual int height() { 
+    return ((fltk3::GraphicsDriver*)_p)->height(); 
+    }
 
-#if 0
-class Fl_Font_Descriptor;
+  virtual int descent() { 
+    return ((fltk3::GraphicsDriver*)_p)->descent(); 
+  }
+ 
+  virtual int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H) { 
+    return ((fltk3::GraphicsDriver*)_p)->clip_box(x,y,w,h,X,Y,W,H); 
+  }
+  
+  virtual int not_clipped(int x, int y, int w, int h) { 
+    return ((fltk3::GraphicsDriver*)_p)->not_clipped(x,y,w,h); 
+  }
+  
+  virtual double width(const char* str, int l) { 
+    return ((fltk3::GraphicsDriver*)_p)->width(str, l); 
+  }
+
+  virtual double width(unsigned c) { 
+    return ((fltk3::GraphicsDriver*)_p)->width(c); 
+  }
+  
+#define FLTK3_DRIVER_WRAPPER(proto, call) \
+virtual void proto { \
+      ((fltk3::GraphicsDriver*)_p)->call; \
+  }
+FLTK3_DRIVER_WRAPPER(font(Fl_Font f, Fl_Fontsize s), font(_1to3_font(f), _1to3_fontsize(s)))
+FLTK3_DRIVER_WRAPPER(draw(const char* str, int l, int x, int y), draw(str, l, x, y))
+FLTK3_DRIVER_WRAPPER(draw(const char* str, int l, float fx, float fy), draw(str, l, fx, fy))
+FLTK3_DRIVER_WRAPPER(draw(int angle, const char* str, int l, int x, int y), draw(angle, str, l, x, y))
+FLTK3_DRIVER_WRAPPER(line(int x, int y, int x1, int y1), line(x, y, x1, y1))
+FLTK3_DRIVER_WRAPPER(rect(int x, int y, int w, int h), rect(x, y, w, h))
+FLTK3_DRIVER_WRAPPER(rectf(int x, int y, int w, int h), rectf(x, y, w, h))
+FLTK3_DRIVER_WRAPPER(color(uchar r, uchar g, uchar b), color(r, g, b))
+FLTK3_DRIVER_WRAPPER(color(Fl_Color c), color(_1to3_color(c)))
+FLTK3_DRIVER_WRAPPER(line_style(int style, int width, char *dashes), line_style(style, width, dashes))
+FLTK3_DRIVER_WRAPPER(push_clip(int x, int y, int w, int h) , push_clip(x, y, w, h))
+FLTK3_DRIVER_WRAPPER(pop_clip(), pop_clip())
+FLTK3_DRIVER_WRAPPER(draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) ,
+    draw((fltk3::Pixmap*)pxm->_p, XP,YP,WP,HP,cx,cy) )
+FLTK3_DRIVER_WRAPPER(draw_image(Fl_Draw_Image_Cb cb, void *data, int X, int Y, int W, int H, int D) ,
+    draw_image( (fltk3::DrawImageCb)cb, data, X,Y,W,H,D) )
+FLTK3_DRIVER_WRAPPER(line(int x, int y, int x1, int y1, int x2, int y2), line(x, y, x1, y1, x2, y2))
+FLTK3_DRIVER_WRAPPER(xyline(int x, int y, int x1), xyline(x, y, x1))
+FLTK3_DRIVER_WRAPPER(xyline(int x, int y, int x1, int y2), xyline(x, y, x1, y2))
+FLTK3_DRIVER_WRAPPER(xyline(int x, int y, int x1, int y2, int x3), xyline(x, y, x1, y2, x3))
+FLTK3_DRIVER_WRAPPER(yxline(int x, int y, int y1), yxline(x, y, y1))
+FLTK3_DRIVER_WRAPPER(yxline(int x, int y, int y1, int x2), yxline(x, y, y1, x2))
+FLTK3_DRIVER_WRAPPER(yxline(int x, int y, int y1, int x2, int y3), yxline(x, y, y1, x2, y3))
+FLTK3_DRIVER_WRAPPER(rtl_draw(const char* str, int l, int x, int y), rtl_draw(str, l, x, y))
+FLTK3_DRIVER_WRAPPER(draw(Fl_RGB_Image* rgb,int XP, int YP, int WP, int HP, int cx, int cy) ,
+		     draw( (fltk3::RGBImage*)rgb->_p, XP, YP, WP, HP, cx, cy) )
+FLTK3_DRIVER_WRAPPER( draw(Fl_Bitmap* bm, int XP, int YP, int WP, int HP, int cx, int cy) ,
+		     draw( (fltk3::Bitmap*)bm->_p, XP, YP, WP, HP, cx, cy) )
+FLTK3_DRIVER_WRAPPER(draw_image(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image(cb, X, Y, W, H, D, L))
+FLTK3_DRIVER_WRAPPER(draw_image_mono(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image_mono(cb, X, Y, W, H, D, L))
+FLTK3_DRIVER_WRAPPER(draw_image_mono(Fl_Draw_Image_Cb cb, void *data, int X, int Y, int W, int H, int D), draw_image_mono((fltk3::DrawImageCb)cb,data, X, Y, W, H, D))
+FLTK3_DRIVER_WRAPPER(text_extents(const char* str, int n, int& dx, int& dy, int& w, int& h), text_extents(str, n, dx, dy, w, h))
+
+FLTK3_DRIVER_WRAPPER(arc(double x, double y, double r, double start, double end), arc(x,y,r,start,end))
+FLTK3_DRIVER_WRAPPER(arc(int x, int y, int w, int h, double a1, double a2), arc(x,y,w,h,a1,a2))
+FLTK3_DRIVER_WRAPPER(begin_complex_polygon(), begin_complex_polygon())
+FLTK3_DRIVER_WRAPPER(begin_line(), begin_line())
+FLTK3_DRIVER_WRAPPER(begin_loop(), begin_loop())
+FLTK3_DRIVER_WRAPPER(begin_points(), begin_points())
+FLTK3_DRIVER_WRAPPER(begin_polygon(), begin_polygon())
+FLTK3_DRIVER_WRAPPER(circle(double x, double y, double r), circle(x, y, r))
+FLTK3_DRIVER_WRAPPER(copy_offscreen (int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy),
+		     copy_offscreen(x,y,w,h,(fltk3::Offscreen)pixmap,srcx,srcy))
+FLTK3_DRIVER_WRAPPER(curve (double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3),
+		       curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3))
+FLTK3_DRIVER_WRAPPER(end_complex_polygon(), end_complex_polygon())
+FLTK3_DRIVER_WRAPPER(end_line(), end_line())
+FLTK3_DRIVER_WRAPPER(end_loop(), end_loop())
+FLTK3_DRIVER_WRAPPER(end_points(), end_points())
+FLTK3_DRIVER_WRAPPER(end_polygon(), end_polygon())
+FLTK3_DRIVER_WRAPPER(gap(), gap())
+FLTK3_DRIVER_WRAPPER(loop(int x0, int y0, int x1, int y1, int x2, int y2), loop(x0,y0,x1,y1,x2,y2))
+FLTK3_DRIVER_WRAPPER(loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), loop(x0,y0,x1,y1,x2,y2,x3,y3))
+FLTK3_DRIVER_WRAPPER(pie(int x, int y, int w, int h, double a1, double a2), pie(x,y,w,h,a1,a2))
+FLTK3_DRIVER_WRAPPER(point(int x, int y), point(x,y))
+FLTK3_DRIVER_WRAPPER(polygon(int x0, int y0, int x1, int y1, int x2, int y2), polygon(x0,y0,x1,y1,x2,y2))
+FLTK3_DRIVER_WRAPPER(polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), polygon(x0,y0,x1,y1,x2,y2,x3,y3))
+FLTK3_DRIVER_WRAPPER(push_no_clip(), push_no_clip())
+FLTK3_DRIVER_WRAPPER(transformed_vertex (double xf, double yf), transformed_vertex ( xf, yf))
+FLTK3_DRIVER_WRAPPER(vertex (double xf, double yf), vertex ( xf, yf))
+
+};
+  
+#define pVCallGraphicsDriver pVCallImageCopyWH
+
+class GraphicsDriver_I : public GraphicsDriver { 
+public: 
+  virtual ~GraphicsDriver_I() { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallDtor) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallDtor; 
+      delete ((Wrapper*)pWrapper); 
+    }
+  }
+  GraphicsDriver_I() : GraphicsDriver() { } 
+  void font(Font f, Fontsize s) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      ((GraphicsDriverWrapper*)pWrapper)->font(_3to1_font(f), _3to1_fontsize(s)); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
+    }
+    else GraphicsDriver::font(f, s); 
+  } 
+  int height() { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      int h = ((GraphicsDriverWrapper*)pWrapper)->height(); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver;
+      return h;
+    }
+    return GraphicsDriver::height(); 
+  } 
+  int descent() { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      int d = ((GraphicsDriverWrapper*)pWrapper)->descent(); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver;
+      return d;
+    }
+    return GraphicsDriver::descent(); 
+  } 
+  int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      int d = ((GraphicsDriverWrapper*)pWrapper)->clip_box(x,y,w,h,X,Y,W,H); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver;
+      return d;
+    }
+    return GraphicsDriver::clip_box(x,y,w,h,X,Y,W,H); 
+  } 
+  int not_clipped(int x, int y, int w, int h) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      int d = ((GraphicsDriverWrapper*)pWrapper)->not_clipped(x,y,w,h); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver;
+      return d;
+    }
+    return GraphicsDriver::not_clipped(x,y,w,h); 
+  } 
+  double width(const char* str, int l) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      double w = ((GraphicsDriverWrapper*)pWrapper)->width(str, l); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver;
+      return w;
+    }
+    return GraphicsDriver::width(str, l); 
+  } 
+  double width(unsigned c) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      double w = ((GraphicsDriverWrapper*)pWrapper)->width(c); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver;
+      return w;
+    }
+    return GraphicsDriver::width(c); 
+  } 
+  
+#define FLTK3_DRIVER_VF(proto, call) \
+void proto { \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; \
+    ((GraphicsDriverWrapper*)pWrapper)->call; \
+    pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; \
+  } \
+  else GraphicsDriver::call; \
+} 
+  FLTK3_DRIVER_VF(draw(const char* str, int l, int x, int y), draw(str, l, x, y))
+  FLTK3_DRIVER_VF(draw(const char* str, int l, float fx, float fy), draw(str, l, fx, fy))
+  FLTK3_DRIVER_VF(draw(int angle, const char* str, int l, int x, int y), draw(angle, str, l, x, y))
+  FLTK3_DRIVER_VF(line(int x, int y, int x1, int y1), line(x, y, x1, y1))
+  FLTK3_DRIVER_VF(rect(int x, int y, int w, int h), rect(x, y, w, h))
+  FLTK3_DRIVER_VF(rectf(int x, int y, int w, int h), rectf(x, y, w, h))
+  FLTK3_DRIVER_VF(color(uchar r, uchar g, uchar b), color(r, g, b))
+  FLTK3_DRIVER_VF(color(fltk3::Color c), color(fltk3::_3to1_color(c)))
+  FLTK3_DRIVER_VF(line_style(int style, int width, char *dashes), line_style(style, width, dashes))
+  FLTK3_DRIVER_VF(push_clip(int x, int y, int w, int h) , push_clip(x, y, w, h))
+  FLTK3_DRIVER_VF(pop_clip(), pop_clip())
+  FLTK3_DRIVER_VF(draw_image(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D) ,
+		       draw_image( (Fl_Draw_Image_Cb)cb, data, X,Y,W,H,D) )
+  FLTK3_DRIVER_VF(line(int x, int y, int x1, int y1, int x2, int y2), line(x, y, x1, y1, x2, y2))
+  FLTK3_DRIVER_VF(xyline(int x, int y, int x1), xyline(x, y, x1))
+  FLTK3_DRIVER_VF(xyline(int x, int y, int x1, int y2), xyline(x, y, x1, y2))
+  FLTK3_DRIVER_VF(xyline(int x, int y, int x1, int y2, int x3), xyline(x, y, x1, y2, x3))
+  FLTK3_DRIVER_VF(yxline(int x, int y, int y1), yxline(x, y, y1))
+  FLTK3_DRIVER_VF(yxline(int x, int y, int y1, int x2), yxline(x, y, y1, x2))
+  FLTK3_DRIVER_VF(yxline(int x, int y, int y1, int x2, int y3), yxline(x, y, y1, x2, y3))
+  FLTK3_DRIVER_VF(rtl_draw(const char* str, int l, int x, int y), rtl_draw(str, l, x, y))
+  
+  void draw(fltk3::RGBImage* rgb,int XP, int YP, int WP, int HP, int cx, int cy) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      Fl_RGB_Image *rgb1 = (Fl_RGB_Image*)rgb->wrapper();
+      if (!rgb1) rgb1 = new Fl_RGB_Image(rgb);
+      ((GraphicsDriverWrapper*)pWrapper)->draw(rgb1, XP, YP, WP, HP, cx, cy); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
+    } 
+  } 
+  void draw(fltk3::Bitmap* bm,int XP, int YP, int WP, int HP, int cx, int cy) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      Fl_Bitmap *bm1 = (Fl_Bitmap*)bm->wrapper();
+      if (!bm1) bm1 = (Fl_Bitmap*)new Fl_Image(bm);
+      ((GraphicsDriverWrapper*)pWrapper)->draw(bm1, XP, YP, WP, HP, cx, cy); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
+    } 
+  } 
+  void draw(fltk3::Pixmap* px,int XP, int YP, int WP, int HP, int cx, int cy) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      Fl_Pixmap *px1 = (Fl_Pixmap*)px->wrapper();
+      if (!px1) px1 = (Fl_Pixmap*)new Fl_Image(px);
+      ((GraphicsDriverWrapper*)pWrapper)->draw(px1, XP, YP, WP, HP, cx, cy); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
+    } 
+  }
+  
+  FLTK3_DRIVER_VF(draw_image(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image(cb, X, Y, W, H, D, L))
+  FLTK3_DRIVER_VF(draw_image_mono(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image_mono(cb, X, Y, W, H, D, L))
+  FLTK3_DRIVER_VF(draw_image_mono(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D), draw_image_mono((Fl_Draw_Image_Cb)cb,data, X, Y, W, H, D))
+  FLTK3_DRIVER_VF(text_extents(const char* str, int n, int& dx, int& dy, int& w, int& h), text_extents(str, n, dx, dy, w, h))
+  FLTK3_DRIVER_VF(arc(double x, double y, double r, double start, double end), arc(x,y,r,start,end))
+  FLTK3_DRIVER_VF(arc(int x, int y, int w, int h, double a1, double a2), arc(x,y,w,h,a1,a2))
+  FLTK3_DRIVER_VF(begin_complex_polygon(), begin_complex_polygon())
+  FLTK3_DRIVER_VF(begin_line(), begin_line())
+  FLTK3_DRIVER_VF(begin_loop(), begin_loop())
+  FLTK3_DRIVER_VF(begin_points(), begin_points())
+  FLTK3_DRIVER_VF(begin_polygon(), begin_polygon())
+  FLTK3_DRIVER_VF(circle(double x, double y, double r), circle(x, y, r))
+  FLTK3_DRIVER_VF(copy_offscreen (int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy),
+		       copy_offscreen(x,y,w,h,(Fl_Offscreen)pixmap,srcx,srcy))
+  FLTK3_DRIVER_VF(curve (double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3),
+		       curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3))
+  FLTK3_DRIVER_VF(end_complex_polygon(), end_complex_polygon())
+  FLTK3_DRIVER_VF(end_line(), end_line())
+  FLTK3_DRIVER_VF(end_loop(), end_loop())
+  FLTK3_DRIVER_VF(end_points(), end_points())
+  FLTK3_DRIVER_VF(end_polygon(), end_polygon())
+  FLTK3_DRIVER_VF(gap(), gap())
+  FLTK3_DRIVER_VF(loop(int x0, int y0, int x1, int y1, int x2, int y2), loop(x0,y0,x1,y1,x2,y2))
+  FLTK3_DRIVER_VF(loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), loop(x0,y0,x1,y1,x2,y2,x3,y3))
+  FLTK3_DRIVER_VF(pie(int x, int y, int w, int h, double a1, double a2), pie(x,y,w,h,a1,a2))
+  FLTK3_DRIVER_VF(point(int x, int y), point(x,y))
+  FLTK3_DRIVER_VF(polygon(int x0, int y0, int x1, int y1, int x2, int y2), polygon(x0,y0,x1,y1,x2,y2))
+  FLTK3_DRIVER_VF(polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), polygon(x0,y0,x1,y1,x2,y2,x3,y3))
+  FLTK3_DRIVER_VF(push_no_clip(), push_no_clip())
+  FLTK3_DRIVER_VF(transformed_vertex (double xf, double yf), transformed_vertex ( xf, yf))
+  FLTK3_DRIVER_VF(vertex (double xf, double yf), vertex ( xf, yf))
+}; 
+
+}
+   
+class FL_EXPORT Fl_Graphics_Driver : public fltk3::GraphicsDriverWrapper {
+public:
+  struct matrix {double a, b, c, d, x, y;};
+protected:
+  matrix *fl_matrix;
+public:
+  Fl_Graphics_Driver() {
+    _p = new fltk3::GraphicsDriver_I();
+    _p->wrapper(this);
+    fl_matrix = (matrix*)((fltk3::GraphicsDriver*)_p)->fl_matrix;
+  }
+  Fl_Font font() { 
+    return fltk3::_3to1_font( ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::font() );
+  }
+  Fl_Fontsize size() { 
+    return fltk3::_3to1_fontsize( ((fltk3::GraphicsDriver_I*)_p)->size() );
+  }
+  void font(Fl_Font f, Fl_Fontsize s) { 
+    ((fltk3::GraphicsDriver_I*)_p)->font(fltk3::_1to3_font(f), fltk3::_1to3_fontsize(s));
+  }
+  Fl_Color color() {
+    return fltk3::_3to1_color( ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::color() );
+    }
+  void color(Fl_Color c) { 
+    ((fltk3::GraphicsDriver_I*)_p)->color(fltk3::_1to3_color(c));
+  }
+  void color(uchar r, uchar g, uchar b) { 
+    ((fltk3::GraphicsDriver_I*)_p)->color(r,g,b);
+  }
+  Fl_Region clip_region() {
+    return ((fltk3::GraphicsDriver_I*)_p)->clip_region();
+  }
+  void clip_region(Fl_Region r) {
+    ((fltk3::GraphicsDriver_I*)_p)->clip_region(r);
+  }
+  void mult_matrix (double a, double b, double c, double d, double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->mult_matrix(a,b,c,d,x,y);
+  }
+  void pop_matrix() {
+    ((fltk3::GraphicsDriver_I*)_p)->pop_matrix();
+  }
+  void push_matrix() {
+    ((fltk3::GraphicsDriver_I*)_p)->push_matrix();
+  }
+  void restore_clip() {
+    ((fltk3::GraphicsDriver_I*)_p)->restore_clip();
+  }
+  void rotate(double d) {
+    ((fltk3::GraphicsDriver_I*)_p)->rotate(d);
+  }
+  void scale(double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->scale(x,y);
+  }
+  void scale(double x) {
+    ((fltk3::GraphicsDriver_I*)_p)->scale(x);
+  }
+  void transform_dx(double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->transform_dx(x,y);
+  }
+  void transform_dy(double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->transform_dy(x,y);
+  }
+  void transform_x(double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->transform_x(x,y);
+  }
+  void transform_y(double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->transform_y(x,y);
+  }
+  void translate(double x, double y) {
+    ((fltk3::GraphicsDriver_I*)_p)->translate(x,y);
+  }
+};
+
 FL_EXPORT extern Fl_Graphics_Driver *fl_graphics_driver;
+
+#ifdef __APPLE__
+class FL_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
+public:
+  Fl_Quartz_Graphics_Driver() {
+    _p->wrapper(NULL);
+    delete _p;
+    _p = new fltk3::QuartzGraphicsDriver();
+    _p->wrapper(this);
+  }
+};
+#elif defined(WIN32)
+class FL_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
+public:
+  Fl_GDI_Graphics_Driver() {
+    _p->wrapper(NULL);
+    delete _p;
+    _p = new fltk3::GDIGraphicsDriver();
+    _p->wrapper(this);
+  }
+};
+#else
+class FL_EXPORT Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
+public:
+  Fl_Xlib_Graphics_Driver() {
+    _p->wrapper(NULL);
+    delete _p;
+    _p = new fltk3::XlibGraphicsDriver();
+    _p->wrapper(this);
+  }
+};
 #endif
 
-typedef void (*Fl_Draw_Image_Cb)(void* data,int x,int y,int w,uchar* buf);
+class FL_EXPORT Fl_Surface_Device : public fltk3::Wrapper {
+protected:
+  Fl_Surface_Device(Fl_Graphics_Driver* g) {
+    _p = new fltk3::SurfaceDevice( (g && g->_p) ? (fltk3::GraphicsDriver*)g->_p : NULL );
+    _p->wrapper(this);
+  }
+public:
+  void set_current(void) {
+    ((fltk3::SurfaceDevice*)_p)->set_current();
+    fl_graphics_driver = driver();
+  }
+  
+  void driver(Fl_Graphics_Driver *d) {
+    ((fltk3::SurfaceDevice*)_p)->driver((fltk3::GraphicsDriver*)d->_p);
+  }
+  
+  Fl_Graphics_Driver *driver() {
+    fltk3::GraphicsDriver* g = ((fltk3::SurfaceDevice*)_p)->driver();
+    if (!g->wrapper()) {
+      fltk3::GraphicsDriverWrapper* w = new fltk3::GraphicsDriverWrapper;
+      w->_p = g;
+      g->wrapper(w);
+    }
+    return (Fl_Graphics_Driver*)g->wrapper();
+  }
+  
+  static Fl_Surface_Device *surface() {
+    fltk3::SurfaceDevice* s = fltk3::SurfaceDevice::surface(); 
+    if (!s->wrapper()) {
+      Wrapper* w = new Wrapper;
+      w->_p = s;
+      s->wrapper(w);
+    }
+    return (Fl_Surface_Device*)s->wrapper();
+  }
+};
 
-#if 0 // FIXME: 123
+class FL_EXPORT Fl_Display_Device : public Fl_Surface_Device {
+public:
+  Fl_Display_Device(Fl_Graphics_Driver *g) : Fl_Surface_Device(NULL) {
+    _p->wrapper(NULL);
+    delete _p;
+    _p = new fltk3::DisplayDevice((fltk3::GraphicsDriver*)g->_p);
+    _p->wrapper(this);
+  }
+  static Fl_Display_Device* display_device() { 
+    fltk3::DisplayDevice* d = fltk3::DisplayDevice::display_device();
+    if (!d->wrapper()) {
+      Wrapper* w = new Wrapper;
+      w->_p = d;
+      d->wrapper(w);
+    }
+    return (Fl_Display_Device*)d->wrapper();
+  }
+};
+
+#if 0 // 123 doesn't need compatibility
+
+class Fl_Font_Descriptor;
+
 // typedef what the x,y fields in a point are:
 #ifdef WIN32
 typedef int COORD_T;
@@ -68,453 +486,8 @@ typedef short COORD_T;
 #  define XPOINT XPoint
 #endif
 
-#endif // 123
-
-
-class FL_EXPORT Fl_Device : public fltk3::Wrapper {
-
-protected:
-  
-  Fl_Device() { /* don't call me */ }
-
-public:
-  
-};
-
-
-#if 0 // 123
-
 #define FL_REGION_STACK_SIZE 10
 #define FL_MATRIX_STACK_SIZE 32
-/**
- \brief A virtual class subclassed for each graphics driver FLTK uses.
- *
- The virtual methods of this class are those that a graphics driver should implement to
- support all of FLTK drawing functions.
- <br> The public API for drawing operations is functionally presented in \ref drawing and as function lists
- in the \ref fl_drawings and \ref fl_attributes modules. 
-  */
-class FL_EXPORT Fl_Graphics_Driver : public Fl_Device {
-public:
-  /** A 2D coordinate transformation matrix
-   */
-  struct matrix {double a, b, c, d, x, y;};
-private:
-  tatic const matrix m0;
-  Fl_Font font_; // current font
-  Fl_Fontsize size_; // current font size
-  Fl_Color color_; // current color
-  enum {LINE, LOOP, POLYGON, POINT_};
-  int sptr;
-  static const int matrix_stack_size = FL_MATRIX_STACK_SIZE;
-  matrix stack[FL_MATRIX_STACK_SIZE];
-  matrix m;
-  int n, p_size, gap_;
-  XPOINT *p;
-  int what;
-  int fl_clip_state_number;
-  int rstackptr;
-  static const int region_stack_max = FL_REGION_STACK_SIZE - 1;
-  Fl_Region rstack[FL_REGION_STACK_SIZE];
-#ifdef WIN32
-  int numcount;
-  int counts[20];
-#endif
-  Fl_Font_Descriptor *font_descriptor_;
-  void transformed_vertex0(COORD_T x, COORD_T y);
-  void fixloop();
-  
-protected:
-/*  ** \brief red color for background and/or mixing if device does not support masking or alpha *
-  uchar bg_r_; 
-  ** \brief green color for background and/or mixing if device does not support masking or alpha *
-  uchar bg_g_; 
-  ** \brief blue color for background and/or mixing if device does not support masking or alpha *
-  uchar bg_b_; */
-  friend class Fl_Pixmap;
-  friend class Fl_Bitmap;
-  friend class Fl_RGB_Image;
-  friend void fl_rect(int x, int y, int w, int h);
-  friend void fl_rectf(int x, int y, int w, int h);
-  friend void fl_line_style(int style, int width, char* dashes);
-  friend void fl_xyline(int x, int y, int x1);
-  friend void fl_xyline(int x, int y, int x1, int y2);
-  friend void fl_xyline(int x, int y, int x1, int y2, int x3);
-  friend void fl_yxline(int x, int y, int y1);
-  friend void fl_yxline(int x, int y, int y1, int x2);
-  friend void fl_yxline(int x, int y, int y1, int x2, int y3);
-  friend void fl_line(int x, int y, int x1, int y1);
-  friend void fl_line(int x, int y, int x1, int y1, int x2, int y2);
-  friend void fl_draw(const char *str, int n, int x, int y);
-#ifdef __APPLE__
-  friend void fl_draw(const char *str, int n, float x, float y);
-#endif
-  friend void fl_draw(int angle, const char *str, int n, int x, int y);
-  friend void fl_rtl_draw(const char *str, int n, int x, int y);
-  friend void fl_font(Fl_Font face, Fl_Fontsize size);
-  friend void fl_color(Fl_Color c);
-  friend void fl_color(uchar r, uchar g, uchar b);
-  friend void fl_point(int x, int y);
-  friend void fl_loop(int x0, int y0, int x1, int y1, int x2, int y2);
-  friend void fl_loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  friend void fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2);
-  friend void fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  friend void fl_begin_points();
-  friend void fl_begin_line();
-  friend void fl_begin_loop();
-  friend void fl_begin_polygon();
-  friend void fl_vertex(double x, double y);
-  friend void fl_curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3);
-  friend void fl_circle(double x, double y, double r);
-  friend void fl_arc(double x, double y, double r, double start, double end);
-  friend void fl_arc(int x, int y, int w, int h, double a1, double a2);
-  friend void fl_pie(int x, int y, int w, int h, double a1, double a2);
-  friend void fl_end_points();
-  friend void fl_end_line();
-  friend void fl_end_loop();
-  friend void fl_end_polygon();
-  friend void fl_transformed_vertex(double xf, double yf);
-  friend void fl_push_clip(int x, int y, int w, int h);
-  friend int fl_clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
-  friend int fl_not_clipped(int x, int y, int w, int h);
-  friend void fl_push_no_clip();
-  friend void fl_pop_clip();
-  friend void fl_begin_complex_polygon();
-  friend void fl_gap();
-  friend void fl_end_complex_polygon();
-  friend void fl_push_matrix();
-  friend void fl_pop_matrix();
-  friend void fl_mult_matrix(double a, double b, double c, double d, double x, double y);
-  friend void fl_scale(double x, double y);
-  friend void fl_scale(double x);
-  friend void fl_translate(double x, double y);
-  friend void fl_rotate(double d);
-  friend double fl_transform_x(double x, double y);
-  friend double fl_transform_y(double x, double y);
-  friend double fl_transform_dx(double x, double y);
-  friend double fl_transform_dy(double x, double y);
-  friend Fl_Region fl_clip_region();
-  friend void fl_clip_region(Fl_Region r);
-  friend void fl_restore_clip();
-  
-  friend void fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L);
-  friend void fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L);
-  friend void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  friend FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  friend FL_EXPORT void gl_start();
-
-  matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
-
-  /** \brief The constructor. */
-  Fl_Graphics_Driver();
-  /** \brief see fl_rect(int x, int y, int w, int h). */
-  virtual void rect(int x, int y, int w, int h);
-  /** \brief see fl_rectf(int x, int y, int w, int h). */
-  virtual void rectf(int x, int y, int w, int h);
-  /** \brief see fl_line_style(int style, int width, char* dashes). */
-  virtual void line_style(int style, int width=0, char* dashes=0);
-  /** \brief see fl_xyline(int x, int y, int x1). */
-  virtual void xyline(int x, int y, int x1);
-  /** \brief see fl_xyline(int x, int y, int x1, int y2). */
-  virtual void xyline(int x, int y, int x1, int y2);
-  /** \brief see fl_xyline(int x, int y, int x1, int y2, int x3). */
-  virtual void xyline(int x, int y, int x1, int y2, int x3);
-  /** \brief see fl_yxline(int x, int y, int y1). */
-  virtual void yxline(int x, int y, int y1);
-  /** \brief see fl_yxline(int x, int y, int y1, int x2). */
-  virtual void yxline(int x, int y, int y1, int x2);
-  /** \brief see fl_yxline(int x, int y, int y1, int x2, int y3). */
-  virtual void yxline(int x, int y, int y1, int x2, int y3);
-  /** \brief see fl_line(int x, int y, int x1, int y1). */
-  virtual void line(int x, int y, int x1, int y1);
-  /** \brief see fl_line(int x, int y, int x1, int y1, int x2, int y2). */
-  virtual void line(int x, int y, int x1, int y1, int x2, int y2);
-  /** \brief see fl_draw(const char *str, int n, int x, int y). */
-  virtual void draw(const char *str, int n, int x, int y) = 0;
-#ifdef __APPLE__
-  virtual void draw(const char *str, int n, float x, float y) = 0;
-#endif
-  /** \brief see fl_draw(int angle, const char *str, int n, int x, int y). */
-  virtual void draw(int angle, const char *str, int n, int x, int y) = 0;
-  /** \brief see fl_rtl_draw(const char *str, int n, int x, int y). */
-  virtual void rtl_draw(const char *str, int n, int x, int y) = 0;
-  /** \brief see fl_color(Fl_Color c). */
-  virtual void color(Fl_Color c) {color_ = c;}
-  /** \brief see fl_color(uchar r, uchar g, uchar b). */
-  virtual void color(uchar r, uchar g, uchar b) = 0;
-  /** \brief see fl_point(int x, int y). */
-  virtual void point(int x, int y);
-  /** \brief see fl_loop(int x0, int y0, int x1, int y1, int x2, int y2). */
-  virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2);
-  /** \brief see fl_loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
-  virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  /** \brief see fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2). */
-  virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2);
-  /** \brief see fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
-  virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  /** \brief see fl_begin_points(). */
-  virtual void begin_points();
-  /** \brief see fl_begin_line(). */
-  virtual void begin_line();
-  /** \brief see fl_begin_loop(). */
-  virtual void begin_loop();
-  /** \brief see fl_begin_polygon(). */
-  virtual void begin_polygon();
-  /** \brief see fl_vertex(double x, double y). */
-  virtual void vertex(double x, double y);
-  /** \brief see fl_curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3). */
-  virtual void curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3);
-  /** \brief see fl_circle(double x, double y, double r). */
-  virtual void circle(double x, double y, double r);
-  /** \brief see fl_arc(double x, double y, double r, double start, double end). */
-  virtual void arc(double x, double y, double r, double start, double end);
-  /** \brief see fl_arc(int x, int y, int w, int h, double a1, double a2). */
-  virtual void arc(int x, int y, int w, int h, double a1, double a2);
-  /** \brief see fl_pie(int x, int y, int w, int h, double a1, double a2). */
-  virtual void pie(int x, int y, int w, int h, double a1, double a2);
-  /** \brief see fl_end_points(). */
-  virtual void end_points();
-  /** \brief see fl_end_line(). */
-  virtual void end_line();
-  /** \brief see fl_end_loop(). */
-  virtual void end_loop();
-  /** \brief see fl_end_polygon(). */
-  virtual void end_polygon();
-  /** \brief see fl_begin_complex_polygon(). */
-  virtual void begin_complex_polygon();
-  /** \brief see fl_gap(). */
-  virtual void gap();
-  /** \brief see fl_end_complex_polygon(). */
-  virtual void end_complex_polygon();
-  /** \brief see fl_transformed_vertex(double xf, double yf). */
-  virtual void transformed_vertex(double xf, double yf);
-  /** \brief see fl_push_clip(int x, int y, int w, int h). */
-  virtual void push_clip(int x, int y, int w, int h);
-  /** \brief see fl_clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H). */
-  virtual int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
-  /** \brief see fl_not_clipped(int x, int y, int w, int h). */
-  virtual int not_clipped(int x, int y, int w, int h);
-  /** \brief see fl_push_no_clip(). */
-  virtual void push_no_clip();
-  /** \brief see fl_pop_clip(). */
-  virtual void pop_clip();
-    
-  /** \brief see fl_push_matrix(). */
-  void push_matrix();
-  /** \brief see fl_pop_matrix(). */
-  void pop_matrix();
-  /** \brief see fl_mult_matrix(double a, double b, double c, double d, double x, double y). */
-  void mult_matrix(double a, double b, double c, double d, double x, double y);
-  /** \brief see fl_scale(double x, double y). */
-  inline void scale(double x, double y) { mult_matrix(x,0,0,y,0,0); }
-  /** \brief see fl_scale(double x). */
-  inline void scale(double x) { mult_matrix(x,0,0,x,0,0); }
-  /** \brief see fl_translate(double x, double y). */
-  inline void translate(double x,double y) { mult_matrix(1,0,0,1,x,y); }
-  /** \brief see fl_rotate(double d). */
-  void rotate(double d);
-  /** \brief see fl_transform_x(double x, double y). */
-  double transform_x(double x, double y);
-  /** \brief see fl_transform_y(double x, double y). */
-  double transform_y(double x, double y);
-  /** \brief see fl_transform_dx(double x, double y). */
-  double transform_dx(double x, double y);
-  /** \brief see fl_transform_dy(double x, double y). */
-  double transform_dy(double x, double y);
-  /** \brief see fl_clip_region(). */
-  Fl_Region clip_region();
-  /** \brief see fl_clip_region(Fl_Region r). */
-  void clip_region(Fl_Region r);
-  /** \brief see fl_restore_clip(). */
-  void restore_clip();
-  
-  // Images
-  /** \brief see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
-  virtual   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0) = 0;
-  /** \brief see fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
-  virtual   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0) = 0;
-  /** \brief see fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
-  virtual   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3) = 0;
-  /** \brief see fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
-  virtual   void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1) = 0;
-  // Image classes
-  /** \brief Draws an Fl_RGB_Image object to the device. 
-   *
-   Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
-   the image offset by the cx and cy arguments.
-   */
-  virtual   void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
-  /** \brief Draws an Fl_Pixmap object to the device. 
-   *
-   Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
-   the image offset by the cx and cy arguments.
-   */
-  virtual   void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
-  /** \brief Draws an Fl_Bitmap object to the device. 
-   *
-   Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
-   the image offset by the cx and cy arguments.
-   */
-  virtual void draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) = 0;
-    
-public:
-  /** \brief see fl_font(Fl_Font face, Fl_Fontsize size). */
-  virtual void font(Fl_Font face, Fl_Fontsize size) {font_ = face; size_ = size;}
-  /** \brief see fl_font(void). */
-  Fl_Font font() {return font_; }
-  /** \brief see fl_size(). */
-  Fl_Fontsize size() {return size_; }
-  /** \brief see fl_width(const char *str, int n). */
-  virtual double width(const char *str, int n) = 0;
-  /** \brief see fl_width(unsigned int n). */
-  virtual inline double width(unsigned int c) { char ch = (char)c; return width(&ch, 1); }
-  /** \brief see fl_text_extents(const char*, int n, int& dx, int& dy, int& w, int& h). */
-  virtual void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
-  /** \brief see fl_height(). */
-  virtual int height() = 0;
-  /** \brief see fl_descent(). */
-  virtual int descent() = 0;
-  /** \brief see fl_color(void). */
-  Fl_Color color() {return color_;}
-  /** Returns a pointer to the current Fl_Font_Descriptor for the graphics driver */
-  inline Fl_Font_Descriptor *font_descriptor() { return font_descriptor_;}
-  /** Sets the current Fl_Font_Descriptor for the graphics driver */
-  inline void font_descriptor(Fl_Font_Descriptor *d) { font_descriptor_ = d;}
-  /** \brief The destructor */
-  virtual ~Fl_Graphics_Driver() {};
-};
-
-#if defined(__APPLE__) || defined(FL_DOXYGEN)
-/**
- \brief The Mac OS X-specific graphics class.
- *
- This class is implemented only on the Mac OS X platform.
- */
-class FL_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
-public:
-  void color(Fl_Color c);
-  void color(uchar r, uchar g, uchar b);
-  void draw(const char* str, int n, int x, int y);
-#ifdef __APPLE__
-  void draw(const char *str, int n, float x, float y);
-#endif
-  void draw(int angle, const char *str, int n, int x, int y);
-  void rtl_draw(const char* str, int n, int x, int y);
-  void font(Fl_Font face, Fl_Fontsize size);
-  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
-  void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
-  void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
-  void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
-  double width(const char *str, int n);
-  double width(unsigned int c);
-  void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
-  int height();
-  int descent();
-};
-#endif
-#if defined(WIN32) || defined(FL_DOXYGEN)
-/**
- \brief The MSWindows-specific graphics class.
- *
- This class is implemented only on the MSWindows platform.
- */
-class FL_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
-public:
-  void color(Fl_Color c);
-  void color(uchar r, uchar g, uchar b);
-  void draw(const char* str, int n, int x, int y);
-  void draw(int angle, const char *str, int n, int x, int y);
-  void rtl_draw(const char* str, int n, int x, int y);
-  void font(Fl_Font face, Fl_Fontsize size);
-  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
-  void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
-  void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
-  void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
-  double width(const char *str, int n);
-  double width(unsigned int c);
-  void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
-  int height();
-  int descent();
-};
-#endif
-#if !(defined(__APPLE__) || defined(WIN32))
-/**
- \brief The Xlib-specific graphics class.
- *
- This class is implemented only on the Xlib platform.
- */
-class Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
-public:
-  void color(Fl_Color c);
-  void color(uchar r, uchar g, uchar b);
-  void draw(const char* str, int n, int x, int y);
-  void draw(int angle, const char *str, int n, int x, int y);
-  void rtl_draw(const char* str, int n, int x, int y);
-  void font(Fl_Font face, Fl_Fontsize size);
-  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
-  void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
-  void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
-  void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
-  double width(const char *str, int n);
-  double width(unsigned int c);
-  void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
-  int height();
-  int descent();
-};
-#endif
-
-#endif // 123
-
-class FL_EXPORT Fl_Surface_Device : public Fl_Device {
-
-protected:
-
-  Fl_Surface_Device(Fl_Graphics_Driver*) {
-    /* empty */
-  }
-
-public:
-  
-  virtual void set_current(void) {
-    ((fltk3::SurfaceDevice*)_p)->set_current();
-  }
-
-  void driver(Fl_Graphics_Driver *d) {
-    ((fltk3::SurfaceDevice*)_p)->driver((fltk3::GraphicsDriver*)d);
-  }
-  
-  Fl_Graphics_Driver *driver() {
-    return (Fl_Graphics_Driver*)((fltk3::SurfaceDevice*)_p)->driver();
-  }
-  
-  static Fl_Surface_Device *surface() {
-    return (Fl_Surface_Device*)fltk3::SurfaceDevice::surface(); 
-  }
-  
-};
-
-#if 0 // 123
-
-/**
- \brief A display to which the computer can draw.
- */
-class FL_EXPORT Fl_Display_Device : public Fl_Surface_Device {
-  static Fl_Display_Device *_display; // the platform display device
-public:
-  /** \brief A constructor that sets the graphics driver used by the display */
-  Fl_Display_Device(Fl_Graphics_Driver *graphics_driver);
-  /** Returns the platform display device. */
-  static inline Fl_Display_Device *display_device() {return _display;};
-};
 
 /**
  This plugin socket allows the integration of new device drivers for special
@@ -538,7 +511,7 @@ public:
   virtual int print(Fl_Widget* w, int x, int y, int height) = 0;
 };
 
-#endif
+#endif // 123
 
 #endif // Fl_Device_H
 

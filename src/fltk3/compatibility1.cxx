@@ -3,7 +3,7 @@
 //
 // FLTK1 compatibility layer for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,7 +25,16 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/enumerations.h>
+#include <FL/Fl_Paged_Device.H>
+
+FL_EXPORT Fl_Graphics_Driver *fl_graphics_driver;
+
+Fl_Paged_Device::Fl_Paged_Device() : Fl_Surface_Device(NULL) {
+  _p->wrapper(NULL);
+  delete _p;
+  _p = new fltk3::PagedDevice_I();
+  _p->wrapper(this);
+}
 
 //
 // End of "$Id$".

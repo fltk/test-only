@@ -60,6 +60,7 @@ typedef short COORD_T;
 extern void gl_start();
 
 class Fl_Font_Descriptor;
+class Fl_Surface_Device;
 
 namespace fltk3 {
   
@@ -518,6 +519,7 @@ namespace fltk3 {
    \brief A surface that's susceptible to receive graphical output.
    */
   class FLTK3_EXPORT SurfaceDevice : public Object {
+    friend class ::Fl_Surface_Device;
     /** \brief The graphics driver in use by this surface. */
     fltk3::GraphicsDriver *_driver;
     static SurfaceDevice *_surface; // the surface that currently receives graphics output

@@ -39,7 +39,7 @@
 #undef FL_MINOR_VERSION
 #define FL_MINOR_VERSION	3
 #undef FL_PATCH_VERSION
-#define FL_PATCH_VERSION	0
+#define FL_PATCH_VERSION	1
 #undef FL_VERSION
 #define FL_VERSION \
   ((double)FL_MAJOR_VERSION + \

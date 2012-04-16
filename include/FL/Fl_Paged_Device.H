@@ -36,9 +36,7 @@
 #define NO_PAGE_FORMATS 30 /* MSVC6 compilation fix */
 #define page_formats fltk3::PagedDevice::page_formats
 
-
 class Fl_Paged_Device : public Fl_Surface_Device {
-  
 public:
 
   enum Page_Format {
@@ -89,72 +87,97 @@ public:
   } page_format;
 
 protected:
-  
-  Fl_Paged_Device() : Fl_Surface_Device(NULL) {};
-  
+  Fl_Paged_Device();
 public:
-  
   virtual int start_job(int pagecount, int *frompage = NULL, int *topage = NULL) {
     return ((fltk3::PagedDevice*)_p)->start_job(pagecount, frompage, topage);
   }
-  
   virtual int start_page(void) {
     return ((fltk3::PagedDevice*)_p)->start_page();
   }
-  
   virtual int printable_rect(int *w, int *h) {
     return ((fltk3::PagedDevice*)_p)->printable_rect(w, h);
   }
-  
   virtual void margins(int *left, int *top, int *right, int *bottom) {
     ((fltk3::PagedDevice*)_p)->margins(left, top, right, bottom);
   }
-  
   virtual void origin(int x, int y) {
     ((fltk3::PagedDevice*)_p)->origin(x, y);
   }
-  
   virtual void origin(int *x, int *y) {
     ((fltk3::PagedDevice*)_p)->origin(x, y);
   }
-  
   virtual void scale(float scale_x, float scale_y = 0.) {
     ((fltk3::PagedDevice*)_p)->scale(scale_x, scale_y);
   }
-  
   virtual void rotate(float angle) {
     ((fltk3::PagedDevice*)_p)->rotate(angle);
   }
-  
   virtual void translate(int x, int y) {
     ((fltk3::PagedDevice*)_p)->translate(x, y);
   }
-  
   virtual void untranslate(void) {
     ((fltk3::PagedDevice*)_p)->untranslate();
   }
-  
+  virtual int end_page (void) {
+   return ((fltk3::PagedDevice*)_p)->end_page();
+  }
+  virtual void end_job (void) {
+   ((fltk3::PagedDevice*)_p)->end_job();
+  }
   void print_widget(Fl_Widget* widget, int delta_x = 0, int delta_y = 0) {
     ((fltk3::PagedDevice*)_p)->print_widget(fltk3::_1to3_widget(widget), delta_x, delta_y);
   }
-  
   void print_window(Fl_Window *win, int x_offset = 0, int y_offset = 0) {
     ((fltk3::PagedDevice*)_p)->print_window(fltk3::_1to3_window(win), x_offset, y_offset);
   }
-  
   void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0) {
     ((fltk3::PagedDevice*)_p)->print_window_part(fltk3::_1to3_window(win), x, y, w, h, delta_x, delta_y);
   }
-  
-  virtual int end_page (void) {
-    return ((fltk3::PagedDevice*)_p)->end_page();
-  }
-  
-  virtual void end_job (void) {
-    ((fltk3::PagedDevice*)_p)->end_job();
-  }
 };
 
+namespace fltk3 {
+  class PagedDevice_I : public fltk3::PagedDevice {
+  public:
+    PagedDevice_I() {}
+    virtual int start_job(int pagecount, int *frompage = NULL, int *topage = NULL) {
+      return ((Fl_Paged_Device*)pWrapper)->start_job(pagecount, frompage, topage);
+    }
+    virtual int start_page(void) {
+      return ((Fl_Paged_Device*)pWrapper)->start_page();
+    }
+    virtual int printable_rect(int *w, int *h) {
+      return ((Fl_Paged_Device*)pWrapper)->printable_rect(w, h);
+    }
+    virtual void margins(int *left, int *top, int *right, int *bottom) {
+      ((Fl_Paged_Device*)pWrapper)->margins(left, top, right, bottom);
+    }
+    virtual void origin(int x, int y) {
+      ((Fl_Paged_Device*)pWrapper)->origin(x, y);
+    }
+    virtual void origin(int *x, int *y) {
+      ((Fl_Paged_Device*)pWrapper)->origin(x, y);
+    }
+    virtual void scale(float scale_x, float scale_y = 0.) {
+      ((Fl_Paged_Device*)pWrapper)->scale(scale_x, scale_y);
+    }
+    virtual void rotate(float angle) {
+      ((Fl_Paged_Device*)pWrapper)->rotate(angle);
+    }
+    virtual void translate(int x, int y) {
+      ((Fl_Paged_Device*)pWrapper)->translate(x, y);
+    }
+    virtual void untranslate(void) {
+      ((Fl_Paged_Device*)pWrapper)->untranslate();
+    }
+    virtual int end_page (void) {
+      return ((Fl_Paged_Device*)pWrapper)->end_page();
+    }
+    virtual void end_job (void) {
+      ((Fl_Paged_Device*)pWrapper)->end_job();
+    }
+  };
+}
 
 #endif // Fl_Paged_Device_H
 
