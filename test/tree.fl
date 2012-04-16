@@ -43,6 +43,7 @@ Function {reason_as_name(fltk3::TreeReason reason)} {
       case fltk3::TREE_REASON_NONE:       return("none");
       case fltk3::TREE_REASON_SELECTED:   return("selected");
       case fltk3::TREE_REASON_DESELECTED: return("deselected");
+      case fltk3::TREE_REASON_RESELECTED: return("reselected");
       case fltk3::TREE_REASON_OPENED:     return("opened");
       case fltk3::TREE_REASON_CLOSED:     return("closed");
       default:                        return("???");

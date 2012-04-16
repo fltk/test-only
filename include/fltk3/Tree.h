@@ -200,6 +200,14 @@ namespace fltk3 {
     TREE_REASON_CLOSED		///< an item was closed
   };
   
+/// \enum Fl_Tree_Item_Select_Mode
+/// Defines the ways an item can be (re) selected.
+///
+  enum Tree_Item_Reselect_Mode
+  {
+      TREE_SELECTABLE_ONCE=0, /// by default, items can only be selected once
+      TREE_SELECTABLE_ALWAYS  /// needed for new RESELECT feature
+  };
   
   class FLTK3_EXPORT Tree : public fltk3::Group {
 
@@ -211,27 +219,18 @@ namespace fltk3 {
     int            _scrollbar_size;		// size of scrollbar trough
   
   public:
-    /// \enum Fl_Tree_Item_Select_Mode
-    /// Defines the ways an item can be (re) selected.
-    ///
-    enum Tree_Item_Reselect_Mode
-    {
-      TREE_SELECTABLE_ONCE=0, /// backward compatible default: an item can only be selected once
-      TREE_SELECTABLE_ALWAYS, /// needed for new RESELECT feature
-    };
-    
     //! Returns the current item re/selection mode
-    Tree_Item_Reselect_Mode item_reselect_mode() const {
-      return _itemReselectMode;
+    fltk3::Tree_Item_Reselect_Mode item_reselect_mode() const {
+        return _itemReselectMode;
     }
   
     //! Sets the item re/selection mode
-    void item_reselect_mode(Tree_Item_Reselect_Mode mode) {
-      _itemReselectMode = mode;
+    void item_reselect_mode(fltk3::Tree_Item_Reselect_Mode mode) {
+        _itemReselectMode = mode;
     }
 
   private:
-    Tree_Item_Reselect_Mode _itemReselectMode;
+    fltk3::Tree_Item_Reselect_Mode _itemReselectMode;
 
   protected:
     /// Vertical scrollbar
