@@ -119,7 +119,7 @@ native-dist:
 	epm -v -f native fltk
 
 etags:
-	etags FL/*.H FL/*.h src/*.cxx src/*.c src/*.h src/xutf8/*.h src/xutf8/*.c cairo/*.cxx fluid/*.h fluid/*.cxx test/*.h test/*.cxx test1/*.h test1/*.cxx
+	etags include/*/*.H include/*/*.h src/*/*.cxx src/*/*.c src/*/*.h
 
 #
 # Run the clang.llvm.org static code analysis tool on the C sources.
