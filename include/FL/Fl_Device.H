@@ -138,6 +138,7 @@ FLTK3_DRIVER_WRAPPER(vertex (double xf, double yf), vertex ( xf, yf))
 };
   
 #define pVCallGraphicsDriver pVCallImageCopyWH
+#define pVCallGraphicsDrawImage pVCallImageColorAverage
 
 class GraphicsDriver_I : public GraphicsDriver { 
 public: 
@@ -210,6 +211,14 @@ public:
     }
     return GraphicsDriver::width(c); 
   } 
+  void draw_image(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDrawImage) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDrawImage; 
+      ((GraphicsDriverWrapper*)pWrapper)->draw_image( (Fl_Draw_Image_Cb)cb, data, X,Y,W,H,D); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDrawImage; 
+    } 
+    else GraphicsDriver::draw_image( (Fl_Draw_Image_Cb)cb, data, X,Y,W,H,D); 
+  }   
   
 #define FLTK3_DRIVER_VF(proto, call) \
 void proto { \
@@ -231,8 +240,6 @@ void proto { \
   FLTK3_DRIVER_VF(line_style(int style, int width, char *dashes), line_style(style, width, dashes))
   FLTK3_DRIVER_VF(push_clip(int x, int y, int w, int h) , push_clip(x, y, w, h))
   FLTK3_DRIVER_VF(pop_clip(), pop_clip())
-  FLTK3_DRIVER_VF(draw_image(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D) ,
-		       draw_image( (Fl_Draw_Image_Cb)cb, data, X,Y,W,H,D) )
   FLTK3_DRIVER_VF(line(int x, int y, int x1, int y1, int x2, int y2), line(x, y, x1, y1, x2, y2))
   FLTK3_DRIVER_VF(xyline(int x, int y, int x1), xyline(x, y, x1))
   FLTK3_DRIVER_VF(xyline(int x, int y, int x1, int y2), xyline(x, y, x1, y2))
