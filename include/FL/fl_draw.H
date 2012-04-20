@@ -444,12 +444,15 @@ inline int fl_draw_pixmap(const char* const* data, int x,int y, Fl_Color bg=FL_G
   return fltk3::draw_pixmap(data, x, y, bg);
 }
 
+inline int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h) {
+  return fltk3::measure_pixmap(data, w, h);
+}
+
+inline int fl_measure_pixmap(const char* const* data, int &w, int &h) {
+  return fltk3::measure_pixmap(data, w, h);
+}
+
 #if 0
-
-FL_EXPORT int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h);
-
-FL_EXPORT int fl_measure_pixmap(const char* const* cdata, int &w, int &h);
-
 
 FL_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
                          void (*draw_area)(void*, int,int,int,int), void* data);
