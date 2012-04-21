@@ -822,15 +822,12 @@ int fltk3::TextDisplay::position_to_xy( int pos, int* X, int* Y ) const {
   
   /* If position is not displayed, return false */
   if (pos < mFirstChar || (pos > mLastChar && !empty_vlines())) {
-    return 0;
+    return *X=*Y=0;
   }
   
   /* Calculate Y coordinate */
-  if (!position_to_line(pos, &visLineNum)) {
-    return 0;
-  }
-  if (visLineNum < 0 || visLineNum > mNBufferLines) {
-    return 0;
+  if (!position_to_line(pos, &visLineNum) || visLineNum < 0 || visLineNum > mNBufferLines) {
+    return *X=*Y=0;
   }
   
   fontHeight = mMaxsize;
@@ -3478,10 +3475,12 @@ void fltk3::TextDisplay::draw(void) {
                  text_area.h);
     
     int X, Y;
-    if (position_to_xy(mCursorPos, &X, &Y)) draw_cursor(X, Y);
+    if (position_to_xy(mCursorPos, &X, &Y)) {
+      draw_cursor(X, Y);
+      mCursorOldY = Y;
+    }
     //    else puts("position_to_xy() failed - unable to draw cursor!");
     //printf("drew cursor at pos: %d (%d,%d)\n", mCursorPos, X, Y);
-    mCursorOldY = Y;
     fltk3::pop_clip();
   }
   fltk3::pop_clip();
