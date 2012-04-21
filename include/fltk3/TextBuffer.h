@@ -195,7 +195,7 @@ namespace fltk3 {
     
     /**  
      Replaces the entire contents of the text buffer.
-     \param text Text must be valid utf8.
+     \param text Text must be utf8, if null an empty string is substituted.
      */
     void text(const char* text);
     
