@@ -960,6 +960,7 @@ fltk3::Preferences::Name::~Name() {
 
 int fltk3::Preferences::Node::lastEntrySet = -1;
 
+#if 0
 // recursively create a path in the file system
 static char makePath( const char *path ) {
   if (access(path, 0)) {
@@ -979,6 +980,8 @@ static char makePath( const char *path ) {
   }
   return 1;
 }
+#endif
+
 
 #if 0
 // strip the filename and create a path

@@ -115,31 +115,6 @@ protected:
     ((fltk3::Widget_I*)_p)->clear_flag(c);
   }
   
-  enum {
-        INACTIVE        = 1<<0,
-        INVISIBLE       = 1<<1,
-        OUTPUT          = 1<<2,
-        NOBORDER        = 1<<3,
-        FORCE_POSITION  = 1<<4,
-        NON_MODAL       = 1<<5,
-        SHORTCUT_LABEL  = 1<<6,
-        CHANGED         = 1<<7,
-        OVERRIDE        = 1<<8,
-        VISIBLE_FOCUS   = 1<<9,
-        COPIED_LABEL    = 1<<10,
-        CLIP_CHILDREN   = 1<<11,
-        MENU_WINDOW     = 1<<12,
-        TOOLTIP_WINDOW  = 1<<13,
-        MODAL           = 1<<14,
-        NO_OVERLAY      = 1<<15,
-        GROUP_RELATIVE  = 1<<16,
-        COPIED_TOOLTIP  = 1<<17,
-	FULLSCREEN      = 1<<18,
-        USERFLAG3       = 1<<29,
-        USERFLAG2       = 1<<30,
-        USERFLAG1       = 1<<31
-  };
-  
   void draw_box() const {
     ((fltk3::Widget_I*)_p)->draw_box();
   }
@@ -174,6 +149,31 @@ protected:
   
 public:
 
+  enum {
+    INACTIVE        = 1<<0,
+    INVISIBLE       = 1<<1,
+    OUTPUT          = 1<<2,
+    NOBORDER        = 1<<3,
+    FORCE_POSITION  = 1<<4,
+    NON_MODAL       = 1<<5,
+    SHORTCUT_LABEL  = 1<<6,
+    CHANGED         = 1<<7,
+    OVERRIDE        = 1<<8,
+    VISIBLE_FOCUS   = 1<<9,
+    COPIED_LABEL    = 1<<10,
+    CLIP_CHILDREN   = 1<<11,
+    MENU_WINDOW     = 1<<12,
+    TOOLTIP_WINDOW  = 1<<13,
+    MODAL           = 1<<14,
+    NO_OVERLAY      = 1<<15,
+    GROUP_RELATIVE  = 1<<16,
+    COPIED_TOOLTIP  = 1<<17,
+    FULLSCREEN      = 1<<18,
+    USERFLAG3       = 1<<29,
+    USERFLAG2       = 1<<30,
+    USERFLAG1       = 1<<31
+  };
+  
   FLTK3_WIDGET_VCALLS(Fl_Widget, Widget);
   
   Fl_Widget() { /*blank */ }
