@@ -32,7 +32,7 @@ comment {//
 } 
 
 decl {\#include "Fl_Type.h"} {
-  comment {Needed for Fl_Panel base class} selected public global
+  comment {Needed for Fl_Panel base class} public global
 } 
 
 Function {make_widget_panel()} {open
@@ -49,7 +49,7 @@ Function {make_widget_panel()} {open
       {fltk3::Group} {} {
         label GUI
         callback {Fl_Panel::propagate_load} open
-        xywh {10 30 400 290} labelsize 11 when 0 hide resizable
+        xywh {10 30 400 290} labelsize 11 when 0 resizable
       } {
         {fltk3::Group} {} {
           label {Label:}
@@ -62,7 +62,7 @@ Function {make_widget_panel()} {open
 Use Ctrl-J for newlines.} xywh {95 40 190 20} labelfont 1 labelsize 11 when 1 textsize 11 resizable
           }
           {fltk3::Choice} {} {
-            callback labeltype_cb open
+            callback labeltype_cb open selected
             tooltip {The label style for the widget.} xywh {284 40 120 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11
             code0 {extern fltk3::MenuItem labeltypemenu[];}
             code1 {o->menu(labeltypemenu);}
@@ -529,7 +529,7 @@ Use Ctrl-J for newlines.} xywh {95 285 310 20} labelfont 1 labelsize 11 textsize
       {fltk3::Group} {} {
         label {C++}
         callback {Fl_Panel::propagate_load} open
-        xywh {10 30 400 290} labelsize 11 when 0
+        xywh {10 30 400 290} labelsize 11 when 0 hide
       } {
         {fltk3::Group} {} {
           label {Class:}

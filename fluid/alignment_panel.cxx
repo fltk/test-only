@@ -81,6 +81,7 @@ fltk3::DoubleWindow* make_project_window() {
     { fltk3::TabGroup* o = new fltk3::TabGroup(10, 10, 378, 220);
       o->selection_color((fltk3::Color)12);
       { fltk3::Group* o = new fltk3::Group(10, 36, 378, 194, "Output");
+        o->hide();
         { fltk3::Box* o = new fltk3::Box(100, 49, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
           o->align(fltk3::Align(fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE));
         } // fltk3::Box* o
@@ -119,7 +120,6 @@ fltk3::DoubleWindow* make_project_window() {
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(10, 36, 378, 194, "Internationalization");
-        o->hide();
         { i18n_type_chooser = new fltk3::Choice(100, 48, 136, 25, "Use:");
           i18n_type_chooser->tooltip("Type of internationalization to use.");
           i18n_type_chooser->box(fltk3::THIN_UP_BOX);
@@ -176,7 +176,7 @@ fltk3::MenuItem menu_scheme_choice[] = {
  {"Default", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"None", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"Plastic", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
- {"Classic", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"GTK+", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -683,7 +683,7 @@ fltk3::DoubleWindow* make_global_settings_window() {
   { global_settings_window = new fltk3::DoubleWindow(403, 317, "FLTK Preferences");
     global_settings_window->color(fltk3::LIGHT1);
     { fltk3::Group* o = new fltk3::Group(10, 10, 380, 100, "Keyboard Focus Options");
-      o->box(fltk3::GTK_DOWN_BOX);
+      o->box(fltk3::DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
       { wVisibleFocus = new fltk3::Choice(245, 40, 100, 25, "Visible Keyboard Focus:");
@@ -708,7 +708,7 @@ hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 120, 380, 65, "Tooltip Options");
-      o->box(fltk3::GTK_DOWN_BOX);
+      o->box(fltk3::DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
       { wShowTooltips = new fltk3::Choice(245, 150, 100, 25, "Show Tooltips:");
@@ -722,7 +722,7 @@ ves the widget. If disabled, no tooltip is shown.\n\nDefault is on.");
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 194, 380, 66, "Drag And Drop Options");
-      o->box(fltk3::GTK_DOWN_BOX);
+      o->box(fltk3::DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
       { wDNDText = new fltk3::Choice(245, 225, 100, 25, "Allow dragging Text:");

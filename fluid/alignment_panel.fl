@@ -67,8 +67,7 @@ decl {extern fltk3::Preferences fluid_prefs;} {public local
 decl {fltk3::TextBuffer *shell_run_buffer;} {public local
 } 
 
-Function {make_project_window()} {open
-} {
+Function {make_project_window()} {} {
   {fltk3::Window} project_window {
     label {Project Settings} open
     xywh {393 460 400 282} type Double
@@ -85,7 +84,7 @@ Function {make_project_window()} {open
     } {
       {fltk3::Group} {} {
         label Output open
-        xywh {10 36 378 194}
+        xywh {10 36 378 194} hide
       } {
         {fltk3::Box} {} {
           label {Use "name.ext" to set a file name or just ".ext" to set extension.}
@@ -115,7 +114,7 @@ Function {make_project_window()} {open
         }
         {fltk3::Choice} proj_version_choice {
           label {Version:}
-          callback proj_version_cb open selected
+          callback proj_version_cb open
           xywh {100 152 145 20} down_box BORDER_BOX labelfont 1
         } {
           MenuItem {} {
@@ -137,7 +136,7 @@ Function {make_project_window()} {open
       }
       {fltk3::Group} {} {
         label Internationalization open
-        xywh {10 36 378 194} hide
+        xywh {10 36 378 194}
       } {
         {fltk3::Choice} i18n_type_chooser {
           label {Use:}
@@ -355,7 +354,7 @@ Function {make_shell_window()} {} {
 
 Function {make_layout_window()} {} {
   {fltk3::Window} grid_window {
-    label {Layout Settings} open
+    label {Layout Settings}
     xywh {760 427 285 245} type Double non_modal visible
   } {
     {fltk3::Input} horizontal_input {
@@ -474,7 +473,7 @@ wDNDText->value(opt[fltk3::OPTION_DND_TEXT][mode]);} {}
 } 
 
 Function {readPrefs()} {
-  comment {read all preferences and refresh the GUI} private return_type void
+  comment {read all preferences and refresh the GUI} open private return_type void
 } {
   code {// read all preferences and refresh the GUI
 {
@@ -493,7 +492,8 @@ Function {readPrefs()} {
   opt_prefs.get("DNDText", opt[fltk3::OPTION_DND_TEXT][0], 2);
   opt_prefs.get("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][0], 2);
 }
-refreshUI();} {}
+refreshUI();} {selected
+  }
 } 
 
 Function {writePrefs()} {
@@ -549,7 +549,7 @@ Function {make_global_settings_window()} {} {
   } {
     {fltk3::Group} {} {
       label {Keyboard Focus Options} open
-      xywh {10 10 380 100} box GTK_DOWN_BOX labelfont 2 align 21
+      xywh {10 10 380 100} box DOWN_BOX labelfont 2 align 21
     } {
       {fltk3::Choice} wVisibleFocus {
         label {Visible Keyboard Focus:}
@@ -606,7 +606,7 @@ Default is off.} xywh {245 75 100 25} down_box BORDER_BOX
     }
     {fltk3::Group} {} {
       label {Tooltip Options} open
-      xywh {10 120 380 65} box GTK_DOWN_BOX labelfont 2 align 21
+      xywh {10 120 380 65} box DOWN_BOX labelfont 2 align 21
     } {
       {fltk3::Choice} wShowTooltips {
         label {Show Tooltips:}
@@ -637,7 +637,7 @@ Default is on.} xywh {245 150 100 25} down_box BORDER_BOX
     }
     {fltk3::Group} {} {
       label {Drag And Drop Options} open
-      xywh {10 194 380 66} box GTK_DOWN_BOX labelfont 2 align 21
+      xywh {10 194 380 66} box DOWN_BOX labelfont 2 align 21
     } {
       {fltk3::Choice} wDNDText {
         label {Allow dragging Text:}

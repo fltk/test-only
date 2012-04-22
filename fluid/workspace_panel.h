@@ -48,7 +48,7 @@ public:
   static fltk3::MenuItem menu_pEnvMenu[];
   static fltk3::MenuItem *pMenuAll;
 private:
-  void cb_pMenuAll_i(fltk3::Menu_*, void*);
+  inline void cb_pMenuAll_i(fltk3::Menu_*, void*);
   static void cb_pMenuAll(fltk3::Menu_*, void*);
 protected:
   void update_all();

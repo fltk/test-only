@@ -113,7 +113,7 @@ if (callback())
       MenuItem {} {
         label {VisualC 6}
         user_data FL_ENV_VC6
-        callback cb_pMenuAll
+        callback cb_pMenuAll selected
         xywh {0 0 100 20} labelsize 12
       }
       MenuItem {} {
@@ -241,7 +241,7 @@ Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
     label {File Properties} open
-    xywh {730 54 420 450} type Double labelsize 11 align 80 resizable hotspot
+    xywh {452 231 420 450} type Double labelsize 11 align 80 resizable hotspot
     class Fl_Panel non_modal visible
   } {
     {fltk3::ScrollGroup} pScrollGroup {
@@ -548,7 +548,7 @@ Function {make_file_panel()} {open
         break;
       }
     }
-  }} open selected
+  }} open
               xywh {108 164 200 20} labelsize 12
             } {
               MenuItem {} {

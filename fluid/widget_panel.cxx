@@ -111,7 +111,6 @@ Fl_Panel* make_widget_panel() {
         o->labelsize(11);
         o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
         o->when(fltk3::WHEN_NEVER);
-        o->hide();
         { fltk3::Group* o = new fltk3::Group(95, 40, 309, 20, "Label:");
           o->labelfont(1);
           o->labelsize(11);
@@ -639,6 +638,7 @@ elative to the origin at construction time");
         o->labelsize(11);
         o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
         o->when(fltk3::WHEN_NEVER);
+        o->hide();
         { fltk3::Group* o = new fltk3::Group(95, 40, 310, 20, "Class:");
           o->labelfont(1);
           o->labelsize(11);
