@@ -3,7 +3,7 @@
 //
 // Code editor widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,7 +37,6 @@
 #  include <string.h>
 #  include <ctype.h>
 #  include <fltk3/run.h>
-#  include <fltk3/TextBuffer.h>
 #  include <fltk3/TextEditor.h>
 
 

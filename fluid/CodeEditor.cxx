@@ -3,7 +3,7 @@
 //
 // Code editor widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -370,7 +370,8 @@ int CodeEditor::auto_indent(int, CodeEditor* e) {
 
 // Create a CodeEditor widget...
 CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
-  fltk3::TextEditor(X, Y, W, H, L) {
+  fltk3::TextEditor(X, Y, W, H, L) 
+{
   buffer(new fltk3::TextBuffer);
 
   char *style = new char[mBuffer->length() + 1];
