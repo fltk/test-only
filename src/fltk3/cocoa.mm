@@ -2048,7 +2048,7 @@ void Fl_X::make(fltk3::Window* w)
     x->gc = 0;
 	  
     NSRect crect;
-    if (w->flags() & fltk3::Widget::FULLSCREEN) {
+    if (w->fullscreen_active()) {
       int sx, sy, sw, sh;
       fltk3::screen_xywh(sx, sy, sw, sh, w->x(), w->y(), w->w(), w->h());
       w->resize(sx, sy, sw, sh);

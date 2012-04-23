@@ -346,18 +346,6 @@ namespace fltk3 {
     
   protected:
     
-    void draw_box() const;
-    void draw_box(Boxtype t, Color c) const;
-    void draw_box(Boxtype t, int x,int y,int w,int h, Color c) const;
-    void draw_backdrop() const;
-    /** draws a focus rectangle around the widget */
-    void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
-    void draw_focus(Boxtype t, int x,int y,int w,int h) const;
-    void draw_label() const;
-    void draw_label(int, int, int, int) const;
-    
-  public:
-    
     /** flags possible values enumeration.
      See activate(), output(), visible(), changed(), set_visible_focus()
      */
@@ -383,6 +371,18 @@ namespace fltk3 {
       USERFLAG2       = 1<<30,  ///< reserved for 3rd party extensions
       USERFLAG1       = 1<<31   ///< reserved for 3rd party extensions
     };
+    
+    void draw_box() const;
+    void draw_box(Boxtype t, Color c) const;
+    void draw_box(Boxtype t, int x,int y,int w,int h, Color c) const;
+    void draw_backdrop() const;
+    /** draws a focus rectangle around the widget */
+    void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
+    void draw_focus(Boxtype t, int x,int y,int w,int h) const;
+    void draw_label() const;
+    void draw_label(int, int, int, int) const;
+    
+  public:
     
     /** Creates a widget at the given position and size.
      
