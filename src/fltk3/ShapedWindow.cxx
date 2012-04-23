@@ -56,7 +56,8 @@ void fltk3::ShapedWindow::shape(fltk3::Image* b) {
 #if USE_X11
 # include <X11/extensions/shape.h>
 #elif defined(_WIN32)
-//#include <malloc.h>
+// needed for VisualC2010
+# include <malloc.h>
 namespace {
   inline BYTE bit(int x) { return (BYTE)(1 << (x%8)); }
 
