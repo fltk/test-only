@@ -61,7 +61,7 @@ namespace fltk3 {
   }
   
   void ColorMenu::drawbox(fltk3::Color c) {
-    if (c < 0 || c > 255) return;
+    if (c > 255) return;
     int X = (c%8)*BOXSIZE+BORDER;
     int Y = (c/8)*BOXSIZE+BORDER;
 #if BORDER_WIDTH < 3
@@ -141,7 +141,7 @@ namespace fltk3 {
 #pragma optimize("a",off) // needed to get the done check to work
 #endif
   fltk3::Color ColorMenu::run() {
-    if (which < 0 || which > 255) {
+    if (which > 255) {
       position(fltk3::event_x_root()-w()/2, fltk3::event_y_root()-y()/2);
     } else {
       position(fltk3::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,

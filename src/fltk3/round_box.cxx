@@ -88,29 +88,29 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
 void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype) {
   uchar *g = fltk3::gray_ramp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g['N']);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g['H']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 0, (fltk3::Color)g['N']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 1, (fltk3::Color)g['H']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 0, (fltk3::Color)g['S']);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g['U']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 1, (fltk3::Color)g['U']);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g['W']);
-  draw(CLOSED,	    x,   y, w,   h, 2, (fltk3::Color)g['A']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g[(uchar)'N']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g[(uchar)'H']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 0, (fltk3::Color)g[(uchar)'N']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 1, (fltk3::Color)g[(uchar)'H']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 0, (fltk3::Color)g[(uchar)'S']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g[(uchar)'U']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 1, (fltk3::Color)g[(uchar)'U']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g[(uchar)'W']);
+  draw(CLOSED,	    x,   y, w,   h, 2, (fltk3::Color)g[(uchar)'A']);
 }
 
 void fl_classic_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype) {
   uchar *g = fltk3::gray_ramp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g['H']);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g['N']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 1, (fltk3::Color)g['H']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 2, (fltk3::Color)g['N']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 2, (fltk3::Color)g['U']);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g['S']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 1, (fltk3::Color)g['W']);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g['U']);
-  draw(CLOSED,	    x,   y, w,   h, 0, (fltk3::Color)g['A']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g[(uchar)'H']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g[(uchar)'N']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 1, (fltk3::Color)g[(uchar)'H']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 2, (fltk3::Color)g[(uchar)'N']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 2, (fltk3::Color)g[(uchar)'U']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g[(uchar)'S']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 1, (fltk3::Color)g[(uchar)'W']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g[(uchar)'U']);
+  draw(CLOSED,	    x,   y, w,   h, 0, (fltk3::Color)g[(uchar)'A']);
 }
 
 //

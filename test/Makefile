@@ -82,7 +82,6 @@ CPPFILES = \
 	rotated_text.cxx \
 	scroll.cxx \
 	shape.cxx \
-	shapedwindow.cxx \
 	subwindow.cxx \
 	sudoku.cxx \
 	symbols.cxx \
@@ -160,7 +159,6 @@ ALL = \
 	rotated_text$(EXEEXT) \
 	scroll$(EXEEXT) \
 	shape$(EXEEXT) \
-	shapedwindow$(EXEEXT) \
 	subwindow$(EXEEXT) \
 	sudoku$(EXEEXT) \
 	symbols$(EXEEXT) \
@@ -513,10 +511,6 @@ scroll$(EXEEXT): scroll.o $(FLTK3_LIB_NAME)
 shape$(EXEEXT): shape.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ shape.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
-
-shapedwindow$(EXEEXT): shapedwindow.o $(FLTK3_LIB_NAME) $(FLTK3IMAGES_LIB_NAME)
-	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ shapedwindow.o $(LINK_FLTK3) $(LDLIBS)
 
 subwindow$(EXEEXT): subwindow.o $(FLTK3_LIB_NAME)
 	echo Linking $@...

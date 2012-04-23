@@ -26,7 +26,6 @@
 #
 
 FLTK3_CPPFILES = \
-	fltk3/run.cxx \
 	fltk3/Adjuster.cxx \
 	fltk3/Bitmap.cxx \
 	fltk3/Box.cxx \
@@ -78,7 +77,6 @@ FLTK3_CPPFILES = \
 	fltk3/RoundButton.cxx \
 	fltk3/ScrollGroup.cxx \
 	fltk3/Scrollbar.cxx \
-	fltk3/ShapedWindow.cxx \
 	fltk3/SharedImage.cxx \
 	fltk3/SingleWindow.cxx \
 	fltk3/Slider.cxx \
@@ -108,36 +106,22 @@ FLTK3_CPPFILES = \
 	fltk3/WizardGroup.cxx \
 	fltk3/XBMImage.cxx \
 	fltk3/XPMImage.cxx \
-	fltk3/abort.cxx \
-	fltk3/add_idle.cxx \
-	fltk3/arg.cxx \
-	fltk3/compose.cxx \
-	fltk3/display.cxx \
-	fltk3/get_key.cxx \
-	fltk3/get_system_colors.cxx \
-	fltk3/grab.cxx \
-	fltk3/lock.cxx \
-	fltk3/own_colormap.cxx \
-	fltk3/visual.cxx \
-	fltk3/x11.cxx \
-	fltk3/filename_absolute.cxx \
-	fltk3/filename_expand.cxx \
-	fltk3/filename_ext.cxx \
-	fltk3/filename_isdir.cxx \
-	fltk3/filename_list.cxx \
-	fltk3/filename_match.cxx \
-	fltk3/filename_setext.cxx \
 	fltk3/arc.cxx \
 	fltk3/arci.cxx \
 	fltk3/ask.cxx \
+	fltk3/abort.cxx \
+	fltk3/add_idle.cxx \
+	fltk3/arg.cxx \
 	fltk3/boxtype.cxx \
 	fltk3/call_main.cxx \
 	fltk3/color.cxx \
 	fltk3/compatibility1.cxx \
 	fltk3/compatibility2.cxx \
+	fltk3/compose.cxx \
 	fltk3/cursor.cxx \
 	fltk3/curve.cxx \
 	fltk3/diamond_box.cxx \
+	fltk3/display.cxx \
 	fltk3/dnd.cxx \
 	fltk3/draw.cxx \
 	fltk3/draw_image.cxx \
@@ -146,19 +130,36 @@ FLTK3_CPPFILES = \
 	fltk3/encoding_mac_roman.cxx \
 	fltk3/engraved_label.cxx \
 	fltk3/file_dir.cxx \
+	fltk3/filename_absolute.cxx \
+	fltk3/filename_expand.cxx \
+	fltk3/filename_ext.cxx \
+	fltk3/filename_isdir.cxx \
+	fltk3/filename_list.cxx \
+	fltk3/filename_match.cxx \
+	fltk3/filename_setext.cxx \
 	fltk3/font.cxx \
 	fltk3/gtk.cxx \
+	fltk3/get_key.cxx \
+	fltk3/get_system_colors.cxx \
+	fltk3/grab.cxx \
 	fltk3/labeltype.cxx \
 	fltk3/line_style.cxx \
+	fltk3/lock.cxx \
+	fltk3/numericsort.cxx \
 	fltk3/open_uri.cxx \
 	fltk3/oval_box.cxx \
 	fltk3/overlay.cxx \
 	fltk3/overlay_visual.cxx \
+	fltk3/own_colormap.cxx \
 	fltk3/plastic.cxx \
+	fltk3/ps_image.cxx \
 	fltk3/read_image.cxx \
 	fltk3/rect.cxx \
 	fltk3/round_box.cxx \
 	fltk3/rounded_box.cxx \
+	fltk3/run.cxx \
+	fltk3/scandir.cxx \
+	fltk3/screen_xywh.cxx \
 	fltk3/scroll_area.cxx \
 	fltk3/set_font.cxx \
 	fltk3/set_fonts.cxx \
@@ -166,13 +167,11 @@ FLTK3_CPPFILES = \
 	fltk3/shortcut.cxx \
 	fltk3/show_colormap.cxx \
 	fltk3/symbols.cxx \
-	fltk3/utf8.cxx \
 	fltk3/utf.cxx \
+	fltk3/utf8.cxx \
 	fltk3/vertex.cxx \
-	fltk3/numericsort.cxx \
-	fltk3/ps_image.cxx \
-	fltk3/scandir.cxx \
-	fltk3/screen_xywh.cxx
+	fltk3/visual.cxx \
+	fltk3/x11.cxx
 
 FLTK3GL_CPPFILES = \
 	fltk3gl/GLChoice.cxx \
@@ -205,15 +204,15 @@ FLTK3_OBJCPPFILES = \
 	fltk3/cocoaSysMenuBar.mm
 
 FLTK3_CFILES = \
-	fltk3/flstring.c \
-	fltk3/vsnprintf.c \
 	fltk3/xutf8/case.c \
+	fltk3/flstring.c \
 	fltk3/xutf8/is_right2left.c \
 	fltk3/xutf8/is_spacing.c \
 	fltk3/xutf8/keysym2Ucs.c \
 	fltk3/xutf8/utf8Input.c \
 	fltk3/xutf8/utf8Utils.c \
-	fltk3/xutf8/utf8Wrap.c
+	fltk3/xutf8/utf8Wrap.c \
+	fltk3/vsnprintf.c
 
 FLTK3PNG_CFILES = \
 	fltk3png/png.c \

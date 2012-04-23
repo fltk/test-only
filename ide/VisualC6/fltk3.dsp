@@ -83,10 +83,6 @@ LIB32=link.exe -lib
 # Name "fltk3 - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\run.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fltk3\Adjuster.cxx
 # End Source File
 # Begin Source File
@@ -307,10 +303,6 @@ SOURCE=..\..\src\fltk3\Style.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\SysMenuBar.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fltk3\Table.cxx
 # End Source File
 # Begin Source File
@@ -411,82 +403,6 @@ SOURCE=..\..\src\fltk3\XPMImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\abort.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\add_idle.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\arg.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\compose.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\display.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\get_key.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\get_system_colors.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\grab.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\lock.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\own_colormap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\visual.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\x11.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_absolute.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_expand.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_ext.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_isdir.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_list.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_match.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\filename_setext.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fltk3\arc.cxx
 # End Source File
 # Begin Source File
@@ -499,11 +415,27 @@ SOURCE=..\..\src\fltk3\ask.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\abort.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\add_idle.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\arg.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\boxtype.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\fltk3\call_main.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\xutf8\case.c
 # End Source File
 # Begin Source File
 
@@ -519,6 +451,10 @@ SOURCE=..\..\src\fltk3\compatibility2.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\compose.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\cursor.cxx
 # End Source File
 # Begin Source File
@@ -528,6 +464,10 @@ SOURCE=..\..\src\fltk3\curve.cxx
 # Begin Source File
 
 SOURCE=..\..\src\fltk3\diamond_box.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\display.cxx
 # End Source File
 # Begin Source File
 
@@ -563,6 +503,38 @@ SOURCE=..\..\src\fltk3\file_dir.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\filename_absolute.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\filename_expand.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\filename_ext.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\filename_isdir.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\filename_list.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\filename_match.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\filename_setext.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\flstring.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\font.cxx
 # End Source File
 # Begin Source File
@@ -571,11 +543,39 @@ SOURCE=..\..\src\fltk3\gtk.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\get_key.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\get_system_colors.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\grab.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\xutf8\is_right2left.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\xutf8\is_spacing.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\labeltype.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\fltk3\line_style.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\lock.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\numericsort.cxx
 # End Source File
 # Begin Source File
 
@@ -595,7 +595,15 @@ SOURCE=..\..\src\fltk3\overlay_visual.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\own_colormap.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\plastic.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\ps_image.cxx
 # End Source File
 # Begin Source File
 
@@ -612,6 +620,18 @@ SOURCE=..\..\src\fltk3\round_box.cxx
 # Begin Source File
 
 SOURCE=..\..\src\fltk3\rounded_box.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\run.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\scandir.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\fltk3\screen_xywh.cxx
 # End Source File
 # Begin Source File
 
@@ -643,11 +663,11 @@ SOURCE=..\..\src\fltk3\symbols.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\utf8.cxx
+SOURCE=..\..\src\fltk3\utf.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\utf.cxx
+SOURCE=..\..\src\fltk3\utf8.cxx
 # End Source File
 # Begin Source File
 
@@ -655,39 +675,15 @@ SOURCE=..\..\src\fltk3\vertex.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\numericsort.cxx
+SOURCE=..\..\src\fltk3\visual.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3\ps_image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\scandir.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\screen_xywh.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\flstring.c
+SOURCE=..\..\src\fltk3\x11.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\fltk3\vsnprintf.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\xutf8\case.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\xutf8\is_right2left.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fltk3\xutf8\is_spacing.c
 # End Source File
 # End Target
 # End Project

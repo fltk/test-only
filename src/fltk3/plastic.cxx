@@ -290,9 +290,9 @@ void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxt
 static void narrow_thin_box(int x, int y, int w, int h, fltk3::Color c) {
   if (h<=0 || w<=0) return;
   uchar *g = fltk3::gray_ramp();
-  fltk3::color(shade_color(g['R'], c));
+  fltk3::color(shade_color(g[(uchar)'R'], c));
   fltk3::rectf(x+1, y+1, w-2, h-2);
-  fltk3::color(shade_color(g['I'], c));
+  fltk3::color(shade_color(g[(uchar)'I'], c));
   if (w > 1) {
     fltk3::xyline(x+1, y, x+w-2);
     fltk3::xyline(x+1, y+h-1, x+w-2);

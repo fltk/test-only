@@ -87,6 +87,7 @@ static void free_path(char **arr) {
 }
 
 // INTERNAL: Recursively descend tree hierarchy, accumulating total child count
+#if 0
 static int find_total_children(fltk3::TreeItem *item, int count=0) {
   count++;
   for ( int t=0; t<item->children(); t++ ) {
@@ -94,6 +95,7 @@ static int find_total_children(fltk3::TreeItem *item, int count=0) {
   }
   return(count);
 }
+#endif
 
 /// Constructor.
 fltk3::Tree::Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W,H,L) { 

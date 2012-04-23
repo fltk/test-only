@@ -33,7 +33,7 @@ extern int fl_gl_load_plugin;
 extern void gl_texture_reset();
 #endif
 
-static int temp = fl_gl_load_plugin;
+int temp = fl_gl_load_plugin;
 
 #include <fltk3/Wrapper.h>
 #include <fltk3/run.h>

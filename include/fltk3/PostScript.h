@@ -222,6 +222,7 @@ namespace fltk3 {
   public:
     PostScriptFileDevice();
     ~PostScriptFileDevice();
+    int start_job(int pagecount, int*, int*) { return start_job(pagecount); }
     int start_job(int pagecount, enum fltk3::PagedDevice::Page_Format format = fltk3::PagedDevice::A4, 
                   enum fltk3::PagedDevice::Page_Layout layout = fltk3::PagedDevice::PORTRAIT);
     int start_job(FILE *ps_output, int pagecount, enum fltk3::PagedDevice::Page_Format format = fltk3::PagedDevice::A4, 

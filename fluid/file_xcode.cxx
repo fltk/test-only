@@ -701,7 +701,6 @@ static int writeProjectSection(FILE *out) {
   fprintf(out, "\t\t\tisa = PBXProject;\n");
   fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXProject \"%s\" */;\n", BuildConfigurationList, workspace->name());
   fprintf(out, "\t\t\tcompatibilityVersion = \"Xcode 3.2\";\n");
-  fprintf(out, "\t\t\tdevelopmentRegion = English;\n");
   fprintf(out, "\t\t\thasScannedForEncodings = 0;\n");
   fprintf(out, "\t\t\tknownRegions = (\n");
   fprintf(out, "\t\t\t\tEnglish,\n");
@@ -712,7 +711,8 @@ static int writeProjectSection(FILE *out) {
   fprintf(out, "\t\t\tmainGroup = %s;\n", Group);
   fprintf(out, "\t\t\tproductRefGroup = %s /* Products */;\n", ProductsGroup);
   fprintf(out, "\t\t\tprojectDirPath = \"\";\n");
-  fprintf(out, "\t\t\tprojectRoot = \"\";\n");
+  //fprintf(out, "\t\t\tprojectRoot = \"\";\n");
+  fprintf(out, "\t\t\tprojectRoot = \"../..\";\n");
   fprintf(out, "\t\t\ttargets = (\n");
   
   for (Fl_Target_Type *tgt = Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {

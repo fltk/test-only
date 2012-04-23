@@ -180,6 +180,10 @@ public:
     return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy() );
   }
   
+  Fl_Image *copy(int w, int h) { 
+    return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy(w, h) );
+  }
+  
   void draw(int X, int Y) {
     ((fltk3::Image*)_p)->draw(X, Y);
   }
