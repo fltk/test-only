@@ -287,6 +287,10 @@ SOURCE=..\..\src\fltk3\Scrollbar.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\ShapedWindow.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\SharedImage.cxx
 # End Source File
 # Begin Source File

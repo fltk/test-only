@@ -77,6 +77,7 @@ FLTK3_CPPFILES = \
 	fltk3/RoundButton.cxx \
 	fltk3/ScrollGroup.cxx \
 	fltk3/Scrollbar.cxx \
+	fltk3/ShapedWindow.cxx \
 	fltk3/SharedImage.cxx \
 	fltk3/SingleWindow.cxx \
 	fltk3/Slider.cxx \

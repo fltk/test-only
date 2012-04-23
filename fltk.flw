@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -333,7 +333,7 @@ workspace FLTK {open selected
       target_path lib
       makefile_path src
     } {
-      folder Headers {
+      folder Headers {open
         uuid_Xcode4_Group {C2F00625-E401-4002-85F6-FA183D17629D}
       } {
         file_ref {all.h} {
@@ -1080,6 +1080,14 @@ workspace FLTK {open selected
           list_env 124
           filename_and_path {include/fltk3/SelectBrowser.h}
         }
+        file_ref {ShapedWindow.h} {selected
+          uuid_Xcode4_BuildFile {88C99958-E07E-4731-B1C4-70B913221C19}
+          uuid_Xcode4_FileRef {7031E56D-C9AA-4136-BEC9-D45D7E4AFBBB}
+          uuid_Xcode4_BuildFileInHeaders {8EAB82FA-6F9C-45A4-9713-6BBE90954C67}
+          build_env 96
+          list_env 124
+          filename_and_path {include/fltk3/ShapedWindow.h}
+        }
         file_ref {SharedImage.h} {
           uuid_Xcode4_BuildFile {F6781690-45D3-43A2-97D0-428E3F972600}
           uuid_Xcode4_FileRef {455CBD05-0AB7-4154-8687-1FBD4BDA0037}
@@ -1748,6 +1756,12 @@ workspace FLTK {open selected
           uuid_Xcode4_FileRef {6F7BEB35-6EBF-499D-A9F5-BD43167B1FB8}
           uuid_Xcode4_BuildFileInSources {5622DE29-66EB-4F16-8F99-3642F1607BC6}
           filename_and_path {src/fltk3/Scrollbar.cxx}
+        }
+        file_ref {ShapedWindow.cxx} {
+          uuid_Xcode4_BuildFile {8E342E66-AEAE-4986-89DC-FA8CAAA1959E}
+          uuid_Xcode4_FileRef {1CCF247C-7D52-42C4-8F94-495883193B68}
+          uuid_Xcode4_BuildFileInSources {BBAD8482-D942-4018-A930-F62D84D224F8}
+          filename_and_path {src/fltk3/ShapedWindow.cxx}
         }
         file_ref {SharedImage.cxx} {
           uuid_Xcode4_BuildFile {8A0C023A-0383-430E-95D8-B9AEA5E17969}
@@ -7242,6 +7256,35 @@ workspace FLTK {open selected
         build_env 1
         value {$(GLLIB)}
         valuetype 2
+      }
+    }
+    app_target shapedwindow {
+      uuid_Xcode4_FluidBuildRule {811C77A1-D264-4FBE-BE29-D8B55F8685F5}
+      uuid_Xcode4_CopyFilesBuildPhase {9C0EF405-6407-4EA7-B52B-955671147285}
+      uuid_Xcode4_ProductFileReference {215A108E-7829-4779-A668-F0AFC5E3CC0B}
+      uuid_Xcode4_FrameworksBuildPhase {9D674B09-289B-446E-8A13-D141665B26E4}
+      uuid_Xcode4_Group {097E71A2-D149-416B-86DC-93FD3D1A6AF0}
+      uuid_Xcode4_Target {2805149A-C955-4FA7-8130-164EB0A171CC}
+      uuid_Xcode4_BuildConfigurationList {43A67177-1E21-4554-A3C7-B41EB047685F}
+      uuid_Xcode4_ResourcesBuildPhase {A7256EFE-6CB4-4F07-8BC9-8EBEC98ED945}
+      uuid_Xcode4_SourcesBuildPhase {81D81E0A-7E50-4117-B29A-E018E68D9C4B}
+      uuid_Xcode4_DebugBuildConfiguration {C4EAE7D7-A65F-41C4-9668-85AEB89D61C5}
+      uuid_Xcode4_ReleaseBuildConfiguration {33987317-5F4F-46F8-8453-484C104901A5}
+      uuid_VC2008_Project {AB43717B-3CBA-4A47-86A9-8C8C212BE152}
+      uuid_VC2010_Project {D494DCF3-B947-420C-A015-86EF07269B4E}
+      target_path test
+      makefile_path test
+    } {
+      file_ref {shapedwindow.cxx} {
+        uuid_Xcode4_BuildFileInSources {CDB8FA56-8AC5-4CE8-8F8E-312F8C776D3B}
+        uuid_Xcode4_FileRef {6FAB4501-2B71-417F-85DA-85FE676F0B4B}
+        filename_and_path {test/shapedwindow.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {B29B16C4-83FF-4C0F-94E4-68D37042950A}
+        uuid_Xcode4_BuildFileInCopyFiles {05EEE3C1-28D3-4FF8-ABD1-C24967CFF170}
+        uuid_Xcode4_ContainerItemProxy {E3AFF9FC-B193-4C21-8D9B-7300FA0EDC75}
+        uuid_Xcode4_TargetDependency {ABFD32A5-B3C4-44F6-8811-D5A768268E29}
       }
     }
     app_target subwindow {

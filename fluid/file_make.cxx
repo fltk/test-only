@@ -1212,16 +1212,6 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "                LIBS=\"-lXext $LIBS\")\n");
   fprintf(out, "        fi\n");
   fprintf(out, "\n");
-  fprintf(out, "	dnl Check for the XRandR extension unless disabled...\n");
-  fprintf(out, "        AC_ARG_ENABLE(xrandr, [  --enable-xrandr         turn on XRandR support [default=yes]])\n");
-  fprintf(out, "\n");
-  fprintf(out, "	if test x$enable_xrandr != xno; then\n");
-  fprintf(out, "	    AC_CHECK_HEADER(X11/extensions/Xrandr.h, AC_DEFINE(HAVE_XRANDR),,\n");
-  fprintf(out, "	        [#include <X11/Xlib.h>])\n");
-  fprintf(out, "	    AC_CHECK_LIB(Xrandr, XRRQueryExtension,\n");
-  fprintf(out, "		LIBS=\"-lXrandr $LIBS\")\n");
-  fprintf(out, "	fi\n");
-  fprintf(out, "\n");
   fprintf(out, "        dnl Check for overlay visuals...\n");
   fprintf(out, "        AC_PATH_PROG(XPROP, xprop)\n");
   fprintf(out, "        AC_CACHE_CHECK(for X overlay visuals, ac_cv_have_overlay,\n");
@@ -1515,7 +1505,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "case $uname in\n");
   fprintf(out, "  MINGW*)\n");
   fprintf(out, "     # Determine the path where MSys has /usr installed\n");
-  fprintf(out, "         msyspath=`mount | grep '\\/usr' | grep -v '\\/usr\\/bin' | cut -d ' ' -f -1 | sed -e 's/\\\\\\/\\// g'`\n");
+  fprintf(out, "         msyspath=`mount | grep '\\/usr ' | cut -d ' ' -f -1 | sed -e 's/\\\\\\/\\// g'`\n");
   fprintf(out, "     # Then substitute that in the WIN32 path instead of /usr\n");
   fprintf(out, "         AC_DEFINE_UNQUOTED(FLTK_DOCDIR, \"$msyspath/local/share/doc/fltk\")\n");
   fprintf(out, "    ;;\n");
@@ -1555,9 +1545,6 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "        if test x$enable_xdbe != xno; then\n");
   fprintf(out, "            graphics=\"$graphics+Xdbe\"\n");
   fprintf(out, "        fi\n");
-  fprintf(out, "	if test x$enable_xrandr != xno; then\n");
-  fprintf(out, "	    graphics=\"$graphics+Xrandr\"\n");
-  fprintf(out, "	fi\n");
   fprintf(out, "        if test x$enable_xinerama != xno; then\n");
   fprintf(out, "            graphics=\"$graphics+Xinerama\"\n");
   fprintf(out, "        fi\n");
