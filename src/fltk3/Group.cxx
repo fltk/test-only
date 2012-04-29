@@ -100,7 +100,9 @@ extern fltk3::Widget* fl_oldfocus; // set by fltk3::focus
 // windows so they are relative to that window.
 
 static int send(fltk3::Widget* o, int event) {
-  if (o->type() < fltk3::WINDOW) return o->handle(event);
+  if ( o->type()<fltk3::WINDOW) {
+    return o->handle(event);
+  }
   switch ( event )
   {
   case fltk3::DND_ENTER: /* FALLTHROUGH */
@@ -745,14 +747,7 @@ void fltk3::Group::draw() {
     draw_box();
     draw_label();
   }
-  if (flags()&GROUP_RELATIVE) {
-    push_matrix();
-    translate(x(), y());
-    draw_children();
-    pop_matrix();
-  } else {
-    draw_children();
-  }
+  draw_children();
 }
 
 /**
@@ -781,7 +776,14 @@ void fltk3::Group::draw_child(fltk3::Widget& widget) const {
   if (widget.visible() && widget.type() < fltk3::WINDOW &&
       fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     widget.clear_damage(fltk3::DAMAGE_ALL);
-    widget.draw();
+    if (widget.flags()&fltk3::Widget::GROUP_RELATIVE) {
+      push_origin();
+      translate_origin(widget.x(), widget.y());
+      widget.draw();
+      pop_origin();
+    } else {
+      widget.draw();
+    }
     widget.clear_damage();
   }
 }

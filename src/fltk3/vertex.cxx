@@ -98,6 +98,7 @@ double fltk3::GraphicsDriver::transform_dx(double x, double y) {return x*m.a + y
 double fltk3::GraphicsDriver::transform_dy(double x, double y) {return x*m.b + y*m.d;}
 
 void fltk3::GraphicsDriver::transformed_vertex0(COORD_T x, COORD_T y) {
+  x += origin_x(); y += origin_y();
   if (!n || x != p[n-1].x || y != p[n-1].y) {
     if (n >= p_size) {
       p_size = p ? 2*p_size : 16;
@@ -197,7 +198,7 @@ void fltk3::GraphicsDriver::fixloop() {  // remove equal points from closed path
 
 void fltk3::GraphicsDriver::end_loop() {
   fixloop();
-  if (n>2) transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
+  if (n>2) transformed_vertex((COORD_T)p[0].x-origin_x(), (COORD_T)p[0].y-origin_y());
   end_line();
 }
 

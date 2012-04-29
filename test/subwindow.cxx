@@ -112,6 +112,51 @@ int testwindow::handle(int e) {
   return 0;
 }
 
+class testgroup : public fltk3::Group {
+  int handle(int);
+  void draw();
+  int cx, cy; char key;
+  fltk3::Cursor crsr;
+public:
+  testgroup(fltk3::Boxtype b,int x,int y,int w,int h,const char *l)
+  : fltk3::Group(x,y,w,h,l) {box(b); key = 0;}
+  void use_cursor(fltk3::Cursor c) { crsr = c; }
+};
+
+void testgroup::draw() {
+#ifdef DEBUG
+  printf("%s : draw\n",label());
+#endif
+  Group::draw();
+#ifdef DEBUG_POS
+  if (key) fltk3::draw(&key, 1, cx, cy);
+#endif
+}
+
+int testgroup::handle(int e) {
+#ifdef DEBUG
+  if (e != fltk3::MOVE) printf("%s : %s\n",label(),fltk3::eventnames[e]);
+#endif
+  printf("%s : %d at %d, %d\n",label(), e, fltk3::event_x(), fltk3::event_y());
+  if (crsr!=fltk3::CURSOR_DEFAULT) {
+    if (e == fltk3::ENTER) 
+      window()->cursor(crsr);
+    if (e == fltk3::LEAVE) 
+      window()->cursor(fltk3::CURSOR_DEFAULT);
+  }
+  if (Group::handle(e)) return 1;
+  if (e == fltk3::FOCUS) return 1;
+  if (e == fltk3::PUSH) {fltk3::focus(this); return 1;}
+  if (e == fltk3::KEYBOARD && fltk3::event_text()[0]) {
+    key = fltk3::event_text()[0];
+    cx = fltk3::event_x();
+    cy = fltk3::event_y();
+    redraw();
+    return 1;
+  }
+  return 0;
+}
+
 fltk3::MenuButton* popup;
 
 const char* bigmess =
@@ -154,16 +199,26 @@ const char* bigmess =
 
 int main(int argc, char **argv) {
   testwindow *window =
-    new testwindow(fltk3::UP_BOX,400,400,"outer");
+    new testwindow(fltk3::UP_BOX,820,400,"outer");
   new fltk3::ToggleButton(310,310,80,80,"&outer");
   new EnterExit(10,310,80,80,"enterexit");
   new fltk3::Input(160,310,140,25,"input1:");
   new fltk3::Input(160,340,140,25,"input2:");
   (new fltk3::MenuButton(5,150,80,25,"menu&1"))->add(bigmess);
+  
+  (new fltk3::Box(fltk3::NO_BOX,150,0,520,100,
+                  "A child fltk3::Window with children of its own may "
+                  "be useful for imbedding controls into a GL or display "
+                  "that needs a different visual."
+                  )) -> align(fltk3::ALIGN_WRAP);
+  
+  popup = new fltk3::MenuButton(0,0,400,400);
+  popup->type(fltk3::MenuButton::POPUP3);
+  popup->add("This|is|a popup|menu");
+  popup->add(bigmess);
+
   testwindow *subwindow =
-    new testwindow(fltk3::DOWN_BOX,100,100,200,200,"inner");
-  //fltk3::Group *subwindow = 
-  //  new fltk3::Group(100,100,200,200,"inner");
+  new testwindow(fltk3::DOWN_BOX,100,100,200,200,"fltk3::Window");
   subwindow->box(fltk3::DOWN_BOX);
   new fltk3::ToggleButton(110,110,80,80,"&inner");
   new EnterExit(10,110,80,80,"enterexit");
@@ -171,20 +226,34 @@ int main(int argc, char **argv) {
   new fltk3::Input(55,50,140,25,"input1:");
   new fltk3::Input(55,80,140,25,"input2:");
   subwindow->resizable(subwindow);
-  window->resizable(subwindow);
   subwindow->end();
   subwindow->use_cursor(fltk3::CURSOR_HAND);
-  (new fltk3::Box(fltk3::NO_BOX,0,0,400,100,
-	     "A child fltk3::Window with children of its own may "
-	     "be useful for imbedding controls into a GL or display "
-	     "that needs a different visual.  There are bugs with the "
-	     "origins being different between drawing and events, "
-	     "which I hope I have solved."
-	     )) -> align(fltk3::ALIGN_WRAP);
-  popup = new fltk3::MenuButton(0,0,400,400);
-  popup->type(fltk3::MenuButton::POPUP3);
-  popup->add("This|is|a popup|menu");
-  popup->add(bigmess);
+  
+  testgroup *subgroup2 =
+  new testgroup(fltk3::DOWN_BOX,310,100,200,200,"fltk3::Group, GROUP_RELATIVE");
+  subgroup2->set_group_relative();
+  new fltk3::ToggleButton(110,110,80,80,"&inner");
+  new EnterExit(10,110,80,80,"enterexit");
+  (new fltk3::MenuButton(50,20,80,25,"menu&2"))->add(bigmess);
+  new fltk3::Input(55,50,140,25,"input1:");
+  new fltk3::Input(55,80,140,25,"input2:");
+  //subgroup2->resizable(subgroup2);
+  window->resizable(subgroup2);
+  subgroup2->end();
+  subgroup2->use_cursor(fltk3::CURSOR_HAND);
+
+  testgroup *subgroup3 =
+  new testgroup(fltk3::DOWN_BOX,520,100,200,200,"fltk3::Group, Window-relative");
+  subgroup3->set_window_relative();
+  new fltk3::ToggleButton(630,210,80,80,"&inner");
+  new EnterExit(530,210,80,80,"enterexit");
+  (new fltk3::MenuButton(570,120,80,25,"menu&2"))->add(bigmess);
+  new fltk3::Input(575,150,140,25,"input1:");
+  new fltk3::Input(575,180,140,25,"input2:");
+  subgroup3->resizable(subgroup3);
+  subgroup3->end();
+  subgroup3->use_cursor(fltk3::CURSOR_HAND);
+  
   window->show(argc, argv);
   return fltk3::run();
 }

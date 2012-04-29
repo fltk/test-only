@@ -95,6 +95,7 @@ namespace fltk3 {
     /** A 2D coordinate transformation matrix
      */
     struct matrix {double a, b, c, d, x, y;};
+    struct origin {int x, y;};
   private:
     static const matrix m0;
     fltk3::Font font_; // current font
@@ -104,6 +105,10 @@ namespace fltk3 {
     enum { matrix_stack_size = MATRIX_STACK_SIZE };
     matrix stack[MATRIX_STACK_SIZE];
     matrix m;
+    int optr;
+    enum { origin_stack_size = MATRIX_STACK_SIZE };
+    origin ostack[MATRIX_STACK_SIZE];
+    origin o;
     int rstackptr;
     enum { region_stack_max = REGION_STACK_SIZE - 1 };
     fltk3::Region rstack[REGION_STACK_SIZE];
@@ -226,6 +231,13 @@ namespace fltk3 {
     virtual void push_no_clip();
     /** \brief see fltk3::pop_clip(). */
     virtual void pop_clip();
+    
+    void push_origin();
+    void pop_origin();
+    void translate_origin(int dx, int dy);
+    void origin(int x, int y);
+    int origin_x() { return o.x; }
+    int origin_y() { return o.y; }
     
     /** \brief see fltk3::push_matrix(). */
     void push_matrix();

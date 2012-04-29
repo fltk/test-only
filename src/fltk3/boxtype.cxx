@@ -446,7 +446,13 @@ void fltk3::draw_box(fltk3::Boxtype t, int x, int y, int w, int h, fltk3::Color 
 //extern fltk3::Widget *fl_boxcheat; // hack set by fltk3::Window.cxx
 /** Draws the widget box according its box style */
 void fltk3::Widget::draw_box() const {
-  if (box_) draw_box((fltk3::Boxtype)box_, x_, y_, w_, h_, color_);
+  if (box_) {
+    if (flags()&GROUP_RELATIVE) {
+      draw_box((fltk3::Boxtype)box_, 0, 0, w_, h_, color_);
+    } else {
+      draw_box((fltk3::Boxtype)box_, x_, y_, w_, h_, color_);
+    }
+  }
   draw_backdrop();
 }
 /** If fltk3::ALIGN_IMAGE_BACKDROP is set, the image or deimage will be drawn */

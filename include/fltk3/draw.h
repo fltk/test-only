@@ -328,6 +328,13 @@ namespace fltk3 {
   /** fltk3::chord declaration is a place holder - the function does not yet exist */
   FLTK3_EXPORT void chord(int x, int y, int w, int h, double a1, double a2); // nyi
   
+  inline void push_origin() { fltk3::graphics_driver->push_origin(); }
+  inline void pop_origin() { fltk3::graphics_driver->pop_origin(); }
+  inline void translate_origin(int dx, int dy) { fltk3::graphics_driver->translate_origin(dx, dy); }
+  inline void origin(int x, int y) { fltk3::graphics_driver->origin(x, y); }
+  inline int origin_x() { return fltk3::graphics_driver->origin_x(); }
+  inline int origin_y() { return fltk3::graphics_driver->origin_y(); }  
+  
   // scalable drawing code (code in fltk3::vertex.C and fltk3::arc.C):
   /**
    Saves the current transformation matrix on the stack. 

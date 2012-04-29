@@ -1033,6 +1033,23 @@ void fl_throw_focus(fltk3::Widget *o) {
 // values to account for nested windows. 'window' is the outermost
 // window the event was posted to by the system:
 static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
+  /*
+   
+   int dx = x(); int dy = y();
+   
+   for (Widget* p = parent(); p; p = p->parent()) {
+     // we may want to ignore hiearchy parents in a browser. Not figured
+     // out how to do this yet.
+     dx += p->x();
+     dy += p->y();
+   }
+   int save_x = e_x;
+   int save_y = e_y;
+   e_x = e_x_root-dx;
+   e_y = e_y_root-dy;
+   
+   */
+  
   int dx, dy;
   int old_event = fltk3::e_number;
   if (window) {
@@ -1041,8 +1058,11 @@ static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
   } else {
     dx = dy = 0;
   }
-  for (const fltk3::Widget* w = to; w; w = w->parent())
-    if (w->type()>=fltk3::WINDOW) {dx -= w->x(); dy -= w->y();}
+  for (const fltk3::Widget* w = to; w; w = w->parent()) {
+    if (w->type()>=fltk3::WINDOW || w->is_group_relative()) {
+      dx -= w->x(); dy -= w->y();
+    }
+  }
   int save_x = fltk3::e_x; fltk3::e_x += dx;
   int save_y = fltk3::e_y; fltk3::e_y += dy;
   int ret = to->handle(fltk3::e_number = event);
@@ -1706,6 +1726,7 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   }
   fltk3::damage(fltk3::DAMAGE_CHILD);
 }
+
 void fltk3::Window::flush() {
   make_current();
 //if (damage() == fltk3::DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;

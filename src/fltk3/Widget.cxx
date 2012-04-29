@@ -385,6 +385,19 @@ void fltk3::Widget::draw() {
   draw_label();
 }
 
+void fltk3::Widget::coding_style(int s) {
+  switch (s) {
+    case 1:
+      set_window_relative();
+      break;
+    case 2:
+      set_group_relative();
+      break;
+    case 3:
+      set_group_relative();
+      break;
+  }
+}
 
 // ========================= Wrapper Support ===================================
 

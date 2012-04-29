@@ -478,6 +478,7 @@ static CGColorRef flcolortocgcolor(fltk3::Color i)
 #endif
 
 static void fl_mac_draw(const char *str, int n, float x, float y, fltk3::GraphicsDriver *driver) {
+  x += driver->origin_x(); y += driver->origin_y();
   // convert to UTF-16 first
   UniChar *uniStr = mac_Utf8_to_Utf16(str, n, &n);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
