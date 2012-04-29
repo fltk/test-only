@@ -73,6 +73,7 @@ void fltk3::Button::setonly() { // set this radio button on, turn others off
 }
 
 void fltk3::Button::draw() {
+  printf("Drawing button %s\n", label());
   if (type() == fltk3::HIDDEN_BUTTON) return;
   fltk3::Color col;
   if (value()) {
@@ -105,10 +106,12 @@ int fltk3::Button::handle(int event) {
     if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
   case fltk3::DRAG:
     if (fltk3::event_inside(this)) {
-      if (type() == fltk3::RADIO_BUTTON) newval = 1;
-      else newval = !oldval;
-    } else
-    {
+      if (type() == fltk3::RADIO_BUTTON) {
+        newval = 1;
+      } else {
+        newval = !oldval;
+      }
+    } else {
       clear_changed();
       newval = oldval;
     }

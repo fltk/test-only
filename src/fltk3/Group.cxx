@@ -100,7 +100,7 @@ extern fltk3::Widget* fl_oldfocus; // set by fltk3::focus
 // windows so they are relative to that window.
 
 static int send(fltk3::Widget* o, int event) {
-  if ( o->type()<fltk3::WINDOW) {
+  if ( (o->type()<fltk3::WINDOW) && (o->is_window_relative()) ) {
     return o->handle(event);
   }
   switch ( event )
@@ -759,10 +759,21 @@ void fltk3::Group::draw() {
   \sa fltk3::Group::draw_child(fltk3::Widget& widget) const
 */
 void fltk3::Group::update_child(fltk3::Widget& widget) const {
-  if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
-      fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
-    widget.draw();	
-    widget.clear_damage();
+  if (widget.is_group_relative()) {
+    push_origin();
+    translate_origin(widget.x(), widget.y());
+    if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
+        fltk3::not_clipped(0, 0, widget.w(), widget.h())) {
+      widget.draw();	
+      widget.clear_damage();
+    }
+    pop_origin();
+  } else {
+    if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
+        fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
+      widget.draw();	
+      widget.clear_damage();
+    }
   }
 }
 
@@ -776,7 +787,7 @@ void fltk3::Group::draw_child(fltk3::Widget& widget) const {
   if (widget.visible() && widget.type() < fltk3::WINDOW &&
       fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     widget.clear_damage(fltk3::DAMAGE_ALL);
-    if (widget.flags()&fltk3::Widget::GROUP_RELATIVE) {
+    if (widget.is_group_relative()) {
       push_origin();
       translate_origin(widget.x(), widget.y());
       widget.draw();

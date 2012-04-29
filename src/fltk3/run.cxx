@@ -1033,23 +1033,6 @@ void fl_throw_focus(fltk3::Widget *o) {
 // values to account for nested windows. 'window' is the outermost
 // window the event was posted to by the system:
 static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
-  /*
-   
-   int dx = x(); int dy = y();
-   
-   for (Widget* p = parent(); p; p = p->parent()) {
-     // we may want to ignore hiearchy parents in a browser. Not figured
-     // out how to do this yet.
-     dx += p->x();
-     dy += p->y();
-   }
-   int save_x = e_x;
-   int save_y = e_y;
-   e_x = e_x_root-dx;
-   e_y = e_y_root-dy;
-   
-   */
-  
   int dx, dy;
   int old_event = fltk3::e_number;
   if (window) {
@@ -1059,7 +1042,7 @@ static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
     dx = dy = 0;
   }
   for (const fltk3::Widget* w = to; w; w = w->parent()) {
-    if (w->type()>=fltk3::WINDOW || w->is_group_relative()) {
+    if ( (w->type()>=fltk3::WINDOW) || (w->is_group_relative())) {
       dx -= w->x(); dy -= w->y();
     }
   }
@@ -1672,6 +1655,10 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   // mark all parent widgets between this and window with fltk3::DAMAGE_CHILD:
   while (wi->type() < fltk3::WINDOW) {
     wi->damage_ |= fl;
+    if (wi->is_group_relative()) {
+      X += wi->x();
+      Y += wi->y();
+    }
     wi = wi->parent();
     if (!wi) return;
     fl = fltk3::DAMAGE_CHILD;
@@ -1685,6 +1672,8 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   if (W > wi->w()-X) W = wi->w()-X;
   if (H > wi->h()-Y) H = wi->h()-Y;
   if (W <= 0 || H <= 0) return;
+  
+  printf("DAMAGE %d %d %d %d\n", X, Y, W, H);
 
   if (!X && !Y && W==wi->w() && H==wi->h()) {
     // if damage covers entire window delete region:

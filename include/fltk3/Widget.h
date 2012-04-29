@@ -787,13 +787,13 @@ namespace fltk3 {
      \see group_relative()
      */
     void set_window_relative() { flags_ &= ~GROUP_RELATIVE; }
-    int is_window_relative() const { return ((flags_|GROUP_RELATIVE)==0); }
+    int is_window_relative() const { return ((flags_&GROUP_RELATIVE)==0); }
     
     /** Use a local coordinte system for this group.
      \see window_relative()
      */
     void set_group_relative() { flags_ |= GROUP_RELATIVE; }
-    int is_group_relative() const { return ((flags_|GROUP_RELATIVE)==GROUP_RELATIVE); }
+    int is_group_relative() const { return ((flags_&GROUP_RELATIVE)==GROUP_RELATIVE); }
     
     /** Returns if the widget is able to take events.
      This is the same as (active() && !output() && visible())
