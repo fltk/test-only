@@ -642,7 +642,7 @@ void fltk3::XlibGraphicsDriver::point(int x, int y) {
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
 // MSWindows equivalent exists, implemented inline in win32.h
 fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
-  x += origin_x(); y += origin_y();
+  x += fltk3::origin_x(); y += fltk3::origin_y();
   XRectangle R;
   clip_to_short(x, y, w, h);
   R.x = x; R.y = y; R.width = w; R.height = h;
