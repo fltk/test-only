@@ -61,9 +61,21 @@ const fltk3::MenuItem* fltk3::MenuButton::popup() {
   redraw();
   fltk3::WidgetTracker mb(this);
   if (!box() || type()) {
-    m = menu()->popup(fltk3::event_x(), fltk3::event_y(), label(), mvalue(), this);
+    m = menu()->popup(event_x_root()-event_x(), event_y_root()-event_y(), label(), mvalue(), this);
   } else {
-    m = menu()->pulldown(x(), y(), w(), h(), 0, this);
+    // FIXME: we need a function in Widget for this
+    int mx = x(), my = y();
+    Group *gi = parent();
+    while (gi) {
+      if (gi->is_group_relative()) {
+        mx += gi->x();
+        my += gi->y();
+      }
+      if (gi->type()>=WINDOW) 
+        break;
+      gi = gi->parent();
+    }
+    m = menu()->pulldown(mx, my, w(), h(), 0, this);
   }
   picked(m);
   pressed_menu_button_ = 0;
