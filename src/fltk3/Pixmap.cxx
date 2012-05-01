@@ -105,7 +105,7 @@ static int start(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int 
   return 0;
 }
 
-int fltk3::Pixmap::prepare(int XP, int YP, int WP, int HP, int cx, int cy,
+int fltk3::Pixmap::prepare(int XP, int YP, int WP, int HP, int &cx, int &cy,
 			   int &X, int &Y, int &W, int &H) {
   if (w() < 0) measure();
   int code = start(this, XP, YP, WP, HP, w(), h(), cx, cy, X, Y, W, H);

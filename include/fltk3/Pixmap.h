@@ -66,7 +66,7 @@ namespace fltk3 {
     void copy_data();
     void delete_data();
     void set_data(const char * const *p);
-    int prepare(int XP, int YP, int WP, int HP, int cx, int cy,
+    int prepare(int XP, int YP, int WP, int HP, int &cx, int &cy,
 		int &X, int &Y, int &W, int &H);
     
   protected:
