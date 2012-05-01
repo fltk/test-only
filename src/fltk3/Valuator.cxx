@@ -34,12 +34,17 @@
 #include <stdio.h>
 #include "flstring.h"
 
-fltk3::Valuator::Valuator(int X, int Y, int W, int H, const char* L)
+
+const double epsilon = 4.66e-10;
+
+
 /**
-  Creates a new fltk3::Valuator widget using the given position,
-  size, and label string. The default boxtype is fltk3::NO_BOX.
-*/
-: fltk3::Widget(X,Y,W,H,L) {
+ Creates a new fltk3::Valuator widget using the given position,
+ size, and label string. The default boxtype is fltk3::NO_BOX.
+ */
+fltk3::Valuator::Valuator(int X, int Y, int W, int H, const char* L)
+: fltk3::Widget(X,Y,W,H,L) 
+{
   align(fltk3::ALIGN_BOTTOM);
   when(fltk3::WHEN_CHANGED);
   value_ = 0;
@@ -50,43 +55,57 @@ fltk3::Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   B = 1;
 }
 
-const double epsilon = 4.66e-10;
 
 /**  See double fltk3::Valuator::step() const */
-void fltk3::Valuator::step(double s) {
+void fltk3::Valuator::step(double s) 
+{
   if (s < 0) s = -s;
   A = rint(s);
   B = 1;
   while (fabs(s-A/B) > epsilon && B<=(0x7fffffff/10)) {B *= 10; A = rint(s*B);}
 }
 
+
 /**  Sets the step value to 1/10<SUP>digits</SUP>.*/
-void fltk3::Valuator::precision(int p) {
+void fltk3::Valuator::precision(int p) 
+{
   A = 1.0;
   for (B = 1; p--;) B *= 10;
 }
+
+
 /** Asks for partial redraw */
-void fltk3::Valuator::value_damage() {damage(fltk3::DAMAGE_EXPOSE);} // by default do partial-redraw
+void fltk3::Valuator::value_damage()
+{
+  damage(fltk3::DAMAGE_EXPOSE); // by default do partial-redraw
+}
+
 
 /**
-    Sets the current value. The new value is <I>not</I>
-    clamped or otherwise changed before storing it. Use
-    clamp() or round() to modify the value before
-    calling value(). The widget is redrawn if the new value
-    is different than the current one. The initial value is zero.
-    <P>changed() will return true if the user has moved the slider,
-    but it will be turned off by value(x) and just before doing a callback
-    (the callback can turn it back on if desired).
-*/
-int fltk3::Valuator::value(double v) {
+ Sets the current value. The new value is <I>not</I>
+ clamped or otherwise changed before storing it. Use
+ clamp() or round() to modify the value before
+ calling value(). The widget is redrawn if the new value
+ is different than the current one. The initial value is zero.
+ <P>changed() will return true if the user has moved the slider,
+ but it will be turned off by value(x) and just before doing a callback
+ (the callback can turn it back on if desired).
+ */
+int fltk3::Valuator::value(double v) 
+{
   clear_changed();
   if (v == value_) return 0;
   value_ = v;
   value_damage();
   return 1;
 }
-/** Clamps the value, but accepts v if the previous value is not already out of range */
-double fltk3::Valuator::softclamp(double v) {
+
+
+/** Clamps the value, but accepts v if the previous value is not already out 
+ of range 
+ */
+double fltk3::Valuator::softclamp(double v) 
+{
   int which = (min<=max);
   double p = previous_value_;
   if ((v<min)==which && p!=min && (p<min)!=which) return min;
@@ -94,9 +113,12 @@ double fltk3::Valuator::softclamp(double v) {
   else return v;
 }
 
-// inline void fltk3::Valuator::handle_push() {previous_value_ = value_;}
-/** Called during a drag operation, after an fltk3::WHEN_CHANGED event is received and before the callback. */
-void fltk3::Valuator::handle_drag(double v) {
+
+/** Called during a drag operation, after an fltk3::WHEN_CHANGED event is 
+ received and before the callback. 
+ */
+void fltk3::Valuator::handle_drag(double v) 
+{
   if (v != value_) {
     value_ = v;
     value_damage();
@@ -104,8 +126,13 @@ void fltk3::Valuator::handle_drag(double v) {
     if (when() & fltk3::WHEN_CHANGED) do_callback();
   }
 }
-/** Called after an fltk3::WHEN_RELEASE event is received and before the callback. */
-void fltk3::Valuator::handle_release() {
+
+
+/** Called after an fltk3::WHEN_RELEASE event is received and before the 
+ callback. 
+ */
+void fltk3::Valuator::handle_release() 
+{
   if (when()&fltk3::WHEN_RELEASE) {
     // insure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
@@ -118,58 +145,63 @@ void fltk3::Valuator::handle_release() {
   }
 }
 
+
 /**
-  Round the passed value to the nearest step increment.  Does
-  nothing if step is zero.
-*/
-double fltk3::Valuator::round(double v) {
+ Round the passed value to the nearest step increment.  Does
+ nothing if step is zero.
+ */
+double fltk3::Valuator::round(double v) 
+{
   if (A) return rint(v*B/A)*A/B;
   else return v;
 }
 
-/**  Clamps the passed value to the valuator range.*/
+
+/**  Clamps the passed value to the valuator range. */
 double fltk3::Valuator::clamp(double v) {
   if ((v<min)==(min<=max)) return min;
   else if ((v>max)==(min<=max)) return max;
   else return v;
 }
 
+
 /**
-  Adds n times the step value to the passed value. If
-  step was set to zero it uses fabs(maximum() - minimum()) /
-  100.
-*/
+ Adds n times the step value to the passed value. If
+ step was set to zero it uses fabs(maximum() - minimum()) /
+ 100.
+ */
 double fltk3::Valuator::increment(double v, int n) {
   if (!A) return v+n*(max-min)/100;
   if (min > max) n = -n;
   return (rint(v*B/A)+n)*A/B;
 }
 
+
 /**
-  Uses internal rules to format the fields numerical value into
-  the character array pointed to by the passed parameter.</P>
-  
-  <P>The actual format used depends on the current step value. If
-  the step value has been set to zero then a %g format is used.
-  If the step value is non-zero, then a %.*f format is used,
-  where the precision is calculated to show sufficient digits
-  for the current step value. An integer step value, such as 1
-  or 1.0, gives a precision of 0, so the formatted value will
-  appear as an integer.</P>
-  
-  <P>This method is used by the Fl_Value_... group of widgets to 
-  format the current value into a text string. 
-  The return value is the length of the formatted text.
-  The formatted value is written into in <i>buffer</i>. 
-  <i>buffer</i> should have space for at least 128 bytes.</P>
-  
-  <P>You may override this function to create your own text formatting.
-*/
+ Uses internal rules to format the fields numerical value into
+ the character array pointed to by the passed parameter.</P>
+ 
+ <P>The actual format used depends on the current step value. If
+ the step value has been set to zero then a %g format is used.
+ If the step value is non-zero, then a %.*f format is used,
+ where the precision is calculated to show sufficient digits
+ for the current step value. An integer step value, such as 1
+ or 1.0, gives a precision of 0, so the formatted value will
+ appear as an integer.</P>
+ 
+ <P>This method is used by the Fl_Value_... group of widgets to 
+ format the current value into a text string. 
+ The return value is the length of the formatted text.
+ The formatted value is written into in <i>buffer</i>. 
+ <i>buffer</i> should have space for at least 128 bytes.</P>
+ 
+ <P>You may override this function to create your own text formatting.
+ */
 int fltk3::Valuator::format(char* buffer) {
   double v = value();
   // MRS: THIS IS A HACK - RECOMMEND ADDING BUFFER SIZE ARGUMENT
   if (!A || !B) return snprintf(buffer, 128, "%g", v);
-
+  
   // Figure out how many digits are required to correctly format the
   // value.
   int i, c = 0;
@@ -186,10 +218,11 @@ int fltk3::Valuator::format(char* buffer) {
   for (; i>0; i--, c++) {
     if (!isdigit(temp[i])) break;
   }
-
+  
   // MRS: THIS IS A HACK - RECOMMEND ADDING BUFFER SIZE ARGUMENT
   return snprintf(buffer, 128, "%.*f", c, v);
 }
+
 
 //
 // End of "$Id$".

@@ -37,21 +37,28 @@
 namespace fltk3 {
   
   // shared type() values for classes that work in both directions:
-  const uchar VERTICAL		= 0; ///< The valuator can work vertically
-  const uchar HORIZONTAL		= 1; ///< The valuator can work horizontally
+  const uchar VERTICAL    = 0; ///< The valuator can work vertically
+  const uchar HORIZONTAL  = 1; ///< The valuator can work horizontally
   
   /**
+   \brief The Valuator is the base class for all numerical slider-type widgets.
+   
    The fltk3::Valuator class controls a single floating-point value
    and provides a consistent interface to set the value, range, and step,
    and insures that callbacks are done the same for every object.
-   <P>There are probably more of these classes in FLTK than any others:
-   <P ALIGN=CENTER>\image html  valuators.png</P> 
-   \image latex   valuators.png "Valuators derived from fltk3::Valuators" width=10cm
-   <P>In the above diagram each box surrounds an actual subclass.  These
-   are further differentiated by setting the type() of the widget t
-   o the symbolic value labeling the widget.  
-   The ones labelled "0" are the default versions with a type(0).  
-   For consistency the symbol fltk3::VERTICAL is defined as zero.
+   
+   There are probably more of these classes in FLTK than any others:
+   <P ALIGN=CENTER>
+   \image html valuators.png
+   \image latex valuators.png
+   </P>  
+   "Valuators derived from fltk3::Valuators" width=10cm
+   
+   In the above diagram each box surrounds an actual subclass. These are 
+   further differentiated by setting the type() of the widget to the symbolic 
+   value labeling the widget. The ones labelled "0" are the default versions 
+   with a type(0). For consistency the symbol fltk3::VERTICAL is defined 
+   as zero.
    */
   class FLTK3_EXPORT Valuator : public fltk3::Widget {
     
@@ -63,8 +70,7 @@ namespace fltk3 {
   protected:
     /** Tells if the valuator is an fltk3::HORIZONTAL one */
     int horizontal() const {return type()& fltk3::HORIZONTAL;}
-    Valuator(int X, int Y, int W, int H, const char* L);
-    
+    Valuator(int X, int Y, int W, int H, const char* L);    
     /** Gets the previous floating point value before an event changed it */
     double previous_value() const {return previous_value_;}
     /** Stores the current value in the previous value */
@@ -78,52 +84,57 @@ namespace fltk3 {
     
   public:
     
-    /**    Sets the minimum (a) and maximum (b) values for the valuator widget. */
+    /** Sets the minimum (a) and maximum (b) values for the valuator widget. */
     void bounds(double a, double b) {min=a; max=b;}
-    /**    Gets the minimum value for the valuator.  */
+    /** Gets the minimum value for the valuator. */
     double minimum() const {return min;}
-    /**    Sets the minimum value for the valuator.  */
+    /** Sets the minimum value for the valuator. */
     void minimum(double a) {min = a;}
-    /**    Gets the maximum value for the valuator.  */
+    /** Gets the maximum value for the valuator. */
     double maximum() const {return max;}
-    /**    Sets the maximum value for the valuator.  */
+    /** Sets the maximum value for the valuator. */
     void maximum(double a) {max = a;}
     /**
-     Sets the minimum and maximum values for the valuator. When
-     the user manipulates the widget, the value is limited to this
+     \brief Sets the minimum and maximum values for the valuator. 
+     
+     Whenthe user manipulates the widget, the value is limited to this
      range. This clamping is done <I>after</I> rounding to the step
      value (this makes a difference if the range is not a multiple of
      the step).
      
-     <P>The minimum may be greater than the maximum. This has the
+     The minimum may be greater than the maximum. This has the
      effect of "reversing" the object so the larger values
      are in the opposite direction. This also switches which end of
-     the filled sliders is filled.</P>
+     the filled sliders is filled.
      
-     <P>Some widgets consider this a "soft" range.  This
+     Some widgets consider this a "soft" range.  This
      means they will stop at the range, but if the user releases and
      grabs the control again and tries to move it further, it is
-     allowed.</P>
+     allowed.
      
-     <P>The range may affect the display. You must redraw()
+     The range may affect the display. You must redraw()
      the widget after changing the range.
      */
     void range(double a, double b) {min = a; max = b;}
-    /**    See double fltk3::Valuator::step() const   */
+    /** See double fltk3::Valuator::step() const   */
     void step(int a) {A = a; B = 1;}
-    /**    See double fltk3::Valuator::step() const   */
-    void step(double a, int b) {A = a; B = b;}
-    void step(double s);
     /**
-     Gets or sets the step value. As the user moves the mouse the
+     \brief Sets the step value. 
+     
+     As the user moves the mouse the
      value is rounded to the nearest multiple of the step value. This
      is done <I>before</I> clamping it to the range. For most widgets
      the default step is zero.
      
-     <P>For precision the step is stored as the ratio of two
+     For precision the step is stored as the ratio of two
      integers, A/B. You can set these integers directly. Currently
      setting a floating point value sets the nearest A/1 or 1/B value
      possible.
+     */
+    void step(double a, int b) {A = a; B = b;}
+    void step(double s);
+    /**
+     \brief Gets the step value.
      */
     double step() const {return A/B;}
     void precision(int);
