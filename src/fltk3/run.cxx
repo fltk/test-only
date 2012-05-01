@@ -1673,8 +1673,6 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   if (H > wi->h()-Y) H = wi->h()-Y;
   if (W <= 0 || H <= 0) return;
   
-  printf("DAMAGE %d %d %d %d\n", X, Y, W, H);
-
   if (!X && !Y && W==wi->w() && H==wi->h()) {
     // if damage covers entire window delete region:
     wi->damage(fl);
