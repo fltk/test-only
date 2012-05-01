@@ -124,10 +124,16 @@ void fltk3::Label::measure(int& W, int& H) const {
     This is the normal call for a widget's draw() method.
  */
 void fltk3::Widget::draw_label() const {
-  int X = x_+fltk3::box_dx(box());
+  int wx, wy;
+  if (is_group_relative()) {
+    wx = wy = 0;
+  } else {
+    wx = x_; wy = y_;
+  }
+  int X = wx+fltk3::box_dx(box());
   int W = w_-fltk3::box_dw(box());
   if (W > 11 && align()&(fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT)) {X += 3; W -= 6;}
-  draw_label(X, y_+fltk3::box_dy(box()), W, h_-fltk3::box_dh(box()));
+  draw_label(X, wy+fltk3::box_dy(box()), W, h_-fltk3::box_dh(box()));
 }
 
 /** Draws the label in an arbitrary bounding box.

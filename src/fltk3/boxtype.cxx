@@ -447,7 +447,7 @@ void fltk3::draw_box(fltk3::Boxtype t, int x, int y, int w, int h, fltk3::Color 
 /** Draws the widget box according its box style */
 void fltk3::Widget::draw_box() const {
   if (box_) {
-    if (flags()&GROUP_RELATIVE) {
+    if (is_group_relative()) {
       draw_box((fltk3::Boxtype)box_, 0, 0, w_, h_, color_);
     } else {
       draw_box((fltk3::Boxtype)box_, x_, y_, w_, h_, color_);

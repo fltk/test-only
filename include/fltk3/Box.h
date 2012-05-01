@@ -39,7 +39,9 @@ namespace fltk3 {
   class Widget;
 
   /**
-   This widget simply draws its box, and possibly it's label.  Putting it
+   \brief This widget draws a box with an optional label.
+   
+   This widget simply draws its box, and possibly it's label. Putting it
    before some other widgets and making it big enough to surround them
    will let you draw a frame around them.
    */
@@ -50,21 +52,22 @@ namespace fltk3 {
     
   public:
     /**
-     - The first constructor sets box() to fltk3::NO_BOX, which
-     means it is invisible. However such widgets are useful as placeholders
-     or fltk3::Group::resizable()
-     values.  To change the box to something visible, use box(n).
-     - The second form of the constructor sets the box to the specified box
-     type.
-     <P>The destructor removes the box.
+     \brief Box constructor.
+     
+     This constructor sets box() to fltk3::NO_BOX, which means it is invisible. 
+     However such widgets are useful as placeholders or 
+     fltk3::Group::resizable() values.  To change the box to something visible, 
+     use box(n).
      */
-    Box(int X, int Y, int W, int H, const char *l=0)
-    : fltk3::Widget(X,Y,W,H,l) {}
+    Box(int X, int Y, int W, int H, const char *l=0);
     
-    /**    See fltk3::Box::Box(int x, int y, int w, int h, const char * = 0)   */
-    Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l)
-    : fltk3::Widget(X,Y,W,H,l) {box(b);}
-    
+    /**
+     \brief Box constructor.
+     
+     This constructor also sets the box type.
+     */
+    Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l);
+
     virtual int handle(int);
   };
   

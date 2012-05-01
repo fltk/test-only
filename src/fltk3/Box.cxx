@@ -30,6 +30,21 @@
 #include <fltk3/Wrapper.h>
 
 
+fltk3::Box::Box(int X, int Y, int W, int H, const char *l)
+: fltk3::Widget(X,Y,W,H,l) 
+{
+  set_group_relative(); // FIXME: remove
+}
+
+
+fltk3::Box::Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l)
+: fltk3::Widget(X,Y,W,H,l) 
+{
+  set_group_relative(); // FIXME: remove
+  box(b);
+}
+
+
 void fltk3::Box::draw() {
   draw_box();
   draw_label();
