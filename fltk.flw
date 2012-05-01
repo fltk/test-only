@@ -315,7 +315,7 @@ workspace FLTK {open
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk3 {open
+    lib_target fltk3 {
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -333,7 +333,7 @@ workspace FLTK {open
       target_path lib
       makefile_path src
     } {
-      folder Headers {open
+      folder Headers {
         uuid_Xcode4_Group {C2F00625-E401-4002-85F6-FA183D17629D}
       } {
         file_ref {all.h} {
@@ -1080,7 +1080,7 @@ workspace FLTK {open
           list_env 124
           filename_and_path {include/fltk3/SelectBrowser.h}
         }
-        file_ref {ShapedWindow.h} {selected
+        file_ref {ShapedWindow.h} {
           uuid_Xcode4_BuildFile {88C99958-E07E-4731-B1C4-70B913221C19}
           uuid_Xcode4_FileRef {7031E56D-C9AA-4136-BEC9-D45D7E4AFBBB}
           uuid_Xcode4_BuildFileInHeaders {8EAB82FA-6F9C-45A4-9713-6BBE90954C67}
@@ -1417,7 +1417,7 @@ workspace FLTK {open
           filename_and_path {include/fltk3/XPMImage.h}
         }
       }
-      folder Sources {open
+      folder Sources {
         uuid_Xcode4_Group {91990322-0AF9-42F2-A077-713540EE5AB1}
       } {
         file_ref {cocoa.mm} {
@@ -8312,6 +8312,35 @@ workspace FLTK {open
         uuid_Xcode4_BuildFileInCopyFiles {232D3B4D-37B2-42DD-A73F-9A8C11A86286}
         uuid_Xcode4_ContainerItemProxy {0A7D43AA-3A79-4B6E-8099-F09910EA5613}
         uuid_Xcode4_TargetDependency {6868A066-7582-4862-BD72-1A2958009957}
+      }
+    }
+    app_target adjuster2 {open
+      uuid_Xcode4_FluidBuildRule {1CA8A9A8-AFB9-44BE-8912-2FF6EAEA43D9}
+      uuid_Xcode4_CopyFilesBuildPhase {7CD9ADA0-CF82-41DF-90C8-C1F68880C475}
+      uuid_Xcode4_ProductFileReference {0C9773B6-4E20-491A-9E97-902E3FAED7F1}
+      uuid_Xcode4_FrameworksBuildPhase {4FB7C69E-1E3E-4166-B49B-11AF0D832194}
+      uuid_Xcode4_Group {9F01513A-8D46-47F6-BCFB-F249F663F58A}
+      uuid_Xcode4_Target {0C9C0BB3-7348-453C-B2AD-DA944F9E8D1A}
+      uuid_Xcode4_BuildConfigurationList {B89CDA9D-D4BA-4973-B47A-AA16C4435E24}
+      uuid_Xcode4_ResourcesBuildPhase {C42A4352-9615-45E1-BE18-295E5F268BD9}
+      uuid_Xcode4_SourcesBuildPhase {2C80EDD6-58BA-4C48-949A-A9F1DDDA7383}
+      uuid_Xcode4_DebugBuildConfiguration {A7B91EBB-E431-4FF5-942E-EC0DFB273384}
+      uuid_Xcode4_ReleaseBuildConfiguration {71A2B5F0-A2EC-4652-8716-4E612831F010}
+      build_env 64
+      target_path test2
+      makefile_path test2
+    } {
+      file_ref {adjuster.cxx} {selected
+        uuid_Xcode4_BuildFileInSources {638CAE7C-A7DF-490E-811D-4A5E65C16AE3}
+        uuid_Xcode4_FileRef {92B55871-2766-4F0C-BBC4-BE3540567DBF}
+        build_env 64
+        filename_and_path {test2/adjuster.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {910EE880-88DF-4694-BECE-6E58A068056A}
+        uuid_Xcode4_BuildFileInCopyFiles {5C48D3CC-0C6D-45D4-9991-6CC76CB59093}
+        uuid_Xcode4_ContainerItemProxy {4304047F-0002-4307-BC25-F4207C88FE81}
+        uuid_Xcode4_TargetDependency {B577E322-F704-4B48-87B0-5EEBCEBEC7B9}
       }
     }
   }

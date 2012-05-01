@@ -988,6 +988,9 @@
 		596D02202FA9ACA0398E401D /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1B2AA7BDC4D9093EAD63680B /* hello.cxx */; };
 		8A69F10A21966EA7513E7FB8 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		232D3B4D756F3DB311A86286 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		638CAE7CEED1CB4365C16AE3 /* adjuster.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 92B55871686A05F140567DBF /* adjuster.cxx */; };
+		910EE880CE4BD096A068056A /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		5C48D3CC49B9F5566CB59093 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -2000,6 +2003,18 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		B1125F317C1D133B96653E6F /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		1CA8A9A8EB07A6E4EAEA43D9 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -3512,6 +3527,13 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
+		4304047F430548057C88FE81 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -4353,6 +4375,16 @@
 			dstSubfolderSpec = 10;
 			files = (
 				232D3B4D756F3DB311A86286 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7CD9ADA08E5D513E8880C475 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5C48D3CC49B9F5566CB59093 /* fltk3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5309,6 +5341,8 @@
 		7D76C0ACB6969ACB80D8F20F /* overlay1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = overlay1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B2AA7BDC4D9093EAD63680B /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test2/hello.cxx; sourceTree = SOURCE_ROOT; };
 		9228B77662AFB89487D6CD0B /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92B55871686A05F140567DBF /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = adjuster.cxx; path = ../../test2/adjuster.cxx; sourceTree = SOURCE_ROOT; };
+		0C9773B6073A0EB93FAED7F1 /* adjuster2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adjuster2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -6069,6 +6103,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FB7C69E5F58A5340D832194 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				910EE880CE4BD096A068056A /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -6160,6 +6202,7 @@
 				95F59D403AC05E1893AB0D94 /* fractals1.app */,
 				7D76C0ACB6969ACB80D8F20F /* overlay1.app */,
 				9228B77662AFB89487D6CD0B /* hello2.app */,
+				0C9773B6073A0EB93FAED7F1 /* adjuster2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7936,10 +7979,19 @@
 			name = hello2;
 			sourceTree = "<group>";
 		};
+		9F01513ACAB04EB2F663F58A /* adjuster2 */ = {
+			isa = PBXGroup;
+			children = (
+				92B55871686A05F140567DBF /* adjuster.cxx */,
+			);
+			name = adjuster2;
+			sourceTree = "<group>";
+		};
 		2B7E88DA9A863C84CF240AC1 /* FLTK2CompatibilityTests */ = {
 			isa = PBXGroup;
 			children = (
 				06C907BD92361F542D5DFF5E /* hello2 */,
+				9F01513ACAB04EB2F663F58A /* adjuster2 */,
 			);
 			name = FLTK2CompatibilityTests;
 			sourceTree = "<group>";
@@ -10112,6 +10164,26 @@
 			productReference = 9228B77662AFB89487D6CD0B /* hello2.app */;
 			productType = "com.apple.product-type.application";
 		};
+		0C9C0BB3367468394F9E8D1A /* adjuster2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B89CDA9D9DC91E6CC4435E24 /* Build configuration list for PBXNativeTarget "adjuster2" */;
+			buildPhases = (
+				C42A4352D3F497465F268BD9 /* Resources */,
+				2C80EDD614F23D6BDDDA7383 /* Sources */,
+				4FB7C69E5F58A5340D832194 /* Frameworks */,
+				7CD9ADA08E5D513E8880C475 /* CopyFiles */,
+			);
+			buildRules = (
+				1CA8A9A8EB07A6E4EAEA43D9 /* PBXBuildRule */,
+			);
+			dependencies = (
+				B577E322BC4CD95BCEBEC7B9 /* fltk3 */,
+			);
+			name = adjuster2;
+			productName = adjuster2;
+			productReference = 0C9773B6073A0EB93FAED7F1 /* adjuster2.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -10216,6 +10288,7 @@
 				48427F0246B6DC0672A00515 /* fractals1 */,
 				789BB61B3680D11F69B41C47 /* overlay1 */,
 				F68ECE70CF387DC9CE70030D /* hello2 */,
+				0C9C0BB3367468394F9E8D1A /* adjuster2 */,
 			);
 		};
 /* End PBXProject section */
@@ -10810,6 +10883,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7AAA72186797089388ACF51E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C42A4352D3F497465F268BD9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -11800,6 +11880,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				596D02202FA9ACA0398E401D /* hello.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C80EDD614F23D6BDDDA7383 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				638CAE7CEED1CB4365C16AE3 /* adjuster.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12872,6 +12960,11 @@
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
 		6868A0663DE0A75B58009957 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		B577E322BC4CD95BCEBEC7B9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
@@ -18999,6 +19092,78 @@
 			};
 			name = Release;
 		};
+		A7B91EBBABC47823FB273384 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/adjuster2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "adjuster2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		71A2B5F0E4BEC9772831F010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/adjuster2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "adjuster2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		2B180F464218A02FAF04B452 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -19788,6 +19953,15 @@
 			buildConfigurations = (
 				96756B440489BDDC1643485F /* Debug */,
 				2294119A0A34638F7F866341 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B89CDA9D9DC91E6CC4435E24 /* Build configuration list for PBXNativeTarget "adjuster2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7B91EBBABC47823FB273384 /* Debug */,
+				71A2B5F0E4BEC9772831F010 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

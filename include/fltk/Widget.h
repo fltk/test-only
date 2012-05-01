@@ -196,9 +196,17 @@ namespace fltk {
     
     bool	take_focus()		;
     void	throw_focus()		;
+#endif 
     
-    void	redraw()		;
-    void	redraw(uchar c)		;
+    void redraw() {
+      ((fltk3::Widget*)_p)->redraw();
+    }
+    
+    void redraw(uchar b) {
+      ((fltk3::Widget*)_p)->damage(b); // FIXME: translate "b"
+    }
+    
+#if 0
     void	redraw_label()		;
     void	redraw_highlight()	;
     void	redraw(const Rectangle&);
