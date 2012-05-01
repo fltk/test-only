@@ -817,27 +817,32 @@ int fltk3::XlibGraphicsDriver::not_clipped(int x, int y, int w, int h) {
 // return rectangle surrounding intersection of this rectangle and clip:
 #if defined(__APPLE_QUARTZ__)
 int fltk3::QuartzGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
+  int ret;
   x += origin_x(); y += origin_y();
   X = x; Y = y; W = w; H = h;
   fltk3::Region r = clip_region();
-  if (!r) return 0;
-  CGRect arg = fl_cgrectmake_cocoa(x, y, w, h);
-  CGRect u = CGRectMake(0,0,0,0);
-  CGRect test;
-  for(int i = 0; i < r->count; i++) {
-    test = CGRectIntersection(r->rects[i], arg);
-    if( ! CGRectIsEmpty(test) ) {
-      if(CGRectIsEmpty(u)) u = test;
-      else u = CGRectUnion(u, test);
+  if (!r) {
+    ret = 0;
+  } else {
+    CGRect arg = fl_cgrectmake_cocoa(x, y, w, h);
+    CGRect u = CGRectMake(0,0,0,0);
+    CGRect test;
+    for(int i = 0; i < r->count; i++) {
+      test = CGRectIntersection(r->rects[i], arg);
+      if( ! CGRectIsEmpty(test) ) {
+        if(CGRectIsEmpty(u)) u = test;
+        else u = CGRectUnion(u, test);
+      }
     }
+    X = int(u.origin.x);
+    Y = int(u.origin.y);
+    W = int(u.size.width + 1);
+    H = int(u.size.height + 1);
+    if(CGRectIsEmpty(u)) W = H = 0;
+    ret = ! CGRectEqualToRect(arg, u);
   }
-  X = int(u.origin.x);
-  Y = int(u.origin.y);
-  W = int(u.size.width + 1);
-  H = int(u.size.height + 1);
-  if(CGRectIsEmpty(u)) W = H = 0;
   X -= origin_x(); Y -= origin_y();
-  return ! CGRectEqualToRect(arg, u);
+  return ret;
 }
 #elif defined(WIN32)
 int fltk3::GDIGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){

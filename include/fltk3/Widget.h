@@ -376,8 +376,7 @@ namespace fltk3 {
     void draw_box(Boxtype t, Color c) const;
     void draw_box(Boxtype t, int x,int y,int w,int h, Color c) const;
     void draw_backdrop() const;
-    /** draws a focus rectangle around the widget */
-    void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
+    void draw_focus();
     void draw_focus(Boxtype t, int x,int y,int w,int h) const;
     void draw_label() const;
     void draw_label(int, int, int, int) const;

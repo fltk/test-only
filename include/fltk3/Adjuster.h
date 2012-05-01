@@ -53,21 +53,34 @@ namespace fltk3 {
    click decrements by 10 times  the amount.
    */
   class FLTK3_EXPORT Adjuster : public Valuator {
+    
+  private:
     int drag;
     int ix;
     int soft_;
+    
   protected:
     void draw();
     int handle(int);
     void value_damage();
+    
   public:
+    
+    /**
+     Creates a new fltk3::Adjuster widget using the given position,
+     size, and label string. It looks best if one of the dimensions is 3
+     times the other.
+     <P> Inherited destructor destroys the Valuator.
+     */
     Adjuster(int X,int Y,int W,int H,const char *l=0);
+    
     /**
      If "soft" is turned on, the user is allowed to drag the value outside
      the range.  If they drag the value to one of the ends, let go, then
      grab again and continue to drag, they can get to any value.  Default is
      one.
      */
+    
     void soft(int s) {soft_ = s;}
     /**
      If "soft" is turned on, the user is allowed to drag the value outside

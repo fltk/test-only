@@ -31,6 +31,8 @@
 #include <fltk3/draw.h>
 #include <fltk3/Wrapper.h>
 
+
+// three bitmaps for the arrow images
 #include "fastarrow.h"
 static fltk3::Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
 #include "mediumarrow.h"
@@ -38,10 +40,15 @@ static fltk3::Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarro
 #include "slowarrow.h"
 static fltk3::Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
-// changing the value does not change the appearance:
-void fltk3::Adjuster::value_damage() {}
 
-void fltk3::Adjuster::draw() {
+// changing the value does not change the appearance:
+void fltk3::Adjuster::value_damage() 
+{
+}
+
+
+void fltk3::Adjuster::draw() 
+{
   int dx, dy, W, H, hor = (w()>=h());
   if (hor) {
     dx = W = w()/3;
@@ -50,23 +57,23 @@ void fltk3::Adjuster::draw() {
     dx = 0; W = w();
     dy = H = h()/3;
   }
-  draw_box(Boxtype((drag==1?DOWN_BOX:box())|(hor?TIE_RIGHT:TIE_TOP)), x(),  y()+2*dy, W, H, color());
-  draw_box(Boxtype((drag==2?fltk3::DOWN_BOX:box())|(hor?TIE_LEFT|TIE_RIGHT:TIE_TOP|TIE_BOTTOM)), x()+dx, y()+dy, W, H, color());
-  draw_box(Boxtype((drag==3?fltk3::DOWN_BOX:box())|(hor?TIE_LEFT:TIE_BOTTOM)), x()+2*dx,  y(), W, H, color());
+  fltk3::Boxtype up = box(), dn = fltk3::down(box());
+  draw_box(Boxtype((drag==1?dn:up)|(hor?TIE_RIGHT:TIE_TOP)), 0, 2*dy, W, H, color());
+  draw_box(Boxtype((drag==2?dn:up)|(hor?TIE_LEFT|TIE_RIGHT:TIE_TOP|TIE_BOTTOM)), dx, dy, W, H, color());
+  draw_box(Boxtype((drag==3?dn:up)|(hor?TIE_LEFT:TIE_BOTTOM)), 2*dx, 0, W, H, color());
   if (active_r())
     fltk3::color(selection_color());
   else
     fltk3::color(fltk3::inactive(selection_color()));
-  fastarrow.draw(x()+(W-fastarrow_width)/2,
-		 y()+2*dy+(H-fastarrow_height)/2, W, H);
-  mediumarrow.draw(x()+dx+(W-mediumarrow_width)/2,
-		   y()+dy+(H-mediumarrow_height)/2, W, H);
-  slowarrow.draw(x()+2*dx+(W-slowarrow_width)/2,
-		 y()+(H-slowarrow_width)/2, W, H);
+  fastarrow.draw((W-fastarrow_width)/2, 2*dy+(H-fastarrow_height)/2, W, H);
+  mediumarrow.draw(dx+(W-mediumarrow_width)/2, dy+(H-mediumarrow_height)/2, W, H);
+  slowarrow.draw(2*dx+(W-slowarrow_width)/2, (H-slowarrow_width)/2, W, H);
   if (fltk3::focus() == this) draw_focus();
 }
 
-int fltk3::Adjuster::handle(int event) {
+
+int fltk3::Adjuster::handle(int event) 
+{
   double v;
   int delta;
   int mx = fltk3::event_x();
@@ -76,18 +83,18 @@ int fltk3::Adjuster::handle(int event) {
       if (fltk3::visible_focus()) fltk3::focus(this);
       ix = mx;
       if (w()>=h())
-	drag = 3*(mx-x())/w() + 1;
+	drag = (3*mx)/w() + 1;
       else
-	drag = 3-3*(fltk3::event_y()-y()-1)/h();
-      { fltk3::WidgetTracker wp(this);
-	handle_push();
-	if (wp.deleted()) return 1;
-      }
+	drag = 3-3*(fltk3::event_y()-1)/h();
+    { fltk3::WidgetTracker wp(this);
+      handle_push();
+      if (wp.deleted()) return 1;
+    }
       redraw();
       return 1;
     case fltk3::DRAG:
       if (w() >= h()) {
-	delta = x()+(drag-1)*w()/3;	// left edge of button
+	delta = (drag-1)*w()/3;	// left edge of button
 	if (mx < delta)
 	  delta = mx-delta;
 	else if (mx > (delta+w()/3)) // right edge of button
@@ -95,10 +102,10 @@ int fltk3::Adjuster::handle(int event) {
 	else
 	  delta = 0;
       } else {
-	if (mx < x())
+	if (mx < 0)
 	  delta = mx-x();
-	else if (mx > (x()+w()))
-	  delta = mx-x()-w();
+	else if (mx > +w())
+	  delta = mx-w();
 	else
 	  delta = 0;
       }
@@ -148,14 +155,14 @@ int fltk3::Adjuster::handle(int event) {
           return 0;
       }
       // break not required because of switch...
-
+      
     case fltk3::FOCUS:
     case fltk3::UNFOCUS:
       if (fltk3::visible_focus()) {
         redraw();
         return 1;
       } else return 0;
-
+      
     case fltk3::ENTER :
     case fltk3::LEAVE :
       return 1;
@@ -163,14 +170,10 @@ int fltk3::Adjuster::handle(int event) {
   return 0;
 }
 
-/**
-  Creates a new fltk3::Adjuster widget using the given position,
-  size, and label string. It looks best if one of the dimensions is 3
-  times the other.
-  <P> Inherited destructor destroys the Valuator.
-*/
 fltk3::Adjuster::Adjuster(int X, int Y, int W, int H, const char* l)
-  : fltk3::Valuator(X, Y, W, H, l) {
+: fltk3::Valuator(X, Y, W, H, l) 
+{
+  set_group_relative(); // FIXME: remove later
   box(fltk3::UP_BOX);
   step(1, 10000);
   selection_color(fltk3::SELECTION_COLOR);

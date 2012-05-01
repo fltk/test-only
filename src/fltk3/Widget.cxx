@@ -216,6 +216,16 @@ fltk3::Widget::~Widget() {
   if (callback_ == default_callback) cleanup_readqueue(this);
 }
 
+
+/** draws a focus rectangle around the widget */
+void fltk3::Widget::draw_focus() {
+  if (is_group_relative()) {
+    draw_focus(box(),0,0,w(),h());
+  } else {
+    draw_focus(box(),x(),y(),w(),h());
+  }
+}
+
 /** Draws a focus box for the widget at the given position and size */
 void
 fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
