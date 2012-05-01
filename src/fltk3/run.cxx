@@ -1639,7 +1639,11 @@ void fltk3::Widget::redraw_label() {
 void fltk3::Widget::damage(uchar fl) {
   if (type() < fltk3::WINDOW) {
     // damage only the rectangle covered by a child widget:
-    damage(fl, x(), y(), w(), h());
+    if (is_group_relative()) {
+      damage(fl, 0, 0, w(), h());
+    } else {
+      damage(fl, x(), y(), w(), h());
+    }
   } else {
     // damage entire window by deleting the region:
     Fl_X* i = Fl_X::i((fltk3::Window*)this);
