@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   window.resizable(c1);
   window.end();
   fltk3::DoubleWindow window2(220,220,"fltk3::Round_Clock");
-  fltk3::RoundClock c2(0,0,220,220); // c2.color(3,4);
+  fltk3::RoundClock c2(10,10,200,200); // c2.color(3,4);
   window2.resizable(c2);
   window2.end();
   // my machine had a clock* Xresource set for another program, so

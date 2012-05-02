@@ -350,7 +350,7 @@ void fltk3::QuartzGraphicsDriver::circle(double x, double y, double r) {
   // Quartz warning: circle won't scale to current matrix!
   // Last argument must be 0 (counter-clockwise) or it draws nothing under __LP64__ !!!!
   CGContextSetShouldAntialias(fl_gc, true);
-  CGContextAddArc(fl_gc, xt, yt, (w+h)*0.25f, 0, 2.0f*M_PI, 0);
+  CGContextAddArc(fl_gc, xt+origin_x(), yt+origin_y(), (w+h)*0.25f, 0, 2.0f*M_PI, 0);
   (vertex_kind() == POLYGON ? CGContextFillPath : CGContextStrokePath)(fl_gc);
   CGContextSetShouldAntialias(fl_gc, false);
 }

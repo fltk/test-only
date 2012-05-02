@@ -63,13 +63,16 @@ namespace fltk3 {
    \image latex round_clock.png "fltk3::ROUND_CLOCK type" width=4cm
    */
   class FLTK3_EXPORT ClockOutput : public Widget {
-
+    
+  private:
     int hour_, minute_, second_;
     ulong value_;
     void drawhands(fltk3::Color,fltk3::Color); // part of draw
+    
   protected:
     void draw();
     void draw(int X, int Y, int W, int H);
+    
   public:
     
     ClockOutput(int X, int Y, int W, int H, const char *L = 0);
@@ -123,7 +126,7 @@ namespace fltk3 {
    \image latex round_clock.png "fltk3::ROUND_CLOCK type" width=4cm
    */
   class FLTK3_EXPORT Clock : public ClockOutput {
-
+    
   public:
     int handle(int);
     

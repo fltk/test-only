@@ -31,16 +31,19 @@
 #include <math.h>
 #include <time.h>
 #ifndef WIN32
-#  include <sys/time.h>
+# include <sys/time.h>
 #endif /* !WIN32 */
+
 
 // Original clock display written by Paul Haeberli at SGI.
 // Modifications by Mark Overmars for Forms
 // Further changes by Bill Spitzak for fltk
 
+
 const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
 const float  minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
 const float  sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
+
 
 static void drawhand(double ang,const float v[][2],fltk3::Color fill,fltk3::Color line)
 {
@@ -53,7 +56,9 @@ static void drawhand(double ang,const float v[][2],fltk3::Color fill,fltk3::Colo
   fltk3::pop_matrix();
 }
 
-void fltk3::ClockOutput::drawhands(fltk3::Color fill, fltk3::Color line) {
+
+void fltk3::ClockOutput::drawhands(fltk3::Color fill, fltk3::Color line) 
+{
   if (!active_r()) {
     fill = fltk3::inactive(fill);
     line = fltk3::inactive(line);
@@ -63,7 +68,9 @@ void fltk3::ClockOutput::drawhands(fltk3::Color fill, fltk3::Color line) {
   drawhand(-360*(second()/60.0), sechand, fill, line);
 }
 
-static void rect(double x, double y, double w, double h) {
+
+static void rect(double x, double y, double w, double h) 
+{
   double r = x+w;
   double t = y+h;
   fltk3::begin_polygon();
@@ -74,11 +81,13 @@ static void rect(double x, double y, double w, double h) {
   fltk3::end_polygon();
 }
 
+
 /**
-  Draw clock with the given position and size.
-  \param[in] X, Y, W, H position and size
-*/
-void fltk3::ClockOutput::draw(int X, int Y, int W, int H) {
+ Draw clock with the given position and size.
+ \param[in] X, Y, W, H position and size
+ */
+void fltk3::ClockOutput::draw(int X, int Y, int W, int H) 
+{
   fltk3::Color box_color = type()==fltk3::ROUND_CLOCK ? fltk3::GRAY : color();
   fltk3::Color shadow_color = fltk3::color_average(box_color, fltk3::BLACK, 0.5);
   draw_box(box(), X, Y, W, H, box_color);
@@ -111,21 +120,29 @@ void fltk3::ClockOutput::draw(int X, int Y, int W, int H) {
   fltk3::pop_matrix();
 }
 
+
 /**
-  Draw clock with current position and size.
-*/
-void fltk3::ClockOutput::draw() {
-  draw(x(), y(), w(), h());
+ Draw clock with current position and size.
+ */
+void fltk3::ClockOutput::draw() 
+{
+  if (is_group_relative()) {
+    draw(0, 0, w(), h());
+  } else {
+    draw(x(), y(), w(), h());
+  }
   draw_label();
 }
 
+
 /**
-  Set the displayed time.
-  Set the time in hours, minutes, and seconds.
-  \param[in] H, m, s displayed time
-  \see hour(), minute(), second()
+ Set the displayed time.
+ Set the time in hours, minutes, and seconds.
+ \param[in] H, m, s displayed time
+ \see hour(), minute(), second()
  */
-void fltk3::ClockOutput::value(int H, int m, int s) {
+void fltk3::ClockOutput::value(int H, int m, int s) 
+{
   if (H!=hour_ || m!=minute_ || s!=second_) {
     hour_ = H; minute_ = m; second_ = s;
     value_ = (H * 60 + m) * 60 + s;
@@ -133,13 +150,15 @@ void fltk3::ClockOutput::value(int H, int m, int s) {
   }
 }
 
+
 /**
-  Set the displayed time.
-  Set the time in seconds since the UNIX epoch (January 1, 1970).
-  \param[in] v seconds since epoch
-  \see value()
+ Set the displayed time.
+ Set the time in seconds since the UNIX epoch (January 1, 1970).
+ \param[in] v seconds since epoch
+ \see value()
  */
-void fltk3::ClockOutput::value(ulong v) {
+void fltk3::ClockOutput::value(ulong v) 
+{
   value_ = v;
   struct tm *timeofday;
   // Some platforms, notably Windows, now use a 64-bit time_t value...
@@ -148,14 +167,17 @@ void fltk3::ClockOutput::value(ulong v) {
   value(timeofday->tm_hour, timeofday->tm_min, timeofday->tm_sec);
 }
 
+
 /**
-  Create a new fltk3::ClockOutput widget with the given position, size and label.
-  The default boxtype is \c fltk3::NO_BOX.
-  \param[in] X, Y, W, H position and size of the widget
-  \param[in] L widget label, default is no label
+ Create a new fltk3::ClockOutput widget with the given position, size and label.
+ The default boxtype is \c fltk3::NO_BOX.
+ \param[in] X, Y, W, H position and size of the widget
+ \param[in] L widget label, default is no label
  */
 fltk3::ClockOutput::ClockOutput(int X, int Y, int W, int H, const char *L)
-: fltk3::Widget(X, Y, W, H, L) {
+: fltk3::Widget(X, Y, W, H, L) 
+{
+  set_group_relative();
   box(fltk3::UP_BOX);
   selection_color(fltk3::gray_ramp(5));
   align(fltk3::ALIGN_BOTTOM);
@@ -165,53 +187,68 @@ fltk3::ClockOutput::ClockOutput(int X, int Y, int W, int H, const char *L)
   value_ = 0;
 }
 
+
 ////////////////////////////////////////////////////////////////
 
-/**
-  Create an fltk3::Clock widget using the given position, size, and label string.
-  The default boxtype is \c fltk3::NO_BOX.
-  \param[in] X, Y, W, H position and size of the widget
-  \param[in] L widget label, default is no label
- */
-fltk3::Clock::Clock(int X, int Y, int W, int H, const char *L)
-  : fltk3::ClockOutput(X, Y, W, H, L) {}
 
 /**
-  Create an fltk3::Clock widget using the given boxtype, position, size, and
-  label string.
-  \param[in] t boxtype
-  \param[in] X, Y, W, H position and size of the widget
-  \param[in] L widget label, default is no label
+ Create an fltk3::Clock widget using the given position, size, and label string.
+ The default boxtype is \c fltk3::NO_BOX.
+ \param[in] X, Y, W, H position and size of the widget
+ \param[in] L widget label, default is no label
+ */
+fltk3::Clock::Clock(int X, int Y, int W, int H, const char *L)
+: fltk3::ClockOutput(X, Y, W, H, L) 
+{
+  set_group_relative();
+}
+
+
+/**
+ Create an fltk3::Clock widget using the given boxtype, position, size, and
+ label string.
+ \param[in] t boxtype
+ \param[in] X, Y, W, H position and size of the widget
+ \param[in] L widget label, default is no label
  */
 fltk3::Clock::Clock(uchar t, int X, int Y, int W, int H, const char *L)
-  : fltk3::ClockOutput(X, Y, W, H, L) {
+: fltk3::ClockOutput(X, Y, W, H, L) 
+{
+  set_group_relative();
   type(t);
   box(t==fltk3::ROUND_CLOCK ? fltk3::NO_BOX : fltk3::UP_BOX);
 }
 
-static void tick(void *v) {
+
+static void tick(void *v) 
+{
   ((fltk3::Clock*)v)->value( (ulong)time(0) );
   fltk3::add_timeout(1.0, tick, v);
 }
 
-int fltk3::Clock::handle(int event) {
+
+int fltk3::Clock::handle(int event) 
+{
   switch (event) {
-  case fltk3::SHOW:
-    tick(this);
-    break;
-  case fltk3::HIDE:
-    fltk3::remove_timeout(tick, this);
-    break;
+    case fltk3::SHOW:
+      tick(this);
+      break;
+    case fltk3::HIDE:
+      fltk3::remove_timeout(tick, this);
+      break;
   }
   return ClockOutput::handle(event);
 }
-  
+
+
 /**
-  The destructor removes the clock.
+ The destructor removes the clock.
  */
-fltk3::Clock::~Clock() {
+fltk3::Clock::~Clock() 
+{
   fltk3::remove_timeout(tick, this);
 }
+
 
 //
 // End of "$Id$".
