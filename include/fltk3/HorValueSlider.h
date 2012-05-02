@@ -31,17 +31,19 @@
 #ifndef Fltk3_Hor_Value_Slider_H
 #define Fltk3_Hor_Value_Slider_H
 
+
 #include "ValueSlider.h"
+
 
 namespace fltk3 {
   
   class FLTK3_EXPORT HorValueSlider : public fltk3::ValueSlider {
   public:
-    HorValueSlider(int X,int Y,int W,int H,const char *l=0)
-    : fltk3::ValueSlider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
+    HorValueSlider(int X,int Y,int W,int H,const char *l=0);
   };
   
 }
+
 
 #endif
 

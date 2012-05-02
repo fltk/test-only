@@ -31,36 +31,48 @@
 #include <math.h>
 #include "flstring.h"
 
-#if defined(FL_DLL)	// really needed for c'tors for MS VC++ only
 #include <fltk3/HorSlider.h>
-#endif
+#include <fltk3/HorValueSlider.h>
+
 
 void fltk3::Slider::_Slider() {
   slider_size_ = 0;
   slider_ = 0; // fltk3::UP_BOX;
 }
 
+
 /**
-  Creates a new fltk3::Slider widget using the given position,
-  size, and label string. The default boxtype is fltk3::DOWN_BOX.
-*/
+ Creates a new fltk3::Slider widget using the given position,
+ size, and label string. The default boxtype is fltk3::DOWN_BOX.
+ 
+ \param[in] X, Y, W, H position and size of widget
+ \param[in] L the label text
+ */
 fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
 : fltk3::Valuator(X, Y, W, H, L) {
+  set_group_relative(); // FIXME: 
   box(fltk3::DOWN_BOX);
   _Slider();
 }
 
+
 /**
-  Creates a new fltk3::Slider widget using the given box type, position,
-  size, and label string.
-*/
+ Creates a new fltk3::Slider widget using the given box type, position,
+ size, and label string.
+
+ \param[in] t the box type for this slider
+ \param[in] X, Y, W, H position and size of widget
+ \param[in] L the label text
+ */
 fltk3::Slider::Slider(uchar t, int X, int Y, int W, int H, const char* L)
-  : fltk3::Valuator(X, Y, W, H, L) {
+: fltk3::Valuator(X, Y, W, H, L) {
+  set_group_relative(); // FIXME: 
   type(t);
   box(t==fltk3::HOR_NICE_SLIDER || t==fltk3::VERT_NICE_SLIDER ?
       fltk3::FLAT_BOX : fltk3::DOWN_BOX);
   _Slider();
 }
+
 
 void fltk3::Slider::slider_size(double v) {
   if (v <  0) v = 0;
@@ -71,10 +83,11 @@ void fltk3::Slider::slider_size(double v) {
   }
 }
 
+
 /** 
-  Sets the minimum (a) and maximum (b) values for the valuator widget. 
-  if at least one of the values is changed, a partial redraw is asked.
-*/
+ Sets the minimum (a) and maximum (b) values for the valuator widget. 
+ if at least one of the values is changed, a partial redraw is asked.
+ */
 void fltk3::Slider::bounds(double a, double b) {
   if (minimum() != a || maximum() != b) {
     Valuator::bounds(a, b); 
@@ -82,13 +95,14 @@ void fltk3::Slider::bounds(double a, double b) {
   }
 }
 
+
 /**
-  Sets the size and position of the sliding knob in the box.
-  \param[in] pos position of first line displayed
-  \param[in] size size of window in lines
-  \param[in] first number of first line
-  \param[in] total total number of lines
-  Returns fltk3::Valuator::value(p)
+ Sets the size and position of the sliding knob in the box.
+ \param[in] pos position of first line displayed
+ \param[in] size size of window in lines
+ \param[in] first number of first line
+ \param[in] total total number of lines
+ Returns fltk3::Valuator::value(p)
  */
 int fltk3::Slider::scrollvalue(int pos, int size, int first, int total) {
   step(1, 1);
@@ -97,6 +111,7 @@ int fltk3::Slider::scrollvalue(int pos, int size, int first, int total) {
   bounds(first, total-size+first);
   return value(pos);
 }
+
 
 // All slider interaction is done as though the slider ranges from
 // zero to one, and the left (bottom) edge of the slider is at the
@@ -109,7 +124,7 @@ void fltk3::Slider::draw_bg(int X, int Y, int W, int H) {
   fltk3::push_clip(X, Y, W, H);
   draw_box();
   fltk3::pop_clip();
-
+  
   fltk3::Color black = active_r() ? fltk3::FOREGROUND_COLOR : fltk3::INACTIVE_COLOR;
   if (type() == fltk3::VERT_NICE_SLIDER) {
     draw_box(fltk3::THIN_DOWN_BOX, X+W/2-2, Y, 4, H, black);
@@ -118,8 +133,9 @@ void fltk3::Slider::draw_bg(int X, int Y, int W, int H) {
   }
 }
 
-void fltk3::Slider::draw(int X, int Y, int W, int H) {
 
+void fltk3::Slider::draw(int X, int Y, int W, int H) {
+  
   double val;
   if (minimum() == maximum())
     val = 0.5;
@@ -128,7 +144,7 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
     if (val > 1.0) val = 1.0;
     else if (val < 0.0) val = 0.0;
   }
-
+  
   int ww = (horizontal() ? W : H);
   int xx, S;
   if (type()==fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) {
@@ -154,9 +170,9 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
     xsl = X;
     wsl = W;
   }
-
+  
   draw_bg(X, Y, W, H);
-
+  
   fltk3::Boxtype box1 = slider();
   if (!box1) {box1 = (fltk3::Boxtype)(box()&-2); if (!box1) box1 = fltk3::UP_BOX;}
   if (type() == fltk3::VERT_NICE_SLIDER) {
@@ -169,7 +185,7 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
     draw_box(fltk3::THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4,selection_color());
   } else {
     if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, selection_color());
-
+    
     if (type()!=fltk3::HOR_FILL_SLIDER && type() != fltk3::VERT_FILL_SLIDER &&
         !fltk3::scheme_) {
       if (W>H && wsl>(hsl+8)) {
@@ -178,12 +194,12 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
 	hh = hsl-8;
 	xx = xsl+(wsl-hsl-4)/2;
 	yy = ysl+3;
-
+        
 	fltk3::color(fltk3::darker(selection_color()));
 	fltk3::line(xx, yy+hh, xx+hh, yy);
 	fltk3::line(xx+6, yy+hh, xx+hh+6, yy);
 	fltk3::line(xx+12, yy+hh, xx+hh+12, yy);
-
+        
         xx++;
 	fltk3::color(fltk3::lighter(selection_color()));
 	fltk3::line(xx, yy+hh, xx+hh, yy);
@@ -195,12 +211,12 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
 	xx = xsl+4;
 	ww = wsl-8;
 	yy = ysl+(hsl-wsl-4)/2;
-
+        
 	fltk3::color(fltk3::darker(selection_color()));
 	fltk3::line(xx, yy+ww, xx+ww, yy);
 	fltk3::line(xx, yy+ww+6, xx+ww, yy+6);
 	fltk3::line(xx, yy+ww+12, xx+ww, yy+12);
-
+        
         yy++;
 	fltk3::color(fltk3::lighter(selection_color()));
 	fltk3::line(xx, yy+ww, xx+ww, yy);
@@ -209,7 +225,7 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
       }
     }
   }
-
+  
   draw_label(xsl, ysl, wsl, hsl);
   if (fltk3::focus() == this) {
     if (type() == fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) draw_focus();
@@ -217,91 +233,93 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
   }
 }
 
+
 void fltk3::Slider::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  draw(x()+fltk3::box_dx(box()),
-       y()+fltk3::box_dy(box()),
+  draw(fltk3::box_dx(box()),
+       fltk3::box_dy(box()),
        w()-fltk3::box_dw(box()),
        h()-fltk3::box_dh(box()));
 }
 
+
 int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
   // fltk3::WidgetTracker wp(this);
   switch (event) {
-  case fltk3::PUSH: {
-    fltk3::WidgetTracker wp(this);
-    if (!fltk3::event_inside(X, Y, W, H)) return 0;
-    handle_push();
-    if (wp.deleted()) return 1; }
-    // fall through ...
-  case fltk3::DRAG: {
-
-    double val;
-    if (minimum() == maximum())
-      val = 0.5;
-    else {
-      val = (value()-minimum())/(maximum()-minimum());
-      if (val > 1.0) val = 1.0;
-      else if (val < 0.0) val = 0.0;
-    }
-
-    int ww = (horizontal() ? W : H);
-    int mx = (horizontal() ? fltk3::event_x()-X : fltk3::event_y()-Y);
-    int S;
-    static int offcenter;
-
-    if (type() == fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) {
-
-      S = 0;
-      if (event == fltk3::PUSH) {
-	int xx = int(val*ww+.5);
-	offcenter = mx-xx;
-	if (offcenter < -10 || offcenter > 10) offcenter = 0;
-	else return 1;
+    case fltk3::PUSH: {
+      fltk3::WidgetTracker wp(this);
+      if (!fltk3::event_inside(X, Y, W, H)) return 0;
+      handle_push();
+      if (wp.deleted()) return 1; }
+      // fall through ...
+    case fltk3::DRAG: {
+      
+      double val;
+      if (minimum() == maximum())
+        val = 0.5;
+      else {
+        val = (value()-minimum())/(maximum()-minimum());
+        if (val > 1.0) val = 1.0;
+        else if (val < 0.0) val = 0.0;
       }
-
-    } else {
-
-      S = int(slider_size_*ww+.5); if (S >= ww) return 0;
-      int T = (horizontal() ? H : W)/2+1;
-      if (type()==fltk3::VERT_NICE_SLIDER || type()==fltk3::HOR_NICE_SLIDER) T += 4;
-      if (S < T) S = T;
-      if (event == fltk3::PUSH) {
-	int xx = int(val*(ww-S)+.5);
-	offcenter = mx-xx;
-	if (offcenter < 0) offcenter = 0;
-	else if (offcenter > S) offcenter = S;
-	else return 1;
+      
+      int ww = (horizontal() ? W : H);
+      int mx = (horizontal() ? fltk3::event_x()-X : fltk3::event_y()-Y);
+      int S;
+      static int offcenter;
+      
+      if (type() == fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) {
+        
+        S = 0;
+        if (event == fltk3::PUSH) {
+          int xx = int(val*ww+.5);
+          offcenter = mx-xx;
+          if (offcenter < -10 || offcenter > 10) offcenter = 0;
+          else return 1;
+        }
+        
+      } else {
+        
+        S = int(slider_size_*ww+.5); if (S >= ww) return 0;
+        int T = (horizontal() ? H : W)/2+1;
+        if (type()==fltk3::VERT_NICE_SLIDER || type()==fltk3::HOR_NICE_SLIDER) T += 4;
+        if (S < T) S = T;
+        if (event == fltk3::PUSH) {
+          int xx = int(val*(ww-S)+.5);
+          offcenter = mx-xx;
+          if (offcenter < 0) offcenter = 0;
+          else if (offcenter > S) offcenter = S;
+          else return 1;
+        }
       }
-    }
-
-    int xx = mx-offcenter;
-    double v;
-    char tryAgain = 1;
-    while (tryAgain)
-    {
-      tryAgain = 0;
-      if (xx < 0) {
-        xx = 0;
-        offcenter = mx; if (offcenter < 0) offcenter = 0;
-      } else if (xx > (ww-S)) {
-        xx = ww-S;
-        offcenter = mx-xx; if (offcenter > S) offcenter = S;
+      
+      int xx = mx-offcenter;
+      double v;
+      char tryAgain = 1;
+      while (tryAgain)
+      {
+        tryAgain = 0;
+        if (xx < 0) {
+          xx = 0;
+          offcenter = mx; if (offcenter < 0) offcenter = 0;
+        } else if (xx > (ww-S)) {
+          xx = ww-S;
+          offcenter = mx-xx; if (offcenter > S) offcenter = S;
+        }
+        v = round(xx*(maximum()-minimum())/(ww-S) + minimum());
+        // make sure a click outside the sliderbar moves it:
+        if (event == fltk3::PUSH && v == value()) {
+          offcenter = S/2;
+          event = fltk3::DRAG;
+          tryAgain = 1;
+        }
       }
-      v = round(xx*(maximum()-minimum())/(ww-S) + minimum());
-      // make sure a click outside the sliderbar moves it:
-      if (event == fltk3::PUSH && v == value()) {
-        offcenter = S/2;
-        event = fltk3::DRAG;
-        tryAgain = 1;
-      }
-    }
-    handle_drag(clamp(v));
+      handle_drag(clamp(v));
     } return 1;
-  case fltk3::RELEASE:
-    handle_release();
-    return 1;
-  case fltk3::KEYBOARD:
+    case fltk3::RELEASE:
+      handle_release();
+      return 1;
+    case fltk3::KEYBOARD:
     { fltk3::WidgetTracker wp(this);
       switch (fltk3::event_key()) {
 	case fltk3::UpKey:
@@ -340,52 +358,50 @@ int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
 	  return 0;
       }
     }
-    // break not required because of switch...
-  case fltk3::FOCUS :
-  case fltk3::UNFOCUS :
-    if (fltk3::visible_focus()) {
-      redraw();
+      // break not required because of switch...
+    case fltk3::FOCUS :
+    case fltk3::UNFOCUS :
+      if (fltk3::visible_focus()) {
+        redraw();
+        return 1;
+      } else return 0;
+    case fltk3::ENTER :
+    case fltk3::LEAVE :
       return 1;
-    } else return 0;
-  case fltk3::ENTER :
-  case fltk3::LEAVE :
-    return 1;
-  default:
-    return 0;
+    default:
+      return 0;
   }
 }
+
 
 int fltk3::Slider::handle(int event) {
   if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();
   }
-
+  
   return handle(event,
-		x()+fltk3::box_dx(box()),
-		y()+fltk3::box_dy(box()),
+		fltk3::box_dx(box()),
+		fltk3::box_dy(box()),
 		w()-fltk3::box_dw(box()),
 		h()-fltk3::box_dh(box()));
 }
 
-/*
- The following constructor must not be in the header file if we
- build a shared object (DLL). Instead it is defined here to force
- the constructor (and default destructor as well) to be defined
- in the DLL and exported (STR #2632).
- 
- Note: if you the ctor here, do the same changes in the specific
- header file as well.  This redundant definition was chosen to enable
- inline constructors in the header files (for static linking) as well
- as the one here for dynamic linking (Windows DLL).
- */
-
-#if defined(FL_DLL)
 
 fltk3::HorSlider::HorSlider(int X,int Y,int W,int H,const char *l)
-: fltk3::Slider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
+: fltk3::Slider(X,Y,W,H,l) 
+{
+  set_group_relative(); // FIXME: 
+  type(fltk3::HOR_SLIDER);
+}
 
-#endif // FL_DLL
+
+fltk3::HorValueSlider::HorValueSlider(int X,int Y,int W,int H,const char *l)
+: fltk3::ValueSlider(X,Y,W,H,l) {
+  set_group_relative(); // FIXME: 
+  type(fltk3::HOR_SLIDER);
+}
+
 
 //
 // End of "$Id$".

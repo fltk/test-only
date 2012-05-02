@@ -31,6 +31,7 @@
 #ifndef Fltk3_Value_Slider_H
 #define Fltk3_Value_Slider_H
 
+
 #include "Slider.h"
 
 
@@ -43,7 +44,7 @@ namespace fltk3 {
    \image latex  value_slider.png "fltk3::ValueSlider" width=4cm
    */
   class FLTK3_EXPORT ValueSlider : public fltk3::Slider {
-
+    
   protected:
     void draw();
   public:

@@ -45,12 +45,7 @@ namespace fltk3 {
      Creates a new HorSlider widget using the given position,
      size, and label string.
      */
-#if defined(FL_DLL)	// implementation in src/Fl_Slider.cxx
     HorSlider(int X,int Y,int W,int H,const char *l=0);
-#else
-    HorSlider(int X,int Y,int W,int H,const char *l=0)
-    : fltk3::Slider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
-#endif
   };
   
 }
