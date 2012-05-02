@@ -32,10 +32,13 @@
 #include <math.h>
 #include "flstring.h"
 
+
 #define INITIALREPEAT .5
 #define REPEAT .05
 
-void fltk3::Scrollbar::increment_cb() {
+
+void fltk3::Scrollbar::increment_cb() 
+{
   char inv = maximum()<minimum();
   int ls = inv ? -linesize_ : linesize_;
   int i;
@@ -66,24 +69,28 @@ void fltk3::Scrollbar::increment_cb() {
   handle_drag(clamp(value() + i));
 }
 
-void fltk3::Scrollbar::timeout_cb(void* v) {
+
+void fltk3::Scrollbar::timeout_cb(void* v) 
+{
   fltk3::Scrollbar* s = (fltk3::Scrollbar*)v;
   s->increment_cb();
   fltk3::add_timeout(REPEAT, timeout_cb, s);
 }
 
-int fltk3::Scrollbar::handle(int event) {
+
+int fltk3::Scrollbar::handle(int event) 
+{
   // area of scrollbar:
   int area;
-  int X=x(); int Y=y(); int W=w(); int H=h();
-
+  int X=0; int Y=0; int W=w(); int H=h();
+  
   // adjust slider area to be inside the arrow buttons:
   if (horizontal()) {
     if (W >= 3*H) {X += H; W -= 2*H;}
   } else {
     if (H >= 3*W) {Y += W; H -= 2*W;}
   }
-
+  
   // which widget part is highlighted?
   int relx;
   int ww;
@@ -102,7 +109,7 @@ int fltk3::Scrollbar::handle(int event) {
     if (type()==fltk3::VERT_NICE_SLIDER || type()==fltk3::HOR_NICE_SLIDER) T += 4;
     if (S < T) S = T;
     double val =
-      (maximum()-minimum()) ? (value()-minimum())/(maximum()-minimum()) : 0.5;
+    (maximum()-minimum()) ? (value()-minimum())/(maximum()-minimum()) : 0.5;
     int sliderx;
     if (val >= 1.0) sliderx = ww-S;
     else if (val <= 0.0) sliderx = 0;
@@ -112,104 +119,106 @@ int fltk3::Scrollbar::handle(int event) {
     else if (relx >= sliderx+S) area = 6;
     else area = 8;
   }
-
+  
   switch (event) {
-  case fltk3::ENTER:
-  case fltk3::LEAVE:
-    return 1;
-  case fltk3::RELEASE:
+    case fltk3::ENTER:
+    case fltk3::LEAVE:
+      return 1;
+    case fltk3::RELEASE:
       damage(fltk3::DAMAGE_ALL);
-    if (pushed_) {
-      fltk3::remove_timeout(timeout_cb, this);
-      pushed_ = 0;
-    }
-    handle_release();
-    return 1;
-  case fltk3::PUSH:
-    if (pushed_) return 1;
-    if (area != 8) pushed_ = area;
-    if (pushed_) {
-      handle_push();
-      fltk3::add_timeout(INITIALREPEAT, timeout_cb, this);
-      increment_cb();
-      damage(fltk3::DAMAGE_ALL);
-      return 1;
-    }
-    return Slider::handle(event, X,Y,W,H);
-  case fltk3::DRAG:
-    if (pushed_) return 1;
-    return Slider::handle(event, X,Y,W,H);
-  case fltk3::MOUSEWHEEL :
-    if (horizontal()) {
-      if (fltk3::e_dx==0) return 0;
-      int ls = maximum()>=minimum() ? linesize_ : -linesize_;
-      handle_drag(clamp(value() + ls * fltk3::e_dx));
-      return 1;
-    } else {
-      if (fltk3::e_dy==0) return 0;
-      int ls = maximum()>=minimum() ? linesize_ : -linesize_;
-      handle_drag(clamp(value() + ls * fltk3::e_dy));
-      return 1;
-    }
-  case fltk3::SHORTCUT:
-  case fltk3::KEYBOARD: {
-    int v = value();
-    int ls = maximum()>=minimum() ? linesize_ : -linesize_;
-    if (horizontal()) {
-      switch (fltk3::event_key()) {
-      case fltk3::LeftKey:
-	v -= ls;
-	break;
-      case fltk3::RightKey:
-	v += ls;
-	break;
-      default:
-	return 0;
+      if (pushed_) {
+        fltk3::remove_timeout(timeout_cb, this);
+        pushed_ = 0;
       }
-    } else { // vertical
-      switch (fltk3::event_key()) {
-      case fltk3::UpKey:
-	v -= ls;
-	break;
-      case fltk3::DownKey:
-	v += ls;
-	break;
-      case fltk3::PageUpKey:
-	if (slider_size() >= 1.0) return 0;
-	v -= int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
-	v += ls;
-	break;
-      case fltk3::PageDownKey:
-	if (slider_size() >= 1.0) return 0;
-	v += int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
-	v -= ls;
-	break;
-      case fltk3::HomeKey:
-	v = int(minimum());
-	break;
-      case fltk3::EndKey:
-	v = int(maximum());
-	break;
-      default:
-	return 0;
+      handle_release();
+      return 1;
+    case fltk3::PUSH:
+      if (pushed_) return 1;
+      if (area != 8) pushed_ = area;
+      if (pushed_) {
+        handle_push();
+        fltk3::add_timeout(INITIALREPEAT, timeout_cb, this);
+        increment_cb();
+        damage(fltk3::DAMAGE_ALL);
+        return 1;
       }
-    }
-    v = int(clamp(v));
-    if (v != value()) {
-      Slider::value(v);
-      value_damage();
-      set_changed();
-      do_callback();
-    }
-    return 1;}
+      return Slider::handle(event, X,Y,W,H);
+    case fltk3::DRAG:
+      if (pushed_) return 1;
+      return Slider::handle(event, X,Y,W,H);
+    case fltk3::MOUSEWHEEL :
+      if (horizontal()) {
+        if (fltk3::e_dx==0) return 0;
+        int ls = maximum()>=minimum() ? linesize_ : -linesize_;
+        handle_drag(clamp(value() + ls * fltk3::e_dx));
+        return 1;
+      } else {
+        if (fltk3::e_dy==0) return 0;
+        int ls = maximum()>=minimum() ? linesize_ : -linesize_;
+        handle_drag(clamp(value() + ls * fltk3::e_dy));
+        return 1;
+      }
+    case fltk3::SHORTCUT:
+    case fltk3::KEYBOARD: {
+      int v = value();
+      int ls = maximum()>=minimum() ? linesize_ : -linesize_;
+      if (horizontal()) {
+        switch (fltk3::event_key()) {
+          case fltk3::LeftKey:
+            v -= ls;
+            break;
+          case fltk3::RightKey:
+            v += ls;
+            break;
+          default:
+            return 0;
+        }
+      } else { // vertical
+        switch (fltk3::event_key()) {
+          case fltk3::UpKey:
+            v -= ls;
+            break;
+          case fltk3::DownKey:
+            v += ls;
+            break;
+          case fltk3::PageUpKey:
+            if (slider_size() >= 1.0) return 0;
+            v -= int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
+            v += ls;
+            break;
+          case fltk3::PageDownKey:
+            if (slider_size() >= 1.0) return 0;
+            v += int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
+            v -= ls;
+            break;
+          case fltk3::HomeKey:
+            v = int(minimum());
+            break;
+          case fltk3::EndKey:
+            v = int(maximum());
+            break;
+          default:
+            return 0;
+        }
+      }
+      v = int(clamp(v));
+      if (v != value()) {
+        Slider::value(v);
+        value_damage();
+        set_changed();
+        do_callback();
+      }
+      return 1;}
   }
   return 0;
 }
 
-void fltk3::Scrollbar::draw() {
+
+void fltk3::Scrollbar::draw() 
+{
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  int X = x()+fltk3::box_dx(box());
-  int Y = y()+fltk3::box_dy(box());
+  int X = fltk3::box_dx(box());
+  int Y = fltk3::box_dy(box());
   int W = w()-fltk3::box_dw(box());
   int H = h()-fltk3::box_dh(box());
   if (horizontal()) {
@@ -266,12 +275,15 @@ void fltk3::Scrollbar::draw() {
   }
 }
 
+
 /**
-  Creates a new fltk3::Scrollbar widget with given position, size, and label.
-  You need to do type(fltk3::HORIZONTAL) if you want a horizontal scrollbar.
-*/
+ Creates a new fltk3::Scrollbar widget with given position, size, and label.
+ You need to do type(fltk3::HORIZONTAL) if you want a horizontal scrollbar.
+ */
 fltk3::Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
-  : fltk3::Slider(X, Y, W, H, L) {
+: fltk3::Slider(X, Y, W, H, L) 
+{
+  set_group_relative();
   box(fltk3::FLAT_BOX);
   color(fltk3::DARK2);
   slider(fltk3::UP_BOX);
@@ -280,8 +292,10 @@ fltk3::Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
   step(1);
 }
 
+
 /**  Destroys the Scrollbar. */
-fltk3::Scrollbar::~Scrollbar() {
+fltk3::Scrollbar::~Scrollbar() 
+{
   if (pushed_)
     fltk3::remove_timeout(timeout_cb, this);
 }

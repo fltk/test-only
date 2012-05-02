@@ -3,7 +3,7 @@
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -396,11 +396,12 @@ void fltk3::ScrollGroup::scrollbar_cb(fltk3::Widget* o, void*) {
   that it is destroyed last.
 */
 fltk3::ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
-  : fltk3::Group(X,Y,W,H,L), 
-    scrollbar(X+W-fltk3::scrollbar_size(),Y,
-              fltk3::scrollbar_size(),H-fltk3::scrollbar_size()),
-    hscrollbar(X,Y+H-fltk3::scrollbar_size(),
-               W-fltk3::scrollbar_size(),fltk3::scrollbar_size()) {
+: fltk3::Group(X,Y,W,H,L), 
+  scrollbar(X+W-fltk3::scrollbar_size(),Y,
+            fltk3::scrollbar_size(),H-fltk3::scrollbar_size()),
+  hscrollbar(X,Y+H-fltk3::scrollbar_size(),
+             W-fltk3::scrollbar_size(),fltk3::scrollbar_size()) 
+{
   type(BOTH);
   xposition_ = oldx = 0;
   yposition_ = oldy = 0;

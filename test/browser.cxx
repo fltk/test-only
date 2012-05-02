@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
   if (!fltk3::args(argc,argv,i)) fltk3::fatal(fltk3::help);
   const char* fname = (i < argc) ? argv[i] : "browser.cxx";
   fltk3::DoubleWindow window(480,400,fname);
-  browser = new fltk3::SelectBrowser(0,0,480,350,0);
+  browser = new fltk3::SelectBrowser(10,10,460,330,0);
   browser->type(fltk3::MULTI_BROWSER);
   //browser->type(fltk3::HOLD_BROWSER);
   //browser->color(42);
@@ -152,7 +152,8 @@ int main(int argc, char **argv) {
       strcpy(buf, argv[0]);
       char *slash = strrchr(buf, '/');
       if (slash)
-        strcpy(slash, "/../Resources/browser.cxx");
+        //strcpy(slash, "/../Resources/browser.cxx");
+        strcpy(buf, "/Users/matt/dev/fltk-3.0.0/test/browser.cxx");
       done = browser->load(buf);
     }
 #endif

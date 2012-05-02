@@ -78,10 +78,14 @@ static void hscrollbar_callback(fltk3::Widget* s, void*) {
 void fltk3::Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
-  X = x()+fltk3::box_dx(b);
-  Y = y()+fltk3::box_dy(b);
+  X = fltk3::box_dx(b);
+  Y = fltk3::box_dy(b);
   W = w()-fltk3::box_dw(b);
   H = h()-fltk3::box_dh(b);
+  if (is_window_relative()) {
+    X += x();
+    Y += y();
+  }
   if (scrollbar.visible()) {
     W -= scrollsize;
     if (scrollbar.align() & fltk3::ALIGN_LEFT) X += scrollsize;
@@ -342,10 +346,15 @@ void fltk3::Browser_::draw() {
   int full_height_ = full_height();
   int X, Y, W, H; bbox(X, Y, W, H);
   int dont_repeat = 0;
+  int xo = 0, yo = 0;
+  if (is_window_relative()) {
+    xo += x();
+    yo += y();
+  }
 J1:
   if (damage() & fltk3::DAMAGE_ALL) { // redraw the box if full redraw
     fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
-    draw_box(b, x(), y(), w(), h(), color());
+    draw_box(b, xo, yo, w(), h(), color());
     drawsquare = 1;
   }
   // see if scrollbar needs to be switched on/off:
@@ -413,7 +422,7 @@ J1:
 	fltk3::rectf(X, yy+Y, W, hh);
       } else if (!(damage()&fltk3::DAMAGE_ALL)) {
 	fltk3::push_clip(X, yy+Y, W, hh);
-	draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
+	draw_box(box() ? box() : fltk3::DOWN_BOX, xo, yo, w(), h(), color());
 	fltk3::pop_clip();
       }
       item_draw(l, X-hposition_, yy+Y, W+hposition_, hh);
@@ -429,7 +438,7 @@ J1:
   // erase the area below last line:
   if (!(damage()&fltk3::DAMAGE_ALL) && yy < H) {
     fltk3::push_clip(X, yy+Y, W, H-yy);
-    draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
+    draw_box(box() ? box() : fltk3::DOWN_BOX, xo, yo, w(), h(), color());
     fltk3::pop_clip();
   }
   fltk3::pop_clip();
@@ -959,9 +968,10 @@ int fltk3::Browser_::handle(int event) {
  */
 fltk3::Browser_::Browser_(int X, int Y, int W, int H, const char* L)
 : fltk3::Group(X, Y, W, H, L),
-scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
-hscrollbar(0, 0, 0, 0, 0)
+  scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
+  hscrollbar(0, 0, 0, 0, 0)
 {
+  set_group_relative();
   box(fltk3::NO_BOX);
   align(fltk3::ALIGN_BOTTOM);
   position_ = real_position_ = 0;
