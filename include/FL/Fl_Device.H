@@ -43,6 +43,9 @@ typedef fltk3::Region Fl_Region;
 namespace fltk3 { 
     
 class GraphicsDriverWrapper : public fltk3::Wrapper {
+protected:
+  enum {LINE, LOOP, POLYGON, POINT_};
+  int what;
 public:
   virtual ~GraphicsDriverWrapper() {}
   
@@ -110,10 +113,23 @@ FLTK3_DRIVER_WRAPPER(text_extents(const char* str, int n, int& dx, int& dy, int&
 FLTK3_DRIVER_WRAPPER(arc(double x, double y, double r, double start, double end), arc(x,y,r,start,end))
 FLTK3_DRIVER_WRAPPER(arc(int x, int y, int w, int h, double a1, double a2), arc(x,y,w,h,a1,a2))
 FLTK3_DRIVER_WRAPPER(begin_complex_polygon(), begin_complex_polygon())
-FLTK3_DRIVER_WRAPPER(begin_line(), begin_line())
-FLTK3_DRIVER_WRAPPER(begin_loop(), begin_loop())
-FLTK3_DRIVER_WRAPPER(begin_points(), begin_points())
-FLTK3_DRIVER_WRAPPER(begin_polygon(), begin_polygon())
+  virtual void begin_line() { 
+    ((fltk3::GraphicsDriver*)_p)->begin_line(); 
+    what = LINE;
+  }
+  virtual void begin_loop() { 
+    ((fltk3::GraphicsDriver*)_p)->begin_loop(); 
+    what = LOOP;
+  }
+  virtual void begin_points() { 
+    ((fltk3::GraphicsDriver*)_p)->begin_points(); 
+    what = POINT_;
+  }
+  virtual void begin_polygon() { 
+    ((fltk3::GraphicsDriver*)_p)->begin_polygon(); 
+    what = POLYGON;
+  }
+  
 FLTK3_DRIVER_WRAPPER(circle(double x, double y, double r), circle(x, y, r))
 FLTK3_DRIVER_WRAPPER(copy_offscreen (int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy),
 		     copy_offscreen(x,y,w,h,(fltk3::Offscreen)pixmap,srcx,srcy))
@@ -136,9 +152,7 @@ FLTK3_DRIVER_WRAPPER(transformed_vertex (double xf, double yf), transformed_vert
 FLTK3_DRIVER_WRAPPER(vertex (double xf, double yf), vertex ( xf, yf))
 
 };
-  
-#define pVCallGraphicsDriver pVCallImageCopyWH
-#define pVCallGraphicsDrawImage pVCallImageColorAverage
+
 
 class GraphicsDriver_I : public GraphicsDriver { 
 public: 
@@ -294,7 +308,16 @@ void proto { \
   FLTK3_DRIVER_VF(curve (double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3),
 		       curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3))
   FLTK3_DRIVER_VF(end_complex_polygon(), end_complex_polygon())
-  FLTK3_DRIVER_VF(end_line(), end_line())
+
+  void end_line() { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsEndLine) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsEndLine; 
+      ((GraphicsDriverWrapper*)pWrapper)->end_line(); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsEndLine; 
+    } 
+    else GraphicsDriver::end_line(); 
+  } 
+  
   FLTK3_DRIVER_VF(end_loop(), end_loop())
   FLTK3_DRIVER_VF(end_points(), end_points())
   FLTK3_DRIVER_VF(end_polygon(), end_polygon())
@@ -322,6 +345,21 @@ public:
     _p = new fltk3::GraphicsDriver_I();
     _p->wrapper(this);
     fl_matrix = (matrix*)((fltk3::GraphicsDriver*)_p)->fl_matrix;
+  }
+  int vertex_no() { 
+    return ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::vertex_no(); 
+  }
+  XPOINT *vertices() { 
+    return ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::vertices(); 
+  }
+  int vertex_kind() {
+    return ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::vertex_kind(); 
+    }
+  void fixloop() {
+    ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::fixloop();
+    }
+  void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt) {
+    ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
   }
   Fl_Font font() { 
     return fltk3::_3to1_font( ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::font() );
@@ -368,17 +406,17 @@ public:
   void scale(double x) {
     ((fltk3::GraphicsDriver_I*)_p)->scale(x);
   }
-  void transform_dx(double x, double y) {
-    ((fltk3::GraphicsDriver_I*)_p)->transform_dx(x,y);
+  double transform_dx(double x, double y) {
+    return ((fltk3::GraphicsDriver_I*)_p)->transform_dx(x,y);
   }
-  void transform_dy(double x, double y) {
-    ((fltk3::GraphicsDriver_I*)_p)->transform_dy(x,y);
+  double transform_dy(double x, double y) {
+    return ((fltk3::GraphicsDriver_I*)_p)->transform_dy(x,y);
   }
-  void transform_x(double x, double y) {
-    ((fltk3::GraphicsDriver_I*)_p)->transform_x(x,y);
+  double transform_x(double x, double y) {
+    return ((fltk3::GraphicsDriver_I*)_p)->transform_x(x,y);
   }
-  void transform_y(double x, double y) {
-    ((fltk3::GraphicsDriver_I*)_p)->transform_y(x,y);
+  double transform_y(double x, double y) {
+    return ((fltk3::GraphicsDriver_I*)_p)->transform_y(x,y);
   }
   void translate(double x, double y) {
     ((fltk3::GraphicsDriver_I*)_p)->translate(x,y);
