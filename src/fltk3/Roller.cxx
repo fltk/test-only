@@ -36,68 +36,72 @@ int fltk3::Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? fltk3::event_x() : fltk3::event_y();
   switch (event) {
-  case fltk3::PUSH:
-    if (fltk3::visible_focus()) {
-      fltk3::focus(this);
-      redraw();
-    }
-    handle_push();
-    ipos = newpos;
-    return 1;
-  case fltk3::DRAG:
-    handle_drag(clamp(round(increment(previous_value(),newpos-ipos))));
-    return 1;
-  case fltk3::RELEASE:
-    handle_release();
-    return 1;
-  case fltk3::KEYBOARD :
-    switch (fltk3::event_key()) {
-      case fltk3::UpKey:
-        if (horizontal()) return 0;
-	handle_drag(clamp(increment(value(),-1)));
-	return 1;
-      case fltk3::DownKey:
-        if (horizontal()) return 0;
-	handle_drag(clamp(increment(value(),1)));
-	return 1;
-      case fltk3::LeftKey:
-        if (!horizontal()) return 0;
-	handle_drag(clamp(increment(value(),-1)));
-	return 1;
-      case fltk3::RightKey:
-        if (!horizontal()) return 0;
-	handle_drag(clamp(increment(value(),1)));
-	return 1;
-      default:
-        return 0;
-    }
-    // break not required because of switch...
-  case fltk3::FOCUS :
-  case fltk3::UNFOCUS :
-    if (fltk3::visible_focus()) {
-      redraw();
+    case fltk3::PUSH:
+      if (fltk3::visible_focus()) {
+        fltk3::focus(this);
+        redraw();
+      }
+      handle_push();
+      ipos = newpos;
       return 1;
-    } else return 0;
-  case fltk3::ENTER :
-  case fltk3::LEAVE :
-    return 1;
-  default:
-    return 0;
+    case fltk3::DRAG:
+      handle_drag(clamp(round(increment(previous_value(),newpos-ipos))));
+      return 1;
+    case fltk3::RELEASE:
+      handle_release();
+      return 1;
+    case fltk3::KEYBOARD :
+      switch (fltk3::event_key()) {
+        case fltk3::UpKey:
+          if (horizontal()) return 0;
+          handle_drag(clamp(increment(value(),-1)));
+          return 1;
+        case fltk3::DownKey:
+          if (horizontal()) return 0;
+          handle_drag(clamp(increment(value(),1)));
+          return 1;
+        case fltk3::LeftKey:
+          if (!horizontal()) return 0;
+          handle_drag(clamp(increment(value(),-1)));
+          return 1;
+        case fltk3::RightKey:
+          if (!horizontal()) return 0;
+          handle_drag(clamp(increment(value(),1)));
+          return 1;
+        default:
+          return 0;
+      }
+      // break not required because of switch...
+    case fltk3::FOCUS :
+    case fltk3::UNFOCUS :
+      if (fltk3::visible_focus()) {
+        redraw();
+        return 1;
+      } else return 0;
+    case fltk3::ENTER :
+    case fltk3::LEAVE :
+      return 1;
+    default:
+      return 0;
   }
 }
 
 void fltk3::Roller::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  int X = x()+fltk3::box_dx(box());
-  int Y = y()+fltk3::box_dy(box());
+  int X = fltk3::box_dx(box());
+  int Y = fltk3::box_dy(box());
   int W = w()-fltk3::box_dw(box())-1;
   int H = h()-fltk3::box_dh(box())-1;
+  if (is_window_relative()) {
+    X += x();
+    Y += y();
+  }
   if (W<=0 || H <=0) return;
   int offset = step() ? int(value()/step()) : 0;
   const double ARC = 1.5; // 1/2 the number of radians visible
   const double delta = .2; // radians per knurl
   if (horizontal()) { // horizontal one
-    // draw shaded ends of wheel:
+                      // draw shaded ends of wheel:
     int h1 = W/4+1; // distance from end that shading starts
     fltk3::color(color()); fltk3::rectf(X+h1,Y,W-2*h1,H);
     for (int i=0; h1; i++) {
@@ -131,7 +135,7 @@ void fltk3::Roller::draw() {
       fltk3::xyline(X+h1,Y+H,X);
     }
   } else { // vertical one
-    // draw shaded ends of wheel:
+           // draw shaded ends of wheel:
     int h1 = H/4+1; // distance from end that shading starts
     fltk3::color(color()); fltk3::rectf(X,Y+h1,W,H-2*h1);
     for (int i=0; h1; i++) {
@@ -165,17 +169,19 @@ void fltk3::Roller::draw() {
       fltk3::yxline(X+W,Y+h1,Y);
     }
   }
-
-  if (fltk3::focus() == this) draw_focus(fltk3::THIN_UP_FRAME, x(), y(), w(), h());
+  
+  if (fltk3::focus() == this) draw_focus(fltk3::THIN_UP_FRAME, 0, 0, w(), h());
 }
 
 /**
-  Creates a new fltk3::Roller widget using the given position,
-  size, and label string. The default boxtype is fltk3::NO_BOX.
-  <P>Inherited destructor destroys the valuator.
-*/
+ Creates a new fltk3::Roller widget using the given position,
+ size, and label string. The default boxtype is fltk3::NO_BOX.
+ <P>Inherited destructor destroys the valuator.
+ */
 fltk3::Roller::Roller(int X,int Y,int W,int H,const char* L)
-  : fltk3::Valuator(X,Y,W,H,L) {
+: fltk3::Valuator(X,Y,W,H,L) 
+{
+  set_group_relative();
   box(fltk3::UP_BOX);
   step(1,1000);
 }

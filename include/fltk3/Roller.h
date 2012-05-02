@@ -43,10 +43,10 @@ namespace fltk3 {
    \image latex fltk3::Roller.png "fltk3::Roller" width=4cm
    */
   class FLTK3_EXPORT Roller : public fltk3::Valuator {
-
+    
   protected:
     void draw();
-
+    
   public:
     int handle(int);
     Roller(int X,int Y,int W,int H,const char* L=0);
