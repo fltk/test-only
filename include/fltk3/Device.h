@@ -58,6 +58,7 @@ typedef short COORD_T;
 
 
 extern void gl_start();
+class Fl_Graphics_Driver;
 
 class Fl_Font_Descriptor;
 class Fl_Surface_Device;
@@ -91,6 +92,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT GraphicsDriver : public Object {
     friend void ::gl_start();
+    friend class ::Fl_Graphics_Driver;
   public:
     /** A 2D coordinate transformation matrix
      */
@@ -113,12 +115,13 @@ namespace fltk3 {
     enum { region_stack_max = REGION_STACK_SIZE - 1 };
     fltk3::Region rstack[REGION_STACK_SIZE];
     Fl_Font_Descriptor *font_descriptor_;
-  protected:
-#ifndef FLTK3_DOXYGEN
     int n, p_size, gap_;
     XPOINT *p;
-    enum {LINE, LOOP, POLYGON, POINT_};
     int what;
+  protected:
+#ifndef FLTK3_DOXYGEN
+    enum {LINE, LOOP, POLYGON, POINT_};
+    inline int vertex_kind() {return what;}
     int fl_clip_state_number;
     void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt);
     void fixloop();
@@ -130,11 +133,11 @@ namespace fltk3 {
     
     matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
     /** Gives the number of vertices in the current path.
-     Useful when writing Fl_Graphics_Driver subclasses.
+     Useful when writing fltk3::GraphicsDriver subclasses.
      */
     int vertex_no() { return n; }
     /** Array of vertices in the current path.
-     Useful when writing Fl_Graphics_Driver subclasses. XPOINT is a system-dependent type.
+     Useful when writing fltk3::GraphicsDriver subclasses. XPOINT is a system-dependent type.
      */
     XPOINT *vertices() { return p; }
     
