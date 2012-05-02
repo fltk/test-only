@@ -29,7 +29,16 @@
 #include <fltk3/ReturnButton.h>
 #include <fltk3/draw.h>
 
-int fl_return_arrow(int x, int y, int w, int h) {
+
+fltk3::ReturnButton::ReturnButton(int X, int Y, int W, int H,const char *l)
+: Button(X,Y,W,H,l) 
+{
+  set_group_relative();
+}
+
+
+int fl_return_arrow(int x, int y, int w, int h) 
+{
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
   int t = (size+9)/12; if (t<1) t = 1;
@@ -47,18 +56,22 @@ int fl_return_arrow(int x, int y, int w, int h) {
   return 1;
 }
 
-void fltk3::ReturnButton::draw() {
+
+void fltk3::ReturnButton::draw() 
+{
   if (type() == fltk3::HIDDEN_BUTTON) return;
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(),
 	   value() ? selection_color() : color());
   int W = h();
   if (w()/3 < W) W = w()/3;
-  fl_return_arrow(x()+w()-W-4, y(), W, h());
-  draw_label(x(), y(), w()-W+4, h());
+  fl_return_arrow(w()-W-4, 0, W, h());
+  draw_label(0, 0, w()-W+4, h());
   if (fltk3::focus() == this) draw_focus();
 }
 
-int fltk3::ReturnButton::handle(int event) {
+
+int fltk3::ReturnButton::handle(int event) 
+{
   if (event == fltk3::SHORTCUT &&
       (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KPEnterKey)) {
     simulate_key_action();

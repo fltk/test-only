@@ -43,7 +43,7 @@ namespace fltk3 {
    \image latex fltk3::ReturnButton.png "fltk3::ReturnButton" width=4cm
    */
   class FLTK3_EXPORT ReturnButton : public Button {
-
+    
   protected:
     void draw();
     
@@ -54,8 +54,8 @@ namespace fltk3 {
      position, size, and label string. The default boxtype is fltk3::UP_BOX.
      <P> The inherited destructor deletes the button.
      */
-    ReturnButton(int X, int Y, int W, int H,const char *l=0)
-    : Button(X,Y,W,H,l) {}
+    ReturnButton(int X, int Y, int W, int H,const char *l=0);
+    
   };
   
 }

@@ -466,9 +466,18 @@ void fltk3::Widget::draw_backdrop() const {
       ((fltk3::Image*)img)->draw(x_+(w_-img->w())/2, y_+(h_-img->h())/2);
   }
 }
-/** Draws a box of type t, of color c at the widget's position and size. */
-void fltk3::Widget::draw_box(fltk3::Boxtype t, fltk3::Color c) const {
-  draw_box(t, x_, y_, w_, h_, c);
+
+
+/** 
+ Draws a box of type t, of color c at the widget's position and size. 
+ */
+void fltk3::Widget::draw_box(fltk3::Boxtype t, fltk3::Color c) const 
+{
+  if (is_group_relative()) {
+    draw_box(t, 0, 0, w_, h_, c);
+  } else {
+    draw_box(t, x_, y_, w_, h_, c);
+  }
 }
 /** Draws a box of type t, of color c at the position X,Y and size W,H. */
 void fltk3::Widget::draw_box(fltk3::Boxtype t, int X, int Y, int W, int H, fltk3::Color c) const {

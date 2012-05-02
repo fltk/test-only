@@ -49,6 +49,7 @@ namespace fltk3 {
   class Window;
   class Label;
   class Image;
+  class Rectangle;
   
 // Keep avoiding having the socket deps at that level but make sure it will work in both 32 & 64 bit builds
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -696,7 +697,7 @@ namespace fltk3 {
   int compose(int &del);
   void compose_reset();
   int event_inside(int,int,int,int);
-  int event_inside(const fltk3::Widget*);
+  int event_inside(const fltk3::Rectangle*);
   int test_shortcut(fltk3::Shortcut);
   
   // event destinations:

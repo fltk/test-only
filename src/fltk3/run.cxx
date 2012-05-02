@@ -214,7 +214,7 @@ int fltk3::event_inside(int xx,int yy,int ww,int hh) /*const*/ {
     \param[in] o	child widget to be tested
     \return		non-zero, if mouse event is inside the widget
 */
-int fltk3::event_inside(const fltk3::Widget *o) /*const*/ {
+int fltk3::event_inside(const fltk3::Rectangle *o) /*const*/ {
   int mx = e_x - o->x();
   int my = e_y - o->y();
   return (mx >= 0 && mx < o->w() && my >= 0 && my < o->h());
