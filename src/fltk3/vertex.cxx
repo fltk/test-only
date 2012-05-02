@@ -351,7 +351,7 @@ void fltk3::QuartzGraphicsDriver::circle(double x, double y, double r) {
   // Last argument must be 0 (counter-clockwise) or it draws nothing under __LP64__ !!!!
   CGContextSetShouldAntialias(fl_gc, true);
   CGContextAddArc(fl_gc, xt, yt, (w+h)*0.25f, 0, 2.0f*M_PI, 0);
-  (what == POLYGON ? CGContextFillPath : CGContextStrokePath)(fl_gc);
+  (vertex_kind() == POLYGON ? CGContextFillPath : CGContextStrokePath)(fl_gc);
   CGContextSetShouldAntialias(fl_gc, false);
 }
 #elif defined(WIN32)
@@ -359,7 +359,7 @@ void fltk3::GDIGraphicsDriver::circle(double x, double y, double r) {
   int llx, lly, w, h;
   double xt, yt;
   prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
-  if (what==POLYGON) {
+  if (vertex_kind()==POLYGON) {
     SelectObject(fl_gc, fl_brush());
     Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
   } else
@@ -370,7 +370,7 @@ void fltk3::XlibGraphicsDriver::circle(double x, double y, double r) {
   int llx, lly, w, h;
   double xt, yt;
   prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
-  (what == POLYGON ? XFillArc : XDrawArc)
+  (vertex_kind() == POLYGON ? XFillArc : XDrawArc)
   (fl_display, fl_window, fl_gc, llx, lly, w, h, 0, 360*64);
 }
 #endif
