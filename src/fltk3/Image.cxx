@@ -500,7 +500,7 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int
     CGDataProviderRelease(src);
   }
   if (img->id_ && fl_gc) {
-    CGRect rect = { { X, Y }, { W, H } };
+    CGRect rect = { { X+origin_x(), Y+origin_y() }, { W, H } };
     Fl_X::q_begin_image(rect, cx, cy, img->w(), img->h());
     CGContextDrawImage(fl_gc, rect, (CGImageRef)img->id_);
     Fl_X::q_end_image();

@@ -65,11 +65,12 @@ public:
   Pens(int X, int Y, int W, int H, const char* L)
   : fltk3::Box(X,Y,W,H,L) {}
 };
+
 void Pens::draw() {
   // use every color in the gray ramp:
   for (int i = 0; i < 3*8; i++) {
     fltk3::color((fltk3::Color)(fltk3::GRAY_RAMP+i));
-    fltk3::line(x()+i, y(), x()+i, y()+h());
+    fltk3::line(i, 0, i, h());
   }
 }
 
