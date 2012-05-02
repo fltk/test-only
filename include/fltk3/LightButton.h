@@ -48,11 +48,17 @@ namespace fltk3 {
    \image latex fltk3::LightButton.png "fltk3::LightButton" width=4cm
    */
   class FLTK3_EXPORT LightButton : public Button {
+    
   protected:
+    
     virtual void draw();
+    
   public:
+    
     virtual int handle(int);
+    
     LightButton(int x,int y,int w,int h,const char *l = 0);
+    
   };
   
 }

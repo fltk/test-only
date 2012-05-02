@@ -43,20 +43,27 @@ namespace fltk3 {
    and depends on the implementation.
    */
   class FLTK3_EXPORT RepeatButton : public Button {
+    
+  private:
+    
     static void repeat_callback(void *);
+    
   public:
+    
     int handle(int);
+    
     /**
      Creates a new fltk3::RepeatButton widget using the given
      position, size, and label string. The default boxtype is fltk3::UP_BOX.
      Deletes the button.
      */
-    RepeatButton(int X,int Y,int W,int H,const char *l=0)
-    : Button(X,Y,W,H,l) {}
+    RepeatButton(int X,int Y,int W,int H,const char *l=0);
+
     void deactivate() {
       remove_timeout(repeat_callback,this);
       Button::deactivate();
     }
+    
   };
   
 }

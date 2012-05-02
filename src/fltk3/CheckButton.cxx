@@ -40,7 +40,9 @@
   \param[in] L widget label, default is no label
  */
 fltk3::CheckButton::CheckButton(int X, int Y, int W, int H, const char *L)
-: fltk3::LightButton(X, Y, W, H, L) {
+: fltk3::LightButton(X, Y, W, H, L) 
+{
+  set_group_relative();
   box(fltk3::NO_BOX);
   down_box(fltk3::DOWN_BOX);
   selection_color(fltk3::FOREGROUND_COLOR);

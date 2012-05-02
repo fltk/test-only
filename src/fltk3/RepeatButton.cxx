@@ -31,13 +31,23 @@
 #define INITIALREPEAT .5
 #define REPEAT .1
 
-void fltk3::RepeatButton::repeat_callback(void *v) {
+
+fltk3::RepeatButton::RepeatButton(int X,int Y,int W,int H,const char *l)
+: Button(X,Y,W,H,l) 
+{
+}
+
+
+void fltk3::RepeatButton::repeat_callback(void *v) 
+{
   fltk3::Button *b = (fltk3::Button*)v;
   fltk3::add_timeout(REPEAT,repeat_callback,b);
   b->do_callback();
 }
 
-int fltk3::RepeatButton::handle(int event) {
+
+int fltk3::RepeatButton::handle(int event) 
+{
   int newval;
   switch (event) {
   case fltk3::HIDE:
@@ -47,7 +57,7 @@ int fltk3::RepeatButton::handle(int event) {
   case fltk3::PUSH:
   case fltk3::DRAG:
     if (fltk3::visible_focus()) fltk3::focus(this);
-    newval = fltk3::event_inside(this);
+    newval = fltk3::event_inside(0, 0, w(), h());
   J1:
     if (!active()) 
       newval = 0;
@@ -64,6 +74,7 @@ int fltk3::RepeatButton::handle(int event) {
     return Button::handle(event);
   }
 }
+
 
 //
 // End of "$Id$".

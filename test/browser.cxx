@@ -152,8 +152,7 @@ int main(int argc, char **argv) {
       strcpy(buf, argv[0]);
       char *slash = strrchr(buf, '/');
       if (slash)
-        //strcpy(slash, "/../Resources/browser.cxx");
-        strcpy(buf, "/Users/matt/dev/fltk-3.0.0/test/browser.cxx");
+        strcpy(slash, "/../Resources/browser.cxx");
       done = browser->load(buf);
     }
 #endif

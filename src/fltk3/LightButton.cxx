@@ -37,7 +37,9 @@
 #include <fltk3/draw.h>
 #include "flstring.h"
 
-void fltk3::LightButton::draw() {
+
+void fltk3::LightButton::draw() 
+{
   fltk3::Color col;
   if (this==fltk3::pushed()) {
     col = fltk3::color_average(fltk3::BLACK, color(), 0.2f);
@@ -46,15 +48,15 @@ void fltk3::LightButton::draw() {
   }
   if (box()) draw_box(this==fltk3::pushed() ? fltk3::down(box()) : box(), col);
   col = value() ? (active_r() ? selection_color() :
-                            fltk3::inactive(selection_color())) : color();
+                   fltk3::inactive(selection_color())) : color();
   int W;
   int dx, dy;
-
+  
   W  = labelsize();
   dx = fltk3::box_dx(box()) + 2;
   dy = (h() - W) / 2;
   // if (dy < 0) dy = 0;         // neg. offset o.k. for vertical centering
-
+  
   if (down_box()) {
     // draw other down_box() styles:
     switch (down_box()) {
@@ -63,18 +65,18 @@ void fltk3::LightButton::draw() {
       case fltk3::PLASTIC_DOWN_BOX :
       case fltk3::PLASTIC_UP_BOX :
         // Check box...
-        draw_box(down_box(), x()+dx, y()+dy, W, W, fltk3::BACKGROUND2_COLOR);
+        draw_box(down_box(), dx, dy, W, W, fltk3::BACKGROUND2_COLOR);
 	if (value()) {
 	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	  } else {
 	    fltk3::color(col);
 	  }
-	  int tx = x() + dx + 3;
+	  int tx = dx + 3;
 	  int tw = W - 6;
 	  int d1 = tw/3;
 	  int d2 = tw-d1;
-	  int ty = y() + dy + (W+d2)/2-d1-2;
+	  int ty = dy + (W+d2)/2-d1-2;
 	  for (int n = 0; n < 3; n++, ty++) {
 	    fltk3::line(tx, ty, tx+d1, ty+d1);
 	    fltk3::line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
@@ -84,55 +86,57 @@ void fltk3::LightButton::draw() {
       case fltk3::ROUND_DOWN_BOX :
       case fltk3::ROUND_UP_BOX :
         // Radio button...
-        draw_box(down_box(), x()+dx, y()+dy, W, W, fltk3::BACKGROUND2_COLOR);
+        draw_box(down_box(), dx, dy, W, W, fltk3::BACKGROUND2_COLOR);
 	if (value()) {
 	  int tW = (W - fltk3::box_dw(down_box())) / 2 + 1;
 	  if ((W - tW) & 1) tW++; // Make sure difference is even to center
 	  int tdx = dx + (W - tW) / 2;
 	  int tdy = dy + (W - tW) / 2;
-
+          
 	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
-	    fltk3::pie(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fltk3::arc(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fltk3::pie(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fltk3::arc(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
 	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
-	  } else fltk3::color(col);
-
+	  } else {
+            fltk3::color(col);
+          }
+          
 	  switch (tW) {
-	    // Larger circles draw fine...
+              // Larger circles draw fine...
 	    default :
-              fltk3::pie(x() + tdx, y() + tdy, tW, tW, 0.0, 360.0);
+              fltk3::pie(tdx, tdy, tW, tW, 0.0, 360.0);
 	      break;
-
-            // Small circles don't draw well on many systems...
+              
+              // Small circles don't draw well on many systems...
 	    case 6 :
-	      fltk3::rectf(x() + tdx + 2, y() + tdy, tW - 4, tW);
-	      fltk3::rectf(x() + tdx + 1, y() + tdy + 1, tW - 2, tW - 2);
-	      fltk3::rectf(x() + tdx, y() + tdy + 2, tW, tW - 4);
+	      fltk3::rectf(tdx + 2, tdy, tW - 4, tW);
+	      fltk3::rectf(tdx + 1, tdy + 1, tW - 2, tW - 2);
+	      fltk3::rectf(tdx, tdy + 2, tW, tW - 4);
 	      break;
-
+              
 	    case 5 :
 	    case 4 :
 	    case 3 :
-	      fltk3::rectf(x() + tdx + 1, y() + tdy, tW - 2, tW);
-	      fltk3::rectf(x() + tdx, y() + tdy + 1, tW, tW - 2);
+	      fltk3::rectf(tdx + 1, tdy, tW - 2, tW);
+	      fltk3::rectf(tdx, tdy + 1, tW, tW - 2);
 	      break;
-
+              
 	    case 2 :
 	    case 1 :
-	      fltk3::rectf(x() + tdx, y() + tdy, tW, tW);
+	      fltk3::rectf(tdx, tdy, tW, tW);
 	      break;
 	  }
-
+          
 	  if (!fltk3::scheme()) {
 	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
-	    fltk3::arc(x() + tdx, y() + tdy, tW + 1, tW + 1, 60.0, 180.0);
+	    fltk3::arc(tdx, tdy, tW + 1, tW + 1, 60.0, 180.0);
 	  }
 	}
         break;
       default :
-        draw_box(down_box(), x()+dx, y()+dy, W, W, col);
+        draw_box(down_box(), dx, dy, W, W, col);
         break;
     }
   } else {
@@ -144,36 +148,42 @@ void fltk3::LightButton::draw() {
     if (fltk3::scheme() && !strcmp(fltk3::scheme(), "plastic")) {
       col = active_r() ? selection_color() : fltk3::inactive(selection_color());
       fltk3::color(value() ? col : fltk3::color_average(col, fltk3::BLACK, 0.5f));
-      fltk3::pie(x()+xx, y()+dy+1, ww, hh, 0, 360);
+      fltk3::pie(xx, dy+1, ww, hh, 0, 360);
     } else {
-      draw_box(fltk3::THIN_DOWN_BOX, x()+xx, y()+dy+1, ww, hh, col);
+      draw_box(fltk3::THIN_DOWN_BOX, xx, dy+1, ww, hh, col);
     }
     dx = (ww + 2 * dx - W) / 2;
   }
-  draw_label(x()+W+2*dx, y(), w()-W-2*dx, h());
+  draw_label(W+2*dx, 0, w()-W-2*dx, h());
   if (fltk3::focus() == this) draw_focus();
 }
 
-int fltk3::LightButton::handle(int event) {
+
+int fltk3::LightButton::handle(int event) 
+{
   switch (event) {
-  case fltk3::RELEASE:
-    if (box()) redraw();
-  default:
-    return Button::handle(event);
+    case fltk3::RELEASE:
+      if (box()) redraw();
+    default:
+      return Button::handle(event);
   }
 }
 
+
 /**
-  Creates a new fltk3::LightButton widget using the given
-  position, size, and label string.
-  <P>The destructor deletes the check button.
-*/
+ Creates a new fltk3::LightButton widget using the given
+ position, size, and label string.
+ <P>The destructor deletes the check button.
+ */
 fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
-: fltk3::Button(X, Y, W, H, l) {
+: fltk3::Button(X, Y, W, H, l) 
+{
+  set_group_relative();
   type(fltk3::TOGGLE_BUTTON);
   selection_color(fltk3::YELLOW);
   align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE);
 }
+
 
 //
 // End of "$Id$".

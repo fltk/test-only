@@ -55,6 +55,7 @@ namespace fltk3 {
     
   public:
     CheckButton(int X, int Y, int W, int H, const char *L = 0);
+    
   };
   
 } // namespace
