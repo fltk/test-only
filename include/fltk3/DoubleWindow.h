@@ -65,17 +65,18 @@ namespace fltk3 {
     void resize(int,int,int,int);
     void hide();
     ~DoubleWindow();
+    
     /**
      Creates a new fltk3::DoubleWindow widget using the given
      position, size, and label (title) string.
      */
-    DoubleWindow(int W, int H, const char *l = 0) 
-    : fltk3::Window(W,H,l), force_doublebuffering_(0) { type(DOUBLE_WINDOW); }
+    DoubleWindow(int W, int H, const char *l = 0);
+    
     /**
      See  fltk3::DoubleWindow::DoubleWindow(int w, int h, const char *label = 0)
      */
-    DoubleWindow(int X, int Y, int W, int H, const char *l = 0)
-    : fltk3::Window(X,Y,W,H,l), force_doublebuffering_(0) { type(DOUBLE_WINDOW); }
+    DoubleWindow(int X, int Y, int W, int H, const char *l = 0);
+    
   };
   
 } // namespace

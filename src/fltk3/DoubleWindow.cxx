@@ -65,6 +65,24 @@ static int can_xdbe() {
 }
 #endif
 
+
+fltk3::DoubleWindow::DoubleWindow(int W, int H, const char *l) 
+: fltk3::Window(W,H,l), 
+  force_doublebuffering_(0) 
+{
+  set_group_relative();
+  type(DOUBLE_WINDOW); 
+}
+
+
+fltk3::DoubleWindow::DoubleWindow(int X, int Y, int W, int H, const char *l)
+: fltk3::Window(X,Y,W,H,l), 
+  force_doublebuffering_(0) 
+{ 
+  type(DOUBLE_WINDOW); 
+}
+
+
 void fltk3::DoubleWindow::show() {
   Window::show();
 }
