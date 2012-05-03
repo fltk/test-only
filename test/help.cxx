@@ -65,21 +65,19 @@ main(int  argc,			// I - Number of command-line arguments
 {
   fltk3::HelpDialog	*help;		// Help dialog
 
-
   help = new fltk3::HelpDialog;
 
   int argn = 1;
   
 #ifdef USING_XCODE
   
-  if (argc>argn && strncmp(argv[1], "-psn_", 5)==0)
-    argn++;
   set_app_dir();
   
-  if (argc <= argn)
-    help->load("../../../../documentation/html/intro.html");
-  else
-    help->load(argv[argn]);
+  //if (argc <= argn)
+    help->load("/Users/matt/mygcc/gcc-4.6.1/INSTALL/index.html");
+  //help->load("../../../../documentation/html/intro.html");
+  //else
+  //help->load(argv[argn]);
   
 #else
   

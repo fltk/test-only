@@ -461,18 +461,18 @@ fltk3::HelpView::draw()
   hh = h();
   i  = 0;
 
-  draw_box(b, x(), y(), ww, hh, bgcolor_);
+  draw_box(b, 0, 0, ww, hh, bgcolor_);
 
   if ( hscrollbar_.visible() || scrollbar_.visible() ) {
     int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
     int hor_vis = hscrollbar_.visible();
     int ver_vis = scrollbar_.visible();
     // Scrollbar corner
-    int scorn_x = x() + ww - (ver_vis?scrollsize:0) - fltk3::box_dw(b) + fltk3::box_dx(b);
-    int scorn_y = y() + hh - (hor_vis?scrollsize:0) - fltk3::box_dh(b) + fltk3::box_dy(b);
+    int scorn_x = ww - (ver_vis?scrollsize:0) - fltk3::box_dw(b) + fltk3::box_dx(b);
+    int scorn_y = hh - (hor_vis?scrollsize:0) - fltk3::box_dh(b) + fltk3::box_dy(b);
     if ( hor_vis ) {
       if ( hscrollbar_.h() != scrollsize ) {		// scrollsize changed?
-	hscrollbar_.resize(x(), scorn_y, scorn_x - x(), scrollsize);
+	hscrollbar_.resize(0, scorn_y, scorn_x, scrollsize);
 	init_sizes();
       }
       draw_child(hscrollbar_);
@@ -480,7 +480,7 @@ fltk3::HelpView::draw()
     }
     if ( ver_vis ) {
       if ( scrollbar_.w() != scrollsize ) {		// scrollsize changed?
-	scrollbar_.resize(scorn_x, y(), scrollsize, scorn_y - y());
+	scrollbar_.resize(scorn_x, 0, scrollsize, scorn_y);
 	init_sizes();
       }
       draw_child(scrollbar_);
@@ -503,7 +503,7 @@ fltk3::HelpView::draw()
   current_pos = 0;
 
   // Clip the drawing to the inside of the box...
-  fltk3::push_clip(x() + fltk3::box_dx(b), y() + fltk3::box_dy(b),
+  fltk3::push_clip(fltk3::box_dx(b), fltk3::box_dy(b),
                ww - fltk3::box_dw(b), hh - fltk3::box_dh(b));
   fltk3::color(textcolor_);
 
@@ -545,11 +545,11 @@ fltk3::HelpView::draw()
 	      hh = 0;
 	    }
 
-            hv_draw(buf, xx + x() - leftline_, yy + y());
+            hv_draw(buf, xx - leftline_, yy);
 	    if (underline) {
               xtra_ww = isspace((*ptr)&255)?(int)fltk3::width(' '):0;
-              fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
-	                xx + x() - leftline_ + ww + xtra_ww);
+              fltk3::xyline(xx - leftline_, yy + 1,
+	                xx - leftline_ + ww + xtra_ww);
             }
             current_pos = (int)(ptr - value_);
 
@@ -568,9 +568,9 @@ fltk3::HelpView::draw()
 	        *s = '\0';
                 s = buf;
 
-                hv_draw(buf, xx + x() - leftline_, yy + y());
-		if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
-	                        	 xx + x() - leftline_ +
+                hv_draw(buf, xx - leftline_, yy);
+		if (underline) fltk3::xyline(xx - leftline_, yy + 1,
+	                        	 xx - leftline_ +
 					     (int)fltk3::width(buf));
 
                 current_pos = (int)(ptr - value_);
@@ -600,10 +600,10 @@ fltk3::HelpView::draw()
 	      *s = '\0';
 	      s = buf;
 
-              hv_draw(buf, xx + x() - leftline_, yy + y());
+              hv_draw(buf, xx - leftline_, yy);
 	      ww = (int)fltk3::width(buf);
-	      if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
-	                               xx + x() - leftline_ + ww);
+	      if (underline) fltk3::xyline(xx - leftline_, yy + 1,
+	                               xx - leftline_ + ww);
               xx += ww;
               current_pos = (int)(ptr - value_);
 	    }
@@ -667,8 +667,7 @@ fltk3::HelpView::draw()
 	  }
 	  else if (strcasecmp(buf, "HR") == 0)
 	  {
-	    fltk3::line(block->x + x(), yy + y(), block->w + x(),
-	            yy + y());
+	    fltk3::line(block->x, yy, block->w, yy);
 
 	    if (line < 31)
 	      line ++;
@@ -717,7 +716,7 @@ fltk3::HelpView::draw()
 //            buf[fl_unicode2utf(b, 1, buf)] = 0;
               unsigned dstlen = fltk3::utf8fromwc(buf, 8, b, 1);
               buf[dstlen] = 0;
-              hv_draw(buf, xx - fsize + x() - leftline_, yy + y());
+              hv_draw(buf, xx - fsize - leftline_, yy);
 	    }
 
 	    pushfont(font, fsize);
@@ -798,9 +797,6 @@ fltk3::HelpView::draw()
 	      th += ty;
 	      ty  = 0;
 	    }
-
-            tx += x();
-	    ty += y();
 
             if (block->bgcolor != bgcolor_)
 	    {
@@ -884,8 +880,8 @@ fltk3::HelpView::draw()
 	    }
 
 	    if (img) {
-	      img->draw(xx + x() - leftline_,
-	                yy + y() - fltk3::height() + fltk3::descent() + 2);
+	      img->draw(xx - leftline_,
+	                yy - fltk3::height() + fltk3::descent() + 2);
 	    }
 
 	    xx += ww;
@@ -900,7 +896,7 @@ fltk3::HelpView::draw()
 	  *s = '\0';
 	  s = buf;
 
-          hv_draw(buf, xx + x() - leftline_, yy + y());
+          hv_draw(buf, xx - leftline_, yy);
 
 	  if (line < 31)
 	    line ++;
@@ -979,9 +975,9 @@ fltk3::HelpView::draw()
 
       if (s > buf && !head)
       {
-        hv_draw(buf, xx + x() - leftline_, yy + y());
-	if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
-	                         xx + x() - leftline_ + ww);
+        hv_draw(buf, xx - leftline_, yy);
+	if (underline) fltk3::xyline(xx - leftline_, yy + 1,
+	                         xx - leftline_ + ww);
         current_pos = (int)(ptr - value_);
       }
     }
@@ -1837,13 +1833,13 @@ void fltk3::HelpView::format() {
 
     if (size_ < (h() - dh)) {
       scrollbar_.hide();
-      hscrollbar_.resize(x() + fltk3::box_dx(b), y() + h() - ss - dy,
+      hscrollbar_.resize(fltk3::box_dx(b), h() - ss - dy,
                          w() - fltk3::box_dw(b), ss);
     } else {
       scrollbar_.show();
-      scrollbar_.resize(x() + w() - ss - dx, y() + fltk3::box_dy(b),
+      scrollbar_.resize(w() - ss - dx, fltk3::box_dy(b),
                         ss, h() - ss - fltk3::box_dh(b));
-      hscrollbar_.resize(x() + fltk3::box_dx(b), y() + h() - ss - dy,
+      hscrollbar_.resize(fltk3::box_dx(b), h() - ss - dy,
                          w() - ss - fltk3::box_dw(b), ss);
     }
   } else {
@@ -1851,7 +1847,7 @@ void fltk3::HelpView::format() {
 
     if (size_ < (h() - dh)) scrollbar_.hide();
     else {
-      scrollbar_.resize(x() + w() - ss - dx, y() + fltk3::box_dy(b),
+      scrollbar_.resize(w() - ss - dx, fltk3::box_dy(b),
                         ss, h() - fltk3::box_dh(b));
       scrollbar_.show();
     }
@@ -2946,8 +2942,8 @@ fltk3::HelpView::handle(int event)	// I - Event to handle
 {
   static fltk3::HelpLink *linkp;   // currently clicked link
 
-  int xx = fltk3::event_x() - x() + leftline_;
-  int yy = fltk3::event_y() - y() + topline_;
+  int xx = fltk3::event_x()+ leftline_;
+  int yy = fltk3::event_y()+ topline_;
 
   switch (event)
   {
@@ -3039,6 +3035,8 @@ fltk3::HelpView::HelpView(int        xx,	// I - Left position
       hscrollbar_(xx, yy + hh - fltk3::scrollbar_size(),
                   ww - fltk3::scrollbar_size(), fltk3::scrollbar_size())
 {
+  set_group_relative();
+  
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
 
   title_[0]     = '\0';
@@ -3242,10 +3240,10 @@ fltk3::HelpView::resize(int xx,	// I - New left position
   Widget::resize(xx, yy, ww, hh);
 
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
-  scrollbar_.resize(x() + w() - scrollsize - fltk3::box_dw(b) + fltk3::box_dx(b),
-                    y() + fltk3::box_dy(b), scrollsize, h() - scrollsize - fltk3::box_dh(b));
-  hscrollbar_.resize(x() + fltk3::box_dx(b),
-                     y() + h() - scrollsize - fltk3::box_dh(b) + fltk3::box_dy(b),
+  scrollbar_.resize(w() - scrollsize - fltk3::box_dw(b) + fltk3::box_dx(b),
+                    fltk3::box_dy(b), scrollsize, h() - scrollsize - fltk3::box_dh(b));
+  hscrollbar_.resize(fltk3::box_dx(b),
+                     h() - scrollsize - fltk3::box_dh(b) + fltk3::box_dy(b),
                      w() - scrollsize - fltk3::box_dw(b), scrollsize);
 
   format();
