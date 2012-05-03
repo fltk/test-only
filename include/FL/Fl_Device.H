@@ -79,7 +79,9 @@ virtual void proto { \
   }
 FLTK3_DRIVER_WRAPPER(font(Fl_Font f, Fl_Fontsize s), font(_1to3_font(f), _1to3_fontsize(s)))
 FLTK3_DRIVER_WRAPPER(draw(const char* str, int l, int x, int y), draw(str, l, x, y))
+#ifdef __APPLE__
 FLTK3_DRIVER_WRAPPER(draw(const char* str, int l, float fx, float fy), draw(str, l, fx, fy))
+#endif
 FLTK3_DRIVER_WRAPPER(draw(int angle, const char* str, int l, int x, int y), draw(angle, str, l, x, y))
 FLTK3_DRIVER_WRAPPER(line(int x, int y, int x1, int y1), line(x, y, x1, y1))
 FLTK3_DRIVER_WRAPPER(rect(int x, int y, int w, int h), rect(x, y, w, h))
@@ -244,7 +246,9 @@ void proto { \
   else GraphicsDriver::call; \
 } 
   FLTK3_DRIVER_VF(draw(const char* str, int l, int x, int y), draw(str, l, x, y))
+#ifdef __APPLE__
   FLTK3_DRIVER_VF(draw(const char* str, int l, float fx, float fy), draw(str, l, fx, fy))
+#endif
   FLTK3_DRIVER_VF(draw(int angle, const char* str, int l, int x, int y), draw(angle, str, l, x, y))
   FLTK3_DRIVER_VF(line(int x, int y, int x1, int y1), line(x, y, x1, y1))
   FLTK3_DRIVER_VF(rect(int x, int y, int w, int h), rect(x, y, w, h))

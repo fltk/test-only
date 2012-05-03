@@ -93,6 +93,7 @@ namespace fltk3 {
   class FLTK3_EXPORT GraphicsDriver : public Object {
     friend void ::gl_start();
     friend class ::Fl_Graphics_Driver;
+    friend class GDIGraphicsDriver;
   public:
     /** A 2D coordinate transformation matrix
      */
