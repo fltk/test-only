@@ -33,7 +33,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Table.H>
-#include <FL/fl_ask.h>
+#include <FL/fl_ask.H>
 #include "Fl_Widget_Type.h"
 #include "../src/fltk3/flstring.h"
 

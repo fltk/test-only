@@ -26,7 +26,7 @@
 //
 
 #include <FL/Fl.H>
-#include <FL/fl_ask.h>
+#include <FL/fl_ask.H>
 #include <FL/Fl_Preferences.H>
 #include <FL/Fl_File_Chooser.H>
 #include "Fl_Type.h"
