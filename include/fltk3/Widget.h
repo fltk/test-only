@@ -788,7 +788,7 @@ namespace fltk3 {
     void set_window_relative() { flags_ &= ~GROUP_RELATIVE; }
     int is_window_relative() const { return ((flags_&GROUP_RELATIVE)==0); }
     
-    /** Use a local coordinte system for this group.
+    /** Use a local coordinate system for this group.
      \see window_relative()
      */
     void set_group_relative() { flags_ |= GROUP_RELATIVE; }
@@ -1038,8 +1038,8 @@ namespace fltk3 {
     void color2(unsigned a) {color2_ = a;}    
     
     /** Choose a coding style for this widget.
-     FLTK 1 coding style uses a Window-relative coordinte system.
-     FLTK 2 and 3 use a Group-relative coordinte system.
+     FLTK 1 coding style uses a Window-relative coordinate system.
+     FLTK 2 and 3 use a Group-relative coordinate system.
      More details will be implemented later.
      */
     void coding_style(int s);
