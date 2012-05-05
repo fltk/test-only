@@ -356,13 +356,14 @@ fltk3::Label::label(const char *a) {
 
 void
 fltk3::Label::copy_label(const char *a) {
-  if (flags() & COPIED_LABEL) free((void *)(labeltext_));
+  // reassigning a copied label remains the same copied label
+  if ((flags() & COPIED_LABEL) && (labeltext_ == a))
+    return;
   if (a) {
+    label(strdup(a));
     set_flag(COPIED_LABEL);
-    labeltext_ = strdup(a);
   } else {
-    clear_flag(COPIED_LABEL);
-    labeltext_ = (char *)0;
+    label(0);
   }
   redraw_label();
 }

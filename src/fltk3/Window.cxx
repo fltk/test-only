@@ -152,13 +152,8 @@ void fltk3::Window::label(const char *name) {
 }
 
 void fltk3::Window::copy_label(const char *a) {
-  if (flags() & COPIED_LABEL) {
-    free((void *)label());
-    clear_flag(COPIED_LABEL);
-  }
-  if (a) a = strdup(a);
+  fltk3::Label::copy_label(a);
   label(a, iconlabel());
-  set_flag(COPIED_LABEL);
 }
 
 
