@@ -86,7 +86,7 @@ namespace fltk3 {
   
 }
 
-#  if defined(WIN32) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
+#  if defined(WIN32) && !defined(__MINGW32__) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
 
 struct dirent {char d_name[1];};
 
