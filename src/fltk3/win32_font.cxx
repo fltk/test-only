@@ -396,7 +396,7 @@ void fltk3::GDIGraphicsDriver::draw(const char* str, int n, int x, int y) {
     wstr_len = wn + 1;
     wn = fltk3::utf8toUtf16(str, n, wstr, wstr_len);
   }
-  TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
+  TextOutW(fl_gc, x+origin_x(), y+origin_y(), (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor); // restore initial state
 }
 
@@ -411,7 +411,7 @@ void fltk3::GDIGraphicsDriver::draw(int angle, const char* str, int n, int x, in
     wstr_len = wn + 1;
     wn = fltk3::utf8toUtf16(str, n, wstr, wstr_len); // respin the translation
   }
-  TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
+  TextOutW(fl_gc, x+origin_x(), y+origin_y(), (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor);
   ::set_font(this, GraphicsDriver::font(), size(), 0);
 }
@@ -427,6 +427,8 @@ void fltk3::GDIGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {
 
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, font_descriptor()->fid);
+  x += origin_x();
+  y += origin_y();
 #ifdef RTL_CHAR_BY_CHAR
   int i = 0;
   int lx = 0;

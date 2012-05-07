@@ -336,7 +336,7 @@ void fltk3::GDIGraphicsDriver::draw_bitmap(fltk3::Bitmap *bm, int XP, int YP, in
     fl_end_offscreen(); // offscreen data is in tmp_id
     SelectObject(tempdc, (HGDIOBJ)tmp_id); // use offscreen data
     // draw it to printer context with background color as transparent
-    fl_TransparentBlt(fl_gc, X,Y,W,H, tempdc, cx, cy, bm->w(), bm->h(), RGB(r, g, b) ); 
+    fl_TransparentBlt(fl_gc, X+origin_x(),Y+origin_y(),W,H, tempdc, cx, cy, bm->w(), bm->h(), RGB(r, g, b) ); 
     fl_delete_offscreen(tmp_id);
   }
   else { // algorithm for bitmap output to display
@@ -345,7 +345,7 @@ void fltk3::GDIGraphicsDriver::draw_bitmap(fltk3::Bitmap *bm, int XP, int YP, in
     SelectObject(tempdc, (HGDIOBJ)bm->id_);
     SelectObject(fl_gc, fl_brush());
     // secret bitblt code found in old MSWindows reference manual:
-    BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
+    BitBlt(fl_gc, X+origin_x(), Y+origin_y(), W, H, tempdc, cx, cy, 0xE20746L);
   }
   RestoreDC(tempdc, save);
   DeleteDC(tempdc);

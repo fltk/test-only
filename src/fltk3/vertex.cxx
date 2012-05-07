@@ -361,9 +361,9 @@ void fltk3::GDIGraphicsDriver::circle(double x, double y, double r) {
   prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
   if (vertex_kind()==POLYGON) {
     SelectObject(fl_gc, fl_brush());
-    Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
+    Pie(fl_gc, llx+origin_x(), lly+origin_y(), llx+w, lly+h, 0,0, 0,0); 
   } else
-    Arc(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
+    Arc(fl_gc, llx+origin_x(), lly+origin_y(), llx+w, lly+h, 0,0, 0,0); 
 }
 #else
 void fltk3::XlibGraphicsDriver::circle(double x, double y, double r) {

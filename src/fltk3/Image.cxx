@@ -537,15 +537,15 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP
     HDC new_gc = CreateCompatibleDC(fl_gc);
     int save = SaveDC(new_gc);
     SelectObject(new_gc, (void*)img->mask_);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
+    BitBlt(fl_gc, X+origin_x(), Y+origin_y(), W, H, new_gc, cx, cy, SRCAND);
     SelectObject(new_gc, (void*)img->id_);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
+    BitBlt(fl_gc, X+origin_x(), Y+origin_y(), W, H, new_gc, cx, cy, SRCPAINT);
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else if (img->d()==2 || img->d()==4) {
-    copy_offscreen_with_alpha(X, Y, W, H, (fltk3::Offscreen)img->id_, cx, cy);
+    copy_offscreen_with_alpha(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)img->id_, cx, cy);
   } else {
-    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)img->id_, cx, cy);
+    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)img->id_, cx, cy);
   }
 }
 

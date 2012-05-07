@@ -156,13 +156,13 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
     HDC new_gc = CreateCompatibleDC(fl_gc);
     int save = SaveDC(new_gc);
     SelectObject(new_gc, (void*)pxm->mask_);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
+    BitBlt(fl_gc, X+origin_x(), Y+origin_y(), W, H, new_gc, cx, cy, SRCAND);
     SelectObject(new_gc, (void*)pxm->id_);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
+    BitBlt(fl_gc, X+origin_x(), Y+origin_y(), W, H, new_gc, cx, cy, SRCPAINT);
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else {
-    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
   }
 }
 
@@ -181,12 +181,12 @@ void fltk3::GDIPrinterGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, i
     int save = SaveDC(new_gc);
     SelectObject(new_gc, (void*)pxm->id_);
     // print all of offscreen but its parts in background color
-    fl_TransparentBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, pxm->w(), pxm->h(), pxm->pixmap_bg_color );
+    fl_TransparentBlt(fl_gc, X+origin_x(), Y+origin_y(), W, H, new_gc, cx, cy, pxm->w(), pxm->h(), pxm->pixmap_bg_color );
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   }
   else {
-    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
   }
 }
 
