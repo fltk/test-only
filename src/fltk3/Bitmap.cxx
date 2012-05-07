@@ -368,7 +368,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, 
   int oy = Y-cy; if (oy < 0) oy += bm->h();
   XSetTSOrigin(fl_display, fl_gc, ox, oy);
   XSetFillStyle(fl_display, fl_gc, FillStippled);
-  XFillRectangle(fl_display, fl_window, fl_gc, X, Y, W, H);
+  XFillRectangle(fl_display, fl_window, fl_gc, X+origin_x(), Y+origin_y(), W, H);
   XSetFillStyle(fl_display, fl_gc, FillSolid);
 }
 #endif
