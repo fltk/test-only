@@ -642,7 +642,7 @@ void fltk3::XlibGraphicsDriver::point(int x, int y) {
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
 // MSWindows equivalent exists, implemented inline in win32.h
 fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
-  x += fltk3::origin_x(); y += fltk3::origin_y();
+  //x += fltk3::origin_x(); y += fltk3::origin_y();
   XRectangle R;
   clip_to_short(x, y, w, h);
   R.x = x; R.y = y; R.width = w; R.height = h;
@@ -846,10 +846,11 @@ int fltk3::QuartzGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, in
 }
 #elif defined(WIN32)
 int fltk3::GDIGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
-  x += origin_x(); y += origin_y();
   X = x; Y = y; W = w; H = h;
   fltk3::Region r = clip_region();
   if (!r) return 0;
+  x += origin_x(); y += origin_y();
+  X = x; Y = y;
   // The win32 API makes no distinction between partial and complete
   // intersection, so we have to check for partial intersection ourselves.
   // However, given that the regions may be composite, we have to do
@@ -882,8 +883,8 @@ int fltk3::GDIGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& 
 }
 #else
 int fltk3::XlibGraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
-  x += origin_x(); y += origin_y();
   X = x; Y = y; W = w; H = h;
+  x += origin_x(); y += origin_y();
   fltk3::Region r = clip_region();
   if (!r) return 0;
   switch (XRectInRegion(r, x, y, w, h)) {

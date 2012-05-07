@@ -357,7 +357,7 @@ int fltk3::draw_pixmap(const char*const* cdata, int x, int y, fltk3::Color bg) {
       }
     }
     fltk3::RGBImage* rgb = new fltk3::RGBImage((uchar*)array, d.w, d.h, 4);
-    rgb->draw(x, y);
+    rgb->draw(x - origin_x(), y - origin_y());
     delete rgb;
     delete[] array;
     }

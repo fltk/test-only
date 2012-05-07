@@ -371,7 +371,7 @@ void fltk3::XlibGraphicsDriver::circle(double x, double y, double r) {
   double xt, yt;
   prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
   (vertex_kind() == POLYGON ? XFillArc : XDrawArc)
-  (fl_display, fl_window, fl_gc, llx, lly, w, h, 0, 360*64);
+  (fl_display, fl_window, fl_gc, llx+origin_x(), lly+origin_y(), w, h, 0, 360*64);
 }
 #endif
 //

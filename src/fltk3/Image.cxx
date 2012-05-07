@@ -582,7 +582,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int W
       XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
     }
     
-    copy_offscreen(X, Y, W, H, img->id_, cx, cy);
+    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, img->id_, cx, cy);
     
     if (img->mask_) {
       // put the old clip region back
@@ -591,7 +591,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int W
     }
   } else {
     // Composite image with alpha manually each time...
-    alpha_blend(img, X, Y, W, H, cx, cy);
+    alpha_blend(img, X+origin_x(), Y+origin_y(), W, H, cx, cy);
   }
 }
 

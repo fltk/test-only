@@ -614,6 +614,8 @@ void fltk3::XlibGraphicsDriver::draw(const char *str, int n, int x, int y) {
   color.color.alpha = 0xffff;
   
   const wchar_t *buffer = utf8reformat(str, n);
+  x += origin_x();
+  y += origin_y();
 #ifdef __CYGWIN__
   XftDrawString16(draw_, &color, font_descriptor()->font, x, y, (XftChar16 *)buffer, n);
 #else

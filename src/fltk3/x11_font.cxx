@@ -323,7 +323,7 @@ void fltk3::XlibGraphicsDriver::draw(const char* c, int n, int x, int y) {
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, font_descriptor()->font->fid);
   }
-  if (fl_gc) XUtf8DrawString(fl_display, fl_window, font_descriptor()->font, fl_gc, x, y, c, n);
+  if (fl_gc) XUtf8DrawString(fl_display, fl_window, font_descriptor()->font, fl_gc, x+origin_x(), y+origin_y(), c, n);
 }
 
 void fltk3::XlibGraphicsDriver::draw(int angle, const char *str, int n, int x, int y) {
