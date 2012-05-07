@@ -92,10 +92,6 @@ void fltk3::Roller::draw() {
   int Y = fltk3::box_dy(box());
   int W = w()-fltk3::box_dw(box())-1;
   int H = h()-fltk3::box_dh(box())-1;
-  if (is_window_relative()) {
-    X += x();
-    Y += y();
-  }
   if (W<=0 || H <=0) return;
   int offset = step() ? int(value()/step()) : 0;
   const double ARC = 1.5; // 1/2 the number of radians visible
@@ -181,7 +177,6 @@ void fltk3::Roller::draw() {
 fltk3::Roller::Roller(int X,int Y,int W,int H,const char* L)
 : fltk3::Valuator(X,Y,W,H,L) 
 {
-  set_group_relative();
   box(fltk3::UP_BOX);
   step(1,1000);
 }

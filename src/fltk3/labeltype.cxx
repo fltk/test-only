@@ -125,11 +125,7 @@ void fltk3::Label::measure(int& W, int& H) const {
  */
 void fltk3::Widget::draw_label() const {
   int wx, wy;
-  if (is_group_relative()) {
-    wx = wy = 0;
-  } else {
-    wx = x_; wy = y_;
-  }
+  wx = wy = 0;
   int X = wx+fltk3::box_dx(box());
   int W = w_-fltk3::box_dw(box());
   if (W > 11 && align()&(fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT)) {X += 3; W -= 6;}

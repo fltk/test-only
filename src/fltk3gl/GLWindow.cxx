@@ -395,7 +395,7 @@ void fltk3::GLWindow::flush() {
 
       } else {
 	damage1_ = damage();
-	clear_damage(0xff); draw();
+	set_damage(0xff); draw();
 	swap_buffers();
       }
 

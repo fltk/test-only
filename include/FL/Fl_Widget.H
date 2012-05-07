@@ -544,7 +544,7 @@ public:
   }
     
   void clear_damage(uchar c = 0) {
-    ((fltk3::Widget_I*)_p)->clear_damage();
+    ((fltk3::Widget_I*)_p)->set_damage(c);
   }
   
   void damage(uchar c) {

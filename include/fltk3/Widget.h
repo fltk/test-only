@@ -363,7 +363,6 @@ namespace fltk3 {
       TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (fltk3::Window)
       MODAL           = 1<<14,  ///< a window blocking input to all other winows (fltk3::Window)
       NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (fltk3::MenuWindow)
-      GROUP_RELATIVE  = 1<<16,  ///< position this widget relative to the parent group, not to the window
       COPIED_TOOLTIP  = 1<<17,  ///< the widget tooltip is internally copied, its destruction is handled by the widget
       FULLSCREEN      = 1<<18,  ///< a fullscreen window (Fl_Window)
                                 // (space for more flags)
@@ -441,6 +440,8 @@ namespace fltk3 {
      */
     virtual int handle(int event);
     
+    int send(int event);
+
     /** Returns a pointer to the parent widget.  
      Usually this is a fltk3::Group or fltk3::Window. 
      \retval NULL if the widget has no parent
@@ -782,18 +783,6 @@ namespace fltk3 {
      */
     void clear_output() {flags_ &= ~OUTPUT;}
     
-    /** Makes the coordinate system of this group relative to the enclosing window. 
-     \see group_relative()
-     */
-    void set_window_relative() { flags_ &= ~GROUP_RELATIVE; }
-    int is_window_relative() const { return ((flags_&GROUP_RELATIVE)==0); }
-    
-    /** Use a local coordinate system for this group.
-     \see window_relative()
-     */
-    void set_group_relative() { flags_ |= GROUP_RELATIVE; }
-    int is_group_relative() const { return ((flags_&GROUP_RELATIVE)==GROUP_RELATIVE); }
-    
     /** Returns if the widget is able to take events.
      This is the same as (active() && !output() && visible())
      but is faster.
@@ -929,23 +918,26 @@ namespace fltk3 {
      The damage value is actually a bit field that the widget 
      subclass can use to figure out what parts to draw.
      \return a bitmap of flags describing the kind of damage to the widget
-     \see damage(uchar), clear_damage(uchar)
+     \see damage(uchar), clear_damage(), set_damage(uchar)
      */
     fltk3::Damage damage() const {return (fltk3::Damage)damage_;}
     
-    /** Clears or sets the damage flags.
+    /** Clears all damage flags.
      Damage flags are cleared when parts of the widget drawing is repaired.
      
-     The optional argument \p c specifies the bits that <b>are set</b>
-     after the call (default: 0) and \b not the bits that are cleared!
+     \see damage(uchar), damage(), set_damage(uchar)
+     */
+    void clear_damage() {damage_ = 0;}
+        
+    /** Sets the damage flags.
      
-     \note Therefore it is possible to set damage bits with this method, but
-     this should be avoided. Use damage(uchar) instead.
+     The argument \p c specifies the bits that are set
+     after the call. This call will not schedule the wiget for redraw!
      
      \param[in] c new bitmask of damage flags (default: 0)
      \see damage(uchar), damage()
      */
-    void clear_damage(uchar c = 0) {damage_ = c;}
+    void set_damage(uchar c = 0) {damage_ = c;}
     
     /** Sets the damage bits for the widget.
      Setting damage bits will schedule the widget for the next redraw.
@@ -975,6 +967,9 @@ namespace fltk3 {
      (if any), not <I>this</I> window.
      */
     fltk3::Window* window() const ;
+    
+    int dx_window();
+    int dy_window();
     
     /** Returns an fltk3::Group pointer if this widget is an fltk3::Group.
      

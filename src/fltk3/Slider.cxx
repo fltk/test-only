@@ -50,7 +50,6 @@ void fltk3::Slider::_Slider() {
  */
 fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
 : fltk3::Valuator(X, Y, W, H, L) {
-  set_group_relative(); // FIXME: 
   box(fltk3::DOWN_BOX);
   _Slider();
 }
@@ -66,7 +65,6 @@ fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
  */
 fltk3::Slider::Slider(uchar t, int X, int Y, int W, int H, const char* L)
 : fltk3::Valuator(X, Y, W, H, L) {
-  set_group_relative(); // FIXME: 
   type(t);
   box(t==fltk3::HOR_NICE_SLIDER || t==fltk3::VERT_NICE_SLIDER ?
       fltk3::FLAT_BOX : fltk3::DOWN_BOX);
@@ -391,14 +389,12 @@ int fltk3::Slider::handle(int event) {
 fltk3::HorSlider::HorSlider(int X,int Y,int W,int H,const char *l)
 : fltk3::Slider(X,Y,W,H,l) 
 {
-  set_group_relative(); // FIXME: 
   type(fltk3::HOR_SLIDER);
 }
 
 
 fltk3::HorValueSlider::HorValueSlider(int X,int Y,int W,int H,const char *l)
 : fltk3::ValueSlider(X,Y,W,H,l) {
-  set_group_relative(); // FIXME: 
   type(fltk3::HOR_SLIDER);
 }
 

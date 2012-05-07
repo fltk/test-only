@@ -283,7 +283,6 @@ void fltk3::Scrollbar::draw()
 fltk3::Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 : fltk3::Slider(X, Y, W, H, L) 
 {
-  set_group_relative();
   box(fltk3::FLAT_BOX);
   color(fltk3::DARK2);
   slider(fltk3::UP_BOX);

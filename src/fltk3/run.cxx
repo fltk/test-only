@@ -181,7 +181,7 @@ void fltk3::scrollbar_size(int W) {
     \param[in] xx,yy,ww,hh	bounding box
     \return			non-zero, if mouse event is inside
 */
-int fltk3::event_inside(int xx,int yy,int ww,int hh) /*const*/ {
+int fltk3::event_inside(int xx,int yy,int ww,int hh) {
   int mx = e_x - xx;
   int my = e_y - yy;
   return (mx >= 0 && mx < ww && my >= 0 && my < hh);
@@ -214,10 +214,8 @@ int fltk3::event_inside(int xx,int yy,int ww,int hh) /*const*/ {
     \param[in] o	child widget to be tested
     \return		non-zero, if mouse event is inside the widget
 */
-int fltk3::event_inside(const fltk3::Rectangle *o) /*const*/ {
-  int mx = e_x - o->x();
-  int my = e_y - o->y();
-  return (mx >= 0 && mx < o->w() && my >= 0 && my < o->h());
+int fltk3::event_inside(const fltk3::Rectangle *r) {
+  return r->contains(e_x, e_y);
 }
 
 //
@@ -1029,33 +1027,6 @@ void fl_throw_focus(fltk3::Widget *o) {
 
 ////////////////////////////////////////////////////////////////
 
-// Call to->handle(), but first replace the mouse x/y with the correct
-// values to account for nested windows. 'window' is the outermost
-// window the event was posted to by the system:
-static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
-  int dx, dy;
-  int old_event = fltk3::e_number;
-  if (window) {
-    dx = window->x();
-    dy = window->y();
-  } else {
-    dx = dy = 0;
-  }
-  for (const fltk3::Widget* w = to; w; w = w->parent()) {
-    if ( (w->type()>=fltk3::WINDOW) || (w->is_group_relative())) {
-      dx -= w->x(); dy -= w->y();
-    }
-  }
-  int save_x = fltk3::e_x; fltk3::e_x += dx;
-  int save_y = fltk3::e_y; fltk3::e_y += dy;
-  int ret = to->handle(fltk3::e_number = event);
-  fltk3::e_number = old_event;
-  fltk3::e_y = save_y;
-  fltk3::e_x = save_x;
-  return ret;
-}
-
-
 /**
  \brief Set a new event dispatch function.
 
@@ -1177,7 +1148,7 @@ int fltk3::handle_(int e, fltk3::Window* window)
     else if (modal() && wi != modal()) return 0;
     pushed_ = wi;
     fltk3::Tooltip::current(wi);
-    if (send(e, wi, window)) return 1;
+    if (wi->send(e)) return 1;
     // raise windows that are clicked on:
     window->show();
     return 1;
@@ -1221,11 +1192,11 @@ int fltk3::handle_(int e, fltk3::Window* window)
 	  fltk3::event_y_root() >= tooltip->y() && fltk3::event_y_root() < tooltip->y() + tooltip->h() );
 	}
 	// if inside, send event to tooltip window instead of background window
-	if (inside) ret = send(e, tooltip, window);
-	else ret = (wi && send(e, wi, window));
+	if (inside) ret = tooltip->send(e);
+	else ret = (wi && wi->send(e));
       } else
 #endif
-      ret = (wi && send(e, wi, window));
+      ret = (wi && wi->send(e));
    if (pbm != belowmouse()) {
 #ifdef DEBUG
       printf("fltk3::handle(e=%d, window=%p);\n", e, window);
@@ -1245,7 +1216,7 @@ int fltk3::handle_(int e, fltk3::Window* window)
       wi = pushed();
       pushed_ = 0; // must be zero before callback is done!
     } else if (modal() && wi != modal()) return 0;
-    int r = send(e, wi, window);
+    int r = wi->send(e);
     fl_fix_focus();
     return r;}
 
@@ -1267,7 +1238,7 @@ int fltk3::handle_(int e, fltk3::Window* window)
     // a KEYUP there. I believe that the current solution is
     // "close enough".
     for (wi = grab() ? grab() : focus(); wi; wi = wi->parent())
-      if (send(fltk3::KEYUP, wi, window)) return 1;
+      if (wi->send(fltk3::KEYUP)) return 1;
     return 0;
 
   case fltk3::KEYBOARD:
@@ -1281,7 +1252,7 @@ int fltk3::handle_(int e, fltk3::Window* window)
 
     // Try it as keystroke, sending it to focus and all parents:
     for (wi = grab() ? grab() : focus(); wi; wi = wi->parent())
-      if (send(fltk3::KEYBOARD, wi, window)) return 1;
+      if (wi->send(fltk3::KEYBOARD)) return 1;
 
     // recursive call to try shortcut:
     if (handle(fltk3::SHORTCUT, window)) return 1;
@@ -1302,11 +1273,11 @@ int fltk3::handle_(int e, fltk3::Window* window)
       wi = modal();
       if (!wi) wi = window;
     } else if (wi->window() != first_window()) {
-      if (send(fltk3::SHORTCUT, first_window(), first_window())) return 1;
+      if (first_window()->send(fltk3::SHORTCUT)) return 1;
     }
 
     for (; wi; wi = wi->parent()) {
-      if (send(fltk3::SHORTCUT, wi, wi->window())) return 1;
+      if (wi->send(fltk3::SHORTCUT)) return 1;
     }
 
     // try using add_handle() functions:
@@ -1348,19 +1319,19 @@ int fltk3::handle_(int e, fltk3::Window* window)
 
     // Try sending it to the "grab" first
     if (grab() && grab()!=modal() && grab()!=window) {
-      if (send(fltk3::MOUSEWHEEL, grab(), window)) return 1;
+      if (grab()->send(fltk3::MOUSEWHEEL)) return 1;
     }
     // Now try sending it to the "modal" window
     if (modal()) {
-      send(fltk3::MOUSEWHEEL, modal(), window);
+      modal()->send(fltk3::MOUSEWHEEL);
       return 1;
     }
     // Finally try sending it to the window, the event occured in
-    if (send(fltk3::MOUSEWHEEL, window, window)) return 1;
+    if (window->send(fltk3::MOUSEWHEEL)) return 1;
   default:
     break;
   }
-  if (wi && send(e, wi, window)) {
+  if (wi && wi->send(e)) {
     dnd_flag = 0;
     return 1;
   }
@@ -1639,11 +1610,7 @@ void fltk3::Widget::redraw_label() {
 void fltk3::Widget::damage(uchar fl) {
   if (type() < fltk3::WINDOW) {
     // damage only the rectangle covered by a child widget:
-    if (is_group_relative()) {
-      damage(fl, 0, 0, w(), h());
-    } else {
-      damage(fl, x(), y(), w(), h());
-    }
+    damage(fl, 0, 0, w(), h());
   } else {
     // damage entire window by deleting the region:
     Fl_X* i = Fl_X::i((fltk3::Window*)this);
@@ -1659,10 +1626,8 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   // mark all parent widgets between this and window with fltk3::DAMAGE_CHILD:
   while (wi->type() < fltk3::WINDOW) {
     wi->damage_ |= fl;
-    if (wi->is_group_relative()) {
-      X += wi->x();
-      Y += wi->y();
-    }
+    X += wi->x();
+    Y += wi->y();
     wi = wi->parent();
     if (!wi) return;
     fl = fltk3::DAMAGE_CHILD;

@@ -228,7 +228,6 @@ void fltk3::Button::key_release_timeout(void *d)
 fltk3::Button::Button(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X,Y,W,H,L) 
 {
-  set_group_relative(); // FIXME:
   box(fltk3::UP_BOX);
   down_box(fltk3::NO_BOX);
   value_ = oldval = 0;

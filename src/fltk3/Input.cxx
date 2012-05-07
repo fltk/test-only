@@ -54,13 +54,19 @@
 #endif
 
 
-void fltk3::Input::draw() {
-  if (input_type() == fltk3::HIDDEN_INPUT) return;
+void fltk3::Input::draw() 
+{
+  if (input_type() == fltk3::HIDDEN_INPUT) {
+    return;
+  }
   fltk3::Boxtype b = box();
-  if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
-  Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
-		      w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
+  if (damage() & fltk3::DAMAGE_ALL) {
+    draw_box(b, color());
+  }
+  Input_::drawtext(fltk3::box_dx(b), fltk3::box_dy(b),
+                   w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
+
 
 // kludge so shift causes selection to extend:
 int fltk3::Input::shift_position(int p) {
@@ -652,8 +658,8 @@ int fltk3::Input::handle(int event) {
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
         fltk3::Boxtype b = box();
-        Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
-                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
+        Input_::handle_mouse(fltk3::box_dx(b), fltk3::box_dy(b),
+                             w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
         newpos = position(); 
         position( oldpos, oldmark );
         if (fltk3::focus()==this && !fltk3::event_state(fltk3::SHIFT) && input_type()!=fltk3::SECRET_INPUT &&
@@ -729,8 +735,8 @@ int fltk3::Input::handle(int event) {
 #endif
       {
         fltk3::Boxtype b = box();
-        Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
-                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
+        Input_::handle_mouse(fltk3::box_dx(b), fltk3::box_dy(b),
+                             w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
       }
       return 1;
       
@@ -766,8 +772,8 @@ int fltk3::Input::handle(int event) {
   }
   fltk3::Boxtype b = box();
   return Input_::handletext(event,
-                               x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
-                               w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
+                            fltk3::box_dx(b), fltk3::box_dy(b),
+                            w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
 
 /**

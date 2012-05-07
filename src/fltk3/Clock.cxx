@@ -126,11 +126,7 @@ void fltk3::ClockOutput::draw(int X, int Y, int W, int H)
  */
 void fltk3::ClockOutput::draw() 
 {
-  if (is_group_relative()) {
-    draw(0, 0, w(), h());
-  } else {
-    draw(x(), y(), w(), h());
-  }
+  draw(0, 0, w(), h());
   draw_label();
 }
 
@@ -177,7 +173,6 @@ void fltk3::ClockOutput::value(ulong v)
 fltk3::ClockOutput::ClockOutput(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X, Y, W, H, L) 
 {
-  set_group_relative();
   box(fltk3::UP_BOX);
   selection_color(fltk3::gray_ramp(5));
   align(fltk3::ALIGN_BOTTOM);
@@ -200,7 +195,6 @@ fltk3::ClockOutput::ClockOutput(int X, int Y, int W, int H, const char *L)
 fltk3::Clock::Clock(int X, int Y, int W, int H, const char *L)
 : fltk3::ClockOutput(X, Y, W, H, L) 
 {
-  set_group_relative();
 }
 
 
@@ -214,7 +208,6 @@ fltk3::Clock::Clock(int X, int Y, int W, int H, const char *L)
 fltk3::Clock::Clock(uchar t, int X, int Y, int W, int H, const char *L)
 : fltk3::ClockOutput(X, Y, W, H, L) 
 {
-  set_group_relative();
   type(t);
   box(t==fltk3::ROUND_CLOCK ? fltk3::NO_BOX : fltk3::UP_BOX);
 }

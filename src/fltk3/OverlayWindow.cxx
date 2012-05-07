@@ -55,7 +55,7 @@ void fltk3::OverlayWindow::flush() {
   }
 #endif
   int erase_overlay = (damage()&fltk3::DAMAGE_OVERLAY) | (overlay_ == this);
-  clear_damage((uchar)(damage()&~fltk3::DAMAGE_OVERLAY));
+  set_damage((uchar)(damage()&~fltk3::DAMAGE_OVERLAY));
   DoubleWindow::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
 }
@@ -85,7 +85,7 @@ int fltk3::OverlayWindow::can_do_overlay() {return 0;}
 */
 void fltk3::OverlayWindow::redraw_overlay() {
   overlay_ = this;
-  clear_damage((uchar)(damage()|fltk3::DAMAGE_OVERLAY));
+  set_damage((uchar)(damage()|fltk3::DAMAGE_OVERLAY));
   fltk3::damage(fltk3::DAMAGE_CHILD);
 }
 

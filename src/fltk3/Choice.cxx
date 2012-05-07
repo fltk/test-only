@@ -40,8 +40,8 @@ void fltk3::Choice::draw() {
   int dy = fltk3::box_dy(fltk3::DOWN_BOX);
   int H = h() - 2 * dy;
   int W = (H > 20) ? 20 : H;
-  int X = x() + w() - W - dx;
-  int Y = y() + dy;
+  int X = w() - W - dx;
+  int Y = dy;
   int w1 = (W - 4) / 3; if (w1 < 1) w1 = 1;
   int x1 = X + (W - 2 * w1 - 1) / 2;
   int y1 = Y + (H - w1 - 1) / 2;
@@ -56,8 +56,8 @@ void fltk3::Choice::draw() {
       fltk3::polygon(x1, y1 + 1, x1 + w1, y1 - w1 + 1, x1 + 2 * w1, y1 + 1);
     } else {
       // Show smaller up/down arrows with a divider...
-      x1 = x() + w() - 13 - dx;
-      y1 = y() + h() / 2;
+      x1 = w() - 13 - dx;
+      y1 = h() / 2;
       fltk3::polygon(x1, y1 - 2, x1 + 3, y1 - 5, x1 + 6, y1 - 2);
       fltk3::polygon(x1, y1 + 2, x1 + 3, y1 + 5, x1 + 6, y1 + 2);
 
@@ -69,11 +69,11 @@ void fltk3::Choice::draw() {
     }
   } else {
     if (fltk3::contrast(textcolor(), fltk3::BACKGROUND2_COLOR) == textcolor()) {
-      draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), x(), y(), X-x(), h(), fltk3::BACKGROUND2_COLOR);
+      draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), 0, 0, X, h(), fltk3::BACKGROUND2_COLOR);
     } else {
-      draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), x(), y(), X-x(), h(), fltk3::lighter(color()));
+      draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), 0, 0, X, h(), fltk3::lighter(color()));
     }
-    draw_box(Boxtype(fltk3::UP_BOX|TIE_LEFT),X,y(),w()+x()-X,h(),color());
+    draw_box(Boxtype(fltk3::UP_BOX|TIE_LEFT),X,0,w()-X,h(),color());
 
     fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
     fltk3::polygon(x1, y1, x1 + w1, y1 + w1, x1 + 2 * w1, y1);
@@ -86,7 +86,7 @@ void fltk3::Choice::draw() {
     if (active_r()) m.activate(); else m.deactivate();
 
     // ERCO
-    int xx = x() + dx, yy = y() + dy + 1, ww = w() - W, hh = H - 2;
+    int xx = dx, yy = dy + 1, ww = w() - W, hh = H - 2;
 
     fltk3::push_clip(xx, yy, ww, hh);
 
@@ -128,7 +128,8 @@ void fltk3::Choice::draw() {
   \param[in] L widget label, default is no label
  */
 fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
-: fltk3::Menu_(X,Y,W,H,L) {
+: fltk3::Menu_(X,Y,W,H,L) 
+{
   align(fltk3::ALIGN_LEFT);
   when(fltk3::WHEN_RELEASE);
   textfont(fltk3::HELVETICA);
@@ -178,13 +179,13 @@ int fltk3::Choice::handle(int e) {
   J1:
     if (fltk3::scheme()
 	|| fltk3::contrast(textcolor(), fltk3::BACKGROUND2_COLOR) != textcolor()) {
-      v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
+      v = menu()->pulldown(dx_window(), dy_window(), w(), h(), mvalue(), this);
     } else {
       // In order to preserve the old look-n-feel of "white" menus,
       // temporarily override the color() of this widget...
       fltk3::Color c = color();
       color(fltk3::BACKGROUND2_COLOR);
-      v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
+      v = menu()->pulldown(dx_window(), dy_window(), w(), h(), mvalue(), this);
       color(c);
     }
     if (!v || v->submenu()) return 1;

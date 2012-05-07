@@ -100,7 +100,7 @@ extern fltk3::Widget* fl_oldfocus; // set by fltk3::focus
 // windows so they are relative to that window.
 
 static int send(fltk3::Widget* o, int event) {
-  if ( (o->type()<fltk3::WINDOW) && (o->is_window_relative()) ) {
+  if (o->type()<fltk3::WINDOW) {
     return o->handle(event);
   }
   switch ( event )
@@ -181,12 +181,12 @@ int fltk3::Group::handle(int event) {
   case fltk3::SHORTCUT:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
+      if (o->takesevents() && fltk3::event_inside(o) && o->send(fltk3::SHORTCUT))
 	return 1;
     }
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
+      if (o->takesevents() && !fltk3::event_inside(o) && o->send(fltk3::SHORTCUT))
 	return 1;
     }
     if ((fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KPEnterKey)) return navigation(fltk3::DownKey);
@@ -198,10 +198,10 @@ int fltk3::Group::handle(int event) {
       o = a[i];
       if (o->visible() && fltk3::event_inside(o)) {
 	if (o->contains(fltk3::belowmouse())) {
-	  return send(o,fltk3::MOVE);
+	  return o->send(fltk3::MOVE);
 	} else {
 	  fltk3::belowmouse(o);
-	  if (send(o,fltk3::ENTER)) return 1;
+	  if (o->send(fltk3::ENTER)) return 1;
 	}
       }
     }
@@ -214,8 +214,8 @@ int fltk3::Group::handle(int event) {
       o = a[i];
       if (o->takesevents() && fltk3::event_inside(o)) {
 	if (o->contains(fltk3::belowmouse())) {
-	  return send(o,fltk3::DND_DRAG);
-	} else if (send(o,fltk3::DND_ENTER)) {
+	  return o->send(fltk3::DND_DRAG);
+	} else if (o->send(fltk3::DND_ENTER)) {
 	  if (!o->contains(fltk3::belowmouse())) fltk3::belowmouse(o);
 	  return 1;
 	}
@@ -229,7 +229,7 @@ int fltk3::Group::handle(int event) {
       o = a[i];
       if (o->takesevents() && fltk3::event_inside(o)) {
 	fltk3::WidgetTracker wp(o);
-	if (send(o,fltk3::PUSH)) {
+	if (o->send(fltk3::PUSH)) {
 	  if (fltk3::pushed() && wp.exists() && !o->contains(fltk3::pushed())) fltk3::pushed(o);
 	  return 1;
 	}
@@ -241,12 +241,12 @@ int fltk3::Group::handle(int event) {
   case fltk3::DRAG:
     o = fltk3::pushed();
     if (o == this) return 0;
-    else if (o) send(o,event);
+    else if (o) o->send(event);
     else {
       for (i = children(); i--;) {
 	o = a[i];
 	if (o->takesevents() && fltk3::event_inside(o)) {
-	  if (send(o,event)) return 1;
+	  if (o->send(event)) return 1;
 	}
       }
     }
@@ -255,12 +255,12 @@ int fltk3::Group::handle(int event) {
   case fltk3::MOUSEWHEEL:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && fltk3::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
+      if (o->takesevents() && fltk3::event_inside(o) && o->send(fltk3::MOUSEWHEEL))
 	return 1;
     }
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
+      if (o->takesevents() && !fltk3::event_inside(o) && o->send(fltk3::MOUSEWHEEL))
 	return 1;
     }
     return 0;
@@ -297,7 +297,7 @@ int fltk3::Group::handle(int event) {
 
     if (children()) {
       for (int j = i;;) {
-        if (a[j]->takesevents()) if (send(a[j], event)) return 1;
+        if (a[j]->takesevents()) if (a[j]->send(event)) return 1;
         j++;
         if (j >= children()) j = 0;
         if (j == i) break;
@@ -723,10 +723,10 @@ void fltk3::Group::draw_children() {
   fltk3::Widget*const* a = array();
 
   if (clip_children()) {
-    fltk3::push_clip(x() + fltk3::box_dx(box()),
-                 y() + fltk3::box_dy(box()),
-		 w() - fltk3::box_dw(box()),
-		 h() - fltk3::box_dh(box()));
+    fltk3::push_clip(fltk3::box_dx(box()),
+                     fltk3::box_dy(box()),
+                     w() - fltk3::box_dw(box()),
+                     h() - fltk3::box_dh(box()));
   }
 
   if (damage() & ~fltk3::DAMAGE_CHILD) { // redraw the entire thing:
@@ -736,7 +736,10 @@ void fltk3::Group::draw_children() {
       draw_outside_label(o);
     }
   } else {	// only redraw the children that need it:
-    for (int i=children_; i--;) update_child(**a++);
+    for (int i=children_; i--;) {
+      Widget *w = *a;
+      update_child(**a++);
+    }
   }
 
   if (clip_children()) fltk3::pop_clip();
@@ -759,21 +762,13 @@ void fltk3::Group::draw() {
   \sa fltk3::Group::draw_child(fltk3::Widget& widget) const
 */
 void fltk3::Group::update_child(fltk3::Widget& widget) const {
-  if (widget.is_group_relative()) {
+  if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
+      fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     push_origin();
     translate_origin(widget.x(), widget.y());
-    if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
-        fltk3::not_clipped(0, 0, widget.w(), widget.h())) {
-      widget.draw();	
-      widget.clear_damage();
-    }
+    widget.draw();	
     pop_origin();
-  } else {
-    if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
-        fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
-      widget.draw();	
-      widget.clear_damage();
-    }
+    widget.clear_damage();
   }
 }
 
@@ -786,15 +781,11 @@ void fltk3::Group::update_child(fltk3::Widget& widget) const {
 void fltk3::Group::draw_child(fltk3::Widget& widget) const {
   if (widget.visible() && widget.type() < fltk3::WINDOW &&
       fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
-    widget.clear_damage(fltk3::DAMAGE_ALL);
-    if (widget.is_group_relative()) {
-      push_origin();
-      translate_origin(widget.x(), widget.y());
-      widget.draw();
-      pop_origin();
-    } else {
-      widget.draw();
-    }
+    widget.set_damage(fltk3::DAMAGE_ALL);
+    push_origin();
+    translate_origin(widget.x(), widget.y());
+    widget.draw();
+    pop_origin();
     widget.clear_damage();
   }
 }

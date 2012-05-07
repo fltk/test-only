@@ -428,10 +428,13 @@ void fltk3::set_boxtype(fltk3::Boxtype t, fltk3::BoxDrawF* f,
   fl_box_table[t&255].dw  = c;
   fl_box_table[t&255].dh  = d;
 }
+
+
 /** Copies the from boxtype. */
 void fltk3::set_boxtype(fltk3::Boxtype to, fltk3::Boxtype from) {
   fl_box_table[to&255] = fl_box_table[from&255];
 }
+
 
 /**
   Draws a box using given type, position, size and color.
@@ -443,18 +446,17 @@ void fltk3::draw_box(fltk3::Boxtype t, int x, int y, int w, int h, fltk3::Color 
   if (t && fl_box_table[t&255].f) fl_box_table[t&255].f(x,y,w,h,c,t);
 }
 
+
 //extern fltk3::Widget *fl_boxcheat; // hack set by fltk3::Window.cxx
 /** Draws the widget box according its box style */
 void fltk3::Widget::draw_box() const {
   if (box_) {
-    if (is_group_relative()) {
-      draw_box((fltk3::Boxtype)box_, 0, 0, w_, h_, color_);
-    } else {
-      draw_box((fltk3::Boxtype)box_, x_, y_, w_, h_, color_);
-    }
+    draw_box((fltk3::Boxtype)box_, 0, 0, w_, h_, color_);
   }
   draw_backdrop();
 }
+
+
 /** If fltk3::ALIGN_IMAGE_BACKDROP is set, the image or deimage will be drawn */
 void fltk3::Widget::draw_backdrop() const {
   if (align() & fltk3::ALIGN_IMAGE_BACKDROP) {
@@ -473,12 +475,10 @@ void fltk3::Widget::draw_backdrop() const {
  */
 void fltk3::Widget::draw_box(fltk3::Boxtype t, fltk3::Color c) const 
 {
-  if (is_group_relative()) {
-    draw_box(t, 0, 0, w_, h_, c);
-  } else {
-    draw_box(t, x_, y_, w_, h_, c);
-  }
+  draw_box(t, 0, 0, w_, h_, c);
 }
+
+
 /** Draws a box of type t, of color c at the position X,Y and size W,H. */
 void fltk3::Widget::draw_box(fltk3::Boxtype t, int X, int Y, int W, int H, fltk3::Color c) const {
   draw_it_active = active_r();

@@ -82,10 +82,6 @@ void fltk3::Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   Y = fltk3::box_dy(b);
   W = w()-fltk3::box_dw(b);
   H = h()-fltk3::box_dh(b);
-  if (is_window_relative()) {
-    X += x();
-    Y += y();
-  }
   if (scrollbar.visible()) {
     W -= scrollsize;
     if (scrollbar.align() & fltk3::ALIGN_LEFT) X += scrollsize;
@@ -347,10 +343,6 @@ void fltk3::Browser_::draw() {
   int X, Y, W, H; bbox(X, Y, W, H);
   int dont_repeat = 0;
   int xo = 0, yo = 0;
-  if (is_window_relative()) {
-    xo += x();
-    yo += y();
-  }
 J1:
   if (damage() & fltk3::DAMAGE_ALL) { // redraw the box if full redraw
     fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
@@ -369,7 +361,7 @@ J1:
     top_ = item_first(); real_position_ = offset_ = 0;
     if (scrollbar.visible()) {
       scrollbar.clear_visible();
-      clear_damage((uchar)(damage()|fltk3::DAMAGE_SCROLL));
+      set_damage((uchar)(damage()|fltk3::DAMAGE_SCROLL));
     }
   }
   
@@ -384,7 +376,7 @@ J1:
     real_hposition_ = 0;
     if (hscrollbar.visible()) {
       hscrollbar.clear_visible();
-      clear_damage((uchar)(damage()|fltk3::DAMAGE_SCROLL));
+      set_damage((uchar)(damage()|fltk3::DAMAGE_SCROLL));
     }
   }
   
@@ -402,7 +394,7 @@ J1:
     top_ = item_first(); real_position_ = offset_ = 0;
     if (scrollbar.visible()) {
       scrollbar.clear_visible();
-      clear_damage((uchar)(damage()|fltk3::DAMAGE_SCROLL));
+      set_damage((uchar)(damage()|fltk3::DAMAGE_SCROLL));
     }
   }
   
@@ -971,7 +963,6 @@ fltk3::Browser_::Browser_(int X, int Y, int W, int H, const char* L)
   scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
   hscrollbar(0, 0, 0, 0, 0)
 {
-  set_group_relative();
   box(fltk3::NO_BOX);
   align(fltk3::ALIGN_BOTTOM);
   position_ = real_position_ = 0;

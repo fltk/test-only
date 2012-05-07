@@ -38,7 +38,6 @@
 fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
 : fltk3::Slider(X,Y,W,H,l) 
 {
-  set_group_relative();
   step(1,100);
   textfont(fltk3::HELVETICA);
   textsize(10);

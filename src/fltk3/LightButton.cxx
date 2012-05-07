@@ -178,7 +178,6 @@ int fltk3::LightButton::handle(int event)
 fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
 : fltk3::Button(X, Y, W, H, l) 
 {
-  set_group_relative();
   type(fltk3::TOGGLE_BUTTON);
   selection_color(fltk3::YELLOW);
   align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE);

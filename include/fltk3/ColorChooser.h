@@ -53,7 +53,7 @@ namespace fltk3 {
     int handle_key(int);
   public:
     int handle(int);
-    cc_HueBox(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
+    cc_HueBox(int X, int Y, int W, int H, const char *L=0L) : fltk3::Widget(X,Y,W,H,L) {
       px = py = 0;}
   };
   
@@ -65,7 +65,7 @@ namespace fltk3 {
     int handle_key(int);
   public:
     int handle(int);
-    cc_ValueBox(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
+    cc_ValueBox(int X, int Y, int W, int H, const char *L=0L) : fltk3::Widget(X,Y,W,H,L) {
       py = 0;}
   };
   
@@ -73,7 +73,7 @@ namespace fltk3 {
   class FLTK3_EXPORT cc_Value_Input : public fltk3::ValueInput {
   public:
     int format(char*);
-    cc_Value_Input(int X, int Y, int W, int H) : fltk3::ValueInput(X,Y,W,H) {}
+    cc_Value_Input(int X, int Y, int W, int H, const char *L=0L) : fltk3::ValueInput(X,Y,W,H,L) {}
   };
   
 #endif // !FLTK3_DOXYGEN

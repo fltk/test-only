@@ -140,7 +140,7 @@ void fltk3::PackedGroup::draw() {
       }
       if (X != o->x() || Y != o->y() || W != o->w() || H != o->h()) {
         o->resize(X,Y,W,H);
-        o->clear_damage(fltk3::DAMAGE_ALL);
+        o->set_damage(fltk3::DAMAGE_ALL);
       }
       if (d&fltk3::DAMAGE_ALL) {
         draw_child(*o);

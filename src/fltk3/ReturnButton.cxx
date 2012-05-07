@@ -33,7 +33,6 @@
 fltk3::ReturnButton::ReturnButton(int X, int Y, int W, int H,const char *l)
 : Button(X,Y,W,H,l) 
 {
-  set_group_relative();
 }
 
 

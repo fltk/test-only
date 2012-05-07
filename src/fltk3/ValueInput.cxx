@@ -49,7 +49,7 @@ void fltk3::ValueInput::input_cb(fltk3::Widget*, void* v) {
 }
 
 void fltk3::ValueInput::draw() {
-  if (damage()&~fltk3::DAMAGE_CHILD) input.clear_damage(fltk3::DAMAGE_ALL);
+  if (damage()&~fltk3::DAMAGE_CHILD) input.set_damage(fltk3::DAMAGE_ALL);
   input.box(box());
   input.color(color(), selection_color());
   fltk3::Widget *i = &input; i->draw(); // calls protected input.draw()
@@ -58,7 +58,7 @@ void fltk3::ValueInput::draw() {
 
 void fltk3::ValueInput::resize(int X, int Y, int W, int H) {
   Valuator::resize(X, Y, W, H);
-  input.resize(X, Y, W, H);
+  input.resize(0, 0, W, H);
 }
 
 void fltk3::ValueInput::value_damage() {
@@ -117,13 +117,17 @@ int fltk3::ValueInput::handle(int event) {
   }
 }
 
+static int nogroup(int x) {fltk3::Group::current(0); return x;}
+
 /**
   Creates a new fltk3::ValueInput widget using the given
   position, size, and label string. The default boxtype is
   fltk3::DOWN_BOX.
 */
 fltk3::ValueInput::ValueInput(int X, int Y, int W, int H, const char* l)
-: fltk3::Valuator(X, Y, W, H, l), input(X, Y, W, H, 0) {
+: fltk3::Valuator(X, Y, W, H, l), 
+  input(nogroup(0), 0, W, H, 0) 
+{
   soft_ = 0;
   if (input.parent())  // defeat automatic-add
     input.parent()->remove(input);
@@ -136,12 +140,15 @@ fltk3::ValueInput::ValueInput(int X, int Y, int W, int H, const char* l)
   align(fltk3::ALIGN_LEFT);
   value_damage();
   set_flag(SHORTCUT_LABEL);
+  fltk3::Group::current(parent());
 }
 
-fltk3::ValueInput::~ValueInput() {
 
-  if (input.parent() == (fltk3::Group *)this)
+fltk3::ValueInput::~ValueInput() 
+{
+  if (input.parent() == (fltk3::Group *)this) {
     input.parent(0);   // *revert* ctor kludge!
+  }
 }
 
 //

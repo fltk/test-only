@@ -3035,8 +3035,6 @@ fltk3::HelpView::HelpView(int        xx,	// I - Left position
       hscrollbar_(xx, yy + hh - fltk3::scrollbar_size(),
                   ww - fltk3::scrollbar_size(), fltk3::scrollbar_size())
 {
-  set_group_relative();
-  
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
 
   title_[0]     = '\0';

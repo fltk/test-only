@@ -70,7 +70,6 @@ fltk3::DoubleWindow::DoubleWindow(int W, int H, const char *l)
 : fltk3::Window(W,H,l), 
   force_doublebuffering_(0) 
 {
-  set_group_relative();
   type(DOUBLE_WINDOW); 
 }
 
@@ -366,7 +365,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
 #elif defined(__APPLE_QUARTZ__)
     if (force_doublebuffering_) {
       myi->other_xid = fl_create_offscreen(w(), h());
-      clear_damage(fltk3::DAMAGE_ALL);
+      set_damage(fltk3::DAMAGE_ALL);
     }
 #else
 # error unsupported platform

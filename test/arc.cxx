@@ -37,17 +37,16 @@ const char* name[6] = {"X", "Y", "R", "start", "end", "rotate"};
 
 class Drawing : public Widget {
   void draw() {
-    push_clip(x(),y(),w(),h());
+    push_clip(0,0,w(),h());
     fltk3::color(DARK3);
-    rectf(x(),y(),w(),h());
+    rectf(0,0,w(),h());
     push_matrix();
     if (val[5]) {
-      translate(x()+w()/2.0, y()+h()/2.0);
+      translate(w()/2.0, h()/2.0);
       rotate(val[5]);
-      translate(-(x()+w()/2.0), -(y()+h()/2.0));
+      translate(-w()/2.0, -h()/2.0);
     }
     fltk3::color(WHITE);
-    translate(x(),y());
     begin_complex_polygon();
     arc(val[0],val[1],val[2],val[3],val[4]);
     gap();
@@ -80,7 +79,7 @@ int main(int argc, char** argv) {
   int y = 300;
   for (int n = 0; n<6; n++) {
     fltk3::Slider* s = new fltk3::HorValueSlider(50,y,240,25,name[n]); y += 25;
-    if (n<3) {s->minimum(0); s->maximum(300);}
+    if (n<3) {s->minimum(0); s->maximum(280);}
     else if (n==5) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
     s->step(1);

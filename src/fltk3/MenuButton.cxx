@@ -36,10 +36,10 @@ static fltk3::MenuButton	*pressed_menu_button_ = 0;
 void fltk3::MenuButton::draw() {
   if (!box() || type()) return;
   int H = (labelsize()-3)&-2;
-  int X = x()+w()-H*2;
-  int Y = y()+(h()-H)/2;
+  int X = w()-H*2;
+  int Y = (h()-H)/2;
   draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
-  draw_label(x(), y(), X-x()+2, h());
+  draw_label(0, 0, X+2, h());
   if (fltk3::focus() == this) draw_focus();
   // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   fltk3::color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));
@@ -63,19 +63,7 @@ const fltk3::MenuItem* fltk3::MenuButton::popup() {
   if (!box() || type()) {
     m = menu()->popup(event_x_root()-event_x(), event_y_root()-event_y(), label(), mvalue(), this);
   } else {
-    // FIXME: we need a function in Widget for this
-    int mx = x(), my = y();
-    Group *gi = parent();
-    while (gi) {
-      if (gi->is_group_relative()) {
-        mx += gi->x();
-        my += gi->y();
-      }
-      if (gi->type()>=WINDOW) 
-        break;
-      gi = gi->parent();
-    }
-    m = menu()->pulldown(mx, my, w(), h(), 0, this);
+    m = menu()->pulldown(dx_window(), dy_window(), w(), h(), 0, this);
   }
   picked(m);
   pressed_menu_button_ = 0;

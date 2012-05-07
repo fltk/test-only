@@ -219,11 +219,7 @@ fltk3::Widget::~Widget() {
 
 /** draws a focus rectangle around the widget */
 void fltk3::Widget::draw_focus() {
-  if (is_group_relative()) {
-    draw_focus(box(),0,0,w(),h());
-  } else {
-    draw_focus(box(),x(),y(),w(),h());
-  }
+  draw_focus(box(),0,0,w(),h());
 }
 
 /** Draws a focus box for the widget at the given position and size */
@@ -396,17 +392,7 @@ void fltk3::Widget::draw() {
 }
 
 void fltk3::Widget::coding_style(int s) {
-  switch (s) {
-    case 1:
-      set_window_relative();
-      break;
-    case 2:
-      set_group_relative();
-      break;
-    case 3:
-      set_group_relative();
-      break;
-  }
+  // TODO: just store the value somewhere? Or should the compatibility layer take car of this?
 }
 
 // ========================= Wrapper Support ===================================
@@ -512,6 +498,51 @@ void fltk3::Rectangle::intersect(const fltk3::Rectangle& R) {
   if (R.y() > y()) set_y(R.y());
   if (R.b() < b()) set_b(R.b());
 }
+
+
+// Call to->handle(), but first replace the mouse x/y with the correct
+// values to account for nested windows. 'window' is the outermost
+// window the event was posted to by the system
+int fltk3::Widget::send(int event) {
+  int dx = 0, dy = 0;
+  for (const Widget* w = this; w; w = w->parent()) {
+    dx += w->x();
+    dy += w->y();
+  }
+  int save_x = e_x; e_x = e_x_root-dx;
+  int save_y = e_y; e_y = e_y_root-dy;
+
+  int old_event = fltk3::e_number; fltk3::e_number = event;
+  
+  int ret = handle(fltk3::e_number);
+  
+  fltk3::e_number = old_event;
+  fltk3::e_y = save_y;
+  fltk3::e_x = save_x;
+  
+  return ret;
+}
+
+int fltk3::Widget::dx_window()
+{
+  int dx = 0;
+  for (const Widget* w = this; w; w = w->parent()) {
+    if (w->type()>=WINDOW) break;
+    dx += w->x();
+  }
+  return dx;
+}
+
+int fltk3::Widget::dy_window()
+{
+  int dy = 0;
+  for (const Widget* w = this; w; w = w->parent()) {
+    if (w->type()>=WINDOW) break;
+    dy += w->y();
+  }
+  return dy;
+}
+
 
 //
 // End of "$Id$".

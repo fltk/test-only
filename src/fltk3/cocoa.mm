@@ -636,10 +636,13 @@ double fl_mac_flush_and_wait(double time_to_wait, char in_idle) {
 }
 
 // updates fltk3::e_x, fltk3::e_y, fltk3::e_x_root, and fltk3::e_y_root
-static void update_e_xy_and_e_xy_root(NSWindow *nsw)
+static void update_e_xy_and_e_xy_root(NSWindow *nsw, NSEvent *theEvent=0)
 {
   NSPoint pt;
-  pt = [nsw mouseLocationOutsideOfEventStream];
+  if (theEvent && [theEvent window]==nsw)
+    pt = [theEvent locationInWindow];
+  else
+    pt = [nsw mouseLocationOutsideOfEventStream];
   fltk3::e_x = int(pt.x);
   fltk3::e_y = int([[nsw contentView] frame].size.height - pt.y);
   pt = [NSEvent mouseLocation];
@@ -765,7 +768,7 @@ static void cocoaMouseHandler(NSEvent *theEvent)
           fltk3::e_is_click = 0;
       }
       mods_to_e_state( mods );
-      update_e_xy_and_e_xy_root([theEvent window]);
+      update_e_xy_and_e_xy_root([theEvent window], theEvent);
       fltk3::handle( sendEvent, window );
       }
       break;
@@ -1365,11 +1368,11 @@ static void handleUpdateEvent( fltk3::Window *window )
       XDestroyRegion(cx->region);
       cx->region = 0;
     }
-    cx->w->clear_damage(fltk3::DAMAGE_ALL);
+    cx->w->set_damage(fltk3::DAMAGE_ALL);
     cx->flush();
     cx->w->clear_damage();
   }
-  window->clear_damage(fltk3::DAMAGE_ALL);
+  window->set_damage(fltk3::DAMAGE_ALL);
   i->flush();
   window->clear_damage();
 }     
