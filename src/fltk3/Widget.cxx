@@ -365,7 +365,6 @@ fltk3::Label::copy_label(const char *a) {
   } else {
     label(0);
   }
-  redraw_label();
 }
 
 /** Calls the widget callback.
