@@ -99,35 +99,6 @@ extern fltk3::Widget* fl_oldfocus; // set by fltk3::focus
 // For back-compatibility, we must adjust all events sent to child
 // windows so they are relative to that window.
 
-static int send(fltk3::Widget* o, int event) {
-  if (o->type()<fltk3::WINDOW) {
-    return o->handle(event);
-  }
-  switch ( event )
-  {
-  case fltk3::DND_ENTER: /* FALLTHROUGH */
-  case fltk3::DND_DRAG:
-    // figure out correct type of event:
-    event = (o->contains(fltk3::belowmouse())) ? fltk3::DND_DRAG : fltk3::DND_ENTER;
-  }
-  int save_x = fltk3::e_x; fltk3::e_x -= o->x();
-  int save_y = fltk3::e_y; fltk3::e_y -= o->y();
-  int ret = o->handle(event);
-  fltk3::e_y = save_y;
-  fltk3::e_x = save_x;
-  switch ( event )
-  {
-  case fltk3::ENTER: /* FALLTHROUGH */
-  case fltk3::DND_ENTER:
-    // Successful completion of fltk3::ENTER means the widget is now the
-    // belowmouse widget, but only call fltk3::belowmouse if the child
-    // widget did not do so:
-    if (!o->contains(fltk3::belowmouse())) fltk3::belowmouse(o);
-    break;
-  }
-  return ret;
-}
-
 // translate the current keystroke into up/down/left/right for navigation:
 #define ctrl(x) (x^0x40)
 static int navkey() {
@@ -737,7 +708,6 @@ void fltk3::Group::draw_children() {
     }
   } else {	// only redraw the children that need it:
     for (int i=children_; i--;) {
-      Widget *w = *a;
       update_child(**a++);
     }
   }

@@ -199,14 +199,14 @@ const char* bigmess =
 
 int main(int argc, char **argv) {
   testwindow *window =
-    new testwindow(fltk3::UP_BOX,820,400,"outer");
+    new testwindow(fltk3::UP_BOX,400,400,"outer");
   new fltk3::ToggleButton(310,310,80,80,"&outer");
   new EnterExit(10,310,80,80,"enterexit");
   new fltk3::Input(160,310,140,25,"input1:");
   new fltk3::Input(160,340,140,25,"input2:");
   (new fltk3::MenuButton(5,150,80,25,"menu&1"))->add(bigmess);
   
-  (new fltk3::Box(fltk3::NO_BOX,150,0,520,100,
+  (new fltk3::Box(fltk3::NO_BOX,0,0,400,100,
                   "A child fltk3::Window with children of its own may "
                   "be useful for imbedding controls into a GL or display "
                   "that needs a different visual."
@@ -228,31 +228,6 @@ int main(int argc, char **argv) {
   subwindow->resizable(subwindow);
   subwindow->end();
   subwindow->use_cursor(fltk3::CURSOR_HAND);
-  
-  testgroup *subgroup2 =
-  new testgroup(fltk3::DOWN_BOX,310,100,200,200,"fltk3::Group, GROUP_RELATIVE");
-  subgroup2->set_group_relative();
-  new fltk3::ToggleButton(110,110,80,80,"&inner");
-  new EnterExit(10,110,80,80,"enterexit");
-  (new fltk3::MenuButton(50,20,80,25,"menu&2"))->add(bigmess);
-  new fltk3::Input(55,50,140,25,"input1:");
-  new fltk3::Input(55,80,140,25,"input2:");
-  //subgroup2->resizable(subgroup2);
-  window->resizable(subgroup2);
-  subgroup2->end();
-  subgroup2->use_cursor(fltk3::CURSOR_HAND);
-
-  testgroup *subgroup3 =
-  new testgroup(fltk3::DOWN_BOX,520,100,200,200,"fltk3::Group, Window-relative");
-  subgroup3->set_window_relative();
-  new fltk3::ToggleButton(630,210,80,80,"&inner");
-  new EnterExit(530,210,80,80,"enterexit");
-  (new fltk3::MenuButton(570,120,80,25,"menu&2"))->add(bigmess);
-  new fltk3::Input(575,150,140,25,"input1:");
-  new fltk3::Input(575,180,140,25,"input2:");
-  subgroup3->resizable(subgroup3);
-  subgroup3->end();
-  subgroup3->use_cursor(fltk3::CURSOR_HAND);
   
   window->show(argc, argv);
   return fltk3::run();
