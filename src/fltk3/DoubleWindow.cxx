@@ -376,7 +376,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
     if (myi->backbuffer_bad || eraseoverlay) {
       // Make sure we do a complete redraw...
       if (myi->region) {XDestroyRegion(myi->region); myi->region = 0;}
-      clear_damage(fltk3::DAMAGE_ALL);
+      set_damage(fltk3::DAMAGE_ALL);
       myi->backbuffer_bad = 0;
     }
 

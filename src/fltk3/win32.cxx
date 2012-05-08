@@ -905,7 +905,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (window->type() == fltk3::DOUBLE_WINDOW) ValidateRgn(hWnd,0);
     else ValidateRgn(hWnd,i->region);
 
-    window->clear_damage((uchar)(window->damage()|fltk3::DAMAGE_EXPOSE));
+    window->set_damage((uchar)(window->damage()|fltk3::DAMAGE_EXPOSE));
     // These next two statements should not be here, so that all update
     // is deferred until fltk3::flush() is called during idle.  However WIN32
     // apparently is very unhappy if we don't obey it and draw right now.

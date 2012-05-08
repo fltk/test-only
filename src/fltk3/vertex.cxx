@@ -262,7 +262,7 @@ void fltk3::GDIGraphicsDriver::begin_complex_polygon() {
 void fltk3::GraphicsDriver::gap() {
   while (n>gap_+2 && p[n-1].x == p[gap_].x && p[n-1].y == p[gap_].y) n--;
   if (n > gap_+2) {
-    transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
+    transformed_vertex((COORD_T)p[gap_].x-origin_x(), (COORD_T)p[gap_].y-origin_y());
     gap_ = n;
   } else {
     n = gap_;

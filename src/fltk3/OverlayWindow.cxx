@@ -153,7 +153,7 @@ void fltk3::OverlayWindow::redraw_overlay() {
   }
   if (shown()) {
     if (overlay_ == this) {
-      clear_damage(damage()|fltk3::DAMAGE_OVERLAY);
+      set_damage(damage()|fltk3::DAMAGE_OVERLAY);
       fltk3::damage(fltk3::DAMAGE_CHILD);
     } else if (!overlay_->shown())
       overlay_->show();

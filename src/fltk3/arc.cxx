@@ -75,7 +75,7 @@ void fltk3::GraphicsDriver::arc(double x, double y, double r, double start, doub
     do {
       double Xnew =  cos_e*X + sin_e*Y;
 		Y = -sin_e*X + cos_e*Y;
-      vertex(x + (X=Xnew), y + Y);
+      fltk3::vertex(x + (X=Xnew), y + Y);
     } while (--i);
   }
 }
