@@ -364,8 +364,8 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, 
   if (!bm->id_) bm->id_ = fl_create_bitmask(bm->w(), bm->h(), bm->array);
   
   XSetStipple(fl_display, fl_gc, bm->id_);
-  int ox = X-cx; if (ox < 0) ox += bm->w();
-  int oy = Y-cy; if (oy < 0) oy += bm->h();
+  int ox = X+origin_x()-cx; if (ox < 0) ox += bm->w();
+  int oy = Y+origin_y()-cy; if (oy < 0) oy += bm->h();
   XSetTSOrigin(fl_display, fl_gc, ox, oy);
   XSetFillStyle(fl_display, fl_gc, FillStippled);
   XFillRectangle(fl_display, fl_window, fl_gc, X+origin_x(), Y+origin_y(), W, H);
