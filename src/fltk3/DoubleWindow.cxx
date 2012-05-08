@@ -361,7 +361,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
 #endif
 #if defined(USE_X11) || defined(WIN32)
     myi->other_xid = fl_create_offscreen(w(), h());
-    clear_damage(fltk3::DAMAGE_ALL);
+    set_damage(fltk3::DAMAGE_ALL);
 #elif defined(__APPLE_QUARTZ__)
     if (force_doublebuffering_) {
       myi->other_xid = fl_create_offscreen(w(), h());
