@@ -605,55 +605,55 @@ int main(int argc, char ** argv) {
   
   fltk3::Group *c2 =new fltk3::Group(3, 43, 494, 514 );
   
-  new MyWidget(10,140);
-  new MyWidget2(110,80);
-  new MyWidget3(220,140);
-  new MyWidget4(330,70);
-  new MyWidget5(140,270);
+  new MyWidget(10,140-43);
+  new MyWidget2(110,80-43);
+  new MyWidget3(220,140-43);
+  new MyWidget4(330,70-43);
+  new MyWidget5(140,270-43);
   
   make_image();
   fltk3::RGBImage *rgb = new fltk3::RGBImage(image, width, height, 4);
-  My_Button b_rgb(10,245,100,100,"RGB with alpha");
+  My_Button b_rgb(10,245-43,100,100,"RGB with alpha");
   b_rgb.image(rgb);
   
-  My_Button b_pixmap(10,345,100,100,"Pixmap");
+  My_Button b_pixmap(10,345-43,100,100,"Pixmap");
   fltk3::Pixmap *pixmap = new fltk3::Pixmap(porsche_xpm);
   b_pixmap.image(pixmap);
   
-  My_Button b_bitmap(10,445,100,100,"Bitmap");
+  My_Button b_bitmap(10,445-43,100,100,"Bitmap");
   b_bitmap.labelcolor(fltk3::GREEN);
   b_bitmap.image(new fltk3::Bitmap(sorceress_bits,sorceress_width,sorceress_height));
   
-  new fltk3::Clock(360,230,120,120);
-  fltk3::ReturnButton * ret = new fltk3::ReturnButton (360, 360, 120,30, "Return");
+  new fltk3::Clock(360,230-43,120,120);
+  fltk3::ReturnButton * ret = new fltk3::ReturnButton (360, 360-43, 120,30, "Return");
   ret->deactivate();
-  fltk3::Button but1(360, 390, 30, 30, "@->|");
+  fltk3::Button but1(360, 390-43, 30, 30, "@->|");
   but1.labelcolor(fltk3::DARK3);
-  fltk3::Button but2(390, 390, 30, 30, "@UpArrow");
+  fltk3::Button but2(390, 390-43, 30, 30, "@UpArrow");
   but2.labelcolor(fltk3::DARK3);
-  fltk3::Button but3(420, 390, 30, 30, "@DnArrow");
+  fltk3::Button but3(420, 390-43, 30, 30, "@DnArrow");
   but3.labelcolor(fltk3::DARK3);
-  fltk3::Button but4(450, 390, 30, 30, "@+");
+  fltk3::Button but4(450, 390-43, 30, 30, "@+");
   but4.labelcolor(fltk3::DARK3);
-  fltk3::Button but5(360, 425, 120, 30, "Hello, World");
+  fltk3::Button but5(360, 425-43, 120, 30, "Hello, World");
   but5.labelfont(fltk3::BOLD|fltk3::ITALIC);
   but5.labeltype(fltk3::SHADOW_LABEL);
   but5.box(fltk3::ROUND_UP_BOX);
   //  but5.selection_color(fltk3::WHITE);
   
-  fltk3::Button but6(360, 460, 120, 30, "Plastic");
+  fltk3::Button but6(360, 460-43, 120, 30, "Plastic");
   but6.box(fltk3::PLASTIC_UP_BOX);
   
   //fltk3::Button but7(, 480, 120, 30, "Engraved box");
   //but7.box(fltk3::ENGRAVED_BOX);
-  { fltk3::Group* o = new fltk3::Group(360, 495, 120, 40);
+  { fltk3::Group* o = new fltk3::Group(360, 495-43, 120, 40);
     o->box(fltk3::UP_BOX);
-    { fltk3::Group* o = new fltk3::Group(365, 500, 110, 30);
+    { fltk3::Group* o = new fltk3::Group(5/*365*/, 5/*500*/, 110, 30);
       o->box(fltk3::THIN_UP_FRAME);
-      { fltk3::RoundButton* o = new fltk3::RoundButton(365, 500, 40, 30, "rad");
+      { fltk3::RoundButton* o = new fltk3::RoundButton(5/*365*/, 5/*00*/, 40, 30, "rad");
         o->value(1);
       }
-      { fltk3::CheckButton* o = new fltk3::CheckButton(410, 500, 60, 30, "check");
+      { fltk3::CheckButton* o = new fltk3::CheckButton(45/*410*/, 5/*00*/, 60, 30, "check");
         o->value(1);
         
       }
@@ -662,7 +662,7 @@ int main(int argc, char ** argv) {
     o->end();
     o->deactivate();
   }
-  fltk3::Box tx(120,492,230,50,"Background is not printed because\nencapsulating group, which we are\n printing, has not set the box type");
+  fltk3::Box tx(120,492-43,230,50,"Background is not printed because\nencapsulating group, which we are\n printing, has not set the box type");
   tx.box(fltk3::SHADOW_BOX);
   tx.labelsize(12);
   
