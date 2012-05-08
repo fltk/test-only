@@ -204,9 +204,9 @@ void fltk3::GraphicsDriver::end_loop() {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::end_polygon() {
+  fixloop();
   int n = vertex_no();
   XPOINT *p = vertices();
-  fixloop();
   if (n < 3) {
     end_line();
     return;
@@ -222,9 +222,9 @@ void fltk3::QuartzGraphicsDriver::end_polygon() {
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::end_polygon() {
+  fixloop();
   int n = vertex_no();
   XPOINT *p = vertices();
-  fixloop();
   if (n < 3) {
     end_line();
     return;
@@ -236,9 +236,9 @@ void fltk3::GDIGraphicsDriver::end_polygon() {
 }
 #else
 void fltk3::XlibGraphicsDriver::end_polygon() {
+  fixloop();
   int n = vertex_no();
   XPOINT *p = vertices();
-  fixloop();
   if (n < 3) {
     end_line();
     return;
@@ -283,9 +283,9 @@ void fltk3::GDIGraphicsDriver::gap() {
 
 #if defined(__APPLE_QUARTZ__)
 void fltk3::QuartzGraphicsDriver::end_complex_polygon() {
+  gap();
   int n = vertex_no();
   XPOINT *p = vertices();
-  gap();
   if (n < 3) {
     end_line();
     return;
@@ -301,9 +301,9 @@ void fltk3::QuartzGraphicsDriver::end_complex_polygon() {
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::end_complex_polygon() {
+  gap();
   int n = vertex_no();
   XPOINT *p = vertices();
-  gap();
   if (n < 3) {
     end_line();
     return;
@@ -315,9 +315,9 @@ void fltk3::GDIGraphicsDriver::end_complex_polygon() {
 }
 #else
 void fltk3::XlibGraphicsDriver::end_complex_polygon() {
+  gap();
   int n = vertex_no();
   XPOINT *p = vertices();
-  gap();
   if (n < 3) {
     end_line();
     return;
