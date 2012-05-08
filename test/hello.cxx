@@ -27,7 +27,6 @@
 
 #include <fltk3/fltk3.h>
 
-
 int main(int argc, char **argv) {
   fltk3::Window *window = new fltk3::Window(340,180);
   fltk3::Box *box = new fltk3::Box(20,40,300,100,"Hello, World!");
@@ -43,4 +42,3 @@ int main(int argc, char **argv) {
 //
 // End of "$Id$".
 //
-
