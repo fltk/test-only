@@ -49,7 +49,7 @@ void FontDisplay::draw() {
   draw_box();
   fltk3::font((fltk3::Font)font, size);
   fltk3::color(fltk3::BLACK);
-  fltk3::draw(label(), x()+3, y()+3, w()-6, h()-6, align());
+  fltk3::draw(label(), 3, 3, w()-6, h()-6, align());
 }
 
 FontDisplay *textobj;
@@ -139,11 +139,11 @@ void create_the_forms() {
 
   fltk3::Group *fontgroup = new fltk3::Group(0, 185, 550, 185);
   fontgroup->box(fltk3::FLAT_BOX);
-  fontobj = new fltk3::HoldBrowser(10, 190, 390, 170);
+  fontobj = new fltk3::HoldBrowser(10, 5, 390, 170);
   fontobj->box(fltk3::FRAME_BOX);
   fontobj->color(53,3);
   fontobj->callback(font_cb);
-  sizeobj = new fltk3::HoldBrowser(410, 190, 130, 170);
+  sizeobj = new fltk3::HoldBrowser(410, 5, 130, 170);
   sizeobj->box(fltk3::FRAME_BOX);
   sizeobj->color(53,3);
   sizeobj->callback(size_cb);
@@ -164,12 +164,7 @@ int main(int argc, char **argv) {
   fltk3::get_system_colors();
   create_the_forms();
 
-// For the Unicode test, get all fonts...
-//#ifdef __APPLE__
   int i = 0;
-//#else
-//  int i = fltk3::choice("Which fonts:","-*","iso8859","All");
-//#endif
   int k = fltk3::set_fonts(i ? (i>1 ? "*" : 0) : "-*");
   sizes = new int*[k];
   numsizes = new int[k];

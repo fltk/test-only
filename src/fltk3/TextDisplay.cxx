@@ -296,8 +296,8 @@ void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
 #endif // DEBUG
   Widget::resize(X,Y,W,H);
   if (!buffer()) return;
-  X += fltk3::box_dx(box());
-  Y += fltk3::box_dy(box());
+  X = fltk3::box_dx(box());
+  Y = fltk3::box_dy(box());
   W -= fltk3::box_dw(box());
   H -= fltk3::box_dh(box());
   
@@ -3370,7 +3370,7 @@ void fltk3::TextDisplay::draw(void) {
   // don't even try if there is no associated text buffer!
   if (!buffer()) { draw_box(); return; }
   
-  fltk3::push_clip(x(),y(),w(),h());	// prevent drawing outside widget area
+  fltk3::push_clip(0,0,w(),h());	// prevent drawing outside widget area
   
   // draw the non-text, non-scrollbar areas.
   if (damage() & fltk3::DAMAGE_ALL) {
@@ -3381,7 +3381,7 @@ void fltk3::TextDisplay::draw(void) {
     }
     // draw the box()
     int W = w(), H = h();
-    draw_box(box(), x(), y(), W, H, color());
+    draw_box(box(), 0, 0, W, H, color());
     
     if (mHScrollBar->visible())
       W -= scrollbar_width();

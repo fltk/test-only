@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
       char *slash = strrchr(buf, '/');
       if (slash)
         strcpy(slash, "/../Resources/browser.cxx");
-#ifndef MATT_IS_LAZY
+#ifdef MATT_IS_LAZY
       done = browser->load("/Users/matt/dev/fltk-1.3.0/test/browser.cxx");
 #else
       done = browser->load(buf);

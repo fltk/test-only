@@ -100,7 +100,7 @@ void fltk3::Dial::draw(int X, int Y, int W, int H) {
   Draws dial at current position and size.
 */
 void fltk3::Dial::draw() {
-  draw(x(), y(), w(), h());
+  draw(0, 0, w(), h());
   draw_label();
 }
 
@@ -147,7 +147,7 @@ int fltk3::Dial::handle(int event, int X, int Y, int W, int H) {
   Allow subclasses to handle event based on current position and size.
 */
 int fltk3::Dial::handle(int e) {
-  return handle(e, x(), y(), w(), h());
+  return handle(e, 0, 0, w(), h());
 }
 
 /**

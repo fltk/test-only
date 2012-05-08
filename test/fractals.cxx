@@ -7,7 +7,7 @@
 // demonstrate how to add FLTK controls to a GLUT program.   The GLUT
 // code is unchanged except for the end (search for FLTK to find changes).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -788,15 +788,15 @@ int main(int argc, char** argv)
   g->align(fltk3::ALIGN_LEFT);
   g->begin();
   fltk3::Button *b;
-  b = new fltk3::Button(110,50,30,30,"0"); b->callback(setlevel,(void*)0);
-  b = new fltk3::Button(140,50,30,30,"1"); b->callback(setlevel,(void*)1);
-  b = new fltk3::Button(170,50,30,30,"2"); b->callback(setlevel,(void*)2);
-  b = new fltk3::Button(200,50,30,30,"3"); b->callback(setlevel,(void*)3);
-  b = new fltk3::Button(230,50,30,30,"4"); b->callback(setlevel,(void*)4);
-  b = new fltk3::Button(260,50,30,30,"5"); b->callback(setlevel,(void*)5);
-  b = new fltk3::Button(290,50,30,30,"6"); b->callback(setlevel,(void*)6);
-  b = new fltk3::Button(320,50,30,30,"7"); b->callback(setlevel,(void*)7);
-  b = new fltk3::Button(350,50,30,30,"8"); b->callback(setlevel,(void*)8);
+  b = new fltk3::Button(  0,0,30,30,"0"); b->callback(setlevel,(void*)0);
+  b = new fltk3::Button( 30,0,30,30,"1"); b->callback(setlevel,(void*)1);
+  b = new fltk3::Button( 60,0,30,30,"2"); b->callback(setlevel,(void*)2);
+  b = new fltk3::Button( 90,0,30,30,"3"); b->callback(setlevel,(void*)3);
+  b = new fltk3::Button(120,0,30,30,"4"); b->callback(setlevel,(void*)4);
+  b = new fltk3::Button(150,0,30,30,"5"); b->callback(setlevel,(void*)5);
+  b = new fltk3::Button(180,0,30,30,"6"); b->callback(setlevel,(void*)6);
+  b = new fltk3::Button(210,0,30,30,"7"); b->callback(setlevel,(void*)7);
+  b = new fltk3::Button(240,0,30,30,"8"); b->callback(setlevel,(void*)8);
   g->end();
 
   b = new fltk3::Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);

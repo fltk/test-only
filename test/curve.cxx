@@ -40,21 +40,21 @@ int points;
 
 class Drawing : public fltk3::Widget {
   void draw() {
-    fltk3::push_clip(x(),y(),w(),h());
+    fltk3::push_clip(0,0,w(),h());
     fltk3::color(fltk3::DARK3);
-    fltk3::rectf(x(),y(),w(),h());
+    fltk3::rectf(0,0,w(),h());
     fltk3::push_matrix();
     if (args[8]) {
-      fltk3::translate(x()+w()/2.0, y()+h()/2.0);
+      fltk3::translate(w()/2.0, h()/2.0);
       fltk3::rotate(args[8]);
-      fltk3::translate(-(x()+w()/2.0), -(y()+h()/2.0));
+      fltk3::translate(-(w()/2.0), -(h()/2.0));
     }
-    fltk3::translate(x(),y());
+    fltk3::translate(0,0);
     if (!points) {
-    fltk3::color(fltk3::WHITE);
-    fltk3::begin_complex_polygon();
-   fltk3::curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-    fltk3::end_complex_polygon();
+      fltk3::color(fltk3::WHITE);
+      fltk3::begin_complex_polygon();
+      fltk3::curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
+      fltk3::end_complex_polygon();
     }
     fltk3::color(fltk3::BLACK);
     fltk3::begin_line();
@@ -65,7 +65,7 @@ class Drawing : public fltk3::Widget {
     fltk3::end_line();
     fltk3::color(points ? fltk3::WHITE : fltk3::RED);
     points ? fltk3::begin_points() : fltk3::begin_line();
-   fltk3::curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
+    fltk3::curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
     points ? fltk3::end_points() : fltk3::end_line();
     fltk3::pop_matrix();
     fltk3::pop_clip();
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
   fltk3::DoubleWindow window(300,555);
   Drawing drawing(10,10,280,280);
   d = &drawing;
-
+  
   int y = 300;
   for (int n = 0; n<9; n++) {
     fltk3::Slider* s = new fltk3::HorValueSlider(50,y,240,25,name[n]); y += 25;
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
   }
   fltk3::ToggleButton but(50,y,50,25,"points");
   but.callback(points_cb);
-
+  
   window.end();
   window.show(argc,argv);
   return fltk3::run();

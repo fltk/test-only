@@ -65,7 +65,7 @@ namespace fltk3 {
       void draw() {
         draw_box(fltk3::UP_BOX, color());
         fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
-        int xc = x()+w()/2, yc=y()+h()/2;
+        int xc = w()/2, yc=h()/2;
         fltk3::polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
         if (fltk3::focus() == this) draw_focus();
       }
@@ -126,13 +126,13 @@ namespace fltk3 {
     }
     
     // Custom resize behavior -- input stretches, menu button doesn't
-    inline int inp_x() { return(x() + fltk3::box_dx(box())); }
-    inline int inp_y() { return(y() + fltk3::box_dy(box())); }
+    inline int inp_x() { return(fltk3::box_dx(box())); }
+    inline int inp_y() { return(fltk3::box_dy(box())); }
     inline int inp_w() { return(w() - fltk3::box_dw(box()) - 20); }
     inline int inp_h() { return(h() - fltk3::box_dh(box())); }
     
-    inline int menu_x() { return(x() + w() - 20 - fltk3::box_dx(box())); }
-    inline int menu_y() { return(y() + fltk3::box_dy(box())); }
+    inline int menu_x() { return(w() - 20 - fltk3::box_dx(box())); }
+    inline int menu_y() { return(fltk3::box_dy(box())); }
     inline int menu_w() { return(20); }
     inline int menu_h() { return(h() - fltk3::box_dh(box())); }
     
