@@ -697,6 +697,7 @@ void fltk3::PostScriptGraphicsDriver::rect(int x, int y, int w, int h) {
   // fprintf(output, "GS\n");
   //  fprintf(output, "%i, %i, %i, %i R\n", x , y , w, h);
   //  fprintf(output, "GR\n");
+  x += origin_x(); y += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -708,16 +709,19 @@ void fltk3::PostScriptGraphicsDriver::rect(int x, int y, int w, int h) {
 }
 
 void fltk3::PostScriptGraphicsDriver::rectf(int x, int y, int w, int h) {
+  x += origin_x(); y += origin_y();
   fprintf(output, "%g %g %i %i FR\n", x-0.5, y-0.5, w, h);
 }
 
 void fltk3::PostScriptGraphicsDriver::line(int x1, int y1, int x2, int y2) {
+  x1 += origin_x(); y1 += origin_y(); x2 += origin_x(); y2 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output, "%i %i %i %i L\n", x1 , y1, x2 ,y2);
   fprintf(output, "GR\n");
 }
 
 void fltk3::PostScriptGraphicsDriver::line(int x0, int y0, int x1, int y1, int x2, int y2) {
+  x0 += origin_x(); y0 += origin_y(); x1 += origin_x(); y1 += origin_y(); x2 += origin_x(); y2 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -728,6 +732,7 @@ void fltk3::PostScriptGraphicsDriver::line(int x0, int y0, int x1, int y1, int x
 }
 
 void fltk3::PostScriptGraphicsDriver::xyline(int x, int y, int x1, int y2, int x3){
+  x += origin_x(); y += origin_y(); x1 += origin_x(); y2 += origin_y(); x3 += origin_x();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y );
@@ -740,7 +745,7 @@ void fltk3::PostScriptGraphicsDriver::xyline(int x, int y, int x1, int y2, int x
 
 
 void fltk3::PostScriptGraphicsDriver::xyline(int x, int y, int x1, int y2){
-  
+  x += origin_x(); y += origin_y(); x1 += origin_x(); y2 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -751,6 +756,7 @@ void fltk3::PostScriptGraphicsDriver::xyline(int x, int y, int x1, int y2){
 }
 
 void fltk3::PostScriptGraphicsDriver::xyline(int x, int y, int x1){
+  x += origin_x(); y += origin_y(); x1 += origin_x();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -761,8 +767,8 @@ void fltk3::PostScriptGraphicsDriver::xyline(int x, int y, int x1){
 }
 
 void fltk3::PostScriptGraphicsDriver::yxline(int x, int y, int y1, int x2, int y3){
+  x += origin_x(); y += origin_y(); y1 += origin_y(); x2 += origin_x(); y3 += origin_y();
   fprintf(output, "GS\n");
-  
   fprintf(output,"BP\n");
   fprintf(output,"%i %i MT\n", x , y);
   fprintf(output, "%i %i LT\n", x , y1 );
@@ -773,6 +779,7 @@ void fltk3::PostScriptGraphicsDriver::yxline(int x, int y, int y1, int x2, int y
 }
 
 void fltk3::PostScriptGraphicsDriver::yxline(int x, int y, int y1, int x2){
+  x += origin_x(); y += origin_y(); y1 += origin_y(); x2 += origin_x();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -783,6 +790,7 @@ void fltk3::PostScriptGraphicsDriver::yxline(int x, int y, int y1, int x2){
 }
 
 void fltk3::PostScriptGraphicsDriver::yxline(int x, int y, int y1){
+  x += origin_x(); y += origin_y(); y1 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -792,6 +800,7 @@ void fltk3::PostScriptGraphicsDriver::yxline(int x, int y, int y1){
 }
 
 void fltk3::PostScriptGraphicsDriver::loop(int x0, int y0, int x1, int y1, int x2, int y2) {
+  x0 += origin_x(); y0 += origin_y(); x1 += origin_x(); y1 += origin_y(); x2 += origin_x(); y2 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -802,6 +811,8 @@ void fltk3::PostScriptGraphicsDriver::loop(int x0, int y0, int x1, int y1, int x
 }
 
 void fltk3::PostScriptGraphicsDriver::loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
+  x0 += origin_x(); y0 += origin_y(); x1 += origin_x(); y1 += origin_y(); 
+  x2 += origin_x(); y2 += origin_y(); x3 += origin_x(); y3 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -813,6 +824,7 @@ void fltk3::PostScriptGraphicsDriver::loop(int x0, int y0, int x1, int y1, int x
 }
 
 void fltk3::PostScriptGraphicsDriver::polygon(int x0, int y0, int x1, int y1, int x2, int y2) {
+  x0 += origin_x(); y0 += origin_y(); x1 += origin_x(); y1 += origin_y(); x2 += origin_x(); y2 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -823,19 +835,20 @@ void fltk3::PostScriptGraphicsDriver::polygon(int x0, int y0, int x1, int y1, in
 }
 
 void fltk3::PostScriptGraphicsDriver::polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
+  x0 += origin_x(); y0 += origin_y(); x1 += origin_x(); y1 += origin_y(); 
+  x2 += origin_x(); y2 += origin_y(); x3 += origin_x(); y3 += origin_y();
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0 );
   fprintf(output, "%i %i LT\n", x1 , y1 );
   fprintf(output, "%i %i LT\n", x2 , y2 );
   fprintf(output, "%i %i LT\n", x3 , y3 );
-  
   fprintf(output, "EFP\n");
   fprintf(output, "GR\n");
 }
 
 void fltk3::PostScriptGraphicsDriver::point(int x, int y){
-  rectf(x,y,1,1);
+  rectf(x + origin_x(), y + origin_y(), 1, 1);
 }
 
 static int dashes_flat[5][7]={
@@ -1127,6 +1140,7 @@ void fltk3::PostScriptGraphicsDriver::transformed_draw(const char* str, int n, d
   // compute display width of string
   int w = (int)width(str, n);
   if (w == 0) return;
+  x += origin_x(); y += origin_y();
   if (GraphicsDriver::font() >= fltk3::FREE_FONT) {
     transformed_draw_extra(str, n, x, y, w, output, this, false);
     return;
@@ -1167,11 +1181,13 @@ void fltk3::PostScriptGraphicsDriver::rtl_draw(const char* str, int n, int x, in
 }
 
 void fltk3::PostScriptGraphicsDriver::concat(){
-  fprintf(output,"[%g %g %g %g %g %g] CT\n", fl_matrix->a , fl_matrix->b , fl_matrix->c , fl_matrix->d , fl_matrix->x , fl_matrix->y);
+  fprintf(output,"[%g %g %g %g %g %g] CT\n", fl_matrix->a , fl_matrix->b , fl_matrix->c , fl_matrix->d , 
+	  fl_matrix->x + origin_x() , fl_matrix->y + origin_y());
 }
 
 void fltk3::PostScriptGraphicsDriver::reconcat(){
-  fprintf(output, "[%g %g %g %g %g %g] RCT\n" , fl_matrix->a , fl_matrix->b , fl_matrix->c , fl_matrix->d , fl_matrix->x , fl_matrix->y);
+  fprintf(output, "[%g %g %g %g %g %g] RCT\n" , fl_matrix->a , fl_matrix->b , fl_matrix->c , fl_matrix->d , 
+	  fl_matrix->x + origin_x() , fl_matrix->y + origin_y());
 }
 
 /////////////////  transformed (double) drawings ////////////////////////////////
@@ -1180,7 +1196,6 @@ void fltk3::PostScriptGraphicsDriver::reconcat(){
 void fltk3::PostScriptGraphicsDriver::begin_points(){
   fprintf(output, "GS\n");
   concat();
-  
   fprintf(output, "BP\n");
   gap_=1;
   shape_=POINTS;
@@ -1231,23 +1246,19 @@ void fltk3::PostScriptGraphicsDriver::curve(double x, double y, double x1, doubl
     fprintf(output, "%g %g LT\n", x , y);
   gap_=0;
   
-  fprintf(output, "%g %g %g %g %g %g curveto \n", x1 , y1 , x2 , y2 , x3 , y3);
+  fprintf(output, "%g %g %g %g %g %g curveto \n", x1, y1, x2, y2, x3, y3);
 }
 
 
 void fltk3::PostScriptGraphicsDriver::circle(double x, double y, double r){
-  if(shape_==NONE){
+  if (shape_ == NONE){
     fprintf(output, "GS\n");
     concat();
-    //    fprintf(output, "BP\n");
     fprintf(output,"%g %g %g 0 360 arc\n", x , y , r);
     reconcat();
-    //    fprintf(output, "ELP\n");
     fprintf(output, "GR\n");
-  }else
-    
+  } else
     fprintf(output, "%g %g %g 0 360 arc\n", x , y , r);
-  
 }
 
 void fltk3::PostScriptGraphicsDriver::arc(double x, double y, double r, double start, double a){
@@ -1262,29 +1273,21 @@ void fltk3::PostScriptGraphicsDriver::arc(double x, double y, double r, double s
 
 void fltk3::PostScriptGraphicsDriver::arc(int x, int y, int w, int h, double a1, double a2) {
   fprintf(output, "GS\n");
-  //fprintf(output, "BP\n");
   begin_line();
   fprintf(output, "%g %g TR\n", x + w/2.0 -0.5 , y + h/2.0 - 0.5);
   fprintf(output, "%g %g SC\n", (w-1)/2.0 , (h-1)/2.0 );
   arc(0,0,1,a2,a1);
-  //  fprintf(output, "0 0 1 %g %g arc\n" , -a1 , -a2);
   fprintf(output, "%g %g SC\n", 2.0/(w-1) , 2.0/(h-1) );
   fprintf(output, "%g %g TR\n", -x - w/2.0 +0.5 , -y - h/2.0 +0.5);
   end_line();
-  
-  //  fprintf(output, "%g setlinewidth\n",  2/sqrt(w*h));
-  //  fprintf(output, "ELP\n");
-  //  fprintf(output, 2.0/w , 2.0/w , " SC\n";
-  //  fprintf(output, (-x - w/2.0) , (-y - h/2)  , " TR\n";
   fprintf(output, "GR\n");
 }
 
 void fltk3::PostScriptGraphicsDriver::pie(int x, int y, int w, int h, double a1, double a2) {
-  
   fprintf(output, "GS\n");
+  begin_polygon();
   fprintf(output, "%g %g TR\n", x + w/2.0 -0.5 , y + h/2.0 - 0.5);
   fprintf(output, "%g %g SC\n", (w-1)/2.0 , (h-1)/2.0 );
-  begin_polygon();
   vertex(0,0);
   arc(0.0,0.0, 1, a2, a1);
   end_polygon();
@@ -1343,7 +1346,7 @@ void fltk3::PostScriptGraphicsDriver::push_clip(int x, int y, int w, int h) {
   fprintf(output, "CR\nCS\n");
   if(lang_level_<3)
     recover();
-  fprintf(output, "%g %g %i %i CL\n", clip_->x-0.5 , clip_->y-0.5 , clip_->w  , clip_->h);
+  fprintf(output, "%g %g %i %i CL\n", clip_->x + origin_x() - 0.5 , clip_->y + origin_y() - 0.5 , clip_->w  , clip_->h);
   
 }
 
@@ -1384,9 +1387,7 @@ int fltk3::PostScriptGraphicsDriver::clip_box(int x, int y, int w, int h, int &X
   if (y > (Y=clip_->y)) {Y=y; ret=1;}
   if ((x+w) < (clip_->x+clip_->w)) {
     W=x+w-X;
-    
     ret=1;
-    
   }else
     W = clip_->x + clip_->w - X;
   if(W<0){

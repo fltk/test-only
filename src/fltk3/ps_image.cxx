@@ -470,6 +470,8 @@ void fltk3::PostScriptGraphicsDriver::draw(fltk3::Pixmap * pxm,int XP, int YP, i
   mx = WP;
   my = HP;
   push_clip(XP, YP, WP, HP);
+  XP += origin_x();
+  YP += origin_y();
   fltk3::draw_pixmap(di,XP -cx, YP -cy, fltk3::BLACK );
   pop_clip();
   delete[] mask;
@@ -485,6 +487,8 @@ void fltk3::PostScriptGraphicsDriver::draw(fltk3::RGBImage * rgb,int XP, int YP,
   if (lang_level_>2) //when not true, not making alphamask, mixing colors instead...
   if (alpha_mask(di, w, h, rgb->d(),rgb->ld())) return; //everthing masked, no need for painting!
   push_clip(XP, YP, WP, HP);
+  XP += origin_x();
+  YP += origin_y();
   draw_image(di, XP + cx, YP + cy, w, h, rgb->d(), rgb->ld());
   pop_clip();
   delete[]mask;
@@ -514,6 +518,8 @@ void fltk3::PostScriptGraphicsDriver::draw(fltk3::Bitmap * bitmap,int XP, int YP
 
   int i,j;
   push_clip(XP, YP, WP, HP);
+  XP += origin_x();
+  YP += origin_y();
   fprintf(output , "%i %i %i %i %i %i MI", XP - si, YP + HP , WP , -HP , w , h);
 
   for (j=0; j<HP; j++){
