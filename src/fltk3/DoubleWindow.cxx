@@ -104,14 +104,14 @@ void fltk3::GraphicsDriver::copy_offscreen(int x, int y, int w, int h, fltk3::Of
   fl_begin_offscreen(pixmap);
   uchar *img = fltk3::read_image(NULL, srcx, srcy, w, h, 0);
   fl_end_offscreen();
-  fltk3::draw_image(img, x, y, w, h, 3, 0);
+  fltk3::draw_image(img, x+origin_x(), y+origin_y(), w, h, 3, 0);
   delete[] img;
 }
 
 #if defined(USE_X11)
 
 void fltk3::XlibGraphicsDriver::copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
-  XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x, y);
+  XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x+origin_x(), y+origin_y());
 }
 
 
@@ -186,7 +186,7 @@ void fltk3::GDIGraphicsDriver::copy_offscreen(int x,int y,int w,int h,HBITMAP bi
   HDC new_gc = CreateCompatibleDC(fl_gc);
   int save = SaveDC(new_gc);
   SelectObject(new_gc, bitmap);
-  BitBlt(fl_gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
+  BitBlt(fl_gc, x+origin_x(), y+origin_y(), w, h, new_gc, srcx, srcy, SRCCOPY);
   RestoreDC(new_gc, save);
   DeleteDC(new_gc);
 }
@@ -200,11 +200,11 @@ void fltk3::GDIGraphicsDriver::copy_offscreen_with_alpha(int x,int y,int w,int h
   // first try to alpha blend
   // if to printer, always try alpha_blend
   if ( (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) || can_do_alpha_blending() ) {
-    if (fl_alpha_blend) alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
+    if (fl_alpha_blend) alpha_ok = fl_alpha_blend(fl_gc, x+origin_x(), y+origin_y(), w, h, new_gc, srcx, srcy, w, h, blendfunc);
   }
   // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1
   if (!alpha_ok) {
-    BitBlt(fl_gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
+    BitBlt(fl_gc, x+origin_x(), y+origin_y(), w, h, new_gc, srcx, srcy, SRCCOPY);
   }
   RestoreDC(new_gc, save);
   DeleteDC(new_gc);
@@ -264,7 +264,7 @@ void fltk3::QuartzGraphicsDriver::copy_offscreen(int x,int y,int w,int h,fltk3::
   CGDataProviderRef src_bytes = CGDataProviderCreateWithData( src, data, sw*sh*4, bmProviderRelease);
   CGImageRef img = CGImageCreate( sw, sh, 8, 4*8, 4*sw, lut, alpha,
 				 src_bytes, 0L, false, kCGRenderingIntentDefault);
-  CGRect rect = { { x, y }, { w, h } };
+  CGRect rect = { { x+origin_x(), y+origin_y() }, { w, h } };
   Fl_X::q_begin_image(rect, srcx, srcy, sw, sh);
   CGContextDrawImage(fl_gc, rect, img);
   Fl_X::q_end_image();

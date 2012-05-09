@@ -144,7 +144,7 @@ int fltk3::Pixmap::prepare(int XP, int YP, int WP, int HP, int &cx, int &cy,
 void fltk3::QuartzGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (pxm->prepare(XP, YP, WP, HP, cx, cy, X, Y, W, H)) return;
-  copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+  copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
 }
 
 #elif defined(WIN32)
@@ -162,7 +162,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, 
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else {
-    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
   }
 }
 
@@ -186,7 +186,7 @@ void fltk3::GDIPrinterGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, i
     DeleteDC(new_gc);
   }
   else {
-    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
+    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
   }
 }
 
@@ -206,7 +206,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP,
     int oy = Y-cy; if (oy < 0) oy += pxm->h();
     XSetClipOrigin(fl_display, fl_gc, X+origin_x()-cx, Y+origin_y()-cy);
   }
-  copy_offscreen(X+origin_x(), Y+origin_y(), W, H, pxm->id_, cx, cy);
+  copy_offscreen(X, Y, W, H, pxm->id_, cx, cy);
   if (pxm->mask_) {
     // put the old clip region back
     XSetClipOrigin(fl_display, fl_gc, 0, 0);

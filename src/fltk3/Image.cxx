@@ -543,9 +543,9 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else if (img->d()==2 || img->d()==4) {
-    copy_offscreen_with_alpha(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)img->id_, cx, cy);
+    copy_offscreen_with_alpha(X, Y, W, H, (fltk3::Offscreen)img->id_, cx, cy);
   } else {
-    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, (fltk3::Offscreen)img->id_, cx, cy);
+    copy_offscreen(X, Y, W, H, (fltk3::Offscreen)img->id_, cx, cy);
   }
 }
 
@@ -582,7 +582,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int W
       XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
     }
     
-    copy_offscreen(X+origin_x(), Y+origin_y(), W, H, img->id_, cx, cy);
+    copy_offscreen(X, Y, W, H, img->id_, cx, cy);
     
     if (img->mask_) {
       // put the old clip region back
