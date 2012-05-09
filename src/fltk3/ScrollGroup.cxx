@@ -109,8 +109,8 @@ void fltk3::ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
 void fltk3::ScrollGroup::recalc_scrollbars(ScrollInfo &si) {
 
   // inner box of widget (excluding scrollbars)
-  si.innerbox_x = x()+fltk3::box_dx(box());
-  si.innerbox_y = y()+fltk3::box_dy(box());
+  si.innerbox_x =     fltk3::box_dx(box());
+  si.innerbox_y =     fltk3::box_dy(box());
   si.innerbox_w = w()-fltk3::box_dw(box());
   si.innerbox_h = h()-fltk3::box_dh(box());
 
@@ -229,8 +229,8 @@ void fltk3::ScrollGroup::recalc_scrollbars(ScrollInfo &si) {
   outside of the draw() method (STR #1895).
 */
 void fltk3::ScrollGroup::bbox(int& X, int& Y, int& W, int& H) {
-  X = x()+fltk3::box_dx(box());
-  Y = y()+fltk3::box_dy(box());
+  X =     fltk3::box_dx(box());
+  Y =     fltk3::box_dy(box());
   W = w()-fltk3::box_dw(box());
   H = h()-fltk3::box_dh(box());
   if (scrollbar.visible()) {
@@ -250,7 +250,7 @@ void fltk3::ScrollGroup::draw() {
   uchar d = damage();
 
   if (d & fltk3::DAMAGE_ALL) { // full redraw
-    draw_box(box(),x(),y(),w(),h(),color());
+    draw_box(box(),0,0,w(),h(),color());
     draw_clip(this, X, Y, W, H);
   } else {
     if (d & fltk3::DAMAGE_SCROLL) {

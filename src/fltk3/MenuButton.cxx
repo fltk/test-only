@@ -61,7 +61,7 @@ const fltk3::MenuItem* fltk3::MenuButton::popup() {
   redraw();
   fltk3::WidgetTracker mb(this);
   if (!box() || type()) {
-    m = menu()->popup(event_x_root()-event_x(), event_y_root()-event_y(), label(), mvalue(), this);
+    m = menu()->popup(dx_window()+event_x(), dy_window()+event_y(), label(), mvalue(), this);
   } else {
     m = menu()->pulldown(dx_window(), dy_window(), w(), h(), 0, this);
   }

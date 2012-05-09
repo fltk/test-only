@@ -76,6 +76,8 @@ int main(int argc, char **argv) {
   // OS X may add the process number as the first argument - ignore
   if (argc>argn && strncmp(argv[1], "-psn_", 5)==0)
     argn++;
+  if (argc>argn+1 && strcmp(argv[1], "-NSDocumentRevisionsDebugMode")==0)
+    argn+=2;
 #endif
   
   fltk3::Window *win = new fltk3::Window(600, 100, "Native File Chooser Test");

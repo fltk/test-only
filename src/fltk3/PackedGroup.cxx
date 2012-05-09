@@ -80,8 +80,8 @@ void fltk3::PackedGroup::layout() {
 }
 
 void fltk3::PackedGroup::draw() {
-  int tx = x()+fltk3::box_dx(box());
-  int ty = y()+fltk3::box_dy(box());
+  int tx =     fltk3::box_dx(box());
+  int ty =     fltk3::box_dy(box());
   int tw = w()-fltk3::box_dw(box());
   int th = h()-fltk3::box_dh(box());
   int rw, rh;

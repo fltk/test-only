@@ -86,7 +86,7 @@ void fltk3::scroll(int X, int Y, int W, int H, int dx, int dy,
 
 #if defined(USE_X11)
   XCopyArea(fl_display, fl_window, fl_window, fl_gc,
-	    src_x, src_y, src_w, src_h, dest_x, dest_y);
+	    src_x+origin_x(), src_y+origin_y(), src_w, src_h, dest_x, dest_y);
   // we have to sync the display and get the GraphicsExpose events! (sigh)
   for (;;) {
     XEvent e; XWindowEvent(fl_display, fl_window, ExposureMask, &e);
@@ -128,7 +128,7 @@ void fltk3::scroll(int X, int Y, int W, int H, int dx, int dy,
     HRGN sys_rgn = CreateRectRgn(0, 0, 0, 0);
     fl_GetRandomRgn(fl_gc, sys_rgn, 4);
     // now get the source scrolling rectangle 
-    HRGN src_rgn = CreateRectRgn(src_x, src_y, src_x+src_w, src_y+src_h);
+    HRGN src_rgn = CreateRectRgn(src_x+origin_x(), src_y+origin_y(), src_x+origin_x()+src_w, src_y+origin_y()+src_h);
     POINT offset = { 0, 0 };
     if (GetDCOrgEx(fl_gc, &offset)) {
       OffsetRgn(src_rgn, offset.x, offset.y);
@@ -148,11 +148,11 @@ void fltk3::scroll(int X, int Y, int W, int H, int dx, int dy,
   }
 
   // Great, we can do an accelerated scroll instead of re-rendering
-  BitBlt(fl_gc, dest_x, dest_y, src_w, src_h, fl_gc, src_x, src_y,SRCCOPY);
+  BitBlt(fl_gc, dest_x+origin_x(), dest_y+origin_y(), src_w, src_h, fl_gc, src_x+origin_x(), src_y+origin_y(),SRCCOPY);
 
 #elif defined(__APPLE_QUARTZ__)
-  CGImageRef img = Fl_X::CGImage_from_window_rect(fltk3::Window::current(), src_x, src_y, src_w, src_h);
-  CGRect rect = { { dest_x, dest_y }, { src_w, src_h } };
+  CGImageRef img = Fl_X::CGImage_from_window_rect(fltk3::Window::current(), src_x+origin_x(), src_y+origin_y(), src_w, src_h);
+  CGRect rect = { { dest_x+origin_x(), dest_y+origin_y() }, { src_w, src_h } };
   Fl_X::q_begin_image(rect, 0, 0, src_w, src_h);
   CGContextDrawImage(fl_gc, rect, img);
   Fl_X::q_end_image();
