@@ -146,28 +146,28 @@ int Drawing_Area::handle(int event) {
   switch (event) {
   case fltk3::PUSH:
     erase_box();
-    ix = fltk3::event_x(); if (ix<x()) ix=x(); if (ix>=x()+w()) ix=x()+w()-1;
-    iy = fltk3::event_y(); if (iy<y()) iy=y(); if (iy>=y()+h()) iy=y()+h()-1;
+    ix = fltk3::event_x(); if (ix<0) ix=0; if (ix>=w()) ix=w()-1;
+    iy = fltk3::event_y(); if (iy<0) iy=0; if (iy>=h()) iy=h()-1;
     dragged = 0;
     button = fltk3::event_button();
     return 1;
   case fltk3::DRAG:
     dragged = 1;
     erase_box();
-    x2 = fltk3::event_x(); if (x2<x()) x2=x(); if (x2>=x()+w()) x2=x()+w()-1;
-    y2 = fltk3::event_y(); if (y2<y()) y2=y(); if (y2>=y()+h()) y2=y()+h()-1;
+    x2 = fltk3::event_x(); if (x2<0) x2=0; if (x2>=w()) x2=w()-1;
+    y2 = fltk3::event_y(); if (y2<0) y2=0; if (y2>=h()) y2=h()-1;
     if (button != 1) {ix = x2; iy = y2; return 1;}
     if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
     if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
     window()->make_current();
-    fltk3::overlay_rect(sx,sy,sw,sh);
+    fltk3::overlay_rect(dx_window()+sx,dy_window()+sy,sw,sh);
     return 1;
   case fltk3::RELEASE:
     if (button == 1) {
       erase_box();
       if (dragged && sw > 3 && sh > 3) {
-	X = X + (sx+sw/2-x()-W/2)*scale/W;
-	Y = Y + (-sy-sh/2+y()+H/2)*scale/W;
+	X = X + (sx+sw/2-W/2)*scale/W;
+	Y = Y + (-sy-sh/2+H/2)*scale/W;
 	scale = sw*scale/W;
       } else if (!dragged) {
 	scale = 2*scale;
@@ -195,8 +195,8 @@ int Drawing_Area::handle(int event) {
 	jbrot.d->scale = 4;
 	jbrot.update_label();
       }
-      jbrot.d->jX = X + (ix-x()-W/2)*scale/W;
-      jbrot.d->jY = Y + (H/2-iy+y())*scale/W;
+      jbrot.d->jX = X + (ix-W/2)*scale/W;
+      jbrot.d->jY = Y + (H/2-iy)*scale/W;
       static char s[128];
       sprintf(s, "Julia %.7f %.7f",jbrot.d->jX,jbrot.d->jY);
       jbrot.window->label(s);
