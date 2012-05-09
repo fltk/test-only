@@ -465,8 +465,10 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   if (!linedelta) linedelta = W*delta;
 
   int dx, dy, w, h;
-  fltk3::clip_box(X,Y,W,H,dx,dy,w,h);
+  fltk3::clip_box(X-fltk3::graphics_driver->origin_x(),Y-fltk3::graphics_driver->origin_y(),W,H,dx,dy,w,h);
   if (w<=0 || h<=0) return;
+  dx += fltk3::graphics_driver->origin_x();
+  dy += fltk3::graphics_driver->origin_y();
   dx -= X;
   dy -= Y;
 
