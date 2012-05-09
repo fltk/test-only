@@ -465,7 +465,7 @@ void fltk3::Widget::draw_backdrop() const {
     if (img && deimage() && !active_r())
       img = deimage();
     if (img) 
-      ((fltk3::Image*)img)->draw(x_+(w_-img->w())/2, y_+(h_-img->h())/2);
+      ((fltk3::Image*)img)->draw((w_-img->w())/2, (h_-img->h())/2);
   }
 }
 

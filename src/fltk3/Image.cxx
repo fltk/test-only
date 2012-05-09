@@ -46,17 +46,17 @@ namespace fltk3 {
 //
 
 /**
-  The destructor is a virtual method that frees all memory used
-  by the image.
-*/
+ The destructor is a virtual method that frees all memory used
+ by the image.
+ */
 fltk3::Image::~Image() {
 }
 
 /**
-  If the image has been cached for display, delete the cache
-  data. This allows you to change the data used for the image and
-  then redraw it without recreating an image object.
-*/
+ If the image has been cached for display, delete the cache
+ data. This allows you to change the data used for the image and
+ then redraw it without recreating an image object.
+ */
 void fltk3::Image::uncache() {
 }
 
@@ -65,10 +65,10 @@ void fltk3::Image::draw(int XP, int YP, int, int, int, int) {
 }
 
 /**
-  The protected method draw_empty() draws a box with
-  an X in it. It can be used to draw any image that lacks image
-  data.
-*/
+ The protected method draw_empty() draws a box with
+ an X in it. It can be used to draw any image that lacks image
+ data.
+ */
 void fltk3::Image::draw_empty(int X, int Y) {
   if (w() > 0 && h() > 0) {
     fltk3::color(fltk3::FOREGROUND_COLOR);
@@ -79,55 +79,55 @@ void fltk3::Image::draw_empty(int X, int Y) {
 }
 
 /**
-  The copy() method creates a copy of the specified
-  image. If the width and height are provided, the image is
-  resized to the specified size. The image should be deleted (or in
-  the case of fltk3::SharedImage, released) when you are done
-  with it.
-*/
+ The copy() method creates a copy of the specified
+ image. If the width and height are provided, the image is
+ resized to the specified size. The image should be deleted (or in
+ the case of fltk3::SharedImage, released) when you are done
+ with it.
+ */
 fltk3::Image *fltk3::Image::copy(int W, int H) {
   return new fltk3::Image(W, H, d());
 }
 
 /**
-  The color_average() method averages the colors in
-  the image with the FLTK color value c. The i
-  argument specifies the amount of the original image to combine
-  with the color, so a value of 1.0 results in no color blend, and
-  a value of 0.0 results in a constant image of the specified
-  color. <I>The original image data is not altered by this
-  method.</I>
-*/
+ The color_average() method averages the colors in
+ the image with the FLTK color value c. The i
+ argument specifies the amount of the original image to combine
+ with the color, so a value of 1.0 results in no color blend, and
+ a value of 0.0 results in a constant image of the specified
+ color. <I>The original image data is not altered by this
+ method.</I>
+ */
 void fltk3::Image::color_average(fltk3::Color, float) {
 }
 
 /**
-  The desaturate() method converts an image to
-  grayscale. If the image contains an alpha channel (depth = 4),
-  the alpha channel is preserved. <I>This method does not alter
-  the original image data.</I>
-*/
+ The desaturate() method converts an image to
+ grayscale. If the image contains an alpha channel (depth = 4),
+ the alpha channel is preserved. <I>This method does not alter
+ the original image data.</I>
+ */
 void fltk3::Image::desaturate() {
 }
 
 /**
-  The label() methods are an obsolete way to set the
-  image attribute of a widget or menu item. Use the
-  image() or deimage() methods of the
-  fltk3::Widget and fltk3::MenuItem classes
-  instead.
-*/
+ The label() methods are an obsolete way to set the
+ image attribute of a widget or menu item. Use the
+ image() or deimage() methods of the
+ fltk3::Widget and fltk3::MenuItem classes
+ instead.
+ */
 void fltk3::Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
 /**
-  The label() methods are an obsolete way to set the
-  image attribute of a widget or menu item. Use the
-  image() or deimage() methods of the
-  fltk3::Widget and fltk3::MenuItem classes
-  instead.
-*/
+ The label() methods are an obsolete way to set the
+ image attribute of a widget or menu item. Use the
+ image() or deimage() methods of the
+ fltk3::Widget and fltk3::MenuItem classes
+ instead.
+ */
 void fltk3::Image::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
@@ -135,39 +135,39 @@ void fltk3::Image::label(fltk3::MenuItem* m) {
 
 void
 fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
-                    int            lx,		// I - X position
-		    int            ly,		// I - Y position
-		    int            lw,		// I - Width of label
-		    int            lh,		// I - Height of label
-		    fltk3::Align       la) {	// I - Alignment
+                        int            lx,		// I - X position
+                        int            ly,		// I - Y position
+                        int            lw,		// I - Width of label
+                        int            lh,		// I - Height of label
+                        fltk3::Align       la) {	// I - Alignment
   fltk3::Image	*img;				// Image pointer
   int		cx, cy;				// Image position
-
+  
   img = (fltk3::Image *)(lo->label()); // FIXME: oh curse you, abuser of pointers
   // the line above will return the address of a wrapper instead of the correct pointer
   // when using wrappers.
-
+  
   if (la & fltk3::ALIGN_LEFT) cx = 0;
   else if (la & fltk3::ALIGN_RIGHT) cx = img->w() - lw;
   else cx = (img->w() - lw) / 2;
-
+  
   if (la & fltk3::ALIGN_TOP) cy = 0;
   else if (la & fltk3::ALIGN_BOTTOM) cy = img->h() - lh;
   else cy = (img->h() - lh) / 2;
-
+  
   fltk3::color((fltk3::Color)lo->labelcolor());
-
+  
   img->draw(lx, ly, lw, lh, cx, cy);
 }
 
 void
 fltk3::Image::measure(const fltk3::Label *lo,		// I - Label
-                  int            &lw,		// O - Width of image
-		  int            &lh) {		// O - Height of image
+                      int            &lw,		// O - Width of image
+                      int            &lh) {		// O - Height of image
   fltk3::Image *img;				// Image pointer
-
+  
   img = (fltk3::Image *)(lo->label());
-
+  
   lw = img->w();
   lh = img->h();
 }
@@ -193,7 +193,7 @@ void fltk3::RGBImage::uncache() {
     fl_delete_offscreen((fltk3::Offscreen)id_);
     id_ = 0;
   }
-
+  
   if (mask_) {
     fl_delete_bitmask((fltk3::Bitmask)mask_);
     mask_ = 0;
@@ -204,7 +204,7 @@ void fltk3::RGBImage::uncache() {
 fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
   fltk3::RGBImage	*new_image;	// New RGB image
   uchar		*new_array;	// New array for image data
-
+  
   // Optimize the simple copy where the width and height are the same,
   // or when we are copying an empty image...
   if ((W == w() && H == h()) ||
@@ -226,50 +226,50 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
       }
       new_image = new fltk3::RGBImage(new_array, w(), h(), d());
       new_image->alloc_array = 1;
-
+      
       return new_image;
     } else return new fltk3::RGBImage(array, w(), h(), d(), ld());
   }
   if (W <= 0 || H <= 0) return 0;
-
+  
   // OK, need to resize the image data; allocate memory and 
   uchar		*new_ptr;	// Pointer into new array
   const uchar	*old_ptr;	// Pointer into old array
   int		c,		// Channel number
-		sy,		// Source coordinate
-		dx, dy,		// Destination coordinates
-		xerr, yerr,	// X & Y errors
-		xmod, ymod,	// X & Y moduli
-		xstep, ystep,	// X & Y step increments
-    line_d; // stride from line to line
-
-
+  sy,		// Source coordinate
+  dx, dy,		// Destination coordinates
+  xerr, yerr,	// X & Y errors
+  xmod, ymod,	// X & Y moduli
+  xstep, ystep,	// X & Y step increments
+  line_d; // stride from line to line
+  
+  
   // Figure out Bresenheim step/modulus values...
   xmod   = w() % W;
   xstep  = (w() / W) * d();
   ymod   = h() % H;
   ystep  = h() / H;
   line_d = ld() ? ld() : w() * d();
-
+  
   // Allocate memory for the new image...
   new_array = new uchar [W * H * d()];
   new_image = new fltk3::RGBImage(new_array, W, H, d());
   new_image->alloc_array = 1;
-
+  
   // Scale the image using a nearest-neighbor algorithm...
   for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
     for (dx = W, xerr = W, old_ptr = array + sy * line_d; dx > 0; dx --) {
       for (c = 0; c < d(); c ++) *new_ptr++ = old_ptr[c];
-
+      
       old_ptr += xstep;
       xerr    -= xmod;
-
+      
       if (xerr <= 0) {
 	xerr    += W;
 	old_ptr += d();
       }
     }
-
+    
     sy   += ystep;
     yerr -= ymod;
     if (yerr <= 0) {
@@ -277,45 +277,45 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
       sy ++;
     }
   }
-
+  
   return new_image;
 }
 
 void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
   // Don't average an empty image...
   if (!w() || !h() || !d() || !array) return;
-
+  
   // Delete any existing pixmap/mask objects...
   uncache();
-
+  
   // Allocate memory as needed...
   uchar		*new_array,
-		*new_ptr;
-
+  *new_ptr;
+  
   if (!alloc_array) new_array = new uchar[h() * w() * d()];
   else new_array = (uchar *)array;
-
+  
   // Get the color to blend with...
   uchar		r, g, b;
   unsigned	ia, ir, ig, ib;
-
+  
   fltk3::get_color(c, r, g, b);
   if (i < 0.0f) i = 0.0f;
   else if (i > 1.0f) i = 1.0f;
-
+  
   ia = (unsigned)(256 * i);
   ir = r * (256 - ia);
   ig = g * (256 - ia);
   ib = b * (256 - ia);
-
+  
   // Update the image data to do the blend...
   const uchar	*old_ptr;
   int		x, y;
   int   line_i = ld() ? ld() - (w()*d()) : 0; // increment from line end to beginning of next line
-
+  
   if (d() < 3) {
     ig = (r * 31 + g * 61 + b * 8) / 100 * (256 - ia);
-
+    
     for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += line_i)
       for (x = 0; x < w(); x ++) {
 	*new_ptr++ = (*old_ptr++ * ia + ig) >> 8;
@@ -330,12 +330,12 @@ void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
 	if (d() > 3) *new_ptr++ = *old_ptr++;
       }
   }
-
+  
   // Set the new pointers/values as needed...
   if (!alloc_array) {
     array       = new_array;
     alloc_array = 1;
-
+    
     ld(0);
   }
 }
@@ -343,38 +343,38 @@ void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
 void fltk3::RGBImage::desaturate() {
   // Don't desaturate an empty image...
   if (!w() || !h() || !d() || !array) return;
-
+  
   // Can only desaturate color images...
   if (d() < 3) return;
-
+  
   // Delete any existing pixmap/mask objects...
   uncache();
-
+  
   // Allocate memory for a grayscale image...
   uchar		*new_array,
-		*new_ptr;
+  *new_ptr;
   int		new_d;
-
+  
   new_d     = d() - 2;
   new_array = new uchar[h() * w() * new_d];
-
+  
   // Copy the image data, converting to grayscale...
   const uchar	*old_ptr;
   int		x, y;
   int   line_i = ld() ? ld() - (w()*d()) : 0; // increment from line end to beginning of next line
-
+  
   for (new_ptr = new_array, old_ptr = array, y = 0; y < h(); y ++, old_ptr += line_i)
     for (x = 0; x < w(); x ++, old_ptr += d()) {
       *new_ptr++ = (uchar)((31 * old_ptr[0] + 61 * old_ptr[1] + 8 * old_ptr[2]) / 100);
       if (d() > 3) *new_ptr++ = old_ptr[3];
     }
-
+  
   // Free the old array as needed, and then set the new pointers/values...
   if (alloc_array) delete[] (uchar *)array;
-
+  
   array       = new_array;
   alloc_array = 1;
-
+  
   ld(0);
   d(new_d);
 }
@@ -387,27 +387,27 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
   if (ld == 0) ld = img->w() * img->d();
   uchar *srcptr = (uchar*)img->array + cy * ld + cx * img->d();
   int srcskip = ld - img->d() * W;
-
+  
   uchar *dst = new uchar[W * H * 3];
   uchar *dstptr = dst;
-
+  
   fltk3::read_image(dst, X, Y, W, H, 0);
-
+  
   uchar srcr, srcg, srcb, srca;
   uchar dstr, dstg, dstb, dsta;
-
+  
   if (img->d() == 2) {
     // Composite grayscale + alpha over RGB...
     for (int y = H; y > 0; y--, srcptr+=srcskip)
       for (int x = W; x > 0; x--) {
 	srcg = *srcptr++;
 	srca = *srcptr++;
-
+        
 	dstr = dstptr[0];
 	dstg = dstptr[1];
 	dstb = dstptr[2];
 	dsta = 255 - srca;
-
+        
 	*dstptr++ = (srcg * srca + dstr * dsta) >> 8;
 	*dstptr++ = (srcg * srca + dstg * dsta) >> 8;
 	*dstptr++ = (srcg * srca + dstb * dsta) >> 8;
@@ -420,20 +420,20 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
 	srcg = *srcptr++;
 	srcb = *srcptr++;
 	srca = *srcptr++;
-
+        
 	dstr = dstptr[0];
 	dstg = dstptr[1];
 	dstb = dstptr[2];
 	dsta = 255 - srca;
-
+        
 	*dstptr++ = (srcr * srca + dstr * dsta) >> 8;
 	*dstptr++ = (srcg * srca + dstg * dsta) >> 8;
 	*dstptr++ = (srcb * srca + dstb * dsta) >> 8;
       }
   }
-
+  
   fltk3::draw_image(dst, X, Y, W, H, 3, 0);
-
+  
   delete[] dst;
 }
 #endif // !WIN32 && !__APPLE_QUARTZ__
@@ -494,8 +494,8 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int
       lut = CGColorSpaceCreateDeviceRGB();
     CGDataProviderRef src = CGDataProviderCreateWithData( NULL, img_bytes, img->w()*img->h()*img->d(), release_cb);
     img->id_ = CGImageCreate( img->w(), img->h(), 8, img->d()*8, ld?ld:img->w()*img->d(),
-			lut, (img->d()&1)?kCGImageAlphaNone:kCGImageAlphaLast,
-			src, 0L, false, kCGRenderingIntentDefault);
+                             lut, (img->d()&1)?kCGImageAlphaNone:kCGImageAlphaLast,
+                             src, 0L, false, kCGRenderingIntentDefault);
     CGColorSpaceRelease(lut);
     CGDataProviderRelease(src);
   }
