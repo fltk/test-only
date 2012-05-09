@@ -535,8 +535,9 @@ void fltk3::QuartzGraphicsDriver::draw(const char* str, int n, int x, int y) {
 
 void fltk3::QuartzGraphicsDriver::draw(int angle, const char *str, int n, int x, int y) {
   CGContextSaveGState(fl_gc);
-  CGContextTranslateCTM(fl_gc, x, y);
+  CGContextTranslateCTM(fl_gc, x+origin_x(), y+origin_y());
   CGContextRotateCTM(fl_gc, - angle*(M_PI/180) );
+  CGContextTranslateCTM(fl_gc, -origin_x(), -origin_y());
   draw(str, n, 0, 0);
   CGContextRestoreGState(fl_gc);
 }
@@ -544,7 +545,7 @@ void fltk3::QuartzGraphicsDriver::draw(int angle, const char *str, int n, int x,
 void fltk3::QuartzGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {
   int dx, dy, w, h;
   text_extents(c, n, dx, dy, w, h);
-  draw(c, n, x - w - dx, y);
+  draw(c, n, x+origin_x() - w - dx, y+origin_y());
 }
 
 //

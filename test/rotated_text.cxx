@@ -56,7 +56,7 @@ class Rotated_Label_Box : public fltk3::Widget{
     fltk3::color(labelcolor());
     int dx(0),dy(0);
      
-    if(rt_align&fltk3::ALIGN_CLIP)fltk3::push_clip(x(),y(),w(),h());
+    if(rt_align&fltk3::ALIGN_CLIP)fltk3::push_clip(0,0,w(),h());
     else fltk3::push_no_clip();
     fltk3::measure(rt_text,dx,dy);
     if(rt_align&fltk3::ALIGN_LEFT){
@@ -69,11 +69,11 @@ class Rotated_Label_Box : public fltk3::Widget{
       dx=(int)(-cos(M_PI*(double)rt_angle/180.)*(double)dx);
       dx/=2;dy/=2;
     }
-    if(labeltype()==fltk3::SHADOW_LABEL)shadow_label(x()+w()/2+dx,y()+h()/2+dy);
-    else if(labeltype()==fltk3::ENGRAVED_LABEL)engraved_label(x()+w()/2+dx,y()+h()/2+dy);
-    else if(labeltype()==fltk3::EMBOSSED_LABEL)embossed_label(x()+w()/2+dx,y()+h()/2+dy);
+    if(labeltype()==fltk3::SHADOW_LABEL)shadow_label(w()/2+dx,h()/2+dy);
+    else if(labeltype()==fltk3::ENGRAVED_LABEL)engraved_label(w()/2+dx,h()/2+dy);
+    else if(labeltype()==fltk3::EMBOSSED_LABEL)embossed_label(w()/2+dx,h()/2+dy);
     else{
-     fltk3::draw(rt_angle,rt_text,x()+w()/2+dx,y()+h()/2+dy);
+     fltk3::draw(rt_angle,rt_text,w()/2+dx,h()/2+dy);
     }
     fltk3::pop_clip();
     draw_label();
