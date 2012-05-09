@@ -170,20 +170,20 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
   { window = new fltk3::DoubleWindow(490, 380, "Choose File");
     window->callback((fltk3::Callback*)cb_window, (void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 470, 25);
-      { showChoice = new fltk3::Choice(65, 10, 215, 25, "Show:");
+      { showChoice = new fltk3::Choice(55, 0, 215, 25, "Show:");
         showChoice->down_box(fltk3::BORDER_BOX);
         showChoice->labelfont(1);
         showChoice->callback((fltk3::Callback*)cb_showChoice);
         fltk3::Group::current()->resizable(showChoice);
         showChoice->label(show_label);
       } // fltk3::Choice* showChoice
-      { favoritesButton = new fltk3::MenuButton(290, 10, 155, 25, "Favorites");
+      { favoritesButton = new fltk3::MenuButton(280, 0, 155, 25, "Favorites");
         favoritesButton->down_box(fltk3::BORDER_BOX);
         favoritesButton->callback((fltk3::Callback*)cb_favoritesButton);
         favoritesButton->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
         favoritesButton->label(favorites_label);
       } // fltk3::MenuButton* favoritesButton
-      { fltk3::Button* o = newButton = new fltk3::Button(455, 10, 25, 25);
+      { fltk3::Button* o = newButton = new fltk3::Button(445, 0, 25, 25);
         newButton->image(image_new);
         newButton->labelsize(8);
         newButton->callback((fltk3::Callback*)cb_newButton);
@@ -193,12 +193,12 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
     } // fltk3::Group* o
     { fltk3::TiledGroup* o = new fltk3::TiledGroup(10, 45, 470, 225);
       o->callback((fltk3::Callback*)cb_);
-      { fileList = new fltk3::FileBrowser(10, 45, 295, 225);
+      { fileList = new fltk3::FileBrowser(0, 0, 295, 225);
         fileList->type(2);
         fileList->callback((fltk3::Callback*)cb_fileList);
         fileList->window()->hotspot(fileList);
       } // fltk3::FileBrowser* fileList
-      { previewBox = new fltk3::Box(305, 45, 175, 225, "?");
+      { previewBox = new fltk3::Box(295, 0, 175, 225, "?");
         previewBox->box(fltk3::DOWN_BOX);
         previewBox->labelsize(100);
         previewBox->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
@@ -207,46 +207,46 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
       fltk3::Group::current()->resizable(o);
     } // fltk3::TiledGroup* o
     { fltk3::Group* o = new fltk3::Group(10, 275, 470, 95);
-      { fltk3::Group* o = new fltk3::Group(10, 275, 470, 20);
-        { previewButton = new fltk3::CheckButton(10, 275, 73, 20, "Preview");
+      { fltk3::Group* o = new fltk3::Group(0, 0, 470, 20);
+        { previewButton = new fltk3::CheckButton(0, 0, 73, 20, "Preview");
           previewButton->shortcut(0x80070);
           previewButton->down_box(fltk3::DOWN_BOX);
           previewButton->value(1);
           previewButton->callback((fltk3::Callback*)cb_previewButton);
           previewButton->label(preview_label);
         } // fltk3::CheckButton* previewButton
-        { showHiddenButton = new fltk3::CheckButton(115, 275, 165, 20, "Show hidden files");
+        { showHiddenButton = new fltk3::CheckButton(105, 0, 165, 20, "Show hidden files");
           showHiddenButton->down_box(fltk3::DOWN_BOX);
           showHiddenButton->callback((fltk3::Callback*)cb_showHiddenButton);
           showHiddenButton->label(hidden_label);
         } // fltk3::CheckButton* showHiddenButton
-        { fltk3::Box* o = new fltk3::Box(115, 275, 365, 20);
+        { fltk3::Box* o = new fltk3::Box(105, 0, 365, 20);
           fltk3::Group::current()->resizable(o);
         } // fltk3::Box* o
         o->end();
       } // fltk3::Group* o
-      { fileName = new fltk3::FileInput(115, 300, 365, 35);
+      { fileName = new fltk3::FileInput(53, 10, 365, 35);
         fileName->labelfont(1);
         fileName->callback((fltk3::Callback*)cb_fileName);
         fileName->when(fltk3::WHEN_ENTER_KEY);
         fltk3::Group::current()->resizable(fileName);
         fileName->when(fltk3::WHEN_CHANGED | fltk3::WHEN_ENTER_KEY);
       } // fltk3::FileInput* fileName
-      { fltk3::Box* o = new fltk3::Box(10, 310, 105, 25, "Filename:");
+      { fltk3::Box* o = new fltk3::Box(0, 25, 105, 25, "Filename:");
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
         o->label(filename_label);
       } // fltk3::Box* o
-      { fltk3::Group* o = new fltk3::Group(10, 345, 470, 25);
-        { okButton = new fltk3::ReturnButton(313, 345, 85, 25, "OK");
+      { fltk3::Group* o = new fltk3::Group(0, 70, 470, 25);
+        { okButton = new fltk3::ReturnButton(303, 0, 85, 25, "OK");
           okButton->callback((fltk3::Callback*)cb_okButton);
           okButton->label(fltk3::ok);
         } // fltk3::ReturnButton* okButton
-        { fltk3::Button* o = cancelButton = new fltk3::Button(408, 345, 72, 25, "Cancel");
+        { fltk3::Button* o = cancelButton = new fltk3::Button(398, 0, 72, 25, "Cancel");
           cancelButton->callback((fltk3::Callback*)cb_cancelButton);
           o->label(fltk3::cancel);
         } // fltk3::Button* cancelButton
-        { fltk3::Box* o = new fltk3::Box(10, 345, 30, 25);
+        { fltk3::Box* o = new fltk3::Box(0, 0, 30, 25);
           fltk3::Group::current()->resizable(o);
         } // fltk3::Box* o
         o->end();
@@ -265,29 +265,29 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
       fltk3::Group::current()->resizable(favList);
     } // fltk3::FileBrowser* favList
     { fltk3::Group* o = new fltk3::Group(320, 10, 25, 95);
-      { favUpButton = new fltk3::Button(320, 10, 25, 25, "@8>");
+      { favUpButton = new fltk3::Button(0, 0, 25, 25, "@8>");
         favUpButton->callback((fltk3::Callback*)cb_favUpButton);
       } // fltk3::Button* favUpButton
-      { favDeleteButton = new fltk3::Button(320, 45, 25, 25, "X");
+      { favDeleteButton = new fltk3::Button(0, 35, 25, 25, "X");
         favDeleteButton->labelfont(1);
         favDeleteButton->callback((fltk3::Callback*)cb_favDeleteButton);
         fltk3::Group::current()->resizable(favDeleteButton);
       } // fltk3::Button* favDeleteButton
-      { favDownButton = new fltk3::Button(320, 80, 25, 25, "@2>");
+      { favDownButton = new fltk3::Button(0, 70, 25, 25, "@2>");
         favDownButton->callback((fltk3::Callback*)cb_favDownButton);
       } // fltk3::Button* favDownButton
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 113, 335, 29);
-      { favCancelButton = new fltk3::Button(273, 115, 72, 25, "Cancel");
+      { favCancelButton = new fltk3::Button(263, 2, 72, 25, "Cancel");
         favCancelButton->callback((fltk3::Callback*)cb_favCancelButton);
         favCancelButton->label(fltk3::cancel);
       } // fltk3::Button* favCancelButton
-      { favOkButton = new fltk3::ReturnButton(181, 115, 79, 25, "Save");
+      { favOkButton = new fltk3::ReturnButton(171, 2, 79, 25, "Save");
         favOkButton->callback((fltk3::Callback*)cb_favOkButton);
         favOkButton->label(save_label);
       } // fltk3::ReturnButton* favOkButton
-      { fltk3::Box* o = new fltk3::Box(10, 115, 161, 25);
+      { fltk3::Box* o = new fltk3::Box(0, 2, 161, 25);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
       o->end();
