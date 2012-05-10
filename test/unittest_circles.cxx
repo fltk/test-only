@@ -50,7 +50,7 @@ public:
   }
   void draw() {
     fltk3::Box::draw();
-    int a = x()+10, b = y()+10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
+    int a = 10, b = 10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
     // test fltk3::arc for full circles
     fltk3::color(fltk3::GREEN); fltk3::rect(a+ 9, b+ 9, 33, 33);
     fltk3::color(fltk3::RED); fltk3::xyline(a+24, b+10, a+27); fltk3::xyline(a+24, b+40, a+27);

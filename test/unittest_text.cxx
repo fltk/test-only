@@ -58,8 +58,8 @@ public:
   }
   TextExtentsTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {}
   void draw(void) {
-    int x0 = x(); // origin is current window position for fltk3::Box
-    int y0 = y();
+    int x0 = 0; // origin is current window position for fltk3::Box
+    int y0 = 0;
     int w0 = w();
     int h0 = h();
     fltk3::push_clip(x0, y0, w0, h0); // reset local clipping

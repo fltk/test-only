@@ -48,7 +48,7 @@ public:
   }
   void draw() {
     fltk3::Box::draw();
-    int a = x()+10, b = y()+10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
+    int a = 10, b = 10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
     // testing fltk3::rect() with positive size
     fltk3::color(fltk3::RED);   fltk3::loop(a+10, b+10, a+40, b+10, a+40, b+40, a+10, b+40);
     fltk3::color(fltk3::GREEN); fltk3::loop(a+ 9, b+ 9, a+41, b+ 9, a+41, b+41, a+ 9, b+41);

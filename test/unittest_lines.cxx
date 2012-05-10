@@ -49,7 +49,7 @@ public:
   }
   void draw() {
     fltk3::Box::draw();
-    int a = x()+10, b = y()+10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
+    int a = 10, b = 10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
     // testing fltk3::xyline(x, y, x1)
     fltk3::color(fltk3::RED); fltk3::point(a+10, b+10); fltk3::point(a+20, b+10);
     fltk3::color(fltk3::BLACK); fltk3::xyline(a+10, b+10, a+20);

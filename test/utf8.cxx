@@ -110,7 +110,7 @@ void FontDisplay::draw(void)
   draw_box();
   fltk3::font((fltk3::Font)font, size);
   fltk3::color(fltk3::BLACK);
-  fltk3::draw(label(), x() + 3, y() + 3, w() - 6, h() - 6, align());
+  fltk3::draw(label(), 3, 3, w() - 6, h() - 6, align());
 }
 
 
@@ -362,43 +362,43 @@ static void create_font_widget()
       }  
       fltk3::Group *fontgroup = new fltk3::Group(0, 105, 380, 315);
       {        
-        fontobj = new fltk3::HoldBrowser(10, 110, 290, 270);
+        fontobj = new fltk3::HoldBrowser(10, 5, 290, 270);
         fontobj->box(fltk3::FRAME_BOX);
         fontobj->color(53, 3);
         fontobj->callback(font_cb);
         fnt_chooser_win->resizable(fontobj);
         
-        sizeobj = new fltk3::HoldBrowser(310, 110, 60, 270);
+        sizeobj = new fltk3::HoldBrowser(310, 5, 60, 270);
         sizeobj->box(fltk3::FRAME_BOX);
         sizeobj->color(53, 3);
         sizeobj->callback(size_cb);
         
         // Create the status bar
-        fltk3::Group *stat_bar = new fltk3::Group (10, 385, 380, 30);
+        fltk3::Group *stat_bar = new fltk3::Group (10, 280, 380, 30);
         {        
-          fnt_cnt = new fltk3::ValueOutput(10, 390, 40, 20);
+          fnt_cnt = new fltk3::ValueOutput(0, 5, 40, 20);
           fnt_cnt->label("fonts");
           fnt_cnt->align(fltk3::ALIGN_RIGHT);
         
-          fix_prop = new fltk3::Output(100, 390, 40, 20);
+          fix_prop = new fltk3::Output(90, 5, 40, 20);
           fix_prop->color(fltk3::BACKGROUND_COLOR);
           fix_prop->value("prop");
           fix_prop->clear_visible_focus();
         
-          own_face = new fltk3::CheckButton(150, 390, 40, 20, "Self");
+          own_face = new fltk3::CheckButton(140, 5, 40, 20, "Self");
           own_face->value(0);
           own_face->type(fltk3::TOGGLE_BUTTON);
           own_face->clear_visible_focus();
           own_face->callback(own_face_cb);
           own_face->tooltip("Display font names in their own face");
         
-          fltk3::Box * dummy = new fltk3::Box(220, 390, 1, 1);
+          fltk3::Box * dummy = new fltk3::Box(210, 10, 1, 1);
         
-          choose_btn = new fltk3::Button(240, 385, 60, 30);
+          choose_btn = new fltk3::Button(230, 0, 60, 30);
           choose_btn->label("Select");
           choose_btn->callback(choose_cb);
         
-          refresh_btn = new fltk3::Button(310, 385, 60, 30);
+          refresh_btn = new fltk3::Button(300, 0, 60, 30);
           refresh_btn->label("Refresh");
           refresh_btn->callback(refresh_cb);
         
@@ -495,7 +495,7 @@ public:
     if (type() == fltk3::HIDDEN_INPUT) return;
     fltk3::Boxtype b = box();
     if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
-    drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b),
+    drawtext(fltk3::box_dx(b)+3, fltk3::box_dy(b),
              w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b));
   }
   void drawtext(int X, int Y, int W, int H) {
@@ -629,10 +629,10 @@ int main(int argc, char** argv)
     }
     buf[o] = '\0';
     sprintf(bu, "0x%06lX", y * 16);
-    fltk3::Input *b = new fltk3::Input(200,(y-off)*25,80,25);
+    fltk3::Input *b = new fltk3::Input(0,(y-off)*25,80,25);
     b->textfont(fltk3::COURIER);
     b->value(strdup(bu));
-    b = new fltk3::Input(280,(y-off)*25,380,25);
+    b = new fltk3::Input(80,(y-off)*25,380,25);
     b->textfont(extra_font);
     b->value(strdup(buf));
   }

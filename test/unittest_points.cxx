@@ -47,7 +47,7 @@ public:
   }
   void draw() {
     fltk3::Box::draw();
-    int a = x()+10, b = y()+10; 
+    int a = 10, b = 10; 
     fltk3::color(fltk3::WHITE); fltk3::rectf(a, b, 90, 90);
     fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 90, 90);
     fltk3::point(a+10, b+10); fltk3::point(a+20, b+20);

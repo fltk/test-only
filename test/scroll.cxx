@@ -49,7 +49,7 @@ public:
 void Drawing::draw() {
   draw_box();
   fltk3::push_matrix();
-  fltk3::translate(x()+w()/2, y()+h()/2);
+  fltk3::translate(w()/2, h()/2);
   fltk3::scale(w()/2, h()/2);
   fltk3::color(fltk3::BLACK);
   for (int i = 0; i < 20; i++) {

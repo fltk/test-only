@@ -545,7 +545,7 @@ void fltk3::QuartzGraphicsDriver::draw(int angle, const char *str, int n, int x,
 void fltk3::QuartzGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {
   int dx, dy, w, h;
   text_extents(c, n, dx, dy, w, h);
-  draw(c, n, x+origin_x() - w - dx, y+origin_y());
+  draw(c, n, x - w - dx, y);
 }
 
 //

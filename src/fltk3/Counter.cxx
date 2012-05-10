@@ -45,26 +45,26 @@ void fltk3::Counter::draw() {
   int xx[5], ww[5];
   if (type() == fltk3::NORMAL_COUNTER) {
     int W = w()*15/100;
-    xx[1] = x();	 ww[1] = W;
-    xx[2] = x()+1*W;     ww[2] = W;
-    xx[0] = x()+2*W;     ww[0] = w()-4*W;
-    xx[3] = x()+w()-2*W; ww[3] = W;
-    xx[4] = x()+w()-1*W; ww[4] = W;
+    xx[1] = 0;	 ww[1] = W;
+    xx[2] = 1*W;     ww[2] = W;
+    xx[0] = 2*W;     ww[0] = w()-4*W;
+    xx[3] = w()-2*W; ww[3] = W;
+    xx[4] = w()-1*W; ww[4] = W;
   } else {
     int W = w()*20/100;
     xx[1] = 0;	         ww[1] = 0;
-    xx[2] = x();	 ww[2] = W;
-    xx[0] = x()+W;	 ww[0] = w()-2*W;
-    xx[3] = x()+w()-1*W; ww[3] = W;
+    xx[2] = 0;	 ww[2] = W;
+    xx[0] = W;	 ww[0] = w()-2*W;
+    xx[3] = w()-1*W; ww[3] = W;
     xx[4] = 0;	         ww[4] = 0;
   }
 
-  draw_box(Boxtype(boxtype[0]|TIE_LEFT|TIE_RIGHT), xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
+  draw_box(Boxtype(boxtype[0]|TIE_LEFT|TIE_RIGHT), xx[0], 0, ww[0], h(), fltk3::BACKGROUND2_COLOR);
   fltk3::font(textfont(), textsize());
   fltk3::color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
   char str[128]; format(str);
-  fltk3::draw(str, xx[0], y(), ww[0], h(), fltk3::ALIGN_CENTER);
-  if (fltk3::focus() == this) draw_focus(boxtype[0], xx[0], y(), ww[0], h());
+  fltk3::draw(str, xx[0], 0, ww[0], h(), fltk3::ALIGN_CENTER);
+  if (fltk3::focus() == this) draw_focus(boxtype[0], xx[0], 0, ww[0], h());
   if (!(damage()&fltk3::DAMAGE_ALL)) return; // only need to redraw text
 
   if (active_r())
@@ -73,22 +73,22 @@ void fltk3::Counter::draw() {
     selcolor = fltk3::inactive(labelcolor());
 
   if (type() == fltk3::NORMAL_COUNTER) {
-    draw_box(Boxtype(boxtype[1]|TIE_RIGHT), xx[1], y(), ww[1], h(), color());
-    fltk3::draw_symbol("@-4<<", xx[1], y(), ww[1], h(), selcolor);
-    draw_box(Boxtype(boxtype[2]|TIE_LEFT|TIE_RIGHT), xx[2], y(), ww[2], h(), color());
-    fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
+    draw_box(Boxtype(boxtype[1]|TIE_RIGHT), xx[1], 0, ww[1], h(), color());
+    fltk3::draw_symbol("@-4<<", xx[1], 0, ww[1], h(), selcolor);
+    draw_box(Boxtype(boxtype[2]|TIE_LEFT|TIE_RIGHT), xx[2], 0, ww[2], h(), color());
+    fltk3::draw_symbol("@-4<",  xx[2], 0, ww[2], h(), selcolor);
   } else {
-    draw_box(Boxtype(boxtype[2]|TIE_RIGHT), xx[2], y(), ww[2], h(), color());
-    fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
+    draw_box(Boxtype(boxtype[2]|TIE_RIGHT), xx[2], 0, ww[2], h(), color());
+    fltk3::draw_symbol("@-4<",  xx[2], 0, ww[2], h(), selcolor);
   }
   if (type() == fltk3::NORMAL_COUNTER) {
-    draw_box(Boxtype(boxtype[3]|TIE_LEFT|TIE_RIGHT), xx[3], y(), ww[3], h(), color());
-    fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
-    draw_box(Boxtype(boxtype[4]|TIE_LEFT), xx[4], y(), ww[4], h(), color());
-    fltk3::draw_symbol("@-4>>", xx[4], y(), ww[4], h(), selcolor);
+    draw_box(Boxtype(boxtype[3]|TIE_LEFT|TIE_RIGHT), xx[3], 0, ww[3], h(), color());
+    fltk3::draw_symbol("@-4>",  xx[3], 0, ww[3], h(), selcolor);
+    draw_box(Boxtype(boxtype[4]|TIE_LEFT), xx[4], 0, ww[4], h(), color());
+    fltk3::draw_symbol("@-4>>", xx[4], 0, ww[4], h(), selcolor);
   } else {
-    draw_box(Boxtype(boxtype[3]|TIE_LEFT), xx[3], y(), ww[3], h(), color());
-    fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
+    draw_box(Boxtype(boxtype[3]|TIE_LEFT), xx[3], 0, ww[3], h(), color());
+    fltk3::draw_symbol("@-4>",  xx[3], 0, ww[3], h(), selcolor);
   }
 }
 
@@ -118,14 +118,14 @@ void fltk3::Counter::repeat_callback(void* v) {
 int fltk3::Counter::calc_mouseobj() {
   if (type() == fltk3::NORMAL_COUNTER) {
     int W = w()*15/100;
-    if (fltk3::event_inside(x(), y(), W, h())) return 1;
-    if (fltk3::event_inside(x()+W, y(), W, h())) return 2;
-    if (fltk3::event_inside(x()+w()-2*W, y(), W, h())) return 3;
-    if (fltk3::event_inside(x()+w()-W, y(), W, h())) return 4;
+    if (fltk3::event_inside(0, 0, W, h())) return 1;
+    if (fltk3::event_inside(W, 0, W, h())) return 2;
+    if (fltk3::event_inside(w()-2*W, 0, W, h())) return 3;
+    if (fltk3::event_inside(w()-W, 0, W, h())) return 4;
   } else {
     int W = w()*20/100;
-    if (fltk3::event_inside(x(), y(), W, h())) return 2;
-    if (fltk3::event_inside(x()+w()-W, y(), W, h())) return 3;
+    if (fltk3::event_inside(0, 0, W, h())) return 2;
+    if (fltk3::event_inside(w()-W, 0, W, h())) return 3;
   }
   return -1;
 }

@@ -121,19 +121,19 @@ public:
         //     |        |  |        |  |        |          |      |
         //     ----------  ----------  ----------         ---  ------
         //                                     
-        int tgrpy = Y+30;
+        int tgrpy = 30;
         int tgrph = H-130;
         int browy = tgrpy+14;
         int browh = tgrph/2 - 20;
         int treey = browy + browh + 20;
         int treeh = browh;
-        brow_a = makebrowser(X+ 10,browy,100,browh,"Browser A");
-        brow_b = makebrowser(X+120,browy,100,browh,"Browser B");
-        brow_c = makebrowser(X+240,browy,100,browh,"Browser C");
-        tree_a = maketree(X+ 10,treey,100,treeh,"Tree A");
-        tree_b = maketree(X+120,treey,100,treeh,"Tree B");
-        tree_c = maketree(X+240,treey,100,treeh,"Tree C");
-        fltk3::ValueSlider *slide_glob = new fltk3::ValueSlider(X+100,Y,100,18,"Global Scroll Size");
+        brow_a = makebrowser( 10,browy,100,browh,"Browser A");
+        brow_b = makebrowser(120,browy,100,browh,"Browser B");
+        brow_c = makebrowser(240,browy,100,browh,"Browser C");
+        tree_a = maketree( 10,treey,100,treeh,"Tree A");
+        tree_b = maketree(120,treey,100,treeh,"Tree B");
+        tree_c = maketree(240,treey,100,treeh,"Tree C");
+        fltk3::ValueSlider *slide_glob = new fltk3::ValueSlider(100,0,100,18,"Global Scroll Size");
         slide_glob->value(16);
         slide_glob->type(fltk3::HORIZONTAL);
         slide_glob->align(fltk3::ALIGN_LEFT);
@@ -141,7 +141,7 @@ public:
         slide_glob->step(1.0);
         slide_glob->callback(slide_cb, (void*)this);
         slide_glob->labelsize(12);
-        fltk3::ValueSlider *slide_browa = new fltk3::ValueSlider(X+350,Y,100,18,"A: Scroll Size");
+        fltk3::ValueSlider *slide_browa = new fltk3::ValueSlider(350,0,100,18,"A: Scroll Size");
         slide_browa->value(16);
         slide_browa->type(fltk3::HORIZONTAL);
         slide_browa->align(fltk3::ALIGN_LEFT);

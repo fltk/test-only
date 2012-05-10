@@ -126,10 +126,9 @@ namespace fltk3 {
      */
     Spinner(int X, int Y, int W, int H, const char *L = 0)
     : fltk3::Group(X, Y, W, H, L),
-    input_(X, Y, W - H / 2 - 2, H),
-    up_button_(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2, "@-42<"),
-    down_button_(X + W - H / 2 - 2, Y + H - H / 2,
-                 H / 2 + 2, H / 2, "@-42>") {
+    input_(0, 0, W - H / 2 - 2, H),
+    up_button_(W - H / 2 - 2, 0, H / 2 + 2, H / 2, "@-42<"),
+    down_button_(W - H / 2 - 2, H - H / 2, H / 2 + 2, H / 2, "@-42>") {
       end();
       
       value_   = 1.0;
@@ -193,12 +192,10 @@ namespace fltk3 {
     /** Sets the minimum and maximum values for the widget. */
     void		range(double a, double b) { minimum_ = a; maximum_ = b; }
     void		resize(int X, int Y, int W, int H) {
-      Group::resize(X,Y,W,H);
-      
-      input_.resize(X, Y, W - H / 2 - 2, H);
-      up_button_.resize(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2);
-      down_button_.resize(X + W - H / 2 - 2, Y + H - H / 2,
-                          H / 2 + 2, H / 2);
+      Group::resize(X,Y,W,H);      
+      input_.resize(0, 0, W - H / 2 - 2, H);
+      up_button_.resize(W - H / 2 - 2, 0, H / 2 + 2, H / 2);
+      down_button_.resize(W - H / 2 - 2, H - H / 2, H / 2 + 2, H / 2);
     }
     /**
      Sets or returns the amount to change the value when the user clicks a button. 

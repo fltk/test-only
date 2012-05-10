@@ -138,17 +138,17 @@ fltk3::Table::Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,
   
   box(fltk3::THIN_DOWN_FRAME);
   
-  vscrollbar = new fltk3::Scrollbar(x()+w()-SCROLLBAR_SIZE, y(),
+  vscrollbar = new fltk3::Scrollbar(w()-SCROLLBAR_SIZE, 0,
                                 SCROLLBAR_SIZE, h()-SCROLLBAR_SIZE);
   vscrollbar->type(fltk3::VERTICAL);
   vscrollbar->callback(scroll_cb, (void*)this);
   
-  hscrollbar = new fltk3::Scrollbar(x(), y()+h()-SCROLLBAR_SIZE,
+  hscrollbar = new fltk3::Scrollbar(0, h()-SCROLLBAR_SIZE,
                                 w(), SCROLLBAR_SIZE);
   hscrollbar->type(fltk3::HORIZONTAL);
   hscrollbar->callback(scroll_cb, (void*)this);
   
-  table = new fltk3::ScrollGroup(x(), y(), w(), h());
+  table = new fltk3::ScrollGroup(0, 0, w(), h());
   table->box(fltk3::NO_BOX);
   table->type(0);		// don't show fltk3::ScrollGroup's scrollbars -- use our own
   table->hide();		// hide unless children are present
@@ -418,34 +418,34 @@ void fltk3::Table::_auto_drag_cb() {
   int lx = fltk3::e_x;
   int ly = fltk3::e_y;
   if (_selecting == CONTEXT_COL_HEADER)
-  { ly = y() + col_header_height(); }
+  { ly = col_header_height(); }
   else if (_selecting == CONTEXT_ROW_HEADER)
-  { lx = x() + row_header_width(); }
-  if (lx > x() + w() - 20) {
-    fltk3::e_x = x() + w() - 20;
+  { lx = row_header_width(); }
+  if (lx > w() - 20) {
+    fltk3::e_x = w() - 20;
     if (hscrollbar->visible())
       ((fltk3::Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() + 30));
     hscrollbar->do_callback();
     _dragging_x = fltk3::e_x - 30;
   }
-  else if (lx < (x() + row_header_width())) {
-    fltk3::e_x = x() + row_header_width() + 1;
+  else if (lx < (row_header_width())) {
+    fltk3::e_x = row_header_width() + 1;
     if (hscrollbar->visible()) {
       ((fltk3::Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() - 30));
     }
     hscrollbar->do_callback();
     _dragging_x = fltk3::e_x + 30;
   }
-  if (ly > y() + h() - 20) {
-    fltk3::e_y = y() + h() - 20;
+  if (ly > h() - 20) {
+    fltk3::e_y = h() - 20;
     if (vscrollbar->visible()) {
       ((fltk3::Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() + 30));
     }
     vscrollbar->do_callback();
     _dragging_y = fltk3::e_y - 30;
   }
-  else if (ly < (y() + col_header_height())) {
-    fltk3::e_y = y() + col_header_height() + 1;
+  else if (ly < (col_header_height())) {
+    fltk3::e_y = col_header_height() + 1;
     if (vscrollbar->visible()) {
       ((fltk3::Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() - 30));
     }
@@ -467,8 +467,8 @@ void fltk3::Table::_auto_drag_cb() {
 // Recalculate the window dimensions
 void fltk3::Table::recalc_dimensions() {
   // Recalc to* (Table Outer), ti* (Table Inner), wi* ( Widget Inner)
-  wix = ( x() + fltk3::box_dx(box())); tox = wix; tix = tox + fltk3::box_dx(table->box());
-  wiy = ( y() + fltk3::box_dy(box())); toy = wiy; tiy = toy + fltk3::box_dy(table->box());
+  wix = (       fltk3::box_dx(box())); tox = wix; tix = tox + fltk3::box_dx(table->box());
+  wiy = (       fltk3::box_dy(box())); toy = wiy; tiy = toy + fltk3::box_dy(table->box());
   wiw = ( w() - fltk3::box_dw(box())); tow = wiw; tiw = tow - fltk3::box_dw(table->box());
   wih = ( h() - fltk3::box_dh(box())); toh = wih; tih = toh - fltk3::box_dh(table->box());
   // Trim window if headers enabled
@@ -740,7 +740,7 @@ int fltk3::Table::handle(int event) {
         case CONTEXT_NONE:
           // fltk3::PUSH on table corner?
           if ( fltk3::event_button() == 1 && 
-              fltk3::event_x() < x() + row_header_width()) {
+              fltk3::event_x() < row_header_width()) {
             current_col = 0;
             select_col = cols() - 1;
             current_row = 0;
@@ -885,10 +885,10 @@ int fltk3::Table::handle(int event) {
       }
       // Enable autodrag if not resizing, and mouse has moved off table edge
       if ( _resizing_row < 0 && _resizing_col < 0 && _auto_drag == 0 && 
-          ( fltk3::event_x() > x() + w() - 20 ||
-           fltk3::event_x() < x() + row_header_width() || 
-           fltk3::event_y() > y() + h() - 20 ||
-           fltk3::event_y() < y() + col_header_height()
+          ( fltk3::event_x() > w() - 20 ||
+           fltk3::event_x() < row_header_width() || 
+           fltk3::event_y() > h() - 20 ||
+           fltk3::event_y() < col_header_height()
            ) ) {
             _start_auto_drag();
           }
@@ -1139,7 +1139,7 @@ void fltk3::Table::draw() {
   fltk3::pop_clip();
   
   // Explicitly draw border around widget, if any
-  draw_box(box(), x(), y(), w(), h(), color());
+  draw_box(box(), 0, 0, w(), h(), color());
   
   // If fltk3::ScrollGroup 'table' is hidden, draw its box
   //    Do this after fltk3::Group::draw() so we draw over scrollbars

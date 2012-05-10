@@ -512,14 +512,16 @@ SudokuCell::draw() {
 
 
   // Draw the cell box...
-  if (readonly()) fltk3::draw_box(fltk3::UP_BOX, x(), y(), w(), h(), color());
-  else fltk3::draw_box(fltk3::DOWN_BOX, x(), y(), w(), h(), color());
+  if (readonly()) 
+    fltk3::draw_box(fltk3::UP_BOX, 0, 0, w(), h(), color());
+  else 
+    fltk3::draw_box(fltk3::DOWN_BOX, 0, 0, w(), h(), color());
 
   // Draw the cell background...
   if (fltk3::focus() == this) {
     fltk3::Color c = fltk3::color_average(fltk3::SELECTION_COLOR, color(), 0.5f);
     fltk3::color(c);
-    fltk3::rectf(x() + 4, y() + 4, w() - 8, h() - 8);
+    fltk3::rectf(4, 4, w() - 8, h() - 8);
     fltk3::color(fltk3::contrast(labelcolor(), c));
   } else fltk3::color(labelcolor());
 
@@ -532,7 +534,7 @@ SudokuCell::draw() {
     s[0] = value_ + '0';
 
     fltk3::font(fltk3::HELVETICA_BOLD, h() - 10);
-    fltk3::draw(s, x(), y(), w(), h(), fltk3::ALIGN_CENTER);
+    fltk3::draw(s, 0, 0, w(), h(), fltk3::ALIGN_CENTER);
   }
 
   fltk3::font(fltk3::HELVETICA_BOLD, h() / 5);
@@ -540,7 +542,7 @@ SudokuCell::draw() {
   for (int i = 0; i < 8; i ++) {
     if (test_value_[i]) {
       s[0] = test_value_[i] + '0';
-      fltk3::draw(s, x() + 5, y() + 5, w() - 10, h() - 10, align[i]);
+      fltk3::draw(s, 5, 5, w() - 10, h() - 10, align[i]);
     }
   }
 }
@@ -560,7 +562,7 @@ SudokuCell::handle(int event) {
       return 1;
 
     case fltk3::PUSH :
-      if (!readonly() && fltk3::event_inside(this)) {
+      if (!readonly() && fltk3::event_inside(0, 0, w(), h())) {
         if (fltk3::event_clicks()) {
 	  // 2+ clicks increments/sets value
 	  if (value()) {

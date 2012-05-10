@@ -277,8 +277,8 @@ void fltk3::Tree::draw() {
   Group::draw_label();
   // Handle tree
   if ( ! _root ) return;
-  int cx = x() + fltk3::box_dx(box());
-  int cy = y() + fltk3::box_dy(box());
+  int cx =       fltk3::box_dx(box());
+  int cy =       fltk3::box_dy(box());
   int cw = w() - fltk3::box_dw(box());
   int ch = h() - fltk3::box_dh(box());
   // These values are changed during drawing
@@ -308,8 +308,8 @@ void fltk3::Tree::draw() {
     _vscroll->visible();
     
     int scrollsize = _scrollbar_size ? _scrollbar_size : fltk3::scrollbar_size();
-    int sx = x()+w()-fltk3::box_dx(box())-scrollsize;
-    int sy = y()+fltk3::box_dy(box());
+    int sx = w()-fltk3::box_dx(box())-scrollsize;
+    int sy = fltk3::box_dy(box());
     int sw = scrollsize;
     int sh = h()-fltk3::box_dh(box());
     _vscroll->show();
@@ -602,8 +602,8 @@ int fltk3::Tree::handle(int e) {
                                                                         // Autoscroll
 		int itemtop = _item_focus->y();
 		int itembot = _item_focus->y()+_item_focus->h();
-		if ( itemtop < y() ) { show_item_top(_item_focus); }
-		if ( itembot > y()+h() ) { show_item_bottom(_item_focus); }
+		if ( itemtop < 0 ) { show_item_top(_item_focus); }
+		if ( itembot > h() ) { show_item_bottom(_item_focus); }
 		// Extend selection
 		if ( _prefs.selectmode() == fltk3::TREE_SELECT_MULTI &&	// multiselect on?
                     (fltk3::event_state() & fltk3::SHIFT) &&			// shift key?
@@ -673,12 +673,12 @@ int fltk3::Tree::handle(int e) {
     case fltk3::DRAG: {
       // do the scrolling first:
       int my = fltk3::event_y();
-      if ( my < y() ) {				// above top?
-        int p = vposition()-(y()-my);
+      if ( my < 0 ) {				// above top?
+        int p = vposition()-(-my);
 	if ( p < 0 ) p = 0;
         vposition(p);
-      } else if ( my > (y()+h()) ) {		// below bottom?
-        int p = vposition()+(my-y()-h());
+      } else if ( my > (h()) ) {		// below bottom?
+        int p = vposition()+(my-h());
 	if ( p > (int)_vscroll->maximum() ) p = (int)_vscroll->maximum();
         vposition(p);
       }
@@ -831,7 +831,7 @@ int fltk3::Tree::select_only(fltk3::TreeItem *selitem, int docallback) {
 void fltk3::Tree::show_item(fltk3::TreeItem *item, int yoff) {
   item = item ? item : first();
   if (!item) return;
-  int newval = item->y() - y() - yoff + (int)_vscroll->value();
+  int newval = item->y() - yoff + (int)_vscroll->value();
   if ( newval < _vscroll->minimum() ) newval = (int)_vscroll->minimum();
   if ( newval > _vscroll->maximum() ) newval = (int)_vscroll->maximum();
   _vscroll->value(newval);
@@ -850,7 +850,7 @@ void fltk3::Tree::show_item(fltk3::TreeItem *item, int yoff) {
 int fltk3::Tree::displayed(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (!item) return(0);
-  return( (item->y() >= y()) && (item->y() <= (y()+h()-item->h())) ? 1 : 0);
+  return( (item->y() >= 0) && (item->y() <= (h()-item->h())) ? 1 : 0);
 }
 
 /// Adjust the vertical scroll bar to show \p item at the top

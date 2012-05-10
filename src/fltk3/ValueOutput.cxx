@@ -35,8 +35,8 @@
 
 void fltk3::ValueOutput::draw() {
   fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
-  int X = x()+fltk3::box_dx(b);
-  int Y = y()+fltk3::box_dy(b);
+  int X =     fltk3::box_dx(b);
+  int Y =     fltk3::box_dy(b);
   int W = w()-fltk3::box_dw(b);
   int H = h()-fltk3::box_dh(b);
   if (damage()&~fltk3::DAMAGE_CHILD)

@@ -109,7 +109,7 @@ public:
 
     // top left: RGB
 
-    int xx = x()+10, yy = y()+10;
+    int xx = 10, yy = 10;
     fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);
 #if IMG
     i_rgb->draw(xx+1,yy+1);
@@ -120,7 +120,7 @@ public:
 
     // bottom left: RGBA
 
-    xx = x()+10; yy = y()+10+134;
+    xx = 10; yy = 10+134;
     fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);	// black frame
     fltk3::color(fltk3::WHITE); fltk3::rectf(xx+1, yy+1, 128, 128);	// white background
 #if CB							// checker board
@@ -136,7 +136,7 @@ public:
 
     // top right: Gray
 
-    xx = x()+10+200; yy = y()+10;
+    xx = 10+200; yy = 10;
     fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);
 #if IMG
     i_g->draw(xx+1,yy+1);
@@ -147,7 +147,7 @@ public:
 
     // bottom right: Gray+Alpha
 
-    xx = x()+10+200; yy = y()+10+134;
+    xx = 10+200; yy = 10+134;
     fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);	// black frame
     fltk3::color(fltk3::WHITE); fltk3::rectf(xx+1, yy+1, 128, 128);	// white background
 #if CB							// checker board
