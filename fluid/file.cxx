@@ -496,6 +496,7 @@ static void read_children(Fl_Type *p, int paste) {
 }
 
 extern void deselect();
+extern void fixup_coordinates();
 
 int read_file(const char *filename, int merge) {
   Fl_Type *o;
@@ -509,6 +510,9 @@ int read_file(const char *filename, int merge) {
     if (o->is_menu_button()) o->add_child(0,0);
   for (o = Fl_Type::first; o; o = o->next)
     if (o->selected) {Fl_Type::current = o; break;}
+  // Fix the coordinate system when importing FLTK 1 files
+  if (read_version>=1.0 && read_version<2.0) 
+    fixup_coordinates();
   selection_changed(Fl_Type::current);
   return close_read();
 }

@@ -39,7 +39,7 @@ void fltk3::MenuButton::draw() {
   int X = w()-H*2;
   int Y = (h()-H)/2;
   draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
-  draw_label(0, 0, X+2, h());
+  draw_label(fltk3::box_dx(box()), 0, X-fltk3::box_dw(box()), h());
   if (fltk3::focus() == this) draw_focus();
   // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   fltk3::color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));

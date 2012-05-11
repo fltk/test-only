@@ -225,14 +225,14 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
         } // fltk3::Box* o
         o->end();
       } // fltk3::Group* o
-      { fileName = new fltk3::FileInput(53, 10, 365, 35);
+      { fileName = new fltk3::FileInput(105, 19, 365, 35);
         fileName->labelfont(1);
         fileName->callback((fltk3::Callback*)cb_fileName);
         fileName->when(fltk3::WHEN_ENTER_KEY);
         fltk3::Group::current()->resizable(fileName);
         fileName->when(fltk3::WHEN_CHANGED | fltk3::WHEN_ENTER_KEY);
       } // fltk3::FileInput* fileName
-      { fltk3::Box* o = new fltk3::Box(0, 25, 105, 25, "Filename:");
+      { fltk3::Box* o = new fltk3::Box(0, 28, 105, 25, "Filename:");
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
         o->label(filename_label);

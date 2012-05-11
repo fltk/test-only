@@ -80,12 +80,12 @@ fltk3::DoubleWindow* make_project_window() {
     } // fltk3::Button* o
     { fltk3::TabGroup* o = new fltk3::TabGroup(10, 10, 378, 220);
       o->selection_color((fltk3::Color)12);
-      { fltk3::Group* o = new fltk3::Group(10, 36, 378, 194, "Output");
+      { fltk3::Group* o = new fltk3::Group(0, 26, 378, 194, "Output");
         o->hide();
-        { fltk3::Box* o = new fltk3::Box(100, 49, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
+        { fltk3::Box* o = new fltk3::Box(90, 13, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
           o->align(fltk3::Align(fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE));
         } // fltk3::Box* o
-        { header_file_input = new fltk3::Input(99, 103, 272, 20, "Header File:");
+        { header_file_input = new fltk3::Input(89, 67, 272, 20, "Header File:");
           header_file_input->tooltip("The name of the generated header file.");
           header_file_input->box(fltk3::THIN_DOWN_BOX);
           header_file_input->labelfont(1);
@@ -93,7 +93,7 @@ fltk3::DoubleWindow* make_project_window() {
           header_file_input->callback((fltk3::Callback*)header_input_cb, (void*)(1));
           header_file_input->when(fltk3::WHEN_CHANGED);
         } // fltk3::Input* header_file_input
-        { code_file_input = new fltk3::Input(100, 128, 272, 20, "Code File:");
+        { code_file_input = new fltk3::Input(90, 92, 272, 20, "Code File:");
           code_file_input->tooltip("The name of the generated code file.");
           code_file_input->box(fltk3::THIN_DOWN_BOX);
           code_file_input->labelfont(1);
@@ -101,17 +101,17 @@ fltk3::DoubleWindow* make_project_window() {
           code_file_input->callback((fltk3::Callback*)code_input_cb, (void*)(1));
           code_file_input->when(fltk3::WHEN_CHANGED);
         } // fltk3::Input* code_file_input
-        { include_H_from_C_button = new fltk3::CheckButton(100, 177, 272, 20, "Include Header from Code");
+        { include_H_from_C_button = new fltk3::CheckButton(90, 141, 272, 20, "Include Header from Code");
           include_H_from_C_button->tooltip("Include the header file from the code file.");
           include_H_from_C_button->down_box(fltk3::DOWN_BOX);
           include_H_from_C_button->callback((fltk3::Callback*)include_H_from_C_button_cb);
         } // fltk3::CheckButton* include_H_from_C_button
-        { use_FL_COMMAND_button = new fltk3::CheckButton(100, 200, 272, 20, "Menu shortcuts use FL_COMMAND");
+        { use_FL_COMMAND_button = new fltk3::CheckButton(90, 164, 272, 20, "Menu shortcuts use FL_COMMAND");
           use_FL_COMMAND_button->tooltip("Replace FL_CTRL with FL_COMMAND when generating menu shortcut code.");
           use_FL_COMMAND_button->down_box(fltk3::DOWN_BOX);
           use_FL_COMMAND_button->callback((fltk3::Callback*)use_FL_COMMAND_button_cb);
         } // fltk3::CheckButton* use_FL_COMMAND_button
-        { proj_version_choice = new fltk3::Choice(100, 152, 145, 20, "Version:");
+        { proj_version_choice = new fltk3::Choice(90, 116, 145, 20, "Version:");
           proj_version_choice->down_box(fltk3::BORDER_BOX);
           proj_version_choice->labelfont(1);
           proj_version_choice->callback((fltk3::Callback*)proj_version_cb);
@@ -119,8 +119,8 @@ fltk3::DoubleWindow* make_project_window() {
         } // fltk3::Choice* proj_version_choice
         o->end();
       } // fltk3::Group* o
-      { fltk3::Group* o = new fltk3::Group(10, 36, 378, 194, "Internationalization");
-        { i18n_type_chooser = new fltk3::Choice(100, 48, 136, 25, "Use:");
+      { fltk3::Group* o = new fltk3::Group(0, 26, 378, 194, "Internationalization");
+        { i18n_type_chooser = new fltk3::Choice(90, 12, 136, 25, "Use:");
           i18n_type_chooser->tooltip("Type of internationalization to use.");
           i18n_type_chooser->box(fltk3::THIN_UP_BOX);
           i18n_type_chooser->down_box(fltk3::BORDER_BOX);
@@ -128,21 +128,21 @@ fltk3::DoubleWindow* make_project_window() {
           i18n_type_chooser->callback((fltk3::Callback*)i18n_type_cb);
           i18n_type_chooser->menu(menu_i18n_type_chooser);
         } // fltk3::Choice* i18n_type_chooser
-        { i18n_include_input = new fltk3::Input(100, 78, 272, 20, "#include:");
+        { i18n_include_input = new fltk3::Input(90, 42, 272, 20, "#include:");
           i18n_include_input->tooltip("The include file for internationalization.");
           i18n_include_input->box(fltk3::THIN_DOWN_BOX);
           i18n_include_input->labelfont(1);
           i18n_include_input->textfont(4);
           i18n_include_input->callback((fltk3::Callback*)i18n_text_cb);
         } // fltk3::Input* i18n_include_input
-        { i18n_file_input = new fltk3::Input(100, 104, 272, 20, "File:");
+        { i18n_file_input = new fltk3::Input(90, 68, 272, 20, "File:");
           i18n_file_input->tooltip("The name of the message catalog.");
           i18n_file_input->box(fltk3::THIN_DOWN_BOX);
           i18n_file_input->labelfont(1);
           i18n_file_input->textfont(4);
           i18n_file_input->callback((fltk3::Callback*)i18n_text_cb);
         } // fltk3::Input* i18n_file_input
-        { i18n_set_input = new fltk3::IntInput(100, 128, 272, 20, "Set:");
+        { i18n_set_input = new fltk3::IntInput(90, 92, 272, 20, "Set:");
           i18n_set_input->tooltip("The message set number.");
           i18n_set_input->type(2);
           i18n_set_input->box(fltk3::THIN_DOWN_BOX);
@@ -150,7 +150,7 @@ fltk3::DoubleWindow* make_project_window() {
           i18n_set_input->textfont(4);
           i18n_set_input->callback((fltk3::Callback*)i18n_int_cb);
         } // fltk3::IntInput* i18n_set_input
-        { i18n_function_input = new fltk3::Input(100, 103, 272, 20, "Function:");
+        { i18n_function_input = new fltk3::Input(90, 67, 272, 20, "Function:");
           i18n_function_input->tooltip("The function to call to internationalize the labels and tooltips.");
           i18n_function_input->box(fltk3::THIN_DOWN_BOX);
           i18n_function_input->labelfont(1);
@@ -239,11 +239,11 @@ fltk3::DoubleWindow* make_settings_window() {
     { fltk3::Group* o = new fltk3::Group(116, 43, 220, 126);
       o->labelfont(1);
       o->align(fltk3::Align(fltk3::ALIGN_CENTER));
-      { fltk3::Box* o = new fltk3::Box(116, 43, 1, 25, "Options: ");
+      { fltk3::Box* o = new fltk3::Box(0, 0, 1, 25, "Options: ");
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT));
       } // fltk3::Box* o
-      { tooltips_button = new fltk3::CheckButton(116, 43, 113, 25, "Show Tooltips");
+      { tooltips_button = new fltk3::CheckButton(0, 0, 113, 25, "Show Tooltips");
         tooltips_button->down_box(fltk3::DOWN_BOX);
         tooltips_button->callback((fltk3::Callback*)cb_tooltips_button);
         int b;
@@ -251,28 +251,28 @@ fltk3::DoubleWindow* make_settings_window() {
         tooltips_button->value(b);
         fltk3::Tooltip::enable(b);
       } // fltk3::CheckButton* tooltips_button
-      { completion_button = new fltk3::CheckButton(116, 68, 186, 25, "Show Completion Dialogs");
+      { completion_button = new fltk3::CheckButton(0, 25, 186, 25, "Show Completion Dialogs");
         completion_button->down_box(fltk3::DOWN_BOX);
         completion_button->callback((fltk3::Callback*)cb_completion_button);
         int b;
         fluid_prefs.get("show_completion_dialogs", b, 1);
         completion_button->value(b);
       } // fltk3::CheckButton* completion_button
-      { openlast_button = new fltk3::CheckButton(116, 93, 214, 25, "Open Previous File on Startup");
+      { openlast_button = new fltk3::CheckButton(0, 50, 214, 25, "Open Previous File on Startup");
         openlast_button->down_box(fltk3::DOWN_BOX);
         openlast_button->callback((fltk3::Callback*)cb_openlast_button);
         int b;
         fluid_prefs.get("open_previous_file", b, 0);
         openlast_button->value(b);
       } // fltk3::CheckButton* openlast_button
-      { prevpos_button = new fltk3::CheckButton(116, 118, 209, 25, "Remember Window Positions");
+      { prevpos_button = new fltk3::CheckButton(0, 75, 209, 25, "Remember Window Positions");
         prevpos_button->down_box(fltk3::DOWN_BOX);
         prevpos_button->callback((fltk3::Callback*)cb_prevpos_button);
         int b;
         fluid_prefs.get("prev_window_pos", b, 1);
         prevpos_button->value(b);
       } // fltk3::CheckButton* prevpos_button
-      { show_comments_button = new fltk3::CheckButton(116, 143, 209, 25, "Show Comments in Browser");
+      { show_comments_button = new fltk3::CheckButton(0, 100, 209, 25, "Show Comments in Browser");
         show_comments_button->down_box(fltk3::DOWN_BOX);
         show_comments_button->callback((fltk3::Callback*)cb_show_comments_button);
         fluid_prefs.get("show_comments", show_comments, 1);
@@ -454,56 +454,56 @@ fltk3::DoubleWindow* make_layout_window() {
       o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
     } // fltk3::Box* o
     { fltk3::Group* o = new fltk3::Group(105, 115, 170, 75);
-      { def_widget_size[0] = new fltk3::RoundButton(105, 115, 70, 25);
+      { def_widget_size[0] = new fltk3::RoundButton(0, 0, 70, 25);
         def_widget_size[0]->type(102);
         def_widget_size[0]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[0]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(8));
       } // fltk3::RoundButton* def_widget_size[0]
-      { fltk3::Box* o = new fltk3::Box(120, 115, 50, 25, "tiny");
+      { fltk3::Box* o = new fltk3::Box(15, 0, 50, 25, "tiny");
         o->labelsize(8);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[1] = new fltk3::RoundButton(180, 115, 70, 25);
+      { def_widget_size[1] = new fltk3::RoundButton(75, 0, 70, 25);
         def_widget_size[1]->type(102);
         def_widget_size[1]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[1]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(11));
       } // fltk3::RoundButton* def_widget_size[1]
-      { fltk3::Box* o = new fltk3::Box(195, 115, 50, 25, "small");
+      { fltk3::Box* o = new fltk3::Box(90, 0, 50, 25, "small");
         o->labelsize(11);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[2] = new fltk3::RoundButton(105, 140, 70, 25);
+      { def_widget_size[2] = new fltk3::RoundButton(0, 25, 70, 25);
         def_widget_size[2]->type(102);
         def_widget_size[2]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[2]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(14));
       } // fltk3::RoundButton* def_widget_size[2]
-      { fltk3::Box* o = new fltk3::Box(120, 140, 50, 25, "normal");
+      { fltk3::Box* o = new fltk3::Box(15, 25, 50, 25, "normal");
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[3] = new fltk3::RoundButton(180, 140, 90, 25);
+      { def_widget_size[3] = new fltk3::RoundButton(75, 25, 90, 25);
         def_widget_size[3]->type(102);
         def_widget_size[3]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[3]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(18));
       } // fltk3::RoundButton* def_widget_size[3]
-      { fltk3::Box* o = new fltk3::Box(195, 140, 68, 25, "medium");
+      { fltk3::Box* o = new fltk3::Box(90, 25, 68, 25, "medium");
         o->labelsize(18);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[4] = new fltk3::RoundButton(105, 165, 75, 25);
+      { def_widget_size[4] = new fltk3::RoundButton(0, 50, 75, 25);
         def_widget_size[4]->type(102);
         def_widget_size[4]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[4]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(24));
       } // fltk3::RoundButton* def_widget_size[4]
-      { fltk3::Box* o = new fltk3::Box(120, 165, 64, 25, "large");
+      { fltk3::Box* o = new fltk3::Box(15, 50, 64, 25, "large");
         o->labelsize(24);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[5] = new fltk3::RoundButton(180, 165, 95, 25);
+      { def_widget_size[5] = new fltk3::RoundButton(75, 50, 95, 25);
         def_widget_size[5]->type(102);
         def_widget_size[5]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[5]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(32));
       } // fltk3::RoundButton* def_widget_size[5]
-      { fltk3::Box* o = new fltk3::Box(195, 165, 76, 25, "huge");
+      { fltk3::Box* o = new fltk3::Box(90, 50, 76, 25, "huge");
         o->labelsize(32);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
@@ -686,7 +686,7 @@ fltk3::DoubleWindow* make_global_settings_window() {
       o->box(fltk3::DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-      { wVisibleFocus = new fltk3::Choice(245, 40, 100, 25, "Visible Keyboard Focus:");
+      { wVisibleFocus = new fltk3::Choice(235, 30, 100, 25, "Visible Keyboard Focus:");
         wVisibleFocus->tooltip("OPTION_VISIBLE_FOCUS\n\nIf visible focus is switched on, FLTK will draw a dot\
 ted rectangle inside the widget that will receive the next keystroke. If switc\
 hed off, no such indicator will be drawn and keyboard navigation is disabled.\
@@ -695,7 +695,7 @@ hed off, no such indicator will be drawn and keyboard navigation is disabled.\
         wVisibleFocus->callback((fltk3::Callback*)cb_wVisibleFocus);
         wVisibleFocus->menu(menu_wVisibleFocus);
       } // fltk3::Choice* wVisibleFocus
-      { wArrowFocus = new fltk3::Choice(245, 75, 100, 25, "Arrow Keys move Focus:");
+      { wArrowFocus = new fltk3::Choice(235, 65, 100, 25, "Arrow Keys move Focus:");
         wArrowFocus->tooltip("OPTION_ARROW_FOCUS\n\nWhen switched on, moving the text cursor beyond the sta\
 rt or end of the text in a text widget will change focus to the next widget. W\
 hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
@@ -711,7 +711,7 @@ hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
       o->box(fltk3::DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-      { wShowTooltips = new fltk3::Choice(245, 150, 100, 25, "Show Tooltips:");
+      { wShowTooltips = new fltk3::Choice(235, 30, 100, 25, "Show Tooltips:");
         wShowTooltips->tooltip("OPTION_SHOW_TOOLTIPS\n\nIf tooltips are enabled, hovering the mouse over a wi\
 dget with a tooltip text will open a little tooltip window until the mouse lea\
 ves the widget. If disabled, no tooltip is shown.\n\nDefault is on.");
@@ -725,7 +725,7 @@ ves the widget. If disabled, no tooltip is shown.\n\nDefault is on.");
       o->box(fltk3::DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-      { wDNDText = new fltk3::Choice(245, 225, 100, 25, "Allow dragging Text:");
+      { wDNDText = new fltk3::Choice(235, 31, 100, 25, "Allow dragging Text:");
         wDNDText->tooltip("OPTION_DND_TEXT\n\nIf text drag-and-drop is enabled, the user can select and \
 drag text from any text widget. If disabled, no dragging is possible, however \
 dropping text from other applications still works.\n\nDefault is on.");

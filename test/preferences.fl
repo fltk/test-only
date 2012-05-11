@@ -63,68 +63,68 @@ Function {} {open return_type int
     } {
       {fltk3::Input} wAlarm {
         label {Alarm at:}
-        xywh {25 55 45 20} align 5
+        xywh {5 25 45 20} align 5
       }
       {fltk3::Choice} wAmPm {open
-        xywh {75 55 55 20} down_box BORDER_BOX
+        xywh {55 25 55 20} down_box BORDER_BOX
       } {
         MenuItem {} {
           label {a.m.}
-          xywh {0 0 100 20}
+          xywh {-75 -55 100 20}
         }
         MenuItem {} {
           label {p.m.}
-          xywh {0 0 100 20}
+          xywh {-75 -55 100 20}
         }
       }
       {fltk3::Choice} wWear {
         label {Wear:} open
-        xywh {25 100 105 20} down_box BORDER_BOX align 5
+        xywh {5 70 105 20} down_box BORDER_BOX align 5
       } {
         MenuItem {} {
           label shoes
-          xywh {0 0 100 20}
+          xywh {-25 -100 100 20}
         }
         MenuItem {} {
           label sandals
-          xywh {0 0 100 20}
+          xywh {-25 -100 100 20}
         }
         MenuItem {} {
           label {flip flops}
-          xywh {0 0 100 20}
+          xywh {-25 -100 100 20}
         }
         MenuItem {} {
           label {bare foot}
-          xywh {0 0 100 20}
+          xywh {-25 -100 100 20}
         }
       }
       {fltk3::Group} {} {open
-        xywh {35 120 98 60}
+        xywh {15 90 98 60}
       } {
         {fltk3::RoundButton} wLeft {
           label {left side}
-          xywh {35 120 95 25} type Radio down_box ROUND_DOWN_BOX
+          xywh {0 0 95 25} type Radio down_box ROUND_DOWN_BOX
         }
         {fltk3::RoundButton} wRight {
           label {right side}
-          xywh {35 140 95 25} type Radio down_box ROUND_DOWN_BOX
+          xywh {0 20 95 25} type Radio down_box ROUND_DOWN_BOX
         }
         {fltk3::Box} {} {
           label {of the bed}
-          xywh {38 160 95 20}
+          xywh {3 40 95 20}
         }
       }
       {fltk3::CheckButton} wShower {
         label shower
-        xywh {25 180 105 25} down_box DOWN_BOX
+        xywh {5 150 105 25} down_box DOWN_BOX
       }
       {fltk3::CheckButton} wShave {
         label shave
-        xywh {25 200 105 25} down_box DOWN_BOX
+        xywh {5 170 105 25} down_box DOWN_BOX
       }
       {fltk3::CheckButton} wBrush {
         label {brush teeth}
-        xywh {25 220 105 25} down_box DOWN_BOX
+        xywh {5 190 105 25} down_box DOWN_BOX
       }
     }
     {fltk3::Group} {} {
@@ -133,61 +133,61 @@ Function {} {open return_type int
     } {
       {fltk3::Choice} wDrink {
         label {Drink:} open
-        xywh {165 50 105 20} down_box BORDER_BOX align 5
+        xywh {5 20 105 20} down_box BORDER_BOX align 5
       } {
         MenuItem {} {
           label coffee
-          xywh {10 10 100 20}
+          xywh {-155 -40 100 20}
         }
         MenuItem {} {
           label tea
-          xywh {10 10 100 20}
+          xywh {-155 -40 100 20}
         }
         MenuItem {} {
           label juice
-          xywh {10 10 100 20}
+          xywh {-155 -40 100 20}
         }
       }
       {fltk3::CheckButton} wMilk {
         label {with milk}
-        xywh {170 70 100 25} down_box DOWN_BOX
+        xywh {10 40 100 25} down_box DOWN_BOX
       }
       {fltk3::Choice} wBread {
         label {Bread:} open
-        xywh {165 110 105 20} down_box BORDER_BOX align 5
+        xywh {5 80 105 20} down_box BORDER_BOX align 5
       } {
         MenuItem {} {
           label wheat
-          xywh {0 0 100 20}
+          xywh {-165 -110 100 20}
         }
         MenuItem {} {
           label white
-          xywh {0 0 100 20}
+          xywh {-165 -110 100 20}
         }
         MenuItem {} {
           label rye
-          xywh {0 0 100 20}
+          xywh {-165 -110 100 20}
         }
         MenuItem {} {
           label {sour doh}
-          xywh {0 0 100 20}
+          xywh {-165 -110 100 20}
         }
       }
       {fltk3::CheckButton} wButter {
         label {with butter}
-        xywh {170 130 100 25} down_box DOWN_BOX
+        xywh {10 100 100 25} down_box DOWN_BOX
       }
       {fltk3::Input} wEggs {
         label eggs
-        xywh {165 163 30 20} type Int align 8
+        xywh {5 133 30 20} type Int align 8
       }
       {fltk3::ValueSlider} wMinutes {
         label {min.}
-        xywh {175 185 70 20} type Horizontal align 8 minimum 2 maximum 6 value 3.1
+        xywh {15 155 70 20} type Horizontal align 8 minimum 2 maximum 6 value 3.1
       }
       {fltk3::Input} wPaper {
         label {Newspaper:}
-        xywh {165 225 105 20} align 5
+        xywh {5 195 105 20} align 5
       }
     }
   }

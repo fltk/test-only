@@ -315,7 +315,9 @@ GLContext fl_create_gl_context(fltk3::Window* window, const fltk3::GLChoice* g, 
   add_context((GLContext)context);
   if ( window->parent() ) {
     int H = window->window()->h();
-    GLint rect[] = { window->x(), H-window->h()-window->y(), window->w(), window->h() };
+    GLint rect[] = { window->dx_window(), 
+      H-window->h()-window->dy_window(), 
+      window->w(), window->h() };
     aglSetInteger( (GLContext)context, AGL_BUFFER_RECT, rect );
     aglEnable( (GLContext)context, AGL_BUFFER_RECT );
   }
@@ -355,7 +357,9 @@ void fl_set_gl_context(fltk3::Window* w, GLContext context) {
     // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
     if ( w->parent() ) { //: resize our GL buffer rectangle
       int H = w->window()->h();
-      GLint rect[] = { w->x(), H-w->h()-w->y(), w->w(), w->h() };
+      GLint rect[] = { w->dx_window(), 
+        H-w->h()-w->dy_window(), 
+        w->w(), w->h() };
       aglSetInteger( context, AGL_BUFFER_RECT, rect );
       aglEnable( context, AGL_BUFFER_RECT );
     }

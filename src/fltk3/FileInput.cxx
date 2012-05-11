@@ -84,14 +84,14 @@ void fltk3::FileInput::draw_buttons() {
     if ((X + buttons_[i]) > xscroll()) {
       if (X < xscroll()) {
         draw_box(pressed_ == i ? fltk3::down(down_box()) : down_box(),
-                 x(), y(), X + buttons_[i] - xscroll(), DIR_HEIGHT, fltk3::GRAY);
+                 0, 0, X + buttons_[i] - xscroll(), DIR_HEIGHT, fltk3::GRAY);
       } else if ((X + buttons_[i] - xscroll()) > w()) {
 	draw_box(pressed_ == i ? fltk3::down(down_box()) : down_box(),
-        	 x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT,
+        	 0 + X - xscroll(), 0, w() - X + xscroll(), DIR_HEIGHT,
 		 fltk3::GRAY);
       } else {
         draw_box(pressed_ == i ? fltk3::down(down_box()) : down_box(),
-	         x() + X - xscroll(), y(), buttons_[i], DIR_HEIGHT, fltk3::GRAY);
+	         0 + X - xscroll(), 0, buttons_[i], DIR_HEIGHT, fltk3::GRAY);
       }
     }
 
@@ -100,7 +100,7 @@ void fltk3::FileInput::draw_buttons() {
 
   if (X < w()) {
     draw_box(pressed_ == i ? fltk3::down(down_box()) : down_box(),
-             x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT, fltk3::GRAY);
+             X - xscroll(), 0, w() - X + xscroll(), DIR_HEIGHT, fltk3::GRAY);
   }
 }
 
@@ -177,9 +177,9 @@ void fltk3::FileInput::draw() {
   char must_trick_fl_input_ = 
     fltk3::focus()!=this && !size() && !(damage()&fltk3::DAMAGE_ALL);
   if ((damage() & fltk3::DAMAGE_ALL) || must_trick_fl_input_) 
-    draw_box(b,x(),y()+DIR_HEIGHT,w(),h()-DIR_HEIGHT,color());
+    draw_box(b,0,DIR_HEIGHT,w(),h()-DIR_HEIGHT,color());
   if (!must_trick_fl_input_) 
-    Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
+    Input_::drawtext(fltk3::box_dx(b)+3, fltk3::box_dy(b)+DIR_HEIGHT,
 		        w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b)-DIR_HEIGHT);
 }
 
@@ -200,7 +200,7 @@ fltk3::FileInput::handle(int event) 		// I - Event
     case fltk3::MOVE :
     case fltk3::ENTER :
       if (active_r()) {
-	if (fltk3::event_y() < (y() + DIR_HEIGHT)) 
+	if (fltk3::event_y() < (DIR_HEIGHT)) 
           window()->cursor(fltk3::CURSOR_DEFAULT);
 	else 
           window()->cursor(fltk3::CURSOR_INSERT);
@@ -209,7 +209,7 @@ fltk3::FileInput::handle(int event) 		// I - Event
       return 1;
 
     case fltk3::PUSH :
-      inButtonBar = (fltk3::event_y() < (y() + DIR_HEIGHT));
+      inButtonBar = (fltk3::event_y() < (DIR_HEIGHT));
     case fltk3::RELEASE :
     case fltk3::DRAG :
       if (inButtonBar) 
@@ -251,7 +251,7 @@ fltk3::FileInput::handle_button(int event)		// I - Event
   {
     X += buttons_[i];
 
-    if (X > xscroll() && fltk3::event_x() < (x() + X - xscroll())) break;
+    if (X > xscroll() && fltk3::event_x() < (X - xscroll())) break;
   }
 
 //  printf("handle_button(event = %d), button = %d\n", event, i);
@@ -260,8 +260,9 @@ fltk3::FileInput::handle_button(int event)		// I - Event
   if (event == fltk3::RELEASE) pressed_ = -1;
   else pressed_ = (short)i;
 
-  window()->make_current();
-  draw_buttons();
+  //window()->make_current();
+  //draw_buttons();
+  damage(fltk3::DAMAGE_BAR);
 
   // Return immediately if the user is clicking on the last button or
   // has not released the mouse button...

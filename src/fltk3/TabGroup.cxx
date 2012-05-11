@@ -111,14 +111,14 @@ int fltk3::TabGroup::tab_positions() {
 int fltk3::TabGroup::tab_height() {
   if (children() == 0) return h();
   int H = h();
-  int H2 = y();
+  int H2 = 0;
   fltk3::Widget*const* a = array();
   for (int i=children(); i--;) {
     fltk3::Widget* o = *a++;
-    if (o->y() < y()+H) H = o->y()-y();
+    if (o->y() < H) H = o->y();
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
-  H2 = y()+h()-H2;
+  H2 = h()-H2;
   if (H2 > H) return (H2 <= 0) ? 0 : -H2;
   else return (H <= 0) ? 0 : H;
 }
@@ -129,16 +129,16 @@ fltk3::Widget *fltk3::TabGroup::which(int event_x, int event_y) {
   if (children() == 0) return 0;
   int H = tab_height();
   if (H < 0) {
-    if (event_y > y()+h() || event_y < y()+h()+H) return 0;
+    if (event_y > h() || event_y < h()+H) return 0;
   } else {
-    if (event_y > y()+H || event_y < y()) return 0;
+    if (event_y > H || event_y < 0) return 0;
   }
-  if (event_x < x()) return 0;
+  if (event_x < 0) return 0;
   fltk3::Widget *ret = 0L;
   int nc = children();
   tab_positions();
   for (int i=0; i<nc; i++) {
-    if (event_x < x()+tab_pos[i+1]) {
+    if (event_x < tab_pos[i+1]) {
       ret = child(i);
       break;
     }
@@ -151,10 +151,10 @@ void fltk3::TabGroup::redraw_tabs()
   int H = tab_height();
   if (H >= 0) {
     H += fltk3::box_dy(box());
-    damage(fltk3::DAMAGE_SCROLL, x(), y(), w(), H);
+    damage(fltk3::DAMAGE_SCROLL, 0, 0, w(), H);
   } else {
     H = fltk3::box_dy(box()) - H;
-    damage(fltk3::DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
+    damage(fltk3::DAMAGE_SCROLL, 0, h() - H, w(), H);
   }
 }
 
@@ -167,9 +167,9 @@ int fltk3::TabGroup::handle(int event) {
   case fltk3::PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (fltk3::event_y() > y()+H) return Group::handle(event);
+      if (fltk3::event_y() > H) return Group::handle(event);
     } else {
-      if (fltk3::event_y() < y()+h()+H) return Group::handle(event);
+      if (fltk3::event_y() < h()+H) return Group::handle(event);
     }}
     /* FALLTHROUGH */
   case fltk3::DRAG:
@@ -196,9 +196,9 @@ int fltk3::TabGroup::handle(int event) {
     int ret = Group::handle(event);
     fltk3::Widget *o = fltk3::Tooltip::current(), *n = o;
     int H = tab_height();
-    if ( (H>=0) && (fltk3::event_y()>y()+H) )
+    if ( (H>=0) && (fltk3::event_y()>H) )
       return ret;
-    else if ( (H<0) && (fltk3::event_y() < y()+h()+H) )
+    else if ( (H<0) && (fltk3::event_y() < h()+H) )
       return ret;
     else { 
       n = which(fltk3::event_x(), fltk3::event_y());
@@ -321,14 +321,14 @@ void fltk3::TabGroup::draw() {
   if (damage() & fltk3::DAMAGE_ALL) { // redraw the entire thing:
     fltk3::Color c = v ? v->color() : color();
 
-    draw_box(box(), x(), y()+(H>=0?H:0), w(), h()-(H>=0?H:-H), c);
+    draw_box(box(), 0, (H>=0?H:0), w(), h()-(H>=0?H:-H), c);
 
     if (selection_color() != c) {
       // Draw the top or bottom SELECTION_BORDER lines of the tab pane in the
       // selection color so that the user knows which tab is selected...
-      int clip_y = (H >= 0) ? y() + H : y() + h() + H - SELECTION_BORDER;
-      fltk3::push_clip(x(), clip_y, w(), SELECTION_BORDER);
-      draw_box(box(), x(), clip_y, w(), SELECTION_BORDER, selection_color());
+      int clip_y = (H >= 0) ? H : h() + H - SELECTION_BORDER;
+      fltk3::push_clip(0, clip_y, w(), SELECTION_BORDER);
+      draw_box(box(), 0, clip_y, w(), SELECTION_BORDER, selection_color());
       fltk3::pop_clip();
     }
     if (v) draw_child(*v);
@@ -341,14 +341,14 @@ void fltk3::TabGroup::draw() {
     int i;
     fltk3::Widget*const* a = array();
     for (i=0; i<selected; i++)
-      draw_tab(x()+tab_pos[i], x()+tab_pos[i+1],
+      draw_tab(tab_pos[i], tab_pos[i+1],
                tab_width[i], H, a[i], LEFT);
     for (i=nc-1; i > selected; i--)
-      draw_tab(x()+tab_pos[i], x()+tab_pos[i+1],
+      draw_tab(tab_pos[i], tab_pos[i+1],
                tab_width[i], H, a[i], RIGHT);
     if (v) {
       i = selected;
-      draw_tab(x()+tab_pos[i], x()+tab_pos[i+1],
+      draw_tab(tab_pos[i], tab_pos[i+1],
                tab_width[i], H, a[i], SELECTED);
     }
   }
@@ -369,53 +369,53 @@ void fltk3::TabGroup::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, i
   if ((x2 < x1+W) && what == RIGHT) x1 = x2 - W;
 
   if (H >= 0) {
-    if (sel) fltk3::push_clip(x1, y(), x2 - x1, H + dh - dy);
-    else fltk3::push_clip(x1, y(), x2 - x1, H);
+    if (sel) fltk3::push_clip(x1, 0, x2 - x1, H + dh - dy);
+    else fltk3::push_clip(x1, 0, x2 - x1, H);
 
     H += dh;
 
     fltk3::Color c = sel ? selection_color() : o->selection_color();
 
-    draw_box(bt, x1, y() + yofs, W, H + 10 - yofs, c);
+    draw_box(bt, x1, yofs, W, H + 10 - yofs, c);
 
     // Save the previous label color
     fltk3::Color oc = o->labelcolor();
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());    
-    o->draw_label(x1, y() + yofs, W, H - yofs, fltk3::ALIGN_CENTER);
+    o->draw_label(x1, yofs, W, H - yofs, fltk3::ALIGN_CENTER);
 
     // Restore the original label color...
     o->labelcolor(oc);
 
     if (fltk3::focus() == this && o->visible())
-      draw_focus(box(), x1, y(), W, H);
+      draw_focus(box(), x1, 0, W, H);
 
     fltk3::pop_clip();
   } else {
     H = -H;
 
-    if (sel) fltk3::push_clip(x1, y() + h() - H - dy, x2 - x1, H + dy);
-    else fltk3::push_clip(x1, y() + h() - H, x2 - x1, H);
+    if (sel) fltk3::push_clip(x1, h() - H - dy, x2 - x1, H + dy);
+    else fltk3::push_clip(x1, h() - H, x2 - x1, H);
 
     H += dh;
 
     fltk3::Color c = sel ? selection_color() : o->selection_color();
 
-    draw_box(bt, x1, y() + h() - H - 10, W, H + 10 - yofs, c);
+    draw_box(bt, x1, h() - H - 10, W, H + 10 - yofs, c);
 
     // Save the previous label color
     fltk3::Color oc = o->labelcolor();
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());
-    o->draw_label(x1, y() + h() - H, W, H - yofs, fltk3::ALIGN_CENTER);
+    o->draw_label(x1, h() - H, W, H - yofs, fltk3::ALIGN_CENTER);
 
     // Restore the original label color...
     o->labelcolor(oc);
 
     if (fltk3::focus() == this && o->visible())
-      draw_focus(box(), x1, y() + h() - H, W, H);
+      draw_focus(box(), x1, h() - H, W, H);
 
     fltk3::pop_clip();
   }
@@ -501,14 +501,14 @@ void fltk3::TabGroup::client_area(int &rx, int &ry, int &rw, int &rh, int tabh) 
     else
       y_offset = tabh;			// user given value
 
-    rx = x();
+    rx = 0;
     rw = w();
 
     if (y_offset >= 0) {		// labels at top
-      ry = y() + y_offset;
+      ry = y_offset;
       rh = h() - y_offset;
     } else {				// labels at bottom
-      ry = y();
+      ry = 0;
       rh = h() + y_offset;
     }
   }

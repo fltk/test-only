@@ -13,97 +13,97 @@ Function {} {open
     } {
       {fltk3::Button} {} {
         label button
-        xywh {50 50 105 25}
+        xywh {25 25 105 25}
       }
       {fltk3::LightButton} {} {
         label {light button}
-        xywh {50 80 105 25} value 1 align 16
+        xywh {25 55 105 25} value 1 align 16
       }
       {fltk3::Group} {} {
         label {Child group} open
-        xywh {50 130 105 125} box DOWN_FRAME
+        xywh {25 105 105 125} box DOWN_FRAME
       } {
         {fltk3::CheckButton} {} {
           label red
-          xywh {50 170 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 1 labelcolor 1
+          xywh {0 40 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 1 labelcolor 1
         }
         {fltk3::CheckButton} {} {
           label green
-          xywh {50 190 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 2 labelcolor 2
+          xywh {0 60 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 2 labelcolor 2
         }
         {fltk3::CheckButton} {} {
           label blue
-          xywh {50 210 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 4 labelcolor 4
+          xywh {0 80 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 4 labelcolor 4
         }
         {fltk3::CheckButton} {} {
           label white
-          xywh {50 230 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 55 labelcolor 55
+          xywh {0 100 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 55 labelcolor 55
         }
         {fltk3::CheckButton} {} {
           label check
-          xywh {50 130 105 25} down_box DOWN_BOX
+          xywh {0 0 105 25} down_box DOWN_BOX
         }
         {fltk3::RoundButton} {} {
           label round
-          xywh {50 150 105 25} down_box ROUND_DOWN_BOX
+          xywh {0 20 105 25} down_box ROUND_DOWN_BOX
         }
       }
       {fltk3::Slider} {} {
         label slider
-        xywh {165 50 24 205} value 0.5
+        xywh {140 25 24 205} value 0.5
       }
       {fltk3::Input} {} {
-        xywh {195 50 195 30}
+        xywh {170 25 195 30}
         code0 {o->static_value("Text Input");}
       }
       {fltk3::MenuButton} {} {
         label menu open
-        xywh {245 90 130 30}
+        xywh {220 65 130 30}
       } {
         MenuItem {} {
           label item
-          xywh {0 0 100 20}
+          xywh {-245 -90 100 20}
         }
         MenuItem {} {
           label item
-          xywh {10 10 100 20}
+          xywh {-235 -80 100 20}
         }
         MenuItem {} {
           label item
-          xywh {20 20 100 20}
+          xywh {-225 -70 100 20}
         }
         MenuItem {} {
           label item
-          xywh {30 30 100 20}
+          xywh {-215 -60 100 20}
         }
         MenuItem {} {
           label item
-          xywh {40 40 100 20}
+          xywh {-205 -50 100 20}
         }
       }
       {fltk3::ValueOutput} {} {
         label {value:}
-        xywh {245 130 130 30} maximum 10000 step 1 textfont 5 textsize 24 textcolor 4
+        xywh {220 105 130 30} maximum 10000 step 1 textfont 5 textsize 24 textcolor 4
       }
       {fltk3::Box} {} {
         label Fl_Box
-        xywh {245 170 140 50} box EMBOSSED_FRAME labeltype SHADOW_LABEL labelfont 3 labelsize 38
+        xywh {220 145 140 50} box EMBOSSED_FRAME labeltype SHADOW_LABEL labelfont 3 labelsize 38
       }
       {fltk3::Scrollbar} {} {
         label scrollbar
-        xywh {40 274 180 20} type Horizontal
+        xywh {15 249 180 20} type Horizontal
       }
       {fltk3::Roller} {} {
         label roller
-        xywh {235 230 25 65}
+        xywh {210 205 25 65}
       }
       {fltk3::Dial} {} {
         label dial
-        xywh {275 235 50 50}
+        xywh {250 210 50 50}
       }
       {fltk3::Clock} {} {
         label clock
-        xywh {335 235 50 50}
+        xywh {310 210 50 50}
       }
     }
     {fltk3::Button} {} {

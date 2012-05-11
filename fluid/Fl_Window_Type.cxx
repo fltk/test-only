@@ -746,10 +746,12 @@ void Fl_Window_Type::draw_overlay() {
       if (q->selected && q->is_widget() && !q->is_menu_item()) {
 	numselected++;
 	Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
-	if (myo->o->x() < bx) bx = myo->o->x();
-	if (myo->o->y() < by) by = myo->o->y();
-	if (myo->o->x()+myo->o->w() > br) br = myo->o->x()+myo->o->w();
-	if (myo->o->y()+myo->o->h() > bt) bt = myo->o->y()+myo->o->h();
+        int myo_x = myo->o->dx_window();
+        int myo_y = myo->o->dy_window();
+	if (myo_x < bx) bx = myo_x;
+	if (myo_y < by) by = myo_y;
+	if (myo_x+myo->o->w() > br) br = myo_x+myo->o->w();
+	if (myo_y+myo->o->h() > bt) bt = myo_y+myo->o->h();
       }
     recalc = 0;
     sx = bx; sy = by; sr = br; st = bt;
@@ -773,6 +775,9 @@ void Fl_Window_Type::draw_overlay() {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
       int x,y,r,t;
       newposition(myo,x,y,r,t);
+      int dx = myo->o->dx_window()-x;
+      int dy = myo->o->dy_window()-y;
+      x += dx; y += dy; r += dx; t += dy;
       if (!show_guides || !drag || numselected != 1) fltk3::rect(x,y,r-x,t-y);
       if (x < mysx) mysx = x;
       if (y < mysy) mysy = y;
@@ -902,10 +907,10 @@ void Fl_Window_Type::draw_overlay() {
 	  if (!qw->o->visible_r()) continue;
 
           // Get bounding box of widget...
-	  int qx = qw->o->x();
-	  int qr = qw->o->x() + qw->o->w();
-	  int qy = qw->o->y();
-	  int qt = qw->o->y() + qw->o->h();
+	  int qx = qw->o->dx_window();
+	  int qr = qx + qw->o->w();
+	  int qy = qw->o->dy_window();
+	  int qt = qy + qw->o->h();
 
 	  if (!(qw->o->align() & fltk3::ALIGN_INSIDE)) {
             // Adjust top/bottom for top/bottom labels...
@@ -1212,7 +1217,7 @@ int Fl_Window_Type::handle(int event) {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
       for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	if (!o1->visible()) goto CONTINUE2;
-      if (fltk3::event_inside(myo->o)) {
+      if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) {
         selection = myo;
         if (fltk3::event_clicks()==1)
           reveal_in_browser(myo);
@@ -1278,9 +1283,10 @@ int Fl_Window_Type::handle(int event) {
 	Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
 	for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	  if (!o1->visible()) goto CONTINUE;
-	if (fltk3::event_inside(myo->o)) selection = myo;
-	if (myo->o->x()>=x1 && myo->o->y()>y1 &&
-	    myo->o->x()+myo->o->w()<mx && myo->o->y()+myo->o->h()<my) {
+	if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) 
+          selection = myo;
+	if (myo->o->dx_window()>=x1 && myo->o->dy_window()>y1 &&
+	    myo->o->dx_window()+myo->o->w()<mx && myo->o->dy_window()+myo->o->h()<my) {
 	  n++;
 	  select(myo, toggle ? !myo->selected : 1);
 	}

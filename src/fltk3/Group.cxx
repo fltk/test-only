@@ -622,13 +622,7 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
 
   if (!resizable() || (dw==0 && dh==0) ) {
 
-    if (type() < fltk3::WINDOW) {
-      fltk3::Widget*const* a = array();
-      for (int i=children_; i--;) {
-	fltk3::Widget* o = *a++;
-	o->resize(o->x()+dx, o->y()+dy, o->w(), o->h());
-      }
-    }
+    return;
 
   } else if (children_) {
 
@@ -637,7 +631,7 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
     dw = W - (p[1]-p[0]);
     dy = Y - p[2];
     dh = H - (p[3]-p[2]);
-    if (type() >= fltk3::WINDOW) dx = dy = 0;
+    /* if (type() >= fltk3::WINDOW) */ dx = dy = 0;
     p += 4;
 
     // get initial size of resizable():

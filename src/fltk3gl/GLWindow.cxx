@@ -193,8 +193,8 @@ void fltk3::GLWindow::make_current() {
   GLint xywh[4];
 
   if (window()) {
-    xywh[0] = x();
-    xywh[1] = window()->h() - y() - h();
+    xywh[0] = dx_window();
+    xywh[1] = window()->h() - dy_window() - h();
   } else {
     xywh[0] = 0;
     xywh[1] = 0;

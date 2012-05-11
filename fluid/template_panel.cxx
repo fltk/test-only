@@ -168,16 +168,16 @@ fltk3::DoubleWindow* make_template_panel() {
       template_instance->hide();
     } // fltk3::Input* template_instance
     { fltk3::Group* o = new fltk3::Group(10, 323, 440, 25);
-      { template_delete = new fltk3::Button(10, 323, 133, 25, "Delete Template");
+      { template_delete = new fltk3::Button(0, 0, 133, 25, "Delete Template");
         template_delete->callback((fltk3::Callback*)template_delete_cb);
       } // fltk3::Button* template_delete
-      { fltk3::Box* o = new fltk3::Box(153, 323, 126, 25);
+      { fltk3::Box* o = new fltk3::Box(143, 0, 126, 25);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
-      { fltk3::Button* o = new fltk3::Button(289, 323, 72, 25, "Cancel");
+      { fltk3::Button* o = new fltk3::Button(279, 0, 72, 25, "Cancel");
         o->callback((fltk3::Callback*)cb_Cancel);
       } // fltk3::Button* o
-      { template_submit = new fltk3::ReturnButton(371, 323, 79, 25, "Save");
+      { template_submit = new fltk3::ReturnButton(361, 0, 79, 25, "Save");
         template_submit->callback((fltk3::Callback*)cb_template_submit);
       } // fltk3::ReturnButton* template_submit
       o->end();

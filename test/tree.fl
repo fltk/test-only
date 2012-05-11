@@ -148,10 +148,10 @@ tree->add("Bbb/child-04");
               grp = new fltk3::Group(100,100,140,18); // build group.. tree handles position
               grp->color(fltk3::WHITE);
               grp->begin();
-                fltk3::Button *abut = new fltk3::Button(grp->x()+0 ,grp->y()+2,65,15,"D1");
+                fltk3::Button *abut = new fltk3::Button(0,2,65,15,"D1");
                 abut->labelsize(10);
 		abut->callback(Button_CB);
-                fltk3::Button *bbut = new fltk3::Button(grp->x()+75,grp->y()+2,65,15,"D2");
+                fltk3::Button *bbut = new fltk3::Button(75,2,65,15,"D2");
                 bbut->labelsize(10);
 		bbut->callback(Button_CB);
               grp->end();
@@ -242,7 +242,7 @@ if ( item ) {
     } {
       {fltk3::Box} {} {
         label {Tree Globals}
-        tooltip {These controls only affect the selected items. If no items are selected, all existing items in tree are modified.} xywh {311 23 335 263} box GTK_DOWN_BOX color 47 labelsize 12 align 1
+        tooltip {These controls only affect the selected items. If no items are selected, all existing items in tree are modified.} xywh {11 18 335 263} box DOWN_BOX color 47 labelsize 12 align 1
       }
       {fltk3::ValueSlider} margintop_slider {
         label {margintop()}
@@ -250,7 +250,7 @@ if ( item ) {
         callback {int val = (int)margintop_slider->value();
 tree->margintop(val);
 tree->redraw();}
-        tooltip {Changes the top margin for the tree widget} xywh {486 31 140 16} type Horizontal labelsize 12 align 4 textsize 12
+        tooltip {Changes the top margin for the tree widget} xywh {186 26 140 16} type Horizontal labelsize 12 align 4 textsize 12
         code0 {o->value(tree->margintop());}
         code1 {o->range(0.0, 100.0);}
         code2 {o->step(1.0);}
@@ -262,7 +262,7 @@ tree->redraw();}
         callback {int val = (int)marginleft_slider->value();
 tree->marginleft(val);
 tree->redraw();}
-        tooltip {Changes the left margin for the tree widget} xywh {486 51 140 16} type Horizontal labelsize 12 align 4 textsize 12
+        tooltip {Changes the left margin for the tree widget} xywh {186 46 140 16} type Horizontal labelsize 12 align 4 textsize 12
         code0 {o->value(tree->marginleft());}
         code1 {o->range(0.0, 100.0);}
         code2 {o->step(1.0);}
@@ -274,7 +274,7 @@ tree->redraw();}
         callback {int val = (int)openchild_marginbottom_slider->value();
 tree->openchild_marginbottom(val);
 tree->redraw();}
-        tooltip {Changes the vertical space below an open child tree} xywh {486 71 140 16} type Horizontal labelsize 12 align 4 textsize 12
+        tooltip {Changes the vertical space below an open child tree} xywh {186 66 140 16} type Horizontal labelsize 12 align 4 textsize 12
         code0 {o->value(tree->openchild_marginbottom());}
         code1 {o->range(0.0, 100.0);}
         code2 {o->step(1.0);}
@@ -369,19 +369,19 @@ switch ( collapseicons_chooser->value() ) {
         tree->showcollapse(0);
         break;
 }}
-        tooltip {Tests Fl_Tree::openicon() and Fl_Tree::closeicon()} xywh {486 96 140 21} down_box BORDER_BOX labelsize 12 textsize 11
+        tooltip {Tests Fl_Tree::openicon() and Fl_Tree::closeicon()} xywh {186 91 140 21} down_box BORDER_BOX labelsize 12 textsize 11
       } {
         MenuItem {} {
           label Normal
-          xywh {10 10 36 21} labelsize 12
+          xywh {-476 -86 36 21} labelsize 12
         }
         MenuItem {} {
           label Custom
-          xywh {20 20 36 21} labelsize 12
+          xywh {-466 -76 36 21} labelsize 12
         }
         MenuItem {} {
           label Off
-          xywh {30 30 36 21} labelsize 12
+          xywh {-456 -66 36 21} labelsize 12
         }
       }
       {fltk3::Choice} connectorstyle_chooser {
@@ -392,20 +392,20 @@ switch ( connectorstyle_chooser->value() ) {
     case 1: tree->connectorstyle(fltk3::TREE_CONNECTOR_DOTTED);   break;
     case 2: tree->connectorstyle(fltk3::TREE_CONNECTOR_SOLID);    break;
 }}
-        tooltip {Tests connectorstyle() bit flags} xywh {486 120 140 21} down_box BORDER_BOX labelsize 12 textsize 11
+        tooltip {Tests connectorstyle() bit flags} xywh {186 115 140 21} down_box BORDER_BOX labelsize 12 textsize 11
         code0 {switch (tree->connectorstyle()) { case fltk3::TREE_CONNECTOR_NONE: connectorstyle_chooser->value(0); break; case fltk3::TREE_CONNECTOR_DOTTED: connectorstyle_chooser->value(1); break; case fltk3::TREE_CONNECTOR_SOLID: connectorstyle_chooser->value(2); break; }}
       } {
         MenuItem {} {
           label None
-          xywh {40 40 36 21} labelsize 12
+          xywh {-446 -80 36 21} labelsize 12
         }
         MenuItem {} {
           label Dotted
-          xywh {20 20 36 21} labelsize 12
+          xywh {-466 -100 36 21} labelsize 12
         }
         MenuItem {} {
           label Solid
-          xywh {30 30 36 21} labelsize 12
+          xywh {-456 -90 36 21} labelsize 12
         }
       }
       {fltk3::Choice} selectmode_chooser {
@@ -417,21 +417,21 @@ switch ( selectmode_chooser->value() ) {
     case 2:  tree->selectmode(fltk3::TREE_SELECT_MULTI);  break; 	// Multi
     default: tree->selectmode(fltk3::TREE_SELECT_SINGLE); break;	// Single
 }}
-        tooltip {Sets how Fl_Tree handles mouse selection of tree items} xywh {486 144 140 21} down_box BORDER_BOX labelsize 12 textsize 11
+        tooltip {Sets how Fl_Tree handles mouse selection of tree items} xywh {186 139 140 21} down_box BORDER_BOX labelsize 12 textsize 11
         code0 {selectmode_chooser->value(1);}
         code1 {cb_selectmode_chooser(selectmode_chooser, (void*)0);}
       } {
         MenuItem {} {
           label None
-          xywh {40 40 36 21} labelsize 12
+          xywh {-446 -104 36 21} labelsize 12
         }
         MenuItem {} {
           label Single
-          xywh {50 50 36 21} labelsize 12
+          xywh {-436 -94 36 21} labelsize 12
         }
         MenuItem {} {
           label Multi
-          xywh {60 60 36 21} labelsize 12
+          xywh {-426 -84 36 21} labelsize 12
         }
       }
       {fltk3::Choice} whenmode_chooser {
@@ -443,28 +443,28 @@ switch ( whenmode_chooser->value() ) {
   case 2:  tree->when(fltk3::WHEN_NEVER);     break;
   default: tree->when(fltk3::WHEN_RELEASE);   break;
 }}
-        tooltip {Sets when() the tree's callback is invoked} xywh {486 168 140 21} down_box BORDER_BOX labelsize 12 textsize 11
+        tooltip {Sets when() the tree's callback is invoked} xywh {186 163 140 21} down_box BORDER_BOX labelsize 12 textsize 11
         code0 {whenmode_chooser->value(1);}
         code1 {cb_whenmode_chooser(whenmode_chooser, (void*)0);}
       } {
         MenuItem {} {
           label Changed
-          xywh {50 50 36 21} labelsize 12
+          xywh {-436 -118 36 21} labelsize 12
         }
         MenuItem {} {
           label Released
-          xywh {60 60 36 21} labelsize 12
+          xywh {-426 -108 36 21} labelsize 12
         }
         MenuItem {} {
           label Never
-          xywh {70 70 36 21} labelsize 12
+          xywh {-416 -98 36 21} labelsize 12
         }
       }
       {fltk3::CheckButton} usericon_radio {
         label {Enable user icons?}
         user_data tree
         callback {AssignUserIcons();} selected
-        tooltip {Tests Fl_Tree_Item::usericon()} xywh {486 194 20 16} down_box DOWN_BOX labelsize 12 align 7
+        tooltip {Tests Fl_Tree_Item::usericon()} xywh {186 189 20 16} down_box DOWN_BOX labelsize 12 align 7
         code0 {usericon_radio->value(1);}
       }
       {fltk3::CheckButton} showroot_radio {
@@ -472,7 +472,7 @@ switch ( whenmode_chooser->value() ) {
         user_data tree
         callback {int onoff = showroot_radio->value();
 tree->showroot(onoff);}
-        tooltip {Tests tree->showroot();} xywh {486 211 20 16} down_box DOWN_BOX labelsize 12 align 7
+        tooltip {Tests tree->showroot();} xywh {186 206 20 16} down_box DOWN_BOX labelsize 12 align 7
         code0 {int onoff = tree->showroot(); showroot_radio->value(onoff);}
       }
       {fltk3::CheckButton} visiblefocus_checkbox {
@@ -480,7 +480,7 @@ tree->showroot(onoff);}
         user_data tree
         callback {int onoff = visiblefocus_checkbox->value();
 tree->visible_focus(onoff);}
-        tooltip {Toggles the tree's visible_focus() box} xywh {486 228 20 16} down_box DOWN_BOX labelsize 12 align 7
+        tooltip {Toggles the tree's visible_focus() box} xywh {186 223 20 16} down_box DOWN_BOX labelsize 12 align 7
         code0 {int onoff = tree->visible_focus(); visiblefocus_checkbox->value(onoff);}
       }
       {fltk3::Button} selection_color_button {
@@ -489,17 +489,17 @@ tree->visible_focus(onoff);}
 selection_color_button->color(val);	// update modified color to button
 tree->selection_color(val);
 tree->redraw();}
-        tooltip {Changes the tree widget's selection color. Tests Fl_Tree::selection_color()} xywh {486 251 16 16} box DOWN_BOX labelsize 12 align 7
+        tooltip {Changes the tree widget's selection color. Tests Fl_Tree::selection_color()} xywh {186 246 16 16} box DOWN_BOX labelsize 12 align 7
         code0 {o->color(tree->selection_color());}
       }
       {fltk3::Box} {} {
         label {Test Operations}
-        tooltip {These controls only affect the defaults for new items that are created. These test the Fl_Tree_Prefs methods.} xywh {311 312 335 120} box GTK_DOWN_BOX color 47 labelsize 12 align 1
+        tooltip {These controls only affect the defaults for new items that are created. These test the Fl_Tree_Prefs methods.} xywh {11 307 335 120} box DOWN_BOX color 47 labelsize 12 align 1
       }
       {fltk3::Box} showitem_box {
         label {show_item()
 }
-        xywh {331 335 70 82} box GTK_DOWN_BOX labelsize 11 align 1
+        xywh {31 330 70 82} box DOWN_BOX labelsize 11 align 1
       }
       {fltk3::Button} {} {
         label Show
@@ -507,7 +507,7 @@ tree->redraw();}
 tree->show_item(item);}
         tooltip {Tests show_item() with no position specified.
 Makes the selected item visible IF it is off-screen.
-No change made if it is not off-screen.} xywh {346 344 40 17} labelsize 11
+No change made if it is not off-screen.} xywh {46 339 40 17} labelsize 11
       }
       {fltk3::Button} {} {
         label Top
@@ -519,7 +519,7 @@ Scrolls selected item to the top of the display
 To use:
 1) open '500 items'
 2) select item 0010
-3) Hit Top/Mid/Bot} xywh {346 361 40 16} labelsize 11
+3) Hit Top/Mid/Bot} xywh {46 356 40 16} labelsize 11
       }
       {fltk3::Button} {} {
         label Mid
@@ -530,7 +530,7 @@ Scrolls the selected item to the middle of the display
 To use:
   1) open '500 items'
   2) select 'item 0010'
-  3) Hit Top/Mid/Bot} xywh {346 377 40 16} labelsize 11
+  3) Hit Top/Mid/Bot} xywh {46 372 40 16} labelsize 11
       }
       {fltk3::Button} {} {
         label Bot
@@ -541,7 +541,7 @@ Scrolls the selected item to the bottom of the display
 To use:
   1) open '500 items'
   2) select 'item 0010'
-  3) Hit Top/Mid/Bot} xywh {346 393 40 16} labelsize 11
+  3) Hit Top/Mid/Bot} xywh {46 388 40 16} labelsize 11
       }
       {fltk3::Button} loaddb_button {
         label {Load Database...}
@@ -552,7 +552,7 @@ if (filename) {
   tree->load(prefs);
   tree->redraw();
 }}
-        tooltip {Load the contents of an Fl_Preferences database into the tree view} xywh {431 338 95 16} labelsize 9
+        tooltip {Load the contents of an Fl_Preferences database into the tree view} xywh {131 333 95 16} labelsize 9
       }
       {fltk3::Button} insertabove_button {
         label {Insert Above}
@@ -567,12 +567,12 @@ while (item) {
 }
 
 tree->redraw();}
-        tooltip {Inserts three items above the selected items} xywh {431 358 95 16} labelsize 9
+        tooltip {Inserts three items above the selected items} xywh {131 353 95 16} labelsize 9
       }
       {fltk3::Button} rebuildtree_button {
         label {Rebuild Tree}
         callback {RebuildTree();}
-        tooltip {Rebuilds the tree with defaults} xywh {431 378 95 16} labelsize 9
+        tooltip {Rebuilds the tree with defaults} xywh {131 373 95 16} labelsize 9
       }
       {fltk3::Button} showpathname_button {
         label {Show Pathname}
@@ -585,14 +585,14 @@ switch ( tree->item_pathname(pathname, sizeof(pathname), item) ) {
     case -1: fltk3::message("item_pathname() returned -1 (NOT FOUND)"); break;
     case -2: fltk3::message("item_pathname() returned -2 (STRING TOO LONG)"); break;
 }}
-        tooltip {Show the pathname for the selected item. Tests the Fl_Tree::item_pathname() method.} xywh {431 398 95 16} labelsize 9
+        tooltip {Show the pathname for the selected item. Tests the Fl_Tree::item_pathname() method.} xywh {131 393 95 16} labelsize 9
       }
       {fltk3::Button} clearall_button {
         label {Clear All}
         callback {tree->clear();
 tree->redraw();}
         tooltip {Clears all items
-Tests Fl_Tree::clear()} xywh {531 338 95 16} labelsize 9
+Tests Fl_Tree::clear()} xywh {231 333 95 16} labelsize 9
       }
       {fltk3::Button} testcallbackflag_button {
         label {Test Callback Flag}
@@ -657,11 +657,11 @@ G_cb_counter = 0; tree->select("ROOT");      if ( !G_cb_counter ) fltk3::alert("
 tree->deselect("ROOT"); // leave deselected
 
 fltk3::alert("TEST COMPLETED\\n If you didn't see any error dialogs, test PASSED.");}
-        tooltip {Test the 'docallback' argument can disable callbacks.} xywh {531 358 95 16} labelsize 9
+        tooltip {Test the 'docallback' argument can disable callbacks.} xywh {231 353 95 16} labelsize 9
       }
       {fltk3::Box} {} {
         label {Selected Items}
-        tooltip {These controls only affect the selected items. If no items are selected, all existing items in tree are modified.} xywh {661 23 335 263} box GTK_DOWN_BOX color 47 labelsize 12 align 1
+        tooltip {These controls only affect the selected items. If no items are selected, all existing items in tree are modified.} xywh {361 18 335 263} box DOWN_BOX color 47 labelsize 12 align 1
       }
       {fltk3::Choice} all_font_choice {
         label {Label Font}
@@ -689,72 +689,72 @@ if ( ! count ) {
 }
 
 tree->redraw();}
-        tooltip {Changes the font for the selected items's labels. If none selected, all are changed. Tests Fl_Tree_Item::labelfont();} xywh {828 31 140 21} down_box BORDER_BOX labelsize 12 textsize 11
+        tooltip {Changes the font for the selected items's labels. If none selected, all are changed. Tests Fl_Tree_Item::labelfont();} xywh {528 26 140 21} down_box BORDER_BOX labelsize 12 textsize 11
         code0 {o->value((int)tree->item_labelfont());   // get tree's current font, assign to chooser}
       } {
         MenuItem {} {
           label Helvetica
-          xywh {30 30 36 21} labelsize 12
+          xywh {-798 -1 36 21} labelsize 12
         }
         MenuItem {} {
           label {Helvetica Bold}
-          xywh {40 40 36 21} labelsize 12
+          xywh {-788 9 36 21} labelsize 12
         }
         MenuItem {} {
           label {Helvetica Italic}
-          xywh {55 55 36 21} labelsize 12
+          xywh {-773 24 36 21} labelsize 12
         }
         MenuItem {} {
           label {Helvetica Bold Italic}
-          xywh {60 60 36 21} labelsize 12
+          xywh {-768 29 36 21} labelsize 12
         }
         MenuItem {} {
           label Courier
-          xywh {70 70 36 21} labelsize 12
+          xywh {-758 39 36 21} labelsize 12
         }
         MenuItem {} {
           label {Courier Bold}
-          xywh {80 80 36 21} labelsize 12
+          xywh {-748 49 36 21} labelsize 12
         }
         MenuItem {} {
           label {Courier Italic}
-          xywh {65 65 36 21} labelsize 12
+          xywh {-763 34 36 21} labelsize 12
         }
         MenuItem {} {
           label {Courier Bold Italic}
-          xywh {70 70 36 21} labelsize 12
+          xywh {-758 39 36 21} labelsize 12
         }
         MenuItem {} {
           label Times
-          xywh {80 80 36 21} labelsize 12
+          xywh {-748 49 36 21} labelsize 12
         }
         MenuItem {} {
           label {Times Bold}
-          xywh {90 90 36 21} labelsize 12
+          xywh {-738 59 36 21} labelsize 12
         }
         MenuItem {} {
           label {Times Italic}
-          xywh {75 75 36 21} labelsize 12
+          xywh {-753 44 36 21} labelsize 12
         }
         MenuItem {} {
           label {Times Bold Italic}
-          xywh {80 80 36 21} labelsize 12
+          xywh {-748 49 36 21} labelsize 12
         }
         MenuItem {} {
           label Symbol
-          xywh {90 90 36 21} labelsize 12
+          xywh {-738 59 36 21} labelsize 12
         }
         MenuItem {} {
           label Screen
-          xywh {100 100 36 21} labelsize 12
+          xywh {-728 69 36 21} labelsize 12
         }
         MenuItem {} {
           label {Screen bold}
-          xywh {85 85 36 21} labelsize 12
+          xywh {-743 54 36 21} labelsize 12
         }
         MenuItem {} {
           label {Zapf Dingbats}
-          xywh {90 90 36 21} labelsize 12
+          xywh {-738 59 36 21} labelsize 12
         }
       }
       {fltk3::ValueSlider} labelsize_slider {
@@ -780,7 +780,7 @@ if ( ! count ) {
 }
 
 tree->redraw();}
-        tooltip {Changes the font size of the selected items's labels. If none selected, all are changed. Tests Fl_Tree_Item::labelsize();} xywh {828 55 140 16} type Horizontal labelsize 12 align 4 textsize 12
+        tooltip {Changes the font size of the selected items's labels. If none selected, all are changed. Tests Fl_Tree_Item::labelsize();} xywh {528 50 140 16} type Horizontal labelsize 12 align 4 textsize 12
         code0 {o->value(tree->item_labelsize());}
         code1 {o->range(5.0, 200.0);}
         code2 {o->step(1.0);}
@@ -813,7 +813,7 @@ if ( ! count ) {
 }
 
 tree->redraw();}
-        tooltip {Changes the label fg color for the selected items. If none selected, all are changed. Tests Fl_Tree_Item::labelfgcolor();} xywh {828 81 16 16} box DOWN_BOX labelsize 12 align 7
+        tooltip {Changes the label fg color for the selected items. If none selected, all are changed. Tests Fl_Tree_Item::labelfgcolor();} xywh {528 76 16 16} box DOWN_BOX labelsize 12 align 7
         code0 {o->color(tree->item_labelfgcolor());}
       }
       {fltk3::Button} all_labelbgcolor_button {
@@ -843,14 +843,14 @@ if ( ! count ) {
 }
 
 tree->redraw();}
-        tooltip {Changes the label bg color for the selected items. If none selected, all are changed. Tests Fl_Tree_Item::labelbgcolor();} xywh {828 99 16 16} box DOWN_BOX labelsize 12 align 7
+        tooltip {Changes the label bg color for the selected items. If none selected, all are changed. Tests Fl_Tree_Item::labelbgcolor();} xywh {528 94 16 16} box DOWN_BOX labelsize 12 align 7
         code0 {o->color(tree->item_labelbgcolor());}
       }
       {fltk3::ValueSlider} connectorwidth_slider {
         label {Connector Width}
         user_data tree
         callback {tree->connectorwidth((int)connectorwidth_slider->value());}
-        tooltip {Tests Fl_Tree::connectorwidth()} xywh {828 126 140 16} type Horizontal labelsize 12 align 4 textsize 12
+        tooltip {Tests Fl_Tree::connectorwidth()} xywh {528 121 140 16} type Horizontal labelsize 12 align 4 textsize 12
         code0 {o->value(tree->connectorwidth());}
         code1 {o->range(1.0, 100.0);}
         code2 {o->step(1.0);}
@@ -877,7 +877,7 @@ if ( count == 0 ) {
 
 tree->redraw();}
         tooltip {Toggle the deactivation state of the selected items.
-If none are selected, all are set.} xywh {734 154 95 16} selection_color 1 labelsize 9
+If none are selected, all are set.} xywh {434 149 95 16} selection_color 1 labelsize 9
       }
       {fltk3::LightButton} bold_toggle {
         label { Bold Font}
@@ -902,7 +902,7 @@ if ( ! count ) {
 
 tree->redraw();}
         tooltip {Toggles bold font for selected items
-If nothing selected, all are changed} xywh {734 174 95 16} selection_color 1 labelsize 9
+If nothing selected, all are changed} xywh {434 169 95 16} selection_color 1 labelsize 9
       }
       {fltk3::Button} showselected_button {
         label {Show Selected}
@@ -912,7 +912,7 @@ for ( fltk3::TreeItem *item = tree->first_selected_item();
       item = tree->next_selected_item(item) ) {
   fprintf(stderr, "\\t%s\\n", item->label() ? item->label() : "???");
 }}
-        tooltip {Clears the selected items} xywh {829 154 95 16} labelsize 9
+        tooltip {Clears the selected items} xywh {529 149 95 16} labelsize 9
       }
       {fltk3::Button} clearselected_button {
         label {Remove Selected}
@@ -927,19 +927,19 @@ while (item) {
 }
 
 tree->redraw();}
-        tooltip {Removes the selected items} xywh {829 174 95 16} labelsize 9
+        tooltip {Removes the selected items} xywh {529 169 95 16} labelsize 9
       }
       {fltk3::Button} selectall_button {
         label {Select All}
         callback {tree->select_all(0);
 tree->redraw();}
-        tooltip {Selects all items in the tree} xywh {689 201 95 16} labelsize 9
+        tooltip {Selects all items in the tree} xywh {389 196 95 16} labelsize 9
       }
       {fltk3::Button} deselectall_button {
         label {Deselect All}
         callback {tree->deselect_all(0);
 tree->redraw();}
-        tooltip {Deselects all items in the tree} xywh {689 221 95 16} labelsize 9
+        tooltip {Deselects all items in the tree} xywh {389 216 95 16} labelsize 9
       }
       {fltk3::LightButton} bbbselect_toggle {
         label { Select Bbb}
@@ -953,7 +953,7 @@ int onoff = bbbselect_toggle->value();
 if ( onoff ) tree->select(bbb);		// select /Bbb
 else         tree->deselect(bbb);	// deselect /Bbb}
         tooltip {Toggle selection of just the /Bbb item
-(Not children)} xywh {784 201 95 16} selection_color 1 labelsize 9
+(Not children)} xywh {484 196 95 16} selection_color 1 labelsize 9
       }
       {fltk3::LightButton} bbbselect2_toggle {
         label { Select Bbb+}
@@ -966,7 +966,7 @@ if ( !bbb) {
 int onoff = bbbselect2_toggle->value();
 if ( onoff ) tree->select_all(bbb);		// select /Bbb and its children
 else         tree->deselect_all(bbb);	// deselect /Bbb and its children}
-        tooltip {Toggle selection of the /Bbb item and its children} xywh {784 221 95 16} selection_color 1 labelsize 9
+        tooltip {Toggle selection of the /Bbb item and its children} xywh {484 216 95 16} selection_color 1 labelsize 9
       }
       {fltk3::LightButton} bbbchild02select_toggle {
         label { Toggle child-02}
@@ -981,7 +981,7 @@ if ( err == -1 ) {
   fltk3::alert("FAIL: Couldn't find item '%s'",pathname);
   return;
 }}
-        tooltip {Toggle the single item "/Bbb/child-02" using the item's "pathname".} xywh {784 241 95 16} selection_color 1 labelsize 9
+        tooltip {Toggle the single item "/Bbb/child-02" using the item's "pathname".} xywh {484 236 95 16} selection_color 1 labelsize 9
       }
       {fltk3::LightButton} rootselect_toggle {
         label {Select ROOT}
@@ -994,7 +994,7 @@ if ( !item) {
 int onoff = rootselect_toggle->value();
 if ( onoff ) tree->select(item);	// select /ROOT and its children
 else         tree->deselect(item);	// deselect /ROOT and its children}
-        tooltip {Toggle selection of the ROOT item} xywh {879 201 95 16} selection_color 1 labelsize 9
+        tooltip {Toggle selection of the ROOT item} xywh {579 196 95 16} selection_color 1 labelsize 9
       }
       {fltk3::LightButton} rootselect2_toggle {
         label {Select ROOT+}
@@ -1007,18 +1007,18 @@ if ( !item) {
 int onoff = rootselect2_toggle->value();
 if ( onoff ) tree->select_all(item);	// select /ROOT and its children
 else         tree->deselect_all(item);	// deselect /ROOT and its children}
-        tooltip {Toggle selection of the ROOT item and all children} xywh {879 221 95 16} selection_color 1 labelsize 9
+        tooltip {Toggle selection of the ROOT item and all children} xywh {579 216 95 16} selection_color 1 labelsize 9
       }
       {fltk3::Box} {} {
         label {New Item Defaults}
-        tooltip {These controls only affect the defaults for new items that are created. These test the Fl_Tree_Prefs methods.} xywh {661 312 335 120} box GTK_DOWN_BOX color 47 labelsize 12 align 1
+        tooltip {These controls only affect the defaults for new items that are created. These test the Fl_Tree_Prefs methods.} xywh {361 307 335 120} box DOWN_BOX color 47 labelsize 12 align 1
       }
       {fltk3::Button} item_labelfgcolor_button {
         label item_labelfgcolor
         callback {fltk3::Color val = EditColor(tree->item_labelfgcolor());	// Let user edit the color
 tree->item_labelfgcolor(val);				// apply modified color to tree
 item_labelfgcolor_button->color(val);			// update modified color to button}
-        tooltip {Sets the *default* label foreground color for new items created. Does NOT affect existing items.} xywh {828 327 16 16} box DOWN_BOX labelsize 12 align 7
+        tooltip {Sets the *default* label foreground color for new items created. Does NOT affect existing items.} xywh {528 322 16 16} box DOWN_BOX labelsize 12 align 7
         code0 {o->color(tree->item_labelfgcolor());}
       }
       {fltk3::Button} item_labelbgcolor_button {
@@ -1026,86 +1026,86 @@ item_labelfgcolor_button->color(val);			// update modified color to button}
         callback {fltk3::Color val = EditColor(tree->item_labelbgcolor());	// Let user edit the color
 tree->item_labelbgcolor(val);				// apply modified color to tree
 item_labelbgcolor_button->color(val);			// update modified color to button}
-        tooltip {Sets the *default* label background color for new items created. Does NOT affect existing items.} xywh {828 345 16 16} box DOWN_BOX labelsize 12 align 7
+        tooltip {Sets the *default* label background color for new items created. Does NOT affect existing items.} xywh {528 340 16 16} box DOWN_BOX labelsize 12 align 7
         code0 {item_labelbgcolor_button->color(tree->item_labelbgcolor());}
       }
       {fltk3::Choice} item_font_choice {
         label {Item label font}
         callback {fltk3::Font val = (fltk3::Font)item_font_choice->value(); // get chooser's current font value
 tree->item_labelfont(val);			  // change font in tree}
-        tooltip {Sets the default font used for new items created. Does NOT affect existing items.} xywh {828 371 140 21} down_box BORDER_BOX labelsize 12 textsize 12
+        tooltip {Sets the default font used for new items created. Does NOT affect existing items.} xywh {528 366 140 21} down_box BORDER_BOX labelsize 12 textsize 12
         code0 {o->value((int)tree->item_labelfont());   // get tree's current font, assign to chooser}
       } {
         MenuItem {} {
           label Helvetica
-          xywh {20 20 36 21} labelsize 12
+          xywh {-808 -351 36 21} labelsize 12
         }
         MenuItem {} {
           label {Helvetica Bold}
-          xywh {30 30 36 21} labelsize 12
+          xywh {-798 -341 36 21} labelsize 12
         }
         MenuItem {} {
           label {Helvetica Italic}
-          xywh {45 45 36 21} labelsize 12
+          xywh {-783 -326 36 21} labelsize 12
         }
         MenuItem {} {
           label {Helvetica Bold Italic}
-          xywh {50 50 36 21} labelsize 12
+          xywh {-778 -321 36 21} labelsize 12
         }
         MenuItem {} {
           label Courier
-          xywh {60 60 36 21} labelsize 12
+          xywh {-768 -311 36 21} labelsize 12
         }
         MenuItem {} {
           label {Courier Bold}
-          xywh {70 70 36 21} labelsize 12
+          xywh {-758 -301 36 21} labelsize 12
         }
         MenuItem {} {
           label {Courier Italic}
-          xywh {55 55 36 21} labelsize 12
+          xywh {-773 -316 36 21} labelsize 12
         }
         MenuItem {} {
           label {Courier Bold Italic}
-          xywh {60 60 36 21} labelsize 12
+          xywh {-768 -311 36 21} labelsize 12
         }
         MenuItem {} {
           label Times
-          xywh {70 70 36 21} labelsize 12
+          xywh {-758 -301 36 21} labelsize 12
         }
         MenuItem {} {
           label {Times Bold}
-          xywh {80 80 36 21} labelsize 12
+          xywh {-748 -291 36 21} labelsize 12
         }
         MenuItem {} {
           label {Times Italic}
-          xywh {65 65 36 21} labelsize 12
+          xywh {-763 -306 36 21} labelsize 12
         }
         MenuItem {} {
           label {Times Bold Italic}
-          xywh {70 70 36 21} labelsize 12
+          xywh {-758 -301 36 21} labelsize 12
         }
         MenuItem {} {
           label Symbol
-          xywh {80 80 36 21} labelsize 12
+          xywh {-748 -291 36 21} labelsize 12
         }
         MenuItem {} {
           label Screen
-          xywh {90 90 36 21} labelsize 12
+          xywh {-738 -281 36 21} labelsize 12
         }
         MenuItem {} {
           label {Screen bold}
-          xywh {75 75 36 21} labelsize 12
+          xywh {-753 -296 36 21} labelsize 12
         }
         MenuItem {} {
           label {Zapf Dingbats}
-          xywh {80 80 36 21} labelsize 12
+          xywh {-748 -291 36 21} labelsize 12
         }
       }
       {fltk3::ValueSlider} item_labelsize_slider {
         label item_labelsize
         user_data tree
         callback {tree->item_labelsize((int)item_labelsize_slider->value());}
-        tooltip {Sets the default labelsize used for new items. Does NOT affect existing items.} xywh {828 396 140 16} type Horizontal labelsize 12 align 4 textsize 12
+        tooltip {Sets the default labelsize used for new items. Does NOT affect existing items.} xywh {528 391 140 16} type Horizontal labelsize 12 align 4 textsize 12
         code0 {o->value((int)tree->item_labelsize());}
         code1 {o->range(1.0, 50.0);}
         code2 {o->step(1.0);}

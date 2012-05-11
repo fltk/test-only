@@ -2293,7 +2293,7 @@ void fltk3::Window::make_current()
     for ( Fl_X *cx = i->xidChildren; cx; cx = cx->xidNext ) {	// clip-out all sub-windows
       fltk3::Window *cw = cx->w;
       fltk3::Region from = fl_window_region;
-      fl_window_region = MacRegionMinusRect(from, cw->x(), cw->y(), cw->w(), cw->h() );
+      fl_window_region = MacRegionMinusRect(from, cw->dx_window(), cw->dy_window(), cw->w(), cw->h() );
       XDestroyRegion(from);
     }
   }
@@ -2307,7 +2307,7 @@ void fltk3::Window::make_current()
   CGContextScaleCTM(fl_gc, 1.0f, -1.0f); // now 0,0 is top-left point of the window
   win = this;
   while(win && win->window()) { // translate to subwindow origin if this is a subwindow context
-    CGContextTranslateCTM(fl_gc, win->x(), win->y());
+    CGContextTranslateCTM(fl_gc, win->dx_window(), win->dy_window());
     win = win->window();
   }
   //apply window's clip

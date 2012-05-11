@@ -525,8 +525,8 @@ int fltk3::Widget::send(int event) {
 
 int fltk3::Widget::dx_window()
 {
-  int dx = 0;
-  for (const Widget* w = this; w; w = w->parent()) {
+  int dx = x();
+  for (const Widget* w = parent(); w; w = w->parent()) {
     if (w->type()>=WINDOW) break;
     dx += w->x();
   }
@@ -535,8 +535,8 @@ int fltk3::Widget::dx_window()
 
 int fltk3::Widget::dy_window()
 {
-  int dy = 0;
-  for (const Widget* w = this; w; w = w->parent()) {
+  int dy = y();
+  for (const Widget* w = parent(); w; w = w->parent()) {
     if (w->type()>=WINDOW) break;
     dy += w->y();
   }

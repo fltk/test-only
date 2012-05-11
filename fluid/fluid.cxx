@@ -1138,6 +1138,34 @@ void print_menu_cb(fltk3::Widget *, void *) {
 
 ////////////////////////////////////////////////////////////////
 
+void fixup_coordinates() {
+  Fl_Type *t;
+  Fl_Widget_Type *w;
+  for (t = Fl_Type::first; t; t = t->next) {
+    if (t->is_widget()) {
+      w = (Fl_Widget_Type*)t;
+      w->redraw(); w->o->redraw();
+      Fl_Type *p = t->parent;
+      while (p) {
+        if (p->is_window())
+          break;
+        if (!p->is_widget())
+          break;
+        Fl_Widget_Type *pw = (Fl_Widget_Type*)p;
+        w->o->x( w->o->x() - pw->o->x() );
+        w->o->y( w->o->y() - pw->o->y() );
+        p = p->parent;
+      }
+    }
+  }
+} 
+
+void fix_coords_cb(fltk3::Widget*, void*) {
+  fixup_coordinates();
+}
+
+////////////////////////////////////////////////////////////////
+
 extern fltk3::MenuItem New_Menu[];
 
 void toggle_widgetbin_cb(fltk3::Widget *, void *);
@@ -1190,6 +1218,7 @@ fltk3::MenuItem Main_Menu[] = {
   {"Hide O&verlays",fltk3::COMMAND+fltk3::SHIFT+'o',toggle_overlays},
   {"Show Widget &Bin...",fltk3::ALT+'b',toggle_widgetbin_cb},
   {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (fltk3::Callback*)toggle_sourceview_cb, 0, fltk3::MENU_DIVIDER},
+  {"Fix relative coordinates",0, (fltk3::Callback*)fix_coords_cb, 0, fltk3::MENU_DIVIDER},
   {"Pro&ject Settings...",fltk3::ALT+'p',show_project_cb},
   {"GU&I Settings...",fltk3::ALT+fltk3::SHIFT+'p',show_settings_cb,0,fltk3::MENU_DIVIDER},
   {"Global &FLTK Settings...",fltk3::ALT+fltk3::SHIFT+'g',show_global_settings_cb},
