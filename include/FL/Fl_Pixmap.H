@@ -33,7 +33,7 @@
 #include "Fl_Image.H"
 
 FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Pixmap, Pixmap)
-FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_Pixmap, Pixmap)
+FLTK3_WRAPPER_INTERFACE_PIXMAP(Fl_Pixmap, Pixmap)
 FLTK3_WRAPPER_INTERFACE_END()
 
 class FL_EXPORT Fl_Pixmap : public Fl_Image {
@@ -51,22 +51,22 @@ public:
   Fl_Pixmap() {}
 
   explicit Fl_Pixmap(char * const * D) {
-    _p = new fltk3::Pixmap(D);
+    _p = new fltk3::Pixmap_I((const uchar * const *)D);
     _p->wrapper(this);
   }
   
   explicit Fl_Pixmap(uchar * const * D) {
-    _p = new fltk3::Pixmap(D);
+    _p = new fltk3::Pixmap_I((const uchar * const *)D);
     _p->wrapper(this);
   }
   
   explicit Fl_Pixmap(const char * const * D) {
-    _p = new fltk3::Pixmap(D);
+    _p = new fltk3::Pixmap_I((const uchar * const *)D);
     _p->wrapper(this);
   }
   
   explicit Fl_Pixmap(const uchar * const * D) {
-    _p = new fltk3::Pixmap(D);
+    _p = new fltk3::Pixmap_I(D);
     _p->wrapper(this);
   }
   
