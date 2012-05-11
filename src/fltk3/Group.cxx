@@ -771,7 +771,8 @@ void fltk3::Group::draw_outside_label(const fltk3::Widget& widget) const {
   if (const_cast<fltk3::Group*>(this)->as_window()) {
     wx = wy = 0;
   } else {
-    wx = x(); wy = y();
+    //wx = x(); wy = y();
+    wx = wy = 0;
   }
   if ( (a & 0x0f) == fltk3::ALIGN_LEFT_TOP ) {
     a = (a &~0x0f ) | fltk3::ALIGN_TOP_RIGHT;
