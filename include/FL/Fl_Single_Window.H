@@ -62,7 +62,7 @@ public:
   }
 
   Fl_Single_Window(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::SingleWindow_I(X, Y, W, H, l);
+    _p = new fltk3::SingleWindow_I(_ctor_dx(X), _ctor_dy(Y), W, H, l);
     _p->wrapper(this);
   }
   

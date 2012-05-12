@@ -32,6 +32,7 @@
 
 #include <fltk3/Wrapper.h>
 #include <fltk3/Widget.h>
+#include <fltk3/Group.h>
 
 #include "Enumerations.H"
 #include "Fl_Image.H"
@@ -86,6 +87,22 @@ class FL_EXPORT Fl_Widget : public fltk3::WidgetWrapper {
   friend class Fl_Group;
 
 protected:
+  
+  int _ctor_dx(int x) {
+    fltk3::Group *cg = fltk3::Group::current();
+    if (cg && !cg->as_window()) {
+      x -= cg->dx_window();
+    }
+    return x;
+  }
+  
+  int _ctor_dy(int y) {
+    fltk3::Group *cg = fltk3::Group::current();
+    if (cg && !cg->as_window()) {
+      y -= cg->dy_window();
+    }
+    return y;
+  }
   
   void x(int v) {
     ((fltk3::Widget_I*)_p)->x(v);
@@ -179,7 +196,7 @@ public:
   Fl_Widget() { /*blank */ }
 
   Fl_Widget(int x, int y, int w, int h, const char *label=0L) {
-    _p = new fltk3::Widget_I(x, y, w, h, label);
+    _p = new fltk3::Widget_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
   }
 

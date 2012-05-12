@@ -115,7 +115,7 @@ public:
   Fl_Input_() { /* empty */ }
   
   Fl_Input_(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::Input__I(x, y, w, h, label);
+    _p = new fltk3::Input__I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
   }
 

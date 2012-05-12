@@ -50,8 +50,9 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Timer, Timer)
   
   Fl_Timer(uchar t,int x,int y,int w,int h, const char *l) {
-    _p = new fltk3::Timer_I(t, x, y, w, h, l);
+    _p = new fltk3::Timer_I(t, _ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
+    box(t);
   }
   
   Fl_Timer() {}

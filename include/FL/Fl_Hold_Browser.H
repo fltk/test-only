@@ -47,7 +47,7 @@ public:
   Fl_Hold_Browser() { /* empty */ }
   
   Fl_Hold_Browser(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::HoldBrowser_I(X, Y, W, H, l);
+    _p = new fltk3::HoldBrowser_I(_ctor_dx(X), _ctor_dy(Y), W, H, l);
     _p->wrapper(this);
   }
 

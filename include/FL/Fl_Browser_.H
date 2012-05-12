@@ -127,7 +127,7 @@ protected:
   Fl_Browser_() { /* empty */ }
 
   Fl_Browser_(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::Browser__I(x, y, w, h, label);
+    _p = new fltk3::Browser__I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
   }
  

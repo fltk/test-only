@@ -49,7 +49,7 @@ public:
   Fl_Light_Button() { /* empty */ }
   
   Fl_Light_Button(int x,int y,int w,int h,const char *l = 0) {
-    _p = new fltk3::LightButton_I(x, y, w, h, l);
+    _p = new fltk3::LightButton_I(_ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
   }
   

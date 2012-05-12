@@ -101,7 +101,7 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Table, Table)
 
   Fl_Table(int X, int Y, int W, int H, const char *l=0) {
-    _p = new fltk3::Table_I(X, Y, W, H, l);
+    _p = new fltk3::Table_I(_ctor_dx(X), _ctor_dy(Y), W, H, l);
     _p->wrapper(this);
   }
   

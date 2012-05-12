@@ -67,13 +67,14 @@ public:
   Fl_Slider() { /* empty */ }
   
   Fl_Slider(int X,int Y,int W,int H, const char *L = 0) {
-    _p = new fltk3::Slider_I(X, Y, W, H, L);
+    _p = new fltk3::Slider_I(_ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
   }
   
   Fl_Slider(uchar t, int X,int Y,int W,int H, const char *L = 0) {
-    _p = new fltk3::Slider_I(t, X, Y, W, H, L);
+    _p = new fltk3::Slider_I(t, _ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
+    box((Fl_Boxtype)t);
   }
   
   void bounds(double a, double b) {

@@ -48,7 +48,7 @@ protected:
   Fl_Valuator() { /* empty */ }
   
   Fl_Valuator(int X, int Y, int W, int H, const char* L) {
-    _p = new fltk3::Valuator_I(X, Y, W, H, L);
+    _p = new fltk3::Valuator_I(_ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
   }
 

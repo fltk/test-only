@@ -136,7 +136,7 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Help_View, HelpView)
   
   Fl_Help_View(int xx, int yy, int ww, int hh, const char *l = 0) {
-    _p = new fltk3::HelpView_I(xx, yy, ww, hh, l);
+    _p = new fltk3::HelpView_I(_ctor_dx(xx), _ctor_dy(yy), ww, hh, l);
     _p->wrapper(this);
   }
 

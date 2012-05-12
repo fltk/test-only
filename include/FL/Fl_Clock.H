@@ -63,7 +63,7 @@ public:
   Fl_Clock_Output() { /* empty */ }
   
   Fl_Clock_Output(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::ClockOutput_I(X, Y, W, H, L);
+    _p = new fltk3::ClockOutput_I(_ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
   }
 
@@ -102,13 +102,14 @@ public:
   Fl_Clock() { /* empty */ }
   
   Fl_Clock(int X, int Y, int W, int H,  const char *L = 0) {
-    _p = new fltk3::Clock_I(X, Y, W, H, L);
+    _p = new fltk3::Clock_I(_ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
   }
   
   Fl_Clock(uchar t, int X, int Y, int W, int H, const char *L) {
-    _p = new fltk3::Clock(t, X, Y, W, H, L);
+    _p = new fltk3::Clock(t, _ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
+    box((Fl_Boxtype)t);
   }
   
 };

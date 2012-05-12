@@ -47,7 +47,7 @@ public:
   Fl_Select_Browser() {}
   
   Fl_Select_Browser(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::SelectBrowser_I(X, Y, W, H, l);
+    _p = new fltk3::SelectBrowser_I(_ctor_dx(X), _ctor_dy(Y), W, H, l);
     _p->wrapper(this);
   }
 

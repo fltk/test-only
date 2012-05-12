@@ -50,7 +50,7 @@ public:
   Fl_Radio_Button() { /* empty */ }
   
   Fl_Radio_Button(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::RadioButton_I(x, y, w, h, l);
+    _p = new fltk3::RadioButton_I(_ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
   }
 

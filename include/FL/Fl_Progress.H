@@ -47,7 +47,7 @@ public:
   Fl_Progress() { }
   
   Fl_Progress(int x, int y, int w, int h, const char *l = 0) {
-    _p = new fltk3::Progress(x, y, w, h, l);
+    _p = new fltk3::Progress(_ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
   }
 

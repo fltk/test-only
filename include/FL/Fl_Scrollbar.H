@@ -47,7 +47,7 @@ public:
   Fl_Scrollbar() { /* empty */ }
   
   Fl_Scrollbar(int X,int Y,int W,int H, const char *L = 0) {
-    _p = new fltk3::Scrollbar_I(X, Y, W, H, L);
+    _p = new fltk3::Scrollbar_I(_ctor_dx(X), _ctor_dy(Y), W, H, L);
     _p->wrapper(this);
   }
     

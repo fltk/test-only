@@ -73,7 +73,7 @@ public:
   }
   
   Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0) {
-    _p = new fltk3::MenuWindow_I(X, Y, W, H, l);
+    _p = new fltk3::MenuWindow_I(_ctor_dx(X), _ctor_dy(Y), W, H, l);
     _p->wrapper(this);
   }
 };

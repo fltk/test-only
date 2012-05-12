@@ -69,7 +69,7 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Group, Group)
 
   Fl_Group(int x, int y, int w, int h, const char *label = 0) {
-    _p = new fltk3::Group_I(x, y, w, h, label);
+    _p = new fltk3::Group_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
   }
 

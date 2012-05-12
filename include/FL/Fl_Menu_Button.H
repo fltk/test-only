@@ -59,7 +59,7 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Menu_Button, MenuButton)
   
   Fl_Menu_Button(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::MenuButton_I(x, y, w, h, label);
+    _p = new fltk3::MenuButton_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
   }
   

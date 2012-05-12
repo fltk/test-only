@@ -47,7 +47,7 @@ public:
   Fl_Value_Slider() {}
   
   Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::ValueSlider_I(x, y, w, h, l);
+    _p = new fltk3::ValueSlider_I(_ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
   }
   

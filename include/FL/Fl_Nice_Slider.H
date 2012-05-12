@@ -45,7 +45,7 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Nice_Slider, NiceSlider)
 
   Fl_Nice_Slider(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::NiceSlider_I(x, y, w, h, l);
+    _p = new fltk3::NiceSlider_I(_ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
   }
 
