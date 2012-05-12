@@ -280,7 +280,7 @@ public:
   }
   
   void copy_label(const char *new_label) {
-    ((fltk3::Widget_I*)_p)->label(new_label);
+    ((fltk3::Widget_I*)_p)->copy_label(new_label);
   }
     
   void label(Fl_Labeltype a, const char* b) {
