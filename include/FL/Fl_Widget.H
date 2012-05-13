@@ -33,6 +33,7 @@
 #include <fltk3/Wrapper.h>
 #include <fltk3/Widget.h>
 #include <fltk3/Group.h>
+#include <fltk3/draw.h>
 
 #include "Enumerations.H"
 #include "Fl_Image.H"

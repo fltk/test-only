@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
   fltk3::Window window(300, 370);
 
   shape_window sw(10, 75, window.w()-20, window.h()-90);
-//sw.mode(fltk3::RGB);
+  sw.mode(fltk3::RGB);
   window.resizable(&sw);
 
   fltk3::HorSlider slider(60, 5, window.w()-70, 30, "Sides:");

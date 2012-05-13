@@ -151,6 +151,21 @@ virtual ~type1() { \
 }
 */
 
+#define FLTK3_WRAPPER_VCALLS_OBJECT_DRAW(type, klass, proto, call, flag) \
+  virtual void proto { \
+    if ( pVCalls & pVCall##type##flag ) { \
+      fltk3::translate_origin(x(), y()); \
+      ((fltk3::klass*)_p)->call; \
+      fltk3::translate_origin(-x(), -y()); \
+    } else { \
+      pVCalls |= pVCall##type##flag; \
+      fltk3::translate_origin(x(), y()); \
+      ((fltk3::klass*)_p)->call; \
+      fltk3::translate_origin(-x(), -y()); \
+      pVCalls &= ~pVCall##type##flag; \
+    } \
+  }
+
 #define FLTK3_WRAPPER_VCALLS_OBJECT(type, klass, proto, call, flag) \
 virtual void proto { \
   if ( pVCalls & pVCall##type##flag ) { \
@@ -187,6 +202,16 @@ virtual rtype proto { \
   if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallDtor) ) { \
     pWrapper->pVCalls |= Wrapper::pVCallDtor; \
     delete ((Wrapper*)pWrapper); \
+    return; \
+  }
+
+#define FLTK3_OBJECT_VCALLS_WRAPPER_DRAW(type, call, flag) \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCall##type##flag) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCall##type##flag; \
+    fltk3::translate_origin(-x(), -y()); \
+    ((type##Wrapper*)pWrapper)->call; \
+    fltk3::translate_origin(x(), y()); \
+    pWrapper->pVCalls &= ~Wrapper::pVCall##type##flag; \
     return; \
   }
 
@@ -240,7 +265,7 @@ virtual rtype proto { \
         type3::resize(X, Y, W, H); \
       } \
       void draw() { \
-        FLTK3_WIDGET_VCALLS_WRAPPER(draw(), Draw) \
+        FLTK3_OBJECT_VCALLS_WRAPPER_DRAW(Widget, draw(), Draw) \
         type3::draw(); \
       } \
       int handle(int event) { \
@@ -324,7 +349,7 @@ virtual rtype proto { \
   FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, show(), show(), Show) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, hide(), hide(), Hide) \
-  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, draw(), draw(), Draw) \
+  FLTK3_WRAPPER_VCALLS_OBJECT_DRAW(Widget, type3##_I, draw(), draw(), Draw) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
   FLTK3_WRAPPER_VCALLS_WIDGET_RET(int, type3##_I, handle(int event), handle(event), Handle)
 
