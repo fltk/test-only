@@ -387,14 +387,14 @@ Fl_Type *Fl_Window_Type::make() {
                                        3072, 2048,
                                        gridx, gridy, 0);
   myo->factory = this;
-  myo->drag = 0;
-  myo->numselected = 0;
+  myo->pDragMode = 0;
+  myo->pNumSelected = 0;
   Overlay_Window *w = new Overlay_Window(100,100);
   w->window = myo;
   myo->o = w;
   myo->add(p);
-  myo->modal = 0;
-  myo->non_modal = 0;
+  myo->pIsModal = 0;
+  myo->pIsNonModal = 0;
   return myo;
 }
 
@@ -455,9 +455,9 @@ void modal_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
     if (!Fl_Panel::current->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)Fl_Panel::current_widget())->modal);
+    i->value(((Fl_Window_Type *)Fl_Panel::current_widget())->pIsModal);
   } else {
-    ((Fl_Window_Type *)Fl_Panel::current_widget())->modal = i->value();
+    ((Fl_Window_Type *)Fl_Panel::current_widget())->pIsModal = i->value();
     set_modflag(1);
   }
 }
@@ -466,9 +466,9 @@ void non_modal_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
     if (!Fl_Panel::current->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)Fl_Panel::current_widget())->non_modal);
+    i->value(((Fl_Window_Type *)Fl_Panel::current_widget())->pIsNonModal);
   } else {
-    ((Fl_Window_Type *)Fl_Panel::current_widget())->non_modal = i->value();
+    ((Fl_Window_Type *)Fl_Panel::current_widget())->pIsNonModal = i->value();
     set_modflag(1);
   }
 }
@@ -539,13 +539,13 @@ void Overlay_Window::resize(int X,int Y,int W,int H) {
 void Fl_Window_Type::newdx() {
   int mydx, mydy;
   if (fltk3::event_state(fltk3::ALT) || !snap) {
-    mydx = mx-x1;
-    mydy = my-y1;
+    mydx = pCurrentMouseX-pInitialMouseX;
+    mydy = pCurrentMouseY-pInitialMouseY;
 
     if (abs(mydx) < 2 && abs(mydy) < 2) mydx = mydy = 0;
   } else {
-    int dx0 = mx-x1;
-    int ix = (drag&RIGHT) ? br : bx;
+    int dx0 = pCurrentMouseX-pInitialMouseX;
+    int ix = (pDragMode&RIGHT) ? pSelectionBox.r() : pSelectionBox.x();
     mydx = gridx ? ((ix+dx0+gridx/2)/gridx)*gridx - ix : dx0;
     if (dx0 > snap) {
       if (mydx < 0) mydx = 0;
@@ -553,8 +553,8 @@ void Fl_Window_Type::newdx() {
       if (mydx > 0) mydx = 0;
     } else 
       mydx = 0;
-    int dy0 = my-y1;
-    int iy = (drag&BOTTOM) ? by : bt;
+    int dy0 = pCurrentMouseY-pInitialMouseY;
+    int iy = (pDragMode&BOTTOM) ? pSelectionBox.y() : pSelectionBox.b();
     mydy = gridy ? ((iy+dy0+gridy/2)/gridy)*gridy - iy : dy0;
     if (dy0 > snap) {
       if (mydy < 0) mydy = 0;
@@ -564,18 +564,18 @@ void Fl_Window_Type::newdx() {
       mydy = 0;
   }
 
-  if (!(drag & (DRAG | BOX | LEFT | RIGHT))) {
+  if (!(pDragMode & (DRAG | BOX | LEFT | RIGHT))) {
     mydx = 0;
-    dx = 0;
+    pDeltaX = 0;
   }
 
-  if (!(drag & (DRAG | BOX | TOP | BOTTOM))) {
+  if (!(pDragMode & (DRAG | BOX | TOP | BOTTOM))) {
     mydy = 0;
-    dy = 0;
+    pDeltaY = 0;
   }
 
-  if (dx != mydx || dy != mydy) {
-    dx = mydx; dy = mydy;
+  if (pDeltaX != mydx || pDeltaY != mydy) {
+    pDeltaX = mydx; pDeltaY = mydy;
     ((Overlay_Window *)o)->redraw_overlay();
   }
 }
@@ -586,39 +586,39 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T
   Y = myo->o->y();
   R = X+myo->o->w();
   T = Y+myo->o->h();
-  if (!drag) return;
-  if (drag&DRAG) {
-    X += dx;
-    Y += dy;
-    R += dx;
-    T += dy;
+  if (!pDragMode) return;
+  if (pDragMode&DRAG) {
+    X += pDeltaX;
+    Y += pDeltaY;
+    R += pDeltaX;
+    T += pDeltaY;
   } else {
-    if (drag&LEFT) {
-      if (X==bx) {
-        X += dx; 
+    if (pDragMode&LEFT) {
+      if (X==pSelectionBox.x()) {
+        X += pDeltaX; 
       } else {
-        if (X<bx+dx) X = bx+dx;
+        if (X<pSelectionBox.x()+pDeltaX) X = pSelectionBox.x()+pDeltaX;
       }
     }
-    if (drag&TOP) {
-      if (Y==by) {
-        Y += dy;
+    if (pDragMode&TOP) {
+      if (Y==pSelectionBox.y()) {
+        Y += pDeltaY;
       } else {
-        if (Y<by+dy) Y = by+dy;
+        if (Y<pSelectionBox.y()+pDeltaY) Y = pSelectionBox.y()+pDeltaY;
       }
     }
-    if (drag&RIGHT) {
-      if (R==br) {
-        R += dx; 
+    if (pDragMode&RIGHT) {
+      if (R==pSelectionBox.r()) {
+        R += pDeltaX; 
       } else {
-        if (R>br+dx) R = br+dx;
+        if (R>pSelectionBox.r()+pDeltaX) R = pSelectionBox.r()+pDeltaX;
       }
     }
-    if (drag&BOTTOM) {
-      if (T==bt) {
-        T += dy; 
+    if (pDragMode&BOTTOM) {
+      if (T==pSelectionBox.b()) {
+        T += pDeltaY; 
       } else {
-        if (T>bt+dx) T = bt+dx;
+        if (T>pSelectionBox.b()+pDeltaX) T = pSelectionBox.b()+pDeltaX;
       }
     }
   }
@@ -739,32 +739,31 @@ static void draw_width(int x, int y, int r, fltk3::Align a) {
 }
 
 void Fl_Window_Type::draw_overlay() {
-  if (recalc) {
-    bx = o->w(); by = o->h(); br = 0; bt = 0;
-    numselected = 0;
+  if (pRecalculateSelectionBox) {
+    pSelectionBox.x(o->w()); pSelectionBox.y(o->h()); pSelectionBox.set_r(0); pSelectionBox.set_b(0);
+    pNumSelected = 0;
     for (Fl_Type *q=next; q && q->level>level; q=q->next)
       if (q->selected && q->is_widget() && !q->is_menu_item()) {
-	numselected++;
+	pNumSelected++;
 	Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
         int myo_x = myo->o->dx_window();
         int myo_y = myo->o->dy_window();
-	if (myo_x < bx) bx = myo_x;
-	if (myo_y < by) by = myo_y;
-	if (myo_x+myo->o->w() > br) br = myo_x+myo->o->w();
-	if (myo_y+myo->o->h() > bt) bt = myo_y+myo->o->h();
+	if (myo_x < pSelectionBox.x()) pSelectionBox.x(myo_x);
+	if (myo_y < pSelectionBox.y()) pSelectionBox.y(myo_y);
+	if (myo_x+myo->o->w() > pSelectionBox.r()) pSelectionBox.set_r(myo_x+myo->o->w());
+	if (myo_y+myo->o->h() > pSelectionBox.b()) pSelectionBox.set_b(myo_y+myo->o->h());
       }
-    recalc = 0;
-    sx = bx; sy = by; sr = br; st = bt;
+    pRecalculateSelectionBox = 0;
   }
   fltk3::color(fltk3::RED);
-  if (drag==BOX && (x1 != mx || y1 != my)) {
-    int x = x1; int r = mx; if (x > r) {x = mx; r = x1;}
-    int y = y1; int b = my; if (y > b) {y = my; b = y1;}
+  if (pDragMode==BOX && (pInitialMouseX != pCurrentMouseX || pInitialMouseY != pCurrentMouseY)) {
+    int x = pInitialMouseX; int r = pCurrentMouseX; if (x > r) {x = pCurrentMouseX; r = pInitialMouseX;}
+    int y = pInitialMouseY; int b = pCurrentMouseY; if (y > b) {y = pCurrentMouseY; b = pInitialMouseY;}
     fltk3::rect(x,y,r-x,b-y);
   }
-  if (overlays_invisible && !drag) return;
+  if (overlays_invisible && !pDragMode) return;
   if (selected) fltk3::rect(0,0,o->w(),o->h());
-  if (!numselected) return;
+  if (!pNumSelected) return;
   int mybx,myby,mybr,mybt;
   int mysx,mysy,mysr,myst;
   mybx = mysx = o->w(); myby = mysy = o->h(); mybr = mysr = 0; mybt = myst = 0;
@@ -778,7 +777,7 @@ void Fl_Window_Type::draw_overlay() {
       int dx = myo->o->dx_window()-x;
       int dy = myo->o->dy_window()-y;
       x += dx; y += dy; r += dx; t += dy;
-      if (!show_guides || !drag || numselected != 1) fltk3::rect(x,y,r-x,t-y);
+      if (!show_guides || !pDragMode || pNumSelected != 1) fltk3::rect(x,y,r-x,t-y);
       if (x < mysx) mysx = x;
       if (y < mysy) mysy = y;
       if (r > mysr) mysr = r;
@@ -801,7 +800,7 @@ void Fl_Window_Type::draw_overlay() {
     }
   if (selected) return;
 
-  if (show_guides && drag) {
+  if (show_guides && pDragMode) {
     // draw overlays for UI Guideline distances
     // - check for distance to the window edge
     //    * FLTK suggests 10 pixels from the edge
@@ -813,41 +812,41 @@ void Fl_Window_Type::draw_overlay() {
 
     ideal_spacing(xsp, ysp);
 
-    if (drag) {
+    if (pDragMode) {
       // Check top spacing...
       if (abs(d = myby - ysp) < 3) {
-	dy -= d;
-	if (drag & DRAG) mybt -= d;
+	pDeltaY -= d;
+	if (pDragMode & DRAG) mybt -= d;
 	myby -= d;
 	draw_v_arrow(mybx+5, myby, 0);
       }
 
       // Check bottom spacing...
       if (abs(d = o->h() - mybt - ysp) < 3) {
-	dy += d;
-	if (drag & DRAG) myby += d;
+	pDeltaY += d;
+	if (pDragMode & DRAG) myby += d;
 	mybt += d;
 	draw_v_arrow(mybx+5, mybt, o->h());
       }
 
       // Check left spacing...
       if (abs(d = mybx - xsp) < 3) {
-        dx -= d;
-	if (drag & DRAG) mybr -= d;
+        pDeltaX -= d;
+	if (pDragMode & DRAG) mybr -= d;
 	mybx -= d;
 	draw_h_arrow(mybx, myby+5, 0);
       }
 
       // Check right spacing...
       if (abs(d = o->w() - mybr - xsp) < 3) {
-	dx += d;
-	if (drag & DRAG) mybx += d;
+	pDeltaX += d;
+	if (pDragMode & DRAG) mybx += d;
 	mybr += d;
 	draw_h_arrow(mybr, myby+5, o->w());
       }
     }
 
-    if (numselected==1 && selection && !(drag & DRAG)) {
+    if (pNumSelected==1 && selection && !(pDragMode & DRAG)) {
       // Check ideal sizes
       int x,y,r,t;
       newposition(mysel,x,y,r,t);
@@ -857,18 +856,18 @@ void Fl_Window_Type::draw_overlay() {
 
       mysel->ideal_size(iw, ih);
 
-      if (drag & (TOP | BOTTOM)) {
+      if (pDragMode & (TOP | BOTTOM)) {
 	// Check height
 	if (abs(d = ih - h) < 5) {
           // Resize height
-	  if (drag & TOP) {
+	  if (pDragMode & TOP) {
 	    myby -= d;
 	    y -= d;
-	    dy -= d;
+	    pDeltaY -= d;
 	  } else {
 	    mybt += d;
 	    t += d;
-	    dy += d;
+	    pDeltaY += d;
 	  }
 	}
 
@@ -877,18 +876,18 @@ void Fl_Window_Type::draw_overlay() {
 	            x < 50 ? fltk3::ALIGN_RIGHT : fltk3::ALIGN_LEFT);
       }
 
-      if (drag & (LEFT | RIGHT)) {
+      if (pDragMode & (LEFT | RIGHT)) {
 	// Check width
 	if (abs(d = iw - w) < 5) {
           // Resize width
-          if (drag & LEFT) {
+          if (pDragMode & LEFT) {
 	    mybx -= d;
 	    x -= d;
-	    dx -= d;
+	    pDeltaX -= d;
 	  } else {
 	    mybr += d;
 	    r += d;
-	    dx += d;
+	    pDeltaX += d;
 	  }
 	}
 
@@ -899,7 +898,7 @@ void Fl_Window_Type::draw_overlay() {
     }
 
     // Check spacing and alignment between individual widgets
-    if (drag && selection->is_widget()) {
+    if (pDragMode && selection->is_widget()) {
       for (Fl_Type *q=next; q && q->level>level; q = q->next)
 	if (q != selection && q->is_widget()) {
           Fl_Widget_Type *qw = (Fl_Widget_Type*)q;
@@ -927,19 +926,19 @@ void Fl_Window_Type::draw_overlay() {
 	  if (fl_min(abs(qy - mysel->o->y() - mysel->o->h()),
 	             abs(mysel->o->y() - qt)) < 25) {
             // Align to left of other widget...
-            if ((drag & (LEFT | DRAG)) && abs(d = mybx - qx) < 3) {
-	      dx += d;
+            if ((pDragMode & (LEFT | DRAG)) && abs(d = mybx - qx) < 3) {
+	      pDeltaX += d;
               mybx += d;
-	      if (drag & DRAG) mybr += d;
+	      if (pDragMode & DRAG) mybr += d;
 
 	      draw_left_brace(qw->o);
 	    }
 
             // Align to right of other widget...
-            if ((drag & (RIGHT | DRAG)) &&
+            if ((pDragMode & (RIGHT | DRAG)) &&
 	        abs(d = qr - mybr) < 3) {
-	      dx += d;
-              if (drag & DRAG) mybx += d;
+	      pDeltaX += d;
+              if (pDragMode & DRAG) mybx += d;
 	      mybr += d;
 
 	      draw_right_brace(qw->o);
@@ -947,18 +946,18 @@ void Fl_Window_Type::draw_overlay() {
           }
 
           // Align to top of other widget...
-          if ((drag & (TOP | DRAG)) && abs(d = myby - qy) < 3) {
-	    dy += d;
+          if ((pDragMode & (TOP | DRAG)) && abs(d = myby - qy) < 3) {
+	    pDeltaY += d;
             myby += d;
-	    if (drag & DRAG) mybt += d;
+	    if (pDragMode & DRAG) mybt += d;
 
 	    draw_top_brace(qw->o);
 	  }
 
           // Align to bottom of other widget...
-          if ((drag & (BOTTOM | DRAG)) && abs(d = qt - mybt) < 3) {
-	    dy += d;
-            if (drag & DRAG) myby += d;
+          if ((pDragMode & (BOTTOM | DRAG)) && abs(d = qt - mybt) < 3) {
+	    pDeltaY += d;
+            if (pDragMode & DRAG) myby += d;
 	    mybt += d;
 
 	    draw_bottom_brace(qw->o);
@@ -969,15 +968,15 @@ void Fl_Window_Type::draw_overlay() {
           else qw->ideal_spacing(xsp, ysp);
 
           if ((qt)>=myby && qy<=mybt) {
-            if (drag & (LEFT | DRAG)) {
+            if (pDragMode & (LEFT | DRAG)) {
 	      // Compare left of selected to left of current
 	      if (abs(d = qx - mybx - xsp) >= 3)
 	        d = qx - mybx + xsp;
 
 	      if (abs(d) < 3) {
-		dx += d;
+		pDeltaX += d;
         	mybx += d;
-		if (drag & DRAG) mybr += d;
+		if (pDragMode & DRAG) mybr += d;
 
         	// Draw left arrow
 		draw_h_arrow(mybx, (myby+mybt)/2, qx);
@@ -988,23 +987,23 @@ void Fl_Window_Type::draw_overlay() {
 	        d = qr - mybx + xsp;
 
 	      if (abs(d) < 3) {
-		dx += d;
+		pDeltaX += d;
         	mybx += d;
-		if (drag & DRAG) mybr += d;
+		if (pDragMode & DRAG) mybr += d;
 
         	// Draw left arrow
 		draw_h_arrow(mybx, (myby+mybt)/2, qr);
               }
 	    }
 
-            if (drag & (RIGHT | DRAG)) {
+            if (pDragMode & (RIGHT | DRAG)) {
 	      // Compare right of selected to left of current
 	      if (abs(d = qx - mybr - xsp) >= 3)
 	        d = qx - mybr + xsp;
 
 	      if (abs(d) < 3) {
-		dx += d;
-        	if (drag & DRAG) mybx += d;
+		pDeltaX += d;
+        	if (pDragMode & DRAG) mybx += d;
 		mybr += d;
 
         	// Draw right arrow
@@ -1016,8 +1015,8 @@ void Fl_Window_Type::draw_overlay() {
 	        d = qr - mybr - xsp;
 
               if (abs(d) < 3) {
-		dx += d;
-        	if (drag & DRAG) mybx += d;
+		pDeltaX += d;
+        	if (pDragMode & DRAG) mybx += d;
 		mybr += d;
 
         	// Draw right arrow
@@ -1028,14 +1027,14 @@ void Fl_Window_Type::draw_overlay() {
 
           if (qr>=mybx && qx<=mybr) {
             // Compare top of selected to top of current
-            if (drag & (TOP | DRAG)) {
+            if (pDragMode & (TOP | DRAG)) {
 	      if (abs(d = qy - myby - ysp) >= 3)
 	        d = qy - myby + ysp;
 
 	      if (abs(d) < 3) {
-		dy += d;
+		pDeltaY += d;
 		myby += d;
-		if (drag & DRAG) mybt += d;
+		if (pDragMode & DRAG) mybt += d;
 
 		// Draw up arrow...
 		draw_v_arrow((mybx+mybr)/2, myby, qy);
@@ -1046,9 +1045,9 @@ void Fl_Window_Type::draw_overlay() {
                 d = qt - myby + ysp;
 
               if (abs(d) < 3) {
-		dy += d;
+		pDeltaY += d;
 		myby += d;
-		if (drag & DRAG) mybt += d;
+		if (pDragMode & DRAG) mybt += d;
 
 		// Draw up arrow...
 		draw_v_arrow((mybx+mybr)/2, myby, qt);
@@ -1056,13 +1055,13 @@ void Fl_Window_Type::draw_overlay() {
 	    }
 
 	    // Compare bottom of selected to top of current
-            if (drag & (BOTTOM | DRAG)) {
+            if (pDragMode & (BOTTOM | DRAG)) {
 	      if (abs(d = qy - mybt - ysp) >= 3)
 	        d = qy - mybt + ysp;
 
 	      if (abs(d) < 3) {
-		dy += d;
-		if (drag & DRAG) myby += d;
+		pDeltaY += d;
+		if (pDragMode & DRAG) myby += d;
 		mybt += d;
 
 		// Draw down arrow...
@@ -1074,8 +1073,8 @@ void Fl_Window_Type::draw_overlay() {
                 d = qt - mybt + ysp;
 
               if (abs(d) < 3) {
-		dy += d;
-		if (drag & DRAG) myby += d;
+		pDeltaY += d;
+		if (pDragMode & DRAG) myby += d;
 		mybt += d;
 
 		// Draw down arrow...
@@ -1088,9 +1087,6 @@ void Fl_Window_Type::draw_overlay() {
     mysx += mybx-mybx_bak; mysr += mybr-mybr_bak;
     mysy += myby-myby_bak; myst += mybt-mybt_bak;
   }
-  // align the snapping selection box with the box we draw.
-  sx = mysx; sy = mysy; sr = mysr; st = myst;
-
   // Draw selection box + resize handles...
   // draw box including all labels
   fltk3::line_style(fltk3::DOT);
@@ -1110,7 +1106,7 @@ extern fltk3::MenuItem Main_Menu[];
 void Fl_Window_Type::fix_overlay() {
   Main_Menu[40].label("Hide O&verlays");
   overlays_invisible = 0;
-  recalc = 1;
+  pRecalculateSelectionBox = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
 }
 
@@ -1186,10 +1182,10 @@ void Fl_Window_Type::moveallchildren()
   for (i=next; i && i->level>level; i=i->next) 
     fix_group_size(i);
   o->redraw();
-  recalc = 1;
+  pRecalculateSelectionBox = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
   set_modflag(1);
-  dx = dy = 0;
+  pDeltaX = pDeltaY = 0;
 
   update_xywh();
 }
@@ -1198,14 +1194,14 @@ int Fl_Window_Type::handle(int event) {
   static Fl_Type* selection;
   switch (event) {
   case fltk3::PUSH:
-    x1 = mx = fltk3::event_x();
-    y1 = my = fltk3::event_y();
-    drag = dx = dy = 0;
+    pInitialMouseX = pCurrentMouseX = fltk3::event_x();
+    pInitialMouseY = pCurrentMouseY = fltk3::event_y();
+    pDragMode = pDeltaX = pDeltaY = 0;
     // test for popup menu:
     if (fltk3::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
       static const fltk3::MenuItem* myprev;
-      const fltk3::MenuItem* m = New_Menu->popup(mx,my,"New",myprev);
+      const fltk3::MenuItem* m = New_Menu->popup(pCurrentMouseX, pCurrentMouseY, "New", myprev);
       if (m && m->callback()) {myprev = m; m->do_callback(this->o);}
       in_this_only = 0;
       return 1;
@@ -1225,19 +1221,19 @@ int Fl_Window_Type::handle(int event) {
     CONTINUE2:;
     }}
     // see if user grabs edges of selected region:
-    if (numselected && !(fltk3::event_state(fltk3::SHIFT)) &&
-	mx<=br+snap && mx>=bx-snap && my<=bt+snap && my>=by-snap) {
+    if (pNumSelected && !(fltk3::event_state(fltk3::SHIFT)) &&
+	pCurrentMouseX<=pSelectionBox.r()+snap && pCurrentMouseX>=pSelectionBox.x()-snap && pCurrentMouseY<=pSelectionBox.b()+snap && pCurrentMouseY>=pSelectionBox.y()-snap) {
       int snap1 = snap>5 ? snap : 5;
-      int w1 = (br-bx)/4; if (w1 > snap1) w1 = snap1;
-      if (mx>=br-w1) drag |= RIGHT;
-      else if (mx<bx+w1) drag |= LEFT;
-      w1 = (bt-by)/4; if (w1 > snap1) w1 = snap1;
-      if (my<=by+w1) drag |= TOP;
-      else if (my>bt-w1) drag |= BOTTOM;
-      if (!drag) drag = DRAG;
+      int w1 = (pSelectionBox.r()-pSelectionBox.x())/4; if (w1 > snap1) w1 = snap1;
+      if (pCurrentMouseX>=pSelectionBox.r()-w1) pDragMode |= RIGHT;
+      else if (pCurrentMouseX<pSelectionBox.x()+w1) pDragMode |= LEFT;
+      w1 = (pSelectionBox.b()-pSelectionBox.y())/4; if (w1 > snap1) w1 = snap1;
+      if (pCurrentMouseY<=pSelectionBox.y()+w1) pDragMode |= TOP;
+      else if (pCurrentMouseY>pSelectionBox.b()-w1) pDragMode |= BOTTOM;
+      if (!pDragMode) pDragMode = DRAG;
     }
     // do object-specific selection of other objects:
-    {Fl_Type* t = selection->click_test(mx, my);
+    {Fl_Type* t = selection->click_test(pCurrentMouseX, pCurrentMouseY);
     if (t) {
       //if (t == selection) return 1; // indicates mouse eaten w/o change
       if (fltk3::event_state(fltk3::SHIFT)) {
@@ -1249,30 +1245,30 @@ int Fl_Window_Type::handle(int event) {
 	if (t->is_menu_item()) t->open();
       }
       selection = t;
-      drag = 0;
+      pDragMode = 0;
     } else {
-      if (!drag) drag = BOX; // if all else fails, start a new selection region
+      if (!pDragMode) pDragMode = BOX; // if all else fails, start a new selection region
     }}
     return 1;
 
   case fltk3::DRAG:
-    if (!drag) return 0;
-    mx = fltk3::event_x();
-    my = fltk3::event_y();
+    if (!pDragMode) return 0;
+    pCurrentMouseX = fltk3::event_x();
+    pCurrentMouseY = fltk3::event_y();
     newdx();
     return 1;
 
   case fltk3::RELEASE:
-    if (!drag) return 0;
-    mx = fltk3::event_x();
-    my = fltk3::event_y();
-    if (drag != BOX && (dx || dy || !fltk3::event_is_click())) {
-      if (dx || dy) moveallchildren();
+    if (!pDragMode) return 0;
+    pCurrentMouseX = fltk3::event_x();
+    pCurrentMouseY = fltk3::event_y();
+    if (pDragMode != BOX && (pDeltaX || pDeltaY || !fltk3::event_is_click())) {
+      if (pDeltaX || pDeltaY) moveallchildren();
     } else if ((fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
       Fl_Widget_Type::open();
     } else {
-      if (mx<x1) {int t = x1; x1 = mx; mx = t;}
-      if (my<y1) {int t = y1; y1 = my; my = t;}
+      if (pCurrentMouseX<pInitialMouseX) {int t = pInitialMouseX; pInitialMouseX = pCurrentMouseX; pCurrentMouseX = t;}
+      if (pCurrentMouseY<pInitialMouseY) {int t = pInitialMouseY; pInitialMouseY = pCurrentMouseY; pCurrentMouseY = t;}
       int n = 0;
       int toggle = fltk3::event_state(fltk3::SHIFT);
       // clear selection on everything:
@@ -1285,8 +1281,8 @@ int Fl_Window_Type::handle(int event) {
 	  if (!o1->visible()) goto CONTINUE;
 	if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) 
           selection = myo;
-	if (myo->o->dx_window()>=x1 && myo->o->dy_window()>y1 &&
-	    myo->o->dx_window()+myo->o->w()<mx && myo->o->dy_window()+myo->o->h()<my) {
+	if (myo->o->dx_window()>=pInitialMouseX && myo->o->dy_window()>pInitialMouseY &&
+	    myo->o->dx_window()+myo->o->w()<pCurrentMouseX && myo->o->dy_window()+myo->o->h()<pCurrentMouseY) {
 	  n++;
 	  select(myo, toggle ? !myo->selected : 1);
 	}
@@ -1297,7 +1293,7 @@ int Fl_Window_Type::handle(int event) {
 	select(selection, toggle ? !selection->selected : 1);
       }
     }
-    drag = 0;
+    pDragMode = 0;
     ((Overlay_Window *)o)->redraw_overlay();
     return 1;
 
@@ -1330,16 +1326,16 @@ int Fl_Window_Type::handle(int event) {
       deselect(); select(i,1);
       return 1;}
 
-    case fltk3::LeftKey:  dx = -1; dy = 0; goto ARROW;
-    case fltk3::RightKey: dx = +1; dy = 0; goto ARROW;
-    case fltk3::UpKey:    dx = 0; dy = -1; goto ARROW;
-    case fltk3::DownKey:  dx = 0; dy = +1; goto ARROW;
+    case fltk3::LeftKey:  pDeltaX = -1; pDeltaY = 0; goto ARROW;
+    case fltk3::RightKey: pDeltaX = +1; pDeltaY = 0; goto ARROW;
+    case fltk3::UpKey:    pDeltaX = 0; pDeltaY = -1; goto ARROW;
+    case fltk3::DownKey:  pDeltaX = 0; pDeltaY = +1; goto ARROW;
     ARROW:
       // for some reason BOTTOM/TOP are swapped... should be fixed...
-      drag = (fltk3::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
-      if (fltk3::event_state(fltk3::CTRL)) {dx *= gridx; dy *= gridy;}
+      pDragMode = (fltk3::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
+      if (fltk3::event_state(fltk3::CTRL)) {pDeltaX *= gridx; pDeltaY *= gridy;}
       moveallchildren();
-      drag = 0;
+      pDragMode = 0;
       return 1;
 
     case 'o':
@@ -1374,8 +1370,8 @@ void Fl_Window_Type::write_code1() {
 void Fl_Window_Type::write_code2() {
   const char *var = is_class() ? "this" : name() ? name() : "o";
   write_extra_code();
-  if (modal) write_c("%s%s->set_modal();\n", indent(), var);
-  else if (non_modal) write_c("%s%s->set_non_modal();\n", indent(), var);
+  if (pIsModal) write_c("%s%s->set_modal();\n", indent(), var);
+  else if (pIsNonModal) write_c("%s%s->set_non_modal();\n", indent(), var);
   if (!((fltk3::Window*)o)->border()) {
     write_c("%s%s->clear_border();\n", indent(), var);
   }
@@ -1384,11 +1380,11 @@ void Fl_Window_Type::write_code2() {
     write_cstring(xclass);
     write_c(");\n");
   }
-  if (sr_max_w || sr_max_h) {
+  if (pMaxW || pMaxH) {
     write_c("%s%s->size_range(%d, %d, %d, %d);\n", indent(), var,
-            sr_min_w, sr_min_h, sr_max_w, sr_max_h);
-  } else if (sr_min_w || sr_min_h) {
-    write_c("%s%s->size_range(%d, %d);\n", indent(), var, sr_min_w, sr_min_h);
+            pMinW, pMinH, pMaxW, pMaxH);
+  } else if (pMinW || pMinH) {
+    write_c("%s%s->size_range(%d, %d);\n", indent(), var, pMinW, pMinH);
   }
   write_c("%s%s->end();\n", indent(), var);
   if (((fltk3::Window*)o)->resizable() == o)
@@ -1398,21 +1394,21 @@ void Fl_Window_Type::write_code2() {
 
 void Fl_Window_Type::write_properties() {
   Fl_Widget_Type::write_properties();
-  if (modal) write_string("modal");
-  else if (non_modal) write_string("non_modal");
+  if (pIsModal) write_string("modal");
+  else if (pIsNonModal) write_string("non_modal");
   if (!((fltk3::Window*)o)->border()) write_string("noborder");
   if (xclass) {write_string("xclass"); write_word(xclass);}
-  if (sr_min_w || sr_min_h || sr_max_w || sr_max_h)
-    write_string("size_range {%d %d %d %d}", sr_min_w, sr_min_h, sr_max_w, sr_max_h);
+  if (pMinW || pMinH || pMaxW || pMaxH)
+    write_string("size_range {%d %d %d %d}", pMinW, pMinH, pMaxW, pMaxH);
   if (o->visible()) write_string("visible");
 }
 
 extern int pasteoffset;
 char Fl_Window_Type::read_property(const char *c) {
   if (!strcmp(c,"modal")) {
-    modal = 1;
+    pIsModal = 1;
   } else if (!strcmp(c,"non_modal")) {
-    non_modal = 1;
+    pIsNonModal = 1;
   } else if (!strcmp(c, "visible")) {
     if (fltk3::first_window()) open(); // only if we are using user interface
   } else if (!strcmp(c,"noborder")) {
@@ -1423,7 +1419,7 @@ char Fl_Window_Type::read_property(const char *c) {
   } else if (!strcmp(c,"size_range")) {
     int mw, mh, MW, MH;
     if (sscanf(read_word(),"%d %d %d %d",&mw,&mh,&MW,&MH) == 4) {
-      sr_min_w = mw; sr_min_h = mh; sr_max_w = MW; sr_max_h = MH;
+      pMinW = mw; pMinH = mh; pMaxW = MW; pMaxH = MH;
     }
   } else if (!strcmp(c,"xywh")) {
     Fl_Widget_Type::read_property(c);
@@ -1455,14 +1451,14 @@ Fl_Type *Fl_Widget_Class_Type::make() {
                                        3072, 2048,
                                        gridx, gridy, 0);
   myo->factory = this;
-  myo->drag = 0;
-  myo->numselected = 0;
+  myo->pDragMode = 0;
+  myo->pNumSelected = 0;
   Overlay_Window *w = new Overlay_Window(100,100);
   w->window = myo;
   myo->o = w;
   myo->add(p);
-  myo->modal = 0;
-  myo->non_modal = 0;
+  myo->pIsModal = 0;
+  myo->pIsNonModal = 0;
   myo->wc_relative = 0;
 
   return myo;
@@ -1555,8 +1551,8 @@ void Fl_Widget_Class_Type::write_code1() {
 void Fl_Widget_Class_Type::write_code2() {
   write_extra_code();
   if (wc_relative) write_c("%sposition(X, Y);\n", indent());
-  if (modal) write_c("%sset_modal();\n", indent());
-  else if (non_modal) write_c("%sset_non_modal();\n", indent());
+  if (pIsModal) write_c("%sset_modal();\n", indent());
+  else if (pIsNonModal) write_c("%sset_non_modal();\n", indent());
   if (!((fltk3::Window*)o)->border()) write_c("%sclear_border();\n", indent());
   if (xclass) {
     write_c("%sxclass(", indent());

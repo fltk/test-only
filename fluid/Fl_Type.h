@@ -850,22 +850,34 @@ public:
   int pixmapID() { return 21; }
 };
 
+
 extern fltk3::MenuItem window_type_menu[];
 
-class Fl_Window_Type : public Fl_Widget_Type {
-protected:
 
-  fltk3::MenuItem* subtypes() {return window_type_menu;}
+class Fl_Window_Type : public Fl_Widget_Type {
 
   friend class Overlay_Window;
-  int mx,my;		// mouse position during dragging
-  int x1,y1;		// initial position of selection box
-  int bx,by,br,bt;	// bounding box of selection before snapping
-  int sx,sy,sr,st;	// bounding box of selection after snapping to guides
-  int dx,dy;
-  int drag;		// which parts of bbox are being moved
-  int numselected;	// number of children selected
+
+protected:
+
   enum {LEFT=1,RIGHT=2,BOTTOM=4,TOP=8,DRAG=16,BOX=32};
+
+  int pCurrentMouseX, pCurrentMouseY;		// mouse position during dragging
+  int pInitialMouseX, pInitialMouseY; // initial position of selection box
+  fltk3::Rectangle pSelectionBox; // bounding box of selection before snapping
+  int pDeltaX, pDeltaY;
+  int pDragMode;		// which parts of bbox are being moved
+  int pNumSelected;	// number of children selected
+  int pRecalculateSelectionBox;		// set by fix_overlay()
+
+public:
+  
+  uchar pIsModal, pIsNonModal;
+  int pMinW, pMinH, pMaxW, pMaxH;
+  
+protected:
+  
+  fltk3::MenuItem* subtypes() {return window_type_menu;}
   void draw_overlay();
   void newdx();
   void newposition(Fl_Widget_Type *,int &x,int &y,int &w,int &h);
@@ -875,14 +887,22 @@ protected:
   void write_code2();
   Fl_Widget_Type *_make() {return 0;} // we don't call this
   fltk3::Widget *widget(int,int,int,int) {return 0;}
-  int recalc;		// set by fix_overlay()
   void moveallchildren();
   int pixmapID() { return 1; }
 
 public:
 
-  Fl_Window_Type() { drag = dx = dy = 0; sr_min_w = sr_min_h = sr_max_w = sr_max_h = 0; }
-  uchar modal, non_modal;
+  Fl_Window_Type() 
+  : pCurrentMouseX(0), pCurrentMouseY(0),
+    pInitialMouseX(0), pInitialMouseY(0),
+    pSelectionBox(0, 0, 0, 0),
+    pDeltaX(0), pDeltaY(0),
+    pDragMode(0),
+    pNumSelected(0),
+    pRecalculateSelectionBox(0),
+    pIsModal(0), pIsNonModal(0),
+    pMinW(0), pMinH(0), pMaxW(0), pMaxH(0)
+  { }
 
   Fl_Type *make();
   virtual const char *type_name() {return "fltk3::Window";}
@@ -907,9 +927,8 @@ public:
   fltk3::Widget *enter_live_mode(int top=0);
   void leave_live_mode();
   void copy_properties();
-
-  int sr_min_w, sr_min_h, sr_max_w, sr_max_h;
 };
+
 
 class Fl_Widget_Class_Type : private Fl_Window_Type {
 public:
