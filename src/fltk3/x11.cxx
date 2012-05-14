@@ -1795,6 +1795,10 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
 
   int X = win->x();
   int Y = win->y();
+  if (win->parent()) {
+    X += win->parent()->dx_window();
+    Y += win->parent()->dy_window();
+    }
   int W = win->w();
   if (W <= 0) W = 1; // X don't like zero...
   int H = win->h();
