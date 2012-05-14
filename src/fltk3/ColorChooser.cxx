@@ -472,7 +472,7 @@ void fltk3::ColorChooser::mode(int newMode)
  \param[in] L widget label, default is no label
  */
 fltk3::ColorChooser::ColorChooser(int X, int Y, int W, int H, const char* L)
-: fltk3::Group(X,Y,W,H,L),  /* 10, 10, 195, 115 */
+: fltk3::Group(0, 0, 195, 115),
   huebox(0,0,115,115),
   valuebox(115,0,20,115),
   choice(140,0,55,25),
