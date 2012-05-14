@@ -824,8 +824,8 @@ const fltk3::MenuItem* fltk3::MenuItem::pulldown(
   button = pbutton;
   if (pbutton && pbutton->window()) {
     for (fltk3::Window* w = pbutton->window(); w; w = w->window()) {
-      X += w->x();
-      Y += w->y();
+      X += w->dx_window();
+      Y += w->dy_window();
     }
   } else {
     X += fltk3::event_x_root()-fltk3::event_x();
