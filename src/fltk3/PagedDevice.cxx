@@ -95,7 +95,7 @@ void fltk3::PagedDevice::traverse(fltk3::Widget *widget)
     fltk3::Widget *c = g->child(i);
     if ( !c->visible() ) continue;
     if ( c->as_window() ) {
-      print_widget(c, c->x(), c->y());
+      print_widget(c, c->dx_window(), c->dy_window());
     }
     else traverse(c);
   }
