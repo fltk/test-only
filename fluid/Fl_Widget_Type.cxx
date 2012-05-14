@@ -1436,13 +1436,13 @@ void min_w_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
     if (!Fl_Panel::current->is_window()) {i->parent()->hide(); return;}
     i->parent()->show();
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMinW);
+    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->sr_min_w);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMinW = n;
+        ((Fl_Window_Type*)Fl_Panel::current_widget())->sr_min_w = n;
         mod = 1;
       }
     }
@@ -1453,13 +1453,13 @@ void min_w_cb(fltk3::ValueInput* i, void* v) {
 void min_h_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
     if (!Fl_Panel::current->is_window()) return;
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMinH);
+    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->sr_min_h);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMinH = n;
+        ((Fl_Window_Type*)Fl_Panel::current_widget())->sr_min_h = n;
         mod = 1;
       }
     }
@@ -1470,13 +1470,13 @@ void min_h_cb(fltk3::ValueInput* i, void* v) {
 void max_w_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
     if (!Fl_Panel::current->is_window()) return;
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxW);
+    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->sr_max_w);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxW = n;
+        ((Fl_Window_Type*)Fl_Panel::current_widget())->sr_max_w = n;
         mod = 1;
       }
     }
@@ -1487,13 +1487,13 @@ void max_w_cb(fltk3::ValueInput* i, void* v) {
 void max_h_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
     if (!Fl_Panel::current->is_window()) return;
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxH);
+    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->sr_max_h);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxH = n;
+        ((Fl_Window_Type*)Fl_Panel::current_widget())->sr_max_h = n;
         mod = 1;
       }
     }
@@ -1508,8 +1508,8 @@ void set_min_size_cb(fltk3::Button*, void* v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
         Fl_Window_Type *win = (Fl_Window_Type*)Fl_Panel::current_widget();
-        win->pMinW = win->o->w();
-        win->pMinH = win->o->h();
+        win->sr_min_w = win->o->w();
+        win->sr_min_h = win->o->h();
         mod = 1;
       }
     }
@@ -1525,8 +1525,8 @@ void set_max_size_cb(fltk3::Button*, void* v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
         Fl_Window_Type *win = (Fl_Window_Type*)Fl_Panel::current_widget();
-        win->pMaxW = win->o->w();
-        win->pMaxH = win->o->h();
+        win->sr_max_w = win->o->w();
+        win->sr_max_h = win->o->h();
         mod = 1;
       }
     }
@@ -1819,10 +1819,10 @@ void live_mode_cb(fltk3::Button*o,void *) {
         live_window->callback(leave_live_mode_cb);
         if (Fl_Panel::current->is_window()) {
           Fl_Window_Type *w = (Fl_Window_Type*)Fl_Panel::current_widget();
-          int mw = w->pMinW; if (mw>0) mw += 20;
-          int mh = w->pMinH; if (mh>0) mh += 55;
-          int MW = w->pMaxW; if (MW>0) MW += 20; 
-          int MH = w->pMaxH; if (MH>2) MH += 55;
+          int mw = w->sr_min_w; if (mw>0) mw += 20;
+          int mh = w->sr_min_h; if (mh>0) mh += 55;
+          int MW = w->sr_max_w; if (MW>0) MW += 20; 
+          int MH = w->sr_max_h; if (MH>2) MH += 55;
           if (mw || mh || MW || MH)
             live_window->size_range(mw, mh, MW, MH);
         }
