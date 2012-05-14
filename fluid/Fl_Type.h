@@ -64,15 +64,15 @@ void set_modflag(int mf);
 
 enum { 
   FL_ENV_NONE=0, 
-      FL_ENV_MAKE = 0x0001, 
-      FL_ENV_CMAKE = 0x0002, 
-    FL_ENV_ALL_SHELL = (FL_ENV_MAKE | FL_ENV_CMAKE), 
-      FL_ENV_VC6 = 0x0004, 
-      FL_ENV_VC2008 = 0x0008, 
-      FL_ENV_VC2010 = 0x0010,
-    FL_ENV_ALL_VC = (FL_ENV_VC6 | FL_ENV_VC2008 | FL_ENV_VC2010), 
-      FL_ENV_XC4 = 0x0040,
-    FL_ENV_ALL_XC = (FL_ENV_XC4), 
+  FL_ENV_MAKE = 0x0001, 
+  FL_ENV_CMAKE = 0x0002, 
+  FL_ENV_ALL_SHELL = (FL_ENV_MAKE | FL_ENV_CMAKE), 
+  FL_ENV_VC6 = 0x0004, 
+  FL_ENV_VC2008 = 0x0008, 
+  FL_ENV_VC2010 = 0x0010,
+  FL_ENV_ALL_VC = (FL_ENV_VC6 | FL_ENV_VC2008 | FL_ENV_VC2010), 
+  FL_ENV_XC4 = 0x0040,
+  FL_ENV_ALL_XC = (FL_ENV_XC4), 
   FL_ENV_ALL = (FL_ENV_ALL_SHELL | FL_ENV_ALL_VC | FL_ENV_ALL_XC)
 }; 
 
@@ -101,25 +101,25 @@ typedef enum {
 } OptionType;
 
 class Fl_Type {
-
+  
   friend class Widget_Browser;
   friend fltk3::Widget *make_type_browser(int,int,int,int,const char *l=0);
   friend class Fl_Window_Type;
   virtual void setlabel(const char *); // virtual part of label(char*)
-
+  
 protected:
-
+  
   Fl_Type();
-
+  
   const char *name_;
   const char *label_;
   const char *callback_;
   const char *user_data_;
   const char *user_data_type_;
   const char *comment_;
-
+  
 public:	// things that should not be public:
-
+  
   Fl_Type *parent; // parent, which is previous in list
   char new_selected; // browser highlight
   char selected; // copied here by selection_changed()
@@ -129,31 +129,31 @@ public:	// things that should not be public:
   int level;	// number of parents over this
   static Fl_Type *first, *last; // linked list of all objects
   Fl_Type *next, *prev;	// linked list of all objects
-
+  
   Fl_Type *factory;
   const char *callback_name();
-
+  
   int code_position, header_position;
   int code_position_end, header_position_end;
-
+  
 protected:
   int user_defined(const char* cbname) const;
-
+  
 public:
-
+  
   virtual ~Fl_Type();
   virtual Fl_Type *make() = 0;
-
+  
   void add(Fl_Type *parent); // add as new child
   void insert(Fl_Type *n); // insert into list before n
   Fl_Type* remove();	// remove from list
   void move_before(Fl_Type*); // move before a sibling
-
+  
   virtual const char *title(); // string for browser
   virtual const char *type_name() = 0; // type for code output
   virtual const char *alt_type_name() { return type_name(); } // alternate type for FLTK1 file reading
   virtual const char *include_path() { return 0; }
-
+  
   const char *name() const {return name_;}
   void name(const char *);
   const char *label() const {return label_;}
@@ -166,35 +166,35 @@ public:
   void user_data_type(const char *);
   const char *comment() { return comment_; }
   void comment(const char *);
-
+  
   virtual Fl_Type* click_test(int,int);
   virtual void add_child(Fl_Type*, Fl_Type* beforethis);
   virtual void move_child(Fl_Type*, Fl_Type* beforethis);
   virtual void remove_child(Fl_Type*);
-
+  
   static Fl_Type *current;  // most recently picked object
   virtual void open();	// what happens when you double-click
-
+  
   // read and write data to a saved file:
   void write();
   virtual void write_properties();
   virtual char read_property(const char *);
-
+  
   // write code, these are called in order:
   virtual void write_static(); // write static stuff to .c file
   virtual void write_code1(); // code and .h before children
   virtual void write_code2(); // code and .h after children
   void write_comment_h(const char *ind=""); // write the commentary text into the header file
   void write_comment_c(const char *ind=""); // write the commentary text into the source file
-
+  
   // live mode
   virtual fltk3::Widget *enter_live_mode(int top=0); // build wdgets needed for live mode
   virtual void leave_live_mode(); // free allocated resources
   virtual void copy_properties(); // copy properties from this type into a potetial live object
-
+  
   // get message number for I18N
   int msgnum();
-
+  
   // fake rtti:
   virtual int is_parent() const;
   virtual int is_widget() const;
@@ -224,9 +224,9 @@ public:
   virtual int is_workspace() const { return 0; }
   virtual int is_target_dependency() const { return 0; }
   virtual int is_option() const { return 0; }
-
+  
   virtual int pixmapID() { return 0; }
-
+  
   virtual int dnd_available() { return 0; }
   virtual int dnd_paste() { return 0; }
   
@@ -276,9 +276,9 @@ class Fl_Option_Type : public Fl_Tool_Type {
   int pValueType;
 public:
   Fl_Option_Type() :
-    Fl_Tool_Type(),
-    pValue(strdup("")),
-    pValueType(0) {
+  Fl_Tool_Type(),
+  pValue(strdup("")),
+  pValueType(0) {
   }
   ~Fl_Option_Type() {
     if (pValue) free(pValue);
@@ -291,7 +291,7 @@ public:
   
   void write_properties();
   char read_property(const char *);
-
+  
   const char *value() { return pValue; }
   void value(const char *);
   int value_type() { return pValueType; }
@@ -403,10 +403,10 @@ class Fl_File_Type : public Fl_Tool_Type {
   FileLocation pFileLocation;
 public:
   Fl_File_Type() :
-    Fl_Tool_Type(),
-    pFilename(0),
-    pFileType(FL_FILE_UNKNOWN),
-    pFileLocation(FL_LOCATION_WORKSPACE) {
+  Fl_Tool_Type(),
+  pFilename(0),
+  pFileType(FL_FILE_UNKNOWN),
+  pFileLocation(FL_LOCATION_WORKSPACE) {
   }
   ~Fl_File_Type() {
     if (pFilename) free(pFilename);
@@ -470,8 +470,8 @@ class Fl_Function_Type : public Fl_Type {
   char public_, cdecl_, constructor, havewidgets;
 public:
   Fl_Function_Type() : 
-    Fl_Type(), 
-    return_type(0L), public_(0), cdecl_(0), constructor(0), havewidgets(0)
+  Fl_Type(), 
+  return_type(0L), public_(0), cdecl_(0), constructor(0), havewidgets(0)
   { }
   ~Fl_Function_Type() {
     if (return_type) free((void*)return_type);
@@ -616,7 +616,7 @@ public:
   // state variables for output:
   char write_public_state; // true when public: has been printed
   Fl_Class_Type* parent_class; // save class if nested
-//
+                               //
   Fl_Type *make();
   void write_code1();
   void write_code2();
@@ -631,7 +631,7 @@ public:
   int pixmapID() { return 12; }
   void write_properties();
   char read_property(const char *);
-
+  
   // class prefix attribute access
   void prefix(const char* p);
   const char*  prefix() const {return class_prefix;}
@@ -646,16 +646,16 @@ class Fl_Widget_Type : public Fl_Type {
   virtual fltk3::Widget *widget(int,int,int,int) = 0;
   virtual Fl_Widget_Type *_make() = 0; // virtual constructor
   virtual void setlabel(const char *);
-
+  
   const char *extra_code_[NUM_EXTRA_CODE];
   const char *subclass_;
   const char *tooltip_;
   const char *image_name_;
   const char *inactive_name_;
   uchar hotspot_;
-
+  
 protected:
-
+  
   void write_static();
   void write_code1();
   void write_widget_code();
@@ -664,24 +664,24 @@ protected:
   void write_code2();
   void write_color(const char*, fltk3::Color);
   fltk3::Widget *live_widget;
-
+  
 public:
   static int default_size;
-
+  
   const char *xclass; // junk string, used for shortcut
   fltk3::Widget *o;
   int public_;
-
+  
   Fluid_Image *image;
   void setimage(Fluid_Image *);
   Fluid_Image *inactive;
   void setinactive(Fluid_Image *);
-
+  
   Fl_Widget_Type();
   Fl_Type *make();
   void open();
   virtual const char *include_path() { return "fltk3"; }
-
+  
   const char *extra_code(int n) const {return extra_code_[n];}
   void extra_code(int n,const char *);
   const char *subclass() const {return subclass_;}
@@ -696,23 +696,23 @@ public:
   void hotspot(uchar v) {hotspot_ = v;}
   uchar resizable() const;
   void resizable(uchar v);
-
+  
   virtual int textstuff(int what, fltk3::Font &, int &, fltk3::Color &);
   virtual fltk3::MenuItem *subtypes();
-
+  
   virtual int is_widget() const;
   virtual int is_public() const;
-
+  
   virtual void write_properties();
   virtual char read_property(const char *);
-
+  
   virtual fltk3::Widget *enter_live_mode(int top=0);
   virtual void leave_live_mode();
   virtual void copy_properties();
-
+  
   virtual void ideal_size(int &w, int &h);
   virtual void ideal_spacing(int &x, int &y);
-
+  
   ~Fl_Widget_Type();
   void redraw();
 };
@@ -758,7 +758,7 @@ public:
   int is_parent() const {return 1;}
   int is_group() const {return 1;}
   int pixmapID() { return 6; }
-
+  
   virtual fltk3::Widget *enter_live_mode(int top=0);
   virtual void leave_live_mode();
   virtual void copy_properties();
@@ -797,9 +797,9 @@ extern const char tabs_type_name[];
 class Fl_Tabs_Type : public Fl_Group_Type {
 public:
   virtual void ideal_spacing(int &x, int &y) {
-     x = 10;
-     fltk3::font(o->labelfont(), o->labelsize());
-     y = fltk3::height() + o->labelsize() - 6;
+    x = 10;
+    fltk3::font(o->labelfont(), o->labelsize());
+    y = fltk3::height() + o->labelsize() - 6;
   }
   virtual const char *type_name() {return tabs_type_name;}
   virtual const char *alt_type_name() {return "Fl_Tabs";}
@@ -852,20 +852,31 @@ public:
 
 extern fltk3::MenuItem window_type_menu[];
 
+
 class Fl_Window_Type : public Fl_Widget_Type {
+  
+  friend class Overlay_Window;
+
 protected:
 
-  fltk3::MenuItem* subtypes() {return window_type_menu;}
+  enum {NONE=0,LEFT=1,RIGHT=2,BOTTOM=4,TOP=8,DRAG=16,BOX=32};
 
-  friend class Overlay_Window;
-  int mx,my;		// mouse position during dragging
-  int x1,y1;		// initial position of selection box
-  int bx,by,br,bt;	// bounding box of selection before snapping
-  int sx,sy,sr,st;	// bounding box of selection after snapping to guides
-  int dx,dy;
-  int drag;		// which parts of bbox are being moved
-  int numselected;	// number of children selected
-  enum {LEFT=1,RIGHT=2,BOTTOM=4,TOP=8,DRAG=16,BOX=32};
+  int pCurrentMouseX, pCurrentMouseY;     // mouse position during dragging
+  int pInitialMouseX, pInitialMouseY;     // initial position of selection box
+  fltk3::Rectangle pSelectionBox;         // bounding box of selection before snapping
+  int pDeltaX, pDeltaY;                   // move selection by this value
+  int pDragMode;                          // which parts of bbox are being moved
+  int pNumSelected;                       // number of children selected
+  int pRecalculateSelectionBox;           // set by fix_overlay()
+
+public:
+  
+  int pMinW, pMinH, pMaxW, pMaxH;
+  uchar pIsModal, pIsNonModal;
+  
+protected:
+  
+  fltk3::MenuItem* subtypes() {return window_type_menu;}
   void draw_overlay();
   void newdx();
   void newposition(Fl_Widget_Type *,int &x,int &y,int &w,int &h);
@@ -875,41 +886,48 @@ protected:
   void write_code2();
   Fl_Widget_Type *_make() {return 0;} // we don't call this
   fltk3::Widget *widget(int,int,int,int) {return 0;}
-  int recalc;		// set by fix_overlay()
   void moveallchildren();
   int pixmapID() { return 1; }
-
+  
 public:
-
-  Fl_Window_Type() { drag = dx = dy = 0; sr_min_w = sr_min_h = sr_max_w = sr_max_h = 0; }
-  uchar modal, non_modal;
-
+  
+  Fl_Window_Type() 
+  : pCurrentMouseX(0), pCurrentMouseY(0),
+    pInitialMouseX(0), pInitialMouseY(0),
+    pSelectionBox(0, 0, 0, 0),
+    pDeltaX(0), pDeltaY(0),
+    pDragMode(NONE),
+    pNumSelected(0),
+    pRecalculateSelectionBox(0),
+    pMinW(0), pMinH(0), pMaxW(0), pMaxH(0),
+    pIsModal(0), pIsNonModal(0)
+  { }
+  
   Fl_Type *make();
   virtual const char *type_name() {return "fltk3::Window";}
   virtual const char *alt_type_name() {return "Fl_Window";}
-
+  
   void open();
-
+  
   void fix_overlay();			// Update the bounding box, etc
   uchar *read_image(int &ww, int &hh);	// Read an image of the window
-
+  
   virtual void write_properties();
   virtual char read_property(const char *);
-
+  
   void add_child(Fl_Type*, Fl_Type*);
   void move_child(Fl_Type*, Fl_Type*);
   void remove_child(Fl_Type*);
-
+  
   int is_parent() const {return 1;}
   int is_group() const {return 1;}
   int is_window() const {return 1;}
-
+  
   fltk3::Widget *enter_live_mode(int top=0);
   void leave_live_mode();
   void copy_properties();
-
-  int sr_min_w, sr_min_h, sr_max_w, sr_max_h;
 };
+
 
 class Fl_Widget_Class_Type : private Fl_Window_Type {
 public:
@@ -920,10 +938,10 @@ public:
   // state variables for output:
   char write_public_state; // true when public: has been printed
   char wc_relative; // if true, reposition all child widgets in an fltk3::Group
-
+  
   virtual void write_properties();
   virtual char read_property(const char *);
-
+  
   void write_code1();
   void write_code2();
   Fl_Type *make();
@@ -980,11 +998,11 @@ class Fl_Menu_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
     fltk3::Menu_ *myo = (fltk3::Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
     switch (w) {
-    case 4:
-    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
-    case 1: myo->textfont(f); break;
-    case 2: myo->textsize(s); break;
-    case 3: myo->textcolor(c); break;
+      case 4:
+      case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+      case 1: myo->textfont(f); break;
+      case 2: myo->textsize(s); break;
+      case 3: myo->textcolor(c); break;
     }
     return 1;
   }
@@ -1058,11 +1076,11 @@ class Fl_Input_Choice_Type : public Fl_Menu_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
     fltk3::InputChoice *myo = (fltk3::InputChoice*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
     switch (w) {
-    case 4:
-    case 0: f = (fltk3::Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
-    case 1: myo->textfont(f); break;
-    case 2: myo->textsize(s); break;
-    case 3: myo->textcolor(c); break;
+      case 4:
+      case 0: f = (fltk3::Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+      case 1: myo->textfont(f); break;
+      case 2: myo->textsize(s); break;
+      case 3: myo->textcolor(c); break;
     }
     return 1;
   }
