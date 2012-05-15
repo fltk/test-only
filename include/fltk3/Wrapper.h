@@ -151,21 +151,6 @@ virtual ~type1() { \
 }
 */
 
-#define FLTK3_WRAPPER_VCALLS_OBJECT_DRAW(type, klass, proto, call, flag) \
-  virtual void proto { \
-    if ( pVCalls & pVCall##type##flag ) { \
-      fltk3::translate_origin(x(), y()); \
-      ((fltk3::klass*)_p)->call; \
-      fltk3::translate_origin(-x(), -y()); \
-    } else { \
-      pVCalls |= pVCall##type##flag; \
-      fltk3::translate_origin(x(), y()); \
-      ((fltk3::klass*)_p)->call; \
-      fltk3::translate_origin(-x(), -y()); \
-      pVCalls &= ~pVCall##type##flag; \
-    } \
-  }
-
 #define FLTK3_WRAPPER_VCALLS_OBJECT(type, klass, proto, call, flag) \
 virtual void proto { \
   if ( pVCalls & pVCall##type##flag ) { \
@@ -202,16 +187,6 @@ virtual rtype proto { \
   if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallDtor) ) { \
     pWrapper->pVCalls |= Wrapper::pVCallDtor; \
     delete ((Wrapper*)pWrapper); \
-    return; \
-  }
-
-#define FLTK3_OBJECT_VCALLS_WRAPPER_DRAW(type, call, flag) \
-  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCall##type##flag) ) { \
-    pWrapper->pVCalls |= Wrapper::pVCall##type##flag; \
-    fltk3::translate_origin(-x(), -y()); \
-    ((type##Wrapper*)pWrapper)->call; \
-    fltk3::translate_origin(x(), y()); \
-    pWrapper->pVCalls &= ~Wrapper::pVCall##type##flag; \
     return; \
   }
 
@@ -261,12 +236,27 @@ virtual rtype proto { \
         type3::hide(); \
       } \
       void resize(int X, int Y, int W, int H) { \
-        FLTK3_WIDGET_VCALLS_WRAPPER(resize(X, Y, W, H), Resize) \
-        type3::resize(X, Y, W, H); \
+	if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidgetResize) ) { \
+	  pWrapper->pVCalls |= Wrapper::pVCallWidgetResize; \
+	  ((WidgetWrapper*)pWrapper)->resize(X + origin_x(), Y + origin_y(), W, H); \
+	  pWrapper->pVCalls &= ~Wrapper::pVCallWidgetResize; \
+	  return; \
+	} \
+	type3::resize(X - origin_x(), Y - origin_y(), W, H); \
       } \
       void draw() { \
-        FLTK3_OBJECT_VCALLS_WRAPPER_DRAW(Widget, draw(), Draw) \
-        type3::draw(); \
+	if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) { \
+	  pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; \
+	  push_origin(); origin(0, 0); \
+	  ((WidgetWrapper*)pWrapper)->draw(); \
+	  pop_origin(); \
+	  pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; \
+	  return; \
+	} \
+	push_origin(); \
+	origin( as_window()?0:dx_window(), as_window()?0:dy_window() ); \
+	type3::draw(); \
+	pop_origin(); \
       } \
       int handle(int event) { \
         FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, handle(event), Handle) \
@@ -349,7 +339,7 @@ virtual rtype proto { \
   FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, show(), show(), Show) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, hide(), hide(), Hide) \
-  FLTK3_WRAPPER_VCALLS_OBJECT_DRAW(Widget, type3##_I, draw(), draw(), Draw) \
+  FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, draw(), draw(), Draw) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
   FLTK3_WRAPPER_VCALLS_WIDGET_RET(int, type3##_I, handle(int event), handle(event), Handle)
 
@@ -358,17 +348,6 @@ virtual rtype proto { \
   FLTK3_WIDGET_VCALLS(type1, type3) \
   FLTK3_WRAPPER_VCALLS_WIDGET(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
 
-/*
-#define FLTK3_IMAGE_VCALLS(type1, type3) \
-  FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
-  FLTK3_WRAPPER_VCALLS_IMAGE_RET(fltk3::Image *, type3##_I, copy(int w, int h), copy(w, h), CopyWH) \
-  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, color_average(Fl_Color c, float i), color_average(fltk3::_1to3_color(c), i), ColorAverage) \
-  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, desaturate(), desaturate(), Desaturate) \
-  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Widget *w), label(fltk3::_1to3_widget(w)), LabelW) \
-  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Menu_Item *w), label((fltk3::MenuItem*)w), LabelM) \
-  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, draw(int X, int Y, int W, int H, int cx=0, int cy=0), draw(X, Y, W, H, cx, cy), Draw) \
-  FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, uncache(), uncache(), Uncache)
-*/
 #define FLTK3_IMAGE_VCALLS(type1, type3) \
 FLTK3_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
 FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, color_average(Fl_Color c, float i), color_average(fltk3::_1to3_color(c), i), ColorAverage) \

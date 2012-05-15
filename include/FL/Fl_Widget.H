@@ -106,11 +106,11 @@ protected:
   }
   
   void x(int v) {
-    ((fltk3::Widget_I*)_p)->x(v);
+    ((fltk3::Widget_I*)_p)->x(_ctor_dx(v));
   }
   
   void y(int v) {
-    ((fltk3::Widget_I*)_p)->y(v);
+    ((fltk3::Widget_I*)_p)->y(_ctor_dy(v));
   }
   
   void w(int v) {
@@ -134,11 +134,15 @@ protected:
   }
   
   void draw_box() const {
+    fltk3::push_origin(); fltk3::origin(x(), y());
     ((fltk3::Widget_I*)_p)->draw_box();
+    fltk3::pop_origin();
   }
   
   void draw_box(Fl_Boxtype t, Fl_Color c) const {
+    fltk3::push_origin(); fltk3::origin(x(), y());
     ((fltk3::Widget_I*)_p)->draw_box(fltk3::_1to3_boxtype(t), fltk3::_1to3_color(c));
+    fltk3::pop_origin();
   }
   
   void draw_box(Fl_Boxtype t, int x,int y,int w,int h, Fl_Color c) const {
@@ -146,7 +150,9 @@ protected:
   }
   
   void draw_backdrop() const {
+    fltk3::push_origin(); fltk3::origin(x(), y());
     ((fltk3::Widget_I*)_p)->draw_backdrop();
+    fltk3::pop_origin();
   }
   
   void draw_focus() {
@@ -158,7 +164,9 @@ protected:
   }
   
   void draw_label() const {
+    fltk3::push_origin(); fltk3::origin(x(), y());
     ((fltk3::Widget_I*)_p)->draw_label();
+    fltk3::pop_origin();
   }
   
   void draw_label(int x, int y, int w, int h) const {
@@ -201,6 +209,7 @@ public:
     _p->wrapper(this);
   }
 
+  
   virtual Fl_Group* as_group() {return 0;}
   
   virtual Fl_Window* as_window() {return 0;}
@@ -228,11 +237,11 @@ public:
   }
   
   int x() const {
-    return ((fltk3::Widget_I*)_p)->x();
+    return ((fltk3::Widget_I*)_p)->dx_window();
   }
   
   int y() const {
-    return ((fltk3::Widget_I*)_p)->y();
+    return ((fltk3::Widget_I*)_p)->dy_window();
   }
   
   int w() const {
@@ -246,11 +255,15 @@ public:
   int damage_resize(int,int,int,int);
   
   void position(int x, int y) {
-    ((fltk3::Widget_I*)_p)->position(x, y);;
+    if (!as_window() || !window()) { // except for top windows
+      x = _ctor_dx(x); // transform to group-relative coords
+      y = _ctor_dy(y);
+    }
+    ((fltk3::Widget_I*)_p)->position(x, y);
   }
   
   void size(int w, int h) {
-    ((fltk3::Widget_I*)_p)->size(w, h);;
+    ((fltk3::Widget_I*)_p)->size(w, h);
   }
   
   Fl_Align align() const {
