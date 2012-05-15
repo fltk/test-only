@@ -434,8 +434,13 @@ fltk3::Group::~Group() {
   the widgets inside a group.
 */
 void fltk3::Group::insert(fltk3::Widget &o, int index) {
-  if (o.parent()) {
-    fltk3::Group* g = o.parent();
+  // new in FLTK3: if widget o changes group, it must also change coordinates
+  // since they are now group-relative
+  int X = o.x(), Y = o.y();
+  fltk3::Group* g = o.parent();
+  if (g) {
+    // compute X,Y window-relative coords of o
+    if (!g->as_window()){ X += g->dx_window(); Y += g->dy_window(); }
     int n = g->find(o);
     if (g == this) {
       if (index > n) index--;
@@ -459,6 +464,12 @@ void fltk3::Group::insert(fltk3::Widget &o, int index) {
     array_[j] = &o;
   }
   children_++;
+  if (g && g != this) {
+    // compute group-relative coords of o;
+    if (!as_window()) { X -= dx_window(); Y -= dy_window(); }
+    // give o its new (group-relative) coords
+    o.x(X); o.y(Y);
+  }
   init_sizes();
 }
 
@@ -572,17 +583,17 @@ int* fltk3::Group::sizes() {
     if (type() < fltk3::WINDOW) {p[0] = x(); p[2] = y();} else {p[0] = p[2] = 0;}
     p[1] = p[0]+w(); p[3] = p[2]+h();
     // next is the resizable's size:
-    p[4] = p[0]; // init to the group's size
-    p[5] = p[1];
-    p[6] = p[2];
-    p[7] = p[3];
+    p[4] = 0;   // init to the group's size using group-relative coords
+    p[5] = w();
+    p[6] = 0;
+    p[7] = h();
     fltk3::Widget* r = resizable();
     if (r && r != this) { // then clip the resizable to it
       int t;
-      t = r->x(); if (t > p[0]) p[4] = t;
-      t +=r->w(); if (t < p[1]) p[5] = t;
-      t = r->y(); if (t > p[2]) p[6] = t;
-      t +=r->h(); if (t < p[3]) p[7] = t;
+      t = r->x(); if (t > p[4]) p[4] = t;
+      t +=r->w(); if (t < p[5]) p[5] = t;
+      t = r->y(); if (t > p[6]) p[6] = t;
+      t +=r->h(); if (t < p[7]) p[7] = t;
     }
     // next is all the children's sizes:
     p += 8;
@@ -622,8 +633,14 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
 
   if (!resizable() || (dw==0 && dh==0) ) {
 
-    return;
-
+    if (!as_window()) {
+      fltk3::Widget*const* a = array();
+      for (int i=children_; i--;) {
+	fltk3::Widget* o = *a++;
+	o->resize(o->x()+dx, o->y()+dy, o->w(), o->h());
+      }
+    }
+    
   } else if (children_) {
 
     // get changes in size/position from the initial size:
@@ -631,7 +648,7 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
     dw = W - (p[1]-p[0]);
     dy = Y - p[2];
     dh = H - (p[3]-p[2]);
-    /* if (type() >= fltk3::WINDOW) */ dx = dy = 0;
+    if (as_window()) dx = dy = 0;
     p += 4;
 
     // get initial size of resizable():
