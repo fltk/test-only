@@ -106,11 +106,19 @@ protected:
   }
   
   void x(int v) {
-    ((fltk3::Widget_I*)_p)->x(_ctor_dx(v));
+    if (!as_window() || window()) { // except for top windows
+      fltk3::Group *g = ((fltk3::Widget*)_p)->parent();
+      if (!g->as_window()) v -= g->dx_window(); // transform to group-relative coords
+    }
+    ((fltk3::Widget_I*)_p)->x(v);
   }
   
   void y(int v) {
-    ((fltk3::Widget_I*)_p)->y(_ctor_dy(v));
+    if (!as_window() || window()) { // except for top windows
+      fltk3::Group *g = ((fltk3::Widget*)_p)->parent();
+      if (!g->as_window()) v -= g->dy_window(); // transform to group-relative coords
+    }
+    ((fltk3::Widget_I*)_p)->y(v);
   }
   
   void w(int v) {
@@ -255,9 +263,12 @@ public:
   int damage_resize(int,int,int,int);
   
   void position(int x, int y) {
-    if (!as_window() || !window()) { // except for top windows
-      x = _ctor_dx(x); // transform to group-relative coords
-      y = _ctor_dy(y);
+    if (!as_window() || window()) { // except for top windows
+      fltk3::Group *g = ((fltk3::Widget*)_p)->parent();
+      if ( !g->as_window()) {
+	x -= g->dx_window(); // transform to group-relative coords
+	y -= g->dy_window();
+      }
     }
     ((fltk3::Widget_I*)_p)->position(x, y);
   }
