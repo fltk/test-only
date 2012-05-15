@@ -534,16 +534,24 @@ void Overlay_Window::resize(int X,int Y,int W,int H) {
   update_xywh();
 }
 
-// calculate actual move by moving mouse position (mx,my) to
-// nearest multiple of gridsize, and snap to original position
-void Fl_Window_Type::newdx() {
+
+/*
+ * Calculate actual move by moving mouse position (mx,my) to
+ * nearest multiple of gridsize, and snap to original position.
+ */
+void Fl_Window_Type::handle_drag_event() 
+{
   int mydx, mydy;
+  
+  // -- handle mouse pointer snapping
   if (fltk3::event_state(fltk3::ALT) || !snap) {
+    // -- no snap size set, or ALT held down
     mydx = pCurrentMouseX-pInitialMouseX;
     mydy = pCurrentMouseY-pInitialMouseY;
-
-    if (abs(mydx) < 2 && abs(mydy) < 2) mydx = mydy = 0;
+    if (abs(mydx) < 2 && abs(mydy) < 2) 
+      mydx = mydy = 0;
   } else {
+    // -- set mydx and mydy 
     int dx0 = pCurrentMouseX-pInitialMouseX;
     int ix = (pDragMode&RIGHT) ? pSelectionBox.r() : pSelectionBox.x();
     mydx = gridx ? ((ix+dx0+gridx/2)/gridx)*gridx - ix : dx0;
@@ -573,17 +581,20 @@ void Fl_Window_Type::newdx() {
     mydy = 0;
     pDeltaY = 0;
   }
-
+  
   if (pDeltaX != mydx || pDeltaY != mydy) {
     pDeltaX = mydx; pDeltaY = mydy;
     ((Overlay_Window *)o)->redraw_overlay();
   }
 }
 
-// Move a widget according to dx and dy calculated above
+
+/*
+ * Move a widget according to pDeltaX and pDeltaY calculated above
+ */
 void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T) {
-  X = myo->o->x();
-  Y = myo->o->y();
+  X = myo->o->dx_window();
+  Y = myo->o->dy_window();
   R = X+myo->o->w();
   T = Y+myo->o->h();
   if (!pDragMode) return;
@@ -625,6 +636,7 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T
   if (R<X) {int n = X; X = R; R = n;}
   if (T<Y) {int n = Y; Y = T; T = n;}
 }
+
 
 // draw a vertical arrow pointing toward y2
 static void draw_v_arrow(int x, int y1, int y2) {
@@ -774,9 +786,6 @@ void Fl_Window_Type::draw_overlay() {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
       int x,y,r,t;
       newposition(myo,x,y,r,t);
-      int dx = myo->o->dx_window()-x;
-      int dy = myo->o->dy_window()-y;
-      x += dx; y += dy; r += dx; t += dy;
       if (!show_guides || !pDragMode || pNumSelected != 1) fltk3::rect(x,y,r-x,t-y);
       if (x < mysx) mysx = x;
       if (y < mysy) mysy = y;
@@ -1154,33 +1163,46 @@ extern void fix_group_size(Fl_Type *t);
 extern fltk3::MenuItem Main_Menu[];
 extern fltk3::MenuItem New_Menu[];
 
-// move the selected children according to current dx,dy,drag state:
-void Fl_Window_Type::moveallchildren()
+
+/*
+ * Move the selected children according to current pDeltaX, pDeltaY, and 
+ * pDragMode state:
+ */
+void Fl_Window_Type::move_all_children()
 {
   undo_checkpoint();
   Fl_Type *i;
   for (i=next; i && i->level>level;) {
     if (i->selected && i->is_widget() && !i->is_menu_item()) {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
-      int x,y,r,t;
+      int x,y,r,t, hx=0, hy=0;
       newposition(myo,x,y,r,t);
-      myo->o->resize(x,y,r-x,t-y);
-      // move all the children, whether selected or not:
+      if (myo->parent && myo->parent->is_widget()) {
+        Fl_Widget_Type *p = (Fl_Widget_Type*)myo->parent;
+        hx = p->o->dx_window();
+        hy = p->o->dy_window();
+      }
+      int dx = myo->o->x()-x+hx, dy = myo->o->y()-y+hy;
+      myo->o->resize(x-hx,y-hy,r-x,t-y);
+      // don't move any children, whether selected or not:
       Fl_Type* p;
-      for (p = myo->next; p && p->level>myo->level; p = p->next)
-	if (p->is_widget() && !p->is_menu_item()) {
-	  Fl_Widget_Type* myo2 = (Fl_Widget_Type*)p;
-	  int X,Y,R,T;
-	  newposition(myo2,X,Y,R,T);
-	  myo2->o->resize(X,Y,R-X,T-Y);
-	}
+      for (p = myo->next; p && p->level>myo->level; p = p->next) {
+        if (pDragMode & (LEFT|TOP|RIGHT|BOTTOM)) {
+          if (p->is_widget() && !p->is_menu_item()) {
+            Fl_Widget_Type* myo2 = (Fl_Widget_Type*)p;
+            myo2->o->position(myo2->o->x()+dx, myo2->o->y()+dy);
+          }
+        }
+      }
       i = p;
     } else {
       i = i->next;
     }
   }
+  /*
   for (i=next; i && i->level>level; i=i->next) 
     fix_group_size(i);
+   */
   o->redraw();
   pRecalculateSelectionBox = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
@@ -1190,171 +1212,217 @@ void Fl_Window_Type::moveallchildren()
   update_xywh();
 }
 
+
+/*
+ * Handle all events to the preview window.
+ */
 int Fl_Window_Type::handle(int event) {
+  
   static Fl_Type* selection;
+  
   switch (event) {
-  case fltk3::PUSH:
-    pInitialMouseX = pCurrentMouseX = fltk3::event_x();
-    pInitialMouseY = pCurrentMouseY = fltk3::event_y();
-    pDragMode = pDeltaX = pDeltaY = 0;
-    // test for popup menu:
-    if (fltk3::event_button() >= 3) {
-      in_this_only = this; // modifies how some menu items work.
-      static const fltk3::MenuItem* myprev;
-      const fltk3::MenuItem* m = New_Menu->popup(pCurrentMouseX, pCurrentMouseY, "New", myprev);
-      if (m && m->callback()) {myprev = m; m->do_callback(this->o);}
-      in_this_only = 0;
-      return 1;
-    }
-    // find the innermost item clicked on:
-    selection = this;
-    {for (Fl_Type* i=next; i && i->level>level; i=i->next)
-      if (i->is_widget() && !i->is_menu_item()) {
-      Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
-      for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
-	if (!o1->visible()) goto CONTINUE2;
-      if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) {
-        selection = myo;
-        if (fltk3::event_clicks()==1)
-          reveal_in_browser(myo);
+      
+    // User clicked in the window
+    case fltk3::PUSH: {
+      
+      // -- store initial and current mouse position
+      pInitialMouseX = pCurrentMouseX = fltk3::event_x();
+      pInitialMouseY = pCurrentMouseY = fltk3::event_y();
+      pDragMode = pDeltaX = pDeltaY = 0;
+      
+      // -- test for popup menu:
+      if (fltk3::event_button() >= 3) {
+        in_this_only = this; // modifies how some menu items work.
+        static const fltk3::MenuItem* myprev;
+        const fltk3::MenuItem* m = New_Menu->popup(pCurrentMouseX, pCurrentMouseY, "New", myprev);
+        if (m && m->callback()) {
+          myprev = m; 
+          m->do_callback(this->o);
+        }
+        in_this_only = 0;
+        return 1;
       }
-    CONTINUE2:;
-    }}
-    // see if user grabs edges of selected region:
-    if (pNumSelected && !(fltk3::event_state(fltk3::SHIFT)) &&
-	pCurrentMouseX<=pSelectionBox.r()+snap && pCurrentMouseX>=pSelectionBox.x()-snap && pCurrentMouseY<=pSelectionBox.b()+snap && pCurrentMouseY>=pSelectionBox.y()-snap) {
-      int snap1 = snap>5 ? snap : 5;
-      int w1 = (pSelectionBox.r()-pSelectionBox.x())/4; if (w1 > snap1) w1 = snap1;
-      if (pCurrentMouseX>=pSelectionBox.r()-w1) pDragMode |= RIGHT;
-      else if (pCurrentMouseX<pSelectionBox.x()+w1) pDragMode |= LEFT;
-      w1 = (pSelectionBox.b()-pSelectionBox.y())/4; if (w1 > snap1) w1 = snap1;
-      if (pCurrentMouseY<=pSelectionBox.y()+w1) pDragMode |= TOP;
-      else if (pCurrentMouseY>pSelectionBox.b()-w1) pDragMode |= BOTTOM;
-      if (!pDragMode) pDragMode = DRAG;
-    }
-    // do object-specific selection of other objects:
-    {Fl_Type* t = selection->click_test(pCurrentMouseX, pCurrentMouseY);
-    if (t) {
-      //if (t == selection) return 1; // indicates mouse eaten w/o change
-      if (fltk3::event_state(fltk3::SHIFT)) {
-	fltk3::event_is_click(0);
-	select(t, !t->selected);
+      
+      // -- find the innermost item clicked on:
+      selection = this;
+      for (Fl_Type* i=next; i && i->level>level; i=i->next) {
+        if (i->is_widget() && !i->is_menu_item()) {
+          Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
+          for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent()) {
+            if (!o1->visible()) 
+              goto CONTINUE2;
+          }
+          if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) {
+            selection = myo;
+            if (fltk3::event_clicks()==1)
+              reveal_in_browser(myo);
+          }
+        CONTINUE2:;
+        }
+      }
+      
+      // -- see if user grabs edges of selected region:
+      if (   pNumSelected 
+          && !(fltk3::event_state(fltk3::SHIFT)) 
+          && pCurrentMouseX<=pSelectionBox.r()+snap 
+          && pCurrentMouseX>=pSelectionBox.x()-snap 
+          && pCurrentMouseY<=pSelectionBox.b()+snap 
+          && pCurrentMouseY>=pSelectionBox.y()-snap) 
+      {
+        int snap1 = snap>5 ? snap : 5;
+        int w1 = (pSelectionBox.r()-pSelectionBox.x())/4; 
+        if (w1 > snap1) 
+          w1 = snap1;
+        if (pCurrentMouseX>=pSelectionBox.r()-w1) 
+          pDragMode |= RIGHT;
+        else if (pCurrentMouseX<pSelectionBox.x()+w1) 
+          pDragMode |= LEFT;
+        w1 = (pSelectionBox.b()-pSelectionBox.y())/4; 
+        if (w1 > snap1) 
+          w1 = snap1;
+        if (pCurrentMouseY<=pSelectionBox.y()+w1) 
+          pDragMode |= TOP;
+        else if (pCurrentMouseY>pSelectionBox.b()-w1) 
+          pDragMode |= BOTTOM;
+        if (!pDragMode) 
+          pDragMode = DRAG;
+      }
+      
+      // -- do object-specific selection of other objects:
+      Fl_Type* t = selection->click_test(pCurrentMouseX, pCurrentMouseY);
+      if (t) {
+        //if (t == selection) return 1; // indicates mouse eaten w/o change
+        if (fltk3::event_state(fltk3::SHIFT)) {
+          fltk3::event_is_click(0);
+          select(t, !t->selected);
+        } else {
+          deselect();
+          select(t, 1);
+          if (t->is_menu_item()) 
+            t->open();
+        }
+        selection = t;
+        pDragMode = 0;
       } else {
-	deselect();
-	select(t, 1);
-	if (t->is_menu_item()) t->open();
+        if (!pDragMode) 
+          pDragMode = BOX; // if all else fails, start a new selection region
       }
-      selection = t;
-      pDragMode = 0;
-    } else {
-      if (!pDragMode) pDragMode = BOX; // if all else fails, start a new selection region
-    }}
-    return 1;
+      return 1; }
 
-  case fltk3::DRAG:
-    if (!pDragMode) return 0;
-    pCurrentMouseX = fltk3::event_x();
-    pCurrentMouseY = fltk3::event_y();
-    newdx();
-    return 1;
-
-  case fltk3::RELEASE:
-    if (!pDragMode) return 0;
-    pCurrentMouseX = fltk3::event_x();
-    pCurrentMouseY = fltk3::event_y();
-    if (pDragMode != BOX && (pDeltaX || pDeltaY || !fltk3::event_is_click())) {
-      if (pDeltaX || pDeltaY) moveallchildren();
-    } else if ((fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
-      Fl_Widget_Type::open();
-    } else {
-      if (pCurrentMouseX<pInitialMouseX) {int t = pInitialMouseX; pInitialMouseX = pCurrentMouseX; pCurrentMouseX = t;}
-      if (pCurrentMouseY<pInitialMouseY) {int t = pInitialMouseY; pInitialMouseY = pCurrentMouseY; pCurrentMouseY = t;}
-      int n = 0;
-      int toggle = fltk3::event_state(fltk3::SHIFT);
-      // clear selection on everything:
-      if (!toggle) deselect(); else fltk3::event_is_click(0);
-      // select everything in box:
-      for (Fl_Type*i=next; i&&i->level>level; i=i->next)
-	if (i->is_widget() && !i->is_menu_item()) {
-	Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
-	for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
-	  if (!o1->visible()) goto CONTINUE;
-	if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) 
-          selection = myo;
-	if (myo->o->dx_window()>=pInitialMouseX && myo->o->dy_window()>pInitialMouseY &&
-	    myo->o->dx_window()+myo->o->w()<pCurrentMouseX && myo->o->dy_window()+myo->o->h()<pCurrentMouseY) {
-	  n++;
-	  select(myo, toggle ? !myo->selected : 1);
-	}
-      CONTINUE:;
-      }
-      // if nothing in box, select what was clicked on:
-      if (!n) {
-	select(selection, toggle ? !selection->selected : 1);
-      }
-    }
-    pDragMode = 0;
-    ((Overlay_Window *)o)->redraw_overlay();
-    return 1;
-
-  case fltk3::KEYBOARD: {
-
-    int backtab = 0;
-    switch (fltk3::event_key()) {
-
-    case fltk3::EscapeKey:
-      ((fltk3::Window*)o)->hide();
+    // User drags the mouse
+    case fltk3::DRAG:
+    
+      // -- check if there is anything to do
+      if (!pDragMode) 
+        return 0;
+      pCurrentMouseX = fltk3::event_x();
+      pCurrentMouseY = fltk3::event_y();
+      handle_drag_event();
       return 1;
-
-    case fltk3::TabKey: {
-      if (fltk3::event_state(fltk3::SHIFT)) backtab = 1;
-      // find current child:
-      Fl_Type *i = Fl_Type::current;
-      while (i && (!i->is_widget() || i->is_menu_item())) i = i->parent;
-      if (!i) return 0;
-      Fl_Type *p = i->parent;
-      while (p && p != this) p = p->parent;
-      if (!p || !p->is_widget()) {
-	i = next; if (!i || i->level <= level) return 0;
+      
+      // user released mouse, show the results of the action
+    case fltk3::RELEASE:
+      
+      // -- anything to do?
+      if (!pDragMode) 
+        return 0;
+      pCurrentMouseX = fltk3::event_x();
+      pCurrentMouseY = fltk3::event_y();
+      
+      if (pDragMode != BOX && (pDeltaX || pDeltaY || !fltk3::event_is_click())) {
+        if (pDeltaX || pDeltaY) move_all_children();
+      } else if ((fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
+        Fl_Widget_Type::open();
+      } else {
+        // -- apply the selection box
+        if (pCurrentMouseX<pInitialMouseX) {int t = pInitialMouseX; pInitialMouseX = pCurrentMouseX; pCurrentMouseX = t;}
+        if (pCurrentMouseY<pInitialMouseY) {int t = pInitialMouseY; pInitialMouseY = pCurrentMouseY; pCurrentMouseY = t;}
+        int n = 0;
+        int toggle = fltk3::event_state(fltk3::SHIFT);
+        // clear selection on everything:
+        if (!toggle) deselect(); else fltk3::event_is_click(0);
+        // select everything in box:
+        for (Fl_Type*i=next; i&&i->level>level; i=i->next)
+          if (i->is_widget() && !i->is_menu_item()) {
+            Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
+            for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
+              if (!o1->visible()) goto CONTINUE;
+            if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) 
+              selection = myo;
+            if (myo->o->dx_window()>=pInitialMouseX && myo->o->dy_window()>pInitialMouseY &&
+                myo->o->dx_window()+myo->o->w()<pCurrentMouseX && myo->o->dy_window()+myo->o->h()<pCurrentMouseY) {
+              n++;
+              select(myo, toggle ? !myo->selected : 1);
+            }
+          CONTINUE:;
+          }
+        // if nothing in box, select what was clicked on:
+        if (!n) {
+          select(selection, toggle ? !selection->selected : 1);
+        }
       }
-      p = i;
-      for (;;) {
-	i = backtab ? i->prev : i->next;
-	if (!i || i->level <= level) {i = p; break;}
-	if (i->is_widget() && !i->is_menu_item()) break;
-      }
-      deselect(); select(i,1);
-      return 1;}
-
-    case fltk3::LeftKey:  pDeltaX = -1; pDeltaY = 0; goto ARROW;
-    case fltk3::RightKey: pDeltaX = +1; pDeltaY = 0; goto ARROW;
-    case fltk3::UpKey:    pDeltaX = 0; pDeltaY = -1; goto ARROW;
-    case fltk3::DownKey:  pDeltaX = 0; pDeltaY = +1; goto ARROW;
-    ARROW:
-      // for some reason BOTTOM/TOP are swapped... should be fixed...
-      pDragMode = (fltk3::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
-      if (fltk3::event_state(fltk3::CTRL)) {pDeltaX *= gridx; pDeltaY *= gridy;}
-      moveallchildren();
       pDragMode = 0;
+      ((Overlay_Window *)o)->redraw_overlay();
       return 1;
-
-    case 'o':
-      toggle_overlays(0, 0);
-      break;
-
+      
+    case fltk3::KEYBOARD: {
+      
+      int backtab = 0;
+      switch (fltk3::event_key()) {
+          
+        case fltk3::EscapeKey:
+          ((fltk3::Window*)o)->hide();
+          return 1;
+          
+        case fltk3::TabKey: {
+          if (fltk3::event_state(fltk3::SHIFT)) backtab = 1;
+          // find current child:
+          Fl_Type *i = Fl_Type::current;
+          while (i && (!i->is_widget() || i->is_menu_item())) i = i->parent;
+          if (!i) return 0;
+          Fl_Type *p = i->parent;
+          while (p && p != this) p = p->parent;
+          if (!p || !p->is_widget()) {
+            i = next; if (!i || i->level <= level) return 0;
+          }
+          p = i;
+          for (;;) {
+            i = backtab ? i->prev : i->next;
+            if (!i || i->level <= level) {i = p; break;}
+            if (i->is_widget() && !i->is_menu_item()) break;
+          }
+          deselect(); select(i,1);
+          return 1;}
+          
+        case fltk3::LeftKey:  pDeltaX = -1; pDeltaY = 0; goto ARROW;
+        case fltk3::RightKey: pDeltaX = +1; pDeltaY = 0; goto ARROW;
+        case fltk3::UpKey:    pDeltaX = 0; pDeltaY = -1; goto ARROW;
+        case fltk3::DownKey:  pDeltaX = 0; pDeltaY = +1; goto ARROW;
+        ARROW:
+          // for some reason BOTTOM/TOP are swapped... should be fixed...
+          pDragMode = (fltk3::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
+          if (fltk3::event_state(fltk3::CTRL)) {pDeltaX *= gridx; pDeltaY *= gridy;}
+          move_all_children();
+          pDragMode = 0;
+          return 1;
+          
+        case 'o':
+          toggle_overlays(0, 0);
+          break;
+          
+        default:
+          return 0;
+      }}
+      
+    case fltk3::SHORTCUT: {
+      in_this_only = this; // modifies how some menu items work.
+      const fltk3::MenuItem* m = Main_Menu->test_shortcut();
+      if (m && m->callback()) m->do_callback(this->o);
+      in_this_only = 0;
+      return (m != 0);}
+      
     default:
       return 0;
-    }}
-
-  case fltk3::SHORTCUT: {
-    in_this_only = this; // modifies how some menu items work.
-    const fltk3::MenuItem* m = Main_Menu->test_shortcut();
-    if (m && m->callback()) m->do_callback(this->o);
-    in_this_only = 0;
-    return (m != 0);}
-
-  default:
-    return 0;
   }
 }
 

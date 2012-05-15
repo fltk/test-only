@@ -879,7 +879,7 @@ protected:
   
   fltk3::MenuItem* subtypes() {return window_type_menu;}
   void draw_overlay();
-  void newdx();
+  void handle_drag_event();
   void newposition(Fl_Widget_Type *,int &x,int &y,int &w,int &h);
   int handle(int);
   virtual void setlabel(const char *);
@@ -887,7 +887,7 @@ protected:
   void write_code2();
   Fl_Widget_Type *_make() {return 0;} // we don't call this
   fltk3::Widget *widget(int,int,int,int) {return 0;}
-  void moveallchildren();
+  void move_all_children();
   int pixmapID() { return 1; }
 
 public:
