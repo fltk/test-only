@@ -230,7 +230,7 @@ public:
   void draw_image(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D) { 
     if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDrawImage) ) { 
       pWrapper->pVCalls |= Wrapper::pVCallGraphicsDrawImage; 
-      ((GraphicsDriverWrapper*)pWrapper)->draw_image( (Fl_Draw_Image_Cb)cb, data, X,Y,W,H,D); 
+      ((GraphicsDriverWrapper*)pWrapper)->draw_image( (Fl_Draw_Image_Cb)cb, data, X+origin_x(),Y+origin_y(),W,H,D); 
       pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDrawImage; 
     } 
     else GraphicsDriver::draw_image( (Fl_Draw_Image_Cb)cb, data, X,Y,W,H,D); 
@@ -245,43 +245,64 @@ void proto { \
   } \
   else GraphicsDriver::call; \
 } 
-  FLTK3_DRIVER_VF(draw(const char* str, int l, int x, int y), draw(str, l, x, y))
+#define FLTK3_DRIVER_VF1(proto, call1) \
+void proto { \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; \
+    ((GraphicsDriverWrapper*)pWrapper)->call1; \
+    pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; \
+  } \
+} 
+  FLTK3_DRIVER_VF1(draw(const char* str, int l, int x, int y), draw(str, l, x+origin_x(), y+origin_y()))
 #ifdef __APPLE__
-  FLTK3_DRIVER_VF(draw(const char* str, int l, float fx, float fy), draw(str, l, fx, fy))
+  void draw(const char* str, int l, float fx, float fy) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
+      ((GraphicsDriverWrapper*)pWrapper)->draw(str, l, fx+origin_x(), fy+origin_y()); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
+    } 
+    else GraphicsDriver::draw(str, l, fx, fy); 
+  } 
 #endif
-  FLTK3_DRIVER_VF(draw(int angle, const char* str, int l, int x, int y), draw(angle, str, l, x, y))
-  FLTK3_DRIVER_VF(line(int x, int y, int x1, int y1), line(x, y, x1, y1))
-  FLTK3_DRIVER_VF(rect(int x, int y, int w, int h), rect(x, y, w, h))
-  FLTK3_DRIVER_VF(rectf(int x, int y, int w, int h), rectf(x, y, w, h))
+  FLTK3_DRIVER_VF1(draw(int angle, const char* str, int l, int x, int y), draw(angle, str, l, x+origin_x(), y+origin_y()))
+  FLTK3_DRIVER_VF1(line(int x, int y, int x1, int y1), line(x+origin_x(), y+origin_y(), x1+origin_x(), y1+origin_y()))
+  FLTK3_DRIVER_VF1(rect(int x, int y, int w, int h), rect(x+origin_x(), y+origin_y(), w, h))
+  FLTK3_DRIVER_VF1(rectf(int x, int y, int w, int h), rectf(x+origin_x(), y+origin_y(), w, h))
   FLTK3_DRIVER_VF(color(uchar r, uchar g, uchar b), color(r, g, b))
   FLTK3_DRIVER_VF(color(fltk3::Color c), color(fltk3::_3to1_color(c)))
   FLTK3_DRIVER_VF(line_style(int style, int width, char *dashes), line_style(style, width, dashes))
-  FLTK3_DRIVER_VF(push_clip(int x, int y, int w, int h) , push_clip(x, y, w, h))
+  void push_clip(int x, int y, int w, int h) { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsPushClip) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsPushClip; 
+      ((GraphicsDriverWrapper*)pWrapper)->push_clip(x+origin_x(), y+origin_y(), w, h); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsPushClip; 
+    } 
+  } 
   FLTK3_DRIVER_VF(pop_clip(), pop_clip())
-  FLTK3_DRIVER_VF(line(int x, int y, int x1, int y1, int x2, int y2), line(x, y, x1, y1, x2, y2))
-  FLTK3_DRIVER_VF(xyline(int x, int y, int x1), xyline(x, y, x1))
-  FLTK3_DRIVER_VF(xyline(int x, int y, int x1, int y2), xyline(x, y, x1, y2))
-  FLTK3_DRIVER_VF(xyline(int x, int y, int x1, int y2, int x3), xyline(x, y, x1, y2, x3))
-  FLTK3_DRIVER_VF(yxline(int x, int y, int y1), yxline(x, y, y1))
-  FLTK3_DRIVER_VF(yxline(int x, int y, int y1, int x2), yxline(x, y, y1, x2))
-  FLTK3_DRIVER_VF(yxline(int x, int y, int y1, int x2, int y3), yxline(x, y, y1, x2, y3))
-  FLTK3_DRIVER_VF(rtl_draw(const char* str, int l, int x, int y), rtl_draw(str, l, x, y))
+  FLTK3_DRIVER_VF1(line(int x, int y, int x1, int y1, int x2, int y2), line(x+origin_x(), y+origin_y(), x1+origin_x(), y1+origin_y(), x2+origin_x(), y2+origin_y()))
+  FLTK3_DRIVER_VF1(xyline(int x, int y, int x1), xyline(x+origin_x(), y+origin_y(), x1+origin_x()))
+  FLTK3_DRIVER_VF1(xyline(int x, int y, int x1, int y2), xyline(x+origin_x(), y+origin_y(), x1+origin_x(), y2+origin_y()))
+  FLTK3_DRIVER_VF1(xyline(int x, int y, int x1, int y2, int x3), xyline(x+origin_x(), y+origin_y(), x1+origin_x(), y2+origin_y(), x3+origin_x()))
+  FLTK3_DRIVER_VF1(yxline(int x, int y, int y1), yxline(x+origin_x(), y+origin_y(), y1+origin_y()))
+  FLTK3_DRIVER_VF1(yxline(int x, int y, int y1, int x2), yxline(x+origin_x(), y+origin_y(), y1+origin_y(), x2+origin_x()))
+  FLTK3_DRIVER_VF1(yxline(int x, int y, int y1, int x2, int y3), yxline(x+origin_x(), y+origin_y(), y1+origin_y(), x2+origin_x(), y3+origin_y()))
+  FLTK3_DRIVER_VF1(rtl_draw(const char* str, int l, int x, int y), rtl_draw(str, l, x+origin_x(), y+origin_y()))
   
   void draw(fltk3::RGBImage* rgb,int XP, int YP, int WP, int HP, int cx, int cy) { 
     if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
       pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
       Fl_RGB_Image *rgb1 = (Fl_RGB_Image*)rgb->wrapper();
       if (!rgb1) rgb1 = new Fl_RGB_Image(rgb);
-      ((GraphicsDriverWrapper*)pWrapper)->draw(rgb1, XP, YP, WP, HP, cx, cy); 
+      ((GraphicsDriverWrapper*)pWrapper)->draw(rgb1, XP+origin_x(), YP+origin_y(), WP, HP, cx, cy); 
       pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
     } 
-  } 
+  }
   void draw(fltk3::Bitmap* bm,int XP, int YP, int WP, int HP, int cx, int cy) { 
     if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsDriver) ) { 
       pWrapper->pVCalls |= Wrapper::pVCallGraphicsDriver; 
       Fl_Bitmap *bm1 = (Fl_Bitmap*)bm->wrapper();
       if (!bm1) bm1 = (Fl_Bitmap*)new Fl_Image(bm);
-      ((GraphicsDriverWrapper*)pWrapper)->draw(bm1, XP, YP, WP, HP, cx, cy); 
+      ((GraphicsDriverWrapper*)pWrapper)->draw(bm1, XP+origin_x(), YP+origin_y(), WP, HP, cx, cy); 
       pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsDriver; 
     } 
   } 
@@ -295,21 +316,21 @@ void proto { \
     } 
   }
   
-  FLTK3_DRIVER_VF(draw_image(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image(cb, X, Y, W, H, D, L))
-  FLTK3_DRIVER_VF(draw_image_mono(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image_mono(cb, X, Y, W, H, D, L))
-  FLTK3_DRIVER_VF(draw_image_mono(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D), draw_image_mono((Fl_Draw_Image_Cb)cb,data, X, Y, W, H, D))
+  FLTK3_DRIVER_VF1(draw_image(const uchar* b, int X, int Y, int W, int H, int D, int L), draw_image(b, X+origin_x(), Y+origin_y(), W, H, D, L))
+  FLTK3_DRIVER_VF1(draw_image_mono(const uchar* cb, int X, int Y, int W, int H, int D, int L), draw_image_mono(cb, X+origin_x(), Y+origin_y(), W, H, D, L))
+  FLTK3_DRIVER_VF1(draw_image_mono(fltk3::DrawImageCb cb, void *data, int X, int Y, int W, int H, int D), draw_image_mono((Fl_Draw_Image_Cb)cb,data, X+origin_x(), Y+origin_y(), W, H, D))
   FLTK3_DRIVER_VF(text_extents(const char* str, int n, int& dx, int& dy, int& w, int& h), text_extents(str, n, dx, dy, w, h))
   FLTK3_DRIVER_VF(arc(double x, double y, double r, double start, double end), arc(x,y,r,start,end))
-  FLTK3_DRIVER_VF(arc(int x, int y, int w, int h, double a1, double a2), arc(x,y,w,h,a1,a2))
+  FLTK3_DRIVER_VF1(arc(int x, int y, int w, int h, double a1, double a2), arc(x+origin_x(),y+origin_y(),w,h,a1,a2))
   FLTK3_DRIVER_VF(begin_complex_polygon(), begin_complex_polygon())
   FLTK3_DRIVER_VF(begin_line(), begin_line())
   FLTK3_DRIVER_VF(begin_loop(), begin_loop())
   FLTK3_DRIVER_VF(begin_points(), begin_points())
   FLTK3_DRIVER_VF(begin_polygon(), begin_polygon())
-  FLTK3_DRIVER_VF(circle(double x, double y, double r), circle(x, y, r))
-  FLTK3_DRIVER_VF(copy_offscreen (int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy),
+  FLTK3_DRIVER_VF1(circle(double x, double y, double r), circle(x+origin_x(), y+origin_y(), r))
+  FLTK3_DRIVER_VF(copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy),
 		       copy_offscreen(x,y,w,h,(Fl_Offscreen)pixmap,srcx,srcy))
-  FLTK3_DRIVER_VF(curve (double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3),
+  FLTK3_DRIVER_VF(curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3),
 		       curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3))
   FLTK3_DRIVER_VF(end_complex_polygon(), end_complex_polygon())
 
@@ -326,15 +347,15 @@ void proto { \
   FLTK3_DRIVER_VF(end_points(), end_points())
   FLTK3_DRIVER_VF(end_polygon(), end_polygon())
   FLTK3_DRIVER_VF(gap(), gap())
-  FLTK3_DRIVER_VF(loop(int x0, int y0, int x1, int y1, int x2, int y2), loop(x0,y0,x1,y1,x2,y2))
-  FLTK3_DRIVER_VF(loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), loop(x0,y0,x1,y1,x2,y2,x3,y3))
-  FLTK3_DRIVER_VF(pie(int x, int y, int w, int h, double a1, double a2), pie(x,y,w,h,a1,a2))
-  FLTK3_DRIVER_VF(point(int x, int y), point(x,y))
-  FLTK3_DRIVER_VF(polygon(int x0, int y0, int x1, int y1, int x2, int y2), polygon(x0,y0,x1,y1,x2,y2))
-  FLTK3_DRIVER_VF(polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), polygon(x0,y0,x1,y1,x2,y2,x3,y3))
+  FLTK3_DRIVER_VF1(loop(int x0, int y0, int x1, int y1, int x2, int y2), loop(x0+origin_x(),y0+origin_y(),x1+origin_x(),y1+origin_y(),x2+origin_x(),y2+origin_y()))
+  FLTK3_DRIVER_VF1(loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), loop(x0+origin_x(),y0+origin_y(),x1+origin_x(),y1+origin_y(),x2+origin_x(),y2+origin_y(),x3+origin_x(),y3+origin_y()))
+  FLTK3_DRIVER_VF1(pie(int x, int y, int w, int h, double a1, double a2), pie(x+origin_x(),y+origin_y(),w,h,a1,a2))
+  FLTK3_DRIVER_VF1(point(int x, int y), point(x+origin_x(),y+origin_y()))
+  FLTK3_DRIVER_VF1(polygon(int x0, int y0, int x1, int y1, int x2, int y2), polygon(x0+origin_x(),y0+origin_y(),x1+origin_x(),y1+origin_y(),x2+origin_x(),y2+origin_y()))
+  FLTK3_DRIVER_VF1(polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3), polygon(x0+origin_x(),y0+origin_y(),x1+origin_x(),y1+origin_y(),x2+origin_x(),y2+origin_y(),x3+origin_x(),y3+origin_y()))
   FLTK3_DRIVER_VF(push_no_clip(), push_no_clip())
-  FLTK3_DRIVER_VF(transformed_vertex (double xf, double yf), transformed_vertex ( xf, yf))
-  FLTK3_DRIVER_VF(vertex (double xf, double yf), vertex ( xf, yf))
+  FLTK3_DRIVER_VF(transformed_vertex(double xf, double yf), transformed_vertex(xf, yf))
+  FLTK3_DRIVER_VF(vertex(double xf, double yf), vertex(xf, yf))
 }; 
 
 }

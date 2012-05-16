@@ -408,9 +408,10 @@ namespace fltk3 {
       pVCallImageDraw         = 1<<6,
       pVCallImageUncache      = 1<<7,
 	  
-      pVCallGraphicsDriver = 1<<1,
+      pVCallGraphicsDriver    = 1<<1,
       pVCallGraphicsDrawImage = 1<<2,
-      pVCallGraphicsEndLine = 1<<3
+      pVCallGraphicsEndLine   = 1<<3,
+      pVCallGraphicsPushClip  = 1<<4
 	};
   };
   

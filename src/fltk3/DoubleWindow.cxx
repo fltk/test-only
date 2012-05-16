@@ -104,7 +104,7 @@ void fltk3::GraphicsDriver::copy_offscreen(int x, int y, int w, int h, fltk3::Of
   fl_begin_offscreen(pixmap);
   uchar *img = fltk3::read_image(NULL, srcx, srcy, w, h, 0);
   fl_end_offscreen();
-  fltk3::draw_image(img, x+origin_x(), y+origin_y(), w, h, 3, 0);
+  fltk3::draw_image(img, x, y, w, h, 3, 0);
   delete[] img;
 }
 
