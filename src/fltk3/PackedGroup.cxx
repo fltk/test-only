@@ -54,27 +54,27 @@ fltk3::PackedGroup::PackedGroup(int X, int Y, int W, int H,const char *l)
 // calculate the height and width of this widget.
 // FIXME: do not move any children. "draw()" does that for now.
 void fltk3::PackedGroup::layout() {
-  //int tx = x()+fltk3::box_dx(box());
-  //int ty = y()+fltk3::box_dy(box());
   int tw = w()-fltk3::box_dw(box());
   int th = h()-fltk3::box_dh(box());
   int rw, rh;
   if (horizontal()) {
     rw = -spacing_;
     rh = th;    
-    for (int i = children(); i--;)
+    for (int i = children(); i--;) {
       if (child(i)->visible()) {
         if (child(i) != this->resizable()) rw += child(i)->w();
         rw += spacing_;
       }
+    }
   } else {
     rw = tw;
     rh = -spacing_;    
-    for (int i = children(); i--;)
+    for (int i = children(); i--;) {
       if (child(i)->visible()) {
         if (child(i) != this->resizable()) rh += child(i)->h();
         rh += spacing_;
       }
+    }
   }
   size(rw+fltk3::box_dw(box()), rh+fltk3::box_dh(box()));
 }
@@ -92,21 +92,21 @@ void fltk3::PackedGroup::draw() {
   if (horizontal()) {
     rw = -spacing_;
     rh = th;
-    
-    for (int i = children(); i--;)
+    for (int i = children(); i--;) {
       if (child(i)->visible()) {
         if (child(i) != this->resizable()) rw += child(i)->w();
         rw += spacing_;
       }
+    }
   } else {
     rw = tw;
     rh = -spacing_;
-    
-    for (int i = children(); i--;)
+    for (int i = children(); i--;) {
       if (child(i)->visible()) {
         if (child(i) != this->resizable()) rh += child(i)->h();
         rh += spacing_;
       }
+    }
   }
   for (int i = children(); i--;) {
     fltk3::Widget* o = *a++;
@@ -124,7 +124,7 @@ void fltk3::PackedGroup::draw() {
         H = o->h();
       }
       // Last child, if resizable, takes all remaining room
-      if(i == 0 && o == this->resizable()) {
+      if (i == 0 && o == this->resizable()) {
         if(horizontal())
           W = tw - rw;
         else

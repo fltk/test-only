@@ -195,9 +195,9 @@ static void cb_(fltk3::PackedGroup* o, void* v) {
   o->layout();
   // TODO: if the window grows taller than the screen height,
   // we can use the pScrollGroup to keep the entire panell accesible.
-  o->window()->size(o->window()->w(), o->y()+o->h()+15+25+10);
-  pScrollGroup->resize(o->x(), o->y(), o->w(), o->h());
-  pCloseGroup->resize(o->x(), o->y()+o->h()+15, o->w(), pCloseGroup->h());
+  o->window()->size(o->window()->w(), 10+o->h()+15+25+10);
+  pScrollGroup->resize(10, 10, o->w(), o->h());
+  pCloseGroup->resize(10, 10+o->h()+15, o->w(), pCloseGroup->h());
   o->window()->init_sizes();
   
   static char buf[1024];
@@ -657,13 +657,13 @@ Fl_Panel* make_file_panel() {
     o->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     o->when(fltk3::WHEN_RELEASE);
     o->hotspot(o);
-    { pScrollGroup = new fltk3::ScrollGroup(6, 10, 406, 400);
+    { pScrollGroup = new fltk3::ScrollGroup(10, 10, 400, 400);
       pScrollGroup->box(fltk3::FLAT_BOX);
       pScrollGroup->color(fltk3::LIGHT1);
       pScrollGroup->callback((fltk3::Callback*)Fl_Panel::propagate_load);
-      { fltk3::PackedGroup* o = new fltk3::PackedGroup(0, 0, 406, 400);
+      { fltk3::PackedGroup* o = new fltk3::PackedGroup(0, 0, 400, 400);
         o->callback((fltk3::Callback*)cb_);
-        { fltk3::Group* o = new fltk3::Group(4, 0, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 0, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_1);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
@@ -677,7 +677,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Input* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(6, 30, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 30, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_2);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
@@ -691,7 +691,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Input* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(3, 89, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 89, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_3);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
@@ -705,7 +705,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Input* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(2, 119, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 119, 400, 30);
           o->callback((fltk3::Callback*)cb_4);
           { fltk3::Group* o = new fltk3::Group(100, 5, 200, 20, "File Type ");
             o->labelsize(12);
@@ -720,7 +720,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Group* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(2, 149, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 149, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_5);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
@@ -737,7 +737,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Group* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(2, 179, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 179, 400, 30);
           o->callback((fltk3::Callback*)cb_6);
           { Fl_Environment_Choice* o = new Fl_Environment_Choice(100, 3, 200, 26, "Build in ");
             o->box(fltk3::FLAT_BOX);
@@ -753,7 +753,7 @@ Fl_Panel* make_file_panel() {
           } // Fl_Environment_Choice* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(2, 209, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 209, 400, 30);
           o->callback((fltk3::Callback*)cb_7);
           { Fl_Environment_Choice* o = new Fl_Environment_Choice(100, 5, 200, 25, "List in ");
             o->box(fltk3::FLAT_BOX);
@@ -769,7 +769,7 @@ Fl_Panel* make_file_panel() {
           } // Fl_Environment_Choice* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(1, 60, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 60, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_8);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
@@ -782,7 +782,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Input* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(1, 247, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 247, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_9);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
@@ -795,7 +795,7 @@ Fl_Panel* make_file_panel() {
           } // fltk3::Input* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Group* o = new fltk3::Group(2, 282, 400, 30);
+        { fltk3::Group* o = new fltk3::Group(0, 282, 400, 30);
           o->labelsize(12);
           o->callback((fltk3::Callback*)cb_a);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));

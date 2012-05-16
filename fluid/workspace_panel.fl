@@ -113,7 +113,7 @@ if (callback())
       MenuItem {} {
         label {VisualC 6}
         user_data FL_ENV_VC6
-        callback cb_pMenuAll selected
+        callback cb_pMenuAll
         xywh {0 0 100 20} labelsize 12
       }
       MenuItem {} {
@@ -246,7 +246,7 @@ Function {make_file_panel()} {open
   } {
     {fltk3::ScrollGroup} pScrollGroup {
       callback {Fl_Panel::propagate_load} open
-      xywh {6 10 406 400} box FLAT_BOX color 50 resizable
+      xywh {10 10 400 400} box FLAT_BOX color 50 resizable
     } {
       {fltk3::PackedGroup} {} {
         callback {if (v == Fl_Panel::LOAD) {
@@ -259,9 +259,9 @@ Function {make_file_panel()} {open
   o->layout();
   // TODO: if the window grows taller than the screen height,
   // we can use the pScrollGroup to keep the entire panell accesible.
-  o->window()->size(o->window()->w(), o->y()+o->h()+15+25+10);
-  pScrollGroup->resize(o->x(), o->y(), o->w(), o->h());
-  pCloseGroup->resize(o->x(), o->y()+o->h()+15, o->w(), pCloseGroup->h());
+  o->window()->size(o->window()->w(), 10+o->h()+15+25+10);
+  pScrollGroup->resize(10, 10, o->w(), o->h());
+  pCloseGroup->resize(10, 10+o->h()+15, o->w(), pCloseGroup->h());
   o->window()->init_sizes();
   
   static char buf[1024];
@@ -270,8 +270,8 @@ Function {make_file_panel()} {open
   else
     sprintf(buf, "%s Properties", Fl_Panel::current->name());
   the_file_panel->label(buf);
-}} open
-        xywh {6 10 406 400} resizable
+}} open selected
+        xywh {0 0 400 400} resizable
       } {
         {fltk3::Group} {} {
           callback {if (v == Fl_Panel::LOAD) {
@@ -284,7 +284,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {10 10 400 30} labelsize 12 align 4
+          xywh {0 0 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {Name }
@@ -302,7 +302,7 @@ Function {make_file_panel()} {open
       if (o->changed()) set_modflag(1);
     }
   }}
-            tooltip {name and path of the file} xywh {110 15 290 20} labelsize 12 when 1 textsize 12 resizable
+            tooltip {name and path of the file} xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
@@ -316,7 +316,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {12 40 400 30} labelsize 12 align 4
+          xywh {0 30 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {Destination Path }
@@ -334,7 +334,7 @@ Function {make_file_panel()} {open
     }
     set_modflag(1);
   }}
-            tooltip {name and path of the file} xywh {112 45 290 20} labelsize 12 when 1 textsize 12 resizable
+            tooltip {name and path of the file} xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
@@ -348,7 +348,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {9 99 400 30} labelsize 12 align 4
+          xywh {0 89 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {File Name }
@@ -366,7 +366,7 @@ Function {make_file_panel()} {open
       if (o->changed()) set_modflag(1);
     }
   }}
-            tooltip {name and path of the file} xywh {109 104 290 20} labelsize 12 when 1 textsize 12 resizable
+            tooltip {name and path of the file} xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
@@ -380,12 +380,12 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {8 129 400 30}
+          xywh {0 119 400 30}
         } {
           {fltk3::Group} {} {
             label {File Type }
             callback {Fl_Panel::propagate_load} open
-            xywh {108 134 200 20} labelsize 12 align 4
+            xywh {100 5 200 20} labelsize 12 align 4
           } {
             {fltk3::MenuButton} {} {
               label Unknown
@@ -430,72 +430,72 @@ Function {make_file_panel()} {open
     }
     o->copy_label(buf);
   }} open
-              xywh {108 134 200 20} labelsize 12
+              xywh {0 0 200 20} labelsize 12
             } {
               MenuItem {} {
                 label Default
                 user_data FL_FILE_EXPLICIT user_data_type long
-                xywh {15 15 31 20} labelsize 12 divider
+                xywh {-93 -119 31 20} labelsize 12 divider
               }
               MenuItem {} {
                 label {C Source Code}
                 user_data FL_FILE_C_SOURCE user_data_type long
-                xywh {5 5 31 20} labelsize 12
+                xywh {-103 -129 31 20} labelsize 12
               }
               MenuItem {} {
                 label {C Header}
                 user_data FL_FILE_C_HEADER user_data_type long
-                xywh {15 15 31 20} labelsize 12
+                xywh {-93 -119 31 20} labelsize 12
               }
               MenuItem {} {
                 label {C++ Source Code}
                 user_data FL_FILE_CPP_SOURCE user_data_type long
-                xywh {25 25 31 20} labelsize 12
+                xywh {-83 -109 31 20} labelsize 12
               }
               MenuItem {} {
                 label {C++ Header}
                 user_data FL_FILE_CPP_HEADER user_data_type long
-                xywh {35 35 31 20} labelsize 12
+                xywh {-73 -99 31 20} labelsize 12
               }
               MenuItem {} {
                 label {ObjectiveC Source}
                 user_data FL_FILE_OBJC_SOURCE user_data_type long
-                xywh {45 45 31 20} labelsize 12
+                xywh {-63 -89 31 20} labelsize 12
               }
               MenuItem {} {
                 label {ObjectiveC Header}
                 user_data FL_FILE_OBJC_HEADER user_data_type long
-                xywh {55 55 31 20} labelsize 12
+                xywh {-53 -79 31 20} labelsize 12
               }
               MenuItem {} {
                 label Text
                 user_data FL_FILE_TEXT user_data_type long
-                xywh {65 65 31 20} labelsize 12
+                xywh {-43 -69 31 20} labelsize 12
               }
               MenuItem {} {
                 label {Shell Script}
                 user_data FL_FILE_TEXT_SCRIPT user_data_type long
-                xywh {75 75 31 20} labelsize 12
+                xywh {-33 -59 31 20} labelsize 12
               }
               MenuItem {} {
                 label {OS X Framework}
                 user_data FL_FILE_FRAMEWORK user_data_type long
-                xywh {85 85 31 20} labelsize 12
+                xywh {-23 -49 31 20} labelsize 12
               }
               MenuItem {} {
                 label Library
                 user_data FL_FILE_LIBRARY user_data_type long
-                xywh {95 95 31 20} labelsize 12
+                xywh {-13 -39 31 20} labelsize 12
               }
               MenuItem {} {
                 label {Fluid UI Design}
                 user_data FL_FILE_FLUID_UI user_data_type long
-                xywh {95 95 31 20} labelsize 12 divider
+                xywh {-13 -39 31 20} labelsize 12 divider
               }
               MenuItem {} {
                 label Unknown
                 user_data FL_FILE_UNKNOWN user_data_type long
-                xywh {85 85 31 20} labelsize 12
+                xywh {-23 -49 31 20} labelsize 12
               }
             }
           }
@@ -511,12 +511,12 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {8 159 400 30} labelsize 12 align 4
+          xywh {0 149 400 30} labelsize 12 align 4
         } {
           {fltk3::Group} {} {
             label {Location }
             callback {Fl_Panel::propagate_load} open
-            xywh {108 164 200 20} labelsize 12 align 4
+            xywh {100 5 200 20} labelsize 12 align 4
           } {
             {fltk3::MenuButton} {} {
               label {Relative to Workspace}
@@ -549,27 +549,27 @@ Function {make_file_panel()} {open
       }
     }
   }} open
-              xywh {108 164 200 20} labelsize 12
+              xywh {0 0 200 20} labelsize 12
             } {
               MenuItem {} {
                 label {Relative to Workspace}
                 user_data FL_LOCATION_WORKSPACE user_data_type long
-                xywh {25 25 31 20} labelsize 12
+                xywh {-83 -139 31 20} labelsize 12
               }
               MenuItem {} {
                 label {Absolute Path}
                 user_data FL_LOCATION_ABSOLUTE user_data_type long
-                xywh {15 15 31 20} labelsize 12
+                xywh {-93 -149 31 20} labelsize 12
               }
               MenuItem {} {
                 label {Relative to IDE}
                 user_data FL_LOCATION_IDE user_data_type long
-                tooltip {Xcode: relative to Developer Directory, used for Frameworks} xywh {25 25 31 20} labelsize 12
+                tooltip {Xcode: relative to Developer Directory, used for Frameworks} xywh {-83 -139 31 20} labelsize 12
               }
               MenuItem {} {
                 label {Relative to SDK}
                 user_data FL_LOCATION_SDK user_data_type long
-                xywh {35 35 31 20} labelsize 12
+                xywh {-73 -129 31 20} labelsize 12
               }
             }
           }
@@ -585,7 +585,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {8 189 400 30}
+          xywh {0 179 400 30}
         } {
           {fltk3::MenuButton} {} {
             label {Build in }
@@ -604,7 +604,7 @@ Function {make_file_panel()} {open
     }
     if (mod) set_modflag(1);
   }} open
-            xywh {108 192 200 26} box FLAT_BOX labelsize 12 align 4
+            xywh {100 3 200 26} box FLAT_BOX labelsize 12 align 4
             class Fl_Environment_Choice
           } {}
         }
@@ -619,7 +619,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {8 219 400 30}
+          xywh {0 209 400 30}
         } {
           {fltk3::MenuButton} {} {
             label {List in }
@@ -638,7 +638,7 @@ Function {make_file_panel()} {open
     }
     if (mod) set_modflag(1);
   }} open
-            xywh {108 224 200 25} box FLAT_BOX labelsize 12 align 4
+            xywh {100 5 200 25} box FLAT_BOX labelsize 12 align 4
             class Fl_Environment_Choice
           } {}
         }
@@ -653,7 +653,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {7 70 400 30} labelsize 12 align 4
+          xywh {0 60 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {Makefile Path }
@@ -671,7 +671,7 @@ Function {make_file_panel()} {open
     }
     set_modflag(1);
   }}
-            xywh {107 75 290 20} labelsize 12 when 1 textsize 12 resizable
+            xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
@@ -685,7 +685,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {7 257 400 30} labelsize 12 align 4
+          xywh {0 247 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {Value }
@@ -703,7 +703,7 @@ Function {make_file_panel()} {open
     }
     set_modflag(1);
   }}
-            xywh {107 262 290 20} labelsize 12 when 1 textsize 12 resizable
+            xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
@@ -717,7 +717,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {8 292 400 30} labelsize 12 align 4
+          xywh {0 282 400 30} labelsize 12 align 4
         } {
           {fltk3::Input} {} {
             label {Option Value }
@@ -735,7 +735,7 @@ Function {make_file_panel()} {open
     }
     set_modflag(1);
   }}
-            tooltip {name and path of the file} xywh {108 297 290 20} labelsize 12 when 1 textsize 12 resizable
+            tooltip {name and path of the file} xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
         {fltk3::Group} {} {
@@ -749,7 +749,7 @@ Function {make_file_panel()} {open
   if (o->visible())
     Fl_Panel::propagate_load(o, v);
 }} open
-          xywh {6 322 400 30}
+          xywh {0 312 400 30}
         } {
           {fltk3::Choice} {} {
             label {Option Type }
@@ -783,27 +783,27 @@ Function {make_file_panel()} {open
     }
     set_modflag(1);
   }} open
-            xywh {106 327 200 20} down_box BORDER_BOX labelsize 12 textsize 12
+            xywh {100 5 200 20} down_box BORDER_BOX labelsize 12 textsize 12
           } {
             MenuItem {} {
               label {Compiler Item}
               user_data FL_OPTION_COMPILER user_data_type long
-              tooltip FL_OPTION_COMPILER xywh {0 0 31 20} labelsize 12
+              tooltip FL_OPTION_COMPILER xywh {-106 -327 31 20} labelsize 12
             }
             MenuItem {} {
               label {Linker Item}
               user_data FL_OPTION_LINKER user_data_type long
-              tooltip FL_OPTION_LINKER xywh {10 10 31 20} labelsize 12 divider
+              tooltip FL_OPTION_LINKER xywh {-96 -317 31 20} labelsize 12 divider
             }
             MenuItem {} {
               label Other
               user_data FL_OPTION_OTHER user_data_type long
-              tooltip FL_OPTION_OTHER xywh {20 20 31 20} labelsize 12
+              tooltip FL_OPTION_OTHER xywh {-86 -307 31 20} labelsize 12
             }
           }
         }
         {fltk3::Group} wSpacer {open
-          xywh {10 400 400 10}
+          xywh {4 390 400 10}
         } {}
       }
     }
@@ -812,7 +812,7 @@ Function {make_file_panel()} {open
       xywh {10 420 400 25} labelsize 11
     } {
       {fltk3::Box} {} {
-        xywh {10 420 290 25} labelsize 11 resizable
+        xywh {0 0 290 25} labelsize 11 resizable
       }
       {fltk3::Button} {} {
         label Close
@@ -821,7 +821,7 @@ Function {make_file_panel()} {open
     file_panel_set_cb(0, 0);
     the_file_panel->hide();
   }}
-        xywh {300 420 110 25}
+        xywh {290 0 110 25}
       }
     }
   }

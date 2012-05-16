@@ -64,6 +64,7 @@ namespace fltk3 {
     
   protected:
     void draw();
+    void resize(int x, int y, int w, int h) { fltk3::Widget::resize(x, y, w, h); }
     
   public:
     PackedGroup(int x,int y,int w ,int h,const char *l = 0);
