@@ -64,7 +64,6 @@ namespace fltk3 {
     
   protected:
     void draw();
-    void resize(int x, int y, int w, int h) { fltk3::Widget::resize(x, y, w, h); }
     
   public:
     PackedGroup(int x,int y,int w ,int h,const char *l = 0);
@@ -82,6 +81,7 @@ namespace fltk3 {
     uchar horizontal() const {return type();}
     /** Recalculate the size of this widget and reposition all children. */
     void layout();
+    void resize(int x, int y, int w, int h) { fltk3::Widget::resize(x, y, w, h); }
   };
   
 }
