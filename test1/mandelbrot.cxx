@@ -94,14 +94,22 @@ void Drawing_Area::draw() {
   set_idle();
 }
 
+#ifdef __APPLE__
+const int slice = 100; // plot drawn by blocks of slice lines
+#else
+const int slice = 1;
+#endif
+
 int Drawing_Area::idle() {
   if (!window()->visible()) return 0;
-  if (drawn < nextline) {
+  int rest = H - drawn;
+  if (rest > slice) rest = slice;
+  if (rest && drawn + rest <= nextline) {
     window()->make_current();
     int yy = drawn+y()+4;
     if (yy >= sy && yy <= sy+sh) erase_box();
-    fl_draw_image_mono(buffer+drawn*W,x()+3,yy,W,1,1,W);
-    drawn++;
+    fl_draw_image_mono(buffer+drawn*W,x()+3,yy,W,rest,1,W);
+    drawn+=rest;
     return 1;
   }
   if (nextline < H) {
@@ -128,9 +136,8 @@ int Drawing_Area::idle() {
       p++;
     }
     nextline++;
-    return nextline < H;
   }
-  return 0;
+  return drawn < H;
 }
 
 void Drawing_Area::erase_box() {
