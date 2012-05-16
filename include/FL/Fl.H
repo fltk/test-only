@@ -392,6 +392,10 @@ public: // should be private!
   }
   
   static int event_inside(int x, int y, int w, int h) {
+    if (fltk3::e_widget && !fltk3::e_widget->as_window()) {
+      x -= fltk3::e_widget->dx_window();
+      y -= fltk3::e_widget->dy_window();
+      }
     return fltk3::event_inside(x, y, w, h);
   }
   
