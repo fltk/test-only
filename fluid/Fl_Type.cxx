@@ -546,6 +546,26 @@ static void fixvisible(Fl_Type *p) {
   }
 }
 
+
+Fl_Type *Fl_Type::first_child() {
+  if (next && next->level==this->level+1) {
+    return next;
+  } else {
+    return 0L;
+  }
+}
+
+
+Fl_Type *Fl_Type::next_brother() {
+  Fl_Type *n = next;
+  for (;;) {
+    if (!n || n->level>=this->level) return 0L;
+    if (n->level==this->level) return n;
+    n = n->next;
+  }
+}
+
+
 // turn a click at x,y on this into the actual picked object:
 Fl_Type* Fl_Type::click_test(int,int) {return 0;}
 void Fl_Type::add_child(Fl_Type*, Fl_Type*) {}

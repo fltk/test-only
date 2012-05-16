@@ -1187,7 +1187,7 @@ void Fl_Window_Type::move_all_children()
       // don't move any children, whether selected or not:
       Fl_Type* p;
       for (p = myo->next; p && p->level>myo->level; p = p->next) {
-        if (pDragMode & (LEFT|TOP|RIGHT|BOTTOM)) {
+        if (pDragMode & (LEFT|TOP)) {
           if (p->is_widget() && !p->is_menu_item()) {
             Fl_Widget_Type* myo2 = (Fl_Widget_Type*)p;
             myo2->o->position(myo2->o->x()+dx, myo2->o->y()+dy);
@@ -1199,10 +1199,8 @@ void Fl_Window_Type::move_all_children()
       i = i->next;
     }
   }
-  /*
   for (i=next; i && i->level>level; i=i->next) 
     fix_group_size(i);
-   */
   o->redraw();
   pRecalculateSelectionBox = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();

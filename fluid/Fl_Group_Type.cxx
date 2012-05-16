@@ -50,6 +50,7 @@ Fl_Type *Fl_Group_Type::make() {
 }
 
 void fix_group_size(Fl_Type *tt) {
+#if 0
   if (!tt || !tt->is_group()) return;
   Fl_Group_Type* t = (Fl_Group_Type*)tt;
   int X = t->o->x();
@@ -59,12 +60,48 @@ void fix_group_size(Fl_Type *tt) {
   for (Fl_Type *nn = t->next; nn && nn->level > t->level; nn = nn->next) {
     if (!nn->is_widget() || nn->is_menu_item()) continue;
     Fl_Widget_Type* n = (Fl_Widget_Type*)nn;
-    int x = n->o->x();	if (x < X) X = x;
-    int y = n->o->y();	if (y < Y) Y = y;
+    int x = n->o->x();  if (x < X) X = x;
+    int y = n->o->y();  if (y < Y) Y = y;
     int r = x+n->o->w();if (r > R) R = r;
     int b = y+n->o->h();if (b > B) B = b;
   }
   t->o->resize(X,Y,R-X,B-Y);
+#else
+  if (!tt || !tt->is_group()) return;
+  Fl_Group_Type* t = (Fl_Group_Type*)tt;
+  fltk3::Group* g = (fltk3::Group*)t->o;
+  int X = g->x(), X0=X;
+  int Y = g->y(), Y0=Y;
+  int R = g->r();
+  int B = g->b();
+  
+  for (Fl_Type *nn = t->first_child(); nn; nn = nn->next_brother()) {
+    if (nn->is_widget()) {
+      fltk3::Widget* o = ((Fl_Widget_Type*)nn)->o;
+      int x = o->x();  if (x+X0 < X)
+        X = x+X0;
+      int y = o->y();  if (y+Y0 < Y) Y = y+Y0;
+      int r = o->r(); if (r+X0 > R)
+        R = r+X0;
+      int b = o->b(); if (b+Y0 > B) B = b+Y0;
+    }
+  }
+  
+  int dx = X - X0, dy = Y-Y0;
+  g->resize(X,Y,R-X,B-Y);
+  if (dx || dy) {
+    for (Fl_Type *nn = t->first_child(); nn; nn = nn->next_brother()) {
+      if (nn->is_widget()) {
+        fltk3::Widget* o = ((Fl_Widget_Type*)nn)->o;
+        o->x(o->x()-dx);
+        o->y(o->y()-dy);
+      }
+    }
+  }
+  
+  g->init_sizes();
+  fix_group_size(t->parent );
+#endif
 }
 
 extern int force_parent;

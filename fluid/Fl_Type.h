@@ -129,6 +129,8 @@ public:	// things that should not be public:
   int level;	// number of parents over this
   static Fl_Type *first, *last; // linked list of all objects
   Fl_Type *next, *prev;	// linked list of all objects
+  Fl_Type *first_child();
+  Fl_Type *next_brother();
 
   Fl_Type *factory;
   const char *callback_name();
