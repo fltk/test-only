@@ -300,11 +300,15 @@ public: // should be private!
   }
   
   static int event_x() {
-    return fltk3::event_x() + (fltk3::e_widget->as_window()?0:fltk3::e_widget->dx_window());
+    int retval = fltk3::event_x();
+    if (fltk3::e_widget && !fltk3::e_widget->as_window()) retval += fltk3::e_widget->dx_window();
+    return retval;
   }
   
   static int event_y() {
-    return fltk3::event_y() + (fltk3::e_widget->as_window()?0:fltk3::e_widget->dy_window());
+    int retval = fltk3::event_y();
+    if (fltk3::e_widget && !fltk3::e_widget->as_window()) retval += fltk3::e_widget->dy_window();
+    return retval;
   }
   
   static int event_x_root() {
