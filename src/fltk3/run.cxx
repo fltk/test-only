@@ -96,6 +96,7 @@ const char *Fl_Mac_App_Menu::quit = "Quit ";
 fltk3::Widget	*fltk3::belowmouse_,
 		*fltk3::pushed_,
 		*fltk3::focus_,
+		*fltk3::e_widget,
 		*fltk3::selection_owner_;
 int		fltk3::damage_,
 		fltk3::e_number,
