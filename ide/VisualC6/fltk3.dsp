@@ -307,6 +307,10 @@ SOURCE=..\..\src\fltk3\Style.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fltk3\Symbol.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fltk3\Table.cxx
 # End Source File
 # Begin Source File
