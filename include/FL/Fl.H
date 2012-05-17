@@ -301,13 +301,13 @@ public: // should be private!
   
   static int event_x() {
     int retval = fltk3::event_x();
-    if (fltk3::e_widget && !fltk3::e_widget->as_window()) retval += fltk3::e_widget->dx_window();
+    if (fltk3::event_widget() && !fltk3::event_widget()->as_window()) retval += fltk3::event_widget()->dx_window();
     return retval;
   }
   
   static int event_y() {
     int retval = fltk3::event_y();
-    if (fltk3::e_widget && !fltk3::e_widget->as_window()) retval += fltk3::e_widget->dy_window();
+    if (fltk3::event_widget() && !fltk3::event_widget()->as_window()) retval += fltk3::event_widget()->dy_window();
     return retval;
   }
   
@@ -392,9 +392,9 @@ public: // should be private!
   }
   
   static int event_inside(int x, int y, int w, int h) {
-    if (fltk3::e_widget && !fltk3::e_widget->as_window()) {
-      x -= fltk3::e_widget->dx_window();
-      y -= fltk3::e_widget->dy_window();
+    if (fltk3::event_widget() && !fltk3::event_widget()->as_window()) {
+      x -= fltk3::event_widget()->dx_window();
+      y -= fltk3::event_widget()->dy_window();
       }
     return fltk3::event_inside(x, y, w, h);
   }

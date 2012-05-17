@@ -326,6 +326,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Widget : public Label {
     friend class Group;
+    friend Widget* fltk3::event_widget();
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
@@ -338,6 +339,7 @@ namespace fltk3 {
     uchar when_;
     
     const char *tooltip_;
+    static Widget* e_widget; //the Widget to which event coordinates relate or NULL
     
     /** unimplemented copy ctor */
     Widget(const Widget &);

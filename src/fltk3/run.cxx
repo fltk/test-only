@@ -96,7 +96,6 @@ const char *Fl_Mac_App_Menu::quit = "Quit ";
 fltk3::Widget	*fltk3::belowmouse_,
 		*fltk3::pushed_,
 		*fltk3::focus_,
-		*fltk3::e_widget,
 		*fltk3::selection_owner_;
 int		fltk3::damage_,
 		fltk3::e_number,
@@ -220,6 +219,7 @@ int fltk3::event_inside(const fltk3::Widget *o) {
   // and e_x, e_y are relative to e_widget.
   int dx = e_x, dy = e_y;
   Group* g = o->parent();
+  Widget* e_widget = event_widget();
   if (e_widget && !e_widget->as_window()) {
     dx += e_widget->dx_window();
     dy += e_widget->dy_window();
@@ -2014,6 +2014,14 @@ fltk3::WidgetTracker::~WidgetTracker()
 {
   fltk3::release_widget_pointer(wp_); // remove pointer from watch list
 }
+
+/** Widget to which mouse event coordinates relate.
+ 
+ Functions fltk3::event_x() and fltk3::event_y() return values that are 
+ offsets from the top-left of the widget returned by this function.
+ Outside of event-handling contexts, this function returns NULL.
+ */
+fltk3::Widget* fltk3::event_widget() {return fltk3::Widget::e_widget;}
 
 //
 // End of "$Id$".

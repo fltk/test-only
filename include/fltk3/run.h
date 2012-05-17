@@ -145,7 +145,6 @@ namespace fltk3 {
   extern fltk3::Widget* belowmouse_;
   extern fltk3::Widget* pushed_;
   extern fltk3::Widget* focus_;
-  extern fltk3::Widget* e_widget;
   extern int damage_;
   extern fltk3::Widget* selection_owner_;
   extern fltk3::Window* modal_;
@@ -694,6 +693,8 @@ namespace fltk3 {
    you paste a nul character.
    */
   inline int event_length() {return e_length;}
+
+  Widget* event_widget();
   
   int compose(int &del);
   void compose_reset();
