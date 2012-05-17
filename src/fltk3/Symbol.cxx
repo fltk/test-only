@@ -338,7 +338,7 @@ void Symbol::_measure(int& w, int& h) const {}
  may influence the value that this returns (such as to return
  a different edge for a pushed button).
  */
-void Symbol::inset(Rectangle& r) const {
+void Symbol::inset(fltk3::Rectangle& r) const {
   r.move(inset_.x(), inset_.y());
   r.move_r(inset_.w());
   r.move_b(inset_.h());
