@@ -324,9 +324,11 @@ namespace fltk3 {
    functions, even if they change the widget's appearance. It is up to the 
    user code to call redraw() after these.
    */
-  class FLTK3_EXPORT Widget : public Label {
+  class FLTK3_EXPORT Widget : public Label 
+  {
     friend class Group;
-    friend Widget* fltk3::event_widget();
+  
+  private:
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
@@ -336,10 +338,8 @@ namespace fltk3 {
     Boxtype box_;
     uchar type_;
     uchar damage_;
-    uchar when_;
-    
+    uchar when_;    
     const char *tooltip_;
-    static Widget* e_widget; //the Widget to which event coordinates relate or NULL
     
     /** unimplemented copy ctor */
     Widget(const Widget &);
@@ -1034,12 +1034,6 @@ namespace fltk3 {
      */
     void color2(unsigned a) {color2_ = a;}    
     
-    /** Choose a coding style for this widget.
-     FLTK 1 coding style uses a Window-relative coordinate system.
-     FLTK 2 and 3 use a Group-relative coordinate system.
-     More details will be implemented later.
-     */
-    void coding_style(int s);
 };
   
   

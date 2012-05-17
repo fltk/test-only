@@ -96,7 +96,8 @@ const char *Fl_Mac_App_Menu::quit = "Quit ";
 fltk3::Widget	*fltk3::belowmouse_,
 		*fltk3::pushed_,
 		*fltk3::focus_,
-		*fltk3::selection_owner_;
+		*fltk3::selection_owner_,
+                *fltk3::e_widget;
 int		fltk3::damage_,
 		fltk3::e_number,
 		fltk3::e_x,
@@ -219,7 +220,6 @@ int fltk3::event_inside(const fltk3::Widget *o) {
   // and e_x, e_y are relative to e_widget.
   int dx = e_x, dy = e_y;
   Group* g = o->parent();
-  Widget* e_widget = event_widget();
   if (e_widget != g) {
     if (e_widget && !e_widget->as_window()) {
       dx += e_widget->dx_window();
@@ -2023,7 +2023,7 @@ fltk3::WidgetTracker::~WidgetTracker()
  offsets from the top-left of the widget returned by this function.
  Outside of event-handling contexts, this function returns NULL.
  */
-fltk3::Widget* fltk3::event_widget() {return fltk3::Widget::e_widget;}
+fltk3::Widget* fltk3::event_widget() {return fltk3::e_widget;}
 
 //
 // End of "$Id$".

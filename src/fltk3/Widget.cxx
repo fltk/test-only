@@ -45,7 +45,6 @@ const int QUEUE_SIZE = 20;
 
 static fltk3::Widget *obj_queue[QUEUE_SIZE];
 static int obj_head, obj_tail;
-fltk3::Widget* fltk3::Widget::e_widget = NULL;
 
 void fltk3::Widget::default_callback(fltk3::Widget *o, void * /*v*/) {
 #if 0
@@ -392,9 +391,6 @@ void fltk3::Widget::draw() {
   draw_label();
 }
 
-void fltk3::Widget::coding_style(int s) {
-  // TODO: just store the value somewhere? Or should the compatibility layer take car of this?
-}
 
 // ========================= Wrapper Support ===================================
 
@@ -515,9 +511,9 @@ int fltk3::Widget::send(int event) {
 
   int old_event = fltk3::e_number; fltk3::e_number = event;
   // the widget to which fltk3::event_x() and event_y() coordinates are relative
-  e_widget = this; 
+  fltk3::e_widget = this; 
   int ret = handle(fltk3::e_number);
-  e_widget = NULL; // set to NULL outside of handle()
+  fltk3::e_widget = NULL; // set to NULL outside of handle()
 
   fltk3::e_number = old_event;
   fltk3::e_y = save_y;

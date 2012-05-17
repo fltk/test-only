@@ -131,6 +131,7 @@ namespace fltk3 {
   extern int e_number;
   extern int e_x;
   extern int e_y;
+  extern Widget* e_widget; //the Widget to which event coordinates relate or NULL
   extern int e_x_root;
   extern int e_y_root;
   extern int e_dx;
