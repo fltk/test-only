@@ -399,7 +399,7 @@ class SymbolSymbol : public Symbol {
   void (*drawit)(Color);
 public:
   SymbolSymbol(const char* name, void (*f)(Color)) : Symbol(name), drawit(f) {}
-  void _draw(const Rectangle&) const;
+  void _draw(const fltk3::Rectangle&) const;
 };
 
 /* Adds a symbol to the system. Returns whether correct. */
@@ -409,7 +409,7 @@ int fltk3::add_symbol(const char *name, void (*drawit)(Color), int scalable)
   return 1;
 }
 
-void SymbolSymbol::_draw(const Rectangle& r) const
+void SymbolSymbol::_draw(const fltk3::Rectangle& r) const
 {
   const char* p = text();
   if (*p == '#') p++; // ignore equalscale indicator from fltk1.1
