@@ -220,14 +220,16 @@ int fltk3::event_inside(const fltk3::Widget *o) {
   int dx = e_x, dy = e_y;
   Group* g = o->parent();
   Widget* e_widget = event_widget();
-  if (e_widget && !e_widget->as_window()) {
-    dx += e_widget->dx_window();
-    dy += e_widget->dy_window();
-  }
-  if (g && !g->as_window()) {
-    dx -= g->dx_window();
-    dy -= g->dy_window();
+  if (e_widget != g) {
+    if (e_widget && !e_widget->as_window()) {
+      dx += e_widget->dx_window();
+      dy += e_widget->dy_window();
     }
+    if (g && !g->as_window()) {
+      dx -= g->dx_window();
+      dy -= g->dy_window();
+    }
+  }
   return o->fltk3::Rectangle::contains(dx, dy);
 }
 
