@@ -32,7 +32,6 @@
 #ifndef FLTK3_SYMBOL_H
 #define FLTK3_SYMBOL_H
 
-#include <fltk3/FL_API.h>
 #include <fltk3/enumerations.h>
 #include <fltk3/Rectangle.h>
 
@@ -41,7 +40,7 @@ namespace fltk3 {
   
   class Style;
   
-  class FL_API Symbol {
+  class FLTK3_EXPORT Symbol {
     const char* name_;
     Rectangle inset_;
     
