@@ -1,5 +1,5 @@
 //
-// "$Id: Symbol.cxx 9041 2011-09-16 21:30:05Z matt $"
+// "$Id$"
 //
 // Symbol widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -1091,5 +1091,5 @@ static void init_symbols(void) {
 
 
 //
-// End of "$Id: Symbol.cxx 9041 2011-09-16 21:30:05Z matt $".
+// End of "$Id$".
 //
