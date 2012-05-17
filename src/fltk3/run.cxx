@@ -215,20 +215,20 @@ int fltk3::event_inside(int xx,int yy,int ww,int hh) {
     \param[in] o	child widget to be tested
     \return		non-zero, if mouse event is inside the widget
 */
-int fltk3::event_inside(const fltk3::Rectangle *r) {
+int fltk3::event_inside(const fltk3::Widget *o) {
   // here r is relative to its enclosing group,
   // and e_x, e_y are relative to e_widget.
-  int dxr = e_x, dyr = e_y;
-  Group* g = ((Widget*)r)->parent();
+  int dx = e_x, dy = e_y;
+  Group* g = o->parent();
   if (e_widget && !e_widget->as_window()) {
-    dxr += e_widget->dx_window();
-    dyr += e_widget->dy_window();
+    dx += e_widget->dx_window();
+    dy += e_widget->dy_window();
   }
   if (g && !g->as_window()) {
-    dxr -= g->dx_window();
-    dyr -= g->dy_window();
+    dx -= g->dx_window();
+    dy -= g->dy_window();
     }
-  return ((Rectangle*)r)->contains(dxr, dyr);
+  return o->fltk3::Rectangle::contains(dx, dy);
 }
 
 //
