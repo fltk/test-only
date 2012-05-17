@@ -216,7 +216,7 @@ int fltk3::event_inside(int xx,int yy,int ww,int hh) {
     \return		non-zero, if mouse event is inside the widget
 */
 int fltk3::event_inside(const fltk3::Widget *o) {
-  // here r is relative to its enclosing group,
+  // here the coordinates of o are relative to its enclosing group,
   // and e_x, e_y are relative to e_widget.
   int dx = e_x, dy = e_y;
   Group* g = o->parent();
