@@ -218,12 +218,17 @@ int fltk3::event_inside(int xx,int yy,int ww,int hh) {
 int fltk3::event_inside(const fltk3::Rectangle *r) {
   // here r is relative to its enclosing group,
   // and e_x, e_y are relative to e_widget.
-  int dxr=0, dyr=0;
-  if (((fltk3::Widget*)r)->as_window()) dxr = ((fltk3::Widget*)r)->dx_window();
-  if (((fltk3::Widget*)r)->as_window()) dyr = ((fltk3::Widget*)r)->dy_window();
-  return ((Rectangle*)r)->contains(
-				   e_x + (e_widget->as_window()?0:e_widget->dx_window()) - dxr, 
-				   e_y + (e_widget->as_window()?0:e_widget->dy_window()) - dyr);
+  int dxr = e_x, dyr = e_y;
+  Group* g = ((Widget*)r)->parent();
+  if (e_widget && !e_widget->as_window()) {
+    dxr += e_widget->dx_window();
+    dyr += e_widget->dy_window();
+  }
+  if (g && !g->as_window()) {
+    dxr -= g->dx_window();
+    dyr -= g->dy_window();
+    }
+  return ((Rectangle*)r)->contains(dxr, dyr);
 }
 
 //

@@ -516,7 +516,8 @@ int fltk3::Widget::send(int event) {
   // the widget to which fltk3::event_x() and event_y() coordinates are relative
   fltk3::e_widget = this; 
   int ret = handle(fltk3::e_number);
-  
+  fltk3::e_widget = NULL; // set to NULL outside of handle()
+
   fltk3::e_number = old_event;
   fltk3::e_y = save_y;
   fltk3::e_x = save_x;
