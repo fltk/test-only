@@ -1544,6 +1544,8 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
   int showit = 1;
 
   if (w->parent()) {
+    xp += w->parent()->dx_window();
+    yp += w->parent()->dy_window();
     style |= WS_CHILD;
     styleEx |= WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     parent = fl_xid(w->window());
