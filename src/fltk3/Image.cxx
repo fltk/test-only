@@ -432,7 +432,7 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
       }
   }
   
-  fltk3::draw_image(dst, X, Y, W, H, 3, 0);
+  fltk3::draw_image(dst, X-fltk3::origin_x(), Y-fltk3::origin_y(), W, H, 3, 0);
   
   delete[] dst;
 }
