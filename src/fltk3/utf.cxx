@@ -822,7 +822,7 @@ unsigned fltk3::utf8to_mb(const char* src, unsigned srclen,
     }
     if (dstlen) {
       ret = wcstombs(dst, buf, dstlen);
-      if (ret >= dstlen-1) ret = wcstombs(0,buf,0);
+      if ((unsigned)ret >= dstlen-1) ret = wcstombs(0,buf,0);
     } else {
       ret = wcstombs(0,buf,0);
     }
