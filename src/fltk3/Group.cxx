@@ -631,14 +631,18 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
 
   Widget::resize(X,Y,W,H); // make new xywh values visible for children
 
-  if (children_) {
+  if (!resizable() || (dw==0 && dh==0) ) {
+
+    return;
+
+  } else if (children_) {
 
     // get changes in size/position from the initial size:
     dx = X - p[0];
     dw = W - (p[1]-p[0]);
     dy = Y - p[2];
     dh = H - (p[3]-p[2]);
-    /*if (as_window())*/ dx = dy = 0;
+    /* if (type() >= fltk3::WINDOW) */ dx = dy = 0;
     p += 4;
 
     // get initial size of resizable():
