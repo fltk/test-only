@@ -690,7 +690,7 @@ Sudoku::Sudoku()
 
   for (j = 0; j < 3; j ++)
     for (k = 0; k < 3; k ++) {
-      g = new fltk3::Group(k * GROUP_SIZE, j * GROUP_SIZE + MENU_OFFSET,
+      g = new fltk3::Group(k * GROUP_SIZE, j * GROUP_SIZE /*+ MENU_OFFSET*/,
 		       GROUP_SIZE, GROUP_SIZE);
       g->box(fltk3::BORDER_BOX);
       if ((int)(j == 1) ^ (int)(k == 1)) g->color(fltk3::DARK3);
@@ -704,7 +704,7 @@ Sudoku::Sudoku()
     for (k = 0; k < 9; k ++) {
       cell = new SudokuCell(k * CELL_SIZE + CELL_OFFSET +
                                 (k / 3) * (GROUP_SIZE - 3 * CELL_SIZE),
-	                    j * CELL_SIZE + CELL_OFFSET + MENU_OFFSET +
+	                    j * CELL_SIZE + CELL_OFFSET /*+ MENU_OFFSET*/ +
 			        (j / 3) * (GROUP_SIZE - 3 * CELL_SIZE),
 			    CELL_SIZE, CELL_SIZE);
       cell->callback(reset_cb);
@@ -726,7 +726,7 @@ Sudoku::Sudoku()
 
   // Make the window resizable...
   resizable(grid_);
-  size_range(3 * GROUP_SIZE, 3 * GROUP_SIZE + MENU_OFFSET, 0, 0, 5, 5, 1);
+  size_range(3 * GROUP_SIZE, 3 * GROUP_SIZE /*+ MENU_OFFSET*/, 0, 0, 5, 5, 1);
 
   // Restore the previous window dimensions...
   int X, Y, W, H;
