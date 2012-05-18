@@ -520,6 +520,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP
   }
   if (!img->id_) {
     img->id_ = fl_create_offscreen(img->w(), img->h());
+    fltk3::push_origin(); fltk3::origin(0,0);
     if ((img->d() == 2 || img->d() == 4) && can_do_alpha_blending()) {
       fl_begin_offscreen((fltk3::Offscreen)img->id_);
       fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|fltk3::IMAGE_WITH_ALPHA, img->ld());
@@ -532,6 +533,7 @@ void fltk3::GDIGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP
         img->mask_ = fl_create_alphamask(img->w(), img->h(), img->d(), img->ld(), img->array);
       }
     }
+    fltk3::pop_origin();
   }
   if (img->mask_) {
     HDC new_gc = CreateCompatibleDC(fl_gc);
@@ -564,7 +566,9 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int W
     if (img->d() == 1 || img->d() == 3) {
       img->id_ = fl_create_offscreen(img->w(), img->h());
       fl_begin_offscreen((fltk3::Offscreen)img->id_);
+      fltk3::push_origin(); fltk3::origin(0,0);
       fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
+      fltk3::pop_origin();
       fl_end_offscreen();
     }
   }

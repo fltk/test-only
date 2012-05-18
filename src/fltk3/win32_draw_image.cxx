@@ -129,7 +129,9 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   if (!linedelta) linedelta = W*delta;
 
   int x, y, w, h;
+  fltk3::push_origin(); fltk3::origin(0,0);
   fltk3::clip_box(X,Y,W,H,x,y,w,h);
+  fltk3::pop_origin();
   if (w<=0 || h<=0) return;
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
 
@@ -289,6 +291,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 static int fl_abs(int v) { return v<0 ? -v : v; }
 
 void fltk3::GDIGraphicsDriver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+  x += origin_x(); y += origin_y();
   if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
     d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(buf,x,y,w,h,d,l,fl_abs(d),0,0);
@@ -299,6 +302,7 @@ void fltk3::GDIGraphicsDriver::draw_image(const uchar* buf, int x, int y, int w,
 
 void fltk3::GDIGraphicsDriver::draw_image(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
+  x += origin_x(); y += origin_y();
   if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
     d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
@@ -308,6 +312,7 @@ void fltk3::GDIGraphicsDriver::draw_image(fltk3::DrawImageCb cb, void* data,
 }
 
 void fltk3::GDIGraphicsDriver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+  x += origin_x(); y += origin_y();
   if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
     d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(buf,x,y,w,h,d,l,1,0,0);
@@ -318,6 +323,7 @@ void fltk3::GDIGraphicsDriver::draw_image_mono(const uchar* buf, int x, int y, i
 
 void fltk3::GDIGraphicsDriver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
+  x += origin_x(); y += origin_y();
   if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
     d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(0,x,y,w,h,d,0,1,cb,data);
@@ -332,7 +338,7 @@ void fltk3::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
   if (fl_palette) {
     uchar c[3];
     c[0] = r; c[1] = g; c[2] = b;
-    innards(c,x,y,w,h,0,0,0,0,0);
+    innards(c,x+origin_x(),y+origin_y(),w,h,0,0,0,0,0);
     return;
   }
 #endif
