@@ -391,7 +391,7 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
   uchar *dst = new uchar[W * H * 3];
   uchar *dstptr = dst;
   
-  fltk3::read_image(dst, X, Y, W, H, 0);
+  fltk3::read_image(dst, X+fltk3::origin_x(), Y+fltk3::origin_y(), W, H, 0);
   
   uchar srcr, srcg, srcb, srca;
   uchar dstr, dstg, dstb, dsta;
@@ -432,7 +432,7 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
       }
   }
   
-  fltk3::draw_image(dst, X-fltk3::origin_x(), Y-fltk3::origin_y(), W, H, 3, 0);
+  fltk3::draw_image(dst, X, Y, W, H, 3, 0);
   
   delete[] dst;
 }
@@ -595,7 +595,7 @@ void fltk3::XlibGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int W
     }
   } else {
     // Composite image with alpha manually each time...
-    alpha_blend(img, X+origin_x(), Y+origin_y(), W, H, cx, cy);
+    alpha_blend(img, X, Y, W, H, cx, cy);
   }
 }
 
