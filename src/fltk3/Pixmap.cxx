@@ -124,7 +124,9 @@ int fltk3::Pixmap::prepare(int XP, int YP, int WP, int HP, int &cx, int &cy,
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
 #endif
+    fltk3::push_origin(); fltk3::origin(0, 0);
     fltk3::draw_pixmap(data(), 0, 0, fltk3::BLACK);
+    fltk3::pop_origin();
 #ifndef __APPLE__
 #if defined(WIN32)
     this->pixmap_bg_color = win_pixmap_bg_color;
