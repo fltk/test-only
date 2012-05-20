@@ -98,29 +98,29 @@ public:
   }   
   
   Fl_Scrollbar *vertical_scrollbar() {
-    fltk3::Scrollbar *scr3 = &((fltk3::ScrollGroup*)_p)->scrollbar;
-    if (!scr3) 
+    fltk3::Scrollbar *s3 = &((fltk3::ScrollGroup*)_p)->scrollbar;
+    if (!s3) 
       return 0L;
-    Fl_Scrollbar *scr1 = (Fl_Scrollbar*)scr3->wrapper();
-    if (!scr1) {
-      scr1 = new Fl_Scrollbar();
-      scr1->_p = scr3;
-      scr3->wrapper(scr1);
+    Fl_Scrollbar *s1 = (Fl_Scrollbar*)s3->wrapper();
+    if (!s1) {
+      s1 = new Fl_Scrollbar();
+      s1->_p = s3;
+      s3->wrapper(s1);
     }
-    return scr1;
+    return s1;
   }
 
   Fl_Scrollbar *horizontal_scrollbar() {
-    fltk3::Scrollbar *scr3 = &((fltk3::ScrollGroup*)_p)->hscrollbar;
-    if (!scr3) 
+    fltk3::Scrollbar *s3 = &((fltk3::ScrollGroup*)_p)->hscrollbar;
+    if (!s3) 
       return 0L;
-    Fl_Scrollbar *scr1 = (Fl_Scrollbar*)scr3->wrapper();
-    if (!scr1) {
-      scr1 = new Fl_Scrollbar();
-      scr1->_p = scr3;
-      scr3->wrapper(scr1);
+    Fl_Scrollbar *s1 = (Fl_Scrollbar*)s3->wrapper();
+    if (!s1) {
+      s1 = new Fl_Scrollbar();
+      s1->_p = s3;
+      s3->wrapper(s1);
     }
-    return scr1;
+    return s1;
   }
 
 };
