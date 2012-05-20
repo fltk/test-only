@@ -56,10 +56,10 @@ fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
 
 
 /**
- Creates a new fltk3::Slider widget using the given box type, position,
+ Creates a new fltk3::Slider widget using the given type, position,
  size, and label string.
 
- \param[in] t the box type for this slider
+ \param[in] t the type for this slider (e.g., fltk3::VERTICAL)
  \param[in] X, Y, W, H position and size of widget
  \param[in] L the label text
  */
