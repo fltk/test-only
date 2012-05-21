@@ -278,7 +278,13 @@ void proto { \
       pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsPushClip; 
     } 
   } 
-  FLTK3_DRIVER_VF(pop_clip(), pop_clip())
+  void pop_clip() { 
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallGraphicsPopClip) ) { 
+      pWrapper->pVCalls |= Wrapper::pVCallGraphicsPopClip; 
+      ((GraphicsDriverWrapper*)pWrapper)->pop_clip(); 
+      pWrapper->pVCalls &= ~Wrapper::pVCallGraphicsPopClip; 
+    } 
+  } 
   FLTK3_DRIVER_VF1(line(int x, int y, int x1, int y1, int x2, int y2), line(x+origin_x(), y+origin_y(), x1+origin_x(), y1+origin_y(), x2+origin_x(), y2+origin_y()))
   FLTK3_DRIVER_VF1(xyline(int x, int y, int x1), xyline(x+origin_x(), y+origin_y(), x1+origin_x()))
   FLTK3_DRIVER_VF1(xyline(int x, int y, int x1, int y2), xyline(x+origin_x(), y+origin_y(), x1+origin_x(), y2+origin_y()))

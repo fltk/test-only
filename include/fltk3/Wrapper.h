@@ -411,7 +411,8 @@ namespace fltk3 {
       pVCallGraphicsDriver    = 1<<1,
       pVCallGraphicsDrawImage = 1<<2,
       pVCallGraphicsEndLine   = 1<<3,
-      pVCallGraphicsPushClip  = 1<<4
+      pVCallGraphicsPushClip  = 1<<4,
+      pVCallGraphicsPopClip   = 1<<5
 	};
   };
   
