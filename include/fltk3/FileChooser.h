@@ -47,9 +47,12 @@
 #include <fltk3/ReturnButton.h>
 #include <fltk3/ask.h>
 
+class Fl_File_Chooser;
+
 namespace fltk3 {
   
   class FLTK3_EXPORT FileChooser {
+    friend class ::Fl_File_Chooser;
   public:
     enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 }; 
   private:

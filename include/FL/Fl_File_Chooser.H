@@ -59,9 +59,15 @@ class FL_EXPORT Fl_File_Chooser : public fltk3::FileChooser {
   Fl_Button *newButton;
   Fl_Check_Button *previewButton;
   
+  static void browser_cb(Fl_Widget *w1, void *v) {
+    fltk3::FileBrowser* o = (fltk3::FileBrowser*)(w1->_p);
+    fltk3::FileChooser::cb_fileList(o,v);
+  }
+  
 public:
   
   enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 }; 
+  
   
   Fl_File_Chooser(const char *d, const char *p, int t, const char *title)
   : fltk3::FileChooser(d, p, t, title) { 
@@ -69,6 +75,9 @@ public:
     Fl_Widget *b1 = new Fl_File_Browser();
     b3->wrapper(b1);
     b1->_p = b3;
+    // when b3's callback will be called it will be sent b1 as 1st argument
+    // thus we change b3's callback accordingly
+    b3->callback((fltk3::Callback*)browser_cb);
   }
   
   Fl_Widget* add_extra(Fl_Widget* gr) {
