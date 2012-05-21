@@ -645,7 +645,7 @@ static void update_e_xy_and_e_xy_root(NSWindow *nsw, NSEvent *theEvent=0)
     pt = [nsw mouseLocationOutsideOfEventStream];
   fltk3::e_x = int(pt.x);
   fltk3::e_y = int([[nsw contentView] frame].size.height - pt.y);
-  pt = [NSEvent mouseLocation];
+  pt = [nsw convertBaseToScreen:pt];
   fltk3::e_x_root = int(pt.x);
   fltk3::e_y_root = int(main_screen_height - pt.y);
 }
