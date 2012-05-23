@@ -499,27 +499,23 @@ namespace fltk3 {
    */
   inline int event()		{return e_number;}
   /**
-   Returns the mouse position of the event relative to the fltk3::Window
+   Returns the mouse position of the event relative to the fltk3::Widget
    it was passed to.
+   \sa fltk3::event_widget()
    */
   inline int event_x()	{return e_x;}
   /**
-   Returns the mouse position of the event relative to the fltk3::Window
+   Returns the mouse position of the event relative to the fltk3::Widget
    it was passed to.
+   \sa fltk3::event_widget()
    */
   inline int event_y()	{return e_y;}
   /**
-   Returns the mouse position on the screen of the event.  To find the
-   absolute position of an fltk3::Window on the screen, use the
-   difference between event_x_root(),event_y_root() and 
-   event_x(),event_y().
+   Returns the mouse position on the screen of the event.
    */
   inline int event_x_root()	{return e_x_root;}
   /**
-   Returns the mouse position on the screen of the event.  To find the
-   absolute position of an fltk3::Window on the screen, use the
-   difference between event_x_root(),event_y_root() and 
-   event_x(),event_y().
+   Returns the mouse position on the screen of the event.
    */
   inline int event_y_root()	{return e_y_root;}
   /**
@@ -695,7 +691,13 @@ namespace fltk3 {
    */
   inline int event_length() {return e_length;}
 
-  Widget* event_widget();
+  /** Widget to which mouse event coordinates relate.
+   
+   Functions fltk3::event_x() and fltk3::event_y() return values that are 
+   offsets from the top-left of the widget returned by this function.
+   */
+  inline Widget* event_widget() {return e_widget;}
+
   
   int compose(int &del);
   void compose_reset();

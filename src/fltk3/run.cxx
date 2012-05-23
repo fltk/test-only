@@ -2017,14 +2017,6 @@ fltk3::WidgetTracker::~WidgetTracker()
   fltk3::release_widget_pointer(wp_); // remove pointer from watch list
 }
 
-/** Widget to which mouse event coordinates relate.
- 
- Functions fltk3::event_x() and fltk3::event_y() return values that are 
- offsets from the top-left of the widget returned by this function.
- Outside of event-handling contexts, this function returns NULL.
- */
-fltk3::Widget* fltk3::event_widget() {return fltk3::e_widget;}
-
 //
 // End of "$Id$".
 //
