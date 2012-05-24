@@ -462,7 +462,8 @@ fltk3::Widget* fltk3::FileChooser::add_extra(fltk3::Widget* gr) {
     fltk3::Widget* svres=window->resizable();
     window->resizable(NULL);
     window->size(window->w(),nh);
-    gr->position(2,okButton->y()+okButton->h()+2);
+    fltk3::Group* lastgr = (fltk3::Group*)window->child( (window->children() - 1) );
+    gr->position(2, lastgr->y() + lastgr->h() + 2);
     window->add(gr);
     ext_group=gr;
     window->resizable(svres);

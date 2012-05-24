@@ -82,7 +82,7 @@ public:
   
   Fl_Widget* add_extra(Fl_Widget* gr) {
     fltk3::Widget *w3 = fltk3::FileChooser::add_extra(fltk3::_1to3_widget(gr));
-    if (!w3->wrapper()) {
+    if (w3 && !w3->wrapper()) {
       Fl_Widget *w1 = new Fl_Widget();
       w3->wrapper(w1);
       w1->_p = w3;
