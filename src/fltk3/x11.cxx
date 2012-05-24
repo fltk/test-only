@@ -1795,7 +1795,7 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
 
   int X = win->x();
   int Y = win->y();
-  if (win->parent()) {
+  if (win->parent() && !win->parent()->as_window()) {
     X += win->parent()->dx_window();
     Y += win->parent()->dy_window();
     }

@@ -233,7 +233,13 @@ public:
   }
   
   Fl_Window* window() const {
-    return fltk3::_3to1_window( ((fltk3::Widget_I*)_p)->window() );
+    fltk3::Window* win3 = ((fltk3::Widget_I*)_p)->window();
+    if (win3 && !win3->wrapper()) {
+      Fl_Widget* win1 = new Fl_Widget();
+      win3->wrapper(win1);
+      win1->_p = win3;
+      }
+    return fltk3::_3to1_window( win3 );
   }
 
   uchar type() const {
