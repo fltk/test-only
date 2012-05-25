@@ -64,6 +64,11 @@ class FL_EXPORT Fl_File_Chooser : public fltk3::FileChooser {
     fltk3::FileChooser::cb_fileList(o,v);
   }
   
+  static void window_cb(Fl_Widget *w1, void *v) {
+    fltk3::DoubleWindow* o = (fltk3::DoubleWindow*)(w1->_p);
+    fltk3::FileChooser::cb_window(o,v);
+  }
+  
 public:
   
   enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 }; 
@@ -78,6 +83,14 @@ public:
     // when b3's callback will be called it will be sent b1 as 1st argument
     // thus we change b3's callback accordingly
     b3->callback((fltk3::Callback*)browser_cb);
+    // wrap the internal fltk3::Window object with an FLTK1 widget
+    fltk3::Window* w3 = b3->window();
+    Fl_Widget *w1 = new Fl_Window();
+    w3->wrapper(w1);
+    w1->_p = w3;
+    // when w3's callback will be called it will be sent w1 as 1st argument
+    // thus we change w3's callback accordingly
+    w3->callback((fltk3::Callback*)window_cb);
   }
   
   Fl_Widget* add_extra(Fl_Widget* gr) {
