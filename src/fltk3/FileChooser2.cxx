@@ -165,6 +165,13 @@
   control the appearance and use.
 */
 
+/** \var fltk3::FileChooser::showHiddenButton
+ When checked, hidden files (i.e., filename begins with dot) are displayed.
+ 
+ The "showHiddenButton" button is exported so that application developers can
+ control its appearance.
+ */
+
 /** \fn fltk3::FileChooser::~Fl_File_Chooser()
   Destroys the widget and frees all memory used by it.*/
 
