@@ -54,11 +54,7 @@
 
 
 class FL_EXPORT Fl_File_Chooser : public fltk3::FileChooser {
-  
-  // make these private so they can't be accessed
-  Fl_Button *newButton;
-  Fl_Check_Button *previewButton;
-  
+    
   static void browser_cb(Fl_Widget *w1, void *v) {
     fltk3::FileBrowser* o = (fltk3::FileBrowser*)(w1->_p);
     fltk3::FileChooser::cb_fileList(o,v);
@@ -69,10 +65,27 @@ class FL_EXPORT Fl_File_Chooser : public fltk3::FileChooser {
     fltk3::FileChooser::cb_window(o,v);
   }
   
+  static void preview_cb(Fl_Widget *w1, void *v) {
+    fltk3::CheckButton* o = (fltk3::CheckButton*)(w1->_p);
+    fltk3::FileChooser::cb_previewButton(o,v);
+  }
+  
+  static void hidden_cb(Fl_Widget *w1, void *v) {
+    fltk3::CheckButton* o = (fltk3::CheckButton*)(w1->_p);
+    fltk3::FileChooser::cb_showHiddenButton(o,v);
+  }
+  
+  static void new_cb(Fl_Widget *w1, void *v) {
+    fltk3::Button* o = (fltk3::Button*)(w1->_p);
+    fltk3::FileChooser::cb_newButton(o,v);
+  }
+  
 public:
   
   enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 }; 
-  
+  Fl_Check_Button *previewButton;
+  Fl_Button *newButton;
+  Fl_Check_Button *showHiddenButton;
   
   Fl_File_Chooser(const char *d, const char *p, int t, const char *title)
   : fltk3::FileChooser(d, p, t, title) { 
@@ -91,6 +104,21 @@ public:
     // when w3's callback will be called it will be sent w1 as 1st argument
     // thus we change w3's callback accordingly
     w3->callback((fltk3::Callback*)window_cb);
+    
+    previewButton = new  Fl_Check_Button();
+    fltk3::FileChooser::previewButton->wrapper(previewButton);
+    previewButton->_p = fltk3::FileChooser::previewButton;
+    fltk3::FileChooser::previewButton->callback((fltk3::Callback*)preview_cb);
+    
+    newButton = new  Fl_Button();
+    fltk3::FileChooser::newButton->wrapper(newButton);
+    newButton->_p = fltk3::FileChooser::newButton;
+    fltk3::FileChooser::newButton->callback((fltk3::Callback*)new_cb);
+    
+    showHiddenButton = new  Fl_Check_Button();
+    fltk3::FileChooser::showHiddenButton->wrapper(showHiddenButton);
+    showHiddenButton->_p = fltk3::FileChooser::showHiddenButton;
+    fltk3::FileChooser::showHiddenButton->callback((fltk3::Callback*)hidden_cb);
   }
   
   Fl_Widget* add_extra(Fl_Widget* gr) {
