@@ -59,11 +59,11 @@ void make_image() {
   }
 }
 
-class Pens : public fltk3::Box {
+class Pens : public fltk3::Widget {
   void draw();
 public:
   Pens(int X, int Y, int W, int H, const char* L)
-  : fltk3::Box(X,Y,W,H,L) {}
+  : fltk3::Widget(X,Y,W,H,L) {}
 };
 
 void Pens::draw() {
@@ -79,7 +79,7 @@ fltk3::Color c = fltk3::GRAY;
 
 void cb1(fltk3::Widget *, void *v) {
   c = fltk3::show_colormap(c);
-  fltk3::Box* b = (fltk3::Box*)v;
+  fltk3::Widget* b = (fltk3::Widget*)v;
   b->color(c);
   b->parent()->redraw();
 }
@@ -90,7 +90,7 @@ void cb2(fltk3::Widget *, void *v) {
   if (!fltk3::color_chooser("New color:",r,g,b,3)) return;
   c = fullcolor_cell;
   fltk3::set_color(fullcolor_cell,r,g,b);
-  fltk3::Box* bx = (fltk3::Box*)v;
+  fltk3::Widget* bx = (fltk3::Widget*)v;
   bx->color(fullcolor_cell);
   bx->parent()->redraw();
 }
@@ -98,7 +98,7 @@ void cb2(fltk3::Widget *, void *v) {
 int main(int argc, char ** argv) {
   fltk3::set_color(fullcolor_cell,145,159,170);
   fltk3::Window window(400,400);
-  fltk3::Box box(50,50,300,300);
+  fltk3::Widget box(50,50,300,300);
   box.box(fltk3::THIN_DOWN_BOX);
   c = fullcolor_cell;
   box.color(c);
@@ -106,10 +106,10 @@ int main(int argc, char ** argv) {
   b1.callback(cb1,&box);
   fltk3::Button b2(140,160,140,30,"fltk3::color_chooser");
   b2.callback(cb2,&box);
-  fltk3::Box image_box(140,200,120,120,0);
+  fltk3::Widget image_box(140,200,120,120,0);
   make_image();
   (new fltk3::RGBImage(image, width, height))->label(&image_box);
-  fltk3::Box b(140,320,120,0,"Example of fltk3::draw_image()");
+  fltk3::Widget b(140,320,120,0,"Example of fltk3::draw_image()");
   Pens p(80,200,3*8,120,"lines");
   p.align(fltk3::ALIGN_TOP);
   int i = 1;

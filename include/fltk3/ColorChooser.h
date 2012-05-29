@@ -122,7 +122,7 @@ namespace fltk3 {
     cc_Value_Input rvalue;
     cc_Value_Input gvalue;
     cc_Value_Input bvalue;
-    fltk3::Box resize_box;
+    fltk3::Widget resize_box;
     double hue_, saturation_, value_;
     double r_, g_, b_;
     void set_valuators();

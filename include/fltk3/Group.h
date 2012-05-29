@@ -146,7 +146,7 @@ namespace fltk3 {
      and distance from the top-left corner.
      
      It is possible to achieve any type of resize behavior by using an
-     invisible fltk3::Box as the resizable and/or by using a hierarchy
+     invisible fltk3::Widget as the resizable and/or by using a hierarchy
      of child fltk3::Group's.
      */
     void resizable(fltk3::Widget* o) {resizable_ = o;}

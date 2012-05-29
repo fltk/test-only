@@ -43,7 +43,7 @@ w->size(w->w()+20, w->h()+20);}
 w->size(w->w()-20, w->h()-20);}
       xywh {30 190 110 40} labelfont 1 labelsize 18
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {This is a test of program-generated resize() of a window.  The window should move or resize once when each button is clicked.  The program and window manager should not go into fits echoing resizes back and forth!}
       xywh {150 10 160 220} box BORDER_BOX align 148
     }

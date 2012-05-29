@@ -44,7 +44,7 @@ void bt(const char *name, fltk3::Boxtype type, int square=0) {
   N++;
   x = x*W+10;
   y = y*H+10;
-  fltk3::Box *b = new fltk3::Box(type,x,y,square ? H-20 : W-20,H-20,name);
+  fltk3::Widget *b = new fltk3::Widget(type,x,y,square ? H-20 : W-20,H-20,name);
   b->labelsize(11);
   if (square) b->align(fltk3::ALIGN_RIGHT);
 }

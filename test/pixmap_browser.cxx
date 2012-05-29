@@ -35,7 +35,7 @@
 #include <fltk3/FileChooser.h>
 #include <fltk3/message.h>
 
-fltk3::Box *b;
+fltk3::Widget *b;
 fltk3::DoubleWindow *w;
 fltk3::SharedImage *img;
 
@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
   fltk3::args(argc,argv,i,arg);
 
   fltk3::DoubleWindow window(400,435); ::w = &window;
-  fltk3::Box b(10,45,380,380); ::b = &b;
+  fltk3::Widget b(10,45,380,380); ::b = &b;
   b.box(fltk3::THIN_DOWN_BOX);
   b.align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_CENTER);
   fltk3::Button button(150,5,100,30,"load");

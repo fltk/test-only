@@ -33,12 +33,12 @@
 //
 //------- test viewport clipping ----------
 //
-class ViewportTest : public fltk3::Box {
+class ViewportTest : public fltk3::Widget {
 public: 
   static fltk3::Widget *create() {
     return new ViewportTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  ViewportTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) { 
+  ViewportTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) { 
     label("Testing Viewport Alignment\n\n"
           "Only green lines should be visible.\n"
           "If red lines are visible in the corners of this window,\n"
@@ -50,11 +50,11 @@ public:
     box(fltk3::BORDER_BOX);
   }
   void show() {
-    fltk3::Box::show();
+    fltk3::Widget::show();
     mainwin->testAlignment(1);
   }
   void hide() {
-    fltk3::Box::hide();
+    fltk3::Widget::hide();
     mainwin->testAlignment(0);
   }
 };

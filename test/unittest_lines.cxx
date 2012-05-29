@@ -33,12 +33,12 @@
 //
 //------- test the line drawing capabilities of this implementation ----------
 //
-class LineTest : public fltk3::Box {
+class LineTest : public fltk3::Widget {
 public: 
   static fltk3::Widget *create() {
     return new LineTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  LineTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
+  LineTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {
     label("testing the integer based fltk3::line calls\n"
 	  "No red pixels should be visible.\n"
 	  "If you see bright red pixels, the line drawing alignment is off,\n"
@@ -48,7 +48,7 @@ public:
     box(fltk3::BORDER_BOX);
   }
   void draw() {
-    fltk3::Box::draw();
+    fltk3::Widget::draw();
     int a = 10, b = 10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
     // testing fltk3::xyline(x, y, x1)
     fltk3::color(fltk3::RED); fltk3::point(a+10, b+10); fltk3::point(a+20, b+10);

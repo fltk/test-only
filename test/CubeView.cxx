@@ -34,7 +34,7 @@ CubeView::CubeView(int x,int y,int w,int h,const char *l)
             : fltk3::GLWindow(x,y,w,h,l)
 #else
 CubeView::CubeView(int x,int y,int w,int h,const char *l)
-            : fltk3::Box(x,y,w,h,l)
+            : fltk3::Widget(x,y,w,h,l)
 #endif /* HAVE_GL */
 {
     vAng = 0.0;

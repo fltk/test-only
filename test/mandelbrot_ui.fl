@@ -16,7 +16,7 @@ class Drawing_Window {open
       xywh {178 479 450 520} type Single resizable
       code0 {o->size_range(220,220);} visible
     } {
-      {fltk3::Box} d {
+      {fltk3::Widget} d {
         user_data this user_data_type {void*}
         xywh {20 80 410 430} box DOWN_BOX color 0 selection_color 47 resizable
         class Drawing_Area
@@ -51,7 +51,7 @@ d->new_display();}
         code2 {o->value(d->DEFAULT_BRIGHTNESS);}
         code3 {o->slider(fltk3::UP_BOX);}
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label {left: click = zoom out, drag = zoom in
 right click: Julia set, ctrl-P: Print}
         xywh {240 50 190 30} labelsize 10 align 24 deactivate

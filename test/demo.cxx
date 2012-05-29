@@ -68,12 +68,12 @@ fltk3::Button *but[9];
 void create_the_forms() {
   fltk3::Widget *obj;
   form = new fltk3::DoubleWindow(350, 440);
-  obj = new fltk3::Box(fltk3::FRAME_BOX,10,15,330,40,"FLTK Demonstration");
+  obj = new fltk3::Widget(fltk3::FRAME_BOX,10,15,330,40,"FLTK Demonstration");
   obj->color(fltk3::GRAY-4);
   obj->labelsize(24);
   obj->labelfont(fltk3::BOLD);
   obj->labeltype(fltk3::ENGRAVED_LABEL);
-  obj = new fltk3::Box(fltk3::FRAME_BOX,10,65,330,330,0);
+  obj = new fltk3::Widget(fltk3::FRAME_BOX,10,65,330,330,0);
   obj->color(fltk3::GRAY-8);
   obj = new fltk3::Button(280,405,60,25,"Exit");
   obj->callback(doexit);

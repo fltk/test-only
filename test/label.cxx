@@ -39,7 +39,7 @@
 
 fltk3::ToggleButton *imageb, *imageovertextb, *imagenexttotextb, *imagebackdropb;
 fltk3::ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
-fltk3::Box *text;
+fltk3::Widget *text;
 fltk3::Input *input;
 fltk3::HorValueSlider *fonts;
 fltk3::HorValueSlider *sizes;
@@ -175,7 +175,7 @@ int main(int argc, char **argv) {
   fltk3::Choice *c = new fltk3::Choice(50,250,200,25);
   c->menu(choices);
 
-  text= new fltk3::Box(fltk3::FRAME_BOX,100,75,200,100,input->value());
+  text= new fltk3::Widget(fltk3::FRAME_BOX,100,75,200,100,input->value());
   text->align(fltk3::ALIGN_CENTER);
   window->resizable(text);
   window->end();

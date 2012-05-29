@@ -3,7 +3,7 @@
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,13 +26,14 @@
 //
 
 /* \file
- fltk3::Box widget . */
+ fltk3::Widget widget . */
 
 #ifndef FLTK3_BOX_H
 #define FLTK3_BOX_H
 
 #include "Widget.h"
 
+#if 0
 
 namespace fltk3 { 
   
@@ -72,6 +73,8 @@ namespace fltk3 {
   };
   
 } // namespace
+
+#endif
 
 #endif
 

@@ -90,13 +90,13 @@ void setbg(fltk3::Widget *o, void *) {
 }
 
 // draw the label without any ^C or \nnn conversions:
-class CharBox : public fltk3::Box {
+class CharBox : public fltk3::Widget {
   void draw() {
     fltk3::font(fltk3::FREE_FONT,14);
     fltk3::draw(label(), x()+w()/2, y()+h()/2);
   }
 public:
-  CharBox(int X, int Y, int W, int H, const char* L) : fltk3::Box(X,Y,W,H,L) {}
+  CharBox(int X, int Y, int W, int H, const char* L) : fltk3::Widget(X,Y,W,H,L) {}
 };
 
 int main(int argc, char **argv) {
@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
   fltk3::set_font(fltk3::FREE_FONT, "cursor");
   char buf[100]; char *p = buf;
   for (fltk3::Menu* m = choices; m->label(); m++) {
-    fltk3::Box* b = new fltk3::Box(35,y,150,25,m->label());
+    fltk3::Widget* b = new fltk3::Widget(35,y,150,25,m->label());
     b->align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE);
     int n = (int)(m->argument());
     if (n == fltk3::CURSOR_NONE) break;

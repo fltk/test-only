@@ -8,7 +8,7 @@ Function {} {open
     label {Comparison of Fl_Tab (left) vs. Fl_Wizard (right)} open
     xywh {423 205 642 337} type Double resizable visible
   } {
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {class Fl_Tabs}
       xywh {95 0 130 35} labeltype ENGRAVED_LABEL labelfont 1
     }
@@ -124,7 +124,7 @@ Function {} {open
         } {}
       }
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {class Fl_Wizard}
       xywh {410 0 130 35} labeltype ENGRAVED_LABEL labelfont 1
     }

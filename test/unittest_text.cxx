@@ -58,7 +58,7 @@ public:
   }
   TextExtentsTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {}
   void draw(void) {
-    int x0 = 0; // origin is current window position for fltk3::Box
+    int x0 = 0; // origin is current window position for fltk3::Widget
     int y0 = 0;
     int w0 = w();
     int h0 = h();

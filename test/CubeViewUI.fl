@@ -49,10 +49,10 @@ cube->redraw();}
         {fltk3::Group} MainView {open
           xywh {41 24 333 333} resizable
         } {
-          {fltk3::Box} cframe {selected
+          {fltk3::Widget} cframe {selected
             xywh {0 0 333 333} box DOWN_FRAME color 4 selection_color 69
           }
-          {fltk3::Box} cube {
+          {fltk3::Widget} cube {
             label {This is the cube_view}
             xywh {2 2 329 329} align 16 resizable
             code0 {\#include "CubeView.h"}

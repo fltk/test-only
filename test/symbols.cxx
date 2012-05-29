@@ -79,13 +79,13 @@ void bt(const char *name) {
   x = x*W+10;
   y = y*H+10;
   sprintf(buf, "@%s", name);
-  fltk3::Box *a = new fltk3::Box(x,y,W-20,H-20);
+  fltk3::Widget *a = new fltk3::Widget(x,y,W-20,H-20);
   a->box(fltk3::NO_BOX);
   a->copy_label(buf);
   a->align(fltk3::ALIGN_BOTTOM);
   a->labelsize(11);
   a->user_data((void *)name);
-  fltk3::Box *b = new fltk3::Box(x,y,W-20,H-20);
+  fltk3::Widget *b = new fltk3::Widget(x,y,W-20,H-20);
   b->box(fltk3::UP_BOX);
   b->copy_label(name);
   b->labelcolor(fltk3::DARK3);

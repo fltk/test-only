@@ -1190,7 +1190,7 @@ void copyright_cb(fltk3::Widget*, void*) {
   if (!copyright_window) {
     copyright_window = new fltk3::Window(400,270,"Copyright");
     copyright_window->color(fltk3::WHITE);
-    fltk3::Box *b = new fltk3::Box(20,0,380,270,copyright);
+    fltk3::Widget *b = new fltk3::Widget(20,0,380,270,copyright);
     b->labelsize(10);
     b->align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
     copyright_window->end();

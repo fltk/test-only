@@ -70,11 +70,11 @@ void shape_window::draw() {
 #else
 
 #include <fltk3/Box.h>
-class shape_window : public fltk3::Box {
+class shape_window : public fltk3::Widget {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    :fltk3::Box(fltk3::DOWN_BOX,x,y,w,h,l){
+    :fltk3::Widget(fltk3::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };

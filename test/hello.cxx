@@ -29,7 +29,7 @@
 
 int main(int argc, char **argv) {
   fltk3::Window *window = new fltk3::Window(340,180);
-  fltk3::Box *box = new fltk3::Box(20,40,300,100,"Hello, World!");
+  fltk3::Widget *box = new fltk3::Widget(20,40,300,100,"Hello, World!");
   box->box(fltk3::UP_BOX);
   box->labelfont(fltk3::BOLD+fltk3::ITALIC);
   box->labelsize(36);

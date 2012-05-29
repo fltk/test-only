@@ -33,12 +33,12 @@
 //
 //------- test the rectangle drawing capabilities of this implementation ----------
 //
-class RectTest : public fltk3::Box {
+class RectTest : public fltk3::Widget {
 public: 
   static fltk3::Widget *create() {
     return new RectTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  RectTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
+  RectTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {
     label("testing the fltk3::rect call\n"
 	  "No red pixels should be visible. "
 	  "If you see bright red lines, or if parts of the green frames are hidden, "
@@ -47,7 +47,7 @@ public:
     box(fltk3::BORDER_BOX);
   }
   void draw() {
-    fltk3::Box::draw();
+    fltk3::Widget::draw();
     int a = 10, b = 10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
     // testing fltk3::rect() with positive size
     fltk3::color(fltk3::RED);   fltk3::loop(a+10, b+10, a+40, b+10, a+40, b+40, a+10, b+40);

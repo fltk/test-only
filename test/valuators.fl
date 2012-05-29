@@ -15,7 +15,7 @@ Function {} {open
     xywh {479 151 580 510} type Double color 43 selection_color 43
     code0 {\#include <stdio.h>} visible
   } {
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label Slider
       xywh {10 10 280 210} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -49,7 +49,7 @@ Function {} {open
       callback callback
       xywh {140 160 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label ValueSlider
       xywh {10 230 280 210} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -83,7 +83,7 @@ Function {} {open
       callback callback
       xywh {140 370 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label ValueInput
       xywh {10 450 135 50} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -92,7 +92,7 @@ Function {} {open
       callback callback
       tooltip {Value Input} xywh {30 470 105 25} labelsize 8 maximum 100 step 0.1
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label ValueOutput
       xywh {155 450 135 50} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -101,7 +101,7 @@ Function {} {open
       callback callback
       tooltip {Value Output} xywh {170 470 105 25} labelsize 8 maximum 100 step 0.1
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {   Scrollbar}
       xywh {300 10 130 120} box ENGRAVED_BOX labelfont 1 align 21
     }
@@ -115,7 +115,7 @@ Function {} {open
       callback callback selected
       tooltip {Vertical Scrollbar} xywh {400 20 20 105} labelsize 8 align 1 maximum 100
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label Adjuster
       xywh {440 10 130 120} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -129,7 +129,7 @@ Function {} {open
       callback callback
       tooltip {Vertical Adjuster} xywh {530 35 25 75} labelsize 8
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label Counter
       xywh {300 140 130 120} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -143,7 +143,7 @@ Function {} {open
       callback callback
       tooltip {Simple Counter} xywh {310 215 110 25} type Simple labelsize 8
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label Spinner
       xywh {440 140 130 120} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -155,7 +155,7 @@ Function {} {open
       label FLOAT_INPUT
       xywh {465 216 80 24} type Float labelsize 8 align 2 minimum 0 maximum 1 step 0.01 value 0.05
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label Dial
       xywh {300 270 270 105} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -176,7 +176,7 @@ Function {} {open
       tooltip {Fill Dial} xywh {480 295 65 65} type Fill color 10 selection_color 1 labelsize 8 value 1
       code0 {o->angles(0,360);}
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label Roller
       xywh {300 385 150 115} box ENGRAVED_BOX labelfont 1 align 17
     }
@@ -190,7 +190,7 @@ Function {} {open
       callback callback
       tooltip {Horizontal Roller} xywh {345 430 90 20} type Horizontal labelsize 8
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {Some widgets have color(GREEN) and color2(RED) to show the areas these effect.}
       xywh {460 385 110 115} box BORDER_FRAME color 0 selection_color 0 labelsize 11 align 128
     }

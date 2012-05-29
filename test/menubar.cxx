@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
   mb.remove(1); // delete the "File" submenu
   mb.callback(test_cb);
   menus[3] = &mb;
-  fltk3::Box b(200,200,200,100,"Press right button\nfor a pop-up menu");
+  fltk3::Widget b(200,200,200,100,"Press right button\nfor a pop-up menu");
   window.resizable(&mb);
   window.size_range(300,400,0,400);
 #ifdef __APPLE__

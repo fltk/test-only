@@ -116,7 +116,7 @@ int main(int argc, char** argv) {
   scroll.end();
   window.resizable(scroll);
 
-  fltk3::Box box(0,300,5*75,window.h()-300); // gray area below the scroll
+  fltk3::Widget box(0,300,5*75,window.h()-300); // gray area below the scroll
   box.box(fltk3::FLAT_BOX);
 
   fltk3::LightButton but1(150, 310, 200, 25, "box");

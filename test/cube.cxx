@@ -37,14 +37,14 @@
 #include <stdlib.h>
 
 #if !HAVE_GL
-class cube_box : public fltk3::Box {
+class cube_box : public fltk3::Widget {
 public:
   double lasttime;
   int wire;
   double size;
   double speed;
   cube_box(int x,int y,int w,int h,const char *l=0)
-    :fltk3::Box(fltk3::DOWN_BOX,x,y,w,h,l){
+    :fltk3::Widget(fltk3::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
@@ -141,8 +141,8 @@ cube_box *cube, *cube2;
 
 void makeform(const char *name) {
   form = new fltk3::Window(510+390,390,name);
-  new fltk3::Box(fltk3::DOWN_FRAME,20,20,350,350,"");
-  new fltk3::Box(fltk3::DOWN_FRAME,510,20,350,350,"");
+  new fltk3::Widget(fltk3::DOWN_FRAME,20,20,350,350,"");
+  new fltk3::Widget(fltk3::DOWN_FRAME,510,20,350,350,"");
   speed = new fltk3::Slider(fltk3::VERT_SLIDER,390,90,40,220,"Speed");
   size = new fltk3::Slider(fltk3::VERT_SLIDER,450,90,40,220,"Size");
   wire = new fltk3::RadioLightButton(390,20,100,30,"Wire");
@@ -150,7 +150,7 @@ void makeform(const char *name) {
   button = new fltk3::Button(390,340,100,30,"Exit");
   cube = new cube_box(23,23,344,344, 0);
   cube2 = new cube_box(513,23,344,344, 0);
-  fltk3::Box *b = new fltk3::Box(fltk3::NO_BOX,cube->x(),size->y(),
+  fltk3::Widget *b = new fltk3::Widget(fltk3::NO_BOX,cube->x(),size->y(),
 			 cube->w(),size->h(),0);
   form->resizable(b);
   b->hide();

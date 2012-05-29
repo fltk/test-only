@@ -133,7 +133,7 @@ void makeform(const char *) {
   sliders[4]->bounds(-10,20);
   draw_line = new fltk3::CheckButton(280,170,20,20,"&Line");
   draw_line->align(fltk3::ALIGN_LEFT);
-  new fltk3::Box (305,170,160,20,"add a 1-pixel black line");
+  new fltk3::Widget (305,170,160,20,"add a 1-pixel black line");
   sliders[5] = new fltk3::Slider(200,210,70,20,"Dash");
   sliders[5]->align(fltk3::ALIGN_TOP_LEFT);
   sliders[5]->bounds(0,40);

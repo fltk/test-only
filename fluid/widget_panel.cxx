@@ -255,10 +255,10 @@ Fl_Panel* make_widget_panel() {
             o->labelcolor(fltk3::INACTIVE_COLOR);
             o->callback((fltk3::Callback*)align_cb, (void*)(fltk3::ALIGN_INSIDE));
           } // fltk3::Button* o
-          { fltk3::Box* o = new fltk3::Box(300, 0, 0, 20);
+          { fltk3::Widget* o = new fltk3::Widget(300, 0, 0, 20);
             o->labelsize(11);
             fltk3::Group::current()->resizable(o);
-          } // fltk3::Box* o
+          } // fltk3::Widget* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(85, 120, 300, 20, "Position:");
@@ -308,9 +308,9 @@ elative to the origin at construction time");
             o->labelsize(11);
             o->callback((fltk3::Callback*)wc_relative_cb);
           } // fltk3::LightButton* o
-          { fltk3::Box* o = new fltk3::Box(299, 0, 1, 20);
+          { fltk3::Widget* o = new fltk3::Widget(299, 0, 1, 20);
             fltk3::Group::current()->resizable(o);
-          } // fltk3::Box* o
+          } // fltk3::Widget* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(85, 155, 300, 20, "Values:");
@@ -355,9 +355,9 @@ elative to the origin at construction time");
             o->callback((fltk3::Callback*)value_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
           } // fltk3::ValueInput* o
-          { fltk3::Box* o = new fltk3::Box(300, 0, 0, 20);
+          { fltk3::Widget* o = new fltk3::Widget(300, 0, 0, 20);
             fltk3::Group::current()->resizable(o);
-          } // fltk3::Box* o
+          } // fltk3::Widget* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(85, 155, 300, 20, "Size Range:");
@@ -410,9 +410,9 @@ elative to the origin at construction time");
             o->labelsize(11);
             o->callback((fltk3::Callback*)set_max_size_cb);
           } // fltk3::Button* o
-          { fltk3::Box* o = new fltk3::Box(300, 0, 0, 20);
+          { fltk3::Widget* o = new fltk3::Widget(300, 0, 0, 20);
             fltk3::Group::current()->resizable(o);
-          } // fltk3::Box* o
+          } // fltk3::Widget* o
           o->end();
         } // fltk3::Group* o
         { Shortcut_Button* o = new Shortcut_Button(85, 180, 310, 20, "Shortcut:");
@@ -493,10 +493,10 @@ elative to the origin at construction time");
             o->callback((fltk3::Callback*)hotspot_cb);
             o->when(fltk3::WHEN_CHANGED);
           } // fltk3::LightButton* o
-          { fltk3::Box* o = new fltk3::Box(300, 0, 0, 20);
+          { fltk3::Widget* o = new fltk3::Widget(300, 0, 0, 20);
             o->labelsize(11);
             fltk3::Group::current()->resizable(o);
-          } // fltk3::Box* o
+          } // fltk3::Widget* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Input* o = new fltk3::Input(85, 255, 310, 20, "Tooltip:");
@@ -506,10 +506,10 @@ elative to the origin at construction time");
           o->textsize(11);
           o->callback((fltk3::Callback*)tooltip_cb);
         } // fltk3::Input* o
-        { fltk3::Box* o = new fltk3::Box(85, 275, 300, 5);
+        { fltk3::Widget* o = new fltk3::Widget(85, 275, 300, 5);
           o->labelsize(11);
           fltk3::Group::current()->resizable(o);
-        } // fltk3::Box* o
+        } // fltk3::Widget* o
         o->end();
         fltk3::Group::current()->resizable(o);
       } // fltk3::Group* o
@@ -628,10 +628,10 @@ elative to the origin at construction time");
           } // fltk3::Button* o
           o->end();
         } // fltk3::Group* o
-        { fltk3::Box* o = new fltk3::Box(85, 110, 300, 40);
+        { fltk3::Widget* o = new fltk3::Widget(85, 110, 300, 40);
           o->labelsize(11);
           fltk3::Group::current()->resizable(o);
-        } // fltk3::Box* o
+        } // fltk3::Widget* o
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(0, 20, 400, 290, "C++");
@@ -798,10 +798,10 @@ access the Widget pointer and \'v\' to access the user value.");
     } // fltk3::TabGroup* o
     { fltk3::Group* o = new fltk3::Group(9, 330, 400, 20);
       o->labelsize(11);
-      { fltk3::Box* o = new fltk3::Box(0, 0, 20, 20);
+      { fltk3::Widget* o = new fltk3::Widget(0, 0, 20, 20);
         o->labelsize(11);
         fltk3::Group::current()->resizable(o);
-      } // fltk3::Box* o
+      } // fltk3::Widget* o
       { fltk3::Button* o = new fltk3::Button(231, 0, 99, 20, "Hide &Overlays");
         o->tooltip("Hide the widget overlay box.");
         o->labelsize(11);

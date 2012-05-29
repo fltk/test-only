@@ -35,7 +35,7 @@ using namespace fltk3;
 
 void adjcb(Widget *o, void *v) {
   Adjuster *a = (Adjuster*)o;
-  Box *b = (Box *)v;
+  Widget *b = (Widget *)v;
   a->format((char *)(b->label()));
   b->redraw();
 }
@@ -44,14 +44,14 @@ int main(int argc, char ** argv) {
    DoubleWindow window(320,100,argv[0]);
 
    char buf1[100];
-   Box b1(DOWN_BOX,20,30,80,25,buf1);
+   Widget b1(DOWN_BOX,20,30,80,25,buf1);
    b1.color(WHITE);
    Adjuster a1(20+80,30,3*25,25);
    a1.callback(adjcb,&b1);
    adjcb(&a1,&b1);
 
    char buf2[100];
-   Box b2(DOWN_BOX,20+80+4*25,30,80,25,buf2);
+   Widget b2(DOWN_BOX,20+80+4*25,30,80,25,buf2);
    b2.color(WHITE);
    Adjuster a2(b2.x()+b2.w(),10,25,3*25);
    a2.callback(adjcb,&b2);

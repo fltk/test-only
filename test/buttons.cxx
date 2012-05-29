@@ -48,7 +48,7 @@ int main(int argc, char ** argv) {
   new fltk3::RoundButton(10,170,160,30,"fltk3::RoundButton");
   new fltk3::CheckButton(10,210,160,30,"fltk3::CheckButton");
 
-  new fltk3::Box(180,20,120,30,"fltk3::Button");
+  new fltk3::Widget(180,20,120,30,"fltk3::Button");
   { fltk3::Button* o = new fltk3::Button(180, 50, 30, 30, "7");
     o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM));
     o->shortcut('7');
@@ -101,7 +101,7 @@ int main(int argc, char ** argv) {
     o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_LEFT|fltk3::TIE_TOP));
     o->shortcut('=');
   } // fltk3::Button* o
-  fltk3::Box *tie = new fltk3::Box(180,180,120,60,"multiple buttons can be tied together visually using the fltk3::TIE_... flags with the box type");
+  fltk3::Widget *tie = new fltk3::Widget(180,180,120,60,"multiple buttons can be tied together visually using the fltk3::TIE_... flags with the box type");
   tie->align(fltk3::ALIGN_WRAP);
   tie->labelsize(11);
   

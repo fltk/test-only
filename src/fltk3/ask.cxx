@@ -48,8 +48,8 @@
 #include <fltk3/draw.h>
 
 static fltk3::Window *message_form;
-static fltk3::Box *message;
-static fltk3::Box *icon;
+static fltk3::Widget *message;
+static fltk3::Widget *icon;
 static fltk3::Button *button[3];
 static fltk3::Input *input;
 static int ret_val;
@@ -89,10 +89,10 @@ static fltk3::Window *makeform() {
  message_form->callback(button_cb,(void *)0);
  // w->clear_border();
  // w->box(fltk3::UP_BOX);
- (message = new fltk3::Box(60, 25, 340, 20))
+ (message = new fltk3::Widget(60, 25, 340, 20))
    ->align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
  (input = new fltk3::Input(60, 37, 340, 23))->hide();
- {fltk3::Box* o = icon = new fltk3::Box(10, 10, 50, 50);
+ {fltk3::Widget* o = icon = new fltk3::Widget(10, 10, 50, 50);
   o->box(fltk3::THIN_UP_BOX);
   o->labelfont(fltk3::TIMES_BOLD);
   o->labelsize(34);
@@ -115,7 +115,7 @@ static fltk3::Window *makeform() {
  for (b=2; b>=0; b--)
    w->add(button[b]);
  w->begin();
- w->resizable(new fltk3::Box(60,10,110-60,27));
+ w->resizable(new fltk3::Widget(60,10,110-60,27));
  w->end();
  w->set_modal();
  fltk3::Group::current(previously_current_group);
@@ -425,7 +425,7 @@ int fltk3::vchoice(const char*fmt,const char *b0,const char *b1,const char *b2, 
   return r;
 }
 
-/** Gets the fltk3::Box icon container of the current default dialog used in
+/** Gets the fltk3::Widget icon container of the current default dialog used in
     many common dialogs like fltk3::message(), fltk3::alert(),
     fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password()
     \note \#include <fltk3/ask.h>

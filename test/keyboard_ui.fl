@@ -684,7 +684,7 @@ Function {make_window()} {open
       label {event_key():} selected
       xywh {15 20 170 30} labelsize 9 align 5
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {event_state():}
       xywh {400 15 80 40} labelsize 9 align 5
     }

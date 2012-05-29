@@ -29,12 +29,21 @@
 #ifndef Fl_Box_H
 #define Fl_Box_H
 
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 #include "Fl_Widget.H"
 
 
-FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Box, Box)
-FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Box, Box)
+namespace fltk3 {
+  class BoxWidget : public Widget {
+  public:
+    BoxWidget(int x, int y, int w, int h, const char *l=0) 
+    : Widget(x, y, w, h, l) { }
+  };
+};
+
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Box, BoxWidget)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Box, BoxWidget)
 FLTK3_WRAPPER_INTERFACE_END()
 
 
@@ -45,12 +54,12 @@ public:
   FLTK3_WIDGET_VCALLS(Fl_Box, Widget)
 
   Fl_Box(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::Box_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
+    _p = new fltk3::BoxWidget_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
   }
   
   Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *label) {
-    _p = new fltk3::Box_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
+    _p = new fltk3::BoxWidget_I(_ctor_dx(x), _ctor_dy(y), w, h, label);
     _p->wrapper(this);
     box(b);
   }

@@ -31,7 +31,7 @@
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/Input.h>
 
-class Drawing_Area : public fltk3::Box {
+class Drawing_Area : public fltk3::Widget {
   void draw();
 public:
   uchar *buffer;
@@ -54,7 +54,7 @@ public:
     MAX_ITERATIONS = 14,
     DEFAULT_ITERATIONS = 7
   };
-  Drawing_Area(int x,int y,int w,int h) : fltk3::Box(x,y,w,h) {
+  Drawing_Area(int x,int y,int w,int h) : fltk3::Widget(x,y,w,h) {
     buffer = 0;
     W = w-6;
     H = h-8;

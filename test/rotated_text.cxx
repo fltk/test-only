@@ -40,7 +40,7 @@
 #endif
 
 fltk3::ToggleButton *leftb,*rightb,*clipb;
-//fltk3::Box *text;
+//fltk3::Widget *text;
 fltk3::Input *input;
 fltk3::HorValueSlider *fonts;
 fltk3::HorValueSlider *sizes;

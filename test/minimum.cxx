@@ -51,7 +51,7 @@
 
 int main(int argc, char **argv) {
   fltk3::DoubleWindow *window = new fltk3::DoubleWindow(400,320,argv[0]);
-  window->resizable(*(new fltk3::Box(fltk3::ENGRAVED_FRAME,10,10,300,300,
+  window->resizable(*(new fltk3::Widget(fltk3::ENGRAVED_FRAME,10,10,300,300,
 "MINIMUM UPDATE TEST\n"
 "\n"
 "The slider on the right purposely\n"

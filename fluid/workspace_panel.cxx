@@ -832,10 +832,10 @@ Fl_Panel* make_file_panel() {
     { pCloseGroup = new fltk3::Group(10, 420, 400, 25);
       pCloseGroup->labelsize(11);
       pCloseGroup->callback((fltk3::Callback*)Fl_Panel::propagate_load);
-      { fltk3::Box* o = new fltk3::Box(0, 0, 290, 25);
+      { fltk3::Widget* o = new fltk3::Widget(0, 0, 290, 25);
         o->labelsize(11);
         fltk3::Group::current()->resizable(o);
-      } // fltk3::Box* o
+      } // fltk3::Widget* o
       { fltk3::Button* o = new fltk3::Button(290, 0, 110, 25, "Close");
         o->callback((fltk3::Callback*)cb_Close);
       } // fltk3::Button* o

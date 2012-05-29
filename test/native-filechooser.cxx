@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
     y += G_filename->h() + 5;
     fltk3::Button *but = new fltk3::Button(win->w()-80-10, win->h()-25-10, 80, 25, "Pick File");
     but->callback(Butt_CB);
-    fltk3::Box *dummy = new fltk3::Box(80, 0, 430, 100);
+    fltk3::Widget *dummy = new fltk3::Widget(80, 0, 430, 100);
     dummy->hide();
     win->resizable(dummy);
   }

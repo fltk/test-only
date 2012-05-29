@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
   fltk3::Button show_button2(0,90,120,30,"show this");
   show_button2.callback(show_cb, &control);
   
-  //  fltk3::Box box(fltk3::NO_BOX,0,60,120,30,"Also try running\nwith -i switch");
+  //  fltk3::Widget box(fltk3::NO_BOX,0,60,120,30,"Also try running\nwith -i switch");
   
   control.end();
   control.show();

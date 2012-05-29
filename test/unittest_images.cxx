@@ -53,7 +53,7 @@
 		// There are plans to support alpha in fltk3::draw_image() in FLTK 1.3.x,
 		// but not in FLTK 1.1.x .
 
-class ImageTest : public fltk3::Box {
+class ImageTest : public fltk3::Widget {
 public: 
   static fltk3::Widget *create() {
     int x, y;
@@ -96,7 +96,7 @@ public:
   static fltk3::RGBImage *i_ga;
   static fltk3::RGBImage *i_rgb;
   static fltk3::RGBImage *i_rgba;
-  ImageTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
+  ImageTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {
     label("Testing Image Drawing\n\n"
 	"This test renders four images, two of them with a checker board\n"
 	"visible through the graphics. Color and gray gradients should be\n"
@@ -105,7 +105,7 @@ public:
     box(fltk3::BORDER_BOX);
   }
   void draw() {
-    fltk3::Box::draw();
+    fltk3::Widget::draw();
 
     // top left: RGB
 

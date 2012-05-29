@@ -54,10 +54,10 @@
 #include <fltk3/draw.h>
 #endif
 
-class EnterExit : public fltk3::Box {
+class EnterExit : public fltk3::Widget {
   int handle(int);
 public:
-  EnterExit(int x, int y, int w, int h, const char *l) : fltk3::Box(fltk3::BORDER_BOX,x,y,w,h,l) {}
+  EnterExit(int x, int y, int w, int h, const char *l) : fltk3::Widget(fltk3::BORDER_BOX,x,y,w,h,l) {}
 };
 
 int EnterExit::handle(int e) {
@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
   new fltk3::Input(160,340,140,25,"input2:");
   (new fltk3::MenuButton(5,150,80,25,"menu&1"))->add(bigmess);
   
-  (new fltk3::Box(fltk3::NO_BOX,0,0,400,100,
+  (new fltk3::Widget(fltk3::NO_BOX,0,0,400,100,
                   "A child fltk3::Window with children of its own may "
                   "be useful for imbedding controls into a GL or display "
                   "that needs a different visual."

@@ -107,10 +107,10 @@ static uchar sorceress_bits[] = {
   0xff, 0xff, 0x40, 0xf0, 0xff, 0xff, 0xff, 0x07, 0xff, 0xff, 0xff, 0xff,
   0x41, 0xf0, 0xff, 0xff, 0xff, 0x07};
 
-class MyWidget: public fltk3::Box{
+class MyWidget: public fltk3::Widget{
 protected:
   void draw(){
-    Box::draw();
+    Widget::draw();
     fltk3::color(fltk3::RED);
     fltk3::rectf(5,5,w()-10,h()-10);
     fltk3::push_clip(6,6,w()-12,h()-12);
@@ -132,17 +132,17 @@ protected:
     
   }
 public:
-  MyWidget(int x, int y):fltk3::Box(x,y,100,100, "Clipping and rect(f):\nYellow rect.framed\nby B-Y-G-R rect. 1 p.\nthick. Your printer may \nrender very thin lines\nsurrounding \"X\""){
+  MyWidget(int x, int y):fltk3::Widget(x,y,100,100, "Clipping and rect(f):\nYellow rect.framed\nby B-Y-G-R rect. 1 p.\nthick. Your printer may \nrender very thin lines\nsurrounding \"X\""){
     align(fltk3::ALIGN_TOP);
     labelsize(10);
   };
 };
 
 
-class MyWidget2: public fltk3::Box{
+class MyWidget2: public fltk3::Widget{
 protected:
   void draw(){
-    Box::draw();
+    Widget::draw();
     int d;
     // fltk3::line_style(0);
     for(d=5;d<48;d+=2){
@@ -238,17 +238,17 @@ protected:
   };
   
 public:
-  MyWidget2(int x, int y):fltk3::Box(x,y,100,100, "Integer primitives"){
+  MyWidget2(int x, int y):fltk3::Widget(x,y,100,100, "Integer primitives"){
     labelsize(10);
     align(fltk3::ALIGN_TOP);
   };
 };
 
 
-class MyWidget3: public fltk3::Box {
+class MyWidget3: public fltk3::Widget {
 protected:
   void draw(){
-    Box::draw();
+    Widget::draw();
     double d;
     //    fltk3::line_style(0);
     fltk3::push_clip(5,5,45,43);
@@ -271,7 +271,7 @@ protected:
     
   };
 public:
-  MyWidget3(int x, int y):fltk3::Box(x,y,100,100, "Sub-pixel drawing of\nlines 1.63 points apart\nOn the screen you\ncan see aliasing, the\nprinter should render\nthem properly"){
+  MyWidget3(int x, int y):fltk3::Widget(x,y,100,100, "Sub-pixel drawing of\nlines 1.63 points apart\nOn the screen you\ncan see aliasing, the\nprinter should render\nthem properly"){
     labelsize(10);
     align(fltk3::ALIGN_TOP);
   };
@@ -279,10 +279,10 @@ public:
 
 
 
-class MyWidget4: public fltk3::Box{
+class MyWidget4: public fltk3::Widget{
 protected:
   void draw(){
-    Box::draw();
+    Widget::draw();
     fltk3::push_matrix();
     fltk3::scale(.75,.75);
     
@@ -436,17 +436,17 @@ protected:
     fltk3::color(fltk3::BLACK);
   };
 public:
-  MyWidget4(int x, int y):fltk3::Box(x,y,150,150, "Line styles"){
+  MyWidget4(int x, int y):fltk3::Widget(x,y,150,150, "Line styles"){
     labelsize(10);
     align(fltk3::ALIGN_TOP);
   };
 };
 
 
-class MyWidget5: public fltk3::Box{
+class MyWidget5: public fltk3::Widget{
 protected:
   void draw(){
-    Box::draw();
+    Widget::draw();
     //fltk3::push_clip(0,0,w(),h());
     fltk3::push_matrix();
     
@@ -520,7 +520,7 @@ protected:
     
   };
 public:
-  MyWidget5(int x, int y):fltk3::Box(x,y,230,250, "Complex (double) drawings:\nBlue ellipse may not be\ncorrectly transformed\ndue to non-orthogonal\ntransformation"){
+  MyWidget5(int x, int y):fltk3::Widget(x,y,230,250, "Complex (double) drawings:\nBlue ellipse may not be\ncorrectly transformed\ndue to non-orthogonal\ntransformation"){
     labelsize(10);
     align(fltk3::ALIGN_TOP);
   };
@@ -662,7 +662,7 @@ int main(int argc, char ** argv) {
     o->end();
     o->deactivate();
   }
-  fltk3::Box tx(120,492-43,230,50,"Background is not printed because\nencapsulating group, which we are\n printing, has not set the box type");
+  fltk3::Widget tx(120,492-43,230,50,"Background is not printed because\nencapsulating group, which we are\n printing, has not set the box type");
   tx.box(fltk3::SHADOW_BOX);
   tx.labelsize(12);
   

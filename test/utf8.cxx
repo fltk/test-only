@@ -392,7 +392,7 @@ static void create_font_widget()
           own_face->callback(own_face_cb);
           own_face->tooltip("Display font names in their own face");
         
-          fltk3::Box * dummy = new fltk3::Box(210, 10, 1, 1);
+          fltk3::Widget * dummy = new fltk3::Widget(210, 10, 1, 1);
         
           choose_btn = new fltk3::Button(230, 0, 60, 30);
           choose_btn->label("Select");

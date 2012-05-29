@@ -33,12 +33,12 @@
 //
 //------- test the circle drawing capabilities of this implementation ----------
 //
-class CircleTest : public fltk3::Box {
+class CircleTest : public fltk3::Widget {
 public: 
   static fltk3::Widget *create() { 
     return new CircleTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  CircleTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
+  CircleTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {
     label("testing int drawing of circles and ovals (fltk3::arc, fltk3::pie)\n"
           "No red lines should be visible. "
           "If you see bright red pixels, the circle drawing alignment is off. "
@@ -49,7 +49,7 @@ public:
     box(fltk3::BORDER_BOX);
   }
   void draw() {
-    fltk3::Box::draw();
+    fltk3::Widget::draw();
     int a = 10, b = 10; fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 100, 100);
     // test fltk3::arc for full circles
     fltk3::color(fltk3::GREEN); fltk3::rect(a+ 9, b+ 9, 33, 33);

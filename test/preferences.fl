@@ -109,7 +109,7 @@ Function {} {open return_type int
           label {right side}
           xywh {0 20 95 25} type Radio down_box ROUND_DOWN_BOX
         }
-        {fltk3::Box} {} {
+        {fltk3::Widget} {} {
           label {of the bed}
           xywh {3 40 95 20}
         }

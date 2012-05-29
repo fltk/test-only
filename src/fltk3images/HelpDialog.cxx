@@ -187,9 +187,9 @@ fltk3::HelpDialog::HelpDialog() {
         } // fltk3::Input* find_
         o->end();
       } // fltk3::Group* o
-      { fltk3::Box* o = new fltk3::Box(140, 0, 190, 25);
+      { fltk3::Widget* o = new fltk3::Widget(140, 0, 190, 25);
         fltk3::Group::current()->resizable(o);
-      } // fltk3::Box* o
+      } // fltk3::Widget* o
       o->end();
     } // fltk3::Group* o
     { view_ = new fltk3::HelpView(10, 45, 510, 330);

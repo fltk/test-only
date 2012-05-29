@@ -52,7 +52,7 @@ namespace fltk3 {
 
 
 static fltk3::DoubleWindow *cl;
-static fltk3::Box *rescol;
+static fltk3::Widget *rescol;
 static fltk3::Button *dbobj;
 static fltk3::HoldBrowser *colbr;
 static fltk3::ValueSlider *rs, *gs, *bs;
@@ -292,7 +292,7 @@ static void create_form_cl(void)
   cl->box(fltk3::UP_BOX);
   cl->color(fltk3::INDIANRED, fltk3::GRAY);
   
-  fltk3::Box *title = new fltk3::Box(40, 10, 300, 30, "Color Browser");
+  fltk3::Widget *title = new fltk3::Widget(40, 10, 300, 30, "Color Browser");
   title->box(fltk3::NO_BOX);
   title->labelcolor(fltk3::RED);
   title->labelsize(32);
@@ -310,7 +310,7 @@ static void create_form_cl(void)
   colbr->callback(br_cb, 0);
   colbr->box(fltk3::DOWN_BOX);
   
-  rescol = new fltk3::Box(300, 90, 90, 35, "");
+  rescol = new fltk3::Widget(300, 90, 90, 35, "");
   rescol->color(fltk3::FREE_COL4, fltk3::FREE_COL4);
   rescol->box(fltk3::BORDER_BOX);
   

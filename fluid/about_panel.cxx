@@ -275,19 +275,19 @@ fltk3::DoubleWindow* make_about_panel() {
     about_panel->color(fltk3::LIGHT1);
     about_panel->selection_color(fltk3::DARK1);
     about_panel->hotspot(about_panel);
-    { fltk3::Box* o = new fltk3::Box(10, 10, 115, 120);
+    { fltk3::Widget* o = new fltk3::Widget(10, 10, 115, 120);
       o->image(image_fluid);
-    } // fltk3::Box* o
-    { fltk3::Box* o = new fltk3::Box(135, 10, 200, 70, "FLTK User\nInterface Designer\nVersion 3.0.0");
+    } // fltk3::Widget* o
+    { fltk3::Widget* o = new fltk3::Widget(135, 10, 200, 70, "FLTK User\nInterface Designer\nVersion 3.0.0");
       o->color((fltk3::Color)12);
       o->selection_color(fltk3::DARK1);
       o->labelfont(1);
       o->labelsize(18);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-    } // fltk3::Box* o
-    { fltk3::Box* o = new fltk3::Box(135, 90, 200, 45, "Copyright 1998-2012 by\nBill Spitzak and others");
+    } // fltk3::Widget* o
+    { fltk3::Widget* o = new fltk3::Widget(135, 90, 200, 45, "Copyright 1998-2012 by\nBill Spitzak and others");
       o->align(fltk3::Align(132|fltk3::ALIGN_INSIDE));
-    } // fltk3::Box* o
+    } // fltk3::Widget* o
     { fltk3::Button* o = new fltk3::Button(115, 145, 123, 25, "View License...");
       o->labelcolor(fltk3::DARK_BLUE);
       o->callback((fltk3::Callback*)cb_View);

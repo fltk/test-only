@@ -85,7 +85,7 @@ Function {} {open
         label {value:}
         xywh {220 105 130 30} maximum 10000 step 1 textfont 5 textsize 24 textcolor 4
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label Fl_Box
         xywh {220 145 140 50} box EMBOSSED_FRAME labeltype SHADOW_LABEL labelfont 3 labelsize 38
       }

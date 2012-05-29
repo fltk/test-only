@@ -37,7 +37,7 @@
 #include <fltk3/message.h>
 
 fltk3::DoubleWindow *window;
-fltk3::Box *box;
+fltk3::Widget *box;
 
 int big = 0;
 
@@ -66,17 +66,17 @@ void b_cb(fltk3::Widget *,long w) {
 int main(int argc, char **argv) {
   window = new fltk3::DoubleWindow(W3,W3);
   window->box(fltk3::NO_BOX);
-  fltk3::Box *n;
+  fltk3::Widget *n;
   for (int x = 0; x<4; x++) for (int y = 0; y<4; y++) {
     if ((x==1 || x==2) && (y==1 || y==2)) continue;
-    n = new fltk3::Box(fltk3::FRAME_BOX,x*(B+W1)+B,y*(B+W1)+B,W1,W1,0);
+    n = new fltk3::Widget(fltk3::FRAME_BOX,x*(B+W1)+B,y*(B+W1)+B,W1,W1,0);
     n->color(x+y+8);
   }
-  n = new fltk3::Box(fltk3::FRAME_BOX,B,4*W1+5*B,4*W1+3*B,W1,0);
+  n = new fltk3::Widget(fltk3::FRAME_BOX,B,4*W1+5*B,4*W1+3*B,W1,0);
   n->color(12);
-  n = new fltk3::Box(fltk3::FRAME_BOX,4*W1+5*B,B,W1,5*W1+4*B,0);
+  n = new fltk3::Widget(fltk3::FRAME_BOX,4*W1+5*B,B,W1,5*W1+4*B,0);
   n->color(13);
-  n = new fltk3::Box(fltk3::FRAME_BOX,W1+B+B,W1+B+B,2*W1+B,2*W1+B,0);
+  n = new fltk3::Widget(fltk3::FRAME_BOX,W1+B+B,W1+B+B,2*W1+B,2*W1+B,0);
   n->color(8);
 
   fltk3::Button *b = new fltk3::RadioButton(W1+B+50,W1+B+30,20,20,"@6>");
@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
   (new fltk3::RadioButton(W1+B+30,W1+B+50,20,20,"@2>"))->callback(b_cb,2);
   (new fltk3::RadioButton(W1+B+30,W1+B+30,20,20,"off"))->callback(b_cb,0);
 
-  box = new fltk3::Box(fltk3::FLAT_BOX,0,0,0,0,"resizable");
+  box = new fltk3::Widget(fltk3::FLAT_BOX,0,0,0,0,"resizable");
   box->color(fltk3::DARK2);
   b->set();
   b->do_callback();

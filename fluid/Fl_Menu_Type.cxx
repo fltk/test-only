@@ -3,7 +3,7 @@
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
-// Menu items are kludged by making a phony fltk3::Box widget so the normal
+// Menu items are kludged by making a phony fltk3::Widget widget so the normal
 // widget panel can be used to control them.
 //
 // This file also contains code to make fltk3::MenuButton, fltk3::MenuBar,

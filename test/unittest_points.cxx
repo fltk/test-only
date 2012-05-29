@@ -33,12 +33,12 @@
 //
 //------- test the point drawing capabilities of this implementation ----------
 //
-class PointTest : public fltk3::Box {
+class PointTest : public fltk3::Widget {
 public:
   static fltk3::Widget *create() {
     return new PointTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  PointTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
+  PointTest(int x, int y, int w, int h) : fltk3::Widget(x, y, w, h) {
     label("testing the fltk3::point call\n"
 	  "You should see four pixels each in black, red, green and blue. "
 	  "Make sure that pixels are not anti-aliased (blurred across multiple pixels)!");
@@ -46,7 +46,7 @@ public:
     box(fltk3::BORDER_BOX);
   }
   void draw() {
-    fltk3::Box::draw();
+    fltk3::Widget::draw();
     int a = 10, b = 10; 
     fltk3::color(fltk3::WHITE); fltk3::rectf(a, b, 90, 90);
     fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 90, 90);

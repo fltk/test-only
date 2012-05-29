@@ -27,7 +27,7 @@ redraw}
       xywh {190 200 30 200}
       code0 {o->set_output();}
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {The left slider has changed( fltk3::WHEN_CHANGED | fltk3::WHEN_RELEASE | fltk3::WHEN_NOT_CHANGED) so it produces a callback on both drag and release mouse events.
 The middle slider (representing a widget with low overhead) is changed on every mouse movement.
 The right slider (representing a widget with high overhead) is only updated when the mouse is released, by checking if fltk3::pushed() is zero.} selected

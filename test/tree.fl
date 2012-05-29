@@ -240,7 +240,7 @@ if ( item ) {
       xywh {300 5 705 427}
       code0 {o->resizable(0);}
     } {
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label {Tree Globals}
         tooltip {These controls only affect the selected items. If no items are selected, all existing items in tree are modified.} xywh {11 18 335 263} box DOWN_BOX color 47 labelsize 12 align 1
       }
@@ -492,11 +492,11 @@ tree->redraw();}
         tooltip {Changes the tree widget's selection color. Tests Fl_Tree::selection_color()} xywh {186 246 16 16} box DOWN_BOX labelsize 12 align 7
         code0 {o->color(tree->selection_color());}
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label {Test Operations}
         tooltip {These controls only affect the defaults for new items that are created. These test the Fl_Tree_Prefs methods.} xywh {11 307 335 120} box DOWN_BOX color 47 labelsize 12 align 1
       }
-      {fltk3::Box} showitem_box {
+      {fltk3::Widget} showitem_box {
         label {show_item()
 }
         xywh {31 330 70 82} box DOWN_BOX labelsize 11 align 1
@@ -659,7 +659,7 @@ tree->deselect("ROOT"); // leave deselected
 fltk3::alert("TEST COMPLETED\\n If you didn't see any error dialogs, test PASSED.");}
         tooltip {Test the 'docallback' argument can disable callbacks.} xywh {231 353 95 16} labelsize 9
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label {Selected Items}
         tooltip {These controls only affect the selected items. If no items are selected, all existing items in tree are modified.} xywh {361 18 335 263} box DOWN_BOX color 47 labelsize 12 align 1
       }
@@ -1009,7 +1009,7 @@ if ( onoff ) tree->select_all(item);	// select /ROOT and its children
 else         tree->deselect_all(item);	// deselect /ROOT and its children}
         tooltip {Toggle selection of the ROOT item and all children} xywh {579 216 95 16} selection_color 1 labelsize 9
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label {New Item Defaults}
         tooltip {These controls only affect the defaults for new items that are created. These test the Fl_Tree_Prefs methods.} xywh {361 307 335 120} box DOWN_BOX color 47 labelsize 12 align 1
       }
@@ -1112,7 +1112,7 @@ tree->item_labelfont(val);			  // change font in tree}
         code3 {o->color(46); o->selection_color(fltk3::RED);}
       }
     }
-    {fltk3::Box} resizer_box {
+    {fltk3::Widget} resizer_box {
       xywh {0 263 15 14}
     }
   }

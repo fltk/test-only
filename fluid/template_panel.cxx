@@ -105,7 +105,7 @@ if (img) {
 };
 }
 
-fltk3::Box *template_preview=(fltk3::Box *)0;
+fltk3::Widget *template_preview=(fltk3::Widget *)0;
 
 fltk3::Input *template_name=(fltk3::Input *)0;
 
@@ -151,11 +151,11 @@ fltk3::DoubleWindow* make_template_panel() {
       template_browser->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       template_browser->when(3);
     } // fltk3::Browser* template_browser
-    { template_preview = new fltk3::Box(200, 28, 250, 250);
+    { template_preview = new fltk3::Widget(200, 28, 250, 250);
       template_preview->box(fltk3::THIN_DOWN_BOX);
       template_preview->align(fltk3::Align(69|fltk3::ALIGN_INSIDE));
       fltk3::Group::current()->resizable(template_preview);
-    } // fltk3::Box* template_preview
+    } // fltk3::Widget* template_preview
     { template_name = new fltk3::Input(124, 288, 326, 25, "Template Name:");
       template_name->labelfont(1);
       template_name->textfont(4);
@@ -171,9 +171,9 @@ fltk3::DoubleWindow* make_template_panel() {
       { template_delete = new fltk3::Button(0, 0, 133, 25, "Delete Template");
         template_delete->callback((fltk3::Callback*)template_delete_cb);
       } // fltk3::Button* template_delete
-      { fltk3::Box* o = new fltk3::Box(143, 0, 126, 25);
+      { fltk3::Widget* o = new fltk3::Widget(143, 0, 126, 25);
         fltk3::Group::current()->resizable(o);
-      } // fltk3::Box* o
+      } // fltk3::Widget* o
       { fltk3::Button* o = new fltk3::Button(279, 0, 72, 25, "Cancel");
         o->callback((fltk3::Callback*)cb_Cancel);
       } // fltk3::Button* o
