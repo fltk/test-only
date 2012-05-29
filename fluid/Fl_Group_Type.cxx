@@ -78,9 +78,9 @@ void fix_group_size(Fl_Type *tt) {
   for (Fl_Type *nn = t->first_child(); nn; nn = nn->next_brother()) {
     if (nn->is_widget()) {
       fltk3::Widget* o = ((Fl_Widget_Type*)nn)->o;
-      int x = o->x();  if (x+X0 < X)
+      int x = o->x(); if (x+X0 < X)
         X = x+X0;
-      int y = o->y();  if (y+Y0 < Y) Y = y+Y0;
+      int y = o->y(); if (y+Y0 < Y) Y = y+Y0;
       int r = o->r(); if (r+X0 > R)
         R = r+X0;
       int b = o->b(); if (b+Y0 > B) B = b+Y0;

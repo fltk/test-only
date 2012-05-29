@@ -1025,7 +1025,7 @@ fltk3::Window* make_widgetbin() {
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(515, 3, 55, 79);
       { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
-        o->tooltip("Box");
+        o->tooltip("Widget");
         o->box(fltk3::THIN_UP_BOX);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Widget"));
         o->image(pixmap[5]);

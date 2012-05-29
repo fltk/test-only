@@ -74,7 +74,7 @@ strcasecmp(const char *s, const char *t) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 class Fl_Box_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "fltk3::Widget";}
