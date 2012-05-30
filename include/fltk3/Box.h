@@ -66,26 +66,6 @@ namespace fltk3 {
      */
     virtual Box* box() { return this; }
   };
-/*
- {fl_no_box,                   0,0,0,0,1},		
- {fl_flat_box,                 0,0,0,0,1}, // fltk3::FLAT_BOX
- {fl_gtk_up_box,		2,2,4,4,0}, // FL_GTK_UP_BOX,
- {fl_gtk_down_box,		2,2,4,4,0}, // FL_GTK_DOWN_BOX,
- {fl_gtk_up_frame,		2,2,4,4,0}, // FL_GTK_UP_FRAME,
- {fl_gtk_down_frame,           2,2,4,4,0}, // FL_GTK_DOWN_FRAME,
- {fl_gtk_thin_up_box,		1,1,2,2,0}, // FL_GTK_THIN_ROUND_UP_BOX,
- {fl_gtk_thin_down_box,	1,1,2,2,0}, // FL_GTK_THIN_ROUND_DOWN_BOX,
- {fl_gtk_thin_up_frame,	1,1,2,2,0}, // FL_GTK_THIN_UP_FRAME,
- {fl_gtk_thin_down_frame,	1,1,2,2,0}, // FL_GTK_THIN_DOWN_FRAME,
- {fl_engraved_box,             2,2,4,4,1},
- {fl_embossed_box,             2,2,4,4,1},
- {fl_engraved_frame,           2,2,4,4,1},
- {fl_embossed_frame,           2,2,4,4,1},
- {fl_border_box,               1,1,2,2,1},
- {fl_shadow_box,               1,1,5,5,0}, // FL_SHADOW_BOX,
- {fl_border_frame,             1,1,2,2,1},
- {fl_shadow_frame,             1,1,5,5,0}, // FL_SHADOW_FRAME,
-*/
   
   class FLTK3_EXPORT NoBox : public Box {
   public:
@@ -104,6 +84,7 @@ namespace fltk3 {
   
   class FLTK3_EXPORT UpBox : public FlatBox {
   public:
+    Box* down() { return DOWN_BOX; }
     void _draw(const Rectangle&) const;
     UpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
   };
@@ -116,6 +97,7 @@ namespace fltk3 {
   
   class FLTK3_EXPORT ThinUpBox : public FlatBox {
   public:
+    Box* down() { return THIN_DOWN_BOX; }
     void _draw(const Rectangle&) const;
     ThinUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
   };
