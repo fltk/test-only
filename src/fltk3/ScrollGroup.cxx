@@ -62,32 +62,30 @@ void fltk3::ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
   fltk3::push_clip(X,Y,W,H);
   fltk3::ScrollGroup* s = (fltk3::ScrollGroup*)v;
   // erase background as needed...
-  switch (s->box()) {
-    case fltk3::NO_BOX :
-    case fltk3::UP_FRAME :
-    case fltk3::DOWN_FRAME :
-    case fltk3::THIN_UP_FRAME :
-    case fltk3::THIN_DOWN_FRAME :
-    case fltk3::ENGRAVED_FRAME :
-    case fltk3::EMBOSSED_FRAME :
-    case fltk3::BORDER_FRAME :
-    case fltk3::SHADOW_FRAME :
-    case fltk3::ROUNDED_FRAME :
-    case fltk3::OVAL_FRAME :
-    case fltk3::PLASTIC_UP_FRAME :
-    case fltk3::PLASTIC_DOWN_FRAME :
-        if (s->parent() == (fltk3::Group *)s->window() && fltk3::scheme_bg_) {
-	  fltk3::scheme_bg_->draw(X-(X%((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->w()),
-	                       Y-(Y%((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->h()),
-	                       W+((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->w(),
-			       H+((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->h());
-	  break;
-        }
-
-    default :
-	fltk3::color(s->color());
-	fltk3::rectf(X,Y,W,H);
-	break;
+  fltk3::Box* sbx = s->box();
+  if (   sbx==fltk3::NO_BOX
+      || sbx==fltk3::UP_FRAME
+      || sbx==fltk3::DOWN_FRAME
+      || sbx==fltk3::THIN_UP_FRAME
+      || sbx==fltk3::THIN_DOWN_FRAME
+      || sbx==fltk3::ENGRAVED_FRAME
+      || sbx==fltk3::EMBOSSED_FRAME
+      || sbx==fltk3::BORDER_FRAME
+      || sbx==fltk3::SHADOW_FRAME
+      || sbx==fltk3::ROUNDED_FRAME
+      || sbx==fltk3::OVAL_FRAME
+      || sbx==fltk3::PLASTIC_UP_FRAME
+      || sbx==fltk3::PLASTIC_DOWN_FRAME)
+  {
+    if (s->parent() == (fltk3::Group *)s->window() && fltk3::scheme_bg_) {
+      fltk3::scheme_bg_->draw(X-(X%((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->w()),
+                              Y-(Y%((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->h()),
+                              W+((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->w(),
+                              H+((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->h());
+    }
+  } else {
+    fltk3::color(s->color());
+    fltk3::rectf(X,Y,W,H);
   }
   fltk3::Widget*const* a = s->array();
   for (int i=s->children()-2; i--;) {

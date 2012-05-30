@@ -77,7 +77,7 @@ static void hscrollbar_callback(fltk3::Widget* s, void*) {
  */
 void fltk3::Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
-  fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
+  fltk3::Box* b = box() ? box() : fltk3::DOWN_BOX;
   X = fltk3::box_dx(b);
   Y = fltk3::box_dy(b);
   W = w()-fltk3::box_dw(b);
@@ -345,7 +345,7 @@ void fltk3::Browser_::draw() {
   int xo = 0, yo = 0;
 J1:
   if (damage() & fltk3::DAMAGE_ALL) { // redraw the box if full redraw
-    fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
+    fltk3::Box* b = box() ? box() : fltk3::DOWN_BOX;
     draw_box(b, xo, yo, w(), h(), color());
     drawsquare = 1;
   }

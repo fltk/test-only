@@ -55,7 +55,7 @@ namespace fltk3 {
   protected:
     
     uchar alloc;			// flag indicates if menu_ is a dynamic copy (=1) or not (=0)
-    uchar down_box_;
+    Box* down_box_;
     
   public:
     Menu_(int,int,int,int,const char * =0);
@@ -137,9 +137,9 @@ namespace fltk3 {
      fltk3::THIN_UP_BOX and selection_color() acts like 
      fltk3::WHITE, for back compatibility.    
      */
-    fltk3::Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
+    fltk3::Box* down_box() const {return down_box_;}
     /**    See fltk3::Boxtype fltk3::Menu_::down_box() const   */
-    void down_box(fltk3::Boxtype b) {down_box_ = b;}
+    void down_box(fltk3::Box* b) {down_box_ = b;}
     
     /** For back compatibility, same as selection_color() */
     fltk3::Color down_color() const {return selection_color();}

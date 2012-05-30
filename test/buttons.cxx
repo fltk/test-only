@@ -50,55 +50,68 @@ int main(int argc, char ** argv) {
 
   new fltk3::Widget(180,20,120,30,"fltk3::Button");
   { fltk3::Button* o = new fltk3::Button(180, 50, 30, 30, "7");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM));
+    o->box(fltk3::UP_BOX);
     o->shortcut('7');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(210, 50, 30, 30, "8");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT));
+    o->box(fltk3::UP_BOX);
     o->shortcut('8');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(240, 50, 30, 30, "9");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT));
+    o->box(fltk3::UP_BOX);
     o->shortcut('9');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(180, 80, 30, 30, "4");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('4');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(210, 80, 30, 30, "5");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('5');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(240, 80, 30, 30, "6");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('6');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(180, 110, 30, 30, "1");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('1');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(210, 110, 30, 30, "2");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('2');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(240, 110, 30, 30, "3");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('3');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(180, 140, 60, 30, "0");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('0');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(240, 140, 30, 30, ".");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_RIGHT|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('.');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(270, 50, 30, 60, "-");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_BOTTOM|fltk3::TIE_LEFT));
+    o->box(fltk3::UP_BOX);
     o->shortcut('-');
   } // fltk3::Button* o
   { fltk3::Button* o = new fltk3::Button(270, 110, 30, 60, "+/=");
-    o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    //o->box(fltk3::Boxtype(fltk3::UP_BOX|fltk3::TIE_LEFT|fltk3::TIE_TOP));
+    o->box(fltk3::UP_BOX);
     o->shortcut('=');
   } // fltk3::Button* o
   fltk3::Widget *tie = new fltk3::Widget(180,180,120,60,"multiple buttons can be tied together visually using the fltk3::TIE_... flags with the box type");

@@ -107,7 +107,7 @@ namespace fltk3 {
     char _showcollapse;			// 1=show collapse icons, 0=don't
     char _showroot;			// show the root item as part of the tree
     fltk3::TreeSort   _sortorder;		// none, ascening, descending, etc.
-    fltk3::Boxtype     _selectbox;		// selection box type
+    fltk3::Box*     _selectbox;		// selection box type
     fltk3::TreeSelect _selectmode;		// selection mode
   public:
     TreePrefs();
@@ -306,11 +306,11 @@ namespace fltk3 {
       _sortorder = val;
     }
     /// Get the default selection box's box drawing style as an fltk3::Boxtype.
-    inline fltk3::Boxtype selectbox() const {
+    inline fltk3::Box* selectbox() const {
       return(_selectbox);
     }
     /// Set the default selection box's box drawing style to \p val.
-    inline void selectbox(fltk3::Boxtype val) {
+    inline void selectbox(fltk3::Box* val) {
       _selectbox = val;
     }
     /// Returns 1 if the root item is to be shown, or 0 if not.

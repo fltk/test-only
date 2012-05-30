@@ -85,7 +85,7 @@ namespace fltk3 {
   typedef void (LabelMeasureF)(const fltk3::Label *label, int &width, int &height);
   
   /** Signature of some box drawing functions passed as parameters */
-  typedef void (BoxDrawF)(int x, int y, int w, int h, fltk3::Color color, fltk3::Boxtype type);
+  typedef void (BoxDrawF)(int x, int y, int w, int h, fltk3::Color color, fltk3::Box* type);
   
   /** Signature of some timeout callback functions passed as parameters */
   typedef void (*TimeoutHandler)(void *data);
@@ -901,13 +901,13 @@ namespace fltk3 {
   void set_labeltype(fltk3::Labeltype, fltk3::Labeltype from); // is it defined ?
   
   // boxtypes:
-  fltk3::BoxDrawF *get_boxtype(fltk3::Boxtype);
-  void set_boxtype(fltk3::Boxtype, fltk3::BoxDrawF*,uchar,uchar,uchar,uchar);
-  void set_boxtype(fltk3::Boxtype, fltk3::Boxtype from);
-  int box_dx(fltk3::Boxtype);
-  int box_dy(fltk3::Boxtype);
-  int box_dw(fltk3::Boxtype);
-  int box_dh(fltk3::Boxtype);
+  fltk3::BoxDrawF *get_boxtype(fltk3::Box*);
+  void set_boxtype(fltk3::Box*, fltk3::BoxDrawF*,uchar,uchar,uchar,uchar);
+  void set_boxtype(fltk3::Box*, fltk3::Box* from);
+  int box_dx(fltk3::Box*);
+  int box_dy(fltk3::Box*);
+  int box_dw(fltk3::Box*);
+  int box_dh(fltk3::Box*);
   int draw_box_active();
   
   // back compatibility:

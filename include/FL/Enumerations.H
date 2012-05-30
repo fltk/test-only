@@ -253,8 +253,10 @@ typedef enum {
 } Fl_Boxtype;
 
 namespace fltk3 {
-  inline Fl_Boxtype _3to1_boxtype(Boxtype k) { return (Fl_Boxtype)k; }
-  inline Boxtype _1to3_boxtype(Fl_Boxtype k) { return (Boxtype)k; }
+  extern int _3to1_boxtype_i(Box* k);
+  extern Box* _1to3_boxtype_i(int k);
+  inline Fl_Boxtype _3to1_boxtype(Box* k) { return (Fl_Boxtype)_3to1_boxtype_i(k); }
+  inline Box* _1to3_boxtype(Fl_Boxtype k) { return _1to3_boxtype_i((int)k); }
 }
 
 inline Fl_Boxtype fl_box(Fl_Boxtype b) {

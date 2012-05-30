@@ -913,14 +913,14 @@ namespace fltk3 {
     /// This is an fltk fltk3::Boxtype.
     /// The default is influenced by FLTK's current fltk3::scheme()
     ///
-    fltk3::Boxtype selectbox() const {
+    fltk3::Box* selectbox() const {
       return(_prefs.selectbox());
     }
     /// Gets the style of box used to draw selected items.
     /// This is an fltk fltk3::Boxtype.
     /// The default is influenced by FLTK's current fltk3::scheme()
     ///
-    void selectbox(fltk3::Boxtype val) {
+    void selectbox(fltk3::Box* val) {
       _prefs.selectbox(val);
       redraw();
     }

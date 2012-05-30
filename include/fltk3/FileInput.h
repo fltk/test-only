@@ -61,7 +61,7 @@ namespace fltk3 {
 
     fltk3::Color	errorcolor_;
     char		ok_entry_;
-    uchar		down_box_;
+    Box*		down_box_;
     short		buttons_[200];
     short		pressed_;
     
@@ -80,9 +80,9 @@ namespace fltk3 {
     
   public:
     /** Gets the box type used for the navigation bar. */
-    fltk3::Boxtype	down_box() const { return (fltk3::Boxtype)down_box_; }
+    fltk3::Box*	down_box() const { return down_box_; }
     /** Sets the box type to use for the navigation bar.  */
-    void		down_box(fltk3::Boxtype b) { down_box_ = b; }
+    void		down_box(fltk3::Box* b) { down_box_ = b; }
     
     /**
      Gets the current error color.

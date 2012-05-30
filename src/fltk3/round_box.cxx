@@ -85,7 +85,7 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
   }
 }
 
-void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype) {
+void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Box*) {
   uchar *g = fltk3::gray_ramp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
   draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g[(uchar)'N']);
@@ -99,7 +99,7 @@ void fl_classic_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor,
   draw(CLOSED,	    x,   y, w,   h, 2, (fltk3::Color)g[(uchar)'A']);
 }
 
-void fl_classic_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Boxtype) {
+void fl_classic_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor, fltk3::Box*) {
   uchar *g = fltk3::gray_ramp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
   draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g[(uchar)'H']);

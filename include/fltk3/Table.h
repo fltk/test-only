@@ -503,7 +503,7 @@ namespace fltk3 {
      the default being fltk3::NO_BOX. Changing this value will cause the table
      to redraw.
      */
-    inline void table_box(fltk3::Boxtype val) {
+    inline void table_box(fltk3::Box* val) {
       table->box(val);
       table_resized();
     }
@@ -511,7 +511,7 @@ namespace fltk3 {
     /**
      Returns the current box type used for the data table.
      */
-    inline fltk3::Boxtype table_box( void ) {
+    inline fltk3::Box* table_box( void ) {
       return(table->box());
     }
     

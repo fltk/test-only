@@ -171,8 +171,9 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
   
   draw_bg(X, Y, W, H);
   
-  fltk3::Boxtype box1 = slider();
-  if (!box1) {box1 = (fltk3::Boxtype)(box()&-2); if (!box1) box1 = fltk3::UP_BOX;}
+  fltk3::Box* box1 = slider();
+  // if (!box1) {box1 = (fltk3::Boxtype)(box()&-2); if (!box1) box1 = fltk3::UP_BOX;}
+  if (!box1) { box1 = fltk3::UP_BOX;}
   if (type() == fltk3::VERT_NICE_SLIDER) {
     draw_box(box1, xsl, ysl, wsl, hsl, fltk3::GRAY);
     int d = (hsl-4)/2;

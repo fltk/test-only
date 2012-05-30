@@ -59,7 +59,7 @@ void fltk3::Input::draw()
   if (input_type() == fltk3::HIDDEN_INPUT) {
     return;
   }
-  fltk3::Boxtype b = box();
+  fltk3::Box* b = box();
   if (damage() & fltk3::DAMAGE_ALL) {
     draw_box(b, color());
   }
@@ -657,7 +657,7 @@ int fltk3::Input::handle(int event) {
 
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
-        fltk3::Boxtype b = box();
+        fltk3::Box* b = box();
         Input_::handle_mouse(fltk3::box_dx(b), fltk3::box_dy(b),
                              w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
         newpos = position(); 
@@ -734,7 +734,7 @@ int fltk3::Input::handle(int event) {
       }
 #endif
       {
-        fltk3::Boxtype b = box();
+        fltk3::Box* b = box();
         Input_::handle_mouse(fltk3::box_dx(b), fltk3::box_dy(b),
                              w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
       }
@@ -770,7 +770,7 @@ int fltk3::Input::handle(int event) {
        return 1;
        */
   }
-  fltk3::Boxtype b = box();
+  fltk3::Box* b = box();
   return Input_::handletext(event,
                             fltk3::box_dx(b), fltk3::box_dy(b),
                             w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));

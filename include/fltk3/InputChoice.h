@@ -171,9 +171,9 @@ namespace fltk3 {
     /** Removes all items from the menu. */
     void clear() { menu_->clear(); }
     /** Gets the box type of the menu button */
-    fltk3::Boxtype down_box() const { return (menu_->down_box()); }
+    fltk3::Box* down_box() const { return (menu_->down_box()); }
     /** Sets the box type of the menu button */
-    void down_box(fltk3::Boxtype b) { menu_->down_box(b); }
+    void down_box(fltk3::Box* b) { menu_->down_box(b); }
     /** Gets the fltk3::MenuItem array used for the menu. */
     const fltk3::MenuItem *menu() { return (menu_->menu()); }
     /** Sets the fltk3::MenuItem array used for the menu. */

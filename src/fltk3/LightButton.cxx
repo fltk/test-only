@@ -59,85 +59,83 @@ void fltk3::LightButton::draw()
   
   if (down_box()) {
     // draw other down_box() styles:
-    switch (down_box()) {
-      case fltk3::DOWN_BOX :
-      case fltk3::UP_BOX :
-      case fltk3::PLASTIC_DOWN_BOX :
-      case fltk3::PLASTIC_UP_BOX :
-        // Check box...
-        draw_box(down_box(), dx, dy, W, W, fltk3::BACKGROUND2_COLOR);
-	if (value()) {
-	  if (!fltk3::scheme()) {
-	    fltk3::color(fltk3::SELECTION_COLOR);
-	  } else {
-	    fltk3::color(col);
-	  }
-	  int tx = dx + 3;
-	  int tw = W - 6;
-	  int d1 = tw/3;
-	  int d2 = tw-d1;
-	  int ty = dy + (W+d2)/2-d1-2;
-	  for (int n = 0; n < 3; n++, ty++) {
-	    fltk3::line(tx, ty, tx+d1, ty+d1);
-	    fltk3::line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
-	  }
-	}
-        break;
-      case fltk3::ROUND_DOWN_BOX :
-      case fltk3::ROUND_UP_BOX :
-        // Radio button...
-        draw_box(down_box(), dx, dy, W, W, fltk3::BACKGROUND2_COLOR);
-	if (value()) {
-	  int tW = (W - fltk3::box_dw(down_box())) / 2 + 1;
-	  if ((W - tW) & 1) tW++; // Make sure difference is even to center
-	  int tdx = dx + (W - tW) / 2;
-	  int tdy = dy + (W - tW) / 2;
-          
-	  if (!fltk3::scheme()) {
-	    fltk3::color(fltk3::SELECTION_COLOR);
-	    tW --;
-	    fltk3::pie(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fltk3::arc(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
-	  } else {
-            fltk3::color(col);
-          }
-          
-	  switch (tW) {
-              // Larger circles draw fine...
-	    default :
-              fltk3::pie(tdx, tdy, tW, tW, 0.0, 360.0);
-	      break;
-              
-              // Small circles don't draw well on many systems...
-	    case 6 :
-	      fltk3::rectf(tdx + 2, tdy, tW - 4, tW);
-	      fltk3::rectf(tdx + 1, tdy + 1, tW - 2, tW - 2);
-	      fltk3::rectf(tdx, tdy + 2, tW, tW - 4);
-	      break;
-              
-	    case 5 :
-	    case 4 :
-	    case 3 :
-	      fltk3::rectf(tdx + 1, tdy, tW - 2, tW);
-	      fltk3::rectf(tdx, tdy + 1, tW, tW - 2);
-	      break;
-              
-	    case 2 :
-	    case 1 :
-	      fltk3::rectf(tdx, tdy, tW, tW);
-	      break;
-	  }
-          
-	  if (!fltk3::scheme()) {
-	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
-	    fltk3::arc(tdx, tdy, tW + 1, tW + 1, 60.0, 180.0);
-	  }
-	}
-        break;
-      default :
-        draw_box(down_box(), dx, dy, W, W, col);
-        break;
+    fltk3::Box* db = down_box();
+    if (   db==fltk3::DOWN_BOX
+        || db==fltk3::UP_BOX
+        || db==fltk3::PLASTIC_DOWN_BOX
+        || db==fltk3::PLASTIC_UP_BOX)
+    {
+      // Check box...
+      draw_box(down_box(), dx, dy, W, W, fltk3::BACKGROUND2_COLOR);
+      if (value()) {
+        if (!fltk3::scheme()) {
+          fltk3::color(fltk3::SELECTION_COLOR);
+        } else {
+          fltk3::color(col);
+        }
+        int tx = dx + 3;
+        int tw = W - 6;
+        int d1 = tw/3;
+        int d2 = tw-d1;
+        int ty = dy + (W+d2)/2-d1-2;
+        for (int n = 0; n < 3; n++, ty++) {
+          fltk3::line(tx, ty, tx+d1, ty+d1);
+          fltk3::line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
+        }
+      }
+    } else if (   db==fltk3::ROUND_DOWN_BOX
+               || db==fltk3::ROUND_UP_BOX) {
+      // Radio button...
+      draw_box(down_box(), dx, dy, W, W, fltk3::BACKGROUND2_COLOR);
+      if (value()) {
+        int tW = (W - fltk3::box_dw(down_box())) / 2 + 1;
+        if ((W - tW) & 1) tW++; // Make sure difference is even to center
+        int tdx = dx + (W - tW) / 2;
+        int tdy = dy + (W - tW) / 2;
+        
+        if (!fltk3::scheme()) {
+          fltk3::color(fltk3::SELECTION_COLOR);
+          tW --;
+          fltk3::pie(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
+          fltk3::arc(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
+          fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
+        } else {
+          fltk3::color(col);
+        }
+        
+        switch (tW) {
+            // Larger circles draw fine...
+          default :
+            fltk3::pie(tdx, tdy, tW, tW, 0.0, 360.0);
+            break;
+            
+            // Small circles don't draw well on many systems...
+          case 6 :
+            fltk3::rectf(tdx + 2, tdy, tW - 4, tW);
+            fltk3::rectf(tdx + 1, tdy + 1, tW - 2, tW - 2);
+            fltk3::rectf(tdx, tdy + 2, tW, tW - 4);
+            break;
+            
+          case 5 :
+          case 4 :
+          case 3 :
+            fltk3::rectf(tdx + 1, tdy, tW - 2, tW);
+            fltk3::rectf(tdx, tdy + 1, tW, tW - 2);
+            break;
+            
+          case 2 :
+          case 1 :
+            fltk3::rectf(tdx, tdy, tW, tW);
+            break;
+        }
+        
+        if (!fltk3::scheme()) {
+          fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
+          fltk3::arc(tdx, tdy, tW + 1, tW + 1, 60.0, 180.0);
+        }
+      }
+    } else {
+      draw_box(down_box(), dx, dy, W, W, col);
     }
   } else {
     // if down_box() is zero, draw light button style:

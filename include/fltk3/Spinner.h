@@ -143,13 +143,16 @@ namespace fltk3 {
       input_.type(fltk3::INT_INPUT);
       input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
       input_.callback((fltk3::Callback *)sb_cb, this);
-      input_.box(Boxtype(input_.box()|TIE_RIGHT));
+      //input_.box(Boxtype(input_.box()|TIE_RIGHT));
+      input_.box(input_.box());
       
       up_button_.callback((fltk3::Callback *)sb_cb, this);
-      up_button_.box(Boxtype(up_button_.box()|TIE_LEFT|TIE_BOTTOM));
+      //up_button_.box(Boxtype(up_button_.box()|TIE_LEFT|TIE_BOTTOM));
+      up_button_.box(up_button_.box());
       
       down_button_.callback((fltk3::Callback *)sb_cb, this);
-      down_button_.box(Boxtype(down_button_.box()|TIE_LEFT|TIE_TOP));
+      //down_button_.box(Boxtype(down_button_.box()|TIE_LEFT|TIE_TOP));
+      down_button_.box(down_button_.box());
     }
     
     /** Sets or returns the format string for the value. */

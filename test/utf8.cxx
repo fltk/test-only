@@ -92,7 +92,7 @@ public:
   
   int test_fixed_pitch(void);
   
-  FontDisplay(fltk3::Boxtype B, int X, int Y, int W, int H, const char *L = 0) 
+  FontDisplay(fltk3::Box* B, int X, int Y, int W, int H, const char *L = 0) 
   : fltk3::Widget(X, Y, W, H, L)
   {
     box(B);
@@ -493,7 +493,7 @@ public:
   right_left_input (int x, int y, int w, int h) : fltk3::Input(x, y, w, h) {};
   void draw() {
     if (type() == fltk3::HIDDEN_INPUT) return;
-    fltk3::Boxtype b = box();
+    fltk3::Box* b = box();
     if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
     drawtext(fltk3::box_dx(b)+3, fltk3::box_dy(b),
              w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b));

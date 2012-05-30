@@ -58,6 +58,7 @@ namespace fltk3 {
   class Image;
   class GLWindow;
   class Style;
+  class Box;
 
   /** Default callback type definition for all fltk widgets (by far the most used) */
   typedef void (Callback)(Widget*, void*);
@@ -333,9 +334,9 @@ namespace fltk3 {
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
     void* user_data_;
-    Color color_;
-    Color color2_;
-    Boxtype box_;
+    Color color_;  // FIXME: should be in Style
+    Color color2_;  // FIXME: should be in Style
+    Box* box_;  // FIXME: should be in Style
     uchar type_;
     uchar damage_;
     uchar when_;    
@@ -374,11 +375,11 @@ namespace fltk3 {
     };
     
     void draw_box() const;
-    void draw_box(Boxtype t, Color c) const;
-    void draw_box(Boxtype t, int x,int y,int w,int h, Color c) const;
+    void draw_box(Box* t, Color c) const;
+    void draw_box(Box* t, int x,int y,int w,int h, Color c) const;
     void draw_backdrop() const;
     void draw_focus();
-    void draw_focus(Boxtype t, int x,int y,int w,int h) const;
+    void draw_focus(Box* t, int x,int y,int w,int h) const;
     void draw_label() const;
     void draw_label(int, int, int, int) const;
     
@@ -396,7 +397,7 @@ namespace fltk3 {
      */
     Widget(int x, int y, int w, int h, const char *label=0L);
     
-    Widget(fltk3::Boxtype b, int x, int y, int w, int h, const char *label=0L);
+    Widget(fltk3::Box* b, int x, int y, int w, int h, const char *label=0L);
     
     /** Destroys the widget.
      Destroying single widgets is not very common. You almost always want to 
@@ -524,7 +525,7 @@ namespace fltk3 {
      \return the current box type
      \see box(fltk3::Boxtype), fltk3::Boxtype
      */
-    Boxtype box() const {return (Boxtype)box_;}
+    Box* box() const {return box_;}
     
     /** Sets the box type for the widget. 
      This identifies a routine that draws the background of the widget.
@@ -533,7 +534,7 @@ namespace fltk3 {
      \param[in] new_box the new box type
      \see box(), fltk3::Boxtype
      */
-    void box(Boxtype new_box) {box_ = new_box;}
+    void box(Box* new_box) {box_ = new_box;}
     
     /** Gets the background color of the widget.
      \return current background color

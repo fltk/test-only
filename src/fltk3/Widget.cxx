@@ -172,7 +172,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L)
   if (fltk3::Group::current()) fltk3::Group::current()->add(this);
 }
 
-fltk3::Widget::Widget(fltk3::Boxtype b, int X, int Y, int W, int H, const char* L) 
+fltk3::Widget::Widget(fltk3::Box* b, int X, int Y, int W, int H, const char* L) 
 : fltk3::Label(X, Y, W, H, L)
 {
   tooltip_       = 0;
@@ -242,17 +242,15 @@ void fltk3::Widget::draw_focus() {
 
 /** Draws a focus box for the widget at the given position and size */
 void
-fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
+fltk3::Widget::draw_focus(fltk3::Box* B, int X, int Y, int W, int H) const {
   if (!fltk3::visible_focus()) return;
-  switch (B) {
-    case fltk3::DOWN_BOX:
-    case fltk3::DOWN_FRAME:
-    case fltk3::THIN_DOWN_BOX:
-    case fltk3::THIN_DOWN_FRAME:
-      X ++;
-      Y ++;
-    default:
-      break;
+  if (   B==fltk3::DOWN_BOX
+      || B==fltk3::DOWN_FRAME
+      || B==fltk3::THIN_DOWN_BOX
+      || B==fltk3::THIN_DOWN_FRAME)
+  {
+    X ++;
+    Y ++;
   }
 
   fltk3::color(fltk3::contrast(fltk3::BLACK, color()));

@@ -87,7 +87,7 @@ namespace fltk3 {
     unsigned int shortcut_;
     char value_;
     char oldval;
-    uchar down_box_;
+    Box* down_box_;
     
   protected:
     
@@ -155,14 +155,14 @@ namespace fltk3 {
      Returns the current down box type, which is drawn when value() is non-zero.
      \retval fltk3::Boxtype
      */
-    Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
+    Box* down_box() const {return down_box_;}
     
     /**
      Sets the down box type. The default value of 0 causes FLTK to figure out
      the correct matching down version of box().
      \param[in] b down box type
      */
-    void down_box(fltk3::Boxtype b) {down_box_ = b;}
+    void down_box(fltk3::Box* b) {down_box_ = b;}
     
     /// (for backwards compatibility)
     void shortcut(const char *s) {shortcut(fltk3::old_shortcut(s));}

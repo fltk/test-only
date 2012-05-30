@@ -361,7 +361,7 @@ void fltk3::TabGroup::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, i
   char prev_draw_shortcut = fltk3::draw_shortcut;
   fltk3::draw_shortcut = 1;
 
-  fltk3::Boxtype bt = (o==push_ &&!sel) ? fltk3::down(box()) : box();
+  fltk3::Box* bt = (o==push_ &&!sel) ? fltk3::down(box()) : box();
 
   // compute offsets to make selected tab look bigger
   int yofs = sel ? 0 : BORDER;

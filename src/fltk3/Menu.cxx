@@ -167,7 +167,7 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
   fltk3::Color color = m ? m->color() : fltk3::GRAY;
   if (selected) {
     fltk3::Color r = m ? m->selection_color() : fltk3::SELECTION_COLOR;
-    fltk3::Boxtype b = m && m->down_box() ? m->down_box() : fltk3::FLAT_BOX;
+    fltk3::Box* b = m && m->down_box() ? m->down_box() : fltk3::FLAT_BOX;
     if (fltk3::contrast(r,color)!=r) { // back compatibility boxtypes
       if (selected == 2) { // menu title
 	r = color;

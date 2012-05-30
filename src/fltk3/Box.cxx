@@ -25,37 +25,95 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Widget.h>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
 #include <fltk3/Box.h>
-#include <fltk3/Wrapper.h>
 
-#if 0
 
-fltk3::Widget::Box(int X, int Y, int W, int H, const char *l)
-: fltk3::Widget(X,Y,W,H,l) 
+fltk3::Box* fltk3::up(fltk3::Box* b) {
+  if (b) {
+    return b->up();
+  } else {
+    return UP_BOX;
+  }
+}
+
+
+fltk3::Box* fltk3::down(fltk3::Box* b) {
+  if (b) {
+    return b->down();
+  } else {
+    return DOWN_BOX;
+  }
+}
+
+
+fltk3::Box* fltk3::frame(fltk3::Box* b) {
+  if (b) {
+    return b->down();
+  } else {
+    return BORDER_FRAME;
+  }
+}
+
+
+fltk3::Box* fltk3::box(fltk3::Box* b) {
+  if (b) {
+    return b->box();
+  } else {
+    return FRAME_BOX;
+  }
+}
+
+//------------------------------------------------------------------------------
+
+void fltk3::NoBox::_draw(const fltk3::Rectangle& r) const
 {
+  // empty
 }
 
+static fltk3::NoBox noBox("noBox");
 
-fltk3::Widget::Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l)
-: fltk3::Widget(X,Y,W,H,l) 
+/*!
+ Draws an empty rectangle (a.k.a. nothing).
+ */
+fltk3::Box* const fltk3::NO_BOX = &noBox;
+
+
+//------------------------------------------------------------------------------
+
+void fltk3::FlatBox::_draw(const fltk3::Rectangle& r) const
 {
-  box(b);
+  // FIXME: if (drawflags(INVISIBLE)) return;
+  if (r.empty()) return;
+  const fltk3::Color fg = fltk3::color();
+  // FIXME: setcolor(fltk3::bgcolor());
+  fltk3::rectf(r.x(), r.y(), r.w(), r.h());
+  fltk3::color(fg);
 }
 
+static fltk3::FlatBox flatBox("flatBox");
 
-void fltk3::Widget::draw() {
-  draw_box();
-  draw_label();
-}
+/*!
+ Draws a flat rectangle of bgcolor().
+ */
+fltk3::Box* const fltk3::FLAT_BOX = &flatBox;
+
+//------------------------------------------------------------------------------
+
+fltk3::Box* const fltk3::FRAME_BOX = fltk3::ENGRAVED_BOX;
+fltk3::Box* const fltk3::GTK_UP_BOX = fltk3::UP_BOX;
+fltk3::Box* const fltk3::GTK_DOWN_BOX = fltk3::DOWN_BOX;
+fltk3::Box* const fltk3::GTK_UP_FRAME = fltk3::UP_FRAME;
+fltk3::Box* const fltk3::GTK_DOWN_FRAME = fltk3::DOWN_FRAME;
+fltk3::Box* const fltk3::GTK_THIN_UP_BOX = fltk3::THIN_UP_BOX;
+fltk3::Box* const fltk3::GTK_THIN_DOWN_BOX = fltk3::THIN_DOWN_BOX;
+fltk3::Box* const fltk3::GTK_THIN_UP_FRAME = fltk3::THIN_UP_FRAME;
+fltk3::Box* const fltk3::GTK_THIN_DOWN_FRAME = fltk3::THIN_DOWN_FRAME;
+fltk3::Box* const fltk3::GTK_ROUND_UP_BOX = fltk3::ROUND_UP_BOX;
+fltk3::Box* const fltk3::GTK_ROUND_DOWN_BOX = fltk3::ROUND_DOWN_BOX;
 
 
-int fltk3::Widget::handle(int event) {
-  if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
-  else return 0;
-}
-
-#endif
 
 //
 // End of "$Id$".

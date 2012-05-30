@@ -42,7 +42,7 @@ class FontDisplay : public fltk3::Widget {
   void draw();
 public:
   int font, size;
-  FontDisplay(fltk3::Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
+  FontDisplay(fltk3::Box* B, int X, int Y, int W, int H, const char* L = 0) :
     fltk3::Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
 void FontDisplay::draw() {

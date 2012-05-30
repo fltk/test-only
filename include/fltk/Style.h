@@ -44,37 +44,7 @@ class FL_API Rectangle;
   
 class Symbol;
 typedef Symbol Box;
-  
-static FL_API Box* const UP_BOX = 0L;
-#if 0 // FIXME: 123
-extern FL_API Box* const DOWN_BOX;
-extern FL_API Box* const DEFAULT_FOCUS_BOX;
-extern FL_API Box* const THIN_UP_BOX;
-extern FL_API Box* const THIN_DOWN_BOX;
-extern FL_API Box* const ENGRAVED_BOX;
-extern FL_API Box* const EMBOSSED_BOX;
-extern FL_API Box* const BORDER_BOX;
-extern FL_API Box* const FLAT_BOX;
-extern FL_API Box* const HIGHLIGHT_UP_BOX;
-extern FL_API Box* const HIGHLIGHT_DOWN_BOX;
-extern FL_API Box* const ROUND_UP_BOX;
-extern FL_API Box* const ROUND_DOWN_BOX;
-extern FL_API Box* const DIAMOND_UP_BOX;
-extern FL_API Box* const DIAMOND_DOWN_BOX;
-extern FL_API Box* const NO_BOX;
-extern FL_API Box* const SHADOW_BOX;
-extern FL_API Box* const ROUNDED_BOX;
-extern FL_API Box* const RSHADOW_BOX;
-extern FL_API Box* const RFLAT_BOX;
-extern FL_API Box* const OVAL_BOX;
-extern FL_API Box* const OSHADOW_BOX;
-extern FL_API Box* const OFLAT_BOX;
-extern FL_API Box* const BORDER_FRAME;
-extern FL_API Box* const PLASTIC_UP_BOX;
-extern FL_API Box* const PLASTIC_DOWN_BOX;
-#endif
-  
-  
+
     
 #if 0 // FIXME: 123
 struct Font;
@@ -219,11 +189,42 @@ FL_API bool reset_theme();
 
 extern "C" FL_API bool fltk_theme();
 
+
 namespace fltk3 {
   inline int _2to3_fontsize(float b) { return (int)b; }
   inline float _3to2_fontsize(int b) { return (float)b; }
-  inline Boxtype _2to3_boxtype(fltk::Box *b) { return UP_BOX; }
-  inline fltk::Box* _3to2_boxtype(Boxtype b) { return 0L; }
+  inline Box* _2to3_boxtype(fltk::Box* b) { return (Box*)b; }
+  inline fltk::Box* _3to2_boxtype(Box* b) { return (fltk::Box*)b; }
+}
+
+
+namespace fltk {
+  static FL_API Box* const UP_BOX = fltk3::_3to2_boxtype(fltk3::UP_BOX);
+  extern FL_API Box* const DOWN_BOX = fltk3::_3to2_boxtype(fltk3::DOWN_BOX);
+  //extern FL_API Box* const DEFAULT_FOCUS_BOX = fltk3::_3to2_boxtype(fltk3::DEFAULT_FOCUS_BOX);
+  extern FL_API Box* const THIN_UP_BOX = fltk3::_3to2_boxtype(fltk3::THIN_UP_BOX);
+  extern FL_API Box* const THIN_DOWN_BOX = fltk3::_3to2_boxtype(fltk3::THIN_DOWN_BOX);
+  extern FL_API Box* const ENGRAVED_BOX = fltk3::_3to2_boxtype(fltk3::ENGRAVED_BOX);
+  extern FL_API Box* const EMBOSSED_BOX = fltk3::_3to2_boxtype(fltk3::EMBOSSED_BOX);
+  extern FL_API Box* const BORDER_BOX = fltk3::_3to2_boxtype(fltk3::BORDER_BOX);
+  extern FL_API Box* const FLAT_BOX = fltk3::_3to2_boxtype(fltk3::FLAT_BOX);
+  extern FL_API Box* const HIGHLIGHT_UP_BOX = fltk3::_3to2_boxtype(fltk3::UP_BOX);
+  extern FL_API Box* const HIGHLIGHT_DOWN_BOX = fltk3::_3to2_boxtype(fltk3::UP_BOX);
+  extern FL_API Box* const ROUND_UP_BOX = fltk3::_3to2_boxtype(fltk3::ROUND_UP_BOX);
+  extern FL_API Box* const ROUND_DOWN_BOX = fltk3::_3to2_boxtype(fltk3::ROUND_DOWN_BOX);
+  extern FL_API Box* const DIAMOND_UP_BOX = fltk3::_3to2_boxtype(fltk3::DIAMOND_UP_BOX);
+  extern FL_API Box* const DIAMOND_DOWN_BOX = fltk3::_3to2_boxtype(fltk3::DIAMOND_DOWN_BOX);
+  extern FL_API Box* const NO_BOX = fltk3::_3to2_boxtype(fltk3::NO_BOX);
+  extern FL_API Box* const SHADOW_BOX = fltk3::_3to2_boxtype(fltk3::SHADOW_BOX);
+  extern FL_API Box* const ROUNDED_BOX = fltk3::_3to2_boxtype(fltk3::ROUNDED_BOX);
+  extern FL_API Box* const RSHADOW_BOX = fltk3::_3to2_boxtype(fltk3::RSHADOW_BOX);
+  extern FL_API Box* const RFLAT_BOX = fltk3::_3to2_boxtype(fltk3::RFLAT_BOX);
+  extern FL_API Box* const OVAL_BOX = fltk3::_3to2_boxtype(fltk3::OVAL_BOX);
+  extern FL_API Box* const OSHADOW_BOX = fltk3::_3to2_boxtype(fltk3::OSHADOW_BOX);
+  extern FL_API Box* const OFLAT_BOX = fltk3::_3to2_boxtype(fltk3::OFLAT_BOX);
+  extern FL_API Box* const BORDER_FRAME = fltk3::_3to2_boxtype(fltk3::BORDER_FRAME);
+  extern FL_API Box* const PLASTIC_UP_BOX = fltk3::_3to2_boxtype(fltk3::PLASTIC_UP_BOX);
+  extern FL_API Box* const PLASTIC_DOWN_BOX = fltk3::_3to2_boxtype(fltk3::PLASTIC_DOWN_BOX);
 }
 
 

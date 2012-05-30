@@ -636,7 +636,7 @@ namespace fltk3 {
   // boxtypes:
   FLTK3_EXPORT void frame(const char* s, int x, int y, int w, int h);
   FLTK3_EXPORT void frame2(const char* s, int x, int y, int w, int h);
-  FLTK3_EXPORT void draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Color);
+  FLTK3_EXPORT void draw_box(fltk3::Box*, int x, int y, int w, int h, fltk3::Color);
   
   // images:
   

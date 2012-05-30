@@ -34,7 +34,7 @@
 #include <fltk3/draw.h>
 
 void fltk3::ValueOutput::draw() {
-  fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
+  fltk3::Box* b = box() ? box() : fltk3::DOWN_BOX;
   int X =     fltk3::box_dx(b);
   int Y =     fltk3::box_dy(b);
   int W = w()-fltk3::box_dw(b);

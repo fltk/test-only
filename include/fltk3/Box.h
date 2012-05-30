@@ -31,55 +31,375 @@
 #ifndef FLTK3_BOX_H
 #define FLTK3_BOX_H
 
-#include "Widget.h"
+#include "Symbol.h"
 
-#if 0
 /* Comment from matt , r9557
  * Removed fltk3::Box as a wiget class. In FLTK2, boxes are drawn simply by 
  * using fltk::Widget. I assume we could add fltk3::BoxWidget. Why all this? 
  * 'Box' will be used later as a base class for a much more flexible Boxtype.
  */
 
-namespace fltk3 { 
+namespace fltk3 {
   
-  class Widget;
-
-  /**
-   \brief This widget draws a box with an optional label.
-   
-   This widget simply draws its box, and possibly it's label. Putting it
-   before some other widgets and making it big enough to surround them
-   will let you draw a frame around them.
-   */
-  class FLTK3_EXPORT Box : public fltk3::Widget {
-    
-  protected:
-    void draw();
-    
+  class FLTK3_EXPORT Box : public Symbol {
   public:
-    /**
-     \brief Box constructor.
-     
-     This constructor sets box() to fltk3::NO_BOX, which means it is invisible. 
-     However such widgets are useful as placeholders or 
-     fltk3::Group::resizable() values.  To change the box to something visible, 
-     use box(n).
-     */
-    Box(int X, int Y, int W, int H, const char *l=0);
+    Box(const char *name=0L) 
+    : Symbol(name) { }
     
     /**
-     \brief Box constructor.
-     
-     This constructor also sets the box type.
+     For shaded boxes, return the box with "raised" graphics.
      */
-    Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l);
+    virtual Box* up() { return this; }
+    
+    /**
+     For shaded boxes, return the box with "lowered" graphics.
+     */
+    virtual Box* down() { return this; }
+    
+    /**
+     Return the corresponding frame type (box without background).
+     */
+    virtual Box* frame() { return this; }
 
-    virtual int handle(int);
+    /**
+     Return the corresponding filled box type (box with background).
+     */
+    virtual Box* box() { return this; }
+  };
+/*
+ {fl_no_box,                   0,0,0,0,1},		
+ {fl_flat_box,                 0,0,0,0,1}, // fltk3::FLAT_BOX
+ {fl_gtk_up_box,		2,2,4,4,0}, // FL_GTK_UP_BOX,
+ {fl_gtk_down_box,		2,2,4,4,0}, // FL_GTK_DOWN_BOX,
+ {fl_gtk_up_frame,		2,2,4,4,0}, // FL_GTK_UP_FRAME,
+ {fl_gtk_down_frame,           2,2,4,4,0}, // FL_GTK_DOWN_FRAME,
+ {fl_gtk_thin_up_box,		1,1,2,2,0}, // FL_GTK_THIN_ROUND_UP_BOX,
+ {fl_gtk_thin_down_box,	1,1,2,2,0}, // FL_GTK_THIN_ROUND_DOWN_BOX,
+ {fl_gtk_thin_up_frame,	1,1,2,2,0}, // FL_GTK_THIN_UP_FRAME,
+ {fl_gtk_thin_down_frame,	1,1,2,2,0}, // FL_GTK_THIN_DOWN_FRAME,
+ {fl_engraved_box,             2,2,4,4,1},
+ {fl_embossed_box,             2,2,4,4,1},
+ {fl_engraved_frame,           2,2,4,4,1},
+ {fl_embossed_frame,           2,2,4,4,1},
+ {fl_border_box,               1,1,2,2,1},
+ {fl_shadow_box,               1,1,5,5,0}, // FL_SHADOW_BOX,
+ {fl_border_frame,             1,1,2,2,1},
+ {fl_shadow_frame,             1,1,5,5,0}, // FL_SHADOW_FRAME,
+*/
+  
+  class FLTK3_EXPORT NoBox : public Box {
+  public:
+    void _draw(const Rectangle&) const;
+    NoBox(const char* name) : fltk3::Box(name) { set_inset(0, 0, 0, 0); }
+  };
+
+  
+  class FLTK3_EXPORT FlatBox : public Box {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return true; }
+    bool is_frame() const { return true; }
+    FlatBox(const char* name) : fltk3::Box(name) { set_inset(0, 0, 0, 0); }
   };
   
-} // namespace
+  class FLTK3_EXPORT UpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    UpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT DownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    DownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ThinUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ThinUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT ThinDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ThinDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT EngravedBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    EngravedBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT EmbossedBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    EmbossedBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT BorderBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    BorderBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT ShadowBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    ShadowBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -5, -5); }
+  };
+  
+  class FLTK3_EXPORT RoundedBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    RoundedBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, 2, 2); }
+  };
+  
+  class FLTK3_EXPORT RShadowBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    RShadowBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT RFlatBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    RFlatBox(const char* name) : fltk3::FlatBox(name) { set_inset(0, 0, 0, 0); }
+  };
+  
+  class FLTK3_EXPORT RoundUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    RoundUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT RoundDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    RoundDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT DiamondUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    DiamondUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(0, 0, 0, 0); }
+  };
+  
+  class FLTK3_EXPORT DiamondDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    DiamondDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(0, 0, 0, 0); }
+  };
+  
+  class FLTK3_EXPORT OvalBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    OvalBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT OShadowBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    OShadowBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT OFlatBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    OFlatBox(const char* name) : fltk3::FlatBox(name) { set_inset(0, 0, 0, 0); }
+  };
+  
+  class FLTK3_EXPORT PlasticUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    PlasticUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(4, 4, -8, -8); }
+  };
+  
+  class FLTK3_EXPORT PlasticDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    PlasticDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT PlasticThinUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    PlasticThinUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT PlasticThinDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    PlasticThinDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT PlasticRoundUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    PlasticRoundUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT PlasticRoundDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    PlasticRoundDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicThinUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicThinUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT ClassicThinDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicThinDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT ClassicRoundUpBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicRoundUpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicRoundDownBox : public FlatBox {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicRoundDownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  
+  class FLTK3_EXPORT BorderFrame : public Box {
+  public:
+    void _draw(const Rectangle&) const;
+    bool fills_rectangle() const { return false; }
+    bool is_frame() const { return true; }
+    BorderFrame(const char* name) : fltk3::Box(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT UpFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    UpFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT DownFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    DownFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ThinUpFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ThinUpFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT ThinDownFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ThinDownFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT EngravedFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    EngravedFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT EmbossedFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    EmbossedFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ShadowFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ShadowFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -5, -5); }
+  };
+  
+  class FLTK3_EXPORT RoundedFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    RoundedFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT OvalFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    OvalFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT PlasticUpFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    PlasticUpFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT PlasticDownFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    PlasticDownFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicUpFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicUpFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicDownFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicDownFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(2, 2, -4, -4); }
+  };
+  
+  class FLTK3_EXPORT ClassicThinUpFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicThinUpFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -2, -2); }
+  };
+  
+  class FLTK3_EXPORT ClassicThinDownFrame : public BorderFrame {
+  public:
+    void _draw(const Rectangle&) const;
+    ClassicThinDownFrame(const char* name) : fltk3::BorderFrame(name) { set_inset(1, 1, -2, -2); }
+  };
 
-#endif
+}
+
 
 #endif
 

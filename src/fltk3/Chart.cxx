@@ -35,7 +35,7 @@
 #define ARCINC	(2.0*M_PI/360.0)
 
 // this function is in fl_boxtype.cxx:
-void fl_rectbound(int x,int y,int w,int h, fltk3::Color color, fltk3::Boxtype);
+void fl_rectbound(int x,int y,int w,int h, fltk3::Color color, fltk3::Box*);
 
 /* Widget specific information */
 
@@ -67,9 +67,9 @@ static void draw_barchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
     int hh = (int)rint(entries[i].val*incr);
     if (hh < 0)
-      fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-hh+1, (fltk3::Color)entries[i].col, (fltk3::Boxtype)0);
+      fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-hh+1, (fltk3::Color)entries[i].col, (fltk3::Box*)0);
     else if (hh > 0)
-      fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(fltk3::Color)entries[i].col, (fltk3::Boxtype)0);
+      fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(fltk3::Color)entries[i].col, (fltk3::Box*)0);
   }
   /* Draw the labels */
   fltk3::color(textcolor);
@@ -113,9 +113,9 @@ static void draw_horbarchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
     int ww = (int)rint(entries[i].val*incr);
     if (ww > 0)
-      fl_rectbound(zeroh,y+i*bwidth,ww+1,bwidth+1, (fltk3::Color)entries[i].col, (fltk3::Boxtype)0);
+      fl_rectbound(zeroh,y+i*bwidth,ww+1,bwidth+1, (fltk3::Color)entries[i].col, (fltk3::Box*)0);
     else if (ww < 0)
-      fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(fltk3::Color)entries[i].col, (fltk3::Boxtype)0);
+      fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(fltk3::Color)entries[i].col, (fltk3::Box*)0);
   }
   /* Draw the labels */
   fltk3::color(textcolor);
@@ -232,7 +232,7 @@ static void draw_piechart(int x,int y,int w,int h,
 
 void fltk3::Chart::draw() {
   draw_box();
-  fltk3::Boxtype b = box();
+  fltk3::Box* b = box();
   int xx = x()+fltk3::box_dx(b); // was 9 instead of dx...
   int yy = y()+fltk3::box_dy(b);
   int ww = w()-fltk3::box_dw(b);

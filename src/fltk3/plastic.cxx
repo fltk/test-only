@@ -34,6 +34,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
+#include <fltk3/Box.h>
 #include "flstring.h"
 
 //
@@ -282,7 +283,7 @@ static void shade_round(int x, int y, int w, int h, const char *c, fltk3::Color 
 }
 
 
-void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
+void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Box*) {
   frame_rect(x, y, w, h - 1, "KLDIIJLM", c);
 }
 
@@ -304,7 +305,7 @@ static void narrow_thin_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
+void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Box*) {
 #ifdef USE_OLD_PLASTIC_BOX
   shade_rect(x + 2, y + 2, w - 4, h - 5, "RVQNOPQRSTUVWVQ", c);
   up_frame(x, y, w, h, c);
@@ -319,7 +320,7 @@ void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::B
 }
 
 
-void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Box* t) {
 #ifdef USE_OLD_PLASTIC_BOX
   shade_rect(x + 2, y + 2, w - 4, h - 5, "RVQNOPQRSTUVWVQ", c);
   up_frame(x, y, w, h, c);
@@ -334,18 +335,18 @@ void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtyp
 }
 
 
-void fl_plastic_up_round(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
+void fl_plastic_up_round(int x, int y, int w, int h, fltk3::Color c, fltk3::Box*) {
   shade_round(x, y, w, h, "RVQNOPQRSTUVWVQ", c);
   frame_round(x, y, w, h, "IJLM", c);
 }
 
 
-void fl_plastic_down_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
+void fl_plastic_down_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Box*) {
   frame_rect(x, y, w, h - 1, "LLLLTTRR", c);
 }
 
 
-void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype t) {
+void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Box* t) {
   if (w > 6 && h > 6) {
     shade_rect(x + 2, y + 2, w - 4, h - 5, "STUVWWWVT", c);
     fl_plastic_down_frame(x, y, w, h, c, t);
@@ -356,10 +357,129 @@ void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxt
 }
 
 
-void fl_plastic_down_round(int x, int y, int w, int h, fltk3::Color c, fltk3::Boxtype) {
+void fl_plastic_down_round(int x, int y, int w, int h, fltk3::Color c, fltk3::Box*) {
   shade_round(x, y, w, h, "STUVWWWVT", c);
   frame_round(x, y, w, h, "IJLM", c);
 }
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticUpBox::_draw(const Rectangle &r) const
+{
+  fl_plastic_up_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticUpBox plasticUpBox("plasticUpBox");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_UP_BOX = &plasticUpBox;
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticDownBox::_draw(const Rectangle &r) const
+{
+  fl_plastic_down_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticDownBox plasticDownBox("plasticDownBox");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_DOWN_BOX = &plasticDownBox;
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticThinUpBox::_draw(const Rectangle &r) const
+{
+  fl_plastic_thin_up_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticThinUpBox plasticThinUpBox("plasticThinUpBox");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_THIN_UP_BOX = &plasticThinUpBox;
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticThinDownBox::_draw(const Rectangle &r) const
+{
+  fl_plastic_down_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticThinDownBox plasticThinDownBox("plasticThinDownBox");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_THIN_DOWN_BOX = &plasticThinDownBox;
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticRoundUpBox::_draw(const Rectangle &r) const
+{
+  fl_plastic_up_round(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticRoundUpBox plasticRoundUpBox("plasticRoundUpBox");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_ROUND_UP_BOX = &plasticRoundUpBox;
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticRoundDownBox::_draw(const Rectangle &r) const
+{
+  fl_plastic_down_round(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticRoundDownBox plasticRoundDownBox("plasticRoundDownBox");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_ROUND_DOWN_BOX = &plasticRoundDownBox;
+
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticUpFrame::_draw(const Rectangle &r) const
+{
+  fl_plastic_up_frame(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticUpFrame plasticUpFrame("plasticUpFrame");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_UP_FRAME = &plasticUpFrame;
+
+//------------------------------------------------------------------------------
+
+void fltk3::PlasticDownFrame::_draw(const Rectangle &r) const
+{
+  fl_plastic_down_frame(r.x(), r.y(), r.w(), r.h(), fltk3::color(), 0);
+}
+
+static fltk3::PlasticDownFrame plasticDownFrame("plasticDownFrame");
+
+/*!
+ Draws a raised rectangle.
+ */
+fltk3::Box* const fltk3::PLASTIC_DOWN_FRAME = &plasticDownFrame;
+
+//------------------------------------------------------------------------------
+
+
+
 
 
 //

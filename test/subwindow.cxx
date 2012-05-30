@@ -72,9 +72,9 @@ class testwindow : public fltk3::Window {
   int cx, cy; char key;
   fltk3::Cursor crsr;
 public:
-  testwindow(fltk3::Boxtype b,int x,int y,const char *l)
+  testwindow(fltk3::Box* b,int x,int y,const char *l)
     : fltk3::Window(x,y,l), crsr(fltk3::CURSOR_DEFAULT) {box(b); key = 0;}
-  testwindow(fltk3::Boxtype b,int x,int y,int w,int h,const char *l)
+  testwindow(fltk3::Box* b,int x,int y,int w,int h,const char *l)
     : fltk3::Window(x,y,w,h,l) {box(b); key = 0;}
   void use_cursor(fltk3::Cursor c) { crsr = c; }
 };
@@ -118,7 +118,7 @@ class testgroup : public fltk3::Group {
   int cx, cy; char key;
   fltk3::Cursor crsr;
 public:
-  testgroup(fltk3::Boxtype b,int x,int y,int w,int h,const char *l)
+  testgroup(fltk3::Box* b,int x,int y,int w,int h,const char *l)
   : fltk3::Group(x,y,w,h,l) {box(b); key = 0;}
   void use_cursor(fltk3::Cursor c) { crsr = c; }
 };

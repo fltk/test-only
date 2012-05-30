@@ -72,7 +72,7 @@ namespace fltk3 {
   class FLTK3_EXPORT Slider : public fltk3::Valuator {
     
     float slider_size_;
-    uchar slider_;
+    Box* slider_;
     void _Slider();
     void draw_bg(int, int, int, int);
     
@@ -109,10 +109,10 @@ namespace fltk3 {
     void slider_size(double v);
     
     /** Gets the slider box type. */
-    fltk3::Boxtype slider() const {return (fltk3::Boxtype)slider_;}
+    fltk3::Box* slider() const {return slider_;}
     
     /** Sets the slider box type. */
-    void slider(fltk3::Boxtype c) {slider_ = c;}
+    void slider(fltk3::Box* c) {slider_ = c;}
   };
   
 }

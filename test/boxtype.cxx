@@ -38,7 +38,7 @@ int N = 0;
 
 fltk3::DoubleWindow *window;
 
-void bt(const char *name, fltk3::Boxtype type, int square=0) {
+void bt(const char *name, fltk3::Box* type, int square=0) {
   int x = N%4;
   int y = N/4;
   N++;

@@ -309,7 +309,7 @@ void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:
   if ((damage()&fltk3::DAMAGE_ALL) &&
-      (!box() || (box()>=4&&!(box()&2)) || box()>=fltk3::ROUNDED_BOX)) {
+      (!box() || !box()->fills_rectangle())) {
     // if so, draw checkerboard so user can see what areas are clear:
     for (int Y = 0; Y < h(); Y += CHECKSIZE) 
       for (int X = 0; X < w(); X += CHECKSIZE) {

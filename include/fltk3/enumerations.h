@@ -473,101 +473,94 @@ namespace fltk3 {
    \see src/get_system_colors.cxx
    */
   /*@{*/
-  enum Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
-    
-    NO_BOX = 0,                 ///< nothing is drawn at all, this box is invisible
-    FLAT_BOX,			///< a flat box
-    UP_BOX,			///< see figure 1
-    DOWN_BOX,			///< see figure 1
-    UP_FRAME,			///< see figure 1
-    DOWN_FRAME,                 ///< see figure 1
-    THIN_UP_BOX,		///< see figure 1
-    THIN_DOWN_BOX,		///< see figure 1
-    THIN_UP_FRAME,		///< see figure 1
-    THIN_DOWN_FRAME,		///< see figure 1
-    ENGRAVED_BOX,		///< see figure 1
-    FRAME_BOX = ENGRAVED_BOX,
-    EMBOSSED_BOX,		///< see figure 1
-    ENGRAVED_FRAME,		///< see figure 1
-    EMBOSSED_FRAME,		///< see figure 1
-    BORDER_BOX,                 ///< see figure 1
-    SHADOW_BOX,                 ///< see figure 1
-    BORDER_FRAME,		///< see figure 1
-    SHADOW_FRAME,		///< see figure 1
-    ROUNDED_BOX,		///< see figure 1
-    RSHADOW_BOX,		///< see figure 1
-    ROUNDED_FRAME,		///< see figure 1
-    RFLAT_BOX,                  ///< see figure 1
-    ROUND_UP_BOX,		///< see figure 1
-    ROUND_DOWN_BOX,		///< see figure 1
-    DIAMOND_UP_BOX,		///< see figure 1
-    DIAMOND_DOWN_BOX,		///< see figure 1
-    OVAL_BOX,			///< see figure 1
-    OSHADOW_BOX,		///< see figure 1
-    OVAL_FRAME,                 ///< see figure 1
-    OFLAT_BOX,                  ///< see figure 1
-    PLASTIC_UP_BOX,		///< plastic version of fltk3::UP_BOX
-    PLASTIC_DOWN_BOX,		///< plastic version of fltk3::DOWN_BOX
-    PLASTIC_UP_FRAME,		///< plastic version of fltk3::UP_FRAME
-    PLASTIC_DOWN_FRAME,         ///< plastic version of fltk3::DOWN_FRAME
-    PLASTIC_THIN_UP_BOX,	///< plastic version of fltk3::THIN_UP_BOX
-    PLASTIC_THIN_DOWN_BOX,	///< plastic version of fltk3::THIN_DOWN_BOX
-    PLASTIC_ROUND_UP_BOX,	///< plastic version of fltk3::ROUND_UP_BOX
-    PLASTIC_ROUND_DOWN_BOX,	///< plastic version of fltk3::ROUND_DOWN_BOX
-    CLASSIC_UP_BOX,		///< classic version of fltk3::UP_BOX
-    CLASSIC_DOWN_BOX,		///< classic version of fltk3::DOWN_BOX
-    CLASSIC_UP_FRAME,		///< classic version of fltk3::UP_FRAME
-    CLASSIC_DOWN_FRAME,		///< classic version of fltk3::DOWN_RAME
-    CLASSIC_THIN_UP_BOX,	///< classic version of fltk3::THIN_UP_BOX
-    CLASSIC_THIN_DOWN_BOX,	///< classic version of fltk3::THIN_DOWN_BOX
-    CLASSIC_THIN_UP_FRAME,	///< classic version of fltk3::UP_FRAME
-    CLASSIC_THIN_DOWN_FRAME,	///< classic version of fltk3::THIN_DOWN_FRAME
-    CLASSIC_ROUND_UP_BOX,	///< classic version of fltk3::ROUND_UP_BOX
-    CLASSIC_ROUND_DOWN_BOX,	///< classic version of fltk3::ROUND_DOWN_BOX
-    FREE_BOXTYPE,		///< the first free box type for creation of new box types
-                                // alternative names:
-    GTK_UP_BOX = UP_BOX,                  ///< gtk+ version of fltk3::UP_BOX
-    GTK_DOWN_BOX = DOWN_BOX,              ///< gtk+ version of fltk3::DOWN_BOX
-    GTK_UP_FRAME = UP_FRAME,              ///< gtk+ version of fltk3::UP_FRAME
-    GTK_DOWN_FRAME = DOWN_FRAME,          ///< gtk+ version of fltk3::DOWN_RAME
-    GTK_THIN_UP_BOX = THIN_UP_BOX,        ///< gtk+ version of fltk3::THIN_UP_BOX
-    GTK_THIN_DOWN_BOX = THIN_DOWN_BOX,    ///< gtk+ version of fltk3::THIN_DOWN_BOX
-    GTK_THIN_UP_FRAME = THIN_UP_FRAME,    ///< gtk+ version of fltk3::UP_FRAME
-    GTK_THIN_DOWN_FRAME = THIN_DOWN_FRAME,///< gtk+ version of fltk3::THIN_DOWN_FRAME
-    GTK_ROUND_UP_BOX = ROUND_UP_BOX,      ///< gtk+ version of fltk3::ROUND_UP_BOX
-    GTK_ROUND_DOWN_BOX = ROUND_DOWN_BOX,  ///< gtk+ version of fltk3::ROUND_DOWN_BOX
-    
-    TIE_LEFT    = 0x10000000,
-    TIE_RIGHT   = 0x20000000,
-    TIE_TOP     = 0x40000000,
-    TIE_BOTTOM  = 0x80000000,
-  };
+
+  class Box;
+  
+  extern FLTK3_EXPORT Box* const NO_BOX;
+  extern FLTK3_EXPORT Box* const FLAT_BOX;
+  extern FLTK3_EXPORT Box* const UP_BOX;
+  extern FLTK3_EXPORT Box* const DOWN_BOX;
+  extern FLTK3_EXPORT Box* const UP_FRAME;
+  extern FLTK3_EXPORT Box* const DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const THIN_UP_BOX;
+  extern FLTK3_EXPORT Box* const THIN_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const THIN_UP_FRAME;
+  extern FLTK3_EXPORT Box* const THIN_DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const ENGRAVED_BOX;
+  extern FLTK3_EXPORT Box* const FRAME_BOX;
+  extern FLTK3_EXPORT Box* const EMBOSSED_BOX;
+  extern FLTK3_EXPORT Box* const ENGRAVED_FRAME;
+  extern FLTK3_EXPORT Box* const EMBOSSED_FRAME;
+  extern FLTK3_EXPORT Box* const BORDER_BOX;
+  extern FLTK3_EXPORT Box* const SHADOW_BOX;
+  extern FLTK3_EXPORT Box* const BORDER_FRAME;
+  extern FLTK3_EXPORT Box* const SHADOW_FRAME;
+  extern FLTK3_EXPORT Box* const ROUNDED_BOX;
+  extern FLTK3_EXPORT Box* const RSHADOW_BOX;
+  extern FLTK3_EXPORT Box* const ROUNDED_FRAME;
+  extern FLTK3_EXPORT Box* const RFLAT_BOX;
+  extern FLTK3_EXPORT Box* const ROUND_UP_BOX;
+  extern FLTK3_EXPORT Box* const ROUND_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const DIAMOND_UP_BOX;
+  extern FLTK3_EXPORT Box* const DIAMOND_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const OVAL_BOX;
+  extern FLTK3_EXPORT Box* const OSHADOW_BOX;
+  extern FLTK3_EXPORT Box* const OVAL_FRAME;
+  extern FLTK3_EXPORT Box* const OFLAT_BOX;
+  extern FLTK3_EXPORT Box* const PLASTIC_UP_BOX;
+  extern FLTK3_EXPORT Box* const PLASTIC_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const PLASTIC_UP_FRAME;
+  extern FLTK3_EXPORT Box* const PLASTIC_DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const PLASTIC_THIN_UP_BOX;
+  extern FLTK3_EXPORT Box* const PLASTIC_THIN_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const PLASTIC_ROUND_UP_BOX;
+  extern FLTK3_EXPORT Box* const PLASTIC_ROUND_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const CLASSIC_UP_BOX;
+  extern FLTK3_EXPORT Box* const CLASSIC_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const CLASSIC_UP_FRAME;
+  extern FLTK3_EXPORT Box* const CLASSIC_DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const CLASSIC_THIN_UP_BOX;
+  extern FLTK3_EXPORT Box* const CLASSIC_THIN_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const CLASSIC_THIN_UP_FRAME;
+  extern FLTK3_EXPORT Box* const CLASSIC_THIN_DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const CLASSIC_ROUND_UP_BOX;
+  extern FLTK3_EXPORT Box* const CLASSIC_ROUND_DOWN_BOX;
+
+  extern FLTK3_EXPORT Box* const GTK_UP_BOX;
+  extern FLTK3_EXPORT Box* const GTK_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const GTK_UP_FRAME;
+  extern FLTK3_EXPORT Box* const GTK_DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const GTK_THIN_UP_BOX;
+  extern FLTK3_EXPORT Box* const GTK_THIN_DOWN_BOX;
+  extern FLTK3_EXPORT Box* const GTK_THIN_UP_FRAME;
+  extern FLTK3_EXPORT Box* const GTK_THIN_DOWN_FRAME;
+  extern FLTK3_EXPORT Box* const GTK_ROUND_UP_BOX;
+  extern FLTK3_EXPORT Box* const GTK_ROUND_DOWN_BOX;
   
   // conversions of box types to other boxtypes:
   /**
    Get the filled version of a frame.
-   If no filled version of a given frame exists, the behavior of this function
-   is undefined and some random box or frame is returned.
+   If no filled version of a given frame exists, the original box is returned.
    */
-  inline Boxtype box(Boxtype b) {
-    return (Boxtype)((b<fltk3::UP_BOX||b%4>1)?b:(b-2));
-  }
+  Box* box(Box* b);
+  
   /**
    Get the "pressed" or "down" version of a box.
-   If no "down" version of a given box exists, the behavior of this function
-   is undefined and some random box or frame is returned.
+   If no "down" version of a given box exists, the original box is returned.
    */
-  inline Boxtype down(Boxtype b) {
-    return (Boxtype)((b<fltk3::UP_BOX)?b:(b|1));
-  }
+  Box* down(Box* b);
+  
+  /**
+   Get the "released" or "up" version of a box.
+   If no "up" version of a given box exists, the original box is returned.
+   */
+  Box* up(Box* b);
+  
   /**
    Get the unfilled, frame only version of a box.
-   If no frame version of a given box exists, the behavior of this function
-   is undefined and some random box or frame is returned.
+   If no frame version of a given box exists, the original box is returned.
    */
-  inline Boxtype frame(Boxtype b) {
-    return (Boxtype)((b%4<2)?b:(b+2));
-  }
+  Box* frame(Box* b);
   
   /*@}*/	// group: Box Types
   

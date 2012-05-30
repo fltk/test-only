@@ -69,11 +69,14 @@ void fltk3::Choice::draw() {
     }
   } else {
     if (fltk3::contrast(textcolor(), fltk3::BACKGROUND2_COLOR) == textcolor()) {
-      draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), 0, 0, X, h(), fltk3::BACKGROUND2_COLOR);
+      //draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), 0, 0, X, h(), fltk3::BACKGROUND2_COLOR);
+      draw_box(DOWN_BOX, 0, 0, X, h(), fltk3::BACKGROUND2_COLOR);
     } else {
-      draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), 0, 0, X, h(), fltk3::lighter(color()));
+      //draw_box(Boxtype(DOWN_BOX|TIE_RIGHT), 0, 0, X, h(), fltk3::lighter(color()));
+      draw_box(DOWN_BOX, 0, 0, X, h(), fltk3::lighter(color()));
     }
-    draw_box(Boxtype(fltk3::UP_BOX|TIE_LEFT),X,0,w()-X,h(),color());
+    //draw_box(Boxtype(fltk3::UP_BOX|TIE_LEFT),X,0,w()-X,h(),color());
+    draw_box(fltk3::UP_BOX,X,0,w()-X,h(),color());
 
     fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
     fltk3::polygon(x1, y1, x1 + w1, y1 + w1, x1 + 2 * w1, y1);

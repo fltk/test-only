@@ -247,17 +247,17 @@ void fltk3::get_system_colors()
 #define D1 BORDER_WIDTH
 #define D2 (BORDER_WIDTH+BORDER_WIDTH)
 
-extern void	fl_gtk_up_box(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_down_box(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_thin_up_box(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_thin_down_box(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_round_up_box(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_round_down_box(int, int, int, int, fltk3::Color, fltk3::Boxtype);
+extern void	fl_gtk_up_box(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_down_box(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_thin_up_box(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_thin_down_box(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_round_up_box(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_round_down_box(int, int, int, int, fltk3::Color, fltk3::Box*);
 
-extern void	fl_gtk_up_frame(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_down_frame(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_thin_up_frame(int, int, int, int, fltk3::Color, fltk3::Boxtype);
-extern void	fl_gtk_thin_down_frame(int, int, int, int, fltk3::Color, fltk3::Boxtype);
+extern void	fl_gtk_up_frame(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_down_frame(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_thin_up_frame(int, int, int, int, fltk3::Color, fltk3::Box*);
+extern void	fl_gtk_thin_down_frame(int, int, int, int, fltk3::Color, fltk3::Box*);
 
 #ifndef FLTK3_DOXYGEN
 const char	*fltk3::scheme_ = (const char *)0;	    // current scheme 

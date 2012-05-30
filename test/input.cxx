@@ -123,19 +123,19 @@ int main(int argc, char **argv) {
 
   fltk3::Button *b;
   b = new fltk3::ToggleButton(10,y,200,25,"fltk3::WHEN_CHANGED");
-  b->box(fltk3::Boxtype(fltk3::TIE_BOTTOM|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->callback(toggle_cb, fltk3::WHEN_CHANGED); y += 25;
   b->tooltip("Do callback each time the text changes");
   b = new fltk3::ToggleButton(10,y,200,25,"fltk3::WHEN_RELEASE");
-  b->box(fltk3::Boxtype(fltk3::TIE_BOTTOM|fltk3::TIE_TOP|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->callback(toggle_cb, fltk3::WHEN_RELEASE); y += 25;
   b->tooltip("Do callback when widget loses focus");
   b = new fltk3::ToggleButton(10,y,200,25,"fltk3::WHEN_ENTER_KEY");
-  b->box(fltk3::Boxtype(fltk3::TIE_BOTTOM|fltk3::TIE_TOP|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->callback(toggle_cb, fltk3::WHEN_ENTER_KEY); y += 25;
   b->tooltip("Do callback when user hits Enter key");
   b = new fltk3::ToggleButton(10,y,200,25,"fltk3::WHEN_NOT_CHANGED");
-  b->box(fltk3::Boxtype(fltk3::TIE_TOP|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->callback(toggle_cb, fltk3::WHEN_NOT_CHANGED); y += 25;
   b->tooltip("Do callback even if the text is not changed");
   y += 5;
@@ -146,12 +146,12 @@ int main(int argc, char **argv) {
 
   y += 5;
   b = new fltk3::LightButton(10,y,100,25," Tab Nav");
-  b->box(fltk3::Boxtype(fltk3::TIE_RIGHT|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->tooltip("Control tab navigation for the multiline input field");
   b->callback(tabnav_cb, (void*)input[4]);
   b->value(input[4]->tab_nav() ? 1 : 0);
   b = new fltk3::LightButton(110,y,100,25," Arrow Nav"); y += 25;
-  b->box(fltk3::Boxtype(fltk3::TIE_LEFT|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->tooltip("Control horizontal arrow key focus navigation behavior.\n"
              "e.g. fltk3::OPTION_ARROW_FOCUS");
   b->callback(arrownav_cb);
@@ -159,16 +159,16 @@ int main(int argc, char **argv) {
   b->value(fltk3::option(fltk3::OPTION_ARROW_FOCUS) ? 1 : 0);
 
   b = new fltk3::Button(220,y1,120,25,"color"); y1 += 25;
-  b->box(fltk3::Boxtype(fltk3::TIE_BOTTOM|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
   b->tooltip("Color behind the text");
   b = new fltk3::Button(220,y1,120,25,"selection_color"); y1 += 25;
-  b->box(fltk3::Boxtype(fltk3::TIE_BOTTOM|fltk3::TIE_TOP|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->color(input[0]->selection_color()); b->callback(color_cb, (void*)1);
   b->labelcolor(fltk3::contrast(fltk3::BLACK,b->color()));
   b->tooltip("Color behind selected text");
   b = new fltk3::Button(220,y1,120,25,"textcolor"); y1 += 25;
-  b->box(fltk3::Boxtype(fltk3::TIE_TOP|fltk3::UP_BOX));
+  b->box(fltk3::UP_BOX);
   b->color(input[0]->textcolor()); b->callback(color_cb, (void*)2);
   b->labelcolor(fltk3::contrast(fltk3::BLACK,b->color()));
   b->tooltip("Color of the text");

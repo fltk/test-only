@@ -273,13 +273,13 @@ char *itoa(int val)
 
 void tablebox_choice_cb(fltk3::Widget *w, void *data)
 {
-    G_table->table_box((fltk3::Boxtype)(fl_intptr_t)data);
+    G_table->table_box((fltk3::Box*)data);
     G_table->redraw();
 }
 
 void widgetbox_choice_cb(fltk3::Widget *w, void *data)
 {
-    G_table->box((fltk3::Boxtype)(fl_intptr_t)data);
+    G_table->box((fltk3::Box*)data);
     G_table->resize(G_table->x(), G_table->y(), G_table->w(), G_table->h());
 }
 

@@ -507,17 +507,15 @@ fltk3::TreeItem *fltk3::TreeItem::find_clicked(const fltk3::TreePrefs &prefs) {
   return(0);
 }
 
-static void draw_item_focus(fltk3::Boxtype B, fltk3::Color C, int X, int Y, int W, int H) {
+static void draw_item_focus(fltk3::Box* B, fltk3::Color C, int X, int Y, int W, int H) {
   if (!fltk3::visible_focus()) return;
-  switch (B) {
-    case fltk3::DOWN_BOX:
-    case fltk3::DOWN_FRAME:
-    case fltk3::THIN_DOWN_BOX:
-    case fltk3::THIN_DOWN_FRAME:
-      X ++;
-      Y ++;
-    default:
-      break;
+  if (   B==fltk3::DOWN_BOX
+      || B==fltk3::DOWN_FRAME
+      || B==fltk3::THIN_DOWN_BOX
+      || B==fltk3::THIN_DOWN_FRAME)
+  {
+    X ++;
+    Y ++;
   }
   fltk3::color(fltk3::contrast(fltk3::BLACK, C));
 
