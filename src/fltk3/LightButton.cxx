@@ -46,7 +46,7 @@ void fltk3::LightButton::draw()
   } else {
     col = color();
   }
-  if (box()) draw_box(this==fltk3::pushed() ? fltk3::down(box()) : box(), col);
+  if (box()!=fltk3::NO_BOX) draw_box(this==fltk3::pushed() ? fltk3::down(box()) : box(), col);
   col = value() ? (active_r() ? selection_color() :
                    fltk3::inactive(selection_color())) : color();
   int W;
@@ -57,7 +57,7 @@ void fltk3::LightButton::draw()
   dy = (h() - W) / 2;
   // if (dy < 0) dy = 0;         // neg. offset o.k. for vertical centering
   
-  if (down_box()) {
+  if (down_box()!=fltk3::NO_BOX) {
     // draw other down_box() styles:
     fltk3::Box* db = down_box();
     if (   db==fltk3::DOWN_BOX
@@ -161,7 +161,7 @@ int fltk3::LightButton::handle(int event)
 {
   switch (event) {
     case fltk3::RELEASE:
-      if (box()) redraw();
+      if (box()!=fltk3::NO_BOX) redraw();
     default:
       return Button::handle(event);
   }
