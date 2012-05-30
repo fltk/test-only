@@ -34,6 +34,11 @@
 #include "Widget.h"
 
 #if 0
+/* Comment from matt , r9557
+ * Removed fltk3::Box as a wiget class. In FLTK2, boxes are drawn simply by 
+ * using fltk::Widget. I assume we could add fltk3::BoxWidget. Why all this? 
+ * 'Box' will be used later as a base class for a much more flexible Boxtype.
+ */
 
 namespace fltk3 { 
   
