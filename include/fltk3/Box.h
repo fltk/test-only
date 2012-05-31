@@ -37,6 +37,11 @@
  * Removed fltk3::Box as a wiget class. In FLTK2, boxes are drawn simply by 
  * using fltk::Widget. I assume we could add fltk3::BoxWidget. Why all this? 
  * 'Box' will be used later as a base class for a much more flexible Boxtype.
+ * 
+ * Dejan: I don't think so - in FLTK2 fltk::Box is an *alias* for fltk::Symbol. 
+ *        :) FLTK2's FrameBox, HighlightBox, and FlatBox do similar to what you 
+ *        do here. The only difference is that FLTK2's class hierarchy is 
+ *        little bit less complicated. I suggest you take a look at the source.
  */
 
 namespace fltk3 {
