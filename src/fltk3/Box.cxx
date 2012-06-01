@@ -77,7 +77,7 @@ static fltk3::NoBox noBox("noBox");
 /*!
  Draws an empty rectangle (a.k.a. nothing).
  */
-fltk3::Box* const fltk3::NO_BOX = 0L;
+fltk3::Box* fltk3::NO_BOX = 0L;
 
 
 //------------------------------------------------------------------------------
@@ -97,21 +97,21 @@ static fltk3::FlatBox flatBox("flatBox");
 /*!
  Draws a flat rectangle of bgcolor().
  */
-fltk3::Box* const fltk3::FLAT_BOX = &flatBox;
+fltk3::Box* fltk3::FLAT_BOX = &flatBox;
 
 //------------------------------------------------------------------------------
 
-fltk3::Box* const fltk3::FRAME_BOX = fltk3::ENGRAVED_BOX;
-fltk3::Box* const fltk3::GTK_UP_BOX = fltk3::UP_BOX;
-fltk3::Box* const fltk3::GTK_DOWN_BOX = fltk3::DOWN_BOX;
-fltk3::Box* const fltk3::GTK_UP_FRAME = fltk3::UP_FRAME;
-fltk3::Box* const fltk3::GTK_DOWN_FRAME = fltk3::DOWN_FRAME;
-fltk3::Box* const fltk3::GTK_THIN_UP_BOX = fltk3::THIN_UP_BOX;
-fltk3::Box* const fltk3::GTK_THIN_DOWN_BOX = fltk3::THIN_DOWN_BOX;
-fltk3::Box* const fltk3::GTK_THIN_UP_FRAME = fltk3::THIN_UP_FRAME;
-fltk3::Box* const fltk3::GTK_THIN_DOWN_FRAME = fltk3::THIN_DOWN_FRAME;
-fltk3::Box* const fltk3::GTK_ROUND_UP_BOX = fltk3::ROUND_UP_BOX;
-fltk3::Box* const fltk3::GTK_ROUND_DOWN_BOX = fltk3::ROUND_DOWN_BOX;
+fltk3::Box* fltk3::FRAME_BOX = fltk3::ENGRAVED_BOX;
+fltk3::Box* fltk3::GTK_UP_BOX = fltk3::UP_BOX;
+fltk3::Box* fltk3::GTK_DOWN_BOX = fltk3::DOWN_BOX;
+fltk3::Box* fltk3::GTK_UP_FRAME = fltk3::UP_FRAME;
+fltk3::Box* fltk3::GTK_DOWN_FRAME = fltk3::DOWN_FRAME;
+fltk3::Box* fltk3::GTK_THIN_UP_BOX = fltk3::THIN_UP_BOX;
+fltk3::Box* fltk3::GTK_THIN_DOWN_BOX = fltk3::THIN_DOWN_BOX;
+fltk3::Box* fltk3::GTK_THIN_UP_FRAME = fltk3::THIN_UP_FRAME;
+fltk3::Box* fltk3::GTK_THIN_DOWN_FRAME = fltk3::THIN_DOWN_FRAME;
+fltk3::Box* fltk3::GTK_ROUND_UP_BOX = fltk3::ROUND_UP_BOX;
+fltk3::Box* fltk3::GTK_ROUND_DOWN_BOX = fltk3::ROUND_DOWN_BOX;
 
 
 

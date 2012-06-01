@@ -358,6 +358,223 @@ FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, draw(int X, int Y, int W, int H, int cx=0,
 FLTK3_WRAPPER_VCALLS_IMAGE(type3##_I, uncache(), uncache(), Uncache)
 
 
+//------------------------------------------------------------------------------
+// FLTK 2 wrapped definition
+
+#define FLTK2_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3) ~type1() { }
+/*
+ #define FLTK2_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3) \
+ virtual ~type1() { \
+ if ( !(pVCalls & pVCallDtor) ) { \
+ pVCalls |= pVCallDtor; \
+ } \
+ }
+ */
+
+#define FLTK2_WRAPPER_VCALLS_OBJECT(type, klass, proto, call, flag) \
+  virtual void proto { \
+    if ( pVCalls & pVCall##type##flag ) { \
+      ((fltk3::klass*)_p)->call; \
+    } else { \
+      pVCalls |= pVCall##type##flag; \
+      ((fltk3::klass*)_p)->call; \
+      pVCalls &= ~pVCall##type##flag; \
+    } \
+  }
+#define FLTK2_WRAPPER_VCALLS_WIDGET(klass, proto, call, flag) \
+  FLTK2_WRAPPER_VCALLS_OBJECT(Widget, klass, proto, call, flag)
+#define FLTK2_WRAPPER_VCALLS_IMAGE(klass, proto, call, flag) \
+  FLTK2_WRAPPER_VCALLS_OBJECT(Image, klass, proto, call, flag)
+
+#define FLTK2_WRAPPER_VCALLS_OBJECT_RET(type, rtype, klass, proto, call, flag) \
+  virtual rtype proto { \
+    rtype ret = 0; \
+    if ( pVCalls & pVCall##type##flag ) { \
+      ret = ((fltk3::klass*)_p)->call; \
+    } else { \
+      pVCalls |= pVCall##type##flag; \
+      ret = ((fltk3::klass*)_p)->call; \
+      pVCalls &= ~pVCall##type##flag; \
+    } \
+    return ret; \
+  }
+#define FLTK2_WRAPPER_VCALLS_WIDGET_RET(rtype, klass, proto, call, flag) \
+  FLTK2_WRAPPER_VCALLS_OBJECT_RET(Widget, rtype, klass, proto, call, flag)
+#define FLTK2_WRAPPER_VCALLS_IMAGE_RET(rtype, klass, proto, call, flag) \
+  FLTK2_WRAPPER_VCALLS_OBJECT_RET(Image, rtype, klass, proto, call, flag)
+
+#define FLTK2_OBJECT_VCALLS_WRAPPER_DTOR() \
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallDtor) ) { \
+      pWrapper->pVCalls |= Wrapper::pVCallDtor; \
+      delete ((Wrapper*)pWrapper); \
+      return; \
+    }
+
+#define FLTK2_OBJECT_VCALLS_WRAPPER(type, call, flag) \
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCall##type##flag) ) { \
+      pWrapper->pVCalls |= Wrapper::pVCall##type##flag; \
+      ((type##Wrapper*)pWrapper)->call; \
+      pWrapper->pVCalls &= ~Wrapper::pVCall##type##flag; \
+      return; \
+    }
+#define FLTK2_WIDGET_VCALLS_WRAPPER(call, flag) \
+  FLTK2_OBJECT_VCALLS_WRAPPER(Widget, call, flag)
+#define FLTK2_IMAGE_VCALLS_WRAPPER(call, flag) \
+  FLTK2_OBJECT_VCALLS_WRAPPER(Image, call, flag)
+
+#define FLTK2_OBJECT_VCALLS_WRAPPER_RET(type, rtype, call, flag) \
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCall##type##flag) ) { \
+      pWrapper->pVCalls |= Wrapper::pVCall##type##flag; \
+      rtype ret = ((type##Wrapper*)pWrapper)->call; \
+      pWrapper->pVCalls &= ~Wrapper::pVCall##type##flag; \
+      return ret; \
+    }
+#define FLTK2_WIDGET_VCALLS_WRAPPER_RET(rtype, call, flag) \
+  FLTK2_OBJECT_VCALLS_WRAPPER_RET(Widget, rtype, call, flag)
+#define FLTK2_IMAGE_VCALLS_WRAPPER_RET(rtype, call, flag) \
+  FLTK2_OBJECT_VCALLS_WRAPPER_RET(Image, rtype, call, flag)
+
+#define FLTK2_WRAPPER_INTERFACE_BEGIN(type1, type3) \
+  namespace fltk { class type1; }\
+  namespace fltk3 { \
+    class type3##_I : public type3 { \
+        friend class ::fltk::type1; \
+    public: \
+      virtual ~type3##_I() { \
+        FLTK2_OBJECT_VCALLS_WRAPPER_DTOR() \
+      }
+
+#define FLTK2_WRAPPER_INTERFACE_WIDGET(type1, type3) \
+  type3##_I(int x, int y, int w, int h, const char *l) \
+  : type3(x, y, w, h, l) { } \
+  void show() { \
+    FLTK2_WIDGET_VCALLS_WRAPPER(show(), Show) \
+    type3::show(); \
+  } \
+  void hide() { \
+    FLTK2_WIDGET_VCALLS_WRAPPER(hide(), Hide) \
+    type3::hide(); \
+  } \
+  void resize(int X, int Y, int W, int H) { \
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidgetResize) ) { \
+      pWrapper->pVCalls |= Wrapper::pVCallWidgetResize; \
+      ((WidgetWrapper*)pWrapper)->resize(X, Y, W, H); \
+      pWrapper->pVCalls &= ~Wrapper::pVCallWidgetResize; \
+      return; \
+    } \
+    type3::resize(X, Y, W, H); \
+  } \
+  void draw() { \
+    if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) { \
+      pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; \
+      ((WidgetWrapper*)pWrapper)->draw(); \
+      pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; \
+      return; \
+    } \
+    type3::draw(); \
+  } \
+  int handle(int event) { \
+    FLTK2_WIDGET_VCALLS_WRAPPER_RET(int, handle(event), Handle) \
+    return type3::handle(event); \
+  }
+
+#define FLTK2_WRAPPER_INTERFACE_WINDOW(type1, type3) \
+  void draw_overlay() { \
+    FLTK2_WIDGET_VCALLS_WRAPPER(draw_overlay(), DrawOverlay) \
+    type3::draw_overlay(); \
+  } \
+  type3##_I(int w, int h, const char *l) \
+  : type3(w, h, l) { }
+
+#define FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_5ARGS(type3) \
+  type3##_I(const uchar *bits, int W, int H, int D=3, int LD=0) : type3(bits, W, H, D, LD) { } 
+
+#define FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_3ARGS(type3) \
+  type3##_I(const uchar *bits, int W, int H) : type3(bits, W, H) { } 
+
+#define FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_TILED(type3) \
+  type3##_I(fltk3::Image* bits, int W, int H) : type3(bits, W, H) { } 
+
+#define FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_PIXMAP(type3) \
+  type3##_I(const uchar * const * D) : type3(D) { } 
+
+
+#define FLTK2_WRAPPER_INTERFACE_IMAGE_BODY(type3) \
+Image *copy(int W, int H) { \
+FLTK2_IMAGE_VCALLS_WRAPPER_RET(Image *, copy(W, H), CopyWH) \
+return type3::copy(W, H); \
+} \
+void color_average(Color c, float i) { \
+FLTK2_IMAGE_VCALLS_WRAPPER(color_average(c, i), ColorAverage) \
+type3::color_average(c, i); \
+} \
+void desaturate() { \
+FLTK2_IMAGE_VCALLS_WRAPPER(desaturate(), Desaturate) \
+type3::desaturate(); \
+} \
+void label(Widget *w) { \
+FLTK2_IMAGE_VCALLS_WRAPPER(label(w), LabelW) \
+type3::label(w); \
+} \
+void label(MenuItem *w) { \
+FLTK2_IMAGE_VCALLS_WRAPPER(label(w), LabelM) \
+type3::label(w); \
+} \
+void draw(int X, int Y, int W, int H, int cx=0, int cy=0) { \
+FLTK2_IMAGE_VCALLS_WRAPPER(draw(X, Y, W, H, cx, cy), Draw) \
+type3::draw(X, Y, W, H, cx, cy); \
+} \
+void uncache() { \
+FLTK2_IMAGE_VCALLS_WRAPPER(uncache(), Uncache) \
+type3::uncache(); \
+}
+
+#define FLTK2_WRAPPER_INTERFACE_IMAGE(type1, type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_5ARGS(type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_BODY(type3)
+
+#define FLTK2_WRAPPER_INTERFACE_BITMAP(type1, type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_3ARGS(type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_BODY(type3)
+
+#define FLTK2_WRAPPER_INTERFACE_PIXMAP(type1, type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_PIXMAP(type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_BODY(type3)
+
+#define FLTK2_WRAPPER_INTERFACE_TILED(type1, type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_CTOR_TILED(type3) \
+FLTK2_WRAPPER_INTERFACE_IMAGE_BODY(type3)
+
+#define FLTK2_WRAPPER_INTERFACE_END() \
+    }; \
+  }
+
+
+#define FLTK2_WIDGET_VCALLS(type1, type3) \
+  FLTK2_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
+  FLTK2_WRAPPER_VCALLS_WIDGET(type3##_I, show(), show(), Show) \
+  FLTK2_WRAPPER_VCALLS_WIDGET(type3##_I, hide(), hide(), Hide) \
+  FLTK2_WRAPPER_VCALLS_WIDGET(type3##_I, draw(), draw(), Draw) \
+  FLTK2_WRAPPER_VCALLS_WIDGET(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
+  FLTK2_WRAPPER_VCALLS_WIDGET_RET(int, type3##_I, handle(int event), handle(event), Handle)
+
+
+#define FLTK2_WINDOW_VCALLS(type1, type3) \
+  FLTK2_WIDGET_VCALLS(type1, type3) \
+  FLTK2_WRAPPER_VCALLS_WIDGET(type3##_I, draw_overlay(), draw_overlay(), DrawOverlay)
+
+#define FLTK2_IMAGE_VCALLS(type1, type3) \
+  FLTK2_WRAPPER_VCALLS_OBJECT_DTOR(type1, type3##_I) \
+  FLTK2_WRAPPER_VCALLS_IMAGE(type3##_I, color_average(Fl_Color c, float i), color_average(fltk3::_1to3_color(c), i), ColorAverage) \
+  FLTK2_WRAPPER_VCALLS_IMAGE(type3##_I, desaturate(), desaturate(), Desaturate) \
+  FLTK2_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Widget *w), label(fltk3::_1to3_widget(w)), LabelW) \
+  FLTK2_WRAPPER_VCALLS_IMAGE(type3##_I, label(Fl_Menu_Item *w), label((fltk3::MenuItem*)w), LabelM) \
+  FLTK2_WRAPPER_VCALLS_IMAGE(type3##_I, draw(int X, int Y, int W, int H, int cx=0, int cy=0), draw(X, Y, W, H, cx, cy), Draw) \
+  FLTK2_WRAPPER_VCALLS_IMAGE(type3##_I, uncache(), uncache(), Uncache)
+
+
+//------------------------------------------------------------------------------
+
 namespace fltk3 {
   
   class Object;

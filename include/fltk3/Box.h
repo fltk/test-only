@@ -32,6 +32,7 @@
 #define FLTK3_BOX_H
 
 #include "Symbol.h"
+#include "Widget.h"
 
 /* Comment from matt , r9557
  * Removed fltk3::Box as a wiget class. In FLTK2, boxes are drawn simply by 
@@ -45,6 +46,14 @@
  */
 
 namespace fltk3 {
+  
+  class FLTK3_EXPORT BoxWidget : public Widget {
+  public:
+    BoxWidget(fltk3::Box* b, int x, int y, int w, int h, const char *l=0) 
+    : Widget(b, x, y, w, h, l) { }
+    BoxWidget(int x, int y, int w, int h, const char *l=0) 
+    : Widget(x, y, w, h, l) { }
+  };
   
   class FLTK3_EXPORT Box : public Symbol {
   public:

@@ -668,7 +668,7 @@ Fl_Double_Window* make_global_settings_window() {
   { global_settings_window = new Fl_Double_Window(403, 317, "FLTK Preferences");
     global_settings_window->color(FL_LIGHT1);
     { Fl_Group* o = new Fl_Group(10, 10, 380, 100, "Keyboard Focus Options");
-      o->box(FL_GTK_DOWN_BOX);
+      o->box(FL_DOWN_BOX);
       o->labelfont(2);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
       { wVisibleFocus = new Fl_Choice(245, 40, 100, 25, "Visible Keyboard Focus:");
@@ -693,7 +693,7 @@ hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
       o->end();
     } // Fl_Group* o
     { Fl_Group* o = new Fl_Group(10, 120, 380, 65, "Tooltip Options");
-      o->box(FL_GTK_DOWN_BOX);
+      o->box(FL_DOWN_BOX);
       o->labelfont(2);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
       { wShowTooltips = new Fl_Choice(245, 150, 100, 25, "Show Tooltips:");
@@ -707,7 +707,7 @@ ves the widget. If disabled, no tooltip is shown.\n\nDefault is on.");
       o->end();
     } // Fl_Group* o
     { Fl_Group* o = new Fl_Group(10, 194, 380, 66, "Drag And Drop Options");
-      o->box(FL_GTK_DOWN_BOX);
+      o->box(FL_DOWN_BOX);
       o->labelfont(2);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
       { wDNDText = new Fl_Choice(245, 225, 100, 25, "Allow dragging Text:");

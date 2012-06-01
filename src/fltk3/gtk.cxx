@@ -36,8 +36,6 @@
 #include <fltk3/draw.h>
 #include <fltk3/Box.h>
 
-extern void fl_internal_boxtype(fltk3::Box*, fltk3::BoxDrawF*);
-
 static const int tie_gap = 5;
 static const float tie_dk = 0.3f;
 static const float tie_lt = 0.45f;
@@ -500,7 +498,7 @@ static fltk3::UpBox upBox("upBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::UP_BOX = &upBox;
+fltk3::Box* fltk3::UP_BOX = &upBox;
 
 //------------------------------------------------------------------------------
 
@@ -514,7 +512,7 @@ static fltk3::DownBox downBox("downBox");
 /*!
  Draws a lowered rectangle.
  */
-fltk3::Box* const fltk3::DOWN_BOX = &downBox;
+fltk3::Box* fltk3::DOWN_BOX = &downBox;
 
 //------------------------------------------------------------------------------
 
@@ -528,7 +526,7 @@ static fltk3::ThinUpBox thinUpBox("thinUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::THIN_UP_BOX = &thinUpBox;
+fltk3::Box* fltk3::THIN_UP_BOX = &thinUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -542,7 +540,7 @@ static fltk3::ThinDownBox thinDownBox("thinDownBox");
 /*!
  Draws a lowered rectangle.
  */
-fltk3::Box* const fltk3::THIN_DOWN_BOX = &thinDownBox;
+fltk3::Box* fltk3::THIN_DOWN_BOX = &thinDownBox;
 
 //------------------------------------------------------------------------------
 

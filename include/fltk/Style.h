@@ -189,12 +189,37 @@ FL_API bool reset_theme();
 
 extern "C" FL_API bool fltk_theme();
 
+namespace fltk {
+  class Widget;
+  class Window;
+  class Group;
+}
 
 namespace fltk3 {
+  class Widget;
+  class Window;
+  class Group;
+  void *_wrapper(Widget*);
+  void *_wrapper(Window*);
+  void *_wrapper(Group*);
+  inline fltk::Widget *_3to2_widget(Widget *w) { return w?(fltk::Widget*)_wrapper(w):0; }
+  inline fltk::Window *_3to2_window(Window *w) { return w?(fltk::Window*)_wrapper(w):0; }
+  inline fltk::Group  *_3to2_group(Group *w) { return w?(fltk::Group*)_wrapper(w):0; }
+  void *_object(fltk::Widget *w);
+  void *_object(fltk::Window *w);
+  void *_object(fltk::Group *w);
+  inline Widget *_2to3_widget(fltk::Widget *w) { return w?(fltk3::Widget*)_object(w):0; }
+  inline Window *_2to3_window(fltk::Window *w) { return w?(fltk3::Window*)_object(w):0; }
+  inline Group  *_2to3_group(fltk::Group *w) { return w?(fltk3::Group*)_object(w):0; }
+  
+  inline int _2to3_damage(int b) { return b; } // FIXME: is that so?
+  inline int _3to2_damage(int b) { return b; } // FIXME: is that so?
   inline int _2to3_fontsize(float b) { return (int)b; }
   inline float _3to2_fontsize(int b) { return (float)b; }
   inline Box* _2to3_boxtype(fltk::Box* b) { return (Box*)b; }
   inline fltk::Box* _3to2_boxtype(Box* b) { return (fltk::Box*)b; }
+  inline Color _2to3_color(fltk::Color b) { return b; }
+  inline fltk::Color _3to2_color(Color b) { return b; }
 }
 
 

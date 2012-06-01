@@ -34,8 +34,6 @@
 #include "Flags.h"
 
 namespace fltk {
-
-#if 0 // FIXME: 123
   
 /// \name fltk/Color.h
 //@{
@@ -105,6 +103,8 @@ enum {
 
   WINDOWS_BLUE	= 0x88 //!< default selection_color
 };
+  
+#if 0 // FIXME: 123
 
 inline Color color(unsigned char r, unsigned char g, unsigned char b) {
   return Color((r<<24)+(g<<16)+(b<<8)); }

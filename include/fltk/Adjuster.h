@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -31,28 +30,49 @@
 #ifndef fltk_Adjuster_h
 #define fltk_Adjuster_h
 
+
+#include <fltk3/Adjuster.h>
 #include "Valuator.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(Adjuster, Adjuster)
+FLTK2_WRAPPER_INTERFACE_WIDGET(Adjuster, Adjuster)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
+  
+  class Adjuster : public Valuator {
+    
+  public:
 
-class FL_API Adjuster : public Valuator {
-public:
-  Adjuster(int x, int y, int w, int h, const char *l=0);
-  static NamedStyle* default_style;
-  void soft(int x) {soft_ = x;}
-  int soft() const {return soft_;}
-  int handle(int);
-
-protected:
-  void draw();
-  void value_damage();
-
-private:
-  int drag, highlight, last;
-  int ix;
-  int soft_;
-};
-
+    FLTK2_WIDGET_VCALLS(Adjuster, Adjuster)
+    
+    Adjuster() { /* empty */ }
+    
+    Adjuster(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::Adjuster_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+    void soft(int s) {
+      ((fltk3::Adjuster_I*)_p)->soft(s);
+    }
+    
+    int soft() const {
+      return ((fltk3::Adjuster_I*)_p)->soft();
+    }
+    
+#if 0
+    static NamedStyle* default_style;
+    
+  protected:
+    void value_damage();
+    
+#endif
+    
+  };
+  
 }
 #endif
 

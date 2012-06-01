@@ -360,11 +360,13 @@ static struct {
   {fl_gtk_down_box,             3,3,6,6,0}, // FL_FREE_BOX+7
 };
 
+
 /**
   Returns the X offset for the given boxtype.
   \see box_dy()
 */
 int fltk3::box_dx(fltk3::Box* t) {return t?t->dx():0;}
+
 
 /**
     Returns the Y offset for the given boxtype.
@@ -391,11 +393,13 @@ int fltk3::box_dx(fltk3::Box* t) {return t?t->dx():0;}
 */
 int fltk3::box_dy(fltk3::Box* t) {return t?t->dy():0;}
 
+
 /**
   Returns the width offset for the given boxtype.
   \see box_dy().
 */
 int fltk3::box_dw(fltk3::Box* t) {return t?t->dw():0;}
+
 
 /**
   Returns the height offset for the given boxtype.
@@ -403,24 +407,15 @@ int fltk3::box_dw(fltk3::Box* t) {return t?t->dw():0;}
 */
 int fltk3::box_dh(fltk3::Box* t) {return t?t->dh():0;}
 
-/**
-  Sets the drawing function for a given box type.
-  \param[in] t box type
-  \param[in] f box drawing function
-*/
-void fl_internal_boxtype(fltk3::Box* t, fltk3::BoxDrawF* f) {
-  // FIXME: if (!fl_box_table[t&255].set) {
-  // FIXME:   fl_box_table[t&255].f   = f;
-  // FIXME:   fl_box_table[t&255].set = 1;
-  // FIXME: }
-}
 
 /** Gets the current box drawing function for the specified box type. */
 fltk3::BoxDrawF *fltk3::get_boxtype(fltk3::Box* t) {
   return 0L; // FIXME: fl_box_table[t&255].f;
 }
+
+
 /** Sets the function to call to draw a specific boxtype. */
-void fltk3::set_boxtype(fltk3::Box* t, fltk3::BoxDrawF* f,
+void fltk3::set_boxtype(fltk3::BoxPtr& t, fltk3::BoxDrawF* f,
 		      uchar a, uchar b, uchar c, uchar d) {
   // FIXME: fl_box_table[t&255].f   = f;
   // FIXME: fl_box_table[t&255].set = 1;
@@ -432,8 +427,8 @@ void fltk3::set_boxtype(fltk3::Box* t, fltk3::BoxDrawF* f,
 
 
 /** Copies the from boxtype. */
-void fltk3::set_boxtype(fltk3::Box* to, fltk3::Box* from) {
-  // FIXME: fl_box_table[to&255] = fl_box_table[from&255];
+void fltk3::set_boxtype(fltk3::BoxPtr& to, fltk3::Box* from) {
+  to = from;
 }
 
 
@@ -505,7 +500,7 @@ static fltk3::BorderFrame borderFrame("borderFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::BORDER_FRAME = &borderFrame;
+fltk3::Box* fltk3::BORDER_FRAME = &borderFrame;
 
 //------------------------------------------------------------------------------
 
@@ -519,7 +514,7 @@ static fltk3::EngravedBox engravedBox("engravedBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::ENGRAVED_BOX = &engravedBox;
+fltk3::Box* fltk3::ENGRAVED_BOX = &engravedBox;
 
 //------------------------------------------------------------------------------
 
@@ -533,7 +528,7 @@ static fltk3::EmbossedBox embossedBox("embossedBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::EMBOSSED_BOX = &embossedBox;
+fltk3::Box* fltk3::EMBOSSED_BOX = &embossedBox;
 
 //------------------------------------------------------------------------------
 
@@ -547,7 +542,7 @@ static fltk3::BorderBox borderBox("borderBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::BORDER_BOX = &borderBox;
+fltk3::Box* fltk3::BORDER_BOX = &borderBox;
 
 //------------------------------------------------------------------------------
 
@@ -561,7 +556,7 @@ static fltk3::ShadowBox shadowBox("shadowBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::SHADOW_BOX = &shadowBox;
+fltk3::Box* fltk3::SHADOW_BOX = &shadowBox;
 
 //------------------------------------------------------------------------------
 
@@ -575,7 +570,7 @@ static fltk3::RoundedBox roundedBox("roundedBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::ROUNDED_BOX = &roundedBox;
+fltk3::Box* fltk3::ROUNDED_BOX = &roundedBox;
 
 //------------------------------------------------------------------------------
 
@@ -589,7 +584,7 @@ static fltk3::RShadowBox rShadowBox("rShadowBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::RSHADOW_BOX = &rShadowBox;
+fltk3::Box* fltk3::RSHADOW_BOX = &rShadowBox;
 
 //------------------------------------------------------------------------------
 
@@ -603,7 +598,7 @@ static fltk3::RFlatBox rFlatBox("rFlatBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::RFLAT_BOX = &rFlatBox;
+fltk3::Box* fltk3::RFLAT_BOX = &rFlatBox;
 
 //------------------------------------------------------------------------------
 
@@ -617,7 +612,7 @@ static fltk3::RoundUpBox roundUpBox("roundUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::ROUND_UP_BOX = &roundUpBox;
+fltk3::Box* fltk3::ROUND_UP_BOX = &roundUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -631,7 +626,7 @@ static fltk3::RoundDownBox roundDownBox("roundDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::ROUND_DOWN_BOX = &roundDownBox;
+fltk3::Box* fltk3::ROUND_DOWN_BOX = &roundDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -645,7 +640,7 @@ static fltk3::DiamondUpBox diamondUpBox("diamondUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::DIAMOND_UP_BOX = &diamondUpBox;
+fltk3::Box* fltk3::DIAMOND_UP_BOX = &diamondUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -659,7 +654,7 @@ static fltk3::DiamondDownBox diamondDownBox("diamondDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::DIAMOND_DOWN_BOX = &diamondDownBox;
+fltk3::Box* fltk3::DIAMOND_DOWN_BOX = &diamondDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -673,7 +668,7 @@ static fltk3::OvalBox ovalBox("ovalBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::OVAL_BOX = &ovalBox;
+fltk3::Box* fltk3::OVAL_BOX = &ovalBox;
 
 //------------------------------------------------------------------------------
 
@@ -687,7 +682,7 @@ static fltk3::OShadowBox oShadowBox("oShadowBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::OSHADOW_BOX = &oShadowBox;
+fltk3::Box* fltk3::OSHADOW_BOX = &oShadowBox;
 
 //------------------------------------------------------------------------------
 
@@ -701,7 +696,7 @@ static fltk3::OFlatBox oFlatBox("oFlatBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::OFLAT_BOX = &oFlatBox;
+fltk3::Box* fltk3::OFLAT_BOX = &oFlatBox;
 
 //------------------------------------------------------------------------------
 
@@ -718,7 +713,7 @@ static fltk3::ClassicUpBox classicUpBox("classicUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_UP_BOX = &classicUpBox;
+fltk3::Box* fltk3::CLASSIC_UP_BOX = &classicUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -732,7 +727,7 @@ static fltk3::ClassicDownBox classicDownBox("classicDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_DOWN_BOX = &classicDownBox;
+fltk3::Box* fltk3::CLASSIC_DOWN_BOX = &classicDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -746,7 +741,7 @@ static fltk3::ClassicThinUpBox classicThinUpBox("classicThinUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_THIN_UP_BOX = &classicThinUpBox;
+fltk3::Box* fltk3::CLASSIC_THIN_UP_BOX = &classicThinUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -760,7 +755,7 @@ static fltk3::ClassicThinDownBox classicThinDownBox("classicThinDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_THIN_DOWN_BOX = &classicThinDownBox;
+fltk3::Box* fltk3::CLASSIC_THIN_DOWN_BOX = &classicThinDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -774,7 +769,7 @@ static fltk3::ClassicRoundUpBox classicRoundUpBox("classicRoundUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_ROUND_UP_BOX = &classicRoundUpBox;
+fltk3::Box* fltk3::CLASSIC_ROUND_UP_BOX = &classicRoundUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -788,7 +783,7 @@ static fltk3::ClassicRoundDownBox classicRoundDownBox("classicRoundDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_ROUND_DOWN_BOX = &classicRoundDownBox;
+fltk3::Box* fltk3::CLASSIC_ROUND_DOWN_BOX = &classicRoundDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -804,7 +799,7 @@ static fltk3::UpFrame upFrame("upFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::UP_FRAME = &upFrame;
+fltk3::Box* fltk3::UP_FRAME = &upFrame;
 
 //------------------------------------------------------------------------------
 
@@ -818,7 +813,7 @@ static fltk3::DownFrame downFrame("downFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::DOWN_FRAME = &downFrame;
+fltk3::Box* fltk3::DOWN_FRAME = &downFrame;
 
 //------------------------------------------------------------------------------
 
@@ -832,7 +827,7 @@ static fltk3::ThinUpFrame thinUpFrame("thinUpFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::THIN_UP_FRAME = &thinUpFrame;
+fltk3::Box* fltk3::THIN_UP_FRAME = &thinUpFrame;
 
 //------------------------------------------------------------------------------
 
@@ -846,7 +841,7 @@ static fltk3::ThinDownFrame thinDownFrame("thinDownFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::THIN_DOWN_FRAME = &thinDownFrame;
+fltk3::Box* fltk3::THIN_DOWN_FRAME = &thinDownFrame;
 
 //------------------------------------------------------------------------------
 
@@ -860,7 +855,7 @@ static fltk3::EngravedFrame engravedFrame("engravedFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::ENGRAVED_FRAME = &engravedFrame;
+fltk3::Box* fltk3::ENGRAVED_FRAME = &engravedFrame;
 
 //------------------------------------------------------------------------------
 
@@ -874,7 +869,7 @@ static fltk3::EmbossedFrame embossedFrame("embossedFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::EMBOSSED_FRAME = &embossedFrame;
+fltk3::Box* fltk3::EMBOSSED_FRAME = &embossedFrame;
 
 //------------------------------------------------------------------------------
 
@@ -888,7 +883,7 @@ static fltk3::ShadowFrame shadowFrame("shadowFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::SHADOW_FRAME = &shadowFrame;
+fltk3::Box* fltk3::SHADOW_FRAME = &shadowFrame;
 
 //------------------------------------------------------------------------------
 
@@ -902,7 +897,7 @@ static fltk3::RoundedFrame roundedFrame("roundedFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::ROUNDED_FRAME = &roundedFrame;
+fltk3::Box* fltk3::ROUNDED_FRAME = &roundedFrame;
 
 //------------------------------------------------------------------------------
 
@@ -916,7 +911,7 @@ static fltk3::OvalFrame ovalFrame("ovalFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::OVAL_FRAME = &ovalFrame;
+fltk3::Box* fltk3::OVAL_FRAME = &ovalFrame;
 
 //------------------------------------------------------------------------------
 
@@ -930,7 +925,7 @@ static fltk3::ClassicUpFrame classicUpFrame("classicUpFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_UP_FRAME = &classicUpFrame;
+fltk3::Box* fltk3::CLASSIC_UP_FRAME = &classicUpFrame;
 
 //------------------------------------------------------------------------------
 
@@ -944,7 +939,7 @@ static fltk3::ClassicDownFrame classicDownFrame("classicDownFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_DOWN_FRAME = &classicDownFrame;
+fltk3::Box* fltk3::CLASSIC_DOWN_FRAME = &classicDownFrame;
 
 //------------------------------------------------------------------------------
 
@@ -958,7 +953,7 @@ static fltk3::ClassicThinUpFrame classicThinUpFrame("classicThinUpFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_THIN_UP_FRAME = &classicThinUpFrame;
+fltk3::Box* fltk3::CLASSIC_THIN_UP_FRAME = &classicThinUpFrame;
 
 //------------------------------------------------------------------------------
 
@@ -972,7 +967,7 @@ static fltk3::ClassicThinDownFrame classicThinDownFrame("classicThinDownFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::CLASSIC_THIN_DOWN_FRAME = &classicThinDownFrame;
+fltk3::Box* fltk3::CLASSIC_THIN_DOWN_FRAME = &classicThinDownFrame;
 
 //------------------------------------------------------------------------------
 

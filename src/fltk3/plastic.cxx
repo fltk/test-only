@@ -374,7 +374,7 @@ static fltk3::PlasticUpBox plasticUpBox("plasticUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_UP_BOX = &plasticUpBox;
+fltk3::Box* fltk3::PLASTIC_UP_BOX = &plasticUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -388,7 +388,7 @@ static fltk3::PlasticDownBox plasticDownBox("plasticDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_DOWN_BOX = &plasticDownBox;
+fltk3::Box* fltk3::PLASTIC_DOWN_BOX = &plasticDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -402,7 +402,7 @@ static fltk3::PlasticThinUpBox plasticThinUpBox("plasticThinUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_THIN_UP_BOX = &plasticThinUpBox;
+fltk3::Box* fltk3::PLASTIC_THIN_UP_BOX = &plasticThinUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -416,7 +416,7 @@ static fltk3::PlasticThinDownBox plasticThinDownBox("plasticThinDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_THIN_DOWN_BOX = &plasticThinDownBox;
+fltk3::Box* fltk3::PLASTIC_THIN_DOWN_BOX = &plasticThinDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -430,7 +430,7 @@ static fltk3::PlasticRoundUpBox plasticRoundUpBox("plasticRoundUpBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_ROUND_UP_BOX = &plasticRoundUpBox;
+fltk3::Box* fltk3::PLASTIC_ROUND_UP_BOX = &plasticRoundUpBox;
 
 //------------------------------------------------------------------------------
 
@@ -444,7 +444,7 @@ static fltk3::PlasticRoundDownBox plasticRoundDownBox("plasticRoundDownBox");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_ROUND_DOWN_BOX = &plasticRoundDownBox;
+fltk3::Box* fltk3::PLASTIC_ROUND_DOWN_BOX = &plasticRoundDownBox;
 
 //------------------------------------------------------------------------------
 
@@ -460,7 +460,7 @@ static fltk3::PlasticUpFrame plasticUpFrame("plasticUpFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_UP_FRAME = &plasticUpFrame;
+fltk3::Box* fltk3::PLASTIC_UP_FRAME = &plasticUpFrame;
 
 //------------------------------------------------------------------------------
 
@@ -474,7 +474,7 @@ static fltk3::PlasticDownFrame plasticDownFrame("plasticDownFrame");
 /*!
  Draws a raised rectangle.
  */
-fltk3::Box* const fltk3::PLASTIC_DOWN_FRAME = &plasticDownFrame;
+fltk3::Box* fltk3::PLASTIC_DOWN_FRAME = &plasticDownFrame;
 
 //------------------------------------------------------------------------------
 

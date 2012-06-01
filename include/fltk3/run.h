@@ -901,9 +901,10 @@ namespace fltk3 {
   void set_labeltype(fltk3::Labeltype, fltk3::Labeltype from); // is it defined ?
   
   // boxtypes:
+  typedef Box* BoxPtr;
   fltk3::BoxDrawF *get_boxtype(fltk3::Box*);
-  void set_boxtype(fltk3::Box*, fltk3::BoxDrawF*,uchar,uchar,uchar,uchar);
-  void set_boxtype(fltk3::Box*, fltk3::Box* from);
+  void set_boxtype(fltk3::BoxPtr&, fltk3::BoxDrawF*,uchar,uchar,uchar,uchar);
+  void set_boxtype(fltk3::BoxPtr&, fltk3::Box* from);
   int box_dx(fltk3::Box*);
   int box_dy(fltk3::Box*);
   int box_dw(fltk3::Box*);

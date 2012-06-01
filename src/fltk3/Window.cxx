@@ -297,6 +297,12 @@ class Fl_Widget;
 class Fl_Window;
 class Fl_Group;
 
+namespace fltk {
+  class Widget;
+  class Window;
+  class Group;
+}
+
 namespace fltk3 {
   void *_wrapper(Widget *w) { return w->wrapper(); }
   void *_wrapper(Window *w) { return w->wrapper(); }
@@ -304,6 +310,9 @@ namespace fltk3 {
   void *_object(Fl_Widget *w) { return ((Wrapper*)w)->_p; }
   void *_object(Fl_Window *w) { return ((Wrapper*)w)->_p; }
   void *_object(Fl_Group *w) { return ((Wrapper*)w)->_p; }
+  void *_object(fltk::Widget *w) { return ((Wrapper*)w)->_p; }
+  void *_object(fltk::Window *w) { return ((Wrapper*)w)->_p; }
+  void *_object(fltk::Group *w) { return ((Wrapper*)w)->_p; }
 }
 
 

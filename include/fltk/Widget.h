@@ -30,6 +30,11 @@
 #include "Style.h"
 #include "Rectangle.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(Widget, Widget)
+FLTK2_WRAPPER_INTERFACE_WIDGET(Widget, Widget)
+FLTK2_WRAPPER_INTERFACE_END()
+
 namespace fltk {
   
   class FL_API Widget;
@@ -57,8 +62,11 @@ namespace fltk {
     Widget() {}
     
   public:
+    
+    FLTK2_WIDGET_VCALLS(Widget, Widget);
+
     Widget(int x, int y, int w, int h, const char *label=0) {
-      _p = new fltk3::Widget(x, y, w, h, label);
+      _p = new fltk3::Widget_I(x, y, w, h, label);
       _p->wrapper(this);
     }
     
@@ -100,11 +108,21 @@ namespace fltk {
     bool	resize(int w, int h)	;
     
     void  get_absolute_rect( Rectangle *rect ) const;
+#endif
     
-    const char* label() const	{ return label_; }
-    void	label(const char* a);
-    void	copy_label(const char* a);
+    const char* label() const {
+      return ((fltk3::Widget_I*)_p)->label();
+    }
     
+    void label(const char* text) {
+      ((fltk3::Widget_I*)_p)->label(text);
+    }
+    
+    void copy_label(const char *new_label) {
+      ((fltk3::Widget_I*)_p)->copy_label(new_label);
+    }
+    
+#if 0
     const Symbol* image() const	{ return image_; }
     void	image(const Symbol* a)	{ image_ = a; }
     void	image(const Symbol& a)	{ image_ = &a; }
@@ -122,11 +140,21 @@ namespace fltk {
     bool	test_shortcut() const	;
     bool  test_shortcut(bool) const;
     
-    Callback_p callback() const	{ return callback_; }
-    void	callback(Callback* c, void* p) { callback_=c; user_data_=p; }
+#endif
+    
+    Callback_p callback() const {
+      return (Callback_p)((fltk3::Widget_I*)_p)->callback();
+    }
+    
+    void callback(Callback* cb, void* p) {
+      ((fltk3::Widget_I*)_p)->callback( (fltk3::Callback*)cb, p );
+    }
+    
+#if 0    
     void	callback(Callback* c)	{ callback_=c; }
     void	callback(Callback0*c)	{ callback_=(Callback*)c; }
     void	callback(Callback1*c, long p=0) { callback_=(Callback*)c; user_data_=(void*)p; }
+    
     void*	user_data() const	{ return user_data_; }
     void	user_data(void* v)	{ user_data_ = v; }
     long	argument() const	{ return (long)user_data_; }
@@ -199,11 +227,11 @@ namespace fltk {
 #endif 
     
     void redraw() {
-      ((fltk3::Widget*)_p)->redraw();
+      ((fltk3::Widget_I*)_p)->redraw();
     }
     
     void redraw(uchar b) {
-      ((fltk3::Widget*)_p)->damage(b); // FIXME: translate "b"
+      ((fltk3::Widget_I*)_p)->damage( fltk3::_2to3_damage(b) );
     }
     
 #if 0
@@ -241,7 +269,13 @@ namespace fltk {
     Font*	labelfont()		const;
     Font*	textfont()		const;
     LabelType* labeltype()	const;
-    Color	color()			const;
+#endif
+    
+    Color color() const {
+      return fltk3::_3to2_color( ((fltk3::Widget_I*)_p)->color() );
+    }
+    
+#if 0
     Color	textcolor()		const;
     Color	selection_color()	const;
     Color	selection_textcolor()	const;
@@ -252,7 +286,7 @@ namespace fltk {
 #endif
     
     float labelsize() {
-      return fltk3::_3to2_fontsize( ((fltk3::Widget*)_p)->labelsize() );
+      return fltk3::_3to2_fontsize( ((fltk3::Widget_I*)_p)->labelsize() );
     }
     
 #if 0 // FIXME: 123
@@ -263,7 +297,7 @@ namespace fltk {
 #endif
     
     void box(Box *b) {
-      ((fltk3::Widget*)_p)->box(fltk3::_2to3_boxtype(b));
+      ((fltk3::Widget_I*)_p)->box(fltk3::_2to3_boxtype(b));
     }
     
 #if 0 // FIXME: 123
@@ -273,7 +307,13 @@ namespace fltk {
     void labelfont(Font*)		;
     void textfont(Font*)		;
     void labeltype(LabelType*)	;
-    void color(Color)		;
+#endif
+    
+    void color(Color bg) {
+      ((fltk3::Widget_I*)_p)->color( fltk3::_2to3_color(bg) );
+    }
+    
+#if 0
     void textcolor(Color a)	;
     void selection_color(Color)	;
     void selection_textcolor(Color);
@@ -284,12 +324,12 @@ namespace fltk {
 #endif
     
     void labelsize(float a) {
-      ((fltk3::Widget*)_p)->labelsize(fltk3::_2to3_fontsize(a));
+      ((fltk3::Widget_I*)_p)->labelsize(fltk3::_2to3_fontsize(a));
     }
     
 #if 0 // FIXME: 123
     void textsize(float a) {
-      ((fltk3::Widget*)_p)->textsize(fltk3::_2to3_fontsize(a));
+      ((fltk3::Widget_I*)_p)->textsize(fltk3::_2to3_fontsize(a));
     }
     
     void leading(float a)		;
@@ -303,20 +343,6 @@ namespace fltk {
     bool  remove(const AssociationType&, void* data);
     bool  find(const AssociationType&, void* data) const;
         
-  private:
-    
-    const char*		label_;
-    const Symbol*		image_;
-    unsigned		flags_;
-    const Style*		style_;
-    Callback*		callback_;
-    void*			user_data_;
-    const char*		tooltip_; // make this into another widget?
-    Group*		parent_;
-    uchar			type_;
-    uchar			damage_;
-    uchar			layout_damage_;
-    uchar			when_;
 #endif
   };
   

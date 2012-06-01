@@ -31,6 +31,12 @@
 #include <fltk3/Window.h>
 #include "Group.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(Window, Window)
+FLTK2_WRAPPER_INTERFACE_WIDGET(Window, Window)
+FLTK2_WRAPPER_INTERFACE_WINDOW(Window, Window)
+FLTK2_WRAPPER_INTERFACE_END()
+
 namespace fltk {
 
 #if 0 // FIXME: 123
@@ -45,17 +51,21 @@ class Monitor;
 class Window : public Group {
 public:
 
+  FLTK2_WINDOW_VCALLS(Window, Window)
+  
+  Window() { /* empty */ }
+  
+  Window(int w, int h, const char* label = 0) {
+    _p = new fltk3::Window_I(w, h, label);
+    _p->wrapper(this);
+  }
+  
   Window(int x, int y, int w, int h, const char *label = 0, bool begin = false) {
-    fltk3::Group *g = fltk3::Group::current();
-    _p = new fltk3::Window(x, y, w, h, label);
+    fltk3::Group *g = fltk3::Group::current(); // FIXME: is that so in the original 2 code?
+    _p = new fltk3::Window_I(x, y, w, h, label);
     _p->wrapper(this);
     if (!begin)
       fltk3::Group::current(g);
-  }
-  
-  Window(int w, int h, const char *label = 0) {
-    _p = new fltk3::Window(w, h, label);
-    _p->wrapper(this);
   }
   
 #if 0 // FIXME: 123
