@@ -35,17 +35,16 @@
 
 #include <fltk/run.h>
 #include <fltk/Window.h>
-#if 0
 #include <fltk/ValueSlider.h>
 #include <fltk/draw.h>
 
+
 float dargs[7] = {90, 90, 100, 100, 0, 360, 0};
 const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
-#endif
+
 
 using namespace fltk;
 
-#if 0
 class Drawing : public Widget {
   void draw() {
     push_clip(0,0, w(), h());
@@ -57,18 +56,23 @@ class Drawing : public Widget {
       rotate(dargs[6]);
       translate(-w()/2.0f, -h()/2.0f);
       //}
+    fltk3::begin_complex_polygon();
+    setcolor_alpha(GRAY33, 0.5);
     addarc(dargs[0],dargs[1],dargs[2],dargs[3],dargs[4],dargs[5]);
     closepath();
     addarc(120,120,40,40,0,-360);
     setcolor_alpha(GRAY33,0.6);
     fillstrokepath(WHITE);
+#if 0
     // draw a hardware circle to see how well rotations match:
     setcolor(GRAY33);
     fltk::Rectangle r(20,20,(int)(dargs[2]+1),(int)(dargs[3]+1));
     addchord(r,dargs[4],dargs[5]);
     fillstrokepath(WHITE);
     // now draw non-rotated hardware circle to check if it inscribes:
+#endif
     pop_matrix();
+#if 0
     setcolor_alpha(GRAY40,0.6);
     r.set(10,(int) (270-dargs[3]),(int) dargs[2],(int)dargs[3]);
     fillrect(r);
@@ -77,6 +81,7 @@ class Drawing : public Widget {
     setcolor_alpha(RED,0.6);
     addchord(r,dargs[4],dargs[5]);
     fillstrokepath(GRAY90);
+#endif
     pop_clip();
   }
 public:
@@ -91,10 +96,8 @@ void slider_cb(Widget* o, void* v) {
   d->redraw();
 }
 
-#endif
 int main(int argc, char** argv) {
-  Window window(300,500);
-#if 0
+  fltk::Window window(300,500);
   window.begin();
   Drawing drawing(10,10,280,280);
   d = &drawing;
@@ -106,17 +109,22 @@ int main(int argc, char** argv) {
     if (n<4) {s->minimum(0); s->maximum(300);}
     else if (n==6) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
+#if 0
     s->type(Slider::TICK_ABOVE);
+#endif
     s->step(1);
     s->value(dargs[n]);
-	s->clear_flag(ALIGN_MASK);
+#if 0
+    s->clear_flag(ALIGN_MASK);
     s->set_flag(ALIGN_LEFT);
+#else
+    s->type(s->type() | 1);
+#endif
     s->callback(slider_cb, (void*)n);
   }
 
   window.end();
   window.resizable(drawing);
-#endif
   window.show(argc,argv);
   return run();
 }

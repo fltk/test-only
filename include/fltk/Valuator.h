@@ -57,18 +57,35 @@ namespace fltk {
       return ((fltk3::Valuator_I*)_p)->value(v);
     }
         
+    double minimum() const {
+      return ((fltk3::Valuator_I*)_p)->minimum();
+    }
+      
+    void minimum(double a) {
+      ((fltk3::Valuator_I*)_p)->minimum(a);
+    }
+    
+    double maximum() const {
+      return ((fltk3::Valuator_I*)_p)->maximum();
+    }
+    
+    void maximum(double a) {
+      ((fltk3::Valuator_I*)_p)->maximum(a);
+    }
+    
+    void range(double a, double b) {
+      ((fltk3::Valuator_I*)_p)->range(a, b);
+    }
+    
+    double step() const {
+      return ((fltk3::Valuator_I*)_p)->step();
+    }
+    
+    void step(double a) {
+      ((fltk3::Valuator_I*)_p)->step(a);
+    }
+    
 #if 0
-    double minimum() const {return minimum_;}
-    void minimum(double a) {minimum_ = a;}
-    
-    double maximum() const {return maximum_;}
-    void maximum(double a) {maximum_ = a;}
-    
-    void range(double a, double b) {minimum_ = a; maximum_ = b;}
-    
-    double step() const {return step_;}
-    void step(double a) {step_ = a;}
-    
     double linesize() const;
     void linesize(double a) {linesize_ = a;}
     double linesize_setting() const {return linesize_;}
@@ -102,15 +119,6 @@ namespace fltk {
     
     virtual void value_damage(); // callback whenever value changes
     void set_value(double v) {value_ = v;} // change w/o doing value_damage
-    
-  private:
-    
-    double value_;
-    double previous_value_;
-    double minimum_;
-    double maximum_;
-    double step_;
-    double linesize_;
 #endif
     
   };

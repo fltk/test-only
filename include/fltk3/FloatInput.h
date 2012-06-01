@@ -32,7 +32,7 @@
 #ifndef Fltk3_Float_Input_H
 #define Fltk3_Float_Input_H
 
-#include "Input.h"
+#include "NumericInput.h"
 
 namespace fltk3 {
   
@@ -41,7 +41,7 @@ namespace fltk3 {
    that only allows the user to type floating point numbers (sign,
    digits, decimal point, more digits, 'E' or 'e', sign, digits).
    */
-  class FLTK3_EXPORT FloatInput : public fltk3::Input { // don't use FLTK3_EXPORT here !
+  class FLTK3_EXPORT FloatInput : public fltk3::NumericInput { // don't use FLTK3_EXPORT here !
   public:
     /**
      Creates a new fltk3::FloatInput widget using the given position,
@@ -53,7 +53,7 @@ namespace fltk3 {
     FloatInput(int X,int Y,int W,int H,const char *l = 0);
 #else
     FloatInput(int X,int Y,int W,int H,const char *l = 0)
-    : fltk3::Input(X,Y,W,H,l) {type(fltk3::FLOAT_INPUT);}
+    : fltk3::NumericInput(X,Y,W,H,l) {type(fltk3::FLOAT_INPUT);}
 #endif
   };
   

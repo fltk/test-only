@@ -97,9 +97,17 @@ namespace fltk {
       GROUP_TYPE         = 0xe0,
       WINDOW_TYPE        = 0xf0
     };
+#endif
     
-    uchar	type() const		{ return type_; }
-    void	type(uchar t)		{ type_ = t; }
+    uchar type() const { 
+      return ((fltk3::Widget_I*)_p)->type();
+    }
+    
+    void type(uchar t) {
+      ((fltk3::Widget_I*)_p)->type(t);
+    }
+
+#if 0
     bool	is_group() const	{ return type_ >= GROUP_TYPE; }
     bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
     

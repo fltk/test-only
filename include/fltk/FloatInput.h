@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -6,7 +5,7 @@
 // typed. Currently this is implemented by the base class by checking
 // type() but this may change in the future.
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,21 +30,43 @@
 #ifndef fltk_FloatInput_h
 #define fltk_FloatInput_h
 
+#include <fltk3/FloatInput.h>
 #include "NumericInput.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(FloatInput, FloatInput)
+FLTK2_WRAPPER_INTERFACE_WIDGET(FloatInput, FloatInput)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
+  
+  class FloatInput : public NumericInput {
+    
+  public:
 
-class FL_API FloatInput : public NumericInput {
-  virtual bool replace(int, int, const char*, int);
-public:
-  enum { FLOAT = 1, INT = 2 };
-  FloatInput(int x,int y,int w,int h,const char *l = 0)
+    FLTK2_WIDGET_VCALLS(FloatInput, FloatInput)
+    
+    FloatInput() {}
+    
+    FloatInput(int x,int y,int w,int h, const char *l = 0) {
+      _p = new fltk3::FloatInput_I(x, y, w, h, l);
+      _p->wrapper(this);
+    }
+
+#if 0
+    virtual bool replace(int, int, const char*, int);
+  public:
+    enum { FLOAT = 1, INT = 2 };
+    FloatInput(int x,int y,int w,int h,const char *l = 0)
     : NumericInput(x,y,w,h,l) { type(FLOAT); }
-  long lvalue() const;
-  int ivalue() const { return int(lvalue()); }
-  double fvalue() const;
-};
-
+    long lvalue() const;
+    int ivalue() const { return int(lvalue()); }
+    double fvalue() const;
+#endif
+    
+  };
+  
 }
 #endif
 

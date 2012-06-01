@@ -28,50 +28,40 @@
 //    http://www.fltk.org/str.php
 //
 
-#ifndef fltk_NumericInput_h
-#define fltk_NumericInput_h
+/* \file
+ fltk3::NumericInput widget . */
 
-#include <fltk3/NumericInput.h>
+
+#ifndef Fltk3_Numeric_Input_H
+#define Fltk3_Numeric_Input_H
+
 #include "Input.h"
 
-
-FLTK2_WRAPPER_INTERFACE_BEGIN(NumericInput, NumericInput)
-FLTK2_WRAPPER_INTERFACE_WIDGET(NumericInput, NumericInput)
-FLTK2_WRAPPER_INTERFACE_END()
-
-
-namespace fltk {
+namespace fltk3 {
   
-  class FL_API NumericInput : public Input {
-    
-#if 0
-  protected:
-    int handle_arrow(int);
-#endif
-    
+  /**
+    One-line text input field, which handles up/down arrows to
+    change the digit to the right of the cursor. This still allows
+    arbitrary text such as a math expression to be typed, if you
+    want to restrict the user to a number use FloatInput or IntInput.
+   */
+  class FLTK3_EXPORT NumericInput : public fltk3::Input {
   public:
-    
-    FLTK2_WIDGET_VCALLS(NumericInput, NumericInput)
-    
-    NumericInput() {}
-    
-    NumericInput(int x,int y,int w,int h, const char *l = 0) {
-      _p = new fltk3::NumericInput_I(x, y, w, h, l);
-      _p->wrapper(this);
-    }
-
-#if 0
-    NumericInput(int x,int y, int w,int h,const char* l = 0) :
-    Input(x,y,w,h,l) {when(WHEN_ENTER_KEY|WHEN_RELEASE);}
-    void value(double);
-    void value(int);
-    int handle(int);
-#endif
+    /**
+     Creates a new fltk3::NumericInput widget using the given position,
+     size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     
+     Inherited destructor destroys the widget and any value associated with it
+     FIXME: this is not yet implemented! Please copy code from FLTK2!
+     */
+    NumericInput(int X,int Y,int W,int H,const char *l = 0)
+    : fltk3::Input(X,Y,W,H,l) {type(fltk3::FLOAT_INPUT);}
   };
   
 }
+
 #endif
 
 //
-// End of "$Id$"
+// End of "$Id$".
 //

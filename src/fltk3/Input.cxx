@@ -797,8 +797,13 @@ fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
  */
 #if defined(FL_DLL)
 
-fltk3::FloatInput::FloatInput(int X,int Y,int W,int H,const char *l)
+fltk3::NumericInput::NumericInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
+  type(fltk3::FLOAT_INPUT);
+}
+
+fltk3::FloatInput::FloatInput(int X,int Y,int W,int H,const char *l)
+: fltk3::NumericInput(X,Y,W,H,l) {
   type(fltk3::FLOAT_INPUT);
 }
 

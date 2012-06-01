@@ -1,8 +1,7 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,26 +26,43 @@
 #ifndef fltk_Value_Slider_h
 #define fltk_Value_Slider_h
 
+
+#include <fltk3/ValueSlider.h>
 #include "Slider.h"
 #include "FloatInput.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(ValueSlider, ValueSlider)
+FLTK2_WRAPPER_INTERFACE_WIDGET(ValueSlider, ValueSlider)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class FL_API ValueSlider : public Slider {
-public:
-  FloatInput input;
-  int handle(int);
-  void draw();
-  ValueSlider(int x,int y,int w,int h, const char *l = 0);
-  ~ValueSlider();
-  void layout();
-  virtual void value_damage(); // cause damage() due to value() changing
-
-private:
-  static void input_cb(Widget*,void*);
-  void slider_rect(Rectangle&);
-};
-
+  
+  class ValueSlider : public Slider {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(ValueSlider, ValueSlider)
+    
+    ValueSlider() {}
+    
+    ValueSlider(int x,int y,int w,int h, const char *l = 0) {
+      _p = new fltk3::ValueSlider_I(x, y, w, h, l);
+      _p->wrapper(this);
+    }
+    
+#if 0
+    FloatInput input;
+    int handle(int);
+    void draw();
+    ~ValueSlider();
+    void layout();
+    virtual void value_damage(); // cause damage() due to value() changing
+#endif
+    
+  };
+  
 }
 #endif
 

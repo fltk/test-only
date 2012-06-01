@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -29,103 +28,97 @@
 #ifndef fltk_Input_h
 #define fltk_Input_h
 
-#ifndef fltk_Widget_h
+#include <fltk3/Input.h>
 #include "Widget.h"
-#endif
+
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(Input, Input)
+FLTK2_WRAPPER_INTERFACE_WIDGET(Input, Input)
+FLTK2_WRAPPER_INTERFACE_END()
+
 
 namespace fltk {
+  
+  class Input : public Widget {
+    
+  public:
 
-class FL_API Input : public Widget {
-public:
-  enum { // values for type()
-    NORMAL	= 0,
-    FLOAT_INPUT = 1,
-    INT_INPUT	= 2,
-    SECRET	= 3,
-    MULTILINE	= 4,
-    WORDWRAP	= 5
-  };
+    FLTK2_WIDGET_VCALLS(Input, Input)
+    
+    Input() {}
+    
+    Input(int x,int y,int w,int h, const char *l = 0) {
+      _p = new fltk3::Input_I(x, y, w, h, l);
+      _p->wrapper(this);
+    }
 
-  Input(int, int, int, int, const char* = 0);
-  ~Input();
-  static NamedStyle* default_style;
-
-  void draw();
-  void draw(const Rectangle&);
-  int handle(int);
-  int handle(int event, const Rectangle&);
-  bool handle_key();
-
-  bool text(const char*);
-  bool text(const char*, int);
-  bool static_text(const char*);
-  bool static_text(const char*, int);
-  const char* text() const {return text_;}
-  char at(int i) const {return text_[i];}
+#if 0
+    enum { // values for type()
+      NORMAL	= 0,
+      FLOAT_INPUT = 1,
+      INT_INPUT	= 2,
+      SECRET	= 3,
+      MULTILINE	= 4,
+      WORDWRAP	= 5
+    };
+    
+    Input(int, int, int, int, const char* = 0);
+    ~Input();
+    static NamedStyle* default_style;
+    
+    void draw();
+    void draw(const Rectangle&);
+    int handle(int);
+    int handle(int event, const Rectangle&);
+    bool handle_key();
+    
+    bool text(const char*);
+    bool text(const char*, int);
+    bool static_text(const char*);
+    bool static_text(const char*, int);
+    const char* text() const {return text_;}
+    char at(int i) const {return text_[i];}
 #ifdef FLTK_1_WIDGET  // back-compatability section:
-  char index(int i) const {return text_[i];}
+    char index(int i) const {return text_[i];}
 #endif
 #ifndef SKIP_DEPRECIATED
-  bool value(const char* v) {return text(v);}
-  bool value(const char* v, int n) {return text(v,n);}
-  bool static_value(const char* v) {return static_text(v);}
-  const char* value() const {return text_;}
+    bool value(const char* v) {return text(v);}
+    bool value(const char* v, int n) {return text(v,n);}
+    bool static_value(const char* v) {return static_text(v);}
+    const char* value() const {return text_;}
 #endif
-  int size() const {return size_;}
-  void reserve(int newsize);
-
-  int position() const {return position_;}
-  int mark() const {return mark_;}
-  void position(int p, int m);
-  void position(int p) {position(p, p);}
-  void up_down_position(int position, bool extend);
-  void mark(int m) { position(position(), m);}
-
-  virtual bool replace(int, int, const char*, int);
-  bool cut() {return replace(position(), mark(), 0, 0);}
-  bool cut(int n) {return replace(position(), position()+n, 0, 0);}
-  bool cut(int a, int b) {return replace(a, b, 0, 0);}
-  bool insert(const char* t);
-  bool insert(const char* t, int l){return replace(position_, mark_, t, l);}
-  bool replace(int a, int b, char c) {return replace(a,b,&c,1);}
-  bool copy(bool clipboard = true);
-  bool undo();
-  void maybe_do_callback();
-
-  int word_start(int i) const;
-  int word_end(int i) const;
-  int line_start(int i) const;
-  int line_end(int i) const;
-  int mouse_position(const Rectangle&) const;
-  int xscroll() const {return xscroll_;}
-  int yscroll() const {return yscroll_;}
-
-private:
-
-  const char* text_;
-  char* buffer;
-
-  int size_;
-  int bufsize;
-  int position_;
-  int mark_;
-  int xscroll_, yscroll_;
-  int mu_p;
-  int label_width;
-
-  const char* expand(const char*, char*, int) const;
-  float expandpos(const char*, const char*, const char*, int*) const;
-  void minimal_update(int, int);
-  void minimal_update(int p);
-  void erase_cursor_at(int p);
-
-  void setfont() const;
-
-  void shift_position(int p);
-  void shift_up_down_position(int p);
-
-};
-
+    int size() const {return size_;}
+    void reserve(int newsize);
+    
+    int position() const {return position_;}
+    int mark() const {return mark_;}
+    void position(int p, int m);
+    void position(int p) {position(p, p);}
+    void up_down_position(int position, bool extend);
+    void mark(int m) { position(position(), m);}
+    
+    virtual bool replace(int, int, const char*, int);
+    bool cut() {return replace(position(), mark(), 0, 0);}
+    bool cut(int n) {return replace(position(), position()+n, 0, 0);}
+    bool cut(int a, int b) {return replace(a, b, 0, 0);}
+    bool insert(const char* t);
+    bool insert(const char* t, int l){return replace(position_, mark_, t, l);}
+    bool replace(int a, int b, char c) {return replace(a,b,&c,1);}
+    bool copy(bool clipboard = true);
+    bool undo();
+    void maybe_do_callback();
+    
+    int word_start(int i) const;
+    int word_end(int i) const;
+    int line_start(int i) const;
+    int line_end(int i) const;
+    int mouse_position(const Rectangle&) const;
+    int xscroll() const {return xscroll_;}
+    int yscroll() const {return yscroll_;}
+    
+#endif
+  };
+  
 }
 
 #endif

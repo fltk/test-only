@@ -39,40 +39,61 @@
 //#define FLTK_CENTER_X(coord, length)  (coord + (length>>1))
 //#define FLTK_CENTER_Y(coord, length)  (coord + (length>>1))
 
+
 namespace fltk {
   
 
-  class FL_API Rectangle : public fltk3::WidgetWrapper {
+  class Rectangle : public fltk3::WidgetWrapper {
   protected:
     // FIXME: 123 - this should be public, but then it must initialize _p, which 
     // in turn means that we must create a different constructor that is called 
     // for a derived class (Widget).
     Rectangle() {}
     
-#if 0 // FIXME: 123
-
  public:
 
-  /*! Left edge */
-  int x() const {return x_;}
-  /*! Top edge */
-  int y() const {return y_;}
-  /*! Distance between left and right edges */
-  int w() const {return w_;}
-  /*! Distance between top and bottom edges */
-  int h() const {return h_;}
+    int x() {
+      return ((fltk3::Rectangle*)_p)->x();
+    }
+    
+    int y() {
+      return ((fltk3::Rectangle*)_p)->y();
+    }
+    
+    int w() {
+      return ((fltk3::Rectangle*)_p)->w();
+    }
+    
+    int h() {
+      return ((fltk3::Rectangle*)_p)->h();
+    }
+    
+    
+#if 0 // FIXME: 123
+    
   /*! Return x()+w(), the right edge of the rectangle. */
   int r() const {return x_+w_;}
   /*! Return y()+h(), the bottom edge of the rectangle. */
   int b() const {return y_+h_;}
-  /*! Move the rectangle so the left edge is at \a v. */
-  void x(int v) {x_ = v;}
-  /*! Move the rectangle so the top edge is at \a v. */
-  void y(int v) {y_ = v;}
-  /*! Change w() by moving the right edge. x() does not change. */
-  void w(int v) {w_ = v;}
-  /*! Change h() by moving the bottom edge. y() does not change. */
-  void h(int v) {h_ = v;}
+#endif
+    
+    void x(int v) {
+      ((fltk3::Rectangle*)_p)->x(v);
+    }
+    
+    void y(int v) {
+      ((fltk3::Rectangle*)_p)->y(v);
+    }
+    
+    void w(int v) {
+      ((fltk3::Rectangle*)_p)->w(v);
+    }
+    
+    void h(int v) {
+      ((fltk3::Rectangle*)_p)->h(v);
+    }
+    
+#if 0
   /*! Change x() without changing r(), by changing the width. */
   void set_x(int v) {w_ -= v-x_; x_ = v;}
   /*! Change y() without changing b(), by changing the height. */
@@ -108,11 +129,15 @@ namespace fltk {
   /*! Where to put baseline to center current font nicely */
   int baseline_y() const;
 
-  Rectangle() {}
-
-  /*! Constructor that sets x(), y(), w(), and h(). */
-  Rectangle(int x, int y, int w, int h) : x_(x), y_(y), w_(w), h_(h) {}
-
+#endif
+    
+    /*! Constructor that sets x(), y(), w(), and h(). */
+    Rectangle(int x, int y, int w, int h) {
+      _p = new fltk3::Rectangle(x, y, w, h);
+      _p->wrapper(this);
+    }
+    
+#if 0
   /*! Constructor that sets x() and y() to zero, and sets w() and h(). */
   Rectangle(int w, int h) : x_(0), y_(0), w_(w), h_(h) {}
 

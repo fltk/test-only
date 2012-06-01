@@ -1,7 +1,6 @@
-#error header has not been ported to 3.0 yet
 // "$Id$"
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,13 +36,18 @@
 #ifndef fltk_draw_h
 #define fltk_draw_h
 
+#include <fltk3/draw.h>
+
+#if 0
 #include "Flags.h" // for alignment values
 #include "Color.h"
 #include "Rectangle.h"
 #include "PixelType.h"
+#endif
 
 namespace fltk {
 
+#if 0
 /// \name fltk/draw.h
 //@{
 
@@ -56,15 +60,37 @@ class FL_API GSave {
   GSave();
   ~GSave();
 };
-
-// Transformation
-FL_API void push_matrix();
-FL_API void pop_matrix();
-FL_API void scale(float x, float y);
-FL_API void scale(float x);
-FL_API void translate(float x, float y);
-FL_API void translate(int x, int y);
-FL_API void rotate(float d);
+#endif
+  
+  void push_matrix() {
+    fltk3::push_matrix();
+  }
+  
+  void pop_matrix() {
+    fltk3::pop_matrix();
+  }
+  
+  void scale(float x, float y) {
+    fltk3::scale(x, y);
+  }
+  
+  void scale(float x) {
+    fltk3::scale(x);
+  }
+  
+  void translate(float x, float y) {
+    fltk3::translate(x, y);
+  }
+  
+  void translate(int x, int y) {
+    fltk3::translate(x, y);
+  }
+  
+  void rotate(float d) {
+    fltk3::rotate(d);
+  }
+  
+#if 0
 FL_API void concat(float, float, float, float, float, float);
 FL_API void load_identity();
 
@@ -78,15 +104,34 @@ FL_API void transform(int& x, int& y, int& w, int& h);
 // Clipping
 FL_API void push_clip(const Rectangle&);
 //! Same as push_clip(Rectangle(x,y,w,h)) but faster:
-FL_API void push_clip(int X,int Y, int W, int H);
+#endif
+  
+  void push_clip(int X,int Y, int W, int H) {
+    fltk3::push_clip(X, Y, W, H);
+  }
+  
+#if 0
 FL_API void clipout(const Rectangle&);
-FL_API void pop_clip();
+#endif
+  
+  void pop_clip() {
+    fltk3::pop_clip();
+  }
+  
+#if 0
 FL_API void push_no_clip();
 FL_API bool not_clipped(const Rectangle&);
 FL_API int intersect_with_clip(Rectangle&);
 
 FL_API void setcolor(Color);
-FL_API void setcolor_alpha(Color, float alpha);
+#endif
+  
+  // FIXME: no alpha yet!
+  void setcolor_alpha(Color c, float alpha) {
+    fltk3::color(c);
+  }
+  
+#if 0
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
 
@@ -135,17 +180,37 @@ FL_API void addvertices(int n, const float v[][2]);
 FL_API void addvertices(int n, const int v[][2]);
 FL_API void addvertices_transformed(int n, const float v[][2]);
 FL_API void addcurve(float,float, float,float, float,float, float,float);
-FL_API void addarc(float x,float y,float w,float h, float a1, float a2);
+#endif
+  
+  void addarc(float x,float y,float w,float h, float a1, float a2) {
+    // FIXME: I like the FLTK2 naming convention much more!
+    fltk3::arc(x, y, w, h, a1, a2);
+  }
+  
+#if 0
 FL_API void addpie(const Rectangle& r, float a, float a2);
 FL_API void addchord(const Rectangle& r,float a,float a2);
-FL_API void closepath();
+#endif
+  
+  void closepath() {
+    fltk3::gap();
+  }
 
+#if 0
 // Shapes and lines
 FL_API void strokepath();
 FL_API void fillpath();
-FL_API void fillstrokepath(Color);
+#endif
 
-FL_API void fillrect(int, int, int, int);
+  void fillstrokepath(Color c) {
+    fltk3::end_polygon();
+  }
+  
+  void fillrect(int x, int y, int w, int h) {
+    fltk3::rectf(x, y, w, h);
+  }
+  
+#if 0
 inline void fillrect(const Rectangle& r) {fillrect(r.x(),r.y(),r.w(),r.h());}
 FL_API void strokerect(int, int, int, int);
 inline void strokerect(const Rectangle& r) {strokerect(r.x(),r.y(),r.w(),r.h());}
@@ -216,7 +281,8 @@ FL_API void overlay_clear();
 #endif
 
 //@}
-
+#endif
+  
 }
 
 #endif
