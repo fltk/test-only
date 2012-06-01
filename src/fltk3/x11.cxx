@@ -39,6 +39,7 @@
 #  include <fltk3/run.h>
 #  include <fltk3/x.h>
 #  include <fltk3/Window.h>
+#  include <fltk3/Box.h>
 #  include <fltk3/utf8.h>
 #  include <fltk3/Tooltip.h>
 #  include <fltk3/draw.h>
@@ -2102,7 +2103,9 @@ void fltk3::Window::label(const char *name,const char *iname) {
 // contents are restored to the area, but this assumes the area
 // is cleared to background color.  So this is disabled in this version.
 // fltk3::Window *fl_boxcheat;
-static inline int can_boxcheat(uchar b) {return (b==1 || ((b&2) && b<=15));}
+static inline int can_boxcheat(fltk3::Box* b) {
+  return b->fills_rectangle();
+}
 
 void fltk3::Window::show() {
   image(fltk3::scheme_bg_);
