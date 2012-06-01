@@ -25,20 +25,27 @@
 //    http://www.fltk.org/str.php
 //
 
+
+#if 0
+
 #include <config.h> // for  USE_CAIRO definition
 
 #include <fltk/x.h>
+#endif
 
 #include <fltk/run.h>
-#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Window.h>
+#if 0
 #include <fltk/ValueSlider.h>
 #include <fltk/draw.h>
 
 float dargs[7] = {90, 90, 100, 100, 0, 360, 0};
 const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
+#endif
 
 using namespace fltk;
 
+#if 0
 class Drawing : public Widget {
   void draw() {
     push_clip(0,0, w(), h());
@@ -84,8 +91,10 @@ void slider_cb(Widget* o, void* v) {
   d->redraw();
 }
 
+#endif
 int main(int argc, char** argv) {
   Window window(300,500);
+#if 0
   window.begin();
   Drawing drawing(10,10,280,280);
   d = &drawing;
@@ -107,6 +116,7 @@ int main(int argc, char** argv) {
 
   window.end();
   window.resizable(drawing);
+#endif
   window.show(argc,argv);
   return run();
 }

@@ -936,6 +936,47 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tname = Release;\n");
   fprintf(out, "\t\t};\n");
   
+  // write a plist if none is there yet - must be added to SVN if appropriate!
+  
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/Xcode4/plists/");
+  strcat(buf, tgt->name());
+  strcat(buf, "-Info.plist");
+  FILE *plist = fopen(buf, "rb");
+  if (plist) {
+    fclose(plist);
+  } else {  
+    FILE *plist = fopen(buf, "wb");boxt
+    fprintf(plist, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(plist, "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n");
+    fprintf(plist, "<plist version=\"1.0\">\n");
+    fprintf(plist, "\t<dict>\n");
+    fprintf(plist, "\t\t<key>CFBundleDevelopmentRegion</key>\n");
+    fprintf(plist, "\t\t<string>English</string>\n");
+    fprintf(plist, "\t\t<key>CFBundleExecutable</key>\n");
+    fprintf(plist, "\t\t<string>${EXECUTABLE_NAME}</string>\n");
+    fprintf(plist, "\t\t<key>CFBundleIdentifier</key>\n");
+    fprintf(plist, "\t\t<string>org.fltk.message</string>\n");
+    fprintf(plist, "\t\t<key>CFBundleInfoDictionaryVersion</key>\n");
+    fprintf(plist, "\t\t<string>6.0</string>\n");
+    fprintf(plist, "\t\t<key>CFBundlePackageType</key>\n");
+    fprintf(plist, "\t\t<string>APPL</string>\n");
+    fprintf(plist, "\t\t<key>CFBundleSignature</key>\n");
+    fprintf(plist, "\t\t<string>FLTK</string>\n");
+    fprintf(plist, "\t\t<key>CFBundleVersion</key>\n");
+    fprintf(plist, "\t\t<string>1.0</string>\n");
+    fprintf(plist, "\t\t<key>NSHumanReadableCopyright</key>\n");
+    fprintf(plist, "\t\t<string>Copyright 1998-2012 by Bill Spitzak and others.</string>\n");
+    fprintf(plist, "\t\t<key>CFBundleGetInfoString</key>\n");
+    fprintf(plist, "\t\t<string>Part of the FLTK library. Please visit www.fltk.org.</string>\n");
+    fprintf(plist, "\t</dict>\n");
+    fprintf(plist, "</plist>\n");
+  }
+  
   return 0;
 }
 

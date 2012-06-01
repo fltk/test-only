@@ -27,7 +27,11 @@
 #include <stdio.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
+#if 0
 #include <fltk/InvisibleBox.h>
+#else
+#include <fltk/Box.h>
+#endif
 
 int N = 0;
 #define W 150
@@ -40,11 +44,15 @@ fltk::Widget* bt(const char *name, fltk::Box* type, int square=0) {
     N++;
     x = x*W+10;
     y = y*H+10;
+#if 0
     fltk::Widget *b = new fltk::InvisibleBox(type,x,y,square ? H-20 : W-20,H-20,name);
+#else
+    fltk::Widget *b = new fltk::FrameBox(type,x,y,square ? H-20 : W-20,H-20,name);
+#endif
     b->labelsize(11);
     if (square) {
-	b->clear_flag(fltk::ALIGN_MASK);
-	b->set_flag(fltk::ALIGN_RIGHT);
+      // FIXME: b->clear_flag(fltk::ALIGN_MASK);
+      // FIXME: b->set_flag(fltk::ALIGN_RIGHT);
     }
     return b;
 }

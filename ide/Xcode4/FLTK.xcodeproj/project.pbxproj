@@ -993,6 +993,15 @@
 		638CAE7CEED1CB4365C16AE3 /* adjuster.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 92B55871686A05F140567DBF /* adjuster.cxx */; };
 		910EE880CE4BD096A068056A /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		5C48D3CC49B9F5566CB59093 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		260BB637391FCDA7CB39CBAA /* arc.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 08AEB3BFFD4C8797DEB0CBA4 /* arc.cxx */; };
+		18F7052DEBA527B9C3D4EF22 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		A8597FF80426DB45DBB226C3 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		B3B2F8C18345AE4A767FB3AF /* ask.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 93B055E6034BB18E4469C9EA /* ask.cxx */; };
+		18C08F0111CA254FA3626954 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		00C22F37C46D423F9A1BBB16 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		240CAC7011234FCFA63B74A9 /* boxtype.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C186EFBE448F65A879CAE820 /* boxtype.cxx */; };
+		697C697FA98BECBEE99FBBEE /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		59AE49D3C514D955CA335C44 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -2017,6 +2026,42 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		1CA8A9A8EB07A6E4EAEA43D9 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C4B63B542A05EED7A9AA9F72 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		E7E890936CA629B69AECCF27 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		5B686C182F964B7CEC87FC89 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -3536,6 +3581,27 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
+		CF4654B583379DC676C2A775 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		7E5BACCC4A93AA0E9CA1177A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		3A9A19F2796E26C3DD15810C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -4387,6 +4453,36 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5C48D3CC49B9F5566CB59093 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E68166C64D1694FEF519D74C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A8597FF80426DB45DBB226C3 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB40173657F0F0A66B0F888E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				00C22F37C46D423F9A1BBB16 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A2E198CC0F54BAAB9F59D10 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				59AE49D3C514D955CA335C44 /* fltk3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5347,6 +5443,12 @@
 		9228B77662AFB89487D6CD0B /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92B55871686A05F140567DBF /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = adjuster.cxx; path = ../../test2/adjuster.cxx; sourceTree = SOURCE_ROOT; };
 		0C9773B6073A0EB93FAED7F1 /* adjuster2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adjuster2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		08AEB3BFFD4C8797DEB0CBA4 /* arc.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arc.cxx; path = ../../test2/arc.cxx; sourceTree = SOURCE_ROOT; };
+		30F34D6AC7B9C3D86A87DD94 /* arc2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = arc2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		93B055E6034BB18E4469C9EA /* ask.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ask.cxx; path = ../../test2/ask.cxx; sourceTree = SOURCE_ROOT; };
+		16975AEB541D6482052F3BE8 /* ask2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ask2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C186EFBE448F65A879CAE820 /* boxtype.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boxtype.cxx; path = ../../test2/boxtype.cxx; sourceTree = SOURCE_ROOT; };
+		C5AC020408DB35803CB6F8C7 /* boxtype2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = boxtype2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -6115,6 +6217,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4401A6C157634D672D0D1700 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18F7052DEBA527B9C3D4EF22 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1DD5AAAC7924B3CC7404F141 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C08F0111CA254FA3626954 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6ABDE8ED8DE5A9B1B62C2823 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				697C697FA98BECBEE99FBBEE /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -6207,6 +6333,9 @@
 				7D76C0ACB6969ACB80D8F20F /* overlay1.app */,
 				9228B77662AFB89487D6CD0B /* hello2.app */,
 				0C9773B6073A0EB93FAED7F1 /* adjuster2.app */,
+				30F34D6AC7B9C3D86A87DD94 /* arc2.app */,
+				16975AEB541D6482052F3BE8 /* ask2.app */,
+				C5AC020408DB35803CB6F8C7 /* boxtype2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7993,11 +8122,38 @@
 			name = adjuster2;
 			sourceTree = "<group>";
 		};
+		731CD504F1D9E711DB1519E7 /* arc2 */ = {
+			isa = PBXGroup;
+			children = (
+				08AEB3BFFD4C8797DEB0CBA4 /* arc.cxx */,
+			);
+			name = arc2;
+			sourceTree = "<group>";
+		};
+		039320A7BD44CE6DDE61CB4A /* ask2 */ = {
+			isa = PBXGroup;
+			children = (
+				93B055E6034BB18E4469C9EA /* ask.cxx */,
+			);
+			name = ask2;
+			sourceTree = "<group>";
+		};
+		A5F45CA64A158AE206EA04D7 /* boxtype2 */ = {
+			isa = PBXGroup;
+			children = (
+				C186EFBE448F65A879CAE820 /* boxtype.cxx */,
+			);
+			name = boxtype2;
+			sourceTree = "<group>";
+		};
 		2B7E88DA9A863C84CF240AC1 /* FLTK2CompatibilityTests */ = {
 			isa = PBXGroup;
 			children = (
 				06C907BD92361F542D5DFF5E /* hello2 */,
 				9F01513ACAB04EB2F663F58A /* adjuster2 */,
+				731CD504F1D9E711DB1519E7 /* arc2 */,
+				039320A7BD44CE6DDE61CB4A /* ask2 */,
+				A5F45CA64A158AE206EA04D7 /* boxtype2 */,
 			);
 			name = FLTK2CompatibilityTests;
 			sourceTree = "<group>";
@@ -10191,6 +10347,66 @@
 			productReference = 0C9773B6073A0EB93FAED7F1 /* adjuster2.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A2B2ABACA53FC4348440F9BF /* arc2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 069987BE1DA566086F7B556D /* Build configuration list for PBXNativeTarget "arc2" */;
+			buildPhases = (
+				622715D5BACB910D10E6C313 /* Resources */,
+				9586987FCB83C23006950237 /* Sources */,
+				4401A6C157634D672D0D1700 /* Frameworks */,
+				E68166C64D1694FEF519D74C /* CopyFiles */,
+			);
+			buildRules = (
+				C4B63B542A05EED7A9AA9F72 /* PBXBuildRule */,
+			);
+			dependencies = (
+				348C2485102830A4428C99B3 /* fltk3 */,
+			);
+			name = arc2;
+			productName = arc2;
+			productReference = 30F34D6AC7B9C3D86A87DD94 /* arc2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B1AFAE502FB055D9CC170FD0 /* ask2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 399F7BF803787207E74383BB /* Build configuration list for PBXNativeTarget "ask2" */;
+			buildPhases = (
+				19E0505C377539A952B66E45 /* Resources */,
+				3B57B323BB4D1136AC3044A6 /* Sources */,
+				1DD5AAAC7924B3CC7404F141 /* Frameworks */,
+				FB40173657F0F0A66B0F888E /* CopyFiles */,
+			);
+			buildRules = (
+				E7E890936CA629B69AECCF27 /* PBXBuildRule */,
+			);
+			dependencies = (
+				221B4D535BD50725C5ECD04A /* fltk3 */,
+			);
+			name = ask2;
+			productName = ask2;
+			productReference = 16975AEB541D6482052F3BE8 /* ask2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CCF28A8924E1F4E06D9FFE52 /* boxtype2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D992F673A5CD016B2C03D411 /* Build configuration list for PBXNativeTarget "boxtype2" */;
+			buildPhases = (
+				9D61AB5B01D9D401BAF2C876 /* Resources */,
+				890DCF9B97C3519D5FF2B47A /* Sources */,
+				6ABDE8ED8DE5A9B1B62C2823 /* Frameworks */,
+				6A2E198CC0F54BAAB9F59D10 /* CopyFiles */,
+			);
+			buildRules = (
+				5B686C182F964B7CEC87FC89 /* PBXBuildRule */,
+			);
+			dependencies = (
+				4C35BAE6FD94CEE7A016055A /* fltk3 */,
+			);
+			name = boxtype2;
+			productName = boxtype2;
+			productReference = C5AC020408DB35803CB6F8C7 /* boxtype2.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -10296,6 +10512,9 @@
 				789BB61B3680D11F69B41C47 /* overlay1 */,
 				F68ECE70CF387DC9CE70030D /* hello2 */,
 				0C9C0BB3367468394F9E8D1A /* adjuster2 */,
+				A2B2ABACA53FC4348440F9BF /* arc2 */,
+				B1AFAE502FB055D9CC170FD0 /* ask2 */,
+				CCF28A8924E1F4E06D9FFE52 /* boxtype2 */,
 			);
 		};
 /* End PBXProject section */
@@ -10897,6 +11116,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C42A4352D3F497465F268BD9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		622715D5BACB910D10E6C313 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19E0505C377539A952B66E45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D61AB5B01D9D401BAF2C876 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -11896,6 +12136,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				638CAE7CEED1CB4365C16AE3 /* adjuster.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9586987FCB83C23006950237 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				260BB637391FCDA7CB39CBAA /* arc.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B57B323BB4D1136AC3044A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3B2F8C18345AE4A767FB3AF /* ask.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		890DCF9B97C3519D5FF2B47A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				240CAC7011234FCFA63B74A9 /* boxtype.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12973,6 +13237,21 @@
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
 		B577E322BC4CD95BCEBEC7B9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		348C2485102830A4428C99B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		221B4D535BD50725C5ECD04A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		4C35BAE6FD94CEE7A016055A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
@@ -19172,6 +19451,222 @@
 			};
 			name = Release;
 		};
+		A2198F90F8CB38A275CB725A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/arc2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "arc2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		AE58EA00E4FD25A1B08A2A10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/arc2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "arc2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		182EF065BA4EEC75ECF2C7B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/ask2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "ask2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		556DAA7D50361523865BD285 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/ask2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "ask2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		12A683218379395DE4038D11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/boxtype2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "boxtype2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		559A3C55C6B759450B3A7493 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/boxtype2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "boxtype2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		2B180F464218A02FAF04B452 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -19970,6 +20465,33 @@
 			buildConfigurations = (
 				A7B91EBBABC47823FB273384 /* Debug */,
 				71A2B5F0E4BEC9772831F010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		069987BE1DA566086F7B556D /* Build configuration list for PBXNativeTarget "arc2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2198F90F8CB38A275CB725A /* Debug */,
+				AE58EA00E4FD25A1B08A2A10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		399F7BF803787207E74383BB /* Build configuration list for PBXNativeTarget "ask2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				182EF065BA4EEC75ECF2C7B6 /* Debug */,
+				556DAA7D50361523865BD285 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D992F673A5CD016B2C03D411 /* Build configuration list for PBXNativeTarget "boxtype2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12A683218379395DE4038D11 /* Debug */,
+				559A3C55C6B759450B3A7493 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -32,6 +32,8 @@
 //    http://www.fltk.org/str.php
 //
 
+#if 0
+
 #include <stdio.h>
 #include <string.h>
 #include <FL/Fl.H>
@@ -57,7 +59,9 @@ void window_callback(Fl_Widget*, void*) {
   exit(0);
 }
 
+#endif
 int main(int argc, char **argv) {
+#if 0
   char buffer[128] = "test text";
 
 // this is a test to make sure automatic destructors work.  Pop up
@@ -72,8 +76,9 @@ int main(int argc, char **argv) {
   window.callback(window_callback);
 
   return Fl::run();
+#endif
 }
-    
+
 //
 // End of "$Id: ask.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".
 //
