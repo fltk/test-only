@@ -89,7 +89,7 @@ void fltk3::Button::draw()
   } else {
     col = color();
   }
-  draw_box(value() ? ( (down_box()!=fltk3::NO_BOX)? down_box():fltk3::down(box()) ) : box(), col);
+  draw_box(value() ? ( down_box()? down_box():fltk3::down(box()) ) : box(), col);
   draw_backdrop();
   if (labeltype() == fltk3::NORMAL_LABEL && value()) {
     fltk3::Color c = labelcolor();

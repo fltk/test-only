@@ -364,7 +364,7 @@ static struct {
   Returns the X offset for the given boxtype.
   \see box_dy()
 */
-int fltk3::box_dx(fltk3::Box* t) {return t->dx();}
+int fltk3::box_dx(fltk3::Box* t) {return t?t->dx():0;}
 
 /**
     Returns the Y offset for the given boxtype.
@@ -389,19 +389,19 @@ int fltk3::box_dx(fltk3::Box* t) {return t->dx();}
     for deriving custom widgets, where one wants to avoid drawing 
     over the widget's own border box().
 */
-int fltk3::box_dy(fltk3::Box* t) {return t->dy();}
+int fltk3::box_dy(fltk3::Box* t) {return t?t->dy():0;}
 
 /**
   Returns the width offset for the given boxtype.
   \see box_dy().
 */
-int fltk3::box_dw(fltk3::Box* t) {return t->dw();}
+int fltk3::box_dw(fltk3::Box* t) {return t?t->dw():0;}
 
 /**
   Returns the height offset for the given boxtype.
   \see box_dy().
 */
-int fltk3::box_dh(fltk3::Box* t) {return t->dh();}
+int fltk3::box_dh(fltk3::Box* t) {return t?t->dh():0;}
 
 /**
   Sets the drawing function for a given box type.

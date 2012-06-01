@@ -77,7 +77,7 @@ static fltk3::NoBox noBox("noBox");
 /*!
  Draws an empty rectangle (a.k.a. nothing).
  */
-fltk3::Box* const fltk3::NO_BOX = &noBox;
+fltk3::Box* const fltk3::NO_BOX = 0L;
 
 
 //------------------------------------------------------------------------------

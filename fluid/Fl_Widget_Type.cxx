@@ -2525,7 +2525,7 @@ char Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"box")) {
     const char* value = read_word();
     if ((bx = boxptr(value))) {
-      if (bx == ZERO_BOX) bx = 0L;
+      if (bx == ZERO_BOX) bx = fltk3::NO_BOX;
       o->box(bx);
     }
   } else if (is_button() && !strcmp(c,"down_box")) {
