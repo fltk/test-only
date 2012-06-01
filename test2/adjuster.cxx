@@ -28,8 +28,8 @@
 #include <stdlib.h>
 #include <fltk/run.h>
 #include <fltk/Window.h>
-#include <fltk/Adjuster.h>
 #if 0
+#include <fltk/Adjuster.h>
 #include <fltk/Box.h>
 #include <fltk/Rectangle.h>
 #endif 
@@ -51,9 +51,7 @@ int main(int argc, char ** argv) {
    char buf1[100];
    FrameBox b1(fltk::DOWN_BOX,20,30,80,25,buf1);
    b1.color(fltk::WHITE);
-#endif
    Adjuster a1(20+80,30,3*25,25);
-#if 0
    a1.callback(adjcb,&b1);
    adjcb(&a1,&b1);
 
