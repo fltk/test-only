@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -30,17 +29,33 @@
 #ifndef fltk_RepeatButton_h
 #define fltk_RepeatButton_h
 
+
+#include <fltk3/RepeatButton.h>
 #include "Button.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(RepeatButton, RepeatButton)
+FLTK2_WRAPPER_INTERFACE_WIDGET(RepeatButton, RepeatButton)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class FL_API RepeatButton : public Button {
-  static void repeat_callback(void *);
-public:
-  int handle(int);
-  RepeatButton(int x,int y,int w,int h,const char *l=0) : Button(x,y,w,h,l) {}
-};
-
+  
+  class FL_API RepeatButton : public Button {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(RepeatButton, RepeatButton)
+    
+    RepeatButton() { /* empty */ }
+    
+    RepeatButton(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::RepeatButton_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+  };
+  
 }
 
 #endif

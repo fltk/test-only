@@ -29,17 +29,8 @@
 #ifndef Fl_Box_H
 #define Fl_Box_H
 
-#include <fltk3/Widget.h>
+#include <fltk3/Box.h>
 #include "Fl_Widget.H"
-
-
-namespace fltk3 {
-  class BoxWidget : public Widget {
-  public:
-    BoxWidget(int x, int y, int w, int h, const char *l=0) 
-    : Widget(x, y, w, h, l) { }
-  };
-};
 
 
 FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Box, BoxWidget)

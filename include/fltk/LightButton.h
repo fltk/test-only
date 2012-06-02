@@ -1,10 +1,9 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Forms/XForms/Flame style button with indicator light on left
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,15 +28,36 @@
 #ifndef fltk_Light_Button_h
 #define fltk_Light_Button_h
 
+
+#include <fltk3/LightButton.h>
 #include "CheckButton.h"
 
-namespace fltk {
 
-class FL_API LightButton : public CheckButton {
-public:
-  LightButton(int x,int y,int w,int h,const char *l = 0);
+FLTK2_WRAPPER_INTERFACE_BEGIN(LightButton, LightButton)
+FLTK2_WRAPPER_INTERFACE_WIDGET(LightButton, LightButton)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
+namespace fltk {
+  
+  class FL_API LightButton : public CheckButton {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(LightButton, LightButton)
+    
+    LightButton() { /* empty */ }
+    
+    LightButton(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::LightButton_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+#if 0
   static NamedStyle* default_style;
   static void default_glyph(const Widget*, int, int,int,int,int, Flags);
+#endif
+    
 };
 
 }

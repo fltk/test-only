@@ -36,6 +36,7 @@
 #include <fltk/CheckButton.h>
 #include <fltk/RadioButton.h>
 #include <fltk/LightButton.h>
+#if 0
 #include <fltk/HighlightButton.h>
 #include <fltk/MultiImage.h>
 #include <fltk/xpmImage.h>
@@ -44,15 +45,20 @@
 #include <pixmaps/folder_small.xpm>
 #include <pixmaps/folder_small2.xpm>
 #include <pixmaps/folder_small3.xpm>
+#endif
 
 using namespace fltk;
 
 Button * abutton=0;
+#if 0
 MultiImage* multi;
+#endif
 
 void cb_active_butt(Widget*, void*) {
     static bool flip = true;
+#if 0
     if (flip) abutton->activate(); else abutton->deactivate();
+#endif
     abutton->label(flip ? "Active" : "Inactive");
     flip = !flip;
 
@@ -60,6 +66,7 @@ void cb_active_butt(Widget*, void*) {
 }
 
 void rb_cb(Widget*, void*) {
+#if 0
   static bool flip = false;
   if (flip) { //  Fl::theme("essai");
       reset_theme();
@@ -71,6 +78,7 @@ void rb_cb(Widget*, void*) {
   }
   flip = !flip;
   redraw();
+#endif
 }
 
 const int W = 150;
@@ -82,7 +90,8 @@ const int X1 = (B+W+B);
 int main(int argc, char ** argv) {
   Window window(X1+W+B, B+7*(H+B));
   window.begin();
-  
+
+#if 0
   xpmImage fold1(folder_small);
   xpmImage fold3(folder_small3);
 
@@ -94,10 +103,13 @@ int main(int argc, char ** argv) {
   SharedImage& ifold2 = *SharedImage::get("images/testimg2.jpg");
   //SharedImage& ifold2 = *SharedImage::get("images/coucou.png"); 
 #endif
+#endif
   // ifold2.inactive();
   // WAS: inactive() is nyi but should not be a problem with new Image...
+#if 0
   MultiImage push_release_img(fold2, PUSHED, fold3);
   MultiImage push_release_hlt_img(fold2, HIGHLIGHT, fold1, PUSHED, fold3);
+#endif
   
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");
@@ -117,19 +129,26 @@ int main(int argc, char ** argv) {
   // The box of the higlight button will appear when belowmouse
   // when combined with image() as below, you get the border + the image appearing when belowmouse()
 
+#if 0
   //HighlightButton* hb = 
       new HighlightButton(X0, Y, W, H, "HighlightButton");
+#endif
 
   new CheckButton(X1, Y, W, H, "CheckButton");
 
   Y += H+B;
   Button * b = new Button(X0, Y, W, H, "push/release img");
+#if 0
   b->image(push_release_img); // use default & pushed img
+#endif
   b = new Button(X1, Y, W, H, "push/rel noborder");
+#if 0
   b->image(push_release_img); // use default & pushed img
+#endif
   b->box(NO_BOX);
   
   Y += H+B;
+#if 0
   b = new HighlightButton(X0, Y, W, H, "Everything !");
   // to remove the  belowmouse changing image comment this line:
   b->image(push_release_hlt_img);
@@ -144,6 +163,7 @@ int main(int argc, char ** argv) {
   b->image(&fold2,&ifold2);
 #endif
   b->activate(0);  
+#endif
 
   window.resizable(window);
   window.end();

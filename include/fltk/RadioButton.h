@@ -1,11 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Button with a circle indicator to it's left, turning it on turns
 // off all other radio buttons in the same Group.
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,16 +29,37 @@
 #ifndef fltk_RadioButton_h
 #define fltk_RadioButton_h
 
+
+#include <fltk3/RadioButton.h>
 #include "CheckButton.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(RadioButton, RadioButton)
+FLTK2_WRAPPER_INTERFACE_WIDGET(RadioButton, RadioButton)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class FL_API RadioButton : public CheckButton {
-public:
-  RadioButton(int x, int y, int w, int h, const char *l=0);
-  static NamedStyle* default_style;
-};
-
+  
+  class FL_API RadioButton : public CheckButton {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(RadioButton, RadioButton)
+    
+    RadioButton() { /* empty */ }
+    
+    RadioButton(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::RadioButton_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+#if 0
+    static NamedStyle* default_style;
+#endif
+    
+  };
+  
 }
 
 #endif

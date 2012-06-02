@@ -56,14 +56,12 @@ class Drawing : public Widget {
       rotate(dargs[6]);
       translate(-w()/2.0f, -h()/2.0f);
       //}
-    fltk3::begin_complex_polygon();
-    setcolor_alpha(GRAY33, 0.5);
+#if 0
     addarc(dargs[0],dargs[1],dargs[2],dargs[3],dargs[4],dargs[5]);
     closepath();
     addarc(120,120,40,40,0,-360);
     setcolor_alpha(GRAY33,0.6);
     fillstrokepath(WHITE);
-#if 0
     // draw a hardware circle to see how well rotations match:
     setcolor(GRAY33);
     fltk::Rectangle r(20,20,(int)(dargs[2]+1),(int)(dargs[3]+1));

@@ -1,10 +1,9 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Button that clicks on and off. You get the state with value().
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,17 +28,32 @@
 #ifndef fltk_ToggleButton_h
 #define fltk_ToggleButton_h
 
+
+#include <fltk3/ToggleButton.h>
 #include "Button.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(ToggleButton, ToggleButton)
+FLTK2_WRAPPER_INTERFACE_WIDGET(ToggleButton, ToggleButton)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class ToggleButton : public Button {
-public:
-  ToggleButton(int x,int y,int w,int h,const char *l=0)
-    : Button(x,y,w,h,l) {type(TOGGLE);}
-};
-
+  
+  class ToggleButton : public Button {
+  public:
+    FLTK2_WIDGET_VCALLS(ToggleButton, ToggleButton)
+    
+    ToggleButton() { /* empty */ }
+    
+    ToggleButton(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::ToggleButton_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+  };
+  
 }
+
 #endif
 
 //

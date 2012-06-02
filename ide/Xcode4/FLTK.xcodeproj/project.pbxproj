@@ -960,15 +960,33 @@
 		9B9AA0A4AB4B9737FF17D323 /* fltk3png.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
 		850AB0916947A0A36E2D7216 /* fltk3jpeg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
 		4347543596E9D9210AE7AD95 /* fltk3zlib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
-		996D3158F8534009D880D068 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E8E40FC6442E03AE819DD6B6 /* hello.cxx */; };
-		752E08556331ABF38A21882C /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		FEABCB46F4DCC7B8B8188E69 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		9B3E8D8D0D54014D56AC5401 /* adjuster.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F17213DD54894261DDE9ED9B /* adjuster.cxx */; };
 		FA8AE91F9641C31326C75D07 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		2A490B9BFAA1645E3915C117 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		E0783BD484C94B020C9DACDE /* arc.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8715274FBD4943332E9D0212 /* arc.cxx */; };
 		A8BA372A0F0328FE974B6A83 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		991E929544F6230A49485FEF /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		EF825E10E72F53BD922C69E4 /* ask.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5958E95CB608D487076C1C48 /* ask.cxx */; };
+		040FACFE6C7133F018648926 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		4A8BCC7721BA4CAEEFE6171E /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		41AFE5198273B01BAA00D9D0 /* bitmap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AB1B9CA0DCEA8564FC2632E9 /* bitmap.cxx */; };
+		6BE42EF8A1A10C78874DF333 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		F5CBF60C129E23A2BCBF867E /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		EA46A8F89720BF1D0ED448C3 /* boxtype.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D2B973D0F6D20A6D47718D2B /* boxtype.cxx */; };
+		68847436B03D75AAB00E163E /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		753DA5AF014481A7D54279FA /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		91F7D1E4BF5717E5AD71F43C /* browser.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 86CAE95C9C263926DA8242AC /* browser.cxx */; };
+		4BBF4FCFF6DF4673B7995A72 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		7A9C4D601AE2EB97776D0414 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		107918C9E2570CA6593230B8 /* button.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 4B364C2E8A2CA52F956FB4E8 /* button.cxx */; };
+		8A0257BAD059E2EC67E3E86F /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		0569DA3CEB37CD98F06E1531 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		7EA96ECFE1E441D590B8F977 /* buttons.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B2FF8D317E09E7C5AF07D689 /* buttons.cxx */; };
+		82D3CDAE87735F775B7E87BF /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		BFF32F30E2FA8A79FA8A77DF /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		996D3158F8534009D880D068 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E8E40FC6442E03AE819DD6B6 /* hello.cxx */; };
+		752E08556331ABF38A21882C /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		FEABCB46F4DCC7B8B8188E69 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		E1C0D0791FA3C78FAF9D7A16 /* gl_overlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7C4842ECC242B64FB69F455C /* gl_overlay.cxx */; };
 		D1B45F51AD3E03E83AA4780B /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95021A4BA62DF0A081DBA8A0 /* AGL.framework */; };
 		AC3A686B1F3B7B2533AE4ACF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006E100C7BD1C8803026EEB2 /* OpenGL.framework */; };
@@ -987,9 +1005,6 @@
 		D0CBDA8965DFE7596933DFEA /* overlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C479AD25E5A5CE6873F9B2BE /* overlay.cxx */; };
 		F921A1156C69B16BD04BBDFF /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		A807BFEF5586189810922F18 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		596D02202FA9ACA0398E401D /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1B2AA7BDC4D9093EAD63680B /* hello.cxx */; };
-		8A69F10A21966EA7513E7FB8 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		232D3B4D756F3DB311A86286 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		638CAE7CEED1CB4365C16AE3 /* adjuster.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 92B55871686A05F140567DBF /* adjuster.cxx */; };
 		910EE880CE4BD096A068056A /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		5C48D3CC49B9F5566CB59093 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
@@ -1002,6 +1017,15 @@
 		240CAC7011234FCFA63B74A9 /* boxtype.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C186EFBE448F65A879CAE820 /* boxtype.cxx */; };
 		697C697FA98BECBEE99FBBEE /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		59AE49D3C514D955CA335C44 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		0847EF88734DC2A54372D03C /* button.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6CA03ACDF1943D1202327152 /* button.cxx */; };
+		4F49E966A37643C1BD33E0C8 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		A0E3F10A864A15162A2F2EF9 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		DBFD2471E84E3E57558A44C2 /* buttons.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 30D51403B8EE13A173E49B17 /* buttons.cxx */; };
+		B7118FBF5AB6315738B1E35C /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		BACA9D6B5031DCDAD0AF6B1C /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		596D02202FA9ACA0398E401D /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1B2AA7BDC4D9093EAD63680B /* hello.cxx */; };
+		8A69F10A21966EA7513E7FB8 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		232D3B4D756F3DB311A86286 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1941,18 +1965,6 @@
 			);
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
-		FFA29F39E937CD33A6C566AB /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.fl";
-			fileType = pattern.proxy;
-			isEditable = 1;
-			outputFiles = (
-				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
-				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
-			);
-			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
-		};
 		EA165AF72567BE1406EAD3F3 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -1966,6 +1978,90 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		4FC27B2E19F46144456BA914 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		011A622BE5675D0A8B481911 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		015DA37D66FB78307A138A4C /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		5AD64485B3921A26CAE06FEE /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		36BA23A3FC6695AE4FAFA862 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		1284241083F344DBC926F391 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		4E16D58E0695FD9529794CAE /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		FFA29F39E937CD33A6C566AB /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2002,18 +2098,6 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		557D13F6191FBF25FDC04384 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.fl";
-			fileType = pattern.proxy;
-			isEditable = 1;
-			outputFiles = (
-				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
-				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
-			);
-			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
-		};
-		B1125F317C1D133B96653E6F /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2062,6 +2146,42 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		5B686C182F964B7CEC87FC89 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		201FB59C682C16534636D3C4 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		5649ABEFCAB5C2D95B14684D /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		B1125F317C1D133B96653E6F /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -3511,13 +3631,6 @@
 			remoteGlobalIDString = B5BA5465BD7A0C8F93B338C7;
 			remoteInfo = fltk3zlib;
 		};
-		BADBA8F12AE618D3013BAE95 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
-			remoteInfo = fltk3;
-		};
 		B35AC4F3D81781278BC1F0C0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
@@ -3526,6 +3639,55 @@
 			remoteInfo = fltk3;
 		};
 		FCD0478F0A1039AAE1003D26 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		3B1DE1EC0262154274C9399E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		27218794701001DC967529C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		BFA456A0015A9F9733FFE14E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		ADE82CD7BA42E0170EBD2941 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		677DB57955FC0E1BA862FA81 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		489151B34C9E32271613DD72 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		BADBA8F12AE618D3013BAE95 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
 			proxyType = 1;
@@ -3567,13 +3729,6 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
-		0A7D43AA7117700010EA5613 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
-			remoteInfo = fltk3;
-		};
 		4304047F430548057C88FE81 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
@@ -3596,6 +3751,27 @@
 			remoteInfo = fltk3;
 		};
 		3A9A19F2796E26C3DD15810C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		74F3C46185ECD90CF337480E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		F4871EC8C39A00C72FE30345 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		0A7D43AA7117700010EA5613 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
 			proxyType = 1;
@@ -4374,16 +4550,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E476E2ABC5221067E28DF30F /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FEABCB46F4DCC7B8B8188E69 /* fltk3 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		58A9C2188495C658207225FA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4401,6 +4567,76 @@
 			dstSubfolderSpec = 10;
 			files = (
 				991E929544F6230A49485FEF /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		684B7D58033B364B8243314C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4A8BCC7721BA4CAEEFE6171E /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2E1A70B0E3E29B393C2C605F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F5CBF60C129E23A2BCBF867E /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F0900D64BDAC3C3695DF190 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				753DA5AF014481A7D54279FA /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63B006AE258FA85C19AC76B3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7A9C4D601AE2EB97776D0414 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CBD2ACBFBB5C0395908EC3E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0569DA3CEB37CD98F06E1531 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		908298075A6767F1BFA37806 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BFF32F30E2FA8A79FA8A77DF /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E476E2ABC5221067E28DF30F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEABCB46F4DCC7B8B8188E69 /* fltk3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4433,16 +4669,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A807BFEF5586189810922F18 /* fltk3 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		36B3B6B6F34F363C2122F5CE /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				232D3B4D756F3DB311A86286 /* fltk3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4483,6 +4709,36 @@
 			dstSubfolderSpec = 10;
 			files = (
 				59AE49D3C514D955CA335C44 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0F704DCA3CEDAE6868C20DB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A0E3F10A864A15162A2F2EF9 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84F559AADDA6E89852CD34C9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BACA9D6B5031DCDAD0AF6B1C /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36B3B6B6F34F363C2122F5CE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				232D3B4D756F3DB311A86286 /* fltk3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5422,12 +5678,24 @@
 		5428EB61A3297BCDC937533E /* undo.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = undo.cxx; path = ../../fluid1/undo.cxx; sourceTree = SOURCE_ROOT; };
 		4AFE59F0B80E883292632F19 /* widget_panel.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = widget_panel.cxx; path = ../../fluid1/widget_panel.cxx; sourceTree = SOURCE_ROOT; };
 		DF4E2699FBE76FDC0E372501 /* Fluid1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fluid1.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8E40FC6442E03AE819DD6B6 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = SOURCE_ROOT; };
-		A385760B80B7DE62389968E3 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F17213DD54894261DDE9ED9B /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = adjuster.cxx; path = ../../test1/adjuster.cxx; sourceTree = SOURCE_ROOT; };
 		B85460DEE49F328FAD1C39CF /* adjuster1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adjuster1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8715274FBD4943332E9D0212 /* arc.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arc.cxx; path = ../../test1/arc.cxx; sourceTree = SOURCE_ROOT; };
 		630B7D37423C4FE8B1F22283 /* arc1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = arc1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5958E95CB608D487076C1C48 /* ask.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ask.cxx; path = ../../test1/ask.cxx; sourceTree = SOURCE_ROOT; };
+		CC9E733D270902404CA314C0 /* ask1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ask1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB1B9CA0DCEA8564FC2632E9 /* bitmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cxx; path = ../../test1/bitmap.cxx; sourceTree = SOURCE_ROOT; };
+		DCE95734EC1F93EADB04AA0A /* bitmap1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitmap1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2B973D0F6D20A6D47718D2B /* boxtype.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boxtype.cxx; path = ../../test1/boxtype.cxx; sourceTree = SOURCE_ROOT; };
+		C64EBCEB9F7089127C300FD2 /* boxtype1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = boxtype1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86CAE95C9C263926DA8242AC /* browser.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = browser.cxx; path = ../../test1/browser.cxx; sourceTree = SOURCE_ROOT; };
+		87DD20C45CF13BCBD026E3E8 /* browser1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = browser1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B364C2E8A2CA52F956FB4E8 /* button.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cxx; path = ../../test1/button.cxx; sourceTree = SOURCE_ROOT; };
+		07F9BA49CB2A76BA4BAFDB41 /* button1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = button1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2FF8D317E09E7C5AF07D689 /* buttons.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = buttons.cxx; path = ../../test1/buttons.cxx; sourceTree = SOURCE_ROOT; };
+		75FD974FB22E76417CEB5F9C /* buttons1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buttons1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8E40FC6442E03AE819DD6B6 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = SOURCE_ROOT; };
+		A385760B80B7DE62389968E3 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C4842ECC242B64FB69F455C /* gl_overlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl_overlay.cxx; path = ../../test1/gl_overlay.cxx; sourceTree = SOURCE_ROOT; };
 		95021A4BA62DF0A081DBA8A0 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
 		006E100C7BD1C8803026EEB2 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
@@ -5439,8 +5707,6 @@
 		95F59D403AC05E1893AB0D94 /* fractals1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fractals1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C479AD25E5A5CE6873F9B2BE /* overlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = overlay.cxx; path = ../../test1/overlay.cxx; sourceTree = SOURCE_ROOT; };
 		7D76C0ACB6969ACB80D8F20F /* overlay1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = overlay1.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1B2AA7BDC4D9093EAD63680B /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test2/hello.cxx; sourceTree = SOURCE_ROOT; };
-		9228B77662AFB89487D6CD0B /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92B55871686A05F140567DBF /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = adjuster.cxx; path = ../../test2/adjuster.cxx; sourceTree = SOURCE_ROOT; };
 		0C9773B6073A0EB93FAED7F1 /* adjuster2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = adjuster2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08AEB3BFFD4C8797DEB0CBA4 /* arc.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arc.cxx; path = ../../test2/arc.cxx; sourceTree = SOURCE_ROOT; };
@@ -5449,6 +5715,12 @@
 		16975AEB541D6482052F3BE8 /* ask2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ask2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C186EFBE448F65A879CAE820 /* boxtype.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boxtype.cxx; path = ../../test2/boxtype.cxx; sourceTree = SOURCE_ROOT; };
 		C5AC020408DB35803CB6F8C7 /* boxtype2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = boxtype2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CA03ACDF1943D1202327152 /* button.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cxx; path = ../../test2/button.cxx; sourceTree = SOURCE_ROOT; };
+		C24E04D67251B86980B6F6F4 /* button2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = button2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		30D51403B8EE13A173E49B17 /* buttons.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = buttons.cxx; path = ../../test2/buttons.cxx; sourceTree = SOURCE_ROOT; };
+		EA5173E8AFAC747B115399BC /* buttons2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buttons2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B2AA7BDC4D9093EAD63680B /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test2/hello.cxx; sourceTree = SOURCE_ROOT; };
+		9228B77662AFB89487D6CD0B /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -6147,14 +6419,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0E9CA2DF4F97CE00AEDCFBBC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				752E08556331ABF38A21882C /* fltk3 in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		B9CB3D0361D19D4575353F44 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6168,6 +6432,62 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8BA372A0F0328FE974B6A83 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17A40AC819D63262C7C45B48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				040FACFE6C7133F018648926 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D64FF94DA3C10B942E0868B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BE42EF8A1A10C78874DF333 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BCEB024026DCD774DD5D14E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68847436B03D75AAB00E163E /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71F0882AABDEA87FD3C7B022 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BBF4FCFF6DF4673B7995A72 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36D240AB0DA32B3F8EB4EDF9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A0257BAD059E2EC67E3E86F /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18904D6A67E2EAF0FAFD3F49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82D3CDAE87735F775B7E87BF /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0E9CA2DF4F97CE00AEDCFBBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				752E08556331ABF38A21882C /* fltk3 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6201,14 +6521,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D57A72B6513B40BB73B435FC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8A69F10A21966EA7513E7FB8 /* fltk3 in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4FB7C69E5F58A5340D832194 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6238,6 +6550,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				697C697FA98BECBEE99FBBEE /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAB5B7A117D5C51E99F0BF17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F49E966A37643C1BD33E0C8 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7597C64CC6961C5AAE3371E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7118FBF5AB6315738B1E35C /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D57A72B6513B40BB73B435FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A69F10A21966EA7513E7FB8 /* fltk3 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6325,17 +6661,25 @@
 				E3A581295196504551F65B80 /* utf8.app */,
 				F67F39FF8C416A255A6BC345 /* valuators.app */,
 				DF4E2699FBE76FDC0E372501 /* Fluid1.app */,
-				A385760B80B7DE62389968E3 /* hello1.app */,
 				B85460DEE49F328FAD1C39CF /* adjuster1.app */,
 				630B7D37423C4FE8B1F22283 /* arc1.app */,
+				CC9E733D270902404CA314C0 /* ask1.app */,
+				DCE95734EC1F93EADB04AA0A /* bitmap1.app */,
+				C64EBCEB9F7089127C300FD2 /* boxtype1.app */,
+				87DD20C45CF13BCBD026E3E8 /* browser1.app */,
+				07F9BA49CB2A76BA4BAFDB41 /* button1.app */,
+				75FD974FB22E76417CEB5F9C /* buttons1.app */,
+				A385760B80B7DE62389968E3 /* hello1.app */,
 				E7910239AB9F803E8D4BEDB6 /* gl_overlay1.app */,
 				95F59D403AC05E1893AB0D94 /* fractals1.app */,
 				7D76C0ACB6969ACB80D8F20F /* overlay1.app */,
-				9228B77662AFB89487D6CD0B /* hello2.app */,
 				0C9773B6073A0EB93FAED7F1 /* adjuster2.app */,
 				30F34D6AC7B9C3D86A87DD94 /* arc2.app */,
 				16975AEB541D6482052F3BE8 /* ask2.app */,
 				C5AC020408DB35803CB6F8C7 /* boxtype2.app */,
+				C24E04D67251B86980B6F6F4 /* button2.app */,
+				EA5173E8AFAC747B115399BC /* buttons2.app */,
+				9228B77662AFB89487D6CD0B /* hello2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -8039,14 +8383,6 @@
 			name = Fluid1;
 			sourceTree = "<group>";
 		};
-		069C04D73C83E249369A2FD6 /* hello1 */ = {
-			isa = PBXGroup;
-			children = (
-				E8E40FC6442E03AE819DD6B6 /* hello.cxx */,
-			);
-			name = hello1;
-			sourceTree = "<group>";
-		};
 		B1377DC5EDE0B38E90B47142 /* adjuster1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -8061,6 +8397,62 @@
 				8715274FBD4943332E9D0212 /* arc.cxx */,
 			);
 			name = arc1;
+			sourceTree = "<group>";
+		};
+		56E0864C23B134CFE0914A61 /* ask1 */ = {
+			isa = PBXGroup;
+			children = (
+				5958E95CB608D487076C1C48 /* ask.cxx */,
+			);
+			name = ask1;
+			sourceTree = "<group>";
+		};
+		BA2AFB8093F319CEB743558A /* bitmap1 */ = {
+			isa = PBXGroup;
+			children = (
+				AB1B9CA0DCEA8564FC2632E9 /* bitmap.cxx */,
+			);
+			name = bitmap1;
+			sourceTree = "<group>";
+		};
+		73DCDF2301777AD0153E9E76 /* boxtype1 */ = {
+			isa = PBXGroup;
+			children = (
+				D2B973D0F6D20A6D47718D2B /* boxtype.cxx */,
+			);
+			name = boxtype1;
+			sourceTree = "<group>";
+		};
+		585869FDE3F0C8ECD520B61F /* browser1 */ = {
+			isa = PBXGroup;
+			children = (
+				86CAE95C9C263926DA8242AC /* browser.cxx */,
+			);
+			name = browser1;
+			sourceTree = "<group>";
+		};
+		9297C03824E517B680914046 /* button1 */ = {
+			isa = PBXGroup;
+			children = (
+				4B364C2E8A2CA52F956FB4E8 /* button.cxx */,
+			);
+			name = button1;
+			sourceTree = "<group>";
+		};
+		CF5378158A0F1EDAD0DE3DD6 /* buttons1 */ = {
+			isa = PBXGroup;
+			children = (
+				B2FF8D317E09E7C5AF07D689 /* buttons.cxx */,
+			);
+			name = buttons1;
+			sourceTree = "<group>";
+		};
+		069C04D73C83E249369A2FD6 /* hello1 */ = {
+			isa = PBXGroup;
+			children = (
+				E8E40FC6442E03AE819DD6B6 /* hello.cxx */,
+			);
+			name = hello1;
 			sourceTree = "<group>";
 		};
 		44002B5096C4E8C91251D0EF /* gl_overlay1 */ = {
@@ -8096,22 +8488,20 @@
 			isa = PBXGroup;
 			children = (
 				9C81FC9E8877722D98478169 /* Fluid1 */,
-				069C04D73C83E249369A2FD6 /* hello1 */,
 				B1377DC5EDE0B38E90B47142 /* adjuster1 */,
 				30E400B8C304059FAE6E52DD /* arc1 */,
+				56E0864C23B134CFE0914A61 /* ask1 */,
+				BA2AFB8093F319CEB743558A /* bitmap1 */,
+				73DCDF2301777AD0153E9E76 /* boxtype1 */,
+				585869FDE3F0C8ECD520B61F /* browser1 */,
+				9297C03824E517B680914046 /* button1 */,
+				CF5378158A0F1EDAD0DE3DD6 /* buttons1 */,
+				069C04D73C83E249369A2FD6 /* hello1 */,
 				44002B5096C4E8C91251D0EF /* gl_overlay1 */,
 				140C86B12569A486720172FC /* fractals1 */,
 				2D58DAAA66EDA041B9D4A74B /* overlay1 */,
 			);
 			name = FLTK1CompatibilityTests;
-			sourceTree = "<group>";
-		};
-		06C907BD92361F542D5DFF5E /* hello2 */ = {
-			isa = PBXGroup;
-			children = (
-				1B2AA7BDC4D9093EAD63680B /* hello.cxx */,
-			);
-			name = hello2;
 			sourceTree = "<group>";
 		};
 		9F01513ACAB04EB2F663F58A /* adjuster2 */ = {
@@ -8146,14 +8536,40 @@
 			name = boxtype2;
 			sourceTree = "<group>";
 		};
+		3DA87E93769D3FBF025EC663 /* button2 */ = {
+			isa = PBXGroup;
+			children = (
+				6CA03ACDF1943D1202327152 /* button.cxx */,
+			);
+			name = button2;
+			sourceTree = "<group>";
+		};
+		040B894E1F7510C31E13E98F /* buttons2 */ = {
+			isa = PBXGroup;
+			children = (
+				30D51403B8EE13A173E49B17 /* buttons.cxx */,
+			);
+			name = buttons2;
+			sourceTree = "<group>";
+		};
+		06C907BD92361F542D5DFF5E /* hello2 */ = {
+			isa = PBXGroup;
+			children = (
+				1B2AA7BDC4D9093EAD63680B /* hello.cxx */,
+			);
+			name = hello2;
+			sourceTree = "<group>";
+		};
 		2B7E88DA9A863C84CF240AC1 /* FLTK2CompatibilityTests */ = {
 			isa = PBXGroup;
 			children = (
-				06C907BD92361F542D5DFF5E /* hello2 */,
 				9F01513ACAB04EB2F663F58A /* adjuster2 */,
 				731CD504F1D9E711DB1519E7 /* arc2 */,
 				039320A7BD44CE6DDE61CB4A /* ask2 */,
 				A5F45CA64A158AE206EA04D7 /* boxtype2 */,
+				3DA87E93769D3FBF025EC663 /* button2 */,
+				040B894E1F7510C31E13E98F /* buttons2 */,
+				06C907BD92361F542D5DFF5E /* hello2 */,
 			);
 			name = FLTK2CompatibilityTests;
 			sourceTree = "<group>";
@@ -10185,26 +10601,6 @@
 			productReference = DF4E2699FBE76FDC0E372501 /* Fluid1.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1D6CF364DC77BE5CA370C953 /* hello1 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FEA66476A925BA9C14D2BC36 /* Build configuration list for PBXNativeTarget "hello1" */;
-			buildPhases = (
-				15E50C71C4A72812D7DB6098 /* Resources */,
-				B0034EC191BD469B8088B310 /* Sources */,
-				0E9CA2DF4F97CE00AEDCFBBC /* Frameworks */,
-				E476E2ABC5221067E28DF30F /* CopyFiles */,
-			);
-			buildRules = (
-				FFA29F39E937CD33A6C566AB /* PBXBuildRule */,
-			);
-			dependencies = (
-				78C56F7A323EC19AFB427676 /* fltk3 */,
-			);
-			name = hello1;
-			productName = hello1;
-			productReference = A385760B80B7DE62389968E3 /* hello1.app */;
-			productType = "com.apple.product-type.application";
-		};
 		54DF99D776C056F2B89A7CFD /* adjuster1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C657D403B8C94E8223A274D /* Build configuration list for PBXNativeTarget "adjuster1" */;
@@ -10243,6 +10639,146 @@
 			name = arc1;
 			productName = arc1;
 			productReference = 630B7D37423C4FE8B1F22283 /* arc1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A34564E43E46B1443FEB23E7 /* ask1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 846D42B01F8BAF814CFA6984 /* Build configuration list for PBXNativeTarget "ask1" */;
+			buildPhases = (
+				CCA8122C4ECD231CE7049EF8 /* Resources */,
+				B90A09D1C8AA9FE3F870E08C /* Sources */,
+				17A40AC819D63262C7C45B48 /* Frameworks */,
+				684B7D58033B364B8243314C /* CopyFiles */,
+			);
+			buildRules = (
+				011A622BE5675D0A8B481911 /* PBXBuildRule */,
+			);
+			dependencies = (
+				BA41334A6CB827FD167A2D7D /* fltk3 */,
+			);
+			name = ask1;
+			productName = ask1;
+			productReference = CC9E733D270902404CA314C0 /* ask1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FAA6C040D0550F8C5C9288CC /* bitmap1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B931CB2F45AF2A3D5E988C4E /* Build configuration list for PBXNativeTarget "bitmap1" */;
+			buildPhases = (
+				D7BD81EBBA31A93031E1A551 /* Resources */,
+				5375AC16BBF86C9A2669CBC1 /* Sources */,
+				0D64FF94DA3C10B942E0868B /* Frameworks */,
+				2E1A70B0E3E29B393C2C605F /* CopyFiles */,
+			);
+			buildRules = (
+				015DA37D66FB78307A138A4C /* PBXBuildRule */,
+			);
+			dependencies = (
+				75DE841BE58D5D34FF03C27A /* fltk3 */,
+			);
+			name = bitmap1;
+			productName = bitmap1;
+			productReference = DCE95734EC1F93EADB04AA0A /* bitmap1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DB4FB218816F33F9B28B914B /* boxtype1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5196EA9C89CE97EAF9C687D /* Build configuration list for PBXNativeTarget "boxtype1" */;
+			buildPhases = (
+				023F14148B1002391EAE7920 /* Resources */,
+				EB39D224C83F9BE052C6F656 /* Sources */,
+				4BCEB024026DCD774DD5D14E /* Frameworks */,
+				3F0900D64BDAC3C3695DF190 /* CopyFiles */,
+			);
+			buildRules = (
+				5AD64485B3921A26CAE06FEE /* PBXBuildRule */,
+			);
+			dependencies = (
+				0F3273DF02C844C4141B2162 /* fltk3 */,
+			);
+			name = boxtype1;
+			productName = boxtype1;
+			productReference = C64EBCEB9F7089127C300FD2 /* boxtype1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AF575B6EED53CB2A715DF67D /* browser1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C2F00D901330D6A4B172A69 /* Build configuration list for PBXNativeTarget "browser1" */;
+			buildPhases = (
+				575B9CEB5656D6B4B57AADF6 /* Resources */,
+				D66E05332AE674AA72E505C6 /* Sources */,
+				71F0882AABDEA87FD3C7B022 /* Frameworks */,
+				63B006AE258FA85C19AC76B3 /* CopyFiles */,
+			);
+			buildRules = (
+				36BA23A3FC6695AE4FAFA862 /* PBXBuildRule */,
+			);
+			dependencies = (
+				3D8EC98B3A8E0A2BEF80B54B /* fltk3 */,
+			);
+			name = browser1;
+			productName = browser1;
+			productReference = 87DD20C45CF13BCBD026E3E8 /* browser1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4884D5659516CFA7DD961341 /* button1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67E41B159FE006BDE624995B /* Build configuration list for PBXNativeTarget "button1" */;
+			buildPhases = (
+				CF7414735862AB4CED82A55C /* Resources */,
+				91CD355636B99C53081B7BA6 /* Sources */,
+				36D240AB0DA32B3F8EB4EDF9 /* Frameworks */,
+				5CBD2ACBFBB5C0395908EC3E /* CopyFiles */,
+			);
+			buildRules = (
+				1284241083F344DBC926F391 /* PBXBuildRule */,
+			);
+			dependencies = (
+				B764FAA7B9E8D4ECB4640E5E /* fltk3 */,
+			);
+			name = button1;
+			productName = button1;
+			productReference = 07F9BA49CB2A76BA4BAFDB41 /* button1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8652707FD267338605181157 /* buttons1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70BF1758FB972570B0622C9E /* Build configuration list for PBXNativeTarget "buttons1" */;
+			buildPhases = (
+				15775B2724D3D7CD2655A142 /* Resources */,
+				CD3D31CF7A13EED175EC708C /* Sources */,
+				18904D6A67E2EAF0FAFD3F49 /* Frameworks */,
+				908298075A6767F1BFA37806 /* CopyFiles */,
+			);
+			buildRules = (
+				4E16D58E0695FD9529794CAE /* PBXBuildRule */,
+			);
+			dependencies = (
+				6A524AB6986F8B17213E8445 /* fltk3 */,
+			);
+			name = buttons1;
+			productName = buttons1;
+			productReference = 75FD974FB22E76417CEB5F9C /* buttons1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1D6CF364DC77BE5CA370C953 /* hello1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FEA66476A925BA9C14D2BC36 /* Build configuration list for PBXNativeTarget "hello1" */;
+			buildPhases = (
+				15E50C71C4A72812D7DB6098 /* Resources */,
+				B0034EC191BD469B8088B310 /* Sources */,
+				0E9CA2DF4F97CE00AEDCFBBC /* Frameworks */,
+				E476E2ABC5221067E28DF30F /* CopyFiles */,
+			);
+			buildRules = (
+				FFA29F39E937CD33A6C566AB /* PBXBuildRule */,
+			);
+			dependencies = (
+				78C56F7A323EC19AFB427676 /* fltk3 */,
+			);
+			name = hello1;
+			productName = hello1;
+			productReference = A385760B80B7DE62389968E3 /* hello1.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1D89CD767D8FAD4A30148DC7 /* gl_overlay1 */ = {
@@ -10305,26 +10841,6 @@
 			name = overlay1;
 			productName = overlay1;
 			productReference = 7D76C0ACB6969ACB80D8F20F /* overlay1.app */;
-			productType = "com.apple.product-type.application";
-		};
-		F68ECE70CF387DC9CE70030D /* hello2 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 766899A3AE573DB64802F973 /* Build configuration list for PBXNativeTarget "hello2" */;
-			buildPhases = (
-				7AAA72186797089388ACF51E /* Resources */,
-				78CD681550EE25346B85E13B /* Sources */,
-				D57A72B6513B40BB73B435FC /* Frameworks */,
-				36B3B6B6F34F363C2122F5CE /* CopyFiles */,
-			);
-			buildRules = (
-				B1125F317C1D133B96653E6F /* PBXBuildRule */,
-			);
-			dependencies = (
-				6868A0663DE0A75B58009957 /* fltk3 */,
-			);
-			name = hello2;
-			productName = hello2;
-			productReference = 9228B77662AFB89487D6CD0B /* hello2.app */;
 			productType = "com.apple.product-type.application";
 		};
 		0C9C0BB3367468394F9E8D1A /* adjuster2 */ = {
@@ -10405,6 +10921,66 @@
 			name = boxtype2;
 			productName = boxtype2;
 			productReference = C5AC020408DB35803CB6F8C7 /* boxtype2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6C6607E004609D856EAF9A71 /* button2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5F19147F713B9B8E967AC8DC /* Build configuration list for PBXNativeTarget "button2" */;
+			buildPhases = (
+				96AE3EF515C753528D3682A6 /* Resources */,
+				F21CD1A2AA6CC2BBC4BAFF4F /* Sources */,
+				BAB5B7A117D5C51E99F0BF17 /* Frameworks */,
+				E0F704DCA3CEDAE6868C20DB /* CopyFiles */,
+			);
+			buildRules = (
+				201FB59C682C16534636D3C4 /* PBXBuildRule */,
+			);
+			dependencies = (
+				F8954FB2BCD09D492C7CC967 /* fltk3 */,
+			);
+			name = button2;
+			productName = button2;
+			productReference = C24E04D67251B86980B6F6F4 /* button2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		91161E6101EE5295B72EA940 /* buttons2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75C5A37F7F27FFADA9164172 /* Build configuration list for PBXNativeTarget "buttons2" */;
+			buildPhases = (
+				2F14BB7F5607B0EAA0E89485 /* Resources */,
+				E02EEF9FA34082472CF6736A /* Sources */,
+				B7597C64CC6961C5AAE3371E /* Frameworks */,
+				84F559AADDA6E89852CD34C9 /* CopyFiles */,
+			);
+			buildRules = (
+				5649ABEFCAB5C2D95B14684D /* PBXBuildRule */,
+			);
+			dependencies = (
+				EABFF7CDF55D7882B629D076 /* fltk3 */,
+			);
+			name = buttons2;
+			productName = buttons2;
+			productReference = EA5173E8AFAC747B115399BC /* buttons2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F68ECE70CF387DC9CE70030D /* hello2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 766899A3AE573DB64802F973 /* Build configuration list for PBXNativeTarget "hello2" */;
+			buildPhases = (
+				7AAA72186797089388ACF51E /* Resources */,
+				78CD681550EE25346B85E13B /* Sources */,
+				D57A72B6513B40BB73B435FC /* Frameworks */,
+				36B3B6B6F34F363C2122F5CE /* CopyFiles */,
+			);
+			buildRules = (
+				B1125F317C1D133B96653E6F /* PBXBuildRule */,
+			);
+			dependencies = (
+				6868A0663DE0A75B58009957 /* fltk3 */,
+			);
+			name = hello2;
+			productName = hello2;
+			productReference = 9228B77662AFB89487D6CD0B /* hello2.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -10504,17 +11080,25 @@
 				FAD13873C55C68CA34763ED0 /* utf8 */,
 				5392AA2CD0F94CD3E4A31577 /* valuators */,
 				E7B7690D3DC6F55F6E77EB13 /* Fluid1 */,
-				1D6CF364DC77BE5CA370C953 /* hello1 */,
 				54DF99D776C056F2B89A7CFD /* adjuster1 */,
 				454FFE17C13BB6701A2D6A46 /* arc1 */,
+				A34564E43E46B1443FEB23E7 /* ask1 */,
+				FAA6C040D0550F8C5C9288CC /* bitmap1 */,
+				DB4FB218816F33F9B28B914B /* boxtype1 */,
+				AF575B6EED53CB2A715DF67D /* browser1 */,
+				4884D5659516CFA7DD961341 /* button1 */,
+				8652707FD267338605181157 /* buttons1 */,
+				1D6CF364DC77BE5CA370C953 /* hello1 */,
 				1D89CD767D8FAD4A30148DC7 /* gl_overlay1 */,
 				48427F0246B6DC0672A00515 /* fractals1 */,
 				789BB61B3680D11F69B41C47 /* overlay1 */,
-				F68ECE70CF387DC9CE70030D /* hello2 */,
 				0C9C0BB3367468394F9E8D1A /* adjuster2 */,
 				A2B2ABACA53FC4348440F9BF /* arc2 */,
 				B1AFAE502FB055D9CC170FD0 /* ask2 */,
 				CCF28A8924E1F4E06D9FFE52 /* boxtype2 */,
+				6C6607E004609D856EAF9A71 /* button2 */,
+				91161E6101EE5295B72EA940 /* buttons2 */,
+				F68ECE70CF387DC9CE70030D /* hello2 */,
 			);
 		};
 /* End PBXProject section */
@@ -11066,13 +11650,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		15E50C71C4A72812D7DB6098 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CA0EDF187C321496D28FFE45 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -11081,6 +11658,55 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7254710D18DDEA9DA4C8208F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CCA8122C4ECD231CE7049EF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D7BD81EBBA31A93031E1A551 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		023F14148B1002391EAE7920 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		575B9CEB5656D6B4B57AADF6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF7414735862AB4CED82A55C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		15775B2724D3D7CD2655A142 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		15E50C71C4A72812D7DB6098 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -11102,13 +11728,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F243D7B44CF515613EE0E6E5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7AAA72186797089388ACF51E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -11137,6 +11756,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9D61AB5B01D9D401BAF2C876 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96AE3EF515C753528D3682A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2F14BB7F5607B0EAA0E89485 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AAA72186797089388ACF51E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -12074,14 +12714,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B0034EC191BD469B8088B310 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				996D3158F8534009D880D068 /* hello.cxx in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0404FAE77D1EF87769C8ABEF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -12095,6 +12727,62 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0783BD484C94B020C9DACDE /* arc.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B90A09D1C8AA9FE3F870E08C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF825E10E72F53BD922C69E4 /* ask.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5375AC16BBF86C9A2669CBC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41AFE5198273B01BAA00D9D0 /* bitmap.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB39D224C83F9BE052C6F656 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA46A8F89720BF1D0ED448C3 /* boxtype.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D66E05332AE674AA72E505C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91F7D1E4BF5717E5AD71F43C /* browser.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91CD355636B99C53081B7BA6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				107918C9E2570CA6593230B8 /* button.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD3D31CF7A13EED175EC708C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EA96ECFE1E441D590B8F977 /* buttons.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0034EC191BD469B8088B310 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				996D3158F8534009D880D068 /* hello.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12120,14 +12808,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0CBDA8965DFE7596933DFEA /* overlay.cxx in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		78CD681550EE25346B85E13B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				596D02202FA9ACA0398E401D /* hello.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12160,6 +12840,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				240CAC7011234FCFA63B74A9 /* boxtype.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F21CD1A2AA6CC2BBC4BAFF4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0847EF88734DC2A54372D03C /* button.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E02EEF9FA34082472CF6736A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBFD2471E84E3E57558A44C2 /* buttons.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		78CD681550EE25346B85E13B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				596D02202FA9ACA0398E401D /* hello.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13191,17 +13895,47 @@
 			target = B5BA5465BD7A0C8F93B338C7 /* fltk3zlib */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
-		78C56F7A323EC19AFB427676 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
-			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
-		};
 		C094AF313B07D16CB7D3FD38 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
 		96EF5FAEB93ADD22D121137A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		BA41334A6CB827FD167A2D7D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		75DE841BE58D5D34FF03C27A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		0F3273DF02C844C4141B2162 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		3D8EC98B3A8E0A2BEF80B54B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		B764FAA7B9E8D4ECB4640E5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		6A524AB6986F8B17213E8445 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		78C56F7A323EC19AFB427676 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
@@ -13231,11 +13965,6 @@
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
-		6868A0663DE0A75B58009957 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
-			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
-		};
 		B577E322BC4CD95BCEBEC7B9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
@@ -13252,6 +13981,21 @@
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
 		4C35BAE6FD94CEE7A016055A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		F8954FB2BCD09D492C7CC967 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		EABFF7CDF55D7882B629D076 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		6868A0663DE0A75B58009957 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
@@ -18875,78 +19619,6 @@
 			};
 			name = Release;
 		};
-		F1951F926357E78229A59011 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = fltk.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					../../ide/XCode4/,
-					../../include/,
-					../../include/fltk3png,
-					../../include/fltk3jpeg,
-					../../include/fltk3zlib,
-				);
-				INFOPLIST_FILE = "plists/hello1-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "hello1";
-				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"-Wno-format-security",
-					"-Wall",
-				);
-			};
-			name = Debug;
-		};
-		6A1955BCACC2D07F0B61E2E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = fltk.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					../../ide/XCode4/,
-					../../include/,
-					../../include/fltk3png,
-					../../include/fltk3jpeg,
-					../../include/fltk3zlib,
-				);
-				INFOPLIST_FILE = "plists/hello1-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "hello1";
-				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"-Wno-format-security",
-					"-Wall",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		44F0D4EBF82DD2C3F0C74584 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -19082,6 +19754,510 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "arc1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		9B1A1B7528E1A1F3400F0EBD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/ask1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "ask1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		71B1FDFB77CDB10CF6281DCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/ask1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "ask1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		4D33A64D9EF16D8A4903498A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/bitmap1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "bitmap1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		6B71C4EE093B42F0531C9808 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/bitmap1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "bitmap1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		8FC38BED69AA447B2CFA35E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/boxtype1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "boxtype1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		E60BEB87DC319E1497DE2E0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/boxtype1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "boxtype1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		4E51C64028FD7B72D9C03411 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/browser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "browser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		70A358D663619E391D75ED7B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/browser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "browser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		EADA84A5C4E3A8A29C6856F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/button1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "button1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		358728E19D28A04361564962 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/button1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "button1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		42A01F31FBCF0E68B016D1C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/buttons1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "buttons1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		4548F016E77D2D6E7537A410 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/buttons1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "buttons1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		F1951F926357E78229A59011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/hello1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "hello1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		6A1955BCACC2D07F0B61E2E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/hello1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "hello1";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -19298,78 +20474,6 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "overlay1";
-				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"-Wno-format-security",
-					"-Wall",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		96756B440489BDDC1643485F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = fltk.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					../../ide/XCode4/,
-					../../include/,
-					../../include/fltk3png,
-					../../include/fltk3jpeg,
-					../../include/fltk3zlib,
-				);
-				INFOPLIST_FILE = "plists/hello2-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "hello2";
-				SDKROOT = macosx;
-				WARNING_CFLAGS = (
-					"-Wno-format-security",
-					"-Wall",
-				);
-			};
-			name = Debug;
-		};
-		2294119A0A34638F7F866341 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = fltk.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					../../ide/XCode4/,
-					../../include/,
-					../../include/fltk3png,
-					../../include/fltk3jpeg,
-					../../include/fltk3zlib,
-				);
-				INFOPLIST_FILE = "plists/hello2-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "hello2";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -19658,6 +20762,222 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "boxtype2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		BEC82ADF8E3326583FDA50B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/button2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "button2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		9676B84829694A40993DA54A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/button2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "button2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		AE4DD65BC01CBBB65854739A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/buttons2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "buttons2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		65D611A380293FAA0858F2AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/buttons2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "buttons2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		96756B440489BDDC1643485F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/hello2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "hello2";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		2294119A0A34638F7F866341 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/hello2-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "hello2";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -20397,15 +21717,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		FEA66476A925BA9C14D2BC36 /* Build configuration list for PBXNativeTarget "hello1" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F1951F926357E78229A59011 /* Debug */,
-				6A1955BCACC2D07F0B61E2E6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		8C657D403B8C94E8223A274D /* Build configuration list for PBXNativeTarget "adjuster1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -20420,6 +21731,69 @@
 			buildConfigurations = (
 				7C65709551FE15672B25AC71 /* Debug */,
 				A48D729897309CB46836D06F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		846D42B01F8BAF814CFA6984 /* Build configuration list for PBXNativeTarget "ask1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B1A1B7528E1A1F3400F0EBD /* Debug */,
+				71B1FDFB77CDB10CF6281DCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B931CB2F45AF2A3D5E988C4E /* Build configuration list for PBXNativeTarget "bitmap1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D33A64D9EF16D8A4903498A /* Debug */,
+				6B71C4EE093B42F0531C9808 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A5196EA9C89CE97EAF9C687D /* Build configuration list for PBXNativeTarget "boxtype1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FC38BED69AA447B2CFA35E1 /* Debug */,
+				E60BEB87DC319E1497DE2E0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3C2F00D901330D6A4B172A69 /* Build configuration list for PBXNativeTarget "browser1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E51C64028FD7B72D9C03411 /* Debug */,
+				70A358D663619E391D75ED7B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		67E41B159FE006BDE624995B /* Build configuration list for PBXNativeTarget "button1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EADA84A5C4E3A8A29C6856F6 /* Debug */,
+				358728E19D28A04361564962 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		70BF1758FB972570B0622C9E /* Build configuration list for PBXNativeTarget "buttons1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42A01F31FBCF0E68B016D1C4 /* Debug */,
+				4548F016E77D2D6E7537A410 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FEA66476A925BA9C14D2BC36 /* Build configuration list for PBXNativeTarget "hello1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1951F926357E78229A59011 /* Debug */,
+				6A1955BCACC2D07F0B61E2E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -20447,15 +21821,6 @@
 			buildConfigurations = (
 				D48683F3E68947DF26D5E458 /* Debug */,
 				1DE1C8C56F53B78F38331342 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		766899A3AE573DB64802F973 /* Build configuration list for PBXNativeTarget "hello2" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				96756B440489BDDC1643485F /* Debug */,
-				2294119A0A34638F7F866341 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -20492,6 +21857,33 @@
 			buildConfigurations = (
 				12A683218379395DE4038D11 /* Debug */,
 				559A3C55C6B759450B3A7493 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5F19147F713B9B8E967AC8DC /* Build configuration list for PBXNativeTarget "button2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEC82ADF8E3326583FDA50B3 /* Debug */,
+				9676B84829694A40993DA54A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		75C5A37F7F27FFADA9164172 /* Build configuration list for PBXNativeTarget "buttons2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE4DD65BC01CBBB65854739A /* Debug */,
+				65D611A380293FAA0858F2AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		766899A3AE573DB64802F973 /* Build configuration list for PBXNativeTarget "hello2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96756B440489BDDC1643485F /* Debug */,
+				2294119A0A34638F7F866341 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

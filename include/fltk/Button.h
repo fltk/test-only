@@ -1,10 +1,9 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Push button widget
 //
-// Copyright 2002 by Bill Spitzak and others.
+// Copyright 2002-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,28 +28,44 @@
 #ifndef fltk_Button_h
 #define fltk_Button_h
 
-#ifndef fltk_Widget_h
+#include <fltk3/Button.h>
 #include "Widget.h"
-#endif
+
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(Button, Button)
+FLTK2_WRAPPER_INTERFACE_WIDGET(Button, Button)
+FLTK2_WRAPPER_INTERFACE_END()
+
 
 namespace fltk {
-
-class FL_API Button : public Widget {
-public:
-  enum {HIDDEN=3}; // back-comptability value to hide the button
-
-  bool	value() const { return state(); }
-  bool	value(bool v) { return state(v); }
-
-  int handle(int);
-  int handle(int event, const Rectangle&);
-  Button(int,int,int,int,const char * = 0);
-  static NamedStyle* default_style;
-
-  virtual void draw();
-  void draw(int glyph_width) const;
-};
-
+  
+  class Button : public Widget {
+  public:
+    
+    FLTK2_WIDGET_VCALLS(Button, Button)
+    
+    Button() { /* empty */ }
+    
+    Button(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::Button_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+    enum {HIDDEN=3}; // back-comptability value to hide the button
+    
+#if 0
+    bool	value() const { return state(); }
+    bool	value(bool v) { return state(v); }
+    
+    int handle(int);
+    int handle(int event, const Rectangle&);
+    static NamedStyle* default_style;
+    
+    virtual void draw();
+    void draw(int glyph_width) const;
+#endif
+  };
+  
 }
 
 #endif

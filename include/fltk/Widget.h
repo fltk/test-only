@@ -134,10 +134,17 @@ namespace fltk {
     const Symbol* image() const	{ return image_; }
     void	image(const Symbol* a)	{ image_ = a; }
     void	image(const Symbol& a)	{ image_ = &a; }
+#endif
     
-    const char *tooltip() const	{ return tooltip_; }
-    void	tooltip(const char *t)	{ tooltip_ = t; }
+    const char *tooltip() const	{
+      return ((fltk3::Widget_I*)_p)->tooltip();
+    }
     
+    void tooltip(const char *t) {
+      ((fltk3::Widget_I*)_p)->tooltip(t);
+    }
+    
+#if 0
     unsigned shortcut() const	;
     void	shortcut(unsigned key)	;
     bool	add_shortcut(unsigned key);
@@ -158,8 +165,11 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->callback( (fltk3::Callback*)cb, p );
     }
     
+    void callback(Callback* cb) {
+      ((fltk3::Widget_I*)_p)->callback( (fltk3::Callback*)cb );
+    }
+    
 #if 0    
-    void	callback(Callback* c)	{ callback_=c; }
     void	callback(Callback0*c)	{ callback_=(Callback*)c; }
     void	callback(Callback1*c, long p=0) { callback_=(Callback*)c; user_data_=(void*)p; }
     

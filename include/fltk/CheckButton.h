@@ -1,10 +1,9 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Button with a checkmark to the left of it.
 //
-// Copyright 2002 by Bill Spitzak and others.
+// Copyright 2002-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,18 +27,37 @@
 #ifndef fltk_CheckButton_h
 #define fltk_CheckButton_h
 
+
+#include <fltk3/CheckButton.h>
 #include "Button.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(CheckButton, CheckButton)
+FLTK2_WRAPPER_INTERFACE_WIDGET(CheckButton, CheckButton)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class FL_API CheckButton : public Button {
-public:
-  CheckButton(int x,int y,int w,int h,const char *l = 0);
-  static NamedStyle* default_style;
-
-  virtual void draw();
-};
-
+  
+  class CheckButton : public Button {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(CheckButton, CheckButton)
+    
+    CheckButton() { /* empty */ }
+    
+    CheckButton(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::CheckButton_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+#if 0
+    static NamedStyle* default_style;
+#endif
+    
+  };
+  
 }
 
 #endif

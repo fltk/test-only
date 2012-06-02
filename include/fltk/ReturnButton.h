@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 // "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -25,18 +24,37 @@
 #ifndef fltk_ReturnButton_h
 #define fltk_ReturnButton_h
 
+
+#include <fltk3/ReturnButton.h>
 #include "Button.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(ReturnButton, ReturnButton)
+FLTK2_WRAPPER_INTERFACE_WIDGET(ReturnButton, ReturnButton)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class FL_API ReturnButton : public Button {
-public:
-  ReturnButton(int x,int y,int w,int h,const char *l=0);
-  static NamedStyle* default_style;
-protected:
-  void draw();
-};
-
+  
+  class FL_API ReturnButton : public Button {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(ReturnButton, ReturnButton)
+    
+    ReturnButton() { /* empty */ }
+    
+    ReturnButton(int x, int y, int w, int h, const char *label=0) {
+      _p = new fltk3::ReturnButton_I(x, y, w, h, label);
+      _p->wrapper(this);
+    }
+    
+#if 0
+    static NamedStyle* default_style;
+#endif
+    
+  };
+  
 }
 
 #endif

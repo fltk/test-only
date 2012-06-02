@@ -950,7 +950,7 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   if (plist) {
     fclose(plist);
   } else {  
-    FILE *plist = fopen(buf, "wb");boxt
+    FILE *plist = fopen(buf, "wb");
     fprintf(plist, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     fprintf(plist, "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n");
     fprintf(plist, "<plist version=\"1.0\">\n");

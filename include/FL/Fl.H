@@ -580,11 +580,11 @@ public: // should be private!
   }
   
   static void set_boxtype(Fl_Boxtype a, Fl_Box_Draw_F *b, uchar c, uchar d, uchar e, uchar f) {
-    fltk3::set_boxtype(fltk3::_1to3_boxtype(a), (fltk3::BoxDrawF*)b, c, d, e, f);
+    // FIXME: not supported - fltk3::set_boxtype(fltk3::_1to3_boxtype(a), (fltk3::BoxDrawF*)b, c, d, e, f);
   }
   
   static void set_boxtype(Fl_Boxtype a, Fl_Boxtype b) {
-    fltk3::set_boxtype(fltk3::_1to3_boxtype(a), fltk3::_1to3_boxtype(b));
+    // FIXME: not supported - fltk3::set_boxtype(fltk3::_1to3_boxtype(a), fltk3::_1to3_boxtype(b));
   }
   
   static int box_dx(Fl_Boxtype b) {
