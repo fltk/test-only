@@ -323,8 +323,6 @@ void DataReady::HandleData(fd_set& r, fd_set& w, fd_set& x)
 void* DataReady::DataReadyThread(void *o)
 {
   DataReady *self = (DataReady*)o;
-  NSAutoreleasePool *localPool;
-  localPool = [[NSAutoreleasePool alloc] init]; 
   while ( 1 ) {					// loop until thread cancel or error
     // Thread safe local copies of data before each select()
     self->DataLock();
@@ -354,6 +352,7 @@ void* DataReady::DataReadyThread(void *o)
         if (FD_ISSET(cancelpipe, &r) || FD_ISSET(cancelpipe, &x)) 	// cancel?
 	  { return(NULL); }						// just exit
         DEBUGMSG("CHILD THREAD: DATA IS READY\n");
+	NSAutoreleasePool *localPool = [[NSAutoreleasePool alloc] init]; 
         NSPoint pt={0,0};
         NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined location:pt 
 				       modifierFlags:0
@@ -361,6 +360,7 @@ void* DataReady::DataReadyThread(void *o)
                                         windowNumber:0 context:NULL 
 					     subtype:FLTKDataReadyEvent data1:0 data2:0];
         [NSApp postEvent:event atStart:NO];
+	[localPool release];
         return(NULL);		// done with thread
       }
     }
