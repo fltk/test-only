@@ -277,7 +277,7 @@ Fl_Value_Slider *linespacing_slider=(Fl_Value_Slider *)0;
 
 static void cb_linespacing_slider(Fl_Value_Slider*, void*) {
   int val = (int)linespacing_slider->value();
-tree->linespacing(val);
+  // FIXME: notsuuported tree->linespacing(val);
 tree->redraw();
 }
 
@@ -285,7 +285,7 @@ Fl_Value_Slider *usericonmarginleft_slider=(Fl_Value_Slider *)0;
 
 static void cb_usericonmarginleft_slider(Fl_Value_Slider*, void*) {
   int val = (int)usericonmarginleft_slider->value();
-tree->usericonmarginleft(val);
+  // FIXME: notsuuported tree->usericonmarginleft(val);
 tree->redraw();
 }
 
@@ -293,7 +293,7 @@ Fl_Value_Slider *labelmarginleft_slider=(Fl_Value_Slider *)0;
 
 static void cb_labelmarginleft_slider(Fl_Value_Slider*, void*) {
   int val = (int)labelmarginleft_slider->value();
-tree->labelmarginleft(val);
+  // FIXME: notsuuported tree->labelmarginleft(val);
 tree->redraw();
 }
 
@@ -1210,7 +1210,8 @@ u can scroll");
         linespacing_slider->textsize(9);
         linespacing_slider->callback((Fl_Callback*)cb_linespacing_slider, (void*)(tree));
         linespacing_slider->align(Fl_Align(FL_ALIGN_LEFT));
-        o->value(tree->linespacing());
+          // FIXME: notsuuported o->value(tree->linespacing());
+        o->deactivate();
         o->range(0.0, 100.0);
         o->step(1.0);
       } // Fl_Value_Slider* linespacing_slider
@@ -1223,7 +1224,8 @@ u can scroll");
         usericonmarginleft_slider->textsize(9);
         usericonmarginleft_slider->callback((Fl_Callback*)cb_usericonmarginleft_slider, (void*)(tree));
         usericonmarginleft_slider->align(Fl_Align(FL_ALIGN_LEFT));
-        o->value(tree->usericonmarginleft());
+          // FIXME: notsuuported o->value(tree->usericonmarginleft());
+        o->deactivate();
         o->range(0.0, 100.0);
         o->step(1.0);
       } // Fl_Value_Slider* usericonmarginleft_slider
@@ -1236,7 +1238,8 @@ u can scroll");
         labelmarginleft_slider->textsize(9);
         labelmarginleft_slider->callback((Fl_Callback*)cb_labelmarginleft_slider, (void*)(tree));
         labelmarginleft_slider->align(Fl_Align(FL_ALIGN_LEFT));
-        o->value(tree->labelmarginleft());
+          // FIXME: notsuuported o->value(tree->labelmarginleft());
+        o->deactivate();
         o->range(0.0, 100.0);
         o->step(1.0);
       } // Fl_Value_Slider* labelmarginleft_slider

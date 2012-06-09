@@ -391,12 +391,13 @@ public:
     ((fltk3::Tree*)_p)->sortorder( (fltk3::TreeSort)val );
   }
 
-#if 0
   Fl_Boxtype selectbox() const {
+    return fltk3::_3to1_boxtype( ((fltk3::Tree*)_p)->selectbox() );
   }
+  
   void selectbox(Fl_Boxtype val) {
+    ((fltk3::Tree*)_p)->selectbox( fltk3::_1to3_boxtype(val) );
   }
-#endif
 
   Fl_Tree_Select selectmode() const {
     return (Fl_Tree_Select)((fltk3::Tree*)_p)->selectmode();
