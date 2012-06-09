@@ -8373,6 +8373,93 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {EE5794EF-D347-4570-AACC-31BF09BE24A4}
       }
     }
+    app_target CubeView1 {
+      uuid_Xcode4_FluidBuildRule {52D691A8-DD76-4503-BC23-076E1528F57E}
+      uuid_Xcode4_CopyFilesBuildPhase {A80F08E9-59A2-44F6-AC3C-322A37498BA6}
+      uuid_Xcode4_ProductFileReference {4CF2B5A8-F10A-468C-8285-5BDC6D7CDF0D}
+      uuid_Xcode4_FrameworksBuildPhase {E57C3A99-E8ED-42D8-AD3D-DB3DBEAC8DE4}
+      uuid_Xcode4_Group {E555F573-4D71-44A5-8744-5010736FDB4A}
+      uuid_Xcode4_Target {E1864A14-11F0-45C7-BF2A-D4EFA83B624A}
+      uuid_Xcode4_BuildConfigurationList {990756FA-BC0C-4AA3-9833-7E504B4396BB}
+      uuid_Xcode4_ResourcesBuildPhase {6E1C0F7F-F275-44AE-8D12-FF935082D867}
+      uuid_Xcode4_SourcesBuildPhase {58F4DE05-0EB3-4633-A3B6-8822FF93475E}
+      uuid_Xcode4_DebugBuildConfiguration {252EEC3F-DA2C-475A-BC18-4AAAE7AEFC15}
+      uuid_Xcode4_ReleaseBuildConfiguration {4B133BBB-B10E-42E7-ACF2-C168F6B439E7}
+      uuid_VC2008_Project {DED5DEBD-F146-40C7-948B-6F8DB718B7D7}
+      uuid_VC2010_Project {80276DC7-FD63-4F8B-BB5F-E2C701356D95}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {CubeView.cxx} {
+        uuid_Xcode4_BuildFileInSources {86BB3CDB-A353-4B29-9FC4-FDBA35C675C8}
+        uuid_Xcode4_FileRef {F7DB7297-150F-4B25-9F58-55B22C51B4D5}
+        filename_and_path {test1/CubeView.cxx}
+      }
+      file_ref {CubeMain.cxx} {
+        uuid_Xcode4_BuildFileInSources {CADD9E5F-A8F9-4752-8AD0-8D7A7221A276}
+        uuid_Xcode4_FileRef {54E705FB-7F77-4CFE-AEEA-83690D7F7E24}
+        filename_and_path {test1/CubeMain.cxx}
+      }
+      file_ref {CubeViewUI.cxx} {
+        uuid_Xcode4_FileRef {BA2143BA-276A-465D-B10C-99CA31B4C748}
+        uuid_Xcode4_BuildFileInSources {DC5601E8-F6A8-4CFB-A652-16FFE6944E18}
+        filename_and_path {test1/CubeViewUI.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {6B363546-5CC0-4EC9-85BD-CEB15804F7A1}
+        uuid_Xcode4_BuildFileInCopyFiles {1297E24C-A41F-4F92-B675-5B5390060732}
+        uuid_Xcode4_ContainerItemProxy {5BFDD0A3-D7E8-4557-B053-48CC58D67AA7}
+        uuid_Xcode4_TargetDependency {398F7C3A-2FEF-40B1-84BE-548ADE3EE539}
+      }
+      target_dependency fltk3gl {
+        uuid_Xcode4_BuildFileInFrameworks {2AB5235B-972A-41BE-B79B-FED4843FC05F}
+        uuid_Xcode4_BuildFileInCopyFiles {33ACED40-27AF-4FB2-846E-0DFCEC55108E}
+        uuid_Xcode4_ContainerItemProxy {9B7A1050-D0EC-404E-835A-95C103249732}
+        uuid_Xcode4_TargetDependency {11699BAF-270D-4F0D-82C6-A595A5036956}
+      }
+      file_ref {AGL.framework} {
+        uuid_Xcode4_BuildFile {0A19FD91-EF6B-4833-9B3E-E98871CF53F3}
+        uuid_Xcode4_FileRef {9AB565E7-FFF1-4174-9234-70EA22CE0DCF}
+        uuid_Xcode4_BuildFileInFrameworks {E04B67AC-AC1D-4020-A620-486B10F9C952}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework}
+        location 2
+      }
+      file_ref {OpenGL.framework} {
+        uuid_Xcode4_BuildFile {F98AD4A7-9C80-43D6-9DB4-D8EF7B4F2173}
+        uuid_Xcode4_FileRef {63259B33-AD8B-4B36-B180-432519ED5A3F}
+        uuid_Xcode4_BuildFileInFrameworks {4AEA1267-D1A3-4168-A388-5AEC6ADFC9D3}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework}
+        location 2
+      }
+      file_ref {glu32.lib} {
+        uuid_Xcode4_BuildFile {4E0F2736-0A18-4F86-B3FC-2B1511D25D30}
+        uuid_Xcode4_FileRef {A689B97E-6644-4F81-AC37-D508682A0E7B}
+        uuid_Xcode4_BuildFileInFrameworks {A072649C-256F-4AD8-B7C0-71E445AFC197}
+        build_env 28
+        list_env 28
+        filename_and_path {glu32.lib}
+        location 3
+      }
+      file_ref {opengl32.lib} {
+        uuid_Xcode4_BuildFile {E72FA28A-FE62-4254-B2D4-DD30EDBBF791}
+        uuid_Xcode4_FileRef {770016D4-3FF4-4C89-B795-A322C5E1029B}
+        uuid_Xcode4_BuildFileInFrameworks {1D8EC0C5-4DC7-4ADA-9EE3-336BE0F6B04E}
+        build_env 28
+        list_env 28
+        filename_and_path {opengl32.lib}
+        location 3
+      }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
+      }
+    }
     app_target cube1 {
       uuid_Xcode4_FluidBuildRule {1760205E-C4B2-4ECA-A2E1-D694A6BF93FF}
       uuid_Xcode4_CopyFilesBuildPhase {EB9F684A-74C6-49F5-9599-C40E9A2A4D4F}
@@ -8939,7 +9026,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {78C56F7A-713B-4305-848E-4514FB427676}
       }
     }
-    app_target help1 {open
+    app_target help1 {
       uuid_Xcode4_FluidBuildRule {351AA7EA-C929-49E5-AA93-EE5A18D40BB4}
       uuid_Xcode4_CopyFilesBuildPhase {A0322527-FDEB-4235-8E4F-2E4DFEE7042B}
       uuid_Xcode4_ProductFileReference {0B2066E3-2B74-4C8E-867D-3B714543895F}
@@ -9391,7 +9478,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {971E4633-D0DD-440F-86DD-059AEBA751F6}
       }
     }
-    app_target pack1 {open
+    app_target pack1 {
       uuid_Xcode4_FluidBuildRule {1BA8542A-09F1-45E4-8A61-3C721B0AE5BE}
       uuid_Xcode4_CopyFilesBuildPhase {74AFC76C-E1D5-4066-A0E7-12A5150B9C4B}
       uuid_Xcode4_ProductFileReference {605AD7C9-EE6F-4FCA-A1C7-6142F614962D}
@@ -9421,7 +9508,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {84C8CC2C-4559-4F60-A9F6-5B31BE42947B}
       }
     }
-    app_target pixmap_browser1 {open
+    app_target pixmap_browser1 {
       uuid_Xcode4_FluidBuildRule {C3BE4E47-040B-411E-84A4-884FA719C63D}
       uuid_Xcode4_CopyFilesBuildPhase {224698C5-0A53-42C1-BC51-B951D073B9D1}
       uuid_Xcode4_ProductFileReference {7B45F49D-3ADC-49EF-BDE7-E0BFFCC877B5}
@@ -9450,32 +9537,32 @@ workspace FLTK {open
         uuid_Xcode4_ContainerItemProxy {82867D9B-4F02-44B9-85BF-0AC12B55ECFC}
         uuid_Xcode4_TargetDependency {12ACB0F7-A6D6-4D6E-9E00-2B1940A53D8B}
       }
-      target_dependency fltk3images {selected
+      target_dependency fltk3images {
         uuid_Xcode4_BuildFileInFrameworks {73AF7933-6037-45FE-9B07-5F3337F70875}
         uuid_Xcode4_BuildFileInCopyFiles {6669555B-BAC5-4AF2-B193-834723D4A731}
         uuid_Xcode4_ContainerItemProxy {04845F3D-846D-42B8-864D-F4EBD817C732}
         uuid_Xcode4_TargetDependency {8E301ABB-A9F8-46F2-A0AF-85A67F2B0CC5}
       }
-      target_dependency fltk3png {selected
+      target_dependency fltk3png {
         uuid_Xcode4_BuildFileInFrameworks {B96F67A4-0B9C-437C-96B0-0D4AB104F5B0}
         uuid_Xcode4_BuildFileInCopyFiles {CB5D855B-CB2D-4CBF-B56D-675567EA9193}
         uuid_Xcode4_ContainerItemProxy {BEF6A288-9407-456F-BF2D-E29EBB5A91DE}
         uuid_Xcode4_TargetDependency {DEACACB7-306D-433C-BA58-0F8FD0C0B879}
       }
-      target_dependency fltk3jpeg {selected
+      target_dependency fltk3jpeg {
         uuid_Xcode4_BuildFileInFrameworks {3B7F1A75-9A5B-423C-AD84-0F23246BB481}
         uuid_Xcode4_BuildFileInCopyFiles {A265C15A-BE1C-47AE-A1CF-819E87A5D4F2}
         uuid_Xcode4_ContainerItemProxy {A3CF11CB-8D95-4AFE-B819-1C87A98A1587}
         uuid_Xcode4_TargetDependency {542C6EB4-890B-47F7-9B36-E1DAE2257A5E}
       }
-      target_dependency fltk3zlib {selected
+      target_dependency fltk3zlib {
         uuid_Xcode4_BuildFileInFrameworks {E87E7EEA-BEB7-476C-85B2-2EE17B58E4EC}
         uuid_Xcode4_BuildFileInCopyFiles {A1F3CD3C-29BD-4C0E-8AEE-6429CA4F7B25}
         uuid_Xcode4_ContainerItemProxy {DC9430C1-D303-41FA-B3FC-6BBA034D5105}
         uuid_Xcode4_TargetDependency {83335F52-325B-408C-90CE-76AC0FC44978}
       }
     }
-    app_target pixmap1 {open
+    app_target pixmap1 {
       uuid_Xcode4_FluidBuildRule {D5967689-0E32-45EB-974B-00D71E64B45E}
       uuid_Xcode4_CopyFilesBuildPhase {DB52458A-479D-429B-97E4-73EEB6990BD7}
       uuid_Xcode4_ProductFileReference {7EE66457-7452-459F-9636-63986CA3CACB}
@@ -9505,7 +9592,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {E86F3B55-F9F1-459F-AAA9-B8ABB3580118}
       }
     }
-    app_target resizebox1 {open
+    app_target resizebox1 {
       uuid_Xcode4_FluidBuildRule {7CE3181E-9BE2-42A6-91AE-B7BC31AA43BF}
       uuid_Xcode4_CopyFilesBuildPhase {0169C018-A6A5-4CB9-9450-CDF6698C30A5}
       uuid_Xcode4_ProductFileReference {7F1E871D-8B78-4E68-9B57-450F4EA49CCC}
@@ -9535,7 +9622,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {A9F751A6-D434-4C89-9306-09ACD856D46D}
       }
     }
-    app_target rotated_text1 {open
+    app_target rotated_text1 {
       uuid_Xcode4_FluidBuildRule {F0C64E94-ED3A-4FE0-B056-A074FA256802}
       uuid_Xcode4_CopyFilesBuildPhase {4A5955C7-B897-42B2-82D5-AC00258924F2}
       uuid_Xcode4_ProductFileReference {D9F916C6-EFE3-450F-BDDF-D323F1269F4B}
@@ -9565,7 +9652,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {A43B43E5-8845-4ED8-A828-9039251E4EAE}
       }
     }
-    app_target scroll1 {open
+    app_target scroll1 {
       uuid_Xcode4_FluidBuildRule {4AF9048B-3254-4A41-8657-D0EE5972587F}
       uuid_Xcode4_CopyFilesBuildPhase {B189C982-421A-4AD7-B93D-E0D6C2D4D322}
       uuid_Xcode4_ProductFileReference {A0F24E89-47F9-41AC-8D54-1402B9FAEAE4}
@@ -9595,7 +9682,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {8B02C5E6-7925-4BD0-8134-39E0D2BCCC7D}
       }
     }
-    app_target shape1 {open
+    app_target shape1 {
       uuid_Xcode4_FluidBuildRule {95263504-00FB-4DFE-8703-23CA48B90E03}
       uuid_Xcode4_CopyFilesBuildPhase {F6878F6B-E711-44C7-A86D-5977CBC11592}
       uuid_Xcode4_ProductFileReference {71EDB085-83A3-4E3F-B885-C00113890E32}
@@ -9671,7 +9758,7 @@ workspace FLTK {open
         valuetype 2
       }
     }
-    app_target subwindow1 {open
+    app_target subwindow1 {
       uuid_Xcode4_FluidBuildRule {2C3680CF-43EF-48FC-A7F4-F61E28C2CD4A}
       uuid_Xcode4_CopyFilesBuildPhase {9B441FB9-8C52-4E0D-A04E-6F1005E8894D}
       uuid_Xcode4_ProductFileReference {8E40BB14-0F66-45D9-8CAE-33D48EE7C827}
@@ -9701,7 +9788,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {57E42799-922F-4493-ACE2-A1E6E455B664}
       }
     }
-    app_target symbols1 {open
+    app_target symbols1 {
       uuid_Xcode4_FluidBuildRule {525D5AE5-DB9D-4951-AA55-A7A949C9DFBA}
       uuid_Xcode4_CopyFilesBuildPhase {0D197986-9C32-496B-A48E-37F208E4DD5C}
       uuid_Xcode4_ProductFileReference {881F4D4A-EB48-41AA-91EC-7D814FC510E4}
@@ -9731,7 +9818,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {96A2437B-6193-4EED-9EDE-4683D9016B18}
       }
     }
-    app_target table1 {open
+    app_target table1 {
       uuid_Xcode4_FluidBuildRule {F5488F65-5188-4996-8516-BCD6053B4570}
       uuid_Xcode4_CopyFilesBuildPhase {7E7C0F32-FC45-4322-BB4A-6B700958C75E}
       uuid_Xcode4_ProductFileReference {C8A0FA0E-9988-4178-9B8D-01224B81B887}
@@ -9761,7 +9848,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {56A72704-1588-49FF-A6FA-1D3C99336AAE}
       }
     }
-    app_target threads1 {open
+    app_target threads1 {
       uuid_Xcode4_FluidBuildRule {4251B65B-E29F-44FB-A4EB-4DCC3343D955}
       uuid_Xcode4_CopyFilesBuildPhase {6B835FF1-6CED-48C5-861B-D18D26B4C807}
       uuid_Xcode4_ProductFileReference {DA6DE21C-D303-4536-8481-B30DA6E0F109}
@@ -9791,7 +9878,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {91F0C6FE-DA3C-4D03-9A17-442FC0B19A65}
       }
     }
-    app_target tile1 {open
+    app_target tile1 {
       uuid_Xcode4_FluidBuildRule {3DA38BC2-CC82-499E-B462-89390CB597DD}
       uuid_Xcode4_CopyFilesBuildPhase {DBD0D1BD-7339-44AA-BDB8-AA1A165A9226}
       uuid_Xcode4_ProductFileReference {48B45CC9-21BF-4179-9FFB-6E11AC9A38DB}
@@ -9821,7 +9908,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {EF841ABC-A96F-451C-89A3-BFB8A9AA7253}
       }
     }
-    app_target tiled_image1 {open
+    app_target tiled_image1 {
       uuid_Xcode4_FluidBuildRule {61A141D2-7C44-47F6-B3E6-EF5BB6B5CC72}
       uuid_Xcode4_CopyFilesBuildPhase {059EEC53-38F6-4B14-AD8A-1BFF6D6253B8}
       uuid_Xcode4_ProductFileReference {4F4E16BA-7F69-4436-9F44-1A30DBD6DC59}
@@ -9851,7 +9938,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {9ED59956-CD7A-4C8D-9925-F449066F7EAB}
       }
     }
-    app_target unittests1 {open
+    app_target unittests1 {
       uuid_Xcode4_FluidBuildRule {C5007C66-05FD-459C-A2FE-A5C37E9D2768}
       uuid_Xcode4_CopyFilesBuildPhase {F8B959E1-C6A0-4873-AEF8-515F26173CDE}
       uuid_Xcode4_ProductFileReference {635421D1-3544-4C13-A22A-D0C5AC57704F}
@@ -9881,7 +9968,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {BA231265-6509-4C84-B77A-ABC3CFCAEAA7}
       }
     }
-    app_target utf81 {open
+    app_target utf81 {
       uuid_Xcode4_FluidBuildRule {35C1DA6C-9AFA-4EB2-B274-A4C92C7512BE}
       uuid_Xcode4_CopyFilesBuildPhase {04BF9E21-8F7F-4D07-8094-526F5DA0A030}
       uuid_Xcode4_ProductFileReference {6E02D160-6829-4ECF-99F6-7FE0B1463426}
@@ -9909,6 +9996,362 @@ workspace FLTK {open
         uuid_Xcode4_BuildFileInCopyFiles {FC69BCB5-DEF9-4B00-825D-45F59B2141F8}
         uuid_Xcode4_ContainerItemProxy {E3EFC8A7-84AB-4460-A408-7955EE4B0190}
         uuid_Xcode4_TargetDependency {6FDFF2B0-4D77-435D-A190-003D7C505041}
+      }
+    }
+    app_target fast_slow1 {open
+      uuid_Xcode4_FluidBuildRule {B4325756-257E-4FCB-AD0C-B27E1509D07C}
+      uuid_Xcode4_CopyFilesBuildPhase {D1F31CDC-BB11-4F1B-ADE4-973F9899205B}
+      uuid_Xcode4_ProductFileReference {9CC2CAAE-8918-4FE7-A240-EE623F19ACBB}
+      uuid_Xcode4_FrameworksBuildPhase {C6BFCE61-FCBD-4692-9ABA-6A5468B226CF}
+      uuid_Xcode4_Group {5066248E-EB6A-49D0-839A-6243DB254585}
+      uuid_Xcode4_Target {BB6F2307-A7AF-492D-9B72-574C80140821}
+      uuid_Xcode4_BuildConfigurationList {7A4263A7-5034-4C10-8450-C5E153B7BD1C}
+      uuid_Xcode4_ResourcesBuildPhase {11390660-68FC-4CD1-B2BB-E2F5AE19E3C7}
+      uuid_Xcode4_SourcesBuildPhase {8036C3B8-18E7-4C2A-8785-6904FFC454A4}
+      uuid_Xcode4_DebugBuildConfiguration {91D51B13-9240-44A7-BC02-C7A88505895C}
+      uuid_Xcode4_ReleaseBuildConfiguration {F05ACD98-B123-4450-9434-0CB794D86547}
+      uuid_VC2008_Project {8C2FB695-8F7B-464C-B260-0C27653F2801}
+      uuid_VC2010_Project {F61758C9-8070-4D19-9203-80945FED8144}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {fast_slow.cxx} {
+        uuid_Xcode4_BuildFileInSources {064E1BDF-1524-4AC2-8DDA-F84FC0441445}
+        uuid_Xcode4_FileRef {2CD33ACB-32D2-4BBD-ABB8-48047F467410}
+        filename_and_path {test1/fast_slow.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {C8CE564C-6914-4745-B6F9-451B2950B9F9}
+        uuid_Xcode4_BuildFileInCopyFiles {EA4C61A1-5665-41FB-84EB-C06BD1793C8A}
+        uuid_Xcode4_ContainerItemProxy {AF4D8560-C3C8-4F6E-A1AA-C51C2522564F}
+        uuid_Xcode4_TargetDependency {A1808D0B-2C37-44EC-8F76-2E47A783FC95}
+      }
+    }
+    app_target inactive1 {open
+      uuid_Xcode4_FluidBuildRule {DF98E1DD-0D79-439A-A55D-15C080C9CA6E}
+      uuid_Xcode4_CopyFilesBuildPhase {0606BC7E-EC92-43AF-849E-D59838F1C40F}
+      uuid_Xcode4_ProductFileReference {CC35EE19-5023-449B-AE00-E63A9D4232DD}
+      uuid_Xcode4_FrameworksBuildPhase {97A48BA6-DF69-40FD-B4EE-7978BA6761BE}
+      uuid_Xcode4_Group {902C3174-5D4A-4128-BCD9-F019D20846E1}
+      uuid_Xcode4_Target {D6E74D34-AE9C-4915-AEBA-37D5C801DECB}
+      uuid_Xcode4_BuildConfigurationList {2967E699-3DB7-42A3-9B8E-1A5550BA235D}
+      uuid_Xcode4_ResourcesBuildPhase {16F87C9D-0910-43F4-9CA1-7DD0EE8253D9}
+      uuid_Xcode4_SourcesBuildPhase {324BB41A-2FF1-4D3B-94AA-8E08E6DCBE6E}
+      uuid_Xcode4_DebugBuildConfiguration {46FA25E1-131E-4E47-8056-382C8B4763B1}
+      uuid_Xcode4_ReleaseBuildConfiguration {38B22368-748E-492D-BCBB-96F762AD3642}
+      uuid_VC2008_Project {8B5BFFEE-1337-4CB7-A987-CF8ACC4A430D}
+      uuid_VC2010_Project {82796767-98D8-4AA9-9927-23F18939A400}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {inactive.cxx} {
+        uuid_Xcode4_BuildFileInSources {DA1FA14D-84B3-44CA-BA1E-253ADEC8E1B3}
+        uuid_Xcode4_FileRef {ED1E4D57-DE9A-43C3-92C0-A397D309CF06}
+        filename_and_path {test1/inactive.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {46F20C1F-03CA-43CE-8E9C-E3F2CD66A7A6}
+        uuid_Xcode4_BuildFileInCopyFiles {A451249C-E640-4EF4-80E5-007DA06B0677}
+        uuid_Xcode4_ContainerItemProxy {CAAE9136-382D-4F09-B566-6C47D632B110}
+        uuid_Xcode4_TargetDependency {EF573433-46AC-4910-85E6-E0B84ACFFF6C}
+      }
+    }
+    app_target keyboard1 {open selected
+      uuid_Xcode4_FluidBuildRule {3DC2C8C0-CB45-4BE7-9307-A2C9C99D9D09}
+      uuid_Xcode4_CopyFilesBuildPhase {5EE46C34-3610-4C80-AEFE-9445E26262A1}
+      uuid_Xcode4_ProductFileReference {81D7F9FF-83F5-43E7-B2A0-C4A8769E9DD8}
+      uuid_Xcode4_FrameworksBuildPhase {F181BF64-B5D8-41E4-819C-E8E9A86B9A00}
+      uuid_Xcode4_Group {E2D196D9-32F0-4E57-AEB4-B6ED72AF5024}
+      uuid_Xcode4_Target {6A9AB3B0-FCFA-4C9F-BE1C-BE7B23A0BDDC}
+      uuid_Xcode4_BuildConfigurationList {568F10BC-8FDD-4F27-8250-2ED9F7DDA99D}
+      uuid_Xcode4_ResourcesBuildPhase {033444ED-BEF2-43FF-A641-462C77907627}
+      uuid_Xcode4_SourcesBuildPhase {C92ADB9D-086D-48C1-A16E-94E46277C3E2}
+      uuid_Xcode4_DebugBuildConfiguration {728866E9-3305-4B16-8059-D49A19B9A473}
+      uuid_Xcode4_ReleaseBuildConfiguration {D56AFCBA-ED29-4F93-8025-97452987E879}
+      uuid_VC2008_Project {BE3ABA9A-78ED-4E64-8E9F-9110691B161F}
+      uuid_VC2010_Project {68BE2ECF-54F4-43B2-AC41-B18D475220AE}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {keyboard.cxx} {
+        uuid_Xcode4_BuildFileInSources {D1DC36A0-3C10-4B44-BE96-5207AE1392C3}
+        uuid_Xcode4_FileRef {4893FD14-911C-4C3F-A1DC-89343407C108}
+        filename_and_path {test1/keyboard.cxx}
+      }
+      file_ref {keyboard_ui.cxx} {
+        uuid_Xcode4_BuildFileInSources {ECE48331-B081-4ADD-B65B-73B15DFD2F8F}
+        uuid_Xcode4_FileRef {FFF8D04B-29CA-40B8-8025-428439EE2A98}
+        filename_and_path {test1/keyboard_ui.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {1FB3DBE9-7DE7-45EC-9148-64F1ECBB7146}
+        uuid_Xcode4_BuildFileInCopyFiles {4CBCF9C1-8B03-40F2-BE2F-A9EF8C574BCF}
+        uuid_Xcode4_ContainerItemProxy {D292A709-D8C2-42D5-893C-BC4392FC219A}
+        uuid_Xcode4_TargetDependency {97752CCA-6739-4CD8-9C3D-35AEDEBE9DFE}
+      }
+    }
+    app_target mandelbrot1 {open
+      uuid_Xcode4_FluidBuildRule {A78D98B4-91DF-407F-8CA0-D78A0F618123}
+      uuid_Xcode4_CopyFilesBuildPhase {9B8BAB65-988C-4F6C-B960-D058B2438F47}
+      uuid_Xcode4_ProductFileReference {C0E4B5D2-78BE-4C29-A521-5EB8DE944168}
+      uuid_Xcode4_FrameworksBuildPhase {F52C349C-D31A-487E-8461-FC24AC946A5D}
+      uuid_Xcode4_Group {64E0087D-68D7-4CC3-80FA-56EBD11CE660}
+      uuid_Xcode4_Target {92B67206-9EE8-4B76-A993-A29131789DAA}
+      uuid_Xcode4_BuildConfigurationList {BEDE7A34-C21C-407B-94C7-69B78C918C82}
+      uuid_Xcode4_ResourcesBuildPhase {3B2C89CC-9AB9-4F74-8116-34F8C7271148}
+      uuid_Xcode4_SourcesBuildPhase {4247E7CC-209B-44D1-ABCE-37DF59C3A314}
+      uuid_Xcode4_DebugBuildConfiguration {58F217A7-1761-4B84-BB4A-5AF1D07E5AEC}
+      uuid_Xcode4_ReleaseBuildConfiguration {2C99AF82-4CFE-4688-A27B-4086F71C8B3D}
+      uuid_VC2008_Project {4553D873-AA38-4EB2-A9B6-55737E3B9FA6}
+      uuid_VC2010_Project {3545892B-C1E2-4805-A889-9F3D1D8921CA}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {mandelbrot.cxx} {
+        uuid_Xcode4_BuildFileInSources {734E5D4B-7EEF-480F-B900-2B2CD6265E3D}
+        uuid_Xcode4_FileRef {3F9D86D7-39A6-426D-A57F-DFC1B22AD3E3}
+        filename_and_path {test1/mandelbrot.cxx}
+      }
+      file_ref {mandelbrot_ui.cxx} {
+        uuid_Xcode4_BuildFileInSources {644045CF-893E-4B2A-8302-129FE5F246D7}
+        uuid_Xcode4_FileRef {4BB3D20A-5489-4979-BD86-BDF80969073E}
+        filename_and_path {test1/mandelbrot_ui.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {473DF877-DC95-401F-A720-C448C0F85E86}
+        uuid_Xcode4_BuildFileInCopyFiles {7E963834-5987-4DD7-9DD8-B610D2E76ED1}
+        uuid_Xcode4_ContainerItemProxy {4B48FF2E-2940-41D2-8E79-024E1849985F}
+        uuid_Xcode4_TargetDependency {4D51F269-4E33-4A55-8E20-69D8AA44CEA1}
+      }
+    }
+    app_target preferences1 {open
+      uuid_Xcode4_FluidBuildRule {0BB51663-84BD-427B-A500-A26C555FB49A}
+      uuid_Xcode4_CopyFilesBuildPhase {23CE2306-5041-4586-8906-27DA806F8F50}
+      uuid_Xcode4_ProductFileReference {7631A428-F86B-44FE-9928-9D047670D533}
+      uuid_Xcode4_FrameworksBuildPhase {6CBE6E5C-0506-4CC2-AB8F-CB0B0FE6638E}
+      uuid_Xcode4_Group {9BA228DD-87BC-461F-B8ED-A3ABD20DCAF8}
+      uuid_Xcode4_Target {B04CEDCF-6E0F-4433-9B87-093B5E38EBB8}
+      uuid_Xcode4_BuildConfigurationList {F276DB5A-4081-41A6-B187-1FC01AD2101A}
+      uuid_Xcode4_ResourcesBuildPhase {CE4EF586-8E72-4808-93AC-EB7F8EE03FB4}
+      uuid_Xcode4_SourcesBuildPhase {2BDB350B-7B08-4036-A2E7-693D7BB5A884}
+      uuid_Xcode4_DebugBuildConfiguration {EA6567C5-9329-4B25-BE6E-1F9D52A9487D}
+      uuid_Xcode4_ReleaseBuildConfiguration {952452F1-4A01-4989-9726-0662D621A2A1}
+      uuid_VC2008_Project {9D7243F6-6359-4DEE-A7A6-B01BCB391114}
+      uuid_VC2010_Project {FCB227B1-BE55-4923-B38B-937533BC74A2}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {preferences.cxx} {
+        uuid_Xcode4_BuildFileInSources {E28E507F-B4D8-4912-8A66-185315FD86CE}
+        uuid_Xcode4_FileRef {266F9016-368F-46A3-A1E4-7401B44D6E0F}
+        filename_and_path {test1/preferences.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {A6DFC720-23A0-4927-94C4-1FD703872F08}
+        uuid_Xcode4_BuildFileInCopyFiles {9E3F485C-4370-4847-B44B-7FB82496948A}
+        uuid_Xcode4_ContainerItemProxy {8FAC740A-3A98-4DAE-8A29-D5F2D4783CF8}
+        uuid_Xcode4_TargetDependency {FDDEBBA6-AE0E-4CAB-9C73-C62813F7B873}
+      }
+    }
+    app_target radio1 {open
+      uuid_Xcode4_FluidBuildRule {455AFA4E-0599-4E23-8F34-4E038F7A6713}
+      uuid_Xcode4_CopyFilesBuildPhase {732852F2-B2E6-43F3-9E61-93BB0CCE6C54}
+      uuid_Xcode4_ProductFileReference {68EAEB50-E545-404C-9DD6-E1FF23FB134A}
+      uuid_Xcode4_FrameworksBuildPhase {734C35AC-1BD1-4228-9A70-8298E6B6ECE9}
+      uuid_Xcode4_Group {9D8EAB42-E492-457D-AB08-6DF76D818A73}
+      uuid_Xcode4_Target {DDDAE741-4DCE-4897-8F6F-2FF061A7AD7A}
+      uuid_Xcode4_BuildConfigurationList {49E71D84-D2EB-48F7-AAE1-D88B66ADB3B8}
+      uuid_Xcode4_ResourcesBuildPhase {A3A893B1-E4EB-4C6B-A0FB-F7E08702E130}
+      uuid_Xcode4_SourcesBuildPhase {54F9592E-879C-41F5-8280-07C1314E0B59}
+      uuid_Xcode4_DebugBuildConfiguration {B21DF25A-6C2A-406D-95F3-3563BEDCE939}
+      uuid_Xcode4_ReleaseBuildConfiguration {596FE109-77BC-44CF-889E-66C27E35527E}
+      uuid_VC2008_Project {127F5691-0794-4F3D-817E-34C9B1DCDDD6}
+      uuid_VC2010_Project {4E3BC4B2-502F-42FD-B408-881C928AAC4F}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {radio.cxx} {
+        uuid_Xcode4_BuildFileInSources {8B97EFEF-FCD7-4E05-AA8D-A859C14EE071}
+        uuid_Xcode4_FileRef {85557634-E574-4FDE-A46E-61D9EE5D5875}
+        filename_and_path {test1/radio.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {3DAB0772-AFA6-4893-863E-B7A74B2ADFC4}
+        uuid_Xcode4_BuildFileInCopyFiles {6727FF1B-1DE2-4EB2-AF25-097EE1FBD7C5}
+        uuid_Xcode4_ContainerItemProxy {C9EF77ED-C080-426F-B748-58F93E3EE165}
+        uuid_Xcode4_TargetDependency {7304C827-5C91-4B78-9EFB-BABFD2E29D0E}
+      }
+    }
+    app_target resize1 {open
+      uuid_Xcode4_FluidBuildRule {8C4A1DC6-88D0-4521-A5B5-EAE8074230F5}
+      uuid_Xcode4_CopyFilesBuildPhase {2D79D6C6-3C8B-4E49-ADDF-7237E808B2D2}
+      uuid_Xcode4_ProductFileReference {934222EC-E95E-4730-992D-ABD5E5BD02D7}
+      uuid_Xcode4_FrameworksBuildPhase {7DB06BA3-F8F6-4CB8-B4F1-1228584F5857}
+      uuid_Xcode4_Group {44009312-1108-4BDC-9E90-B2AEF741472A}
+      uuid_Xcode4_Target {426C9A71-EE6C-4328-A0C3-949391A44605}
+      uuid_Xcode4_BuildConfigurationList {F9E341E0-2DA3-4CA8-952F-D2EE01B000C6}
+      uuid_Xcode4_ResourcesBuildPhase {2F756B2D-69A9-40F1-A1E8-A6776CF8D6B0}
+      uuid_Xcode4_SourcesBuildPhase {48F00020-3F87-47A5-A085-8AEA2F94827E}
+      uuid_Xcode4_DebugBuildConfiguration {9730DA15-2BF6-47E5-9AE3-65A7587FD8A2}
+      uuid_Xcode4_ReleaseBuildConfiguration {8F579E9B-07CC-418D-9356-1E6D865CDBC2}
+      uuid_VC2008_Project {09EAEAC2-B075-4342-85EE-F23D775B353B}
+      uuid_VC2010_Project {8869DA6A-F659-499D-91E2-81B66DA7F4FA}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {resize.cxx} {
+        uuid_Xcode4_BuildFileInSources {8F08B6A7-B9DB-4E46-96ED-83AA9D95129F}
+        uuid_Xcode4_FileRef {C3C6039E-AB8C-49E2-9A33-087EE8D0C9C0}
+        filename_and_path {test1/resize.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {1DC85561-4F51-4F35-8D65-4398C3064508}
+        uuid_Xcode4_BuildFileInCopyFiles {50A5A886-BF8B-4D43-B6BE-237E58C18DC5}
+        uuid_Xcode4_ContainerItemProxy {67FA7EA1-EEB9-4084-9A92-1CD0AB431D3F}
+        uuid_Xcode4_TargetDependency {527B5B87-81E7-4954-BB26-38D113D6B3BA}
+      }
+    }
+    app_target tabs1 {open
+      uuid_Xcode4_FluidBuildRule {219AB1F6-54AF-4AB2-9EAA-94EC531E526B}
+      uuid_Xcode4_CopyFilesBuildPhase {78C456C7-12E1-44CE-A3A3-C721BFC1BED8}
+      uuid_Xcode4_ProductFileReference {5D1C7044-82C0-40BB-8B3A-26682A4FE202}
+      uuid_Xcode4_FrameworksBuildPhase {31092309-31D0-4ABF-B222-18BDC146587F}
+      uuid_Xcode4_Group {BAA559B3-22BC-4A2B-809B-5AAB2DE6F5B4}
+      uuid_Xcode4_Target {ECD2F026-8171-4A49-B146-7AF5483730DE}
+      uuid_Xcode4_BuildConfigurationList {73E50989-B4BE-47ED-AF14-0D2273F1D989}
+      uuid_Xcode4_ResourcesBuildPhase {D9390F86-4585-4069-9A65-915EE3F7AE68}
+      uuid_Xcode4_SourcesBuildPhase {04F57DB3-A4CF-4F3B-B333-624583C9FC07}
+      uuid_Xcode4_DebugBuildConfiguration {FE98A889-F01F-4FE7-AEEC-679FBA359F04}
+      uuid_Xcode4_ReleaseBuildConfiguration {271A0292-872A-4F19-9F87-E3C53E16F511}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {tabs.cxx} {
+        uuid_Xcode4_BuildFileInSources {2C658BDA-91C6-4CCB-9ED5-2A87AEA0F365}
+        uuid_Xcode4_FileRef {9DD75A01-A195-45C3-884D-FEA00CDEA570}
+        build_env 64
+        filename_and_path {test1/tabs.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {794536F1-C086-4528-BC38-873A8FFDD236}
+        uuid_Xcode4_BuildFileInCopyFiles {DEB32A8C-8BF9-480A-9299-485675EB4B76}
+        uuid_Xcode4_ContainerItemProxy {E6E5DA7C-A1E2-4C0F-BEC4-77153759A144}
+        uuid_Xcode4_TargetDependency {7B8ACEF2-EA1A-4DC7-B354-4EAC6C5A94A5}
+      }
+      target_dependency fltk3gl {
+        uuid_Xcode4_BuildFileInFrameworks {F15EBE01-7A85-4E42-BF82-930364731979}
+        uuid_Xcode4_BuildFileInCopyFiles {500A2CD4-26E9-4A99-82DF-0E4EB978AD8C}
+        uuid_Xcode4_ContainerItemProxy {8EFB20D2-CC32-477C-87BA-8D58FC81ABE3}
+        uuid_Xcode4_TargetDependency {FEFBF342-6ADB-4A17-904E-EF34C64C320D}
+      }
+      file_ref {AGL.framework} {
+        uuid_Xcode4_BuildFile {936F5696-840E-4431-AC85-67980D3D7AA6}
+        uuid_Xcode4_FileRef {B2B8C5C0-545B-4067-A264-A68D1612D723}
+        uuid_Xcode4_BuildFileInFrameworks {7E6D1C86-FA42-40CD-B623-5529270F3DDA}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework}
+        location 2
+      }
+      file_ref {OpenGL.framework} {
+        uuid_Xcode4_BuildFile {0FFCF091-F83E-4AF0-99B1-661970B3C4AA}
+        uuid_Xcode4_FileRef {954745CD-D8F2-4964-93B2-7218D1813302}
+        uuid_Xcode4_BuildFileInFrameworks {1FEF7572-CEE4-44E7-887C-46B99AA2882A}
+        build_env 96
+        list_env 96
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework}
+        location 2
+      }
+      file_ref {glu32.lib} {
+        uuid_Xcode4_BuildFile {FC39A2E0-535D-40D2-B7AA-E81E1A020A64}
+        uuid_Xcode4_FileRef {1B62E569-75EE-4753-BA3F-EC89BDF96C8B}
+        uuid_Xcode4_BuildFileInFrameworks {344023FD-37A2-41E8-A752-3B163C640F3B}
+        build_env 28
+        list_env 28
+        filename_and_path {glu32.lib}
+        location 3
+      }
+      file_ref {opengl32.lib} {
+        uuid_Xcode4_BuildFile {BDA02A5C-C987-47AF-A612-0E558B12AF5A}
+        uuid_Xcode4_FileRef {C5148020-8884-40C9-88C3-BDCAB06F8219}
+        uuid_Xcode4_BuildFileInFrameworks {A3072CC7-6408-45BB-841F-ECFBE2713E57}
+        build_env 28
+        list_env 28
+        filename_and_path {opengl32.lib}
+        location 3
+      }
+      tool_option {Makefile OpenGL libraries} {
+        build_env 1
+        value {$(GLLIB)}
+        valuetype 2
+      }
+    }
+    app_target tree1 {open
+      uuid_Xcode4_FluidBuildRule {8D48F8FA-CCB3-4E16-9ACF-495C3AE2EDF7}
+      uuid_Xcode4_CopyFilesBuildPhase {D6BC0112-32E3-4B59-B4BF-963B97C4E381}
+      uuid_Xcode4_ProductFileReference {3FF463B9-EB62-4A96-8D63-696218BA4406}
+      uuid_Xcode4_FrameworksBuildPhase {B0E4CAC4-0939-473A-ABC9-A8CC1CC48A66}
+      uuid_Xcode4_Group {72F7DA81-ADF2-4E39-8A1D-A781A491AA23}
+      uuid_Xcode4_Target {0691B6C7-71BB-47B5-8065-1057937DB646}
+      uuid_Xcode4_BuildConfigurationList {C21A4D75-E71D-44CC-9D68-448F42D0471B}
+      uuid_Xcode4_ResourcesBuildPhase {A8CCD54B-C522-4BCD-838B-F522EDAC8B8B}
+      uuid_Xcode4_SourcesBuildPhase {E30BB0A1-6361-47CC-BF18-7FCE010457FC}
+      uuid_Xcode4_DebugBuildConfiguration {01391EC9-BF73-4148-B5F0-94E792B50C3E}
+      uuid_Xcode4_ReleaseBuildConfiguration {F46AFFFB-0009-432F-8939-8FA5A39BD865}
+      uuid_VC2008_Project {80FC815A-6FBC-4E1D-B206-2FFFE608AEA0}
+      uuid_VC2010_Project {D77F8FD4-C02A-47D1-BD25-B5115C9D5B79}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {tree.cxx} {
+        uuid_Xcode4_BuildFileInSources {F07D8D5F-7DCC-4A0F-916D-623B93428C8D}
+        uuid_Xcode4_FileRef {9C4B8B1E-6145-4FAB-8313-4BC88D47DAE8}
+        filename_and_path {test1/tree.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {969318A8-1D09-4067-A5CC-F621B7BDFC5E}
+        uuid_Xcode4_BuildFileInCopyFiles {9D3230FC-361A-402E-B2B8-80A62111B51A}
+        uuid_Xcode4_ContainerItemProxy {09AA53BC-31FA-4F7B-A105-681280BF934E}
+        uuid_Xcode4_TargetDependency {EC520CD1-B0D5-41DD-8416-69D1EE98D34E}
+      }
+    }
+    app_target valuators1 {open
+      uuid_Xcode4_FluidBuildRule {4623819D-8A98-4598-8EF6-8DE6698F5314}
+      uuid_Xcode4_CopyFilesBuildPhase {729810B1-6A0F-495C-8525-074D423D8140}
+      uuid_Xcode4_ProductFileReference {208EF86B-EE55-48A3-8F93-5CC2B252A148}
+      uuid_Xcode4_FrameworksBuildPhase {38839387-65FB-4142-8F0C-FA69A10F16A4}
+      uuid_Xcode4_Group {59B4EB40-F1DD-4856-B144-EB003E4C7951}
+      uuid_Xcode4_Target {64D08A9B-65AA-4DC2-9469-39869634C586}
+      uuid_Xcode4_BuildConfigurationList {B5E43877-21ED-4BCE-9EB0-0A33814CFAFE}
+      uuid_Xcode4_ResourcesBuildPhase {D45EB6DF-01E7-466A-8582-5B0D554AEC6C}
+      uuid_Xcode4_SourcesBuildPhase {0A15BBF9-DB13-4360-BAFC-ABBEA43B6FAA}
+      uuid_Xcode4_DebugBuildConfiguration {0A87A19E-A0FB-46CA-86F2-128559896EC7}
+      uuid_Xcode4_ReleaseBuildConfiguration {328DDC6B-D89E-4864-A2C9-E4FE17F03B0C}
+      uuid_VC2008_Project {D408B910-75E6-4361-8B5A-8AC9EECC9AFE}
+      uuid_VC2010_Project {E778B6A7-79B7-441D-BC93-3B6171A7D463}
+      build_env 64
+      target_path test1
+      makefile_path test1
+    } {
+      file_ref {valuators.cxx} {
+        uuid_Xcode4_BuildFileInSources {B13D9B6A-CE6C-4DB5-A65C-8BDC5E819166}
+        uuid_Xcode4_FileRef {8D903FD9-C4E9-4BAD-91F2-EC55627B8302}
+        filename_and_path {test1/valuators.cxx}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {592E7E49-2522-45AB-BB4B-98DA4D35AC11}
+        uuid_Xcode4_BuildFileInCopyFiles {8C6F97CB-4360-4904-9C2F-1E6D98768712}
+        uuid_Xcode4_ContainerItemProxy {9851F261-3C4C-4966-A8BA-9B236AA1218E}
+        uuid_Xcode4_TargetDependency {54C3FE64-414E-4481-9C13-24A9B8B7290A}
       }
     }
   }
