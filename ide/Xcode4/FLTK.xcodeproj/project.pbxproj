@@ -1114,7 +1114,15 @@
 		7F5D579690265ED6DE91F026 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		A0A7C91F444F8AAC30422F9F /* pixmap_browser.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5C58ED8449D4908762AC36BF /* pixmap_browser.cxx */; };
 		228AEE728840B4F3B7BF3018 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		73AF793325C9C43437F70875 /* fltk3images.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7522F0908E6250B67C2110 /* fltk3images.framework */; };
+		B96F67A448E09BFAB104F5B0 /* fltk3png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
+		3B7F1A75D867A2A7246BB481 /* fltk3jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
+		E87E7EEAF9DBAB537B58E4EC /* fltk3zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
 		0967A39A51B3F478F80A3ADA /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		6669555BF03732D423D4A731 /* fltk3images.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BF7522F0908E6250B67C2110 /* fltk3images.framework */; };
+		CB5D855B8792D23867EA9193 /* fltk3png.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
+		A265C15AF9B2205187A5D4F2 /* fltk3jpeg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
+		A1F3CD3C65B3EEC7CA4F7B25 /* fltk3zlib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
 		74C3AB36B244FFB26586EF43 /* pixmap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F127E4D9C837DA2602C9AAD4 /* pixmap.cxx */; };
 		CD0DE8870FF50492707D4929 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		71D0060874CC2DCE55D99C99 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
@@ -4640,6 +4648,34 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
+		04845F3DC6D572A6D817C732 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00A26433E953EAC785420507;
+			remoteInfo = fltk3images;
+		};
+		BEF6A288D1685DB3BB5A91DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87465A7F0F0821C6F896CA29;
+			remoteInfo = fltk3png;
+		};
+		A3CF11CBC76BA49EA98A1587 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E08AAC0C48D8A8B2784F6D46;
+			remoteInfo = fltk3jpeg;
+		};
+		DC9430C192F9D846034D5105 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5BA5465BD7A0C8F93B338C7;
+			remoteInfo = fltk3zlib;
+		};
 		88D46BE6CF055DCCE2E73A96 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
@@ -5969,6 +6005,10 @@
 			dstSubfolderSpec = 10;
 			files = (
 				0967A39A51B3F478F80A3ADA /* fltk3 in CopyFiles */,
+				6669555BF03732D423D4A731 /* fltk3images in CopyFiles */,
+				CB5D855B8792D23867EA9193 /* fltk3png in CopyFiles */,
+				A265C15AF9B2205187A5D4F2 /* fltk3jpeg in CopyFiles */,
+				A1F3CD3C65B3EEC7CA4F7B25 /* fltk3zlib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8278,6 +8318,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				228AEE728840B4F3B7BF3018 /* fltk3 in Frameworks */,
+				73AF793325C9C43437F70875 /* fltk3images in Frameworks */,
+				B96F67A448E09BFAB104F5B0 /* fltk3png in Frameworks */,
+				3B7F1A75D867A2A7246BB481 /* fltk3jpeg in Frameworks */,
+				E87E7EEAF9DBAB537B58E4EC /* fltk3zlib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13692,6 +13736,10 @@
 			);
 			dependencies = (
 				12ACB0F7EBB8B51940A53D8B /* fltk3 */,
+				8E301ABBEF0A25097F2B0CC5 /* fltk3images */,
+				DEACACB77351B5D7D0C0B879 /* fltk3png */,
+				542C6EB4CEFC7AECE2257A5E /* fltk3jpeg */,
+				83335F5272D7E6620FC44978 /* fltk3zlib */,
 			);
 			name = pixmap_browser1;
 			productName = pixmap_browser1;
@@ -17925,6 +17973,26 @@
 		12ACB0F7EBB8B51940A53D8B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		8E301ABBEF0A25097F2B0CC5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00A26433E953EAC785420507 /* fltk3images */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		DEACACB77351B5D7D0C0B879 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87465A7F0F0821C6F896CA29 /* fltk3png */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		542C6EB4CEFC7AECE2257A5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E08AAC0C48D8A8B2784F6D46 /* fltk3jpeg */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		83335F5272D7E6620FC44978 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5BA5465BD7A0C8F93B338C7 /* fltk3zlib */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
 		E86F3B55BC6E1202B3580118 /* PBXTargetDependency */ = {

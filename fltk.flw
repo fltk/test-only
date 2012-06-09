@@ -8939,7 +8939,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {78C56F7A-713B-4305-848E-4514FB427676}
       }
     }
-    app_target help1 {
+    app_target help1 {open
       uuid_Xcode4_FluidBuildRule {351AA7EA-C929-49E5-AA93-EE5A18D40BB4}
       uuid_Xcode4_CopyFilesBuildPhase {A0322527-FDEB-4235-8E4F-2E4DFEE7042B}
       uuid_Xcode4_ProductFileReference {0B2066E3-2B74-4C8E-867D-3B714543895F}
@@ -9450,6 +9450,30 @@ workspace FLTK {open
         uuid_Xcode4_ContainerItemProxy {82867D9B-4F02-44B9-85BF-0AC12B55ECFC}
         uuid_Xcode4_TargetDependency {12ACB0F7-A6D6-4D6E-9E00-2B1940A53D8B}
       }
+      target_dependency fltk3images {selected
+        uuid_Xcode4_BuildFileInFrameworks {73AF7933-6037-45FE-9B07-5F3337F70875}
+        uuid_Xcode4_BuildFileInCopyFiles {6669555B-BAC5-4AF2-B193-834723D4A731}
+        uuid_Xcode4_ContainerItemProxy {04845F3D-846D-42B8-864D-F4EBD817C732}
+        uuid_Xcode4_TargetDependency {8E301ABB-A9F8-46F2-A0AF-85A67F2B0CC5}
+      }
+      target_dependency fltk3png {selected
+        uuid_Xcode4_BuildFileInFrameworks {B96F67A4-0B9C-437C-96B0-0D4AB104F5B0}
+        uuid_Xcode4_BuildFileInCopyFiles {CB5D855B-CB2D-4CBF-B56D-675567EA9193}
+        uuid_Xcode4_ContainerItemProxy {BEF6A288-9407-456F-BF2D-E29EBB5A91DE}
+        uuid_Xcode4_TargetDependency {DEACACB7-306D-433C-BA58-0F8FD0C0B879}
+      }
+      target_dependency fltk3jpeg {selected
+        uuid_Xcode4_BuildFileInFrameworks {3B7F1A75-9A5B-423C-AD84-0F23246BB481}
+        uuid_Xcode4_BuildFileInCopyFiles {A265C15A-BE1C-47AE-A1CF-819E87A5D4F2}
+        uuid_Xcode4_ContainerItemProxy {A3CF11CB-8D95-4AFE-B819-1C87A98A1587}
+        uuid_Xcode4_TargetDependency {542C6EB4-890B-47F7-9B36-E1DAE2257A5E}
+      }
+      target_dependency fltk3zlib {selected
+        uuid_Xcode4_BuildFileInFrameworks {E87E7EEA-BEB7-476C-85B2-2EE17B58E4EC}
+        uuid_Xcode4_BuildFileInCopyFiles {A1F3CD3C-29BD-4C0E-8AEE-6429CA4F7B25}
+        uuid_Xcode4_ContainerItemProxy {DC9430C1-D303-41FA-B3FC-6BBA034D5105}
+        uuid_Xcode4_TargetDependency {83335F52-325B-408C-90CE-76AC0FC44978}
+      }
     }
     app_target pixmap1 {open
       uuid_Xcode4_FluidBuildRule {D5967689-0E32-45EB-974B-00D71E64B45E}
@@ -9875,7 +9899,7 @@ workspace FLTK {open
       target_path test1
       makefile_path test1
     } {
-      file_ref {utf8.cxx} {selected
+      file_ref {utf8.cxx} {
         uuid_Xcode4_BuildFileInSources {0B7AC2CD-2234-4B2E-AF50-80299DDFDAEE}
         uuid_Xcode4_FileRef {9F1936B5-A736-4F59-8DFF-78245EB5C904}
         filename_and_path {test1/utf8.cxx}
