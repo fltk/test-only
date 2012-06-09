@@ -58,7 +58,7 @@ inline void fl_message(const char *fmt, ...) {
 inline void fl_alert(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  fltk3::alert(fmt, ap);
+  fltk3::valert(fmt, ap);
   va_end(ap);
 }
 

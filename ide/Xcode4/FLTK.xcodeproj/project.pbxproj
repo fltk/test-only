@@ -984,24 +984,98 @@
 		7EA96ECFE1E441D590B8F977 /* buttons.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B2FF8D317E09E7C5AF07D689 /* buttons.cxx */; };
 		82D3CDAE87735F775B7E87BF /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		BFF32F30E2FA8A79FA8A77DF /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		735E1100E518ED453EFF79A9 /* checkers.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D401020CFC229F9FD2E7C024 /* checkers.cxx */; };
+		6A7EC2D2B5FA0FC3CE6985E5 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		8921DF47B4F8FE8B1C7682FA /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		74F6D9F5AB57DCB0FD535B69 /* clock.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A504306EF99ABE6689CF734F /* clock.cxx */; };
+		87285CD92823DB8915CE17FD /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		683948227D81D8AC9F271CA8 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		1A1E802A5FC242E1E47A501D /* colbrowser.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 82C05F1862C14AFE602C70CF /* colbrowser.cxx */; };
+		3FAE78CF38A587E3CA1A4EC0 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		A7E9558C6334AAA68DE298A5 /* rgb.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = DF9D0DDC20388DFB151E07C0 /* rgb.txt */; };
+		2DA4B5E3386971EDF475CDF5 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		3F9F9A42285A72744558F51D /* color_chooser.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F177282996D907999AECA81B /* color_chooser.cxx */; };
+		06444EA141842658E2F6290E /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		AB7446A97C598FB5E4E80ECC /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		3499087CB4C707B3F4B47DF3 /* cube.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 2BD66489005B71681B019A1E /* cube.cxx */; };
+		B3DD872526F4E04D47984469 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B7C192B09B9964E4AC95CF8 /* AGL.framework */; };
+		D5295EA544BBB81A66B9EFB7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8E3A9CE7AE0F21CD873113 /* OpenGL.framework */; };
+		2101759ECFFF7C327404B67C /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		31F459D277EB52B7C936A248 /* fltk3gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		07B9B9FE62177AF5A033B4DE /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		2A0B1C53D73690233A651438 /* fltk3gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		B93E9897246A5E5E8A942C70 /* cursor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F76526EF608D46DC77707260 /* cursor.cxx */; };
+		A1C5002B413A37F4C5A0AE4E /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		F83316AE5A132A134682A56D /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		105B6A01D15DB6790BCC6F6C /* curve.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8D2C3E6F27C22459D0DFF116 /* curve.cxx */; };
+		8925590B9C16A5A0A0055B8D /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		0037D1B45A98245186449B28 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		CA5A9A13AEE1056CAC04B5D4 /* device.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8370B1A8BAFE0D195DF65838 /* device.cxx */; };
+		63D641663E5E7D876E4CFB6D /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		F222B28ECDA65660CB0AD971 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		730DEB527D27B22B08559597 /* doublebuffer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 00387FB3EB8DE1697379F223 /* doublebuffer.cxx */; };
+		C45A067067FF0431E517EA1E /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		857F46992526FA057CD14CA0 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		C70ADEE06685B63558600103 /* editor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3C9D4E967A58E81776624EFC /* editor.cxx */; };
+		3B5939168506BE569790C5D0 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		78D6C978E78E0BBBC06581D8 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		CDC404FEC906EBBBC9549516 /* file_chooser.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F23804B3F3A2934AF61B5F0F /* file_chooser.cxx */; };
+		0E45CDA147CF520A542399A1 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		43A7327A9597BFE01B4AB3F7 /* fltk3images.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7522F0908E6250B67C2110 /* fltk3images.framework */; };
+		70B9ED1078259E79D9C33F43 /* fltk3png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
+		F1291FDCC842C2E8E4692302 /* fltk3jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
+		7D8141C73A43956ADD89C027 /* fltk3zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
+		1F36579171A626BE6BB4385C /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		99C1DEEA0AABAFBEB82D95CE /* fltk3images.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BF7522F0908E6250B67C2110 /* fltk3images.framework */; };
+		9E7B465CE9D7CD13776F6D09 /* fltk3png.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
+		C3F3B63411F66B6726DBF7C7 /* fltk3jpeg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
+		FF4C4209D2A46B7CA0E83C9D /* fltk3zlib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
+		85534A23304981145FD9D8B2 /* fonts.cxx in Sources */ = {isa = PBXBuildFile; fileRef = EFFE58AA113BC4E8593132FD /* fonts.cxx */; };
+		5C4A9F0FC24389B8D6BF5671 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		30F4FF6524C8AEFA47F43132 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		AA3EF0531547F2661DBFB9C4 /* fractals.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F25F4CEC756722E968FCC09B /* fractals.cxx */; };
+		E976D665C526F97948D05018 /* fracviewer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A690044EE5136E82ABD0D9D6 /* fracviewer.cxx */; };
+		CB38CA793A5CA7008A2F7FA1 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9EA030D8C5B59484D50E480 /* AGL.framework */; };
+		8E10A56FF0429877F1E906F9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 703A3CA35317A89408132B62 /* OpenGL.framework */; };
+		080109145E12AFBFCD3E5DBF /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		9D33B4AD2F0D50A7BDA6E622 /* fltk3gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		8A9245FA153C6A88EB8A04D3 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		FB510CA102A984778A1876A6 /* fltk3gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		DF9F9E861B7F03C98C3D7683 /* fullscreen.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 862CE220727727B435E437D9 /* fullscreen.cxx */; };
+		1B03A8D7DC2B82696F1F6C30 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A3110386E58DDA6B2D0AEB3 /* AGL.framework */; };
+		661E77E4E95822DB9A90F4BB /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2F0D365F49F6DF17925E04 /* OpenGL.framework */; };
+		656E30D3AEEA0F70346C566C /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		D8C296D2E5925B98CD910A77 /* fltk3gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		75858BF6798EC8E1170DC541 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		0B91503C66544A0178DCA24B /* fltk3gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		1AD22BCE8B36C17D73248C57 /* gl_overlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5F659BEE8829D53975BB3F95 /* gl_overlay.cxx */; };
+		F81DEEB086EE9F8CEC8488FD /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 743C39E5144DEF9D8CE035F7 /* AGL.framework */; };
+		32210D5CA247337DD2096E35 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B7DDD4BEFBE668161ADCD18 /* OpenGL.framework */; };
+		5DC9967700297B83DB8E8082 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		97439BD0D6EFB988051CE32B /* fltk3gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
+		DDC7E72789BF23941DA0E230 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		8530AD9607E3E937A11158F5 /* fltk3gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
 		996D3158F8534009D880D068 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E8E40FC6442E03AE819DD6B6 /* hello.cxx */; };
 		752E08556331ABF38A21882C /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		FEABCB46F4DCC7B8B8188E69 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		E1C0D0791FA3C78FAF9D7A16 /* gl_overlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7C4842ECC242B64FB69F455C /* gl_overlay.cxx */; };
-		D1B45F51AD3E03E83AA4780B /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95021A4BA62DF0A081DBA8A0 /* AGL.framework */; };
-		AC3A686B1F3B7B2533AE4ACF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006E100C7BD1C8803026EEB2 /* OpenGL.framework */; };
-		DA4A505F0374000792715B1E /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		8E77773E382B09A17BDE9ACD /* fltk3gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
-		D9130262BB3E7722AEEBB87F /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		ABF4FA691EAAAFA6802CE7F9 /* fltk3gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
-		BCF6B5BED4F74BB1D20C3F8B /* fractals.cxx in Sources */ = {isa = PBXBuildFile; fileRef = DC93EFBA45710037DC8EE4D9 /* fractals.cxx */; };
-		9884A092B76A943AA362176E /* fracviewer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C1D55F2AC55C067BA1652E14 /* fracviewer.cxx */; };
-		5737E37F7AB5A6B928D5A860 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F273FC8E60B23A3C6FB69A5 /* AGL.framework */; };
-		0FE0A644AC4C5EB00B0AB6B4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8093FFA00206E7F884FACCC1 /* OpenGL.framework */; };
-		B6F5F2120206F6C76011200A /* fltk3gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
-		564FBE4AF6FCB1A38B71D85F /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
-		817855B527E8108A1A375EF2 /* fltk3gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 47405B558C14400ABA410AF3 /* fltk3gl.framework */; };
-		7F6E2334DA2F57E9A129D20D /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		E427ABF71BFFE2E1B6C4119E /* help.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 00A1332B14D1742EE210A73C /* help.cxx */; };
+		B29D4C5E6C634846B7C494DE /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8FE20A582330707B737E4B /* CoreFoundation.framework */; };
+		2102A9D9268FC01B6FC68EBA /* fltk3images.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF7522F0908E6250B67C2110 /* fltk3images.framework */; };
+		25C2946525E90508CA3FB532 /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		217995B94672DE8E87999716 /* fltk3png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
+		64F91DEEC3E276ACF8521C49 /* fltk3jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
+		34441C9E57EC309CD6AB8701 /* fltk3zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
+		042625EA0BD8884B63044710 /* fltk3images.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BF7522F0908E6250B67C2110 /* fltk3images.framework */; };
+		EBB396E59E69142A3FC4C2F2 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		BC52A630C56AE7CCAC89EF2E /* fltk3png.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
+		9E6A1E3178140D80D61406A3 /* fltk3jpeg.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
+		801C25E8A8DFC57724882590 /* fltk3zlib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFDEBB8CE5A31C066586BF8B /* fltk3zlib.framework */; };
+		D4A6EAD2117B8ABAAA039108 /* iconize.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E3494B8B82F3C1555F116911 /* iconize.cxx */; };
+		1851F0738C0AEC7DAD8DA3AC /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		23B42BA81C5F0B58E4882C4F /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		D3AC04FD3036FF39DC492D38 /* image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D1A79E39BEAE29251CFEA725 /* image.cxx */; };
+		0A311CDA06E21B5672C3189B /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
+		1F8B363EB71863A97B57C986 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		D0CBDA8965DFE7596933DFEA /* overlay.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C479AD25E5A5CE6873F9B2BE /* overlay.cxx */; };
 		F921A1156C69B16BD04BBDFF /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		A807BFEF5586189810922F18 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
@@ -2061,6 +2135,186 @@
 			);
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
+		48B8BCE9FF3038C3E81B38C5 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		685BC19B7ECFA11AE986509E /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		E3CC31BE49D624DCFB5905AC /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		23CDBE2CE60DC86E4CEADEE2 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		1760205E8A787475A6BF93FF /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		3A0FAF75A99D40323BFB481E /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		7C71A5E95D7784E4343AB3F2 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		7E0F8090A0C28D9B7FDC72D6 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		9231DAD9D8C834725111CAA7 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C8D29089C5CFC750560AA67F /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		9B3C1AB8C855D152EF832E83 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		7BD10952B4122C5204F3EC8A /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		DB4EA1071A67D5CC78781933 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		3E395DDDD67842FB893FFE60 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		3FC1EB74AEB3A0C7DA339667 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
 		FFA29F39E937CD33A6C566AB /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -2073,7 +2327,7 @@
 			);
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
-		3E7AFF7AA220E2400C3CE087 /* PBXBuildRule */ = {
+		351AA7EA80CC44C918D40BB4 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2085,7 +2339,19 @@
 			);
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
-		7B22D97A906A9C9041A804F2 /* PBXBuildRule */ = {
+		EE9B4B5D65CF84393B7ED709 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		66F0CF3DCA48FEA7C5D91174 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -3687,6 +3953,167 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
+		CDCAF711FB5BDBBB27391B91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		DD88E693CC3DB6524639A60E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		A2D1D35872B22C3292A2C78B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		AA14B87866B255986769CEAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		E4CC5E408437F7788208CD30 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		A0672AD99A7329F38988D8ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F082108A40ACB22900A01FF;
+			remoteInfo = fltk3gl;
+		};
+		DBABE42C62327731E30329E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		FC0DB52394E49B6D81CCAD61 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		B39F9D7F87E1A0C735179717 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		A97F08864E6A47F274BCFEBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		B6C441AC8200BB1DC915A2E3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		0976F6D01E6123C927116383 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		5765C00B7390DCE3912B24A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00A26433E953EAC785420507;
+			remoteInfo = fltk3images;
+		};
+		911A8E125C2C78CDC4085459 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87465A7F0F0821C6F896CA29;
+			remoteInfo = fltk3png;
+		};
+		F39B3DDA7C7F9E623E69F17C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E08AAC0C48D8A8B2784F6D46;
+			remoteInfo = fltk3jpeg;
+		};
+		4B0E440C3B7F0CC25E8ACA99 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5BA5465BD7A0C8F93B338C7;
+			remoteInfo = fltk3zlib;
+		};
+		2D0BF6AF68AB6B10113E7C03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		1CDEF8F7C59063CCC5CCB90B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		B35DE35625672ED44B36667B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F082108A40ACB22900A01FF;
+			remoteInfo = fltk3gl;
+		};
+		DBDE20FE8A4C02ACBCF6C9A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		CAAE28E3355BC883B7A22BAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F082108A40ACB22900A01FF;
+			remoteInfo = fltk3gl;
+		};
+		B743C0CBD192AF352B0625E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		C02E714F7EB1240765816C6E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F082108A40ACB22900A01FF;
+			remoteInfo = fltk3gl;
+		};
 		BADBA8F12AE618D3013BAE95 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
@@ -3694,28 +4121,49 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
-		AE361666F7092B1E6F835880 /* PBXContainerItemProxy */ = {
+		2131F08CEE8EEB3CEDBF230C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00A26433E953EAC785420507;
+			remoteInfo = fltk3images;
+		};
+		BFD31D5E44C6C9D4D93AEEAD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk3;
 		};
-		F61D6302CDF6F95A673884DC /* PBXContainerItemProxy */ = {
+		F4BBA9A0D970047C2F8CD666 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0F082108A40ACB22900A01FF;
-			remoteInfo = fltk3gl;
+			remoteGlobalIDString = 87465A7F0F0821C6F896CA29;
+			remoteInfo = fltk3png;
 		};
-		4EBD51DB51CF6D199975206E /* PBXContainerItemProxy */ = {
+		6C4BE6C34211B45A53A05025 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0F082108A40ACB22900A01FF;
-			remoteInfo = fltk3gl;
+			remoteGlobalIDString = E08AAC0C48D8A8B2784F6D46;
+			remoteInfo = fltk3jpeg;
 		};
-		54EE41B7175F836B03EA4F4C /* PBXContainerItemProxy */ = {
+		DEFD00BF37895F35DC2BAABA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5BA5465BD7A0C8F93B338C7;
+			remoteInfo = fltk3zlib;
+		};
+		1D6BA32AE2CCFA92EC99FF2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk3;
+		};
+		0B87931FAD4EE14AB708EF54 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2204C8627A66DD596FFDC8F4 /* Project object */;
 			proxyType = 1;
@@ -4630,6 +5078,165 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		20E1BB27728FD348338E5377 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8921DF47B4F8FE8B1C7682FA /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A4182C8322763A42A77F30A3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				683948227D81D8AC9F271CA8 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF482DC27C9E6172522C18E0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A7E9558C6334AAA68DE298A5 /* rgb.txt in CopyFiles */,
+				2DA4B5E3386971EDF475CDF5 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD3848BF754FD7E48968BCB1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AB7446A97C598FB5E4E80ECC /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9F684A3D3351979A2A4D4F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				07B9B9FE62177AF5A033B4DE /* fltk3 in CopyFiles */,
+				2A0B1C53D73690233A651438 /* fltk3gl in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF3FF430B1461A41B7BACAAD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F83316AE5A132A134682A56D /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8A95A3A7C64221EC2900493 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0037D1B45A98245186449B28 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1CA11D82FD6810AB17867991 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F222B28ECDA65660CB0AD971 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C36F12853A7395D9352D6441 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				857F46992526FA057CD14CA0 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98BB2A68EAFE5FCCAA61262B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				78D6C978E78E0BBBC06581D8 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		31DEBED1D1023E5464A479C0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1F36579171A626BE6BB4385C /* fltk3 in CopyFiles */,
+				99C1DEEA0AABAFBEB82D95CE /* fltk3images in CopyFiles */,
+				9E7B465CE9D7CD13776F6D09 /* fltk3png in CopyFiles */,
+				C3F3B63411F66B6726DBF7C7 /* fltk3jpeg in CopyFiles */,
+				FF4C4209D2A46B7CA0E83C9D /* fltk3zlib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1DFFE25CE0E5383DA9E2244 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				30F4FF6524C8AEFA47F43132 /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20FFB1999B9E1918F7CDEB5B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8A9245FA153C6A88EB8A04D3 /* fltk3 in CopyFiles */,
+				FB510CA102A984778A1876A6 /* fltk3gl in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A5CD7739224B9C357D714E5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				75858BF6798EC8E1170DC541 /* fltk3 in CopyFiles */,
+				0B91503C66544A0178DCA24B /* fltk3gl in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71F6753E559FB558E57C3BEB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DDC7E72789BF23941DA0E230 /* fltk3 in CopyFiles */,
+				8530AD9607E3E937A11158F5 /* fltk3gl in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E476E2ABC5221067E28DF30F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4640,25 +5247,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B813E1CFDD90CB814F0EE17C /* CopyFiles */ = {
+		A0322527BFDEA002FEE7042B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D9130262BB3E7722AEEBB87F /* fltk3 in CopyFiles */,
-				ABF4FA691EAAAFA6802CE7F9 /* fltk3gl in CopyFiles */,
+				042625EA0BD8884B63044710 /* fltk3images in CopyFiles */,
+				EBB396E59E69142A3FC4C2F2 /* fltk3 in CopyFiles */,
+				BC52A630C56AE7CCAC89EF2E /* fltk3png in CopyFiles */,
+				9E6A1E3178140D80D61406A3 /* fltk3jpeg in CopyFiles */,
+				801C25E8A8DFC57724882590 /* fltk3zlib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EF132FC91CB46B05AEF261CE /* CopyFiles */ = {
+		D0ECED4ED84C02EC144ED766 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				817855B527E8108A1A375EF2 /* fltk3gl in CopyFiles */,
-				7F6E2334DA2F57E9A129D20D /* fltk3 in CopyFiles */,
+				23B42BA81C5F0B58E4882C4F /* fltk3 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		03FFA7C5A3EF9067B2D088F7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1F8B363EB71863A97B57C986 /* fltk3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5694,17 +6313,55 @@
 		07F9BA49CB2A76BA4BAFDB41 /* button1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = button1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FF8D317E09E7C5AF07D689 /* buttons.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = buttons.cxx; path = ../../test1/buttons.cxx; sourceTree = SOURCE_ROOT; };
 		75FD974FB22E76417CEB5F9C /* buttons1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buttons1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D401020CFC229F9FD2E7C024 /* checkers.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = checkers.cxx; path = ../../test1/checkers.cxx; sourceTree = SOURCE_ROOT; };
+		EBA4C0A6CE8AEB337B94B669 /* checkers1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = checkers1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A504306EF99ABE6689CF734F /* clock.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = clock.cxx; path = ../../test1/clock.cxx; sourceTree = SOURCE_ROOT; };
+		25DDA19E178C6829B0D463BB /* clock1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = clock1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		82C05F1862C14AFE602C70CF /* colbrowser.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = colbrowser.cxx; path = ../../test1/colbrowser.cxx; sourceTree = SOURCE_ROOT; };
+		DF9D0DDC20388DFB151E07C0 /* rgb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rgb.txt; path = ../../test1/rgb.txt; sourceTree = SOURCE_ROOT; };
+		186E4E1F8CB4C5ED446E8C4E /* colbrowser1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = colbrowser1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F177282996D907999AECA81B /* color_chooser.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color_chooser.cxx; path = ../../test1/color_chooser.cxx; sourceTree = SOURCE_ROOT; };
+		39BC67E30705802B6FEA8614 /* color_chooser1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = color_chooser1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BD66489005B71681B019A1E /* cube.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cube.cxx; path = ../../test1/cube.cxx; sourceTree = SOURCE_ROOT; };
+		2B7C192B09B9964E4AC95CF8 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
+		3C8E3A9CE7AE0F21CD873113 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
+		9343788591FF54F321D04977 /* cube1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cube1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F76526EF608D46DC77707260 /* cursor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursor.cxx; path = ../../test1/cursor.cxx; sourceTree = SOURCE_ROOT; };
+		9F375AC3D253A54EDA7DCBCD /* cursor1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cursor1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D2C3E6F27C22459D0DFF116 /* curve.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = curve.cxx; path = ../../test1/curve.cxx; sourceTree = SOURCE_ROOT; };
+		5EF7A9A67B8AC1918C56CE58 /* curve1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = curve1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8370B1A8BAFE0D195DF65838 /* device.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = device.cxx; path = ../../test1/device.cxx; sourceTree = SOURCE_ROOT; };
+		42D3252A0F2CAE6C0006FC2D /* device1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = device1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00387FB3EB8DE1697379F223 /* doublebuffer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = doublebuffer.cxx; path = ../../test1/doublebuffer.cxx; sourceTree = SOURCE_ROOT; };
+		782D64F4A98B1FD1597AB2ED /* doublebuffer1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = doublebuffer1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C9D4E967A58E81776624EFC /* editor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = editor.cxx; path = ../../test1/editor.cxx; sourceTree = SOURCE_ROOT; };
+		A1BF659E1083EC4D471D4080 /* editor1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = editor1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F23804B3F3A2934AF61B5F0F /* file_chooser.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_chooser.cxx; path = ../../test1/file_chooser.cxx; sourceTree = SOURCE_ROOT; };
+		3555ADBD7F2CF5D3A3BBB15F /* file_chooser1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = file_chooser1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFFE58AA113BC4E8593132FD /* fonts.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fonts.cxx; path = ../../test1/fonts.cxx; sourceTree = SOURCE_ROOT; };
+		1E2B8577828B914003607426 /* fonts1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fonts1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F25F4CEC756722E968FCC09B /* fractals.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fractals.cxx; path = ../../test1/fractals.cxx; sourceTree = SOURCE_ROOT; };
+		A690044EE5136E82ABD0D9D6 /* fracviewer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fracviewer.cxx; path = ../../test1/fracviewer.cxx; sourceTree = SOURCE_ROOT; };
+		D9EA030D8C5B59484D50E480 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
+		703A3CA35317A89408132B62 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
+		A6324FAAD97BE79A317E7E14 /* fractals1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fractals1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		862CE220727727B435E437D9 /* fullscreen.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fullscreen.cxx; path = ../../test1/fullscreen.cxx; sourceTree = SOURCE_ROOT; };
+		0A3110386E58DDA6B2D0AEB3 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
+		0F2F0D365F49F6DF17925E04 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
+		372C0DDEAD986FC8156E7C0E /* fullscreen1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fullscreen1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F659BEE8829D53975BB3F95 /* gl_overlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl_overlay.cxx; path = ../../test1/gl_overlay.cxx; sourceTree = SOURCE_ROOT; };
+		743C39E5144DEF9D8CE035F7 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
+		9B7DDD4BEFBE668161ADCD18 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
+		508DB4D496C8284613EF9C9F /* gl_overlay1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gl_overlay1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E40FC6442E03AE819DD6B6 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = SOURCE_ROOT; };
 		A385760B80B7DE62389968E3 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C4842ECC242B64FB69F455C /* gl_overlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl_overlay.cxx; path = ../../test1/gl_overlay.cxx; sourceTree = SOURCE_ROOT; };
-		95021A4BA62DF0A081DBA8A0 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
-		006E100C7BD1C8803026EEB2 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
-		E7910239AB9F803E8D4BEDB6 /* gl_overlay1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gl_overlay1.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC93EFBA45710037DC8EE4D9 /* fractals.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fractals.cxx; path = ../../test1/fractals.cxx; sourceTree = SOURCE_ROOT; };
-		C1D55F2AC55C067BA1652E14 /* fracviewer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fracviewer.cxx; path = ../../test1/fracviewer.cxx; sourceTree = SOURCE_ROOT; };
-		0F273FC8E60B23A3C6FB69A5 /* AGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = AGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/AGL.framework; sourceTree = DEVELOPER_DIR; };
-		8093FFA00206E7F884FACCC1 /* OpenGL.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
-		95F59D403AC05E1893AB0D94 /* fractals1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fractals1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00A1332B14D1742EE210A73C /* help.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = help.cxx; path = ../../test1/help.cxx; sourceTree = SOURCE_ROOT; };
+		4C8FE20A582330707B737E4B /* CoreFoundation.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		0B2066E367FABD0C4543895F /* help1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = help1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3494B8B82F3C1555F116911 /* iconize.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iconize.cxx; path = ../../test1/iconize.cxx; sourceTree = SOURCE_ROOT; };
+		0CD378E1BF6E862A184965A8 /* iconize1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iconize1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1A79E39BEAE29251CFEA725 /* image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = image.cxx; path = ../../test1/image.cxx; sourceTree = SOURCE_ROOT; };
+		F990888179FAA876CF06019F /* image1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = image1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C479AD25E5A5CE6873F9B2BE /* overlay.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = overlay.cxx; path = ../../test1/overlay.cxx; sourceTree = SOURCE_ROOT; };
 		7D76C0ACB6969ACB80D8F20F /* overlay1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = overlay1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92B55871686A05F140567DBF /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = adjuster.cxx; path = ../../test2/adjuster.cxx; sourceTree = SOURCE_ROOT; };
@@ -6483,6 +7140,142 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		719951B829A70F98179E4008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A7EC2D2B5FA0FC3CE6985E5 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EAE1E087DAE2B3FF318CD7FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87285CD92823DB8915CE17FD /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C178E81F83D5D822C1A190B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FAE78CF38A587E3CA1A4EC0 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		965D6F1E083BC0C7A665701A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				06444EA141842658E2F6290E /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A561C722D68A9F5363DD9748 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3DD872526F4E04D47984469 /* AGL.framework in Frameworks */,
+				D5295EA544BBB81A66B9EFB7 /* OpenGL.framework in Frameworks */,
+				2101759ECFFF7C327404B67C /* fltk3 in Frameworks */,
+				31F459D277EB52B7C936A248 /* fltk3gl in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27BED6D75DE41D089887931D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1C5002B413A37F4C5A0AE4E /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42D833B5EF90BFE0768A1C2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8925590B9C16A5A0A0055B8D /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		408FC1CB228B1FD413D1444A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63D641663E5E7D876E4CFB6D /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76EA56914E165D1C58F42093 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C45A067067FF0431E517EA1E /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D54C1801D5BE6E589D2AD766 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B5939168506BE569790C5D0 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CE276A65157754337E7A701 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E45CDA147CF520A542399A1 /* fltk3 in Frameworks */,
+				43A7327A9597BFE01B4AB3F7 /* fltk3images in Frameworks */,
+				70B9ED1078259E79D9C33F43 /* fltk3png in Frameworks */,
+				F1291FDCC842C2E8E4692302 /* fltk3jpeg in Frameworks */,
+				7D8141C73A43956ADD89C027 /* fltk3zlib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4ADCC98E9C2CA00728D3DB9B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C4A9F0FC24389B8D6BF5671 /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3104BD601EF716D2D219223E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB38CA793A5CA7008A2F7FA1 /* AGL.framework in Frameworks */,
+				8E10A56FF0429877F1E906F9 /* OpenGL.framework in Frameworks */,
+				080109145E12AFBFCD3E5DBF /* fltk3 in Frameworks */,
+				9D33B4AD2F0D50A7BDA6E622 /* fltk3gl in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCBDA868AE973208B2F4F205 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B03A8D7DC2B82696F1F6C30 /* AGL.framework in Frameworks */,
+				661E77E4E95822DB9A90F4BB /* OpenGL.framework in Frameworks */,
+				656E30D3AEEA0F70346C566C /* fltk3 in Frameworks */,
+				D8C296D2E5925B98CD910A77 /* fltk3gl in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC992E558E8A90431A2BC449 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F81DEEB086EE9F8CEC8488FD /* AGL.framework in Frameworks */,
+				32210D5CA247337DD2096E35 /* OpenGL.framework in Frameworks */,
+				5DC9967700297B83DB8E8082 /* fltk3 in Frameworks */,
+				97439BD0D6EFB988051CE32B /* fltk3gl in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0E9CA2DF4F97CE00AEDCFBBC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6491,25 +7284,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D34AA98F1E807493BCC3515 /* Frameworks */ = {
+		B4C3CA24895B8130370DFA18 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1B45F51AD3E03E83AA4780B /* AGL.framework in Frameworks */,
-				AC3A686B1F3B7B2533AE4ACF /* OpenGL.framework in Frameworks */,
-				DA4A505F0374000792715B1E /* fltk3 in Frameworks */,
-				8E77773E382B09A17BDE9ACD /* fltk3gl in Frameworks */,
+				B29D4C5E6C634846B7C494DE /* CoreFoundation.framework in Frameworks */,
+				2102A9D9268FC01B6FC68EBA /* fltk3images in Frameworks */,
+				25C2946525E90508CA3FB532 /* fltk3 in Frameworks */,
+				217995B94672DE8E87999716 /* fltk3png in Frameworks */,
+				64F91DEEC3E276ACF8521C49 /* fltk3jpeg in Frameworks */,
+				34441C9E57EC309CD6AB8701 /* fltk3zlib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		49EF13AB6D9B4E969F4CBA62 /* Frameworks */ = {
+		5E1529DD4A6381CBF67824A9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5737E37F7AB5A6B928D5A860 /* AGL.framework in Frameworks */,
-				0FE0A644AC4C5EB00B0AB6B4 /* OpenGL.framework in Frameworks */,
-				B6F5F2120206F6C76011200A /* fltk3gl in Frameworks */,
-				564FBE4AF6FCB1A38B71D85F /* fltk3 in Frameworks */,
+				1851F0738C0AEC7DAD8DA3AC /* fltk3 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		305194EC479D338A81D2DC3B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A311CDA06E21B5672C3189B /* fltk3 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6669,9 +7469,25 @@
 				87DD20C45CF13BCBD026E3E8 /* browser1.app */,
 				07F9BA49CB2A76BA4BAFDB41 /* button1.app */,
 				75FD974FB22E76417CEB5F9C /* buttons1.app */,
+				EBA4C0A6CE8AEB337B94B669 /* checkers1.app */,
+				25DDA19E178C6829B0D463BB /* clock1.app */,
+				186E4E1F8CB4C5ED446E8C4E /* colbrowser1.app */,
+				39BC67E30705802B6FEA8614 /* color_chooser1.app */,
+				9343788591FF54F321D04977 /* cube1.app */,
+				9F375AC3D253A54EDA7DCBCD /* cursor1.app */,
+				5EF7A9A67B8AC1918C56CE58 /* curve1.app */,
+				42D3252A0F2CAE6C0006FC2D /* device1.app */,
+				782D64F4A98B1FD1597AB2ED /* doublebuffer1.app */,
+				A1BF659E1083EC4D471D4080 /* editor1.app */,
+				3555ADBD7F2CF5D3A3BBB15F /* file_chooser1.app */,
+				1E2B8577828B914003607426 /* fonts1.app */,
+				A6324FAAD97BE79A317E7E14 /* fractals1.app */,
+				372C0DDEAD986FC8156E7C0E /* fullscreen1.app */,
+				508DB4D496C8284613EF9C9F /* gl_overlay1.app */,
 				A385760B80B7DE62389968E3 /* hello1.app */,
-				E7910239AB9F803E8D4BEDB6 /* gl_overlay1.app */,
-				95F59D403AC05E1893AB0D94 /* fractals1.app */,
+				0B2066E367FABD0C4543895F /* help1.app */,
+				0CD378E1BF6E862A184965A8 /* iconize1.app */,
+				F990888179FAA876CF06019F /* image1.app */,
 				7D76C0ACB6969ACB80D8F20F /* overlay1.app */,
 				0C9773B6073A0EB93FAED7F1 /* adjuster2.app */,
 				30F34D6AC7B9C3D86A87DD94 /* arc2.app */,
@@ -8447,6 +9263,136 @@
 			name = buttons1;
 			sourceTree = "<group>";
 		};
+		A381949F6C334729E7367271 /* checkers1 */ = {
+			isa = PBXGroup;
+			children = (
+				D401020CFC229F9FD2E7C024 /* checkers.cxx */,
+			);
+			name = checkers1;
+			sourceTree = "<group>";
+		};
+		CEA65C0B33769B0182E5D449 /* clock1 */ = {
+			isa = PBXGroup;
+			children = (
+				A504306EF99ABE6689CF734F /* clock.cxx */,
+			);
+			name = clock1;
+			sourceTree = "<group>";
+		};
+		F98FEB00817E0AF543BCF66F /* colbrowser1 */ = {
+			isa = PBXGroup;
+			children = (
+				82C05F1862C14AFE602C70CF /* colbrowser.cxx */,
+				DF9D0DDC20388DFB151E07C0 /* rgb.txt */,
+			);
+			name = colbrowser1;
+			sourceTree = "<group>";
+		};
+		158611B3799698A00BF67A32 /* color_chooser1 */ = {
+			isa = PBXGroup;
+			children = (
+				F177282996D907999AECA81B /* color_chooser.cxx */,
+			);
+			name = color_chooser1;
+			sourceTree = "<group>";
+		};
+		997B0E432D124F5F29E84371 /* cube1 */ = {
+			isa = PBXGroup;
+			children = (
+				2BD66489005B71681B019A1E /* cube.cxx */,
+				2B7C192B09B9964E4AC95CF8 /* AGL.framework */,
+				3C8E3A9CE7AE0F21CD873113 /* OpenGL.framework */,
+			);
+			name = cube1;
+			sourceTree = "<group>";
+		};
+		2C0F44BFEFED4DF6FBF98820 /* cursor1 */ = {
+			isa = PBXGroup;
+			children = (
+				F76526EF608D46DC77707260 /* cursor.cxx */,
+			);
+			name = cursor1;
+			sourceTree = "<group>";
+		};
+		99B94554E68F4B7544D1B782 /* curve1 */ = {
+			isa = PBXGroup;
+			children = (
+				8D2C3E6F27C22459D0DFF116 /* curve.cxx */,
+			);
+			name = curve1;
+			sourceTree = "<group>";
+		};
+		EB6E96794CC165DA189D9CB3 /* device1 */ = {
+			isa = PBXGroup;
+			children = (
+				8370B1A8BAFE0D195DF65838 /* device.cxx */,
+			);
+			name = device1;
+			sourceTree = "<group>";
+		};
+		ABF2308175C917ACA1EFE156 /* doublebuffer1 */ = {
+			isa = PBXGroup;
+			children = (
+				00387FB3EB8DE1697379F223 /* doublebuffer.cxx */,
+			);
+			name = doublebuffer1;
+			sourceTree = "<group>";
+		};
+		F0F4FA188686B51AF9B2327C /* editor1 */ = {
+			isa = PBXGroup;
+			children = (
+				3C9D4E967A58E81776624EFC /* editor.cxx */,
+			);
+			name = editor1;
+			sourceTree = "<group>";
+		};
+		CCD65FF3A651401A5B4D14F7 /* file_chooser1 */ = {
+			isa = PBXGroup;
+			children = (
+				F23804B3F3A2934AF61B5F0F /* file_chooser.cxx */,
+			);
+			name = file_chooser1;
+			sourceTree = "<group>";
+		};
+		B576D87B2DFB031637800692 /* fonts1 */ = {
+			isa = PBXGroup;
+			children = (
+				EFFE58AA113BC4E8593132FD /* fonts.cxx */,
+			);
+			name = fonts1;
+			sourceTree = "<group>";
+		};
+		E8C9D2610CE8E22C09765726 /* fractals1 */ = {
+			isa = PBXGroup;
+			children = (
+				F25F4CEC756722E968FCC09B /* fractals.cxx */,
+				A690044EE5136E82ABD0D9D6 /* fracviewer.cxx */,
+				D9EA030D8C5B59484D50E480 /* AGL.framework */,
+				703A3CA35317A89408132B62 /* OpenGL.framework */,
+			);
+			name = fractals1;
+			sourceTree = "<group>";
+		};
+		69115AFC39CDFD0DA9821B0C /* fullscreen1 */ = {
+			isa = PBXGroup;
+			children = (
+				862CE220727727B435E437D9 /* fullscreen.cxx */,
+				0A3110386E58DDA6B2D0AEB3 /* AGL.framework */,
+				0F2F0D365F49F6DF17925E04 /* OpenGL.framework */,
+			);
+			name = fullscreen1;
+			sourceTree = "<group>";
+		};
+		384ECC49F351288B52877729 /* gl_overlay1 */ = {
+			isa = PBXGroup;
+			children = (
+				5F659BEE8829D53975BB3F95 /* gl_overlay.cxx */,
+				743C39E5144DEF9D8CE035F7 /* AGL.framework */,
+				9B7DDD4BEFBE668161ADCD18 /* OpenGL.framework */,
+			);
+			name = gl_overlay1;
+			sourceTree = "<group>";
+		};
 		069C04D73C83E249369A2FD6 /* hello1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -8455,25 +9401,29 @@
 			name = hello1;
 			sourceTree = "<group>";
 		};
-		44002B5096C4E8C91251D0EF /* gl_overlay1 */ = {
+		361C6185C935979CA05DC1A2 /* help1 */ = {
 			isa = PBXGroup;
 			children = (
-				7C4842ECC242B64FB69F455C /* gl_overlay.cxx */,
-				95021A4BA62DF0A081DBA8A0 /* AGL.framework */,
-				006E100C7BD1C8803026EEB2 /* OpenGL.framework */,
+				00A1332B14D1742EE210A73C /* help.cxx */,
+				4C8FE20A582330707B737E4B /* CoreFoundation.framework */,
 			);
-			name = gl_overlay1;
+			name = help1;
 			sourceTree = "<group>";
 		};
-		140C86B12569A486720172FC /* fractals1 */ = {
+		1CD9E5DEB0721BE7F611BDFD /* iconize1 */ = {
 			isa = PBXGroup;
 			children = (
-				DC93EFBA45710037DC8EE4D9 /* fractals.cxx */,
-				C1D55F2AC55C067BA1652E14 /* fracviewer.cxx */,
-				0F273FC8E60B23A3C6FB69A5 /* AGL.framework */,
-				8093FFA00206E7F884FACCC1 /* OpenGL.framework */,
+				E3494B8B82F3C1555F116911 /* iconize.cxx */,
 			);
-			name = fractals1;
+			name = iconize1;
+			sourceTree = "<group>";
+		};
+		2B33D4B3A931B4AF4ED0CAAA /* image1 */ = {
+			isa = PBXGroup;
+			children = (
+				D1A79E39BEAE29251CFEA725 /* image.cxx */,
+			);
+			name = image1;
 			sourceTree = "<group>";
 		};
 		2D58DAAA66EDA041B9D4A74B /* overlay1 */ = {
@@ -8496,9 +9446,25 @@
 				585869FDE3F0C8ECD520B61F /* browser1 */,
 				9297C03824E517B680914046 /* button1 */,
 				CF5378158A0F1EDAD0DE3DD6 /* buttons1 */,
+				A381949F6C334729E7367271 /* checkers1 */,
+				CEA65C0B33769B0182E5D449 /* clock1 */,
+				F98FEB00817E0AF543BCF66F /* colbrowser1 */,
+				158611B3799698A00BF67A32 /* color_chooser1 */,
+				997B0E432D124F5F29E84371 /* cube1 */,
+				2C0F44BFEFED4DF6FBF98820 /* cursor1 */,
+				99B94554E68F4B7544D1B782 /* curve1 */,
+				EB6E96794CC165DA189D9CB3 /* device1 */,
+				ABF2308175C917ACA1EFE156 /* doublebuffer1 */,
+				F0F4FA188686B51AF9B2327C /* editor1 */,
+				CCD65FF3A651401A5B4D14F7 /* file_chooser1 */,
+				B576D87B2DFB031637800692 /* fonts1 */,
+				E8C9D2610CE8E22C09765726 /* fractals1 */,
+				69115AFC39CDFD0DA9821B0C /* fullscreen1 */,
+				384ECC49F351288B52877729 /* gl_overlay1 */,
 				069C04D73C83E249369A2FD6 /* hello1 */,
-				44002B5096C4E8C91251D0EF /* gl_overlay1 */,
-				140C86B12569A486720172FC /* fractals1 */,
+				361C6185C935979CA05DC1A2 /* help1 */,
+				1CD9E5DEB0721BE7F611BDFD /* iconize1 */,
+				2B33D4B3A931B4AF4ED0CAAA /* image1 */,
 				2D58DAAA66EDA041B9D4A74B /* overlay1 */,
 			);
 			name = FLTK1CompatibilityTests;
@@ -10761,6 +11727,314 @@
 			productReference = 75FD974FB22E76417CEB5F9C /* buttons1.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AC5FD187E064221B9B16D243 /* checkers1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 005DFB1A0D742AFD0DABE570 /* Build configuration list for PBXNativeTarget "checkers1" */;
+			buildPhases = (
+				72996AAF16381D76DE948470 /* Resources */,
+				192877266F5AA4F1B58E3D42 /* Sources */,
+				719951B829A70F98179E4008 /* Frameworks */,
+				20E1BB27728FD348338E5377 /* CopyFiles */,
+			);
+			buildRules = (
+				48B8BCE9FF3038C3E81B38C5 /* PBXBuildRule */,
+			);
+			dependencies = (
+				A2EF200975B780FFBFC4AB78 /* fltk3 */,
+			);
+			name = checkers1;
+			productName = checkers1;
+			productReference = EBA4C0A6CE8AEB337B94B669 /* checkers1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1E4755DE9A71659D588BADC2 /* clock1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EBCA4141C5C59BB64E2B8B2 /* Build configuration list for PBXNativeTarget "clock1" */;
+			buildPhases = (
+				427E9894EECBC3976A4A62D8 /* Resources */,
+				116FC50ACA757E19E1A89DEF /* Sources */,
+				EAE1E087DAE2B3FF318CD7FB /* Frameworks */,
+				A4182C8322763A42A77F30A3 /* CopyFiles */,
+			);
+			buildRules = (
+				685BC19B7ECFA11AE986509E /* PBXBuildRule */,
+			);
+			dependencies = (
+				00707B1517FA71054491E2DF /* fltk3 */,
+			);
+			name = clock1;
+			productName = clock1;
+			productReference = 25DDA19E178C6829B0D463BB /* clock1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4838FFFD4FCDB01A80C7C5C0 /* colbrowser1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D69ADAB161E6B23DEA64608A /* Build configuration list for PBXNativeTarget "colbrowser1" */;
+			buildPhases = (
+				9691BC16CF4EFF549E642DC6 /* Resources */,
+				BB318AF82E68FED13FCF534F /* Sources */,
+				C178E81F83D5D822C1A190B5 /* Frameworks */,
+				CF482DC27C9E6172522C18E0 /* CopyFiles */,
+			);
+			buildRules = (
+				E3CC31BE49D624DCFB5905AC /* PBXBuildRule */,
+			);
+			dependencies = (
+				E94F3B55880D65C7F5462E78 /* fltk3 */,
+			);
+			name = colbrowser1;
+			productName = colbrowser1;
+			productReference = 186E4E1F8CB4C5ED446E8C4E /* colbrowser1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5087E27FBD426BB6C1DA226B /* color_chooser1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 207B3A09066CC484DED1F8AA /* Build configuration list for PBXNativeTarget "color_chooser1" */;
+			buildPhases = (
+				2D614F3BC60BB4BE6B3B76FF /* Resources */,
+				A2E09D5536F4A8940394B22B /* Sources */,
+				965D6F1E083BC0C7A665701A /* Frameworks */,
+				DD3848BF754FD7E48968BCB1 /* CopyFiles */,
+			);
+			buildRules = (
+				23CDBE2CE60DC86E4CEADEE2 /* PBXBuildRule */,
+			);
+			dependencies = (
+				EE5794EF96379B7309BE24A4 /* fltk3 */,
+			);
+			name = color_chooser1;
+			productName = color_chooser1;
+			productReference = 39BC67E30705802B6FEA8614 /* color_chooser1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FA61078A31DA2F6845A785A0 /* cube1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 771452417C112973E10BECF5 /* Build configuration list for PBXNativeTarget "cube1" */;
+			buildPhases = (
+				20C28B3BD3B41C32863C33EE /* Resources */,
+				21451173260A218B9B015CCF /* Sources */,
+				A561C722D68A9F5363DD9748 /* Frameworks */,
+				EB9F684A3D3351979A2A4D4F /* CopyFiles */,
+			);
+			buildRules = (
+				1760205E8A787475A6BF93FF /* PBXBuildRule */,
+			);
+			dependencies = (
+				39D25D267DD716026C0A3618 /* fltk3 */,
+				F112D758B6ED51B82DAA200C /* fltk3gl */,
+			);
+			name = cube1;
+			productName = cube1;
+			productReference = 9343788591FF54F321D04977 /* cube1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2B9583BEF115FC364DE2A10E /* cursor1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A57DA752E88C0B6270CA22CA /* Build configuration list for PBXNativeTarget "cursor1" */;
+			buildPhases = (
+				C0D4D256695A307982734A51 /* Resources */,
+				154A9D1480B7E522C5B229CC /* Sources */,
+				27BED6D75DE41D089887931D /* Frameworks */,
+				EF3FF430B1461A41B7BACAAD /* CopyFiles */,
+			);
+			buildRules = (
+				3A0FAF75A99D40323BFB481E /* PBXBuildRule */,
+			);
+			dependencies = (
+				658A526372B0E6A0E99F080D /* fltk3 */,
+			);
+			name = cursor1;
+			productName = cursor1;
+			productReference = 9F375AC3D253A54EDA7DCBCD /* cursor1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9D285EC550E4B8979118C25E /* curve1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1594761CCCA1A42F5C2A4E6 /* Build configuration list for PBXNativeTarget "curve1" */;
+			buildPhases = (
+				D59B70AA4B46BCB9121A6D0C /* Resources */,
+				DA5E4FC63D5F6BF1CBA76265 /* Sources */,
+				42D833B5EF90BFE0768A1C2F /* Frameworks */,
+				C8A95A3A7C64221EC2900493 /* CopyFiles */,
+			);
+			buildRules = (
+				7C71A5E95D7784E4343AB3F2 /* PBXBuildRule */,
+			);
+			dependencies = (
+				97F57DE6A25F026B430AC8BA /* fltk3 */,
+			);
+			name = curve1;
+			productName = curve1;
+			productReference = 5EF7A9A67B8AC1918C56CE58 /* curve1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6523CB5B2E1B9F465BE4F8E4 /* device1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 975AD7378E8784589288E85C /* Build configuration list for PBXNativeTarget "device1" */;
+			buildPhases = (
+				A797CBA7727C156AEBB23458 /* Resources */,
+				6039398B3E097ED288C198B8 /* Sources */,
+				408FC1CB228B1FD413D1444A /* Frameworks */,
+				1CA11D82FD6810AB17867991 /* CopyFiles */,
+			);
+			buildRules = (
+				7E0F8090A0C28D9B7FDC72D6 /* PBXBuildRule */,
+			);
+			dependencies = (
+				AE2D84FF33167D30BDA7BA8A /* fltk3 */,
+			);
+			name = device1;
+			productName = device1;
+			productReference = 42D3252A0F2CAE6C0006FC2D /* device1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E3666A86C5291D45F3F45DCE /* doublebuffer1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 39B82D98E458AFC2F2968AF5 /* Build configuration list for PBXNativeTarget "doublebuffer1" */;
+			buildPhases = (
+				5F9A51B982C3834C3A462F63 /* Resources */,
+				E9A63A50CFE46C1C2DB08F0A /* Sources */,
+				76EA56914E165D1C58F42093 /* Frameworks */,
+				C36F12853A7395D9352D6441 /* CopyFiles */,
+			);
+			buildRules = (
+				9231DAD9D8C834725111CAA7 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C00C319CF4FB7C6E2EA43C2A /* fltk3 */,
+			);
+			name = doublebuffer1;
+			productName = doublebuffer1;
+			productReference = 782D64F4A98B1FD1597AB2ED /* doublebuffer1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1F99935E99025EB408444E0A /* editor1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EFE70471802300B58F6DF0D3 /* Build configuration list for PBXNativeTarget "editor1" */;
+			buildPhases = (
+				850F2853845EB684D3D579B2 /* Resources */,
+				6E6673C3EC75442BFE645A7E /* Sources */,
+				D54C1801D5BE6E589D2AD766 /* Frameworks */,
+				98BB2A68EAFE5FCCAA61262B /* CopyFiles */,
+			);
+			buildRules = (
+				C8D29089C5CFC750560AA67F /* PBXBuildRule */,
+			);
+			dependencies = (
+				7A11DA555197A74B4ABCC222 /* fltk3 */,
+			);
+			name = editor1;
+			productName = editor1;
+			productReference = A1BF659E1083EC4D471D4080 /* editor1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		45D720D7A3F1DDD4EEA32B10 /* file_chooser1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F9C7D16E5A41E11A4BFE71E9 /* Build configuration list for PBXNativeTarget "file_chooser1" */;
+			buildPhases = (
+				A826159D4EB59A55D6EC06EE /* Resources */,
+				9645DF24730AA38E5974F436 /* Sources */,
+				9CE276A65157754337E7A701 /* Frameworks */,
+				31DEBED1D1023E5464A479C0 /* CopyFiles */,
+			);
+			buildRules = (
+				9B3C1AB8C855D152EF832E83 /* PBXBuildRule */,
+			);
+			dependencies = (
+				308B2739E64EE9BD3D13D36B /* fltk3 */,
+				33209C10EEF3F1D84A8D44C0 /* fltk3images */,
+				D00CB8CAD02B6B02F4DEF985 /* fltk3png */,
+				AB14A83A78F211296860DCFB /* fltk3jpeg */,
+				2D75E94434338DC670ED3C65 /* fltk3zlib */,
+			);
+			name = file_chooser1;
+			productName = file_chooser1;
+			productReference = 3555ADBD7F2CF5D3A3BBB15F /* file_chooser1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1245CDE9DF2540E471632125 /* fonts1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9C20BB87C82700068721834F /* Build configuration list for PBXNativeTarget "fonts1" */;
+			buildPhases = (
+				BC71F1BC8731A31723845AC9 /* Resources */,
+				E6D5528B4389DF4422FA25C0 /* Sources */,
+				4ADCC98E9C2CA00728D3DB9B /* Frameworks */,
+				C1DFFE25CE0E5383DA9E2244 /* CopyFiles */,
+			);
+			buildRules = (
+				7BD10952B4122C5204F3EC8A /* PBXBuildRule */,
+			);
+			dependencies = (
+				BB6F2ABDC101FBCEA88665B9 /* fltk3 */,
+			);
+			name = fonts1;
+			productName = fonts1;
+			productReference = 1E2B8577828B914003607426 /* fonts1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3218E3980949860C5A4BE8E1 /* fractals1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C185CA51C906DE5BBDEB2E92 /* Build configuration list for PBXNativeTarget "fractals1" */;
+			buildPhases = (
+				FD0A9F2A82D384ABD4723095 /* Resources */,
+				C70B1D1F160B112BE3CCFE9B /* Sources */,
+				3104BD601EF716D2D219223E /* Frameworks */,
+				20FFB1999B9E1918F7CDEB5B /* CopyFiles */,
+			);
+			buildRules = (
+				DB4EA1071A67D5CC78781933 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C54A3EE1EB913170E7DFAFAC /* fltk3 */,
+				4E865B3628BD065EA0666D86 /* fltk3gl */,
+			);
+			name = fractals1;
+			productName = fractals1;
+			productReference = A6324FAAD97BE79A317E7E14 /* fractals1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8B60601D5476654F6159BFA1 /* fullscreen1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B5B216DD86AB3AB42948AE2 /* Build configuration list for PBXNativeTarget "fullscreen1" */;
+			buildPhases = (
+				3895324D72FA0EDF7A9F8A86 /* Resources */,
+				F0CC1E5E77BEFE1DC2C5119C /* Sources */,
+				BCBDA868AE973208B2F4F205 /* Frameworks */,
+				4A5CD7739224B9C357D714E5 /* CopyFiles */,
+			);
+			buildRules = (
+				3E395DDDD67842FB893FFE60 /* PBXBuildRule */,
+			);
+			dependencies = (
+				3DDF9C013F8FDD675F17DAD5 /* fltk3 */,
+				CEB1632CDE637444B0F17678 /* fltk3gl */,
+			);
+			name = fullscreen1;
+			productName = fullscreen1;
+			productReference = 372C0DDEAD986FC8156E7C0E /* fullscreen1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3AEFB78BBA2719B2E28AA13B /* gl_overlay1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AFEE4198D4D335547C2D9F5 /* Build configuration list for PBXNativeTarget "gl_overlay1" */;
+			buildPhases = (
+				11A08C04FB37EFEA26DD7006 /* Resources */,
+				F7685B8FD368699D8816F3FC /* Sources */,
+				FC992E558E8A90431A2BC449 /* Frameworks */,
+				71F6753E559FB558E57C3BEB /* CopyFiles */,
+			);
+			buildRules = (
+				3FC1EB74AEB3A0C7DA339667 /* PBXBuildRule */,
+			);
+			dependencies = (
+				D7B9FC69FE6A6731EC5520C2 /* fltk3 */,
+				210B4CF1AE40A552935CFACA /* fltk3gl */,
+			);
+			name = gl_overlay1;
+			productName = gl_overlay1;
+			productReference = 508DB4D496C8284613EF9C9F /* gl_overlay1.app */;
+			productType = "com.apple.product-type.application";
+		};
 		1D6CF364DC77BE5CA370C953 /* hello1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FEA66476A925BA9C14D2BC36 /* Build configuration list for PBXNativeTarget "hello1" */;
@@ -10781,46 +12055,68 @@
 			productReference = A385760B80B7DE62389968E3 /* hello1.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1D89CD767D8FAD4A30148DC7 /* gl_overlay1 */ = {
+		016CA9A19520432CDAD65A6F /* help1 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CE149A18C3297D36E9C47F05 /* Build configuration list for PBXNativeTarget "gl_overlay1" */;
+			buildConfigurationList = D4EF2B0BAF5FF8619068BCA7 /* Build configuration list for PBXNativeTarget "help1" */;
 			buildPhases = (
-				CB7257E161461E0088AB30C0 /* Resources */,
-				94AE9C56B00ADEBF135A3D5C /* Sources */,
-				3D34AA98F1E807493BCC3515 /* Frameworks */,
-				B813E1CFDD90CB814F0EE17C /* CopyFiles */,
+				B136C237CE56B21AEFE1E9C1 /* Resources */,
+				01621467732B83775FD3F206 /* Sources */,
+				B4C3CA24895B8130370DFA18 /* Frameworks */,
+				A0322527BFDEA002FEE7042B /* CopyFiles */,
 			);
 			buildRules = (
-				3E7AFF7AA220E2400C3CE087 /* PBXBuildRule */,
+				351AA7EA80CC44C918D40BB4 /* PBXBuildRule */,
 			);
 			dependencies = (
-				33F6301FDA729BF94AF15E2C /* fltk3 */,
-				EF4BD74A6F541E5A6FDA4829 /* fltk3gl */,
+				72453F82BBC033BCEEAF74AF /* fltk3images */,
+				0769ACEBC0EDB45F1908729D /* fltk3 */,
+				68E26DD18AC39749354BB9DA /* fltk3png */,
+				BD0080E94DCE4B680B7F3902 /* fltk3jpeg */,
+				ACE8FF84D927AC49B66BCFE0 /* fltk3zlib */,
 			);
-			name = gl_overlay1;
-			productName = gl_overlay1;
-			productReference = E7910239AB9F803E8D4BEDB6 /* gl_overlay1.app */;
+			name = help1;
+			productName = help1;
+			productReference = 0B2066E367FABD0C4543895F /* help1.app */;
 			productType = "com.apple.product-type.application";
 		};
-		48427F0246B6DC0672A00515 /* fractals1 */ = {
+		1E094875D67B795FDD9868D0 /* iconize1 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6D3444B2FEE17A8E3B1AD54D /* Build configuration list for PBXNativeTarget "fractals1" */;
+			buildConfigurationList = 819ECD1C5C04FE6E6A359278 /* Build configuration list for PBXNativeTarget "iconize1" */;
 			buildPhases = (
-				92330C15857FB54E4DE36A2D /* Resources */,
-				D33ABD01E0262DD5D9A59605 /* Sources */,
-				49EF13AB6D9B4E969F4CBA62 /* Frameworks */,
-				EF132FC91CB46B05AEF261CE /* CopyFiles */,
+				0BD64356ABDFDBEBEBCEEC9B /* Resources */,
+				116ACA5D4A1886B946367E32 /* Sources */,
+				5E1529DD4A6381CBF67824A9 /* Frameworks */,
+				D0ECED4ED84C02EC144ED766 /* CopyFiles */,
 			);
 			buildRules = (
-				7B22D97A906A9C9041A804F2 /* PBXBuildRule */,
+				EE9B4B5D65CF84393B7ED709 /* PBXBuildRule */,
 			);
 			dependencies = (
-				61F82BA12CF32606FA36BFB7 /* fltk3gl */,
-				A00B68EDEF321DA275A0D79E /* fltk3 */,
+				284D4AF55174B79B254E8F98 /* fltk3 */,
 			);
-			name = fractals1;
-			productName = fractals1;
-			productReference = 95F59D403AC05E1893AB0D94 /* fractals1.app */;
+			name = iconize1;
+			productName = iconize1;
+			productReference = 0CD378E1BF6E862A184965A8 /* iconize1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A7F44A05B4E417810C039AF2 /* image1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01DB0E53C4591A55B7A0598 /* Build configuration list for PBXNativeTarget "image1" */;
+			buildPhases = (
+				02470F4A7F7B177F121C609B /* Resources */,
+				88C6687A12884AAB7F6272FB /* Sources */,
+				305194EC479D338A81D2DC3B /* Frameworks */,
+				03FFA7C5A3EF9067B2D088F7 /* CopyFiles */,
+			);
+			buildRules = (
+				66F0CF3DCA48FEA7C5D91174 /* PBXBuildRule */,
+			);
+			dependencies = (
+				532FB8FEF82FAB01CABFF732 /* fltk3 */,
+			);
+			name = image1;
+			productName = image1;
+			productReference = F990888179FAA876CF06019F /* image1.app */;
 			productType = "com.apple.product-type.application";
 		};
 		789BB61B3680D11F69B41C47 /* overlay1 */ = {
@@ -11088,9 +12384,25 @@
 				AF575B6EED53CB2A715DF67D /* browser1 */,
 				4884D5659516CFA7DD961341 /* button1 */,
 				8652707FD267338605181157 /* buttons1 */,
+				AC5FD187E064221B9B16D243 /* checkers1 */,
+				1E4755DE9A71659D588BADC2 /* clock1 */,
+				4838FFFD4FCDB01A80C7C5C0 /* colbrowser1 */,
+				5087E27FBD426BB6C1DA226B /* color_chooser1 */,
+				FA61078A31DA2F6845A785A0 /* cube1 */,
+				2B9583BEF115FC364DE2A10E /* cursor1 */,
+				9D285EC550E4B8979118C25E /* curve1 */,
+				6523CB5B2E1B9F465BE4F8E4 /* device1 */,
+				E3666A86C5291D45F3F45DCE /* doublebuffer1 */,
+				1F99935E99025EB408444E0A /* editor1 */,
+				45D720D7A3F1DDD4EEA32B10 /* file_chooser1 */,
+				1245CDE9DF2540E471632125 /* fonts1 */,
+				3218E3980949860C5A4BE8E1 /* fractals1 */,
+				8B60601D5476654F6159BFA1 /* fullscreen1 */,
+				3AEFB78BBA2719B2E28AA13B /* gl_overlay1 */,
 				1D6CF364DC77BE5CA370C953 /* hello1 */,
-				1D89CD767D8FAD4A30148DC7 /* gl_overlay1 */,
-				48427F0246B6DC0672A00515 /* fractals1 */,
+				016CA9A19520432CDAD65A6F /* help1 */,
+				1E094875D67B795FDD9868D0 /* iconize1 */,
+				A7F44A05B4E417810C039AF2 /* image1 */,
 				789BB61B3680D11F69B41C47 /* overlay1 */,
 				0C9C0BB3367468394F9E8D1A /* adjuster2 */,
 				A2B2ABACA53FC4348440F9BF /* arc2 */,
@@ -11706,6 +13018,111 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		72996AAF16381D76DE948470 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		427E9894EECBC3976A4A62D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9691BC16CF4EFF549E642DC6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D614F3BC60BB4BE6B3B76FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20C28B3BD3B41C32863C33EE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0D4D256695A307982734A51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D59B70AA4B46BCB9121A6D0C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A797CBA7727C156AEBB23458 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5F9A51B982C3834C3A462F63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		850F2853845EB684D3D579B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A826159D4EB59A55D6EC06EE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC71F1BC8731A31723845AC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD0A9F2A82D384ABD4723095 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3895324D72FA0EDF7A9F8A86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		11A08C04FB37EFEA26DD7006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		15E50C71C4A72812D7DB6098 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -11713,14 +13130,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CB7257E161461E0088AB30C0 /* Resources */ = {
+		B136C237CE56B21AEFE1E9C1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92330C15857FB54E4DE36A2D /* Resources */ = {
+		0BD64356ABDFDBEBEBCEEC9B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02470F4A7F7B177F121C609B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -12778,6 +14202,127 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		192877266F5AA4F1B58E3D42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				735E1100E518ED453EFF79A9 /* checkers.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		116FC50ACA757E19E1A89DEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74F6D9F5AB57DCB0FD535B69 /* clock.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB318AF82E68FED13FCF534F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A1E802A5FC242E1E47A501D /* colbrowser.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2E09D5536F4A8940394B22B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F9F9A42285A72744558F51D /* color_chooser.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		21451173260A218B9B015CCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3499087CB4C707B3F4B47DF3 /* cube.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		154A9D1480B7E522C5B229CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B93E9897246A5E5E8A942C70 /* cursor.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA5E4FC63D5F6BF1CBA76265 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				105B6A01D15DB6790BCC6F6C /* curve.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6039398B3E097ED288C198B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA5A9A13AEE1056CAC04B5D4 /* device.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9A63A50CFE46C1C2DB08F0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				730DEB527D27B22B08559597 /* doublebuffer.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E6673C3EC75442BFE645A7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C70ADEE06685B63558600103 /* editor.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9645DF24730AA38E5974F436 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDC404FEC906EBBBC9549516 /* file_chooser.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6D5528B4389DF4422FA25C0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85534A23304981145FD9D8B2 /* fonts.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C70B1D1F160B112BE3CCFE9B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA3EF0531547F2661DBFB9C4 /* fractals.cxx in Sources */,
+				E976D665C526F97948D05018 /* fracviewer.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0CC1E5E77BEFE1DC2C5119C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF9F9E861B7F03C98C3D7683 /* fullscreen.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7685B8FD368699D8816F3FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AD22BCE8B36C17D73248C57 /* gl_overlay.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B0034EC191BD469B8088B310 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -12786,20 +14331,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94AE9C56B00ADEBF135A3D5C /* Sources */ = {
+		01621467732B83775FD3F206 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1C0D0791FA3C78FAF9D7A16 /* gl_overlay.cxx in Sources */,
+				E427ABF71BFFE2E1B6C4119E /* help.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D33ABD01E0262DD5D9A59605 /* Sources */ = {
+		116ACA5D4A1886B946367E32 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCF6B5BED4F74BB1D20C3F8B /* fractals.cxx in Sources */,
-				9884A092B76A943AA362176E /* fracviewer.cxx in Sources */,
+				D4A6EAD2117B8ABAAA039108 /* iconize.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		88C6687A12884AAB7F6272FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3AC04FD3036FF39DC492D38 /* image.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13935,27 +15487,157 @@
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
+		A2EF200975B780FFBFC4AB78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		00707B1517FA71054491E2DF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		E94F3B55880D65C7F5462E78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		EE5794EF96379B7309BE24A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		39D25D267DD716026C0A3618 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		F112D758B6ED51B82DAA200C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F082108A40ACB22900A01FF /* fltk3gl */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		658A526372B0E6A0E99F080D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		97F57DE6A25F026B430AC8BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		AE2D84FF33167D30BDA7BA8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		C00C319CF4FB7C6E2EA43C2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		7A11DA555197A74B4ABCC222 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		308B2739E64EE9BD3D13D36B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		33209C10EEF3F1D84A8D44C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00A26433E953EAC785420507 /* fltk3images */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		D00CB8CAD02B6B02F4DEF985 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87465A7F0F0821C6F896CA29 /* fltk3png */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		AB14A83A78F211296860DCFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E08AAC0C48D8A8B2784F6D46 /* fltk3jpeg */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		2D75E94434338DC670ED3C65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5BA5465BD7A0C8F93B338C7 /* fltk3zlib */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		BB6F2ABDC101FBCEA88665B9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		C54A3EE1EB913170E7DFAFAC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		4E865B3628BD065EA0666D86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F082108A40ACB22900A01FF /* fltk3gl */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		3DDF9C013F8FDD675F17DAD5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		CEB1632CDE637444B0F17678 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F082108A40ACB22900A01FF /* fltk3gl */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		D7B9FC69FE6A6731EC5520C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		210B4CF1AE40A552935CFACA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F082108A40ACB22900A01FF /* fltk3gl */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
 		78C56F7A323EC19AFB427676 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
-		33F6301FDA729BF94AF15E2C /* PBXTargetDependency */ = {
+		72453F82BBC033BCEEAF74AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00A26433E953EAC785420507 /* fltk3images */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		0769ACEBC0EDB45F1908729D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
-		EF4BD74A6F541E5A6FDA4829 /* PBXTargetDependency */ = {
+		68E26DD18AC39749354BB9DA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0F082108A40ACB22900A01FF /* fltk3gl */;
+			target = 87465A7F0F0821C6F896CA29 /* fltk3png */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
-		61F82BA12CF32606FA36BFB7 /* PBXTargetDependency */ = {
+		BD0080E94DCE4B680B7F3902 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0F082108A40ACB22900A01FF /* fltk3gl */;
+			target = E08AAC0C48D8A8B2784F6D46 /* fltk3jpeg */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
 		};
-		A00B68EDEF321DA275A0D79E /* PBXTargetDependency */ = {
+		ACE8FF84D927AC49B66BCFE0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5BA5465BD7A0C8F93B338C7 /* fltk3zlib */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		284D4AF55174B79B254E8F98 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
+			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
+		};
+		532FB8FEF82FAB01CABFF732 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk3 */;
 			targetProxy = 7DB77C01B6B5D4ED21F15472 /* PBXContainerItemProxy */;
@@ -20195,6 +21877,1086 @@
 			};
 			name = Release;
 		};
+		065B14F3F00A3E1DEA12FBC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/checkers1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "checkers1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		E3929F1AE18C8B656DB5F449 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/checkers1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "checkers1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		070549A3D07F2C2DCDCB6E71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/clock1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "clock1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		4B9443FA0FAE47C1A0B42002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/clock1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "clock1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		09ED4F356CFB4B9E78887EDB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/colbrowser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "colbrowser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		7FBB0421997DC015D187522A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/colbrowser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "colbrowser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		08071E36B6A494718AAD6BD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/color_chooser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "color_chooser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		96D73DAEF6E8BED2EECCF6D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/color_chooser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "color_chooser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A47719538C8840A7895CA045 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/cube1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "cube1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		02DFBFB69382DA42F4B65AEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/cube1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "cube1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A61B7F739F0BE49233FE890A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/cursor1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "cursor1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		2FD4A75BDA754EA7328D6887 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/cursor1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "cursor1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		10EEE3B097CEF0BBB7C1C4FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/curve1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "curve1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		5440308E737587F4E29E5647 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/curve1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "curve1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		534226280CE35CA0A085387A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/device1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "device1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C3B12AAD4FDC9963AB1B8A7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/device1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "device1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		28B58FA87DA2BB76326AA354 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/doublebuffer1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "doublebuffer1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		9A8C89BE8ECBCA500E6648E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/doublebuffer1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "doublebuffer1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		7260ED813E6EEDBB6ED4A0DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/editor1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "editor1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		BF05C34C326FE609209ABA44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/editor1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "editor1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		0895FD579B4138F53DABA372 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/file_chooser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "file_chooser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		ACF204E0D5DFAAC2FBB1EC73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/file_chooser1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "file_chooser1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		10C596C7039AE64AEB5F2943 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/fonts1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "fonts1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		28DB50B92BAD98F7D9D8B85B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/fonts1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "fonts1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		D43D450A5448766EE3E4E65D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/fractals1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "fractals1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		7E4B366CE96EDCB768105781 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/fractals1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "fractals1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		9B93DD9DBF359A56F262D4BD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/fullscreen1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "fullscreen1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		A8BC188DE240D9BFC58AC734 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/fullscreen1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "fullscreen1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		2AA84F91A53C5E6CC470D7BD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/gl_overlay1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "gl_overlay1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		FA65C8ABA4EECC8FF924B95E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/gl_overlay1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "gl_overlay1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		F1951F926357E78229A59011 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -20267,7 +23029,7 @@
 			};
 			name = Release;
 		};
-		DB3FAEBD4EA5986401EB6890 /* Debug */ = {
+		1AE4409E50ACA392EEBA5018 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -20291,10 +23053,10 @@
 					../../include/fltk3jpeg,
 					../../include/fltk3zlib,
 				);
-				INFOPLIST_FILE = "plists/gl_overlay1-Info.plist";
+				INFOPLIST_FILE = "plists/help1-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "gl_overlay1";
+				PRODUCT_NAME = "help1";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -20303,7 +23065,7 @@
 			};
 			name = Debug;
 		};
-		17D607445EB3C389291829BF /* Release */ = {
+		0E6A4F03A6FFF0638F18E262 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -20326,10 +23088,10 @@
 					../../include/fltk3jpeg,
 					../../include/fltk3zlib,
 				);
-				INFOPLIST_FILE = "plists/gl_overlay1-Info.plist";
+				INFOPLIST_FILE = "plists/help1-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "gl_overlay1";
+				PRODUCT_NAME = "help1";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -20339,7 +23101,7 @@
 			};
 			name = Release;
 		};
-		61A7426EC7B2BA918B53DD8F /* Debug */ = {
+		0899A5A032E8416691699A74 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -20363,10 +23125,10 @@
 					../../include/fltk3jpeg,
 					../../include/fltk3zlib,
 				);
-				INFOPLIST_FILE = "plists/fractals1-Info.plist";
+				INFOPLIST_FILE = "plists/iconize1-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "fractals1";
+				PRODUCT_NAME = "iconize1";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -20375,7 +23137,7 @@
 			};
 			name = Debug;
 		};
-		4315D7FCBE2633C192F0630F /* Release */ = {
+		156895AB216227F13A803535 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -20398,10 +23160,82 @@
 					../../include/fltk3jpeg,
 					../../include/fltk3zlib,
 				);
-				INFOPLIST_FILE = "plists/fractals1-Info.plist";
+				INFOPLIST_FILE = "plists/iconize1-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "fractals1";
+				PRODUCT_NAME = "iconize1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		FBFA7C302B3BBA879DC58033 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/image1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "image1";
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		D0DC1FB35279E1A2FFCED600 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = USING_XCODE;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../include/,
+					../../include/fltk3png,
+					../../include/fltk3jpeg,
+					../../include/fltk3zlib,
+				);
+				INFOPLIST_FILE = "plists/image1-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "image1";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -21789,6 +24623,141 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		005DFB1A0D742AFD0DABE570 /* Build configuration list for PBXNativeTarget "checkers1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				065B14F3F00A3E1DEA12FBC7 /* Debug */,
+				E3929F1AE18C8B656DB5F449 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3EBCA4141C5C59BB64E2B8B2 /* Build configuration list for PBXNativeTarget "clock1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070549A3D07F2C2DCDCB6E71 /* Debug */,
+				4B9443FA0FAE47C1A0B42002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D69ADAB161E6B23DEA64608A /* Build configuration list for PBXNativeTarget "colbrowser1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09ED4F356CFB4B9E78887EDB /* Debug */,
+				7FBB0421997DC015D187522A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		207B3A09066CC484DED1F8AA /* Build configuration list for PBXNativeTarget "color_chooser1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08071E36B6A494718AAD6BD4 /* Debug */,
+				96D73DAEF6E8BED2EECCF6D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		771452417C112973E10BECF5 /* Build configuration list for PBXNativeTarget "cube1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A47719538C8840A7895CA045 /* Debug */,
+				02DFBFB69382DA42F4B65AEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A57DA752E88C0B6270CA22CA /* Build configuration list for PBXNativeTarget "cursor1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A61B7F739F0BE49233FE890A /* Debug */,
+				2FD4A75BDA754EA7328D6887 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C1594761CCCA1A42F5C2A4E6 /* Build configuration list for PBXNativeTarget "curve1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10EEE3B097CEF0BBB7C1C4FC /* Debug */,
+				5440308E737587F4E29E5647 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		975AD7378E8784589288E85C /* Build configuration list for PBXNativeTarget "device1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				534226280CE35CA0A085387A /* Debug */,
+				C3B12AAD4FDC9963AB1B8A7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		39B82D98E458AFC2F2968AF5 /* Build configuration list for PBXNativeTarget "doublebuffer1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28B58FA87DA2BB76326AA354 /* Debug */,
+				9A8C89BE8ECBCA500E6648E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EFE70471802300B58F6DF0D3 /* Build configuration list for PBXNativeTarget "editor1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7260ED813E6EEDBB6ED4A0DF /* Debug */,
+				BF05C34C326FE609209ABA44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F9C7D16E5A41E11A4BFE71E9 /* Build configuration list for PBXNativeTarget "file_chooser1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0895FD579B4138F53DABA372 /* Debug */,
+				ACF204E0D5DFAAC2FBB1EC73 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9C20BB87C82700068721834F /* Build configuration list for PBXNativeTarget "fonts1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10C596C7039AE64AEB5F2943 /* Debug */,
+				28DB50B92BAD98F7D9D8B85B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C185CA51C906DE5BBDEB2E92 /* Build configuration list for PBXNativeTarget "fractals1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D43D450A5448766EE3E4E65D /* Debug */,
+				7E4B366CE96EDCB768105781 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8B5B216DD86AB3AB42948AE2 /* Build configuration list for PBXNativeTarget "fullscreen1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B93DD9DBF359A56F262D4BD /* Debug */,
+				A8BC188DE240D9BFC58AC734 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0AFEE4198D4D335547C2D9F5 /* Build configuration list for PBXNativeTarget "gl_overlay1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AA84F91A53C5E6CC470D7BD /* Debug */,
+				FA65C8ABA4EECC8FF924B95E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		FEA66476A925BA9C14D2BC36 /* Build configuration list for PBXNativeTarget "hello1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -21798,20 +24767,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		CE149A18C3297D36E9C47F05 /* Build configuration list for PBXNativeTarget "gl_overlay1" */ = {
+		D4EF2B0BAF5FF8619068BCA7 /* Build configuration list for PBXNativeTarget "help1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DB3FAEBD4EA5986401EB6890 /* Debug */,
-				17D607445EB3C389291829BF /* Release */,
+				1AE4409E50ACA392EEBA5018 /* Debug */,
+				0E6A4F03A6FFF0638F18E262 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		6D3444B2FEE17A8E3B1AD54D /* Build configuration list for PBXNativeTarget "fractals1" */ = {
+		819ECD1C5C04FE6E6A359278 /* Build configuration list for PBXNativeTarget "iconize1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				61A7426EC7B2BA918B53DD8F /* Debug */,
-				4315D7FCBE2633C192F0630F /* Release */,
+				0899A5A032E8416691699A74 /* Debug */,
+				156895AB216227F13A803535 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C01DB0E53C4591A55B7A0598 /* Build configuration list for PBXNativeTarget "image1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBFA7C302B3BBA879DC58033 /* Debug */,
+				D0DC1FB35279E1A2FFCED600 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
