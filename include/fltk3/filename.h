@@ -142,6 +142,8 @@ namespace fltk3 {
   FLTK3_EXPORT int open_uri(const char *uri, char *msg = (char *)0,
 		            int msglen = 0);
   
+  FLTK3_EXPORT void decode_uri(char *uri);
+
 #    ifndef FLTK3_DOXYGEN
   /*
    * fltk3::_filename_isdir_quick() is a private function that checks for a
