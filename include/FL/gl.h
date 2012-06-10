@@ -44,7 +44,7 @@
 #    include <GL/gl.h>
 #  endif
 
-// FIXME: 123 - none of this is really wrapped. There is no fltk3 api for this yet.
+// FIXME: 123-1 - none of this is really wrapped. There is no fltk3 api for this yet.
 // void gl_start();
 // void gl_finish();
 // void gl_rect(int x,int y,int w,int h);

@@ -42,7 +42,7 @@ public:
   }
   
 #if 0 // can't wrap!
-      // FIXME: 123
+      // FIXME: 123-1
   static const char *dialog_title; 
   static const char *dialog_printer; 
   static const char *dialog_range; 

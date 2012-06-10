@@ -42,7 +42,7 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_Tiled_Image, TiledImage)
 
   Fl_Tiled_Image(Fl_Image *i, int W = 0, int H = 0) {
-    // FIXME: 123 TiledImage_I
+    // FIXME: 123-1 TiledImage_I
     _p = new fltk3::TiledImage(fltk3::_1to3_image(i), W, H);
     _p->wrapper(this);
   }

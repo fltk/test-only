@@ -75,7 +75,7 @@ protected:
     ((fltk3::Valuator_I*)_p)->handle_release();
   }
   
-  // FIXME: 123 - this method was virtual 
+  // FIXME: 123-1 - this method was virtual 
   void value_damage() {
     ((fltk3::Valuator_I*)_p)->value_damage();
   }
@@ -140,7 +140,7 @@ public:
     return ((fltk3::Valuator_I*)_p)->value(v);
   }
 
-  // FIXME: 123 - this method was virtual 
+  // FIXME: 123-1 - this method was virtual 
   int format(char *f) {
     return ((fltk3::Valuator_I*)_p)->format(f);
   }

@@ -28,7 +28,7 @@
 #include "gl.h"
 
 #error header has not been ported to 3.0 yet
-// FIXME: 123
+// FIXME: 123-1
 extern FL_EXPORT void gl_remove_displaylist_fonts();
 
 

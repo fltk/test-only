@@ -46,7 +46,7 @@ public:
   }
   
 #if 0  
-  // FIXME: 123
+  // FIXME: 123-1
   ~Fl_Tree_Item_Array();				// DTOR
   Fl_Tree_Item_Array(const Fl_Tree_Item_Array *o);	// COPY CTOR
   /// Return the item and index \p i.

@@ -104,7 +104,7 @@ public:
     return ((fltk3::Group*)_p)->find(*(fltk3::_1to3_widget((Fl_Widget*)&o)));
   }
   
-  // FIXME: 123 - can't traslate easily! Fl_Widget* const* array() const;
+  // FIXME: 123-1 - can't traslate easily! Fl_Widget* const* array() const;
   
   void add(Fl_Widget &o) {
     ((fltk3::Group*)_p)->add(fltk3::_1to3_widget(&o));

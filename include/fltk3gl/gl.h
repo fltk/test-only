@@ -69,7 +69,7 @@
 #    include <GL/gl.h>
 #  endif
 
-//FLTK3_EXPORT // FIXME: 123 - keeping this in when compiling with VisualC 2010 we will get an error.
+//FLTK3_EXPORT // FIXME: 123-3 - keeping this in when compiling with VisualC 2010 we will get an error.
 	void gl_start();
 FLTK3_EXPORT void gl_finish();
 

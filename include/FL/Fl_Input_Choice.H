@@ -80,7 +80,7 @@ public:
     return fltk3::_3to1_boxtype( ((fltk3::InputChoice*)_p)->down_box() );
   }
 
-  // FIXME: 123
+  // FIXME: 123-1
   void down_box(Fl_Boxtype b) {
     ((fltk3::InputChoice*)_p)->down_box( fltk3::_1to3_boxtype(b) );
   }
@@ -129,12 +129,12 @@ public:
     ((fltk3::InputChoice*)_p)->value(val);
   }
   
-  // FIXME: 123
+  // FIXME: 123-1
   Fl_Menu_Button *menubutton() {
     return (Fl_Menu_Button*)fltk3::_3to1_widget( ((fltk3::InputChoice*)_p)->menubutton() );
   }
   
-  // FIXME: 123
+  // FIXME: 123-1
   Fl_Input *input() {
     return (Fl_Input*)fltk3::_3to1_widget( ((fltk3::InputChoice*)_p)->input() );
   }

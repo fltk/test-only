@@ -319,7 +319,7 @@ extern Fl_Window *main_window;
 // Read an image of the overlay window
 uchar *Overlay_Window::read_image(int &ww, int &hh) {
   return 0L;
-#if 0 // FIXME: 123 - no offscreen rendering yet
+#if 0 // FIXME: 123-1 - no offscreen rendering yet
   // Create an off-screen buffer for the window...
   //main_window->make_current();
   make_current();
@@ -432,7 +432,7 @@ void Fl_Window_Type::open() {
     w->resizable(p);
   }
 
-  // w->image(Fl::scheme_bg_); // FIXME: 123
+  // w->image(Fl::scheme_bg_); // FIXME: 123-1
   w->size_range(gridx, gridy, Fl::w(), Fl::h(), gridx, gridy, 0);
 }
 

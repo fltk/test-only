@@ -91,7 +91,7 @@ namespace fltk {
     double linesize_setting() const {return linesize_;}
 #endif
     
-    // FIXME: 123 - this method was virtual 
+    // FIXME: 123-2 - this method was virtual 
     int format(char *f) {
       return ((fltk3::Valuator_I*)_p)->format(f);
     }

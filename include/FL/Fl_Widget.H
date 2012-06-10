@@ -60,7 +60,7 @@ typedef void (Fl_Callback0)(Fl_Widget*);
 typedef void (Fl_Callback1)(Fl_Widget*, long);
 
 
-#if 0 // FIXME: 123 - not sure how to translate this yet
+#if 0 // FIXME: 123-1 - not sure how to translate this yet
 struct FL_EXPORT Fl_Label {
   const char* value;
   Fl_Image* image;

@@ -26,7 +26,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// FIXME: 123 - this file has not yet been touched
+// FIXME: 123-1 - this file has not yet been touched
 
 // Do not directly include this file, instead use <FL/x.H>.  It will
 // include this file if WIN32 is defined.  This is to encourage

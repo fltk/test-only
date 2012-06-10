@@ -37,13 +37,13 @@ class FL_EXPORT Fl_Tooltip : public fltk3::Tooltip {
   
 public:
 
-  // FIXME: 123 - static void (*enter)(Fl_Widget* w);
+  // FIXME: 123-1 - static void (*enter)(Fl_Widget* w);
   
   static void enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* tip) {
     fltk3::Tooltip::enter_area(fltk3::_1to3_widget(w), X, Y, W, H, tip);
   }
   
-  // FIXME: 123 - static void (*exit)(Fl_Widget *w);
+  // FIXME: 123-1 - static void (*exit)(Fl_Widget *w);
   
   static Fl_Widget* current() {
     return fltk3::_3to1_widget( fltk3::Tooltip::current() );

@@ -39,7 +39,7 @@ FLTK2_WRAPPER_INTERFACE_END()
 
 namespace fltk {
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
   
 const int USEDEFAULT = ((int)0x80000000);
 
@@ -68,7 +68,7 @@ public:
       fltk3::Group::current(g);
   }
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
   static NamedStyle* default_style;
   virtual ~Window();
 
@@ -118,7 +118,7 @@ public:
     ((fltk3::Window*)_p)->show(argc, argv);
   }
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
   void show(const Window* parent);
   bool exec(const Window* parent = 0, bool grab = false);
   void make_exec_return(bool);

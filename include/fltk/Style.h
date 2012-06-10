@@ -33,7 +33,7 @@
 
 namespace fltk {
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
 
 /// \name fltk/Style.h
 //@{
@@ -46,7 +46,7 @@ class Symbol;
 typedef Symbol Box;
 
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
 struct Font;
 extern FL_API Font* const HELVETICA;
 extern FL_API Font* const HELVETICA_BOLD;

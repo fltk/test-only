@@ -47,7 +47,7 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
 protected:
 
 #if 0
-  // FIXME: 123
+  // FIXME: 123-1
   static Fl_Shared_Image **images_;	// Shared images
   static int	num_images_;		// Number of shared images
   static int	alloc_images_;		// Allocated shared images
@@ -75,7 +75,7 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_Shared_Image, SharedImage)
 
 #if 0
-  // FIXME: 123
+  // FIXME: 123-1
   /** Returns the filename of the shared image */
   const char	*name() { return name_; }
   /** Returns the number of references of this shared image. When reference is below 1, the image is deleted. */
@@ -87,7 +87,7 @@ public:
   }
 
 #if 0
-  // FIXME: 123
+  // FIXME: 123-1
   void		reload();
 
   Fl_Image *copy() { return copy(w(), h()); }
@@ -123,13 +123,13 @@ public:
   }
 
 #if 0
-  // FIXME: 123
+  // FIXME: 123-1
   static Fl_Shared_Image **images();
   static int		num_images();
 #endif
 
 #if 0 // TODO: 123 - can we port this?
-  // FIXME: 123
+  // FIXME: 123-1
   static void add_handler(Fl_Shared_Handler f) {
     fltk3::SharedImage::add_handler((fltk3::SharedHandler)f);
   }

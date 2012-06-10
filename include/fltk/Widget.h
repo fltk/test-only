@@ -52,7 +52,7 @@ namespace fltk {
   
   class FL_API Widget : public Rectangle {
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     // disable the copy assignment/constructors:
     Widget & operator=(const Widget &);
     Widget(const Widget &);
@@ -70,7 +70,7 @@ namespace fltk {
       _p->wrapper(this);
     }
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     virtual ~Widget();
     
     virtual void draw();
@@ -307,7 +307,7 @@ namespace fltk {
       return fltk3::_3to2_fontsize( ((fltk3::Widget_I*)_p)->labelsize() );
     }
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     float textsize()		const;
     float leading()		const;
     unsigned char scrollbar_align() const;
@@ -318,7 +318,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->box(fltk3::_2to3_boxtype(b));
     }
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     void buttonbox(Box*)		;
     void focusbox(Box*)		;
     void glyph(Symbol*)		;
@@ -331,7 +331,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->color( fltk3::_2to3_color(bg) );
     }
     
-#if 0
+#if 0 // FIXME: 123-2
     void textcolor(Color a)	;
     void selection_color(Color)	;
     void selection_textcolor(Color);
@@ -345,7 +345,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->labelsize(fltk3::_2to3_fontsize(a));
     }
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     void textsize(float a) {
       ((fltk3::Widget_I*)_p)->textsize(fltk3::_2to3_fontsize(a));
     }

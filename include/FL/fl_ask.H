@@ -93,7 +93,7 @@ inline const char *fl_password(const char *label, const char *deflt = 0, ...) {
   return ret;
 }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 inline Fl_Widget *fl_message_icon();
 extern inline Fl_Font fl_message_font_;
 extern inline Fl_Fontsize fl_message_size_;
@@ -119,7 +119,7 @@ inline void fl_message_title_default(const char *title) {
   fltk3::message_title_default(title);
 }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 // pointers you can use to change FLTK to a foreign language:
 extern inline const char* fl_no;
 extern inline const char* fl_yes;

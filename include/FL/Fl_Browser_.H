@@ -134,9 +134,9 @@ public:
 
   FLTK3_WIDGET_VCALLS(Fl_Browser_, Browser_)
 
-  // FIXME: 123 Fl_Scrollbar scrollbar;
+  // FIXME: 123-1 Fl_Scrollbar scrollbar;
   
-  // FIXME: 123 Fl_Scrollbar hscrollbar;
+  // FIXME: 123-1 Fl_Scrollbar hscrollbar;
   
   int select(void *item,int val=1,int docallbacks=0) {
     return ((fltk3::Browser_*)_p)->select(item, val, docallbacks);

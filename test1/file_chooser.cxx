@@ -105,8 +105,8 @@ main(int  argc,		// I - Number of command-line arguments
   fc->callback(fc_callback);
 
   // Register the PS and PDF image types...
-  // FIXME: 123 Fl_Shared_Image::add_handler(pdf_check);
-  // FIXME: 123 Fl_Shared_Image::add_handler(ps_check);
+  // FIXME: 123-1 Fl_Shared_Image::add_handler(pdf_check);
+  // FIXME: 123-1 Fl_Shared_Image::add_handler(ps_check);
 
   // Make the main window...
   window = new Fl_Double_Window(400, 215, "File Chooser Test");

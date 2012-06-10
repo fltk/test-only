@@ -39,7 +39,7 @@ public:
   Fl_XPM_Image() {}
   
   Fl_XPM_Image(const char* filename) {
-    // FIXME: 123 XPMImage_I
+    // FIXME: 123-1 XPMImage_I
     _p = new fltk3::XPMImage(filename);
     _p->wrapper(this);
   }

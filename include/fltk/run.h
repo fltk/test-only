@@ -57,7 +57,7 @@ namespace fltk3 {
 
 namespace fltk {
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
   
 /// \name fltk/run.h
 //@{
@@ -79,7 +79,7 @@ FL_API int ready();
     return fltk3::run();
   }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
  FL_API void flush();
 FL_API void redraw();
 extern FL_API int damage_;

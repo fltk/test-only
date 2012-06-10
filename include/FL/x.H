@@ -45,7 +45,7 @@ inline void fl_mac_set_about( Fl_Callback *cb, void *user_data, int shortcut = 0
 
 #endif
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 
 FL_EXPORT void fl_open_display();
 FL_EXPORT void fl_open_display(Display*);

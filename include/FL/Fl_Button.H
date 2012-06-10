@@ -36,7 +36,7 @@
 #define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2)
 #define FL_HIDDEN_BUTTON	3
 
-// FIXME: 123 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
+// FIXME: 123-1 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
 class Fl_Widget_Tracker;
 

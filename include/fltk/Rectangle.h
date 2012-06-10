@@ -45,7 +45,7 @@ namespace fltk {
 
   class Rectangle : public fltk3::WidgetWrapper {
   protected:
-    // FIXME: 123 - this should be public, but then it must initialize _p, which 
+    // FIXME: 123-2 - this should be public, but then it must initialize _p, which 
     // in turn means that we must create a different constructor that is called 
     // for a derived class (Widget).
     Rectangle() {}
@@ -69,7 +69,7 @@ namespace fltk {
     }
     
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     
   /*! Return x()+w(), the right edge of the rectangle. */
   int r() const {return x_+w_;}

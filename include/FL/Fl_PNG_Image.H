@@ -42,13 +42,13 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_PNG_Image, PNGImage)
 
   Fl_PNG_Image(const char* filename) {
-    // FIXME: 123 PngImage_I
+    // FIXME: 123-1 PngImage_I
     _p = new fltk3::PNGImage(filename);
     _p->wrapper(this);
   }
 
   Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int datasize) {
-    // FIXME: 123 PngImage_I
+    // FIXME: 123-1 PngImage_I
     _p = new fltk3::PNGImage(name_png, buffer, datasize);
     _p->wrapper(this);
   }

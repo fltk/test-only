@@ -77,7 +77,7 @@ protected:
     RESIZE_ROW_BELOW = 4
   };
   
-#if 0 // FIXME: 123 
+#if 0 // FIXME: 123-1
   void recalc_dimensions();
   void table_resized();
   void table_scrolled();
@@ -263,7 +263,7 @@ public:
   }
 
 #if 0
-  // FIXME: 123
+  // FIXME: 123-1
   inline void top_row(int row) {		// set/get top row (deprecated)
   inline int top_row() {
   int is_selected(int r, int c);		// selected cell
@@ -300,7 +300,7 @@ public:
   }
 
 #if 0
-    // FIXME: 123
+    // FIXME: 123-1
   void do_callback(TableContext context, int row, int col) {
 #endif
     

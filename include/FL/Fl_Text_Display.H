@@ -405,8 +405,8 @@ protected:
   }
   
   
-  // FIXME: 123 - static void h_scrollbar_cb(Fl_Scrollbar* w, Fl_Text_Display* d);
-  // FIXME: 123 - static void v_scrollbar_cb( Fl_Scrollbar* w, Fl_Text_Display* d) {
+  // FIXME: 123-1 - static void h_scrollbar_cb(Fl_Scrollbar* w, Fl_Text_Display* d);
+  // FIXME: 123-1 - static void v_scrollbar_cb( Fl_Scrollbar* w, Fl_Text_Display* d) {
     
   void update_v_scrollbar() {
     ((fltk3::TextDisplay_I*)_p)->update_v_scrollbar();

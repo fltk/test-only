@@ -29,7 +29,7 @@
 #ifndef FL_FILENAME_H
 #define FL_FILENAME_H
 
-// FIXME: 123 - this is bad because now we can only include this file from a c++ file!
+// FIXME: 123-1 - this is bad because now we can only include this file from a c++ file!
 #include <fltk3/filename.h>
 #include "Fl_Export.H"
 

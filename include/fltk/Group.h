@@ -59,7 +59,7 @@ namespace fltk {
     }
     
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     int children() const {return children_;}
     Widget* child(int n) const {return array_[n];}
     
@@ -76,7 +76,7 @@ namespace fltk {
       ((fltk3::Group_I*)_p)->end();
     }
     
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
     static Group *current() {return current_;}
     static void current(Group *g) {current_ = g;}
     

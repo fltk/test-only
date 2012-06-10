@@ -80,7 +80,7 @@ protected:
     ((fltk3::Image*)_p)->draw_empty(X, Y);
   }
   
-  // FIXME: 123 - Fl_Label not wrapped!
+  // FIXME: 123-1 - Fl_Label not wrapped!
   static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, Fl_Align la) {
     fltk3::Image::labeltype((fltk3::Label*)lo, lx, ly, lw, lh, fltk3::_1to3_align(la));
   }
@@ -92,7 +92,7 @@ protected:
 public:
 
   virtual Fl_Image* copy(int w, int h) {
-    // FIXME: 123
+    // FIXME: 123-1
     fltk3::Image* ret = 0;
     if ( pVCalls & pVCallImageCopyWH ) {
       ret = ((fltk3::Image_I*)_p)->copy(w, h);
@@ -109,7 +109,7 @@ public:
   Fl_Image() { }
   
   Fl_Image(fltk3::Image *img) {
-    // FIXME: 123
+    // FIXME: 123-1
     _p = img;
     _p->wrapper(this);
   }
@@ -139,13 +139,13 @@ public:
   }
   
   Fl_Image(int W, int H, int D) {    
-    // FIXME: 123
+    // FIXME: 123-1
     _p = new fltk3::Image(W, H, D);
     _p->wrapper(this);
   }
   
   Fl_Image *copy() { 
-    // FIXME: 123
+    // FIXME: 123-1
     return new Fl_Image( ((fltk3::Image*)_p)->copy() );
   }
   

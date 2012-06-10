@@ -51,7 +51,7 @@ public:
     SELECT_MULTI		// multiple row selection (default)
   }; 
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 protected:
   int handle(int event);
   int find_cell(TableContext context,		// find cell's x/y/w/h given r/c
@@ -69,7 +69,7 @@ public:
     _p->wrapper(this);
   }
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
   /**
    The destructor for the Fl_Table_Row.
    Destroys the table and its associated widgets.
@@ -100,7 +100,7 @@ public:
     return ((fltk3::TableRow*)_p)->row_selected(row);
   }
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
   /**
    Changes the selection state for 'row', depending on the value
    of 'flag'.  0=deselected, 1=select, 2=toggle existing state.

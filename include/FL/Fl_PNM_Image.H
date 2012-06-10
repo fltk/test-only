@@ -44,7 +44,7 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_PNM_Image, PNMImage)
 
   Fl_PNM_Image(const char* filename) {
-    // FIXME: 123 PNMImage_I
+    // FIXME: 123-1 PNMImage_I
     _p = new fltk3::PNMImage(filename);
     _p->wrapper(this);
   }

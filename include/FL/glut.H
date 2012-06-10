@@ -50,7 +50,7 @@ public:
     ((fltk3::GlutWindow*)_p)->make_current();
   }
   
-#if 0 // FIXME: 123 - can't wrap
+#if 0 // FIXME: 123-1 - can't wrap
   void (*display)();
   void (*overlaydisplay)();
   void (*reshape)(int w, int h);
@@ -79,7 +79,7 @@ inline Fl_Glut_Window *fltk1_glut_window() {
   return (Fl_Glut_Window*)fltk3::_3to1_window(glut_window);
 }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 extern FL_EXPORT Fl_Glut_Window *glut_window;	// the current window
 extern FL_EXPORT int glut_menu;			// the current menu
 

@@ -39,7 +39,7 @@ public:
   Fl_XBM_Image() {}
   
   Fl_XBM_Image(const char* filename) {
-    // FIXME: 123 XBMImage_I
+    // FIXME: 123-1 XBMImage_I
     _p = new fltk3::XBMImage(filename);
     _p->wrapper(this);
   }

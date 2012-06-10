@@ -387,7 +387,7 @@ inline void fl_draw(const char* str, int x, int y, int w, int h, Fl_Align align,
   fltk3::draw(str, x, y, w, h, fltk3::_1to3_align(align), fltk3::_1to3_image(img), draw_symbols);
 }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 inline void fl_draw(const char* str, int x, int y, int w, int h,
                        Fl_Align align,
                        void (*callthis)(const char *,int,int,int),
@@ -424,7 +424,7 @@ inline char fl_can_do_alpha_blending() {
   return fltk3::can_do_alpha_blending();
 }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 
 FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
 
@@ -507,7 +507,7 @@ inline void fl_copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixma
   fltk3::copy_offscreen(x, y, w, h, pixmap, srcx, srcy);
 }
 
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
 
 FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
 

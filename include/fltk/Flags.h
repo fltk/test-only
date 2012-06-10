@@ -39,7 +39,7 @@
 
 namespace fltk {
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-2
 
 /// \name fltk/Flags.h
 //@{

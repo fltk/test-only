@@ -63,7 +63,7 @@ class FL_EXPORT Fl {
 
 public: // should be private!
   
-#if 0 // FIXME: 123
+#if 0 // FIXME: 123-1
   // these have not been wrapped yet!
   static void (*idle)();
   static int get_awake_handler_(Fl_Awake_Handler &h, void *&d) {}
@@ -75,7 +75,7 @@ public: // should be private!
   static void clear_widget_pointer(Fl_Widget const *w);
 #endif
 
-  static void fatal(const char* format, ...) { /* FIXME: 123 */ }
+  static void fatal(const char* format, ...) { /* FIXME: 123-1 */ }
 
   static void damage(int d) {
     fltk3::damage(d);
@@ -445,7 +445,7 @@ public: // should be private!
   }
   
   static Fl_Event_Dispatch event_dispatch() {
-    return 0L; // FIXME: 123 - (fltk3::EventDispatch)fltk3::event_dispatch();
+    return 0L; // FIXME: 123-1 - (fltk3::EventDispatch)fltk3::event_dispatch();
   }
   
   static void copy(const char* stuff, int len, int destination = 0) {
