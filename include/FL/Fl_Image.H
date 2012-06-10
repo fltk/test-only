@@ -146,7 +146,8 @@ public:
   
   Fl_Image *copy() { 
     // FIXME: 123-1
-    return new Fl_Image( ((fltk3::Image*)_p)->copy() );
+   // return new Fl_Image( ((fltk3::Image*)_p)->copy() );
+    return copy(w(), h());
   }
   
   void inactive() {
@@ -179,11 +180,13 @@ public:
   }
   
   Fl_Image *copy() { 
-    return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy() );
+    //return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy() );
+    return Fl_Image::copy();
   }
   
   Fl_Image *copy(int w, int h) { 
-    return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy(w, h) );
+    //return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy(w, h) );
+    return Fl_Image::copy(w, h);
   }
   
   void draw(int X, int Y) {
