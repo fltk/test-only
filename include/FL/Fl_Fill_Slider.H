@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Filled slider header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper finished
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -47,7 +46,7 @@ public:
   Fl_Fill_Slider() { /* empty */ }
   
   Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::FillSlider(_ctor_dx(x), _ctor_dy(y), w, h, l);
+    _p = new fltk3::FillSlider_I(_ctor_dx(x), _ctor_dy(y), w, h, l);
     _p->wrapper(this);
   }
 };

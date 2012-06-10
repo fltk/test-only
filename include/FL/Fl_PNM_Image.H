@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper complete
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,6 +44,7 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_PNM_Image, PNMImage)
 
   Fl_PNM_Image(const char* filename) {
+    // FIXME: 123 PNMImage_I
     _p = new fltk3::PNMImage(filename);
     _p->wrapper(this);
   }

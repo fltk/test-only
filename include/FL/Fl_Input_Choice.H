@@ -2,14 +2,8 @@
 // "$Id$"
 //
 // An input/chooser widget.
-//            ______________  ____
-//           |              || __ |
-//           | input area   || \/ |
-//           |______________||____|
-// FLTK 123 wrapper started
-//  - Fl_Menu_Item not wrapped yet
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 // Copyright 2004 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or

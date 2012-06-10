@@ -5,7 +5,7 @@
 // FLTK 123 wrapper started
 //  - no virtual members, the class is simply derived from FLTK3
 //
-// Copyright 1999-2011 by Michael Sweet.
+// Copyright 1999-2012 by Michael Sweet and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

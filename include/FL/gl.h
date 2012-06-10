@@ -4,8 +4,6 @@
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
-// FLTK 123 wrapper finished
-//  - we only wrap those functions that have version specific arguments
 //
 // You must include this instead of GL/gl.h to get the Microsoft
 // APIENTRY stuff included (from <windows.h>) prior to the OpenGL
@@ -46,6 +44,7 @@
 #    include <GL/gl.h>
 #  endif
 
+// FIXME: 123 - none of this is really wrapped. There is no fltk3 api for this yet.
 // void gl_start();
 // void gl_finish();
 // void gl_rect(int x,int y,int w,int h);

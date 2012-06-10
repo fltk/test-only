@@ -4,7 +4,7 @@
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 //
 //     http://www.fltk.org/str.php
 //
+
+// FIXME: 123 - this file has not been touched at all yet
 
 // Do not directly include this file, instead use <FL/x.H>.  It will
 // include this file if "__APPLE__" is defined.  This is to encourage

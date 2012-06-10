@@ -19,7 +19,7 @@
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
-// Copyright (C) 2009-2011 by Greg Ercolano.
+// Copyright (C) 2009-2012 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -66,7 +66,8 @@ FLTK3_WRAPPER_INTERFACE_END()
 class FL_EXPORT Fl_Tree : public Fl_Group {
 
 public:
-  //! Returns the current item re/selection mode
+#if 0
+  // FIXME: 123
   Fl_Tree_Item_Reselect_Mode item_reselect_mode() const {
       return _itemReselectMode;
   }
@@ -75,10 +76,8 @@ public:
   void item_reselect_mode(Fl_Tree_Item_Reselect_Mode mode) {
       _itemReselectMode = mode;
   }
-
-private:
-      Fl_Tree_Item_Reselect_Mode _itemReselectMode;
-
+#endif
+  
 protected:
 
   // Fl_Scrollbar *_vscroll;

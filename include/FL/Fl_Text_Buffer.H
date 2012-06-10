@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Header file for Fl_Text_Buffer class.
-// FLTK 123 alias finished
 //
-// Copyright 2001-2011 by Bill Spitzak and others.
+// Copyright 2001-2012 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //

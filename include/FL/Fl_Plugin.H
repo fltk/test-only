@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // A Plugin system for FLTK, implemented in Fl_Plugin_Manager.cxx.
-// FLTK 123 wrapper completed
 //
-// Copyright 2002-2011 by Matthias Melcher.
+// Copyright 2002-2012 by Matthias Melcher.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -2,10 +2,9 @@
 // "$Id$"
 //
 // Help Viewer widget definitions.
-// FLTK 123 wrapper finished
 //
-// Copyright 1997-2011 by Easy Software Products.
-// Image support by Matthias Melcher, Copyright 2000-2011.
+// Copyright 1997-2012 by Easy Software Products.
+// Image support by Matthias Melcher, Copyright 2000-2012.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

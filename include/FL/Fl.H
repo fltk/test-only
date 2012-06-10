@@ -2,11 +2,8 @@
 // "$Id$"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
-//  - function pointers missing (see FIXME)
-//  - callbacks not verified
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,10 +30,6 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
-
-#ifdef FLTK_HAVE_CAIRO
-# include <FL/Fl_Cairo.H>
-#endif
 
 #  include "fl_utf8.h"
 #  include "Enumerations.H"
@@ -707,19 +700,6 @@ public: // should be private!
     fltk3::do_widget_deletion();
   }
     
-#ifdef FLTK_HAVE_CAIRO
-public:
-  static cairo_t * cairo_make_current(Fl_Window* w);
-  static void cairo_autolink_context(bool alink) {cairo_state_.autolink(alink);}
-  static bool cairo_autolink_context() {return cairo_state_.autolink();}
-  static cairo_t * cairo_cc() { return cairo_state_.cc(); }
-  static void cairo_cc(cairo_t * c, bool own=false){ cairo_state_.cc(c, own); } 
-private:
-  static cairo_t * cairo_make_current(void* gc);
-  static cairo_t * cairo_make_current(void* gc, int W, int H);
-  static Fl_Cairo_State cairo_state_;
-public:
-#endif // FLTK_HAVE_CAIRO
 };
 
 

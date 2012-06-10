@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Fl_Table -- A table widget
-// FLTK 123 wrapper complete
 //
-// Copyright 2002-2011 by Greg Ercolano.
+// Copyright 2002-2012 by Greg Ercolano.
 // Copyright (c) 2004 O'ksi'D
 //
 // This library is free software; you can redistribute it and/or
@@ -78,7 +77,7 @@ protected:
     RESIZE_ROW_BELOW = 4
   };
   
-#if 0 // TODO: 123 
+#if 0 // FIXME: 123 
   void recalc_dimensions();
   void table_resized();
   void table_scrolled();
@@ -264,6 +263,7 @@ public:
   }
 
 #if 0
+  // FIXME: 123
   inline void top_row(int row) {		// set/get top row (deprecated)
   inline int top_row() {
   int is_selected(int r, int c);		// selected cell
@@ -300,6 +300,7 @@ public:
   }
 
 #if 0
+    // FIXME: 123
   void do_callback(TableContext context, int row, int col) {
 #endif
     

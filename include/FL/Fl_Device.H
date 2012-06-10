@@ -3,7 +3,6 @@
 //
 // Definition of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, 
 // Fl_Display_Device for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
 //
 // Copyright 2010-2012 by Bill Spitzak and others.
 //
@@ -544,50 +543,6 @@ public:
   }
 };
 
-#if 0 // 123 doesn't need compatibility
-
-class Fl_Font_Descriptor;
-
-// typedef what the x,y fields in a point are:
-#ifdef WIN32
-typedef int COORD_T;
-#  define XPOINT XPoint
-#elif defined(__APPLE__)
-typedef float COORD_T;
-typedef struct { float x; float y; } QPoint;
-#  define XPOINT QPoint
-extern float fl_quartz_line_width_;
-#else
-typedef short COORD_T;
-#  define XPOINT XPoint
-#endif
-
-#define FL_REGION_STACK_SIZE 10
-#define FL_MATRIX_STACK_SIZE 32
-
-/**
- This plugin socket allows the integration of new device drivers for special
- window or screen types. It is currently used to provide an automated printing
- service for OpenGL windows, if linked with fltk_gl.
- */
-class FL_EXPORT Fl_Device_Plugin : public Fl_Plugin {
-public:
-  /** \brief The constructor */
-  Fl_Device_Plugin(const char *name)
-  : Fl_Plugin(klass(), name) { }
-  /** \brief Returns the class name */
-  virtual const char *klass() { return "fltk:device"; }
-  /** \brief Returns the plugin name */
-  virtual const char *name() = 0;
-  /** \brief Prints a widget 
-   \param w the widget
-   \param x,y offsets where to print relatively to coordinates origin
-   \param height height of the current drawing area
-   */
-  virtual int print(Fl_Widget* w, int x, int y, int height) = 0;
-};
-
-#endif // 123
 
 #endif // Fl_Device_H
 

@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Printing support for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
 //
-// Copyright 2010-2011 by Bill Spitzak and others.
+// Copyright 2010-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,6 +42,7 @@ public:
   }
   
 #if 0 // can't wrap!
+      // FIXME: 123
   static const char *dialog_title; 
   static const char *dialog_printer; 
   static const char *dialog_range; 

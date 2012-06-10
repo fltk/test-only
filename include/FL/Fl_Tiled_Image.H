@@ -2,10 +2,8 @@
 // "$Id$"
 //
 // Tiled image header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
-//  - TODO: 123 - virtual setup of images not yet done
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,6 +42,7 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_Tiled_Image, TiledImage)
 
   Fl_Tiled_Image(Fl_Image *i, int W = 0, int H = 0) {
+    // FIXME: 123 TiledImage_I
     _p = new fltk3::TiledImage(fltk3::_1to3_image(i), W, H);
     _p->wrapper(this);
   }

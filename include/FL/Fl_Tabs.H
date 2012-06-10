@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper finished
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

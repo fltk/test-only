@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // FileBrowser definitions.
-// FLTK 123 wrapper finished
 //
-// Copyright 1999-2011 by Michael Sweet.
+// Copyright 1999-2012 by Michael Sweet and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -1,10 +1,9 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // BMP image header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,9 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_BMP_Image widget . */
-
 #ifndef Fl_BMP_Image_H
 #define Fl_BMP_Image_H
 
@@ -39,10 +35,7 @@ FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_BMP_Image, BMPImage)
 FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_BMP_Image, BMPImage)
 FLTK3_WRAPPER_INTERFACE_END()
 
-/**
-  The Fl_BMP_Image class supports loading, caching,
-  and drawing of Windows Bitmap (BMP) image files.
-*/
+
 class FL_EXPORT Fl_BMP_Image : public Fl_RGB_Image {
 
 public:
@@ -54,6 +47,7 @@ public:
     _p->wrapper(this);
   }
 };
+
 
 #endif
 

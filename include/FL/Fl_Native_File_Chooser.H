@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // FLTK native OS file chooser widget
-// FLTK 123 wrapper finished
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 // Copyright 2004 Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or

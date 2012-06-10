@@ -1,7 +1,8 @@
-/* "$Id$"
+/* 
+ * "$Id$"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
- * Copyright 2000-2010 by O'ksi'D.
+ * Copyright 2000-2012 by O'ksi'D.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,16 +23,6 @@
  *
  *     http://www.fltk.org/str.php
  */
-
-/* Merged in some functionality from the fltk-2 version. IMM.
- * The following code is an attempt to merge the functions incorporated in FLTK2
- * with the functions provided in OksiD's fltk-1.1.6-utf8 port
- */
-
-/**
-  \file fl_utf8.h
-  \brief header for Unicode and UTF8 chracter handling
-*/
 
 #ifndef _HAVE_FL_UTF8_HDR_
 #define _HAVE_FL_UTF8_HDR_

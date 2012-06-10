@@ -2,10 +2,8 @@
 // "$Id$"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
-//  - image base wrapper class must be implemented including missing flags
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -94,6 +92,7 @@ protected:
 public:
 
   virtual Fl_Image* copy(int w, int h) {
+    // FIXME: 123
     fltk3::Image* ret = 0;
     if ( pVCalls & pVCallImageCopyWH ) {
       ret = ((fltk3::Image_I*)_p)->copy(w, h);
@@ -110,6 +109,7 @@ public:
   Fl_Image() { }
   
   Fl_Image(fltk3::Image *img) {
+    // FIXME: 123
     _p = img;
     _p->wrapper(this);
   }
@@ -138,12 +138,14 @@ public:
     return ((fltk3::Image*)_p)->data();
   }
   
-  Fl_Image(int W, int H, int D) {
+  Fl_Image(int W, int H, int D) {    
+    // FIXME: 123
     _p = new fltk3::Image(W, H, D);
     _p->wrapper(this);
   }
   
   Fl_Image *copy() { 
+    // FIXME: 123
     return new Fl_Image( ((fltk3::Image*)_p)->copy() );
   }
   

@@ -3,7 +3,7 @@
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
 #include "Fl_Window.H"
 
 #ifndef GLContext
-typedef void* GLContext; // actually a GLXContext or HGLDC
+typedef void* GLContext;
 #endif
 
 
@@ -42,7 +42,7 @@ FLTK3_WRAPPER_INTERFACE_WINDOW(Fl_Gl_Window, GLWindow)
 FLTK3_WRAPPER_INTERFACE_END()
 
 
-class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
+class Fl_Gl_Choice;
 
 
 class FL_EXPORT Fl_Gl_Window : public Fl_Window {

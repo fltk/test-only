@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -26,9 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_JPEG_Image class . */
-
 #ifndef Fl_JPEG_Image_H
 #define Fl_JPEG_Image_H
 
@@ -39,12 +35,7 @@ FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_JPEG_Image, JPEGImage)
 FLTK3_WRAPPER_INTERFACE_IMAGE(Fl_JPEG_Image, JPEGImage)
 FLTK3_WRAPPER_INTERFACE_END()
 
-/**
-  The Fl_JPEG_Image class supports loading, caching,
-  and drawing of Joint Photographic Experts Group (JPEG) File
-  Interchange Format (JFIF) images. The class supports grayscale
-  and color (RGB) JPEG image files.
-*/
+
 class FL_EXPORT Fl_JPEG_Image : public Fl_RGB_Image {
 
 public:

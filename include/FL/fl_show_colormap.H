@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Colormap picker header file for the Fast Light Tool Kit (FLTK).
-// FLTK 3 wrapper finished
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,8 +33,6 @@
 inline Fl_Color fl_show_colormap(Fl_Color oldcol) {
   return fltk3::_3to1_color( fltk3::show_colormap( fltk3::_1to3_color(oldcol) ) );
 }
-
-/** @} */
 
 #endif
 

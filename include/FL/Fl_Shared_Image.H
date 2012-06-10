@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Shared image header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper finished
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -48,6 +47,7 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
 protected:
 
 #if 0
+  // FIXME: 123
   static Fl_Shared_Image **images_;	// Shared images
   static int	num_images_;		// Number of shared images
   static int	alloc_images_;		// Allocated shared images
@@ -75,6 +75,7 @@ public:
   FLTK3_IMAGE_VCALLS(Fl_Shared_Image, SharedImage)
 
 #if 0
+  // FIXME: 123
   /** Returns the filename of the shared image */
   const char	*name() { return name_; }
   /** Returns the number of references of this shared image. When reference is below 1, the image is deleted. */
@@ -86,7 +87,7 @@ public:
   }
 
 #if 0
-  
+  // FIXME: 123
   void		reload();
 
   Fl_Image *copy() { return copy(w(), h()); }
@@ -122,11 +123,13 @@ public:
   }
 
 #if 0
+  // FIXME: 123
   static Fl_Shared_Image **images();
   static int		num_images();
 #endif
 
 #if 0 // TODO: 123 - can we port this?
+  // FIXME: 123
   static void add_handler(Fl_Shared_Handler f) {
     fltk3::SharedImage::add_handler((fltk3::SharedHandler)f);
   }

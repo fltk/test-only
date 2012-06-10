@@ -2,9 +2,8 @@
 // "$Id$"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,13 +33,13 @@
 #include "Fl_Scrollbar.H"
 #include "Fl.H"
 
-#define FL_NORMAL_BROWSER	0	/**< type() of Fl_Browser */
-#define FL_SELECT_BROWSER	1	/**< type() of FL_Select_Browser */
-#define FL_HOLD_BROWSER		2	/**< type() of Fl_Hold_Browser */
-#define FL_MULTI_BROWSER	3	/**< type() of Fl_Multi_Browser */
+#define FL_NORMAL_BROWSER	0
+#define FL_SELECT_BROWSER	1
+#define FL_HOLD_BROWSER		2
+#define FL_MULTI_BROWSER	3
 
-#define FL_SORT_ASCENDING	0	/**< sort browser items in ascending alphabetic order. */
-#define FL_SORT_DESCENDING	1	/**< sort in descending order */
+#define FL_SORT_ASCENDING	0
+#define FL_SORT_DESCENDING	1
 
 
 FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Browser_, Browser_)

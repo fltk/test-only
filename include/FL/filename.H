@@ -4,7 +4,7 @@
  * Filename header file for the Fast Light Tool Kit (FLTK).
  * FLTK 123 wrapper started
  *
- * Copyright 1998-2011 by Bill Spitzak and others.
+ * Copyright 1998-2012 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 #ifndef FL_FILENAME_H
 #define FL_FILENAME_H
 
-// FIXME: 123 - this is bad because now we can only include this file form a c++ file!
+// FIXME: 123 - this is bad because now we can only include this file from a c++ file!
 #include <fltk3/filename.h>
 #include "Fl_Export.H"
 

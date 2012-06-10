@@ -19,7 +19,7 @@
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
-// Copyright (C) 2009-2010 by Greg Ercolano.
+// Copyright (C) 2009-2012 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -58,7 +58,8 @@ public:
   }
   
 #if 0
-  
+  // FIXME: 123
+
   ~Fl_Tree_Item();				// DTOR
   Fl_Tree_Item(const Fl_Tree_Item *o);		// COPY CTOR
   int x() const { return(_xywh[0]); }
@@ -127,6 +128,7 @@ public:
   }
 
 #if 0
+  // FIXME: 123
   /// Return the number of children this item has.
   int children() const {
     return(_children.total()); 
@@ -178,6 +180,7 @@ public:
   }
 
 #if 0
+  // FIXME: 123
   Fl_Tree_Item *next_displayed(Fl_Tree_Prefs &prefs);
   Fl_Tree_Item *prev_displayed(Fl_Tree_Prefs &prefs);
 #endif  
@@ -191,6 +194,7 @@ public:
   }
 
 #if 0
+  // FIXME: 123
   /// Set the parent for this item.
   /// Should only be used by Fl_Tree's internals.
   ///
@@ -316,6 +320,7 @@ public:
   }
 
 #if 0
+  // FIXME: 123
   //////////////////
   // Events
   //////////////////
