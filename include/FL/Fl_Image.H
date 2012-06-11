@@ -178,17 +178,7 @@ public:
     _p = img;
     _p->wrapper(this);
   }
-  
-  Fl_Image *copy() { 
-    //return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy() );
-    return Fl_Image::copy();
-  }
-  
-  Fl_Image *copy(int w, int h) { 
-    //return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy(w, h) );
-    return Fl_Image::copy(w, h);
-  }
-  
+    
   void draw(int X, int Y) {
     ((fltk3::Image*)_p)->draw(X, Y);
   }
