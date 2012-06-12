@@ -1257,6 +1257,9 @@ void fl_open_display() {
 					     selector:@selector(anyWindowWillClose:) 
 						 name:NSWindowWillCloseNotification 
 					       object:nil];
+    // necessary for secondary pthreads to be allowed to use cocoa, 
+    // especially to create an NSAutoreleasePool.
+    [NSThread detachNewThreadSelector:nil toTarget:nil withObject:nil];
   }
 }
 
