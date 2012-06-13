@@ -25,6 +25,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/ShapedWindow.h>
 #include <fltk/Clock.h>
 #include <fltk/PopupMenu.h>
@@ -98,6 +104,8 @@ int main(int argc, char **argv) {
 
   return run();
 }
+
+#endif
 
 //
 // End of "$Id: clock.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

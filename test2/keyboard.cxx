@@ -40,6 +40,13 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
+
 #include "keyboard_ui.cxx"
 #include <stdio.h>
 #include <ctype.h>
@@ -146,6 +153,8 @@ int main(int argc, char** argv) {
   }
   return 0;
 }
+
+#endif
 
 //
 // End of "$Id: keyboard.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

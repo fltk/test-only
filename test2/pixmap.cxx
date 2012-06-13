@@ -25,6 +25,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Button.h>
@@ -93,6 +99,8 @@ int main(int argc, char **argv) {
   window.show(argc,argv);
   return fltk::run();
 }
+
+#endif
 
 //
 // End of "$Id$"

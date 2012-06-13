@@ -27,6 +27,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/Browser.h>
 #include <fltk/Window.h>
 #include <fltk/Button.h>
@@ -370,5 +376,7 @@ int main(int argc,char** argv) {
   run();
   return 0;
 }
+
+#endif
 
 // End of "$Id: browser.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $"

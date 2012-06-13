@@ -25,29 +25,39 @@
 //    http://www.fltk.org/str.php
 //
 
+#if 0 // FIXME: 123-2
+
 // This is a complete rewrite that replaces the old test program.
 // Cursors are no longer identified by an integer.
 
 #include <config.h> 
+#endif
 #include <fltk/run.h>
+#if 0 // FIXME: 123-2
 #include <fltk/events.h>
+#endif
 #include <fltk/Window.h>
+#if 0 // FIXME: 123-2
 #include <fltk/Cursor.h>
 #ifdef USE_XCURSOR
 #include <fltk/SharedImage.h>
 #include <stdio.h>
 #endif
+#endif
 
 using namespace fltk;
 
 class CursorBox : public Widget {
+#if 0 // FIXME: 123-2
   int handle(int);
+#endif
 public:
   Cursor* cursor;
   CursorBox(int x, int y, int w, int h, const char* name, Cursor* c)
     : Widget(x,y,w,h,name), cursor(c) {}
 };
 
+#if 0 // FIXME: 123-2
 int CursorBox::handle(int event) {
   if (event == ENTER) Widget::cursor(cursor);
   if (event == PUSH) return true; // drag the cursor around
@@ -74,10 +84,14 @@ struct gcc4_bug_workaround {const char* name; Cursor* cursor;} table[] = {
 #endif
 };
 #define COUNT (sizeof(table)/sizeof(table[0]))
+#else
+#define COUNT 10
+#endif
 #define W 200
 #define H 25
 #define GAP 5
 
+#if 0 // FIXME: 123-2
 #ifdef USE_XCURSOR
 int load_file(int argc, char** argv, int&i){
   Image *img = SharedImage::get(argv[i]);
@@ -88,7 +102,11 @@ int load_file(int argc, char** argv, int&i){
   }
   return 0;
 }
+#endif
+#endif
 
+#if 0 // FIXME: 123-2
+#ifdef USE_XCURSOR
 int main(int argc, char **argv) {
   register_images();
   int i;
@@ -100,15 +118,23 @@ int main(int argc, char **argv) {
 #else
 int main(int argc, char **argv) {
 #endif
-  Window window(W+2*GAP, (H+GAP)*COUNT+GAP);
+#else
+int main(int argc, char **argv) {
+#endif
+  fltk::Window window(W+2*GAP, (H+GAP)*COUNT+GAP);
   window.begin();
+#if 0 // FIXME: 123-2  
   for (unsigned i = 0; i < COUNT; i++)
     new CursorBox(GAP, GAP+i*(H+GAP), W, H, table[i].name, table[i].cursor);
+#else
+  for (unsigned i = 0; i < COUNT; i++)
+    new CursorBox(GAP, GAP+i*(H+GAP), W, H, "TEST", 0);
+#endif
   window.end();
   window.show(argc, argv);
   return run();
 }
-
+  
 //
 // End of "$Id: cursor.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".
 //

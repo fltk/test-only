@@ -25,6 +25,8 @@
 //    http://www.fltk.org/str.php
 //
 
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Button.h>
 #include <fltk/Window.h>
@@ -38,8 +40,10 @@ void more_cb(Widget*, void* p) {
     out->print("\033[1mbold\033[21moff");
   }
 }
+#endif
 
 int main(int argc, char **argv) {
+#if 0
   int w = 210; // must be > 104
   int h = 200;
   Window window(w, h);
@@ -65,5 +69,6 @@ int main(int argc, char **argv) {
 #endif
 
   return run();
+#endif
 }
 

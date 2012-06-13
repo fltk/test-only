@@ -1,6 +1,12 @@
 // Test of how fast drawing is in various scenarios
 // Requires X because it uses XSync
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/x.h>
@@ -94,3 +100,4 @@ int main(int argc, char** argv) {
   return 0;
 }
 
+#endif

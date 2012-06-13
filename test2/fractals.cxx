@@ -29,6 +29,13 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
+
 #include <config.h>
 #if !HAVE_GL || !HAVE_GL_GLU_H
 #include <fltk/run.h>
@@ -828,6 +835,8 @@ int main(int argc, char** argv)
 
   return 0;
 }
+#endif
+
 #endif
 
 //

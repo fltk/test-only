@@ -30,6 +30,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <fltk/run.h>
@@ -195,6 +201,8 @@ int main(int, char **) {
   window->show(); // this actually shows the window + subwindow
   return fltk::run();
 }
+
+#endif
 
 //
 // End of "$Id: subwindow.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

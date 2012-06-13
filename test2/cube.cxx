@@ -27,6 +27,13 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
+
 #include <config.h>
 #include <fltk/run.h>
 #include <fltk/draw.h>
@@ -196,6 +203,8 @@ int main(int argc, char **argv) {
   fltk::run();
   return 0;
 }
+
+#endif
 
 #endif
 

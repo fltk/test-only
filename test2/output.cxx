@@ -25,6 +25,13 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
+
 #include <fltk/run.h>
 #include <fltk/ValueInput.h> // necessary for bug in mingw32?
 #include <fltk/Window.h>
@@ -107,6 +114,8 @@ int main(int argc, char **argv) {
   window->show(argc,argv);
   return fltk::run();
 }
+
+#endif
 
 //
 // End of "$Id: output.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

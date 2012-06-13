@@ -25,6 +25,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include "CubeView.h"
 #include <math.h>
 
@@ -169,6 +175,8 @@ void CubeView::draw()
     glPopMatrix();
 }
 #endif /* HAVE_GL */
+
+#endif
 
 //
 // End of "$Id: CubeView.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

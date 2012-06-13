@@ -25,17 +25,23 @@
 //    http://www.fltk.org/str.php
 //
 
+
 #include <fltk/run.h>
 #include <fltk/Window.h>
+#if 0 // FIXME: 123-2
 #include <fltk/Browser.h>
+#endif
 #include <fltk/CheckButton.h>
+#if 0 // FIXME: 123-2
 #include <fltk/draw.h>
 #include <fltk/Font.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 fltk::Window *form;
+#if 0 // FIXME: 123-2
 
 class FontDisplay : public fltk::Widget {
   void draw();
@@ -44,8 +50,10 @@ public:
   FontDisplay(fltk::Box* B, int X, int Y, int W, int H, const char* L = 0) :
     fltk::Widget(X,Y,W,H,L) {box(B); font = 0; size = 14.0f;}
 };
+#endif
 
 fltk::Widget* id_box;
+#if 0 // FIXME: 123-2
 
 void FontDisplay::draw() {
   draw_box();
@@ -70,9 +78,11 @@ FontDisplay *textobj;
 fltk::Browser *fontobj, *sizeobj, *encobj;
 
 fltk::Font** fonts; // list returned by fltk
+#endif
 
 fltk::Group *button_group;
 fltk::CheckButton* bold_button, *italic_button;
+#if 0 // FIXME: 123-2
 
 float pickedsize = 14.0f;
 
@@ -160,28 +170,38 @@ void size_cb(fltk::Widget *, long) {
   textobj->size = pickedsize;
   textobj->redraw();
 }
+#endif
 
 void create_the_forms() {
   form = new fltk::Window(550,390);
+#if 0 // FIXME: 123-2
   form->set_double_buffer();
+#endif
   form->begin();
   id_box = new fltk::Widget(10, 172, 530, 15);
   id_box->box(fltk::ENGRAVED_BOX);
   id_box->labelsize(10);
+#if 0 // FIXME: 123-2
   id_box->labelfont(fltk::COURIER);
   id_box->set_flag(fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP|fltk::ALIGN_LEFT);
   textobj = new FontDisplay(fltk::ENGRAVED_BOX,10,10,530,160);
   textobj->clear_flag(fltk::ALIGN_MASK);
   textobj->set_flag(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP);
+#endif
   button_group = new fltk::Group(10, 190, 140, 20);
   button_group->begin();
   bold_button = new fltk::CheckButton(0, 0, 70, 20, "Bold");
+#if 0 // FIXME: 123-2
   bold_button->labelfont(bold_button->labelfont()->bold());
   bold_button->callback(font_cb, 1);
+#endif
   italic_button = new fltk::CheckButton(70, 0, 70, 20, "Italic");
+#if 0 // FIXME: 123-2
   italic_button->labelfont(italic_button->labelfont()->italic());
   italic_button->callback(font_cb, 1);
+#endif
   button_group->end();
+#if 0 // FIXME: 123-2
   fontobj = new fltk::Browser(10, 210, 280, 170);
   fontobj->when(fltk::WHEN_CHANGED);
   fontobj->callback(font_cb);
@@ -192,13 +212,17 @@ void create_the_forms() {
   sizeobj = new fltk::Browser(410, 210, 130, 170);
   sizeobj->when(fltk::WHEN_CHANGED);
   sizeobj->callback(size_cb);
+#endif
   form->end();
 }
 
+#if 0 // FIXME: 123-2
 #include <fltk/ask.h>
+#endif
 
 int main(int argc, char **argv) {
   create_the_forms();
+#if 0 // FIXME: 123-2
   int numfonts = fltk::list_fonts(fonts);
   for (int i = 0; i < numfonts; i++)
        fontobj->add(fonts[i]->name());
@@ -206,9 +230,11 @@ int main(int argc, char **argv) {
   fontobj->value(0);
   textobj->encoding = fltk::get_encoding();
   font_cb(fontobj,0);
+#endif
   form->show(argc,argv);
   return fltk::run();
 }
+
 
 //
 // End of "$Id: fonts.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

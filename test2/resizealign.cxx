@@ -23,6 +23,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #define W1 40
 #define B 0
 #define W3 (5*W1+6*B)
@@ -91,6 +97,8 @@ int main(int argc, char **argv) {
   window->show(argc,argv);
   return run();
 }
+
+#endif
 
 //
 // End of "$Id: resizealign.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

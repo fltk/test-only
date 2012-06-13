@@ -1,3 +1,9 @@
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/Widget.h>
 #include <fltk/Browser.h>
 #include <fltk/Button.h>
@@ -64,3 +70,5 @@ int main() {
   printf("    sizeof(fltk::ValueInput) = %lu\n", (unsigned long)sizeof(class fltk::ValueInput));
   return 0;
 }
+
+#endif

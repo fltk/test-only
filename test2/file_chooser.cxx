@@ -37,6 +37,12 @@
 //   show_callback()  - Show the file chooser...
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 //
 // Include necessary headers...
 //
@@ -357,6 +363,8 @@ main(int  argc,		// I - Number of command-line arguments
 
   return (0);
 }
+
+#endif
 
 //
 // End of "$Id: file_chooser.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

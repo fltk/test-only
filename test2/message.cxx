@@ -25,6 +25,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/ask.h>
 #include <fltk/run.h>
 #include <stdio.h>
@@ -57,6 +63,8 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+
+#endif
 
 //
 // End of "$Id: message.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

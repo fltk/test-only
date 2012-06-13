@@ -1,3 +1,9 @@
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Item.h>
@@ -126,3 +132,5 @@ int main(int argc, char **argv) {
   form->show(argc,argv);
   return run();
 }
+
+#endif

@@ -1,3 +1,9 @@
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Widget.h>
 #include <fltk/Window.h>
@@ -73,3 +79,5 @@ int main(int argc, char** argv) {
 
   return fltk::run();
 }
+
+#endif

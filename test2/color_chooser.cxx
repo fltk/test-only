@@ -24,6 +24,12 @@
 //     http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <config.h>
 #undef USE_XFT // this breaks the <x.h> header file
 
@@ -159,6 +165,8 @@ int main(int argc, char **argv)
   // Run FLTK event loop
   return fltk::run();
 }
+
+#endif
 
 //
 // End of "$Id: color_chooser.cxx 6249 2008-09-15 06:21:01Z spitzak $".

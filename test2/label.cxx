@@ -25,6 +25,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Box.h>
@@ -195,6 +201,8 @@ int main(int argc, char **argv) {
   window->show(argc,argv);
   return run();
 }
+
+#endif
 
 //
 // End of "$Id: label.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

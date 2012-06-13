@@ -25,6 +25,12 @@
 //    http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -227,6 +233,8 @@ void DrawingArea::layout() {
   }
   Widget::layout();
 }
+
+#endif
 
 //
 // End of "$Id: mandelbrot.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".

@@ -27,6 +27,12 @@
 //     http://www.fltk.org/str.php
 //
 
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 //
 // Include necessary headers...
 //
@@ -802,6 +808,8 @@ int main(int argc, char **argv) {
 
   return fltk::run();
 }
+
+#endif
 
 //
 // End of "$Id: editor.cxx 8662 2011-05-15 06:04:24Z bgbnbigben $".

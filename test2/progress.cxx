@@ -1,3 +1,10 @@
+
+int main(int, char **) {
+  return 0;
+}
+
+#if 0 // FIXME: 123-2
+
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/ProgressBar.h>
@@ -49,3 +56,5 @@ int main(int argc, char **argv) {
   win->show(argc-nargs, &argv[nargs]);
   return run();
 }
+
+#endif
