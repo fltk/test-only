@@ -421,7 +421,7 @@ void fltk3::remove_fd(int n)
 }
 
 /*
- * Check if there is actually a message pending!
+ * Check if there is actually a message pending
  */
 int fl_ready()
 {
@@ -1121,7 +1121,7 @@ void fl_open_callback(void (*cb)(const char *)) {
   Fl_X *x;
   for (x = Fl_X::first;x;x = x->next) {
     fltk3::Window *w = x->w;
-    if ( !w->parent() ) {
+    if ( !w->parent() && ![x->xid isMiniaturized] ) {
       fltk3::handle( fltk3::SHOW, w);
       }
   }
