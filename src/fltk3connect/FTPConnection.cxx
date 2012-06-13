@@ -44,6 +44,7 @@ typedef int socklen_t;
 # include <sys/socket.h>
 # include <sys/ioctl.h>
 # include <netdb.h>
+# include <time.h>
 #endif
 
 #if 0
