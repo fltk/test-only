@@ -1127,6 +1127,8 @@ void fill_in_New_Menu() {
   }
 }
 
+extern Fl_Box_Type Fl_Box_type;	// the "factory"
+
 // use keyword to pick the type, this is used to parse files:
 int reading_file;
 Fl_Type *Fl_Type_make(const char *tn) {
@@ -1138,6 +1140,9 @@ Fl_Type *Fl_Type_make(const char *tn) {
     Fl_Type *t = (Fl_Type*)(m->user_data());
     if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}
     if (!strcasecmp(tn,t->alt_type_name())) {r = t->make(); break;}
+  }
+  if (!r && strcasecmp(tn, "Box")) {
+    r = Fl_Box_type.make();
   }
   reading_file = 0;
   return r;

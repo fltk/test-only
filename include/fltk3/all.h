@@ -105,6 +105,7 @@
 #include "RoundClock.h"
 #include "ScrollGroup.h"
 #include "Scrollbar.h"
+#include "Scalebar.h"
 #include "SecretInput.h"
 #include "SelectBrowser.h"
 #include "SharedImage.h"

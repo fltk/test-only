@@ -122,6 +122,7 @@ LINK_FLTK3IMAGES="../lib/libfltk3images.a"
 LINK_FLTK3PNG="../lib/libfltk3png.a"
 LINK_FLTK3JPEG="../lib/libfltk3jpeg.a"
 LINK_FLTK3ZLIB="../lib/libfltk3zlib.a"
+LINK_FLTK3CONNECT="../lib/libfltk3connect.a"
 GLDEMOS="gldemos"
 
 LIBEXT=".a"
@@ -131,6 +132,7 @@ FLTK3IMAGES_LIBNAME="../lib/libfltk3images.a"
 FLTK3PNG_LIBNAME="../lib/libfltk3png.a"
 FLTK3JPEG_LIBNAME="../lib/libfltk3jpeg.a"
 FLTK3ZLIB_LIBNAME="../lib/libfltk3zlib.a"
+FLTK3CONNECT_LIBNAME="../lib/libfltk3connect.a"
 
 FLTK3_LIBBASENAME="libfltk3.a"
 FLTK3GL_LIBBASENAME="libfltk3gl.a"
@@ -138,6 +140,7 @@ FLTK3IMAGES_LIBBASENAME="libfltk3images.a"
 FLTK3PNG_LIBBASENAME="libfltk3png.a"
 FLTK3JPEG_LIBBASENAME="libfltk3jpeg.a"
 FLTK3ZLIB_LIBBASENAME="libfltk3zlib.a"
+FLTK3CONNECT_LIBBASENAME="libfltk3connect.a"
 
 AC_SUBST(GLDEMOS)
 AC_SUBST(LIBEXT)
@@ -159,6 +162,9 @@ AC_SUBST(FLTK3JPEG_LIBBASENAME)
 AC_SUBST(FLTK3ZLIB_LIBNAME)
 AC_SUBST(LINK_FLTK3ZLIB)
 AC_SUBST(FLTK3ZLIB_LIBBASENAME)
+AC_SUBST(FLTK3CONNECT_LIBNAME)
+AC_SUBST(LINK_FLTK3CONNECT)
+AC_SUBST(FLTK3CONNECT_LIBBASENAME)
 
 dnl Handle compile-time options...
 AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]])
@@ -190,6 +196,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.$FL_API_VERSION.dylib"
             FLTK3JPEG_DSONAME="libfltk3jpeg.$FL_API_VERSION.dylib"
             FLTK3ZLIB_DSONAME="libfltk3zlib.$FL_API_VERSION.dylib"
+            FLTK3CONNECT_DSONAME="libfltk3connect.$FL_API_VERSION.dylib"
             DSOCOMMAND="\$(CXX) \$(ARCHFLAGS) \$(DSOFLAGS) -dynamiclib -lc -o"
             ;;
 
@@ -200,6 +207,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
             FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
             FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
+            FLTK3CONNECT_DSONAME="libfltk3connect.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -h \$@ \$(LDLIBS) -G $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib"; then
                     DSOLINK="-R$libdir"
@@ -212,6 +220,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.sl.$FL_API_VERSION"
             FLTK3JPEG_DSONAME="libfltk3jpeg.sl.$FL_API_VERSION"
             FLTK3ZLIB_DSONAME="libfltk3zlib.sl.$FL_API_VERSION"
+            FLTK3CONNECT_DSONAME="libfltk3connect.sl.$FL_API_VERSION"
             DSOCOMMAND="ld \$(DSOFLAGS) -b -z +h \$@ $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib"; then
                     DSOLINK="-Wl,-rpath,$libdir"
@@ -224,6 +233,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
             FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
             FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
+            FLTK3CONNECT_DSONAME="libfltk3connect.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32" -a "x$libdir" != "x/usr/lib64"; then
                     DSOLINK="-Wl,-rpath,$libdir"
@@ -236,6 +246,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
             FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
             FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
+            FLTK3CONNECT_DSONAME="libfltk3connect.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32"; then
                     DSOLINK="-Wl,-rpath,$libdir"
@@ -248,6 +259,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
             FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
             FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
+            FLTK3CONNECT_DSONAME="libfltk3connect.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
             if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib64"; then
                     DSOLINK="-Wl,-rpath,$libdir"
@@ -260,6 +272,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png_s.a"
             FLTK3JPEG_DSONAME="libfltk3jpeg_s.a"
             FLTK3ZLIB_DSONAME="libfltk3zlib_s.a"
+            FLTK3CONNECT_DSONAME="libfltk3connect_s.a"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
             SHAREDSUFFIX="_s"
             ;;
@@ -272,6 +285,7 @@ if test x$enable_shared = xyes; then
                 FLTK3PNG_DSONAME="mgwfltk3pngnox-$FL_API_VERSION.dll"
                 FLTK3JPEG_DSONAME="mgwfltk3jpegnox-$FL_API_VERSION.dll"
                 FLTK3ZLIB_DSONAME="mgwfltk3zlibnox-$FL_API_VERSION.dll"
+                FLTK3CONNECT_DSONAME="mgwfltk3connectnox-$FL_API_VERSION.dll"
             else
                 if test x$enable_x11 = xyes; then
                     FLTK3_DSONAME="cygfltk3-$FL_API_VERSION.dll"
@@ -280,6 +294,7 @@ if test x$enable_shared = xyes; then
                     FLTK3PNG_DSONAME="cygfltk3png-$FL_API_VERSION.dll"
                     FLTK3JPEG_DSONAME="cygfltk3jpeg-$FL_API_VERSION.dll"
                     FLTK3ZLIB_DSONAME="cygfltk3zlib-$FL_API_VERSION.dll"
+                    FLTK3CONNECT_DSONAME="cygfltk3connect-$FL_API_VERSION.dll"
                 else
                     FLTK3_DSONAME="cygfltk3nox-$FL_API_VERSION.dll"
                     FLTK3GL_DSONAME="cygfltk3glnox-$FL_API_VERSION.dll"
@@ -287,6 +302,7 @@ if test x$enable_shared = xyes; then
                     FLTK3PNG_DSONAME="cygfltk3pngnox-$FL_API_VERSION.dll"
                     FLTK3JPEG_DSONAME="cygfltk3jpegnox-$FL_API_VERSION.dll"
                     FLTK3ZLIB_DSONAME="cygfltk3zlibnox-$FL_API_VERSION.dll"
+                    FLTK3CONNECT_DSONAME="cygfltk3connectnox-$FL_API_VERSION.dll"
                 fi
             fi
             #-----------------------------------------------------------
@@ -307,6 +323,7 @@ if test x$enable_shared = xyes; then
             FLTK3PNG_DSONAME="libfltk3png.so.$FL_API_VERSION"
             FLTK3JPEG_DSONAME="libfltk3jpeg.so.$FL_API_VERSION"
             FLTK3ZLIB_DSONAME="libfltk3zlib.so.$FL_API_VERSION"
+            FLTK3CONNECT_DSONAME="libfltk3connect.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) \$(DSOFLAGS) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
             ;;
     esac
@@ -321,6 +338,7 @@ else
     FLTK3PNG_DSONAME=""
     FLTK3JPEG_DSONAME=""
     FLTK3ZLIB_DSONAME=""
+    FLTK3CONNECT_DSONAME=""
     PICFLAG=0
     SHAREDSUFFIX=""
     FLUID="fluid"
@@ -336,6 +354,7 @@ AC_SUBST(FLTK3IMAGES_DSONAME)
 AC_SUBST(FLTK3PNG_DSONAME)
 AC_SUBST(FLTK3JPEG_DSONAME)
 AC_SUBST(FLTK3ZLIB_DSONAME)
+AC_SUBST(FLTK3CONNECT_DSONAME)
 AC_SUBST(SHAREDSUFFIX)
 AC_SUBST(LINKSHARED)
 AC_SUBST(FLUID)

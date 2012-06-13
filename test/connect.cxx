@@ -29,6 +29,46 @@
 //     http://www.fltk.org/str.php
 //
 
+#if 1
+
+
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Button.h>
+#include <fltk3connect/all.h>
+
+
+void ftp_cb(fltk3::Widget*, void *d)
+{
+  fltk3::FTPConnection *ftp = (fltk3::FTPConnection*)d;
+  
+  ftp->sync_open("ftp.gnu.org", "anonymous", "fltk@fltk.org");
+  //ftp->dir()....
+  ftp->close();
+}
+
+
+int main(int argc, char** argv)
+{
+  // ftp.gnu.org
+  fltk3::Window* win = new fltk3::Window(300, 100, "FTP test");
+  win->begin();
+  fltk3::Button* btn = new fltk3::Button(10, 10, 150, 24, "ftp.gnu.org");
+  fltk3::FTPConnection* ftp = new fltk3::FTPConnection(100, 44, 50, 24, "FTP:");
+  ftp->align(fltk3::ALIGN_LEFT);
+  btn->callback(ftp_cb, ftp);
+  win->end();
+  win->show(argc, argv);
+  fltk3::run();
+  return 0;
+}
+
+
+
+#else
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -71,6 +111,10 @@ int main(int argc, char ** argv) {
    window.show(argc,argv);
    return fltk3::run();
 }
+
+
+
+#endif
 
 //
 // End of "$Id$".

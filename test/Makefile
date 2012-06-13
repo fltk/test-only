@@ -42,6 +42,7 @@ CPPFILES = \
 	clock.cxx \
 	colbrowser.cxx \
 	color_chooser.cxx \
+	connect.cxx \
 	cube.cxx \
 	CubeView.cxx \
 	CubeMain.cxx \
@@ -55,8 +56,8 @@ CPPFILES = \
 	fractals.cxx \
 	fracviewer.cxx \
 	fullscreen.cxx \
-	gl_overlay.cxx \
 	glpuzzle.cxx \
+	gl_overlay.cxx \
 	hello.cxx \
 	help.cxx \
 	iconize.cxx \
@@ -80,6 +81,7 @@ CPPFILES = \
 	pixmap.cxx \
 	resizebox.cxx \
 	rotated_text.cxx \
+	scalebar.cxx \
 	scroll.cxx \
 	shape.cxx \
 	shapedwindow.cxx \
@@ -117,6 +119,7 @@ ALL = \
 	clock$(EXEEXT) \
 	colbrowser$(EXEEXT) \
 	color_chooser$(EXEEXT) \
+	connect$(EXEEXT) \
 	cube$(EXEEXT) \
 	CubeView$(EXEEXT) \
 	cursor$(EXEEXT) \
@@ -129,8 +132,8 @@ ALL = \
 	fonts$(EXEEXT) \
 	fractals$(EXEEXT) \
 	fullscreen$(EXEEXT) \
-	gl_overlay$(EXEEXT) \
 	glpuzzle$(EXEEXT) \
+	gl_overlay$(EXEEXT) \
 	hello$(EXEEXT) \
 	help$(EXEEXT) \
 	iconize$(EXEEXT) \
@@ -158,6 +161,7 @@ ALL = \
 	resizebox$(EXEEXT) \
 	resize$(EXEEXT) \
 	rotated_text$(EXEEXT) \
+	scalebar$(EXEEXT) \
 	scroll$(EXEEXT) \
 	shape$(EXEEXT) \
 	shapedwindow$(EXEEXT) \
@@ -326,6 +330,10 @@ color_chooser$(EXEEXT): color_chooser.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ color_chooser.o $(LINK_FLTK3) $(LDLIBS)
 
+connect$(EXEEXT): connect.o $(FLTK3_LIB_NAME) $(FLTK3CONNECT_LIB_NAME)
+	echo Linking $@...
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ connect.o $(LINK_FLTK3) $(LINK_FLTK3CONNECT) $(LDLIBS)
+
 cube$(EXEEXT): cube.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ cube.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
@@ -378,13 +386,13 @@ fullscreen$(EXEEXT): fullscreen.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ fullscreen.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
 
-gl_overlay$(EXEEXT): gl_overlay.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
-	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
-
 glpuzzle$(EXEEXT): glpuzzle.o $(FLTK3GL_LIB_NAME) $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ glpuzzle.o $(LINK_FLTK3GL) $(LINK_FLTK3) $(GLLIB) $(LDLIBS)
+
+gl_overlay$(EXEEXT): gl_overlay.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
+	echo Linking $@...
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ gl_overlay.o $(LINK_FLTK3) $(LINK_FLTK3GL) $(GLLIB) $(LDLIBS)
 
 hello$(EXEEXT): hello.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
@@ -505,6 +513,10 @@ resize.cxx: resize.fl ../fluid/fluid$(EXEEXT)
 rotated_text$(EXEEXT): rotated_text.o $(FLTK3_LIB_NAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ rotated_text.o $(LINK_FLTK3) $(LDLIBS)
+
+scalebar$(EXEEXT): scalebar.o $(FLTK3_LIB_NAME)
+	echo Linking $@...
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ scalebar.o $(LINK_FLTK3) $(LDLIBS)
 
 scroll$(EXEEXT): scroll.o $(FLTK3_LIB_NAME)
 	echo Linking $@...

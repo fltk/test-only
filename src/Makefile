@@ -75,6 +75,7 @@ FLTK3_CPPFILES = \
 	fltk3/ReturnButton.cxx \
 	fltk3/Roller.cxx \
 	fltk3/RoundButton.cxx \
+	fltk3/Scalebar.cxx \
 	fltk3/ScrollGroup.cxx \
 	fltk3/Scrollbar.cxx \
 	fltk3/ShapedWindow.cxx \
@@ -199,6 +200,14 @@ FLTK3IMAGES_CPPFILES = \
 	fltk3images/PNGImage.cxx \
 	fltk3images/PNMImage.cxx
 
+FLTK3CONNECT_CPPFILES = \
+	fltk3connect/Socket.cxx \
+	fltk3connect/SerialConnection.cxx \
+	fltk3connect/TCPSocket.cxx \
+	fltk3connect/FTPConnection.cxx \
+	fltk3connect/HTTPConnection.cxx \
+	fltk3connect/USBConnection.cxx
+
 FLTK3_OBJCPPFILES = \
 	fltk3/cocoa.mm \
 	fltk3/cocoaNativeFileChooser.mm \
@@ -310,6 +319,7 @@ FLTK3IMAGES_OBJECTS = $(FLTK3IMAGES_CPPFILES:.cxx=.o)
 FLTK3PNG_OBJECTS = $(FLTK3PNG_CFILES:.c=.o)
 FLTK3JPEG_OBJECTS = $(FLTK3JPEG_CFILES:.c=.o)
 FLTK3ZLIB_OBJECTS = $(FLTK3ZLIB_CFILES:.c=.o)
+FLTK3CONNECT_OBJECTS = $(FLTK3CONNECT_CPPFILES:.cxx=.o)
 
 all: \
 	$(FLTK3_LIBNAME) $(FLTK3_DSONAME) \
@@ -317,7 +327,8 @@ all: \
 	$(FLTK3IMAGES_LIBNAME) $(FLTK3IMAGES_DSONAME) \
 	$(FLTK3PNG_LIBNAME) $(FLTK3PNG_DSONAME) \
 	$(FLTK3JPEG_LIBNAME) $(FLTK3JPEG_DSONAME) \
-	$(FLTK3ZLIB_LIBNAME) $(FLTK3ZLIB_DSONAME)
+	$(FLTK3ZLIB_LIBNAME) $(FLTK3ZLIB_DSONAME) \
+	$(FLTK3CONNECT_LIBNAME) $(FLTK3CONNECT_DSONAME)
 
 $(FLTK3_LIBNAME): $(FLTK3_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
@@ -353,6 +364,12 @@ $(FLTK3ZLIB_LIBNAME): $(FLTK3ZLIB_OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	$(RM) $@
 	$(LIBCOMMAND) $@ $(FLTK3ZLIB_OBJECTS)
+	$(RANLIB) $@
+
+$(FLTK3CONNECT_LIBNAME): $(FLTK3CONNECT_OBJECTS)
+	echo $(LIBCOMMAND) $@ ...
+	$(RM) $@
+	$(LIBCOMMAND) $@ $(FLTK3CONNECT_OBJECTS)
 	$(RANLIB) $@
 
 libfltk.so.1.3: $(FLTK3_OBJECTS)
