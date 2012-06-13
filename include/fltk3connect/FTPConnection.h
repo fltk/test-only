@@ -35,6 +35,9 @@
 #include <fltk3connect/TCPSocket.h>
 
 
+struct timespec;
+
+
 namespace fltk3 {
   
   class FTPConnection;
