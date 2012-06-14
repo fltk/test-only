@@ -29,7 +29,7 @@
 // Turning off full screen when the border is on causes an unnecessary
 // resize and redraw when the program turns the border on.
 //
-// If it is a seperate window, turning double buffering on and off
+// If it is a separate window, turning double buffering on and off
 // will cause the window to raise, deiconize, and possibly move.  You
 // can avoid this by making the fltk3::GLWindow a child of a normal
 // window.
@@ -64,6 +64,7 @@
 #include <fltk3/LightButton.h>
 #include <fltk3/math.h>
 #include <fltk3/ask.h>
+#include <fltk3/Browser.H>
 #include <stdio.h>
 
 #if HAVE_GL
@@ -193,13 +194,47 @@ void fullscreen_cb(fltk3::Widget *o, void *p) {
   }
 }
 
+
+void update_screeninfo(fltk3::Widget *b, void *p) {
+  fltk3::Browser *browser = (fltk3::Browser *)p;
+  int x, y, w, h;
+  char line[128];
+  browser->clear();
+  
+  sprintf(line, "Main screen work area: %dx%d@%d,%d", fltk3::w(), fltk3::h(), fltk3::x(), fltk3::y());
+  browser->add(line);
+  fltk3::screen_work_area(x, y, w, h);
+  sprintf(line, "Mouse screen work area: %dx%d@%d,%d", w, h, x, y);
+  browser->add(line);
+  for (int n = 0; n < fltk3::screen_count(); n++) {
+    int x, y, w, h;
+    fltk3::screen_xywh(x, y, w, h, n);
+    sprintf(line, "Screen %d: %dx%d@%d,%d", n, w, h, x, y);
+    browser->add(line);
+    fltk3::screen_work_area(x, y, w, h, n);
+    sprintf(line, "Work area %d: %dx%d@%d,%d", n, w, h, x, y);
+    browser->add(line);
+  }
+}
+
+fltk3::Browser *browser_global;
+
+int screen_changed(int event)
+{
+  if (event == fltk3::SCREEN_CONFIGURATION_CHANGED) {
+    update_screeninfo(0, browser_global);
+    return 1;
+    }
+  return 0;
+}
+
 #include <stdlib.h>
 
 void exit_cb(fltk3::Widget *, void *) {
   exit(0);
 }
 
-#define NUMB 6
+#define NUMB 7
 
 int twowindow = 0;
 int initfull = 0;
@@ -215,9 +250,9 @@ int main(int argc, char **argv) {
   if (fltk3::args(argc,argv,i,arg) < argc)
     fltk3::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",fltk3::help);
 
-  fullscreen_window window(300,300+30*NUMB); window.end();
+  fullscreen_window window(400,400+30*NUMB); window.end();
 
-  shape_window sw(10,10,window.w()-20,window.h()-30*NUMB-20);
+  shape_window sw(10,10,window.w()-20,window.h()-30*NUMB-120);
   
 #if HAVE_GL
   sw.mode(fltk3::RGB);
@@ -238,7 +273,7 @@ int main(int argc, char **argv) {
 
   window.begin();
 
-  int y = window.h()-30*NUMB-5;
+  int y = window.h()-30*NUMB-105;
   fltk3::HorSlider slider(50,y,window.w()-60,30,"Sides:");
   slider.align(fltk3::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
@@ -269,10 +304,21 @@ int main(int argc, char **argv) {
   eb.callback(exit_cb);
   y+=30;
 
+  fltk3::Browser *browser = new fltk3::Browser(50,y,window.w()-60,100);
+  update_screeninfo(0, browser);
+  y+=100;
+  
+  fltk3::Button update(50,y,window.w()-60,30,"Update");
+  update.callback(update_screeninfo, browser);
+  y+=30;
+  
   if (initfull) {window.b3->set(); window.b3->do_callback();}
 
   window.end();
   window.show(argc,argv);
+
+  browser_global = browser;
+  fltk3::add_handler(screen_changed);
 
   return fltk3::run();
 }
