@@ -103,11 +103,11 @@ SOURCE=..\..\src\fltk3connect\TCPSocket.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3connect\FTPConnection.cxx
+SOURCE=..\..\src\fltk3connect\FTPClient.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3connect\HTTPConnection.cxx
+SOURCE=..\..\src\fltk3connect\HTTPClient.cxx
 # End Source File
 # Begin Source File
 

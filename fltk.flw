@@ -4689,21 +4689,21 @@ workspace FLTK {open
           list_env 124
           filename_and_path {include/fltk3connect/TCPSocket.h}
         }
-        file_ref {FTPConnection.h} {
+        file_ref {FTPClient.h} {
           uuid_Xcode4_BuildFile {9B27BA3C-924C-49EA-9D52-05CD2E77297B}
           uuid_Xcode4_FileRef {B6C4777F-8E64-43BD-B93D-95ADD60875C4}
           uuid_Xcode4_BuildFileInHeaders {0B43B53B-981E-4EA4-B5BE-64F6D4707528}
           build_env 96
           list_env 124
-          filename_and_path {include/fltk3connect/FTPConnection.h}
+          filename_and_path {include/fltk3connect/FTPClient.h}
         }
-        file_ref {HTTPConnection.h} {
+        file_ref {HTTPClient.h} {
           uuid_Xcode4_BuildFile {20075AD5-98AB-4B95-AC2B-953B70ED6F7B}
           uuid_Xcode4_FileRef {E00EC857-C497-48B6-ABC4-B4D7A87F8F79}
           uuid_Xcode4_BuildFileInHeaders {0C4ECB31-70CE-4A1F-96B4-F7B444814336}
           build_env 96
           list_env 124
-          filename_and_path {include/fltk3connect/HTTPConnection.h}
+          filename_and_path {include/fltk3connect/HTTPClient.h}
         }
         file_ref {USBConnection.h} {
           uuid_Xcode4_BuildFile {47C045EC-299F-49FB-90D5-1304C0B205C8}
@@ -4732,15 +4732,15 @@ workspace FLTK {open
           uuid_Xcode4_FileRef {E3300FB1-0589-4536-9CAF-281F9CE11AEE}
           filename_and_path {src/fltk3connect/TCPSocket.cxx}
         }
-        file_ref {FTPConnection.cxx} {
+        file_ref {FTPClient.cxx} {
           uuid_Xcode4_BuildFileInSources {91D90EA7-FCDF-4EF7-82E2-6454A3D51FC0}
           uuid_Xcode4_FileRef {6653881E-1818-4C58-8184-FA6CB3475553}
-          filename_and_path {src/fltk3connect/FTPConnection.cxx}
+          filename_and_path {src/fltk3connect/FTPClient.cxx}
         }
-        file_ref {HTTPConnection.cxx} {
+        file_ref {HTTPClient.cxx} {selected
           uuid_Xcode4_BuildFileInSources {BB62323B-12F0-45A1-9A39-4499B2B54FD1}
           uuid_Xcode4_FileRef {ADEDA03B-5D8F-47B2-B632-726B4498CFE4}
-          filename_and_path {src/fltk3connect/HTTPConnection.cxx}
+          filename_and_path {src/fltk3connect/HTTPClient.cxx}
         }
         file_ref {USBConnection.cxx} {
           uuid_Xcode4_BuildFileInSources {B72F597D-8CC1-4F83-92FD-9274D7E601DD}
@@ -5621,7 +5621,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {11A4B5BE-B3AE-4FCD-B12C-FFB71C71FC4A}
       }
     }
-    app_target connect {selected
+    app_target connect {
       uuid_Xcode4_FluidBuildRule {D1485AD4-24D6-4B10-ADDB-4C3478DE1E61}
       uuid_Xcode4_CopyFilesBuildPhase {A2946547-FB07-40FA-A666-2CF278BA62AD}
       uuid_Xcode4_ProductFileReference {2D59EFBA-4D3C-46E0-9427-7EC9F44B78D0}

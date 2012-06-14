@@ -27,17 +27,131 @@
 
 #include <fltk3connect/Socket.h>
 
-#if 0 // TODO: FLTK3 Connect is not yet implemented 
 
-/*
- 
- This file will eventually contain a base class for TCPSocket, SerialConnection,
- TCPConnection and USBConnection to provide a common interface for outside
- data connections.
- 
- */
+void fltk3::Socket::draw()
+{
+  fltk3::Group::draw();
+}
 
-#endif
+
+fltk3::Socket::Socket(int x, int y, int w, int h, const char *l)
+: fltk3::Group(x, y, w, h, l),
+  pStatus(CLOSED),
+  pActive(0),
+  pFirstByteTimeout(0),
+  pNextByteTimeout(0)
+{
+}
+
+
+fltk3::Socket::~Socket()
+{
+}
+
+
+int fltk3::Socket::connect(const char*)
+{
+  return -1;
+}
+
+
+int fltk3::Socket::send(const void*, int)
+{
+  return -1;
+}
+
+
+char fltk3::Socket::send(const char *text)
+{
+  if (text) {
+    return send(text, strlen(text));
+  } else {
+    return -1;
+  }
+}
+
+
+int fltk3::Socket::recv_all(void*, int)
+{
+  return -1;
+}
+
+
+int fltk3::Socket::recv(void*, int)
+{
+  return -1;
+}
+
+
+int fltk3::Socket::peek(void*, int) 
+{
+  return -1;
+}
+
+
+void fltk3::Socket::close()
+{
+}
+
+
+char fltk3::Socket::on_connect()
+{
+  return 0;
+}
+
+
+char fltk3::Socket::on_receive()
+{
+  return 0;
+}
+
+
+char fltk3::Socket::on_close()
+{
+  return 0;
+}
+
+
+char fltk3::Socket::on_timeout()
+{
+  return 0;
+}
+
+
+int fltk3::Socket::monitor(int trigger, ...)
+{
+  return -1;
+}
+
+
+int fltk3::Socket::status() const
+{
+  return pStatus;
+}
+
+
+int fltk3::Socket::available() const
+{
+  return -1;
+}
+
+
+void fltk3::Socket::flush_input(int n)
+{
+}
+
+
+void fltk3::Socket::flush_output()
+{
+}
+
+
+void fltk3::Socket::timeout(double first_byte, double next_byte)
+{
+  pFirstByteTimeout = first_byte;
+  pNextByteTimeout = next_byte;
+}
+
 
 //
 // End of "$Id$".

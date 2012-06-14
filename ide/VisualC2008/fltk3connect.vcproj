@@ -230,7 +230,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\fltk3connect\FTPConnection.cxx"
+			RelativePath="..\..\src\fltk3connect\FTPClient.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -253,7 +253,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\src\fltk3connect\HTTPConnection.cxx"
+			RelativePath="..\..\src\fltk3connect\HTTPClient.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

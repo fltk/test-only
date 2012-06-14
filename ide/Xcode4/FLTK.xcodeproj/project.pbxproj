@@ -601,16 +601,16 @@
 		CB761F131FCAC105049627FC /* Socket.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B6DC8E80A0BC8742EB50D6C9 /* Socket.cxx */; };
 		9944741CA0E834A94EFCAE9F /* SerialConnection.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CE848D00D75058A9AF98D759 /* SerialConnection.cxx */; };
 		2E2339CB19DB57CD41D12738 /* TCPSocket.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E3300FB140BFB4B09CE11AEE /* TCPSocket.cxx */; };
-		91D90EA7B228E6B6A3D51FC0 /* FTPConnection.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6653881E54407BE8B3475553 /* FTPConnection.cxx */; };
-		BB62323B5751DEA0B2B54FD1 /* HTTPConnection.cxx in Sources */ = {isa = PBXBuildFile; fileRef = ADEDA03B1A3DC4594498CFE4 /* HTTPConnection.cxx */; };
+		91D90EA7B228E6B6A3D51FC0 /* FTPClient.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6653881E54407BE8B3475553 /* FTPClient.cxx */; };
+		BB62323B5751DEA0B2B54FD1 /* HTTPClient.cxx in Sources */ = {isa = PBXBuildFile; fileRef = ADEDA03B1A3DC4594498CFE4 /* HTTPClient.cxx */; };
 		B72F597DC3420089D7E601DD /* USBConnection.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6394FC3E38D2A15BAC8782E5 /* USBConnection.cxx */; };
 		44F55CDB9FA65C71F10222AB /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E62B899DE54CC6C9DE8E49 /* all.h */; };
 		1295F498263C3E4254217217 /* fltk3connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D57DCA6AC907DBFB3EF012 /* fltk3connect.h */; };
 		E2448FDB8226F5DCEB00893F /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = BD6E3BFCED5FAF6386435304 /* Socket.h */; };
 		D7A1DAAC4FACA639AE414B00 /* SerialConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ED9DE6E5988668CF125B504 /* SerialConnection.h */; };
 		AFBB497E7C7A7AB9C1FB9F40 /* TCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 087FAF86423CD4458B04C53C /* TCPSocket.h */; };
-		0B43B53BD6BAD148D4707528 /* FTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C4777FCDD92C90D60875C4 /* FTPConnection.h */; };
-		0C4ECB313AD1610044814336 /* HTTPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = E00EC8578C211F13A87F8F79 /* HTTPConnection.h */; };
+		0B43B53BD6BAD148D4707528 /* FTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C4777FCDD92C90D60875C4 /* FTPClient.h */; };
+		0C4ECB313AD1610044814336 /* HTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E00EC8578C211F13A87F8F79 /* HTTPClient.h */; };
 		C86B46DD83B2C07E1FD7B18C /* USBConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F6313A22BE464D0F077B0CD2 /* USBConnection.h */; };
 		FABC8E0EAD3A212F02C33DFB /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		C94ED007CFB092A97E1B5B98 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
@@ -9196,14 +9196,14 @@
 		BD6E3BFCED5FAF6386435304 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Socket.h; path = ../../include/fltk3connect/Socket.h; sourceTree = SOURCE_ROOT; };
 		0ED9DE6E5988668CF125B504 /* SerialConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SerialConnection.h; path = ../../include/fltk3connect/SerialConnection.h; sourceTree = SOURCE_ROOT; };
 		087FAF86423CD4458B04C53C /* TCPSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCPSocket.h; path = ../../include/fltk3connect/TCPSocket.h; sourceTree = SOURCE_ROOT; };
-		B6C4777FCDD92C90D60875C4 /* FTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FTPConnection.h; path = ../../include/fltk3connect/FTPConnection.h; sourceTree = SOURCE_ROOT; };
-		E00EC8578C211F13A87F8F79 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTPConnection.h; path = ../../include/fltk3connect/HTTPConnection.h; sourceTree = SOURCE_ROOT; };
+		B6C4777FCDD92C90D60875C4 /* FTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FTPClient.h; path = ../../include/fltk3connect/FTPClient.h; sourceTree = SOURCE_ROOT; };
+		E00EC8578C211F13A87F8F79 /* HTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTPClient.h; path = ../../include/fltk3connect/HTTPClient.h; sourceTree = SOURCE_ROOT; };
 		F6313A22BE464D0F077B0CD2 /* USBConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USBConnection.h; path = ../../include/fltk3connect/USBConnection.h; sourceTree = SOURCE_ROOT; };
 		B6DC8E80A0BC8742EB50D6C9 /* Socket.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cxx; path = ../../src/fltk3connect/Socket.cxx; sourceTree = SOURCE_ROOT; };
 		CE848D00D75058A9AF98D759 /* SerialConnection.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerialConnection.cxx; path = ../../src/fltk3connect/SerialConnection.cxx; sourceTree = SOURCE_ROOT; };
 		E3300FB140BFB4B09CE11AEE /* TCPSocket.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TCPSocket.cxx; path = ../../src/fltk3connect/TCPSocket.cxx; sourceTree = SOURCE_ROOT; };
-		6653881E54407BE8B3475553 /* FTPConnection.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FTPConnection.cxx; path = ../../src/fltk3connect/FTPConnection.cxx; sourceTree = SOURCE_ROOT; };
-		ADEDA03B1A3DC4594498CFE4 /* HTTPConnection.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HTTPConnection.cxx; path = ../../src/fltk3connect/HTTPConnection.cxx; sourceTree = SOURCE_ROOT; };
+		6653881E54407BE8B3475553 /* FTPClient.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FTPClient.cxx; path = ../../src/fltk3connect/FTPClient.cxx; sourceTree = SOURCE_ROOT; };
+		ADEDA03B1A3DC4594498CFE4 /* HTTPClient.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HTTPClient.cxx; path = ../../src/fltk3connect/HTTPClient.cxx; sourceTree = SOURCE_ROOT; };
 		6394FC3E38D2A15BAC8782E5 /* USBConnection.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = USBConnection.cxx; path = ../../src/fltk3connect/USBConnection.cxx; sourceTree = SOURCE_ROOT; };
 		CCFA3B567AFA8148D91B2AC8 /* fltk3connect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk3connect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7D33A211C18D89A010BD86F /* demo.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = demo.cxx; path = ../../test/demo.cxx; sourceTree = SOURCE_ROOT; };
@@ -12631,8 +12631,8 @@
 				BD6E3BFCED5FAF6386435304 /* Socket.h */,
 				0ED9DE6E5988668CF125B504 /* SerialConnection.h */,
 				087FAF86423CD4458B04C53C /* TCPSocket.h */,
-				B6C4777FCDD92C90D60875C4 /* FTPConnection.h */,
-				E00EC8578C211F13A87F8F79 /* HTTPConnection.h */,
+				B6C4777FCDD92C90D60875C4 /* FTPClient.h */,
+				E00EC8578C211F13A87F8F79 /* HTTPClient.h */,
 				F6313A22BE464D0F077B0CD2 /* USBConnection.h */,
 			);
 			name = Headers;
@@ -12644,8 +12644,8 @@
 				B6DC8E80A0BC8742EB50D6C9 /* Socket.cxx */,
 				CE848D00D75058A9AF98D759 /* SerialConnection.cxx */,
 				E3300FB140BFB4B09CE11AEE /* TCPSocket.cxx */,
-				6653881E54407BE8B3475553 /* FTPConnection.cxx */,
-				ADEDA03B1A3DC4594498CFE4 /* HTTPConnection.cxx */,
+				6653881E54407BE8B3475553 /* FTPClient.cxx */,
+				ADEDA03B1A3DC4594498CFE4 /* HTTPClient.cxx */,
 				6394FC3E38D2A15BAC8782E5 /* USBConnection.cxx */,
 			);
 			name = Sources;
@@ -14955,8 +14955,8 @@
 				E2448FDB8226F5DCEB00893F /* Socket.h in Headers */,
 				D7A1DAAC4FACA639AE414B00 /* SerialConnection.h in Headers */,
 				AFBB497E7C7A7AB9C1FB9F40 /* TCPSocket.h in Headers */,
-				0B43B53BD6BAD148D4707528 /* FTPConnection.h in Headers */,
-				0C4ECB313AD1610044814336 /* HTTPConnection.h in Headers */,
+				0B43B53BD6BAD148D4707528 /* FTPClient.h in Headers */,
+				0C4ECB313AD1610044814336 /* HTTPClient.h in Headers */,
 				C86B46DD83B2C07E1FD7B18C /* USBConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -21219,8 +21219,8 @@
 				CB761F131FCAC105049627FC /* Socket.cxx in Sources */,
 				9944741CA0E834A94EFCAE9F /* SerialConnection.cxx in Sources */,
 				2E2339CB19DB57CD41D12738 /* TCPSocket.cxx in Sources */,
-				91D90EA7B228E6B6A3D51FC0 /* FTPConnection.cxx in Sources */,
-				BB62323B5751DEA0B2B54FD1 /* HTTPConnection.cxx in Sources */,
+				91D90EA7B228E6B6A3D51FC0 /* FTPClient.cxx in Sources */,
+				BB62323B5751DEA0B2B54FD1 /* HTTPClient.cxx in Sources */,
 				B72F597DC3420089D7E601DD /* USBConnection.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

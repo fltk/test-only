@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3connect/FTPConnection.h>
+#include <fltk3connect/FTPClient.h>
 
 #include <fltk3/run.h>
 #include <fltk3/dirent.h>
@@ -33,7 +33,9 @@
 #include <fltk3/filename.h>
 
 #ifdef WIN32
-char Flio_TCP_Socket::wsaStartup = 0;
+namespace fltk3 {
+  char TCPSocket::wsaStartup = 0;
+}
 typedef int socklen_t;
 #else
 # include <unistd.h>
@@ -56,7 +58,7 @@ typedef int socklen_t;
 #endif
 
 
-fltk3::FTPConnection::FTPConnection(int x, int y, int w, int h, const char *l)
+fltk3::FTPClient::FTPClient(int x, int y, int w, int h, const char *l)
 : fltk3::Group(x, y, w, h, l),
   pCommand(0, 0, w, h, 0, this),
   pData(0, 0, w, h, 0, this),
@@ -73,7 +75,7 @@ fltk3::FTPConnection::FTPConnection(int x, int y, int w, int h, const char *l)
 }
 
 
-fltk3::FTPConnection::~FTPConnection()
+fltk3::FTPClient::~FTPClient()
 {
   if (pLastReply) free(pLastReply);
   if (pMsg) free(pMsg);
@@ -81,7 +83,7 @@ fltk3::FTPConnection::~FTPConnection()
 }
 
 
-void fltk3::FTPConnection::my_resize(int xp, int yp, int wp, int hp)
+void fltk3::FTPClient::my_resize(int xp, int yp, int wp, int hp)
 {
   xp += fltk3::box_dx(box());
   yp += fltk3::box_dy(box());
@@ -92,14 +94,14 @@ void fltk3::FTPConnection::my_resize(int xp, int yp, int wp, int hp)
 }
 
 
-void fltk3::FTPConnection::resize(int xp, int yp, int wp, int hp)
+void fltk3::FTPClient::resize(int xp, int yp, int wp, int hp)
 {
   fltk3::Group::resize(xp, yp, wp, hp);
   my_resize(xp, yp, wp, hp);
 }
 
 
-void fltk3::FTPConnection::draw()
+void fltk3::FTPClient::draw()
 {
   fltk3::Group::draw();
   int xp =       fltk3::box_dx(box());
@@ -113,7 +115,7 @@ void fltk3::FTPConnection::draw()
 }
 
 
-void fltk3::FTPConnection::message(const char *pattern, ...)
+void fltk3::FTPClient::message(const char *pattern, ...)
 {
   va_list ap;
   va_start(ap, pattern);
@@ -130,7 +132,7 @@ void fltk3::FTPConnection::message(const char *pattern, ...)
 }
 
 
-int fltk3::FTPConnection::close() 
+int fltk3::FTPClient::close() 
 {
   pCommand.close();
   pData.close();
@@ -139,13 +141,13 @@ int fltk3::FTPConnection::close()
 }
 
 
-int fltk3::FTPConnection::sync_close() 
+int fltk3::FTPClient::sync_close() 
 {
   return close();
 }
 
 
-int fltk3::FTPConnection::open(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short port, const char *name, const char *passwd)
+int fltk3::FTPClient::open(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short port, const char *name, const char *passwd)
 {
   pName = strdup(name);
   pPasswd = strdup(passwd);
@@ -163,7 +165,7 @@ int fltk3::FTPConnection::open(unsigned char ip0, unsigned char ip1, unsigned ch
 }
 
 
-int fltk3::FTPConnection::sync_wait()
+int fltk3::FTPClient::sync_wait()
 {
   int ret = -1, n;
   for (;;) {
@@ -176,7 +178,7 @@ int fltk3::FTPConnection::sync_wait()
       break;
     }
     if (n<0) {
-      perror("fltk3::FTPConnection::sync_wait");
+      perror("fltk3::FTPClient::sync_wait");
     }
     fltk3::wait(10.0);
     // TODO: timeout!
@@ -188,7 +190,7 @@ int fltk3::FTPConnection::sync_wait()
 }
 
 
-int fltk3::FTPConnection::sync_open(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short port, const char *name, const char *passwd)
+int fltk3::FTPClient::sync_open(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short port, const char *name, const char *passwd)
 {
   int ret;
   char cmd[1024];
@@ -247,7 +249,7 @@ int fltk3::FTPConnection::sync_open(unsigned char ip0, unsigned char ip1, unsign
 }
   
 
-int fltk3::FTPConnection::sync_open(const char *host, const char *name, const char *passwd)
+int fltk3::FTPClient::sync_open(const char *host, const char *name, const char *passwd)
 {
   int err;
   struct addrinfo *addr;
@@ -267,7 +269,7 @@ int fltk3::FTPConnection::sync_open(const char *host, const char *name, const ch
 }
 
 
-int fltk3::FTPConnection::sync_pwd()
+int fltk3::FTPClient::sync_pwd()
 {
   int ret; 
   
@@ -291,7 +293,7 @@ int fltk3::FTPConnection::sync_pwd()
 }
 
 
-int fltk3::FTPConnection::sync_get_time(const char *serverfile, struct timespec &timespec)
+int fltk3::FTPClient::sync_get_time(const char *serverfile, struct timespec &timespec)
 {
   char cmd[1024];
   int ret;
@@ -327,7 +329,7 @@ int fltk3::FTPConnection::sync_get_time(const char *serverfile, struct timespec 
 }
 
 
-int fltk3::FTPConnection::sync_chdir(const char *serverpath)
+int fltk3::FTPClient::sync_chdir(const char *serverpath)
 {
   /*
   if (strchr(serverpath, '/')) {
@@ -357,7 +359,7 @@ int fltk3::FTPConnection::sync_chdir(const char *serverpath)
 }
   
       
-int fltk3::FTPConnection::sync_mkdir(const char *serverpath)
+int fltk3::FTPClient::sync_mkdir(const char *serverpath)
 {
   char cmd[1024];
   int ret;
@@ -376,7 +378,7 @@ int fltk3::FTPConnection::sync_mkdir(const char *serverpath)
 }
 
 
-int fltk3::FTPConnection::sync_send_file_if_newer(const char *clientfile, const char *serverfile)
+int fltk3::FTPClient::sync_send_file_if_newer(const char *clientfile, const char *serverfile)
 {
   int ret;
   if (!serverfile) serverfile = clientfile;
@@ -410,7 +412,7 @@ int fltk3::FTPConnection::sync_send_file_if_newer(const char *clientfile, const 
 }
 
 
-int fltk3::FTPConnection::sync_send_file(const char *clientfile, const char *serverfile)
+int fltk3::FTPClient::sync_send_file(const char *clientfile, const char *serverfile)
 {
   char cmd[1024], reply[1024];
   int ret, n;
@@ -495,7 +497,7 @@ int fltk3::FTPConnection::sync_send_file(const char *clientfile, const char *ser
 }
 
 
-int fltk3::FTPConnection::sync_send_dir(const char *aClientpath, const char *serverpath)
+int fltk3::FTPClient::sync_send_dir(const char *aClientpath, const char *serverpath)
 {
   int ret;
   char clientpath[FLTK3_PATH_MAX];
@@ -569,13 +571,13 @@ int fltk3::FTPConnection::sync_send_dir(const char *aClientpath, const char *ser
 
 
 
-int fltk3::FTPConnection::get(const char *filename, void *&data, unsigned int &size)
+int fltk3::FTPClient::get(const char *filename, void *&data, unsigned int &size)
 {
   return 0;
 }
 
 
-char fltk3::FTPConnection::on_receive_command()
+char fltk3::FTPClient::on_receive_command()
 {
   if (pStatus==FTP_SYNC) return 0;
   char buffer[1024];
@@ -713,7 +715,7 @@ char fltk3::FTPConnection::on_receive_command()
  */
 
 
-char fltk3::FTPConnection::on_receive_data()
+char fltk3::FTPClient::on_receive_data()
 {
   char buffer[1024];
   int n = pData.available();
@@ -732,7 +734,7 @@ char fltk3::FTPConnection::on_receive_data()
 
 
 
-fltk3::FTPCommandSocket::FTPCommandSocket(int x, int y, int w, int h, const char *l, fltk3::FTPConnection *ftp)
+fltk3::FTPCommandSocket::FTPCommandSocket(int x, int y, int w, int h, const char *l, fltk3::FTPClient *ftp)
 : fltk3::TCPSocket(x, y, w, h, l),
   pFTP(ftp)
 { }
@@ -743,7 +745,7 @@ char fltk3::FTPCommandSocket::on_receive() {
 }
 
 
-fltk3::FTPDataSocket::FTPDataSocket(int x, int y, int w, int h, const char *l, fltk3::FTPConnection *ftp)
+fltk3::FTPDataSocket::FTPDataSocket(int x, int y, int w, int h, const char *l, fltk3::FTPClient *ftp)
 : fltk3::TCPSocket(x, y, w, h, l),
   pFTP(ftp)
 { }

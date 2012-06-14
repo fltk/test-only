@@ -31,8 +31,8 @@
 #include "Socket.h"
 #include "SerialConnection.h"
 #include "TCPSocket.h"
-#include "FTPConnection.h"
-#include "HTTPConnection.h"
+#include "FTPClient.h"
+#include "HTTPClient.h"
 #include "USBConnection.h"
 
 #endif // !FLTK3CONNECT_ALL_H

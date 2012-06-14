@@ -29,7 +29,7 @@
 #define Fltk3_FTP_Connection_H
 
 /* \file
- fltk3::FTPConnection widget . */
+ fltk3::FTPClient widget . */
 
 
 #include <fltk3connect/TCPSocket.h>
@@ -40,33 +40,33 @@ struct timespec;
 
 namespace fltk3 {
   
-  class FTPConnection;
+  class FTPClient;
   
   /**
    For internal use.
-   \todo This class definition should probably be moved inside FTPConnection.
+   \todo This class definition should probably be moved inside FTPClient.
    */
   class FTPCommandSocket : public TCPSocket
   {
   public:
-    FTPCommandSocket(int x, int y, int w, int h, const char *l, FTPConnection *ftp);
+    FTPCommandSocket(int x, int y, int w, int h, const char *l, FTPClient *ftp);
   protected:
     virtual char on_receive();
-    FTPConnection *pFTP;
+    FTPClient *pFTP;
   };
   
   
   /**
    For internal use.
-   \todo This class definition should probably be moved inside FTPConnection.
+   \todo This class definition should probably be moved inside FTPClient.
    */
   class FTPDataSocket : public TCPSocket
   {
   public:
-    FTPDataSocket(int x, int y, int w, int h, const char *l, FTPConnection *ftp);
+    FTPDataSocket(int x, int y, int w, int h, const char *l, FTPClient *ftp);
   protected:
     virtual char on_receive();
-    FTPConnection *pFTP;
+    FTPClient *pFTP;
   };
   
 
@@ -77,14 +77,14 @@ namespace fltk3 {
    \todo There are still many commands not implemented.
    \todo Error handling counld be much better.
    */
-  class FTPConnection : public Group
+  class FTPClient : public Group
   {
     friend class FTPCommandSocket;
     friend class FTPDataSocket;
     
   public:
-    FTPConnection(int x, int y, int w, int h, const char *l);
-    virtual ~FTPConnection();
+    FTPClient(int x, int y, int w, int h, const char *l);
+    virtual ~FTPClient();
     
     void message(const char *pattern, ...);
     

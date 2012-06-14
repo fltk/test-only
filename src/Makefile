@@ -204,8 +204,8 @@ FLTK3CONNECT_CPPFILES = \
 	fltk3connect/Socket.cxx \
 	fltk3connect/SerialConnection.cxx \
 	fltk3connect/TCPSocket.cxx \
-	fltk3connect/FTPConnection.cxx \
-	fltk3connect/HTTPConnection.cxx \
+	fltk3connect/FTPClient.cxx \
+	fltk3connect/HTTPClient.cxx \
 	fltk3connect/USBConnection.cxx
 
 FLTK3_OBJCPPFILES = \

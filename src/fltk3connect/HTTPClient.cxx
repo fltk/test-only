@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// FLTK3 connect library header file for the Fast Light Tool Kit (FLTK).
+// FLTK3 connect library source file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2002-2012 by Matthias Melcher and others.
 //
@@ -25,11 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fltk3_HTTP_Connection_H
-#define Fltk3_HTTP_Connection_H
-
-/* \file
- fltk3::HTTPConnection widget . */
+#include <fltk3connect/HTTPClient.h>
 
 #if 0 // TODO: FLTK3 Connect is not yet implemented 
 
@@ -39,11 +35,9 @@
  to manage network connections to HTTP server. This is great for fetching
  web pages and other resources from the world wide web.
  
- To implement this class, FTPConnection may serve as a good start. 
+ To implement this class, fltk3::FTPClient may serve as a good start. 
  
  */
-
-#endif
 
 #endif
 
