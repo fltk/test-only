@@ -27,6 +27,9 @@
 
 #include <fltk3connect/FTPClient.h>
 
+
+#if 0
+
 #include <fltk3/run.h>
 #include <fltk3/dirent.h>
 #include <fltk3/draw.h>
@@ -755,6 +758,7 @@ char fltk3::FTPDataSocket::on_receive() {
   return pFTP->on_receive_data();
 }
 
+#endif
 
 //
 // End of "$Id$".

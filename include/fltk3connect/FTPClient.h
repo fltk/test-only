@@ -31,6 +31,7 @@
 /* \file
  fltk3::FTPClient widget . */
 
+#if 0
 
 #include <fltk3connect/TCPSocket.h>
 
@@ -146,6 +147,8 @@ namespace fltk3 {
   
   
 } // namespace
+
+#endif
 
 #endif
 
