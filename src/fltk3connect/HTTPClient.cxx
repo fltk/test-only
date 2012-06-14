@@ -27,19 +27,80 @@
 
 #include <fltk3connect/HTTPClient.h>
 
-#if 0 // TODO: FLTK3 Connect is not yet implemented 
 
-/*
- 
- This file will eventually contain an HTTP client widget which can be used
- to manage network connections to HTTP server. This is great for fetching
- web pages and other resources from the world wide web.
- 
- To implement this class, fltk3::FTPClient may serve as a good start. 
- 
- */
+fltk3::HTTPClient::HTTPClient(int x, int y, int w, int h, const char *l)
+: fltk3::TCPSocket(x, y, w, h, l),
+  pHost(0)
+{
+}
 
-#endif
+
+fltk3::HTTPClient::~HTTPClient()
+{
+  if (pHost)
+    free(pHost);
+}
+
+
+int fltk3::HTTPClient::connect(const char *host)
+{
+  int ret = -1;
+  if (pHost) {
+    free(pHost);
+    pHost = 0;
+  }
+  if (host) {
+    const char *cln = strchr(host, ':');
+    if (cln) {
+      ret = TCPSocket::connect(host);
+    } else {
+      ret = TCPSocket::connect(host, 80);
+    }
+    pHost = strdup(host);
+  }
+  return ret;
+}
+
+
+int fltk3::HTTPClient::GET(const char *filename)
+{
+  int ret = -1;
+  if (!filename || !*filename) 
+    filename = "index.html";
+  
+  int size = 32+strlen(filename)+strlen(pHost);
+  char *msg = (char*)malloc(size);
+  snprintf(msg, size, "GET /%s HTTP/1.1\r\nHost: %s\r\n\r\n", filename, pHost);
+  send(msg);
+  
+  // sync mode for testing: simply wait indefinetly for a reply
+  char buf[2048]; buf[0] = 0;
+  
+  // grab the header
+  int n = recv(buf, 2048);
+  if (strncmp(buf, "HTTP", 4)!=0) {
+    return ret;
+  }
+  if (strncmp(buf+4, "/1.1 ", 5)!=0) {
+    return ret;
+  }
+  int err = atoi(buf+9);
+  printf("ERROR: %d\n", err);
+  
+  char *len_key = strstr(buf, "Content-Length:");
+  char *data_key = strstr(buf, "\r\n\r\n");
+  if (len_key && data_key) {
+    int len = atoi(len_key+15);
+    const char *data = (char*)malloc(len);
+    //int nd = n-data_key+4;
+    //memcpy(data, data_key+4, n);    
+    //free(data);//
+  }
+  
+  return ret;
+}
+
+
 
 //
 // End of "$Id$".

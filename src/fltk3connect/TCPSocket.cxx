@@ -32,7 +32,7 @@
 #include <fltk3/draw.h>
 
 #ifdef WIN32
-char fltk3::TCPSocket::wsaStartup = 0;
+char fltk3::TCPSocket::pWSAStartup = 0;
 typedef int socklen_t;
 #else
 # include <unistd.h>
@@ -55,9 +55,7 @@ typedef int socklen_t;
 
 
 fltk3::TCPSocket::TCPSocket(int x, int y, int w, int h, const char *l)
-: fltk3::Widget(x, y, w, h, l),
-  pStatus(CLOSED),
-  pActive(0),
+: fltk3::Socket(x, y, w, h, l),
 #ifdef WIN32
   sListen(INVALID_SOCKET),
   sData(INVALID_SOCKET),
@@ -67,8 +65,6 @@ fltk3::TCPSocket::TCPSocket(int x, int y, int w, int h, const char *l)
 #endif
   pPort(-1)
 {
-  box(fltk3::THIN_DOWN_BOX);
-  align(fltk3::ALIGN_LEFT);
   LOG("fltk3::TCPSocket: constructor\n");
 }
 
@@ -77,6 +73,24 @@ fltk3::TCPSocket::~TCPSocket()
 {
   LOG("fltk3::TCPSocket: destructor\n");
   close();
+}
+
+
+void fltk3::TCPSocket::wsaStartup()
+{
+#ifdef WIN32
+  if (!pWSAStartup) {
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+    wVersionRequested = MAKEWORD( 2, 2 );
+    err = WSAStartup( wVersionRequested, &wsaData );
+    if (err) {
+      LOG("fltk3::TCPSocket: listen - WSAStartup failed!\n");
+    }
+    pWSAStartup = 1;
+  }
+#endif
 }
 
 
@@ -118,6 +132,7 @@ void fltk3::TCPSocket::close()
 
 int fltk3::TCPSocket::connect(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short port)
 {
+  wsaStartup();
   redraw();
 #ifdef WIN32
   if (sData==INVALID_SOCKET)
@@ -126,17 +141,6 @@ int fltk3::TCPSocket::connect(unsigned char ip0, unsigned char ip1, unsigned cha
 #endif
     {
 #ifdef WIN32
-      if (!wsaStartup) {
-        WORD wVersionRequested;
-        WSADATA wsaData;
-        int err;
-        wVersionRequested = MAKEWORD( 2, 2 );
-        err = WSAStartup( wVersionRequested, &wsaData );
-        if (err) {
-          LOG("fltk3::TCPSocket: listen - WSAStartup failed!\n");
-        }
-        wsaStartup = 1;
-      }
       pStatus = CLOSED;
       
       // create the socket
@@ -144,7 +148,7 @@ int fltk3::TCPSocket::connect(unsigned char ip0, unsigned char ip1, unsigned cha
       sData = socket(AF_INET, SOCK_STREAM, 0);
       if (sData==INVALID_SOCKET) {
         LOG("fltk3::TCPSocket: connect - can't open socket\n");
-        return 0;
+        return -1;
       }
 #else
       // create the socket
@@ -152,7 +156,7 @@ int fltk3::TCPSocket::connect(unsigned char ip0, unsigned char ip1, unsigned cha
       fdData = socket(AF_INET, SOCK_STREAM, 0);
       if (fdData==-1) {
         LOG("fltk3::TCPSocket: connect - can't open socket\n");
-        return 0;
+        return -1;
       }
 #endif
     }
@@ -178,7 +182,7 @@ int fltk3::TCPSocket::connect(unsigned char ip0, unsigned char ip1, unsigned cha
       ::close(fdData);
       fdData = -1;
 #endif
-      return 0;
+      return -1;
     }
   // all went well, we listen for connections now
   pStatus = CONNECTED;
@@ -190,12 +194,57 @@ int fltk3::TCPSocket::connect(unsigned char ip0, unsigned char ip1, unsigned cha
   fltk3::add_fd(fdData, fltk3::READ, pDataReadCB, this);
   fltk3::add_fd(fdData, fltk3::EXCEPT, pDataExceptCB, this);
 #endif
-  return 1;
+  return 0;
+}
+
+
+int fltk3::TCPSocket::connect(const char *name)
+{
+  if (!name) 
+    return -1;
+  int ret = -1;
+  char *host = strdup(name);
+  char *col = strchr(host, ':');
+  if (col) {
+    unsigned short port = atoi(col+1);
+    *col = 0;
+    ret = connect(host, port);
+  }
+  free(host);
+  return ret;
+}
+
+
+int fltk3::TCPSocket::connect(const char *name, unsigned short port)
+{
+  unsigned char ip0, ip1, ip2, ip3;
+  int ret = -1;
+  if (find_host(name, ip0, ip1, ip2, ip3)!=-1) {
+    ret = connect(ip0, ip1, ip2, ip3, port);
+  }
+  return ret;
+}
+
+
+int fltk3::TCPSocket::find_host(const char* name, unsigned char &ip0, unsigned char &ip1, unsigned char &ip2, unsigned char &ip3)
+{
+  int ret = -1;
+  wsaStartup();
+  struct hostent* host = gethostbyname(name);
+  if (host && (host->h_addrtype==2) && (host->h_length==4)) {
+    ip0 = host->h_addr_list[0][0];
+    ip1 = host->h_addr_list[0][1];
+    ip2 = host->h_addr_list[0][2];
+    ip3 = host->h_addr_list[0][3];
+    ret = 0;
+  }
+  return ret;
 }
 
 
 int fltk3::TCPSocket::available() const
 {
+  wsaStartup();
   unsigned long n;
 #ifdef WIN32
   DWORD rcvd;
@@ -277,6 +326,7 @@ void fltk3::TCPSocket::pDataExceptCB(int, void *user_data)
 
 char fltk3::TCPSocket::listen(unsigned short port) 
 {
+  wsaStartup();
   redraw();
 #ifdef WIN32
   if (sListen==INVALID_SOCKET)
@@ -285,7 +335,7 @@ char fltk3::TCPSocket::listen(unsigned short port)
 #endif
     {
 #ifdef WIN32
-      if (!wsaStartup) {
+      if (!pWSAStartup) {
         WORD wVersionRequested;
         WSADATA wsaData;
         int err;
@@ -294,7 +344,7 @@ char fltk3::TCPSocket::listen(unsigned short port)
         if (err) {
           LOG("fltk3::TCPSocket: listen - WSAStartup failed!\n");
         }
-        wsaStartup = 1;
+        pWSAStartup = 1;
       }
 #endif
       pStatus = CLOSED;
@@ -305,13 +355,13 @@ char fltk3::TCPSocket::listen(unsigned short port)
       sListen = socket(AF_INET, SOCK_STREAM, 0);
       if (sListen==INVALID_SOCKET) {
         LOG("fltk3::TCPSocket: listen - can't open socket\n");
-        return 0;
+        return -1;
       }
 #else
       fdListen = socket(AF_INET, SOCK_STREAM, 0);
       if (fdListen==-1) {
         LOG("fltk3::TCPSocket: listen - can't open socket\n");
-        return 0;
+        return -1;
       }
 #endif
       
@@ -328,14 +378,14 @@ char fltk3::TCPSocket::listen(unsigned short port)
         LOG("fltk3::TCPSocket: listen - can't bind socket\n");
         closesocket(sListen);
         sListen = INVALID_SOCKET;
-        return 0;
+        return -1;
       }
 #else
       if (::bind(fdListen, (struct sockaddr*)&my_addr, addr_len) == -1) {
         LOG("fltk3::TCPSocket: listen - can't bind socket\n");
         ::close(fdListen);
         fdListen = -1;
-        return 0;
+        return -1;
       }
 #endif
     }
@@ -347,7 +397,7 @@ char fltk3::TCPSocket::listen(unsigned short port)
     pStatus = CLOSED;
     closesocket(sListen);
     sListen = INVALID_SOCKET;
-    return 0;
+    return -1;
   }
 #else
   if (::listen(fdListen, 0) == -1) {
@@ -355,7 +405,7 @@ char fltk3::TCPSocket::listen(unsigned short port)
     pStatus = CLOSED;
     ::close(fdListen);
     fdListen = -1;
-    return 0;
+    return -1;
   }
 #endif
   // all went well, we listen for connections now
@@ -366,12 +416,13 @@ char fltk3::TCPSocket::listen(unsigned short port)
 #else
   fltk3::add_fd(fdListen, pListenCB, this);
 #endif
-  return 1;
+  return 0;
 }
 
 
 char fltk3::TCPSocket::accept()
 {
+  wsaStartup();
   redraw();
   LOG("fltk3::TCPSocket: accept\n");
 #ifdef WIN32
@@ -391,14 +442,14 @@ char fltk3::TCPSocket::accept()
   if (sData==INVALID_SOCKET) {
     LOG("fltk3::TCPSocket: accept - failed\n");
     close();
-    return 0;
+    return -1;
   }
 #else
   fdData = ::accept(fdListen, (struct sockaddr*)&their_addr, &addr_len);
   if (fdData==-1) {
     LOG("fltk3::TCPSocket: accept - failed\n");
     close();
-    return 0;
+    return -1;
   }
 #endif
   pStatus = CONNECTED;
@@ -409,36 +460,30 @@ char fltk3::TCPSocket::accept()
   fltk3::add_fd(fdData, fltk3::READ, pDataReadCB, this);
   fltk3::add_fd(fdData, fltk3::EXCEPT, pDataExceptCB, this);
 #endif
-  return 1;
+  return 0;
 }
 
 
-char fltk3::TCPSocket::send(const char *text)
-{
-  return send(text, strlen(text));
-}
-
-
-char fltk3::TCPSocket::send(const void *d, int n)
+int fltk3::TCPSocket::send(const void *d, int n)
 {
   LOG("fltk3::TCPSocket: send\n");
   pActive++; redraw();
 #ifdef WIN32
   if (sData==INVALID_SOCKET) {
-    return 0;
+    return -1;
   }
   if (::send(sData, (const char*)d, n, 0)!=n) {
-    return 0;
+    return -1;
   }
 #else
   if (fdData==-1) {
-    return 0;
+    return -1;
   }
   if (::send(fdData, d, n, 0)!=n) {
-    return 0;
+    return -1;
   }
 #endif
-  return 1;
+  return n;
 }
 
 
@@ -446,7 +491,7 @@ int fltk3::TCPSocket::recv_all(void *d, int n)
 {
 #ifdef WIN32
   if (sData==-1) {
-    return 0;
+    return -1;
   }
   char *dst = (char*)d;
   int sum = 0;
@@ -461,7 +506,7 @@ int fltk3::TCPSocket::recv_all(void *d, int n)
   }
 #else
   if (fdData==-1) {
-    return 0;
+    return -1;
   }
   return ::recv(fdData, d, n, MSG_WAITALL);
 #endif
@@ -472,12 +517,12 @@ int fltk3::TCPSocket::recv(void *d, int n)
 {
 #ifdef WIN32
   if (sData==-1) {
-    return 0;
+    return -1;
   }
   return ::recv(sData, (char*)d, n, 0);
 #else
   if (fdData==-1) {
-    return 0;
+    return -1;
   }
   int ret = ::recv(fdData, d, n, 0);
 #if 0
@@ -500,12 +545,12 @@ int fltk3::TCPSocket::peek(void *d, int n)
 {
 #ifdef WIN32
   if (sData==-1) {
-    return 0;
+    return -1;
   }
   return ::recv(sData, (char*)d, n, MSG_PEEK);
 #else
   if (fdData==-1) {
-    return 0;
+    return -1;
   }
   return ::recv(fdData, d, n, MSG_PEEK);
 #endif

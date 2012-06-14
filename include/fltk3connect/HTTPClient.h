@@ -25,25 +25,55 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fltk3_HTTP_Connection_H
-#define Fltk3_HTTP_Connection_H
+#ifndef FLTK3_HTTP_CLIENT_H
+#define FLTK3_HTTP_CLIENT_H
 
 /* \file
  fltk3::fltk3::HTTPClient widget . */
 
-#if 0 // TODO: FLTK3 Connect is not yet implemented 
+#include <fltk3connect/TCPSocket.h>
 
-/*
+#include <string.h>
+
+namespace fltk3 {
+
+/**
+ This class implements an HTTP client widget.
+ It can be used to manage network connections to HTTP servers. This is great 
+ for fetching web pages and other resources from the world wide web.
  
- This file will eventually contain an HTTP client widget which can be used
- to manage network connections to HTTP server. This is great for fetching
- web pages and other resources from the world wide web.
+ port 80 (or 8080, etc)
  
- To implement this class, fltk3::FTPClient may serve as a good start. 
+ request (header, body)
+    "GET /index.html HTTP/1.1\r\nHost: www.example.net\r\n\r\n"
  
+ response (header, body)
+    "HTTP/1.1 200 OK\r\n"
+    "Server: Apache/1.3.29 (Unix) PHP/4.3.4\r\n"
+    "Content-Length: 1024\r\n"
+    "Content-Language: en\r\n"
+    "Connection: close\r\n"
+    "Content-Type: text/html\r\n"
+    "\r\n" - binary data follows
  */
+  class HTTPClient : public TCPSocket
+  {
+    
+  protected:
+    
+    char *pHost;
+    
+  public:
+    
+    HTTPClient(int x, int y, int w, int h, const char *label=0L);
+    ~HTTPClient();
+    int connect(const char *host);
+    int GET(const char *filename);
+    
+  };
+  
+}
 
-#endif
 
 #endif
 

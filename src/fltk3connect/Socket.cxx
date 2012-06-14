@@ -41,6 +41,9 @@ fltk3::Socket::Socket(int x, int y, int w, int h, const char *l)
   pFirstByteTimeout(0),
   pNextByteTimeout(0)
 {
+  box(fltk3::THIN_DOWN_BOX);
+  align(fltk3::ALIGN_LEFT);
+  end();
 }
 
 
@@ -61,7 +64,7 @@ int fltk3::Socket::send(const void*, int)
 }
 
 
-char fltk3::Socket::send(const char *text)
+int fltk3::Socket::send(const char *text)
 {
   if (text) {
     return send(text, strlen(text));

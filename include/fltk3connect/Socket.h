@@ -65,14 +65,12 @@ namespace fltk3 {
   class Socket : public Group
   {
     
-  private:
+  protected:
     
     int pStatus;
     int pActive;
     double pFirstByteTimeout;
     double pNextByteTimeout;
-    
-  protected:
     
     void draw();
     
@@ -137,7 +135,7 @@ namespace fltk3 {
      \param text the text we want to send
      \return the number of bytes sent, or -1 for error
      */
-    virtual char send(const char *text);
+    virtual int send(const char *text);
     
     /**
      Receive data until the buffer is filled or a timout occurs.

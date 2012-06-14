@@ -38,11 +38,21 @@
 
 void ftp_cb(fltk3::Widget*, void *d)
 {
+#if 0
   fltk3::FTPClient *ftp = (fltk3::FTPClient*)d;
-  
   ftp->sync_open("ftp.gnu.org", "anonymous", "fltk@fltk.org");
-  //ftp->dir()....
   ftp->close();
+#endif
+#if 0
+  unsigned char ip0, ip1, ip2, ip3;
+  fltk3::TCPSocket* s = new fltk3::TCPSocket(0, 0, 0, 0, 0);
+  s->find_host("fltk.org", ip0, ip1, ip2, ip3);
+#endif
+#if 1
+  fltk3::HTTPClient *http = (fltk3::HTTPClient*)d;
+  http->connect("www.fltk.org");
+  http->GET("index.php");  
+#endif
 }
 
 
@@ -52,9 +62,16 @@ int main(int argc, char** argv)
   fltk3::Window* win = new fltk3::Window(300, 100, "FTP test");
   win->begin();
   fltk3::Button* btn = new fltk3::Button(10, 10, 150, 24, "ftp.gnu.org");
+#if 0
   fltk3::FTPClient* ftp = new fltk3::FTPClient(100, 44, 50, 24, "FTP:");
   ftp->align(fltk3::ALIGN_LEFT);
   btn->callback(ftp_cb, ftp);
+#endif
+#if 1
+  fltk3::HTTPClient* http = new fltk3::HTTPClient(100, 44, 50, 24, "HTTP:");
+  http->align(fltk3::ALIGN_LEFT);
+  btn->callback(ftp_cb, http);
+#endif
   win->end();
   win->show(argc, argv);
   fltk3::run();

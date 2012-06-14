@@ -31,7 +31,7 @@
 /* \file
  fltk3::TCPSocket widget . */
 
-#include <fltk3/Widget.h>
+#include <fltk3connect/Socket.h>
 #include <fltk3/Group.h>
 
 #ifdef WIN32
@@ -45,24 +45,23 @@ namespace fltk3 {
    \brief A simple TCP connection.
    
    This class wraps fltk3::add_fd, fltk3::remove_fd, and friends in a simple
-   package. 
+   package. It implements TCP/IP sockets as listeners (for servers) and as
+   initiators of a connection (for clients).
    
    Connections can be managed via callbacks or by overriding the on_...
    methods in this class.
    
    \todo There are still a lot of useful features missing in this class.
    */
-  class TCPSocket : public Widget
+  class TCPSocket : public Socket
   {
     
   private:
     
-    int pStatus;
-    int pActive;
 #ifdef WIN32
     SOCKET sListen;
     SOCKET sData;
-    static char wsaStartup;
+    static char pWSAStartup;
 #else
     int fdListen;
     int fdData;
@@ -76,15 +75,9 @@ namespace fltk3 {
     
     void draw();
     
+    static void wsaStartup();
+    
   public:
-    
-    enum Status {
-      CLOSED, LISTENING, VERIFYING, CONNECTED
-    };
-    
-    enum Event {
-      CONNECT=128, RECEIVE, CLOSE
-    };
     
     /**
      Create a widget that manages a TCP/IP network connection.
@@ -98,7 +91,7 @@ namespace fltk3 {
     /**
      Disconnect and return resources
      */
-    virtual ~TCPSocket();
+    ~TCPSocket();
     
     // server methods
     
@@ -122,21 +115,46 @@ namespace fltk3 {
     // client methods
     
     /**
-     Attempt a connection to another TCP/IP socket in liestening mode.
+     Attempt a connection to another TCP/IP socket which is in listening mode.
      */
     int connect(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short port);
+
+    /**
+     Attempt a connection to another TCP/IP socket which is in listening mode.
+     
+     Supported formats:
+      - <i>name:port</i>, for example <i>ftp.fltk.org:21</i>
+     
+     /param server name and port number in a string
+     */
+    int connect(const char *server);
+
+    /**
+     Attempt a connection to another TCP/IP socket which is in listening mode.
+     
+     \param name server name
+     \param port TCP/IP port number (21 for FTP, etc.)
+     */
+    int connect(const char *server, unsigned short port);
+    
+    /**
+     Find the IP address of a host using its host name.
+     
+     This method may block for a while.
+     
+     \param name the name of the host
+     \param[out] ip0, ip1, ip2, ip3 the individual bytes of the IP address.
+     \return -1 for error
+     */
+    int find_host(const char* name, unsigned char &ip0, unsigned char &ip1, unsigned char &ip2, unsigned char &ip3);
     
     // shared methods
     
     /**
      Send a datablock over the network connection.
      */
-    char send(const void *data, int size);
-    
-    /**
-     Send some text, terminated by NUL.
-     */
-    char send(const char *text);
+    int send(const void *data, int size);
+    int send(const char *text) { return Socket::send(text); }
     
     /**
      Receive data until the buffer is filled.
