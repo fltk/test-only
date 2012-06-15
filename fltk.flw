@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open
+workspace FLTK {open selected
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -5655,7 +5655,7 @@ workspace FLTK {open
         uuid_Xcode4_ContainerItemProxy {280A81DE-05D7-4633-93A2-1C51596432A5}
         uuid_Xcode4_TargetDependency {691D7169-3A68-40F4-895C-D8B0975D0C0E}
       }
-      file_ref {ws2_32.lib} {selected
+      file_ref {ws2_32.lib} {
         uuid_Xcode4_BuildFile {0124A007-B34A-4DE1-88FC-C30114BDB55B}
         uuid_Xcode4_FileRef {C6A5409C-2471-45E7-B4BC-9D8776188EF4}
         uuid_Xcode4_BuildFileInFrameworks {EB58990F-7CE7-4F05-8B69-1B0E1213F98A}
@@ -5663,6 +5663,11 @@ workspace FLTK {open
         list_env 28
         filename_and_path {ws2_32.lib}
         location 3
+      }
+      tool_option {Makefile Connect libraries} {
+        build_env 1
+        value {$(CONNECTLIB)}
+        valuetype 2
       }
     }
     app_target cube {

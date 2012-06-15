@@ -332,7 +332,7 @@ color_chooser$(EXEEXT): color_chooser.o $(FLTK3_LIB_NAME)
 
 connect$(EXEEXT): connect.o $(FLTK3_LIB_NAME) $(FLTK3CONNECT_LIB_NAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ connect.o $(LINK_FLTK3) $(LINK_FLTK3CONNECT) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ connect.o $(LINK_FLTK3) $(LINK_FLTK3CONNECT) $(CONNECTLIB) $(LDLIBS)
 
 cube$(EXEEXT): cube.o $(FLTK3_LIB_NAME) $(FLTK3GL_LIB_NAME)
 	echo Linking $@...
