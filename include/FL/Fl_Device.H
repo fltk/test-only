@@ -377,22 +377,22 @@ public:
     fl_matrix = (matrix*)((fltk3::GraphicsDriver*)_p)->fl_matrix;
   }
   int vertex_no() { 
-    return ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::vertex_no(); 
+	  return ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::vertex_no(); 
   }
   XPOINT *vertices() { 
-    return ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::vertices(); 
+    return ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::vertices(); 
   }
   int vertex_kind() {
-    return ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::vertex_kind(); 
+    return ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::vertex_kind(); 
     }
   void fixloop() {
-    ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::fixloop();
+    ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::fixloop();
     }
   void prepare_circle(double x, double y, double r, int& llx, int& lly, int& w, int& h, double& xt, double& yt) {
-    ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
+    ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::prepare_circle(x, y, r, llx, lly, w, h, xt, yt);
   }
   Fl_Font font() { 
-    return fltk3::_3to1_font( ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::font() );
+    return fltk3::_3to1_font( ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::font() );
   }
   Fl_Fontsize size() { 
     return fltk3::_3to1_fontsize( ((fltk3::GraphicsDriver_I*)_p)->size() );
@@ -401,7 +401,7 @@ public:
     ((fltk3::GraphicsDriver_I*)_p)->font(fltk3::_1to3_font(f), fltk3::_1to3_fontsize(s));
   }
   Fl_Color color() {
-    return fltk3::_3to1_color( ((fltk3::GraphicsDriver_I*)_p)->fltk3::GraphicsDriver::color() );
+    return fltk3::_3to1_color( ((fltk3::GraphicsDriver_I*)_p)->GraphicsDriver::color() );
     }
   void color(Fl_Color c) { 
     ((fltk3::GraphicsDriver_I*)_p)->color(fltk3::_1to3_color(c));

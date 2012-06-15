@@ -230,7 +230,7 @@ int fltk3::event_inside(const fltk3::Widget *o) {
       dy -= g->dy_window();
     }
   }
-  return o->fltk3::Rectangle::contains(dx, dy);
+  return o->Rectangle::contains(dx, dy);
 }
 
 //

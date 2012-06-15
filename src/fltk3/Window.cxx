@@ -152,7 +152,7 @@ void fltk3::Window::label(const char *name) {
 }
 
 void fltk3::Window::copy_label(const char *a) {
-  fltk3::Label::copy_label(a);
+  Label::copy_label(a);
   label(a, iconlabel());
 }
 

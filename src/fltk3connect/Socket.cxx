@@ -34,7 +34,7 @@
 
 void fltk3::Socket::draw()
 {
-  fltk3::Group::draw();
+  Group::draw();
 }
 
 

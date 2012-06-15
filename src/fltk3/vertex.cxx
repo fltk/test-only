@@ -253,7 +253,7 @@ void fltk3::GraphicsDriver::begin_complex_polygon() {
 }
 #if defined(WIN32)
 void fltk3::GDIGraphicsDriver::begin_complex_polygon() {
-  fltk3::GraphicsDriver::begin_complex_polygon();
+  GraphicsDriver::begin_complex_polygon();
   numcount = 0;
 }
 #endif

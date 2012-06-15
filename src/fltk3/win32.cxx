@@ -777,7 +777,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {0xdc,	'\\'},
   {0xdd,	']'},
   {0xde,	'\''},
-  {VK_OEM_102, fltk3::IsoKey}
+  {226 /*VK_OEM_102*/, fltk3::IsoKey}
 };
 static int ms2fltk(WPARAM vk, int extended) {
   static unsigned short vklut[256];

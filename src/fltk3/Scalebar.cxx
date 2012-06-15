@@ -45,7 +45,7 @@ fltk3::Scalebar::Scalebar( int x, int y, int w, int h, const char *l )
 
 
 int fltk3::Scalebar::value() {
-  return int(fltk3::Slider::value());
+  return int(Slider::value());
 }
 
 
@@ -103,7 +103,7 @@ int fltk3::Scalebar::scrollvalue(int p, int n, int t, int l) {
   if (p+n > t+l) l = p+n-t;
   slider_size(n >= l ? 1.0 : double(n)/double(l));
   bounds(t, l-n+t);
-  return fltk3::Valuator::value(p);
+  return Valuator::value(p);
 }
 
 
@@ -194,7 +194,7 @@ void fltk3::Scalebar::draw(){
   int W = w()-fltk3::box_dw(box());
   int H = h()-fltk3::box_dh(box());
   if (horizontal()) {
-    if (W < 3*H) {fltk3::Slider::draw(X,Y,W,H); return;}
+    if (W < 3*H) {Slider::draw(X,Y,W,H); return;}
     drawSlider(X+H,Y,W-2*H,H);
     if (damage()&fltk3::DAMAGE_ALL) {
       // left arrow box
@@ -216,7 +216,7 @@ void fltk3::Scalebar::draw(){
       fltk3::polygon(x1, y1, x1, y1+2*d1, x1+d1, y1+d1);
     }
   } else { // vertical
-    if (H < 3*W) {fltk3::Slider::draw(X,Y,W,H); return;}
+    if (H < 3*W) {Slider::draw(X,Y,W,H); return;}
     drawSlider(X,Y+W,W,H-2*W);
     if (damage()&fltk3::DAMAGE_ALL) {
       draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
@@ -327,7 +327,7 @@ handleEv:
       damage(fltk3::DAMAGE_ALL);
     }
   }
-  return fltk3::Scrollbar::handle( event );
+  return Scrollbar::handle( event );
 }
 
 //
