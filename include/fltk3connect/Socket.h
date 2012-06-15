@@ -76,11 +76,11 @@ namespace fltk3 {
     
   public:
     
-    enum Status {
+    enum { // Status
       CLOSED, LISTENING, VERIFYING, CONNECTED
     };
     
-    enum Event {
+    enum { // Event
       CONNECT=128, RECEIVE, TIMEOUT, CLOSE
     };
     

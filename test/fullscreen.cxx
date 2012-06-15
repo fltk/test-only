@@ -64,7 +64,7 @@
 #include <fltk3/LightButton.h>
 #include <fltk3/math.h>
 #include <fltk3/ask.h>
-#include <fltk3/Browser.H>
+#include <fltk3/Browser.h>
 #include <stdio.h>
 
 #if HAVE_GL
