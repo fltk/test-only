@@ -27,6 +27,10 @@
 
 #include <fltk3connect/Socket.h>
 
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+
 
 void fltk3::Socket::draw()
 {

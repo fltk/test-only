@@ -35,6 +35,10 @@
 #include <fltk3/draw.h>
 #include <fltk3/filename.h>
 
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+
 #ifdef WIN32
 namespace fltk3 {
   char TCPSocket::wsaStartup = 0;
@@ -54,7 +58,6 @@ typedef int socklen_t;
 
 #if 0
 # include <stdio.h>
-# include <stdarg.h>
 # define LOG(x) fprintf(stderr, x)
 #else
 # define LOG(x)

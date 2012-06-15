@@ -27,6 +27,11 @@
 
 #include <fltk3connect/HTTPClient.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+
 
 fltk3::HTTPClient::HTTPClient(int x, int y, int w, int h, const char *l)
 : fltk3::TCPSocket(x, y, w, h, l),
@@ -65,6 +70,7 @@ int fltk3::HTTPClient::connect(const char *host)
 int fltk3::HTTPClient::GET(const char *filename)
 {
   int ret = -1;
+#if 0
   if (!filename || !*filename) 
     filename = "index.html";
   
@@ -74,10 +80,10 @@ int fltk3::HTTPClient::GET(const char *filename)
   send(msg);
   
   // sync mode for testing: simply wait indefinetly for a reply
-  char buf[2048]; buf[0] = 0;
+  char buf[10000]; buf[0] = 0;
   
   // grab the header
-  int n = recv(buf, 2048);
+  int n = recv(buf, 10000);
   if (strncmp(buf, "HTTP", 4)!=0) {
     return ret;
   }
@@ -96,7 +102,8 @@ int fltk3::HTTPClient::GET(const char *filename)
     //memcpy(data, data_key+4, n);    
     //free(data);//
   }
-  
+  puts(buf);
+#endif  
   return ret;
 }
 
