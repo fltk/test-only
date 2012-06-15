@@ -479,10 +479,12 @@ struct MacTimeout {
   void* data;
   CFRunLoopTimerRef timer;
   char pending; 
+  CFAbsoluteTime next_timeout; // scheduled time for this timer
 };
 static MacTimeout* mac_timers;
 static int mac_timer_alloc;
 static int mac_timer_used;
+static MacTimeout* current_timer;  // the timer that triggered its callback function, or NULL
 
 static void realloc_timers()
 {
@@ -516,7 +518,9 @@ static void do_timer(CFRunLoopTimerRef timer, void* data)
     MacTimeout& t = mac_timers[i];
     if (t.timer == timer  &&  t.data == data) {
       t.pending = 0;
+      current_timer = &t;
       (*t.callback)(data);
+      current_timer = NULL;
       if (t.pending==0)
         delete_timer(t);
       break;
@@ -2520,7 +2524,8 @@ void fltk3::add_timeout(double time, fltk3::TimeoutHandler cb, void* data)
     MacTimeout& t = mac_timers[i];
     // if so, simply change the fire interval
     if (t.callback == cb  &&  t.data == data) {
-      CFRunLoopTimerSetNextFireDate(t.timer, CFAbsoluteTimeGetCurrent() + time );
+      t.next_timeout = CFAbsoluteTimeGetCurrent() + time;
+      CFRunLoopTimerSetNextFireDate(t.timer, t.next_timeout );
       t.pending = 1;
       return;
     }
@@ -2561,12 +2566,23 @@ void fltk3::add_timeout(double time, fltk3::TimeoutHandler cb, void* data)
     t.data     = data;
     t.timer    = timerRef;
     t.pending  = 1;
+    t.next_timeout = CFRunLoopTimerGetNextFireDate(timerRef);
   }
 }
 
 void fltk3::repeat_timeout(double time, fltk3::TimeoutHandler cb, void* data)
 {
-  // currently, repeat_timeout does not subtract the trigger time of the previous timer event as it should.
+  if (current_timer) {
+    // k = how many times 'time' seconds after the last scheduled timeout until the future
+    double k = ceil( (CFAbsoluteTimeGetCurrent() - current_timer->next_timeout) / time);
+    if (k < 1) k = 1;
+    current_timer->next_timeout += k * time;
+    CFRunLoopTimerSetNextFireDate(current_timer->timer, current_timer->next_timeout );
+    current_timer->callback = cb;
+    current_timer->data = data;
+    current_timer->pending = 1;
+    return;
+  }
   add_timeout(time, cb, data);
 }
 
