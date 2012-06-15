@@ -832,6 +832,7 @@ case $uname_GUI in
         LDFLAGS="-mwindows $LDFLAGS"
         DSOFLAGS="-mwindows $DSOFLAGS"
         LIBS="$LIBS -lole32 -luuid -lcomctl32"
+        CONNECTLIB="-lws2_32"
         if test "x$with_optim" = x; then
             dnl Avoid -Os optimization on Cygwin/MinGW
             with_optim="-O3"
@@ -868,6 +869,7 @@ case $uname_GUI in
     Darwin*)
         # MacOS X uses Cocoa for graphics.
         LIBS="$LIBS -framework Cocoa"
+        CONNECTLIB=
 
         if test x$have_pthread = xyes; then
             AC_DEFINE(HAVE_PTHREAD)
@@ -922,6 +924,7 @@ case $uname_GUI in
         CXXFLAGS="$CXXFLAGS $X_CFLAGS"
         LDFLAGS="$X_LIBS $LDFLAGS"
         DSOFLAGS="$X_LIBS $DSOFLAGS"
+        CONNECTLIB=
         AC_DEFINE(USE_X11)
         if test "x$x_includes" != x; then
             ac_cpp="$ac_cpp -I$x_includes"
@@ -1040,6 +1043,7 @@ esac
 
 AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIB)
+AC_SUBST(CONNECTLIB)
 AC_SUBST(HLINKS)
 AC_SUBST(OSX_ONLY)
 AC_SUBST(THREADS)

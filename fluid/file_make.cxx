@@ -185,6 +185,7 @@ static int write_makeinclude_in(FILE *out, Fl_Workspace_Type *workspace, const c
   fprintf(out, "LDLIBS\t\t= @LIBS@\n");
   fprintf(out, "GLLIB\t\t= @GLLIB@\n");
   fprintf(out, "GLDLIBS\t\t= @GLLIB@ @LIBS@\n");
+  fprintf(out, "CONNECTLIB\t= @CONNECTLIB@\n");
   
   for (tgt=Fl_Target_Type::first_target(workspace); tgt; tgt = tgt->next_target(workspace)) {
     if (tgt->is_lib_target() && tgt->builds_in(FL_ENV_MAKE)) {
@@ -1044,6 +1045,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "        LDFLAGS=\"-mwindows $LDFLAGS\"\n");
   fprintf(out, "        DSOFLAGS=\"-mwindows $DSOFLAGS\"\n");
   fprintf(out, "        LIBS=\"$LIBS -lole32 -luuid -lcomctl32\"\n");
+  fprintf(out, "        CONNECTLIB=\"-lws2_32\"\n");
   fprintf(out, "        if test \"x$with_optim\" = x; then\n");
   fprintf(out, "            dnl Avoid -Os optimization on Cygwin/MinGW\n");
   fprintf(out, "            with_optim=\"-O3\"\n");
@@ -1080,6 +1082,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "    Darwin*)\n");
   fprintf(out, "        # MacOS X uses Cocoa for graphics.\n");
   fprintf(out, "        LIBS=\"$LIBS -framework Cocoa\"\n");
+  fprintf(out, "        CONNECTLIB=\n");
   fprintf(out, "\n");
   fprintf(out, "        if test x$have_pthread = xyes; then\n");
   fprintf(out, "            AC_DEFINE(HAVE_PTHREAD)\n");
@@ -1134,6 +1137,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "        CXXFLAGS=\"$CXXFLAGS $X_CFLAGS\"\n");
   fprintf(out, "        LDFLAGS=\"$X_LIBS $LDFLAGS\"\n");
   fprintf(out, "        DSOFLAGS=\"$X_LIBS $DSOFLAGS\"\n");
+  fprintf(out, "        CONNECTLIB=\n");
   fprintf(out, "        AC_DEFINE(USE_X11)\n");
   fprintf(out, "        if test \"x$x_includes\" != x; then\n");
   fprintf(out, "            ac_cpp=\"$ac_cpp -I$x_includes\"\n");
@@ -1252,6 +1256,7 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "\n");
   fprintf(out, "AC_SUBST(GLDEMOS)\n");
   fprintf(out, "AC_SUBST(GLLIB)\n");
+  fprintf(out, "AC_SUBST(CONNECTLIB)\n");
   fprintf(out, "AC_SUBST(HLINKS)\n");
   fprintf(out, "AC_SUBST(OSX_ONLY)\n");
   fprintf(out, "AC_SUBST(THREADS)\n");
