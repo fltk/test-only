@@ -32,6 +32,23 @@
 #include <stdarg.h>
 #include <string.h>
 
+/*
+ Sample data exchange:
+ 
+ port 80 (or 8080, etc)
+ 
+ request (header, body)
+ "GET /index.html HTTP/1.1\r\nHost: www.example.net\r\n\r\n"
+ 
+ response (header, body)
+ "HTTP/1.1 200 OK\r\n"
+ "Server: Apache/1.3.29 (Unix) PHP/4.3.4\r\n"
+ "Content-Length: 1024\r\n"
+ "Content-Language: en\r\n"
+ "Connection: close\r\n"
+ "Content-Type: text/html\r\n"
+ "\r\n" - binary data follows
+*/
 
 fltk3::HTTPClient::HTTPClient(int x, int y, int w, int h, const char *l)
 : fltk3::TCPSocket(x, y, w, h, l),
@@ -67,7 +84,7 @@ int fltk3::HTTPClient::connect(const char *host)
 }
 
 
-int fltk3::HTTPClient::GET(const char *filename)
+int fltk3::HTTPClient::GET(const char *server, const char *filename, void *&data, int &size)
 {
   int ret = -1;
 #if 0
@@ -103,6 +120,16 @@ int fltk3::HTTPClient::GET(const char *filename)
     //free(data);//
   }
   puts(buf);
+#endif  
+  return ret;
+}
+
+
+int fltk3::HTTPClient::GET(const char *server, const char *filename)
+{
+  int ret = -1;
+#if 0
+  // empty
 #endif  
   return ret;
 }

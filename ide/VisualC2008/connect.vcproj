@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk3d.lib fltk3connectd.lib comctl32.lib"
+				AdditionalDependencies="fltk3d.lib fltk3connectd.lib ws2_32.lib comctl32.lib"
 				OutputFile="..\..\test\connectd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk3.lib fltk3connect.lib comctl32.lib"
+				AdditionalDependencies="fltk3.lib fltk3connect.lib ws2_32.lib comctl32.lib"
 				OutputFile="..\..\test\connect.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

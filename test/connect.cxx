@@ -50,8 +50,14 @@ void ftp_cb(fltk3::Widget*, void *d)
 #endif
 #if 1
   fltk3::HTTPClient *http = (fltk3::HTTPClient*)d;
-  http->connect("www.fltk.org");
-  http->GET("index.php");  
+  void *data = 0;
+  int size;
+  int ret = http->GET("www.fltk.org", "index.php", data, size);
+  if (data) {
+    puts((char*)data);
+    free(data);
+  }
+  printf("Err: %d\n", ret);
 #endif
 }
 

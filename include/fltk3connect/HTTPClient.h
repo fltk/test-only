@@ -36,26 +36,29 @@
 #include <string.h>
 
 namespace fltk3 {
+  
+  /**
+   This class implements an HTTP communication client.
+   
+   It can be used to manage network connections to HTTP servers. This is great 
+   for fetching web pages and other resources from the world wide web.
+   
+   HTTP is a state-less protocol. Generally, every transfer implies a new 
+   connection to a server, a request, a reply by the server, and a disconnect.
+   There are options in the protocoll to keep a connection for multiple 
+   transfers, but these are not in the scope of this class.
+   
+   It is possible to create multiple HTTPClient objects that access the same
+   server simultaneously, which may or may not accelerate communications. Some
+   leterature recommends four to six clients working in parallel.
+   
+   This class implements a minimal subset of the HTTP/1.1 standard.
+   
+   Implemented: GET
+   
+   Not Implemented: OPTIONS, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 
-/**
- This class implements an HTTP client widget.
- It can be used to manage network connections to HTTP servers. This is great 
- for fetching web pages and other resources from the world wide web.
- 
- port 80 (or 8080, etc)
- 
- request (header, body)
-    "GET /index.html HTTP/1.1\r\nHost: www.example.net\r\n\r\n"
- 
- response (header, body)
-    "HTTP/1.1 200 OK\r\n"
-    "Server: Apache/1.3.29 (Unix) PHP/4.3.4\r\n"
-    "Content-Length: 1024\r\n"
-    "Content-Language: en\r\n"
-    "Connection: close\r\n"
-    "Content-Type: text/html\r\n"
-    "\r\n" - binary data follows
- */
+   */
   class HTTPClient : public TCPSocket
   {
     
@@ -63,12 +66,59 @@ namespace fltk3 {
     
     char *pHost;
     
+    int connect(const char *host);
+    
   public:
     
+    /**
+     Create a widget that communicates with a server using the HTTP protocol.
+     
+     This widget manages an HTTP network connection, displaying a graphic 
+     representation of the connection state. If no visual feedback is 
+     required, this widget may be hidden or not be put into the widget 
+     hierarchy at all.
+     */
     HTTPClient(int x, int y, int w, int h, const char *label=0L);
+    
+    /**
+     Return resources.
+     */
     ~HTTPClient();
-    int connect(const char *host);
-    int GET(const char *filename);
+    
+    /**
+     Get a file from an HTTP server.
+     
+     This method connects to an HTTP server and requests a file by name and 
+     waits until the file is downloaded.
+     
+     \param server name of the HTTP server. An optional port number can be 
+            appended using the ':' notation.
+     \param filename the path and name of the file we want to download. A '/'
+            is prepended to the path if needed.
+     \param[out] data the class will allocate some memory to hold the 
+            downloaded data; use free() to release memory. The allocated block
+            receives a trailing uncounted 'NUL' for your convinience
+     \param[out] size the size of the data block in bytes
+     \return 1 for a connection error, or the HTTP error code 
+            (404 = not found, etc.)
+     */
+    int GET(const char *server, const char *filename, void *&data, int &size);
+    
+    /**
+     Get a file from an HTTP server asynchronously.
+     
+     This method connects to an HTTP server and requests a file by name. The
+     downloaded file will trigger an on_chunk_receive, on_file_receive, 
+     on_timeout, or the corresponding callbacks.
+     
+     \param server name of the HTTP server. An optional port number can be 
+     appended using the ':' notation.
+     \param filename the path and name of the file we want to download. A '/'
+     is prepended to the path if needed.
+     \return 1 for a connection error, or 0
+     (404 = not found, etc.)
+     */
+    int GET(const char *server, const char *filename);
     
   };
   

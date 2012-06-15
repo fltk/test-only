@@ -4737,7 +4737,7 @@ workspace FLTK {open
           uuid_Xcode4_FileRef {6653881E-1818-4C58-8184-FA6CB3475553}
           filename_and_path {src/fltk3connect/FTPClient.cxx}
         }
-        file_ref {HTTPClient.cxx} {selected
+        file_ref {HTTPClient.cxx} {
           uuid_Xcode4_BuildFileInSources {BB62323B-12F0-45A1-9A39-4499B2B54FD1}
           uuid_Xcode4_FileRef {ADEDA03B-5D8F-47B2-B632-726B4498CFE4}
           filename_and_path {src/fltk3connect/HTTPClient.cxx}
@@ -5621,7 +5621,7 @@ workspace FLTK {open
         uuid_Xcode4_TargetDependency {11A4B5BE-B3AE-4FCD-B12C-FFB71C71FC4A}
       }
     }
-    app_target connect {
+    app_target connect {open
       uuid_Xcode4_FluidBuildRule {D1485AD4-24D6-4B10-ADDB-4C3478DE1E61}
       uuid_Xcode4_CopyFilesBuildPhase {A2946547-FB07-40FA-A666-2CF278BA62AD}
       uuid_Xcode4_ProductFileReference {2D59EFBA-4D3C-46E0-9427-7EC9F44B78D0}
@@ -5654,6 +5654,15 @@ workspace FLTK {open
         uuid_Xcode4_BuildFileInCopyFiles {E48AC2F0-F787-4A0D-BE56-1D8B2DA24725}
         uuid_Xcode4_ContainerItemProxy {280A81DE-05D7-4633-93A2-1C51596432A5}
         uuid_Xcode4_TargetDependency {691D7169-3A68-40F4-895C-D8B0975D0C0E}
+      }
+      file_ref {ws2_32.lib} {selected
+        uuid_Xcode4_BuildFile {0124A007-B34A-4DE1-88FC-C30114BDB55B}
+        uuid_Xcode4_FileRef {C6A5409C-2471-45E7-B4BC-9D8776188EF4}
+        uuid_Xcode4_BuildFileInFrameworks {EB58990F-7CE7-4F05-8B69-1B0E1213F98A}
+        build_env 28
+        list_env 28
+        filename_and_path {ws2_32.lib}
+        location 3
       }
     }
     app_target cube {
@@ -6291,7 +6300,7 @@ workspace FLTK {open
         valuetype 2
       }
     }
-    app_target glpuzzle {
+    app_target glpuzzle {open
       uuid_Xcode4_FluidBuildRule {FC3DFF75-3E15-4CD7-868B-B6A8986E62FC}
       uuid_Xcode4_CopyFilesBuildPhase {E01E4F29-B368-4661-BB01-5B0A57A4D7A7}
       uuid_Xcode4_ProductFileReference {C9C8F484-77FD-4745-96D4-BC79311A3065}
