@@ -232,6 +232,7 @@ char fltk3::HTTPClient::on_command_aborted()
 void fltk3::HTTPClient::clear_attributes()
 {
   pIsChunkedTransfer = 0;
+  pIsInlineTransfer = 0;
 }
 
 
@@ -262,6 +263,17 @@ char *fltk3::HTTPClient::find_end_of_header(char *src)
   }
 }
 
+
+static char *skip_spc(char *src)
+{
+  for (;;) {
+    char c = *src;
+    if (c==0 || (c!=' ' && c!='\t'))
+      break;
+    src++;
+  }
+  return src;
+}
 
 /*
  1.Any response message which "MUST NOT" include a message-body (such as the 1xx, 204, and 304 responses and any response to a HEAD request) is always terminated by the first empty line after the header fields, regardless of the entity-header fields present in the message.
@@ -300,9 +312,12 @@ char *fltk3::HTTPClient::read_attributes(char *src, char *last)
       break;
     
     if (strncmp(src, "Transfer-Encoding:", 18)==0) {
-      if (strncmp(sep+2, "chunked", 7)==0) { // or "identity"
+      if (strncmp(skip_spc(sep+1), "chunked", 7)==0) { // or "identity"
         pIsChunkedTransfer = 1;
       }
+    } else if (strncmp(src, "Content-Length:", 15)==0) {
+      pIsInlineTransfer = 1;
+      pExpectedDataSize = atoi(skip_spc(sep+1));
     }
     // or "Content-Length", followed by the number of bytes in decimal
     
@@ -339,6 +354,7 @@ char fltk3::HTTPClient::on_receive()
       if (strncmp(data, "HTTP/1.1 ", 9)!=0) {
         pState = HTTP_ERROR;
         add_chunk((void*)"\nUnsupported HTTP reply.\n");
+        add_chunk(data, eol-data);
         do_on_command_aborted();
         close();
         pState = HTTP_CLOSED;
@@ -353,7 +369,82 @@ char fltk3::HTTPClient::on_receive()
         // FIXME: Handle more result codes!
         pState = HTTP_UNSUPPORTED;
         add_chunk(data+9, eol-data-9-2);
-        add_chunk((void*)"\n(result code unsupported by fltk3::HTTPClient)\n");
+        if (err==404) { // not found. signal an abort
+          /*
+           100 Continue
+           101 Switching Protocols
+           102 Processing (WebDAV; RFC 2518)
+           200 OK
+           201 Created
+           202 Accepted
+           203 Non-Authoritative Information (since HTTP/1.1)
+           204 No Content
+           205 Reset Content
+           206 Partial Content
+           207 Multi-Status (WebDAV; RFC 4918)
+           208 Already Reported (WebDAV; RFC 5842)
+           226 IM Used (RFC 3229)
+           300 Multiple Choices
+           301 Moved Permanently
+           302 Found
+           303 See Other (since HTTP/1.1)
+           304 Not Modified
+           305 Use Proxy (since HTTP/1.1)
+           306 Switch Proxy
+           307 Temporary Redirect (since HTTP/1.1)
+           308 Permanent Redirect (experimental Internet-Draft)[10]
+           400 Bad Request
+           401 Unauthorized
+           402 Payment Required
+           403 Forbidden
+           404 Not Found
+           405 Method Not Allowed
+           406 Not Acceptable
+           407 Proxy Authentication Required
+           408 Request Timeout
+           409 Conflict
+           410 Gone
+           411 Length Required
+           412 Precondition Failed
+           413 Request Entity Too Large
+           414 Request-URI Too Long
+           415 Unsupported Media Type
+           416 Requested Range Not Satisfiable
+           417 Expectation Failed
+           418 I'm a teapot (RFC 2324)
+           420 Enhance Your Calm (Twitter)
+           422 Unprocessable Entity (WebDAV; RFC 4918)
+           423 Locked (WebDAV; RFC 4918)
+           424 Failed Dependency (WebDAV; RFC 4918)
+           424 Method Failure (WebDAV)[13]
+           425 Unordered Collection (Internet draft)
+           426 Upgrade Required (RFC 2817)
+           428 Precondition Required (RFC 6585)
+           429 Too Many Requests (RFC 6585)
+           431 Request Header Fields Too Large (RFC 6585)
+           444 No Response (Nginx)
+           449 Retry With (Microsoft)
+           450 Blocked by Windows Parental Controls (Microsoft)
+           451 Unavailable For Legal Reasons (Internet draft)
+           499 Client Closed Request (Nginx)
+           500 Internal Server Error
+           501 Not Implemented
+           502 Bad Gateway
+           503 Service Unavailable
+           504 Gateway Timeout
+           505 HTTP Version Not Supported
+           506 Variant Also Negotiates (RFC 2295)
+           507 Insufficient Storage (WebDAV; RFC 4918)
+           508 Loop Detected (WebDAV; RFC 5842)
+           509 Bandwidth Limit Exceeded (Apache bw/limited extension)
+           510 Not Extended (RFC 2774)
+           511 Network Authentication Required (RFC 6585)
+           598 Network read timeout error (Unknown)
+           599 Network connect timeout error (Unknown)
+           */
+        } else {
+          add_chunk((void*)"\n(result code unsupported by fltk3::HTTPClient)\n");
+        }
         do_on_command_aborted();
         close();
         pState = HTTP_CLOSED;
@@ -372,9 +463,13 @@ char fltk3::HTTPClient::on_receive()
       if (pIsChunkedTransfer) {
         flush_input(eoh-data);
         pState = WAITING_FOR_CHUNKS;
+      } else if (pIsInlineTransfer) {
+        flush_input(eoh-data);
+        pState = WAITING_FOR_INLINE_DATA;
       } else {
         pState = HTTP_UNSUPPORTED;
         add_chunk((void*)"\nfltk3::HTTPClient: unsupported combination of attributes in reply\n");
+        add_chunk(data, eoh-data);
         do_on_command_aborted();
         close();
         pState = HTTP_CLOSED;
@@ -404,6 +499,19 @@ char fltk3::HTTPClient::on_receive()
         pState = HTTP_CLOSED;
         break;
       }      
+    } 
+    else if (pState==WAITING_FOR_INLINE_DATA) 
+    {
+      // loop until we received the required number of bytes
+      if (n<pExpectedDataSize) 
+        break;
+      flush_input(pExpectedDataSize);
+      add_chunk(data, pExpectedDataSize);
+      pState = HTTP_COMPLETE;
+      do_on_file_received();
+      close();
+      pState = HTTP_CLOSED;
+      break;
     } else {
       flush_input();
     }

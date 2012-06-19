@@ -84,12 +84,18 @@ namespace fltk3 {
     /** This is set if the attributes indicate a payload in chunks. */
     char pIsChunkedTransfer;
     
+    /** This is set if the payload immediatly follows the header. */
+    char pIsInlineTransfer;
+    
+    /** The number of bytes we expect as a payload. */
+    int pExpectedDataSize;
+    
     /** Possible states of the HTTP transfer. */
     typedef enum { // State
       WAITING_FOR_HEADER,     ///< wait until the first line is received ("HTTP/1.1...")
       WAITING_FOR_ATTRIBUTES, ///< wait until the header is received entirley
       WAITING_FOR_CHUNKS,     ///< wait until the next chunk is received
-      WAITING_FOR_PAYLOAD,    ///< wait until the entire payload is received
+      WAITING_FOR_INLINE_DATA,///< wait until the entire payload is received
       HTTP_CLOSED,            ///< the connection is closed
       HTTP_COMPLETE,          ///< we received al expected data; all following data is ignored and the connection will be closed
       HTTP_ERROR,             ///< FIXME: some error occured
