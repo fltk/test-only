@@ -5643,17 +5643,17 @@ workspace FLTK {open selected
         uuid_Xcode4_FileRef {CA26F8C5-8448-4B02-A5FE-91B068AC89C8}
         filename_and_path {test/connect.cxx}
       }
-      target_dependency fltk3 {
-        uuid_Xcode4_BuildFileInFrameworks {634D43C9-4C94-41BA-9F0F-F9C1E055A6CD}
-        uuid_Xcode4_BuildFileInCopyFiles {EFADEF86-FCF4-4EAF-AC8F-E625D645B40F}
-        uuid_Xcode4_ContainerItemProxy {969D073C-854A-4C91-9C60-1FA267B83269}
-        uuid_Xcode4_TargetDependency {559C7D13-FF12-4804-B869-BE1F974F2637}
-      }
       target_dependency fltk3connect {
         uuid_Xcode4_BuildFileInFrameworks {1A33C558-B0C4-4135-828F-802A8404017D}
         uuid_Xcode4_BuildFileInCopyFiles {E48AC2F0-F787-4A0D-BE56-1D8B2DA24725}
         uuid_Xcode4_ContainerItemProxy {280A81DE-05D7-4633-93A2-1C51596432A5}
         uuid_Xcode4_TargetDependency {691D7169-3A68-40F4-895C-D8B0975D0C0E}
+      }
+      target_dependency fltk3 {
+        uuid_Xcode4_BuildFileInFrameworks {634D43C9-4C94-41BA-9F0F-F9C1E055A6CD}
+        uuid_Xcode4_BuildFileInCopyFiles {EFADEF86-FCF4-4EAF-AC8F-E625D645B40F}
+        uuid_Xcode4_ContainerItemProxy {969D073C-854A-4C91-9C60-1FA267B83269}
+        uuid_Xcode4_TargetDependency {559C7D13-FF12-4804-B869-BE1F974F2637}
       }
       file_ref {ws2_32.lib} {
         uuid_Xcode4_BuildFile {0124A007-B34A-4DE1-88FC-C30114BDB55B}

@@ -33,6 +33,8 @@
 #include <stdarg.h>
 #include <string.h>
 
+#include "../fltk3/flstring.h" // snprintf
+
 
 static char GET_request[] = "GET /%s HTTP/1.1\r\nHost: %s\r\n\r\n";
 

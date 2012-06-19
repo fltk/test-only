@@ -621,10 +621,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name fltk3
+    Project_Dep_Name fltk3connect
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltk3connect
+    Project_Dep_Name fltk3
     End Project Dependency
 }}}
 
