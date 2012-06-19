@@ -42,7 +42,7 @@ static const float tie_lt = 0.45f;
 static const int use_tie_lt = 1;
 // a high number creates a very intense shadow and steep ramp,
 // a low number brightens the shadow and flattens the ramp
-static const float tie_dk_ramp = 0.25;
+static const float tie_dk_ramp = 0.20;
 // a high number creates a very intense highlight and steep ramp,
 // a low number lowers the highlight and flattens the ramp
 static const float tie_lt_ramp = 0.9;

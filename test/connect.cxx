@@ -33,55 +33,64 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/Button.h>
+#include <fltk3/Input.h>
+#include <fltk3/TextDisplay.h>
+#include <fltk3/TextBuffer.h>
 #include <fltk3connect/all.h>
 
+#include <stdio.h>
 
-void ftp_cb(fltk3::Widget*, void *d)
+
+fltk3::Window *win;
+fltk3::Group *grp, *top;
+fltk3::HTTPClient *httpClient;
+fltk3::Input *url;
+fltk3::Button *reload;
+fltk3::TextDisplay *text;
+
+
+static void refresh_text_cb(fltk3::Widget* w, void*)
 {
-#if 0
-  fltk3::FTPClient *ftp = (fltk3::FTPClient*)d;
-  ftp->sync_open("ftp.gnu.org", "anonymous", "fltk@fltk.org");
-  ftp->close();
-#endif
-#if 0
-  unsigned char ip0, ip1, ip2, ip3;
-  fltk3::TCPSocket* s = new fltk3::TCPSocket(0, 0, 0, 0, 0);
-  s->find_host("fltk.org", ip0, ip1, ip2, ip3);
-#endif
-#if 1
-  fltk3::HTTPClient *http = (fltk3::HTTPClient*)d;
-  void *data = 0;
-  int size;
-  int ret = http->GET("www.fltk.org", "index.php", data, size);
-  if (data) {
-    puts((char*)data);
-    free(data);
-  }
-  printf("Err: %d\n", ret);
-#endif
+  text->buffer()->text( (char*)httpClient->file_data() );
+}
+
+
+static void reload_cb(fltk3::Widget* w, void*)
+{
+  httpClient->GET( url->value() );
 }
 
 
 int main(int argc, char** argv)
 {
-  // ftp.gnu.org
-  fltk3::Window* win = new fltk3::Window(300, 100, "FTP test");
-  win->begin();
-  fltk3::Button* btn = new fltk3::Button(10, 10, 150, 24, "ftp.gnu.org");
-#if 0
-  fltk3::FTPClient* ftp = new fltk3::FTPClient(100, 44, 50, 24, "FTP:");
-  ftp->align(fltk3::ALIGN_LEFT);
-  btn->callback(ftp_cb, ftp);
-#endif
-#if 1
-  fltk3::HTTPClient* http = new fltk3::HTTPClient(100, 44, 50, 24, "HTTP:");
-  http->align(fltk3::ALIGN_LEFT);
-  btn->callback(ftp_cb, http);
-#endif
+  win = new fltk3::Window(400, 600, "HTTP Client Test");
+  grp = new fltk3::Group(5, 5, 390, 590);
+  
+  top = new fltk3::Group(0, 0, 390, 20);
+
+  url = new fltk3::Input(0, 0, 320, 20);
+  url->value("http://www.fltk.org/index.php");
+  url->when(fltk3::WHEN_RELEASE);
+  url->callback(reload_cb);
+  reload = new fltk3::Button(320, 0, 50, 20, "Load");
+  reload->callback(reload_cb);
+  httpClient = new fltk3::HTTPClient(370, 0, 20, 20);
+  httpClient->callback(refresh_text_cb);
+  
+  top->resizable(url);
+  top->end();
+  
+  text = new fltk3::TextDisplay(0, 25, 390, 565);
+  text->buffer(new fltk3::TextBuffer());
+  
+  grp->resizable(text);
+  grp->end();
+  
+  win->resizable(grp);
   win->end();
+
   win->show(argc, argv);
-  fltk3::run();
-  return 0;
+  return fltk3::run();
 }
 
 

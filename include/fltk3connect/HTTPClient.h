@@ -61,15 +61,90 @@ namespace fltk3 {
    */
   class HTTPClient : public TCPSocket
   {
-    
+        
   protected:
     
+    /** Copy of the host name (not uesd yet, but needed if we keep the 
+     connection alive). */
     char *pHost;
     
+    /** A block of memory that will hold the entire payload. A trailing NUL is
+     added to the buffer at all times. */
+    void *pFile;
+    
+    /** Pointer into pFile, marking the start of the last receive chunk */
+    void *pChunk;
+    
+    /** Current size of pFile. */
+    int pFileSize;
+    
+    /** Size of the last chunk that was received. */
+    int pChunkSize;
+    
+    /** This is set if the attributes indicate a payload in chunks. */
+    char pIsChunkedTransfer;
+    
+    /** Possible states of the HTTP transfer. */
+    typedef enum { // State
+      WAITING_FOR_HEADER,     ///< wait until the first line is received ("HTTP/1.1...")
+      WAITING_FOR_ATTRIBUTES, ///< wait until the header is received entirley
+      WAITING_FOR_CHUNKS,     ///< wait until the next chunk is received
+      WAITING_FOR_PAYLOAD,    ///< wait until the entire payload is received
+      HTTP_CLOSED,            ///< the connection is closed
+      HTTP_COMPLETE,          ///< we received al expected data; all following data is ignored and the connection will be closed
+      HTTP_ERROR,             ///< FIXME: some error occured
+      HTTP_UNSUPPORTED        ///< FIXME: we don't know how to react yet
+    } TState;
+    
+    /** The state of the HHTP transfer. Not to be confused with status()
+     which indicates the state of the TCP connection. */
+    TState pState;
+    
+    /** Connect to a host. Hostname may be followed by a ':' and a port number.
+     This is currently protected because we disconnect after every transfer. */
     int connect(const char *host);
     
+    /** Release the memory allocated by pFile. */
+    void free_file();
+    
+    /** Add a chunk of data to pFile. */
+    void add_chunk(void *chunk, int size=-1);
+    
+    /** Handle every incoming block of data based on the curren pState. */
+    char on_receive();
+    
+    /** Handle end of connection. */
+    char on_close();
+    
+    /** Clear all flags associated with the attribute part of the header. */
+    void clear_attributes();
+    
+    /** Read all attributes and set the flags accordingly. */
+    char *read_attributes(char *src, char *last);
+    
+    /** Find the next EOL (\r\n) and return the start of the next line. */
+    char *find_end_of_line(char *src);
+    
+    /** Find the end of the header (\r\n\r\n) or NULL if there is none. */
+    char *find_end_of_header(char *src);
+    
+    void do_on_chunk_received();
+    
+    void do_on_file_received();
+    
+    void do_on_command_aborted();
+
   public:
     
+    /** POssible reasons for calling the callback. Use fltk3::event() to read. */
+    enum { // Event
+      FILE_RECEIVED = 256,  ///< The complete file is available in pFile
+      HEADER_RECEIVED,      ///< A message header was received (see attributes), (on_header_received must be overridden to return 0)
+      CHUNK_RECEIVED,       ///< A chunk of data was received (in pChunk), more to follow (on_chunk_received must be overridden to return 0)
+      COMMAND_ABORTED       ///< Somehow the transmission was aborted
+    };
+
+
     /**
      Create a widget that communicates with a server using the HTTP protocol.
      
@@ -112,14 +187,66 @@ namespace fltk3 {
      on_timeout, or the corresponding callbacks.
      
      \param server name of the HTTP server. An optional port number can be 
-     appended using the ':' notation.
+            appended using the ':' notation.
      \param filename the path and name of the file we want to download. A '/'
-     is prepended to the path if needed.
-     \return 1 for a connection error, or 0
-     (404 = not found, etc.)
+            is prepended to the path if needed.
+     \return -1 for a connection error, or 0. (404 = not found, etc.)
      */
     int GET(const char *server, const char *filename);
     
+    /**
+     Get a file using the full URL as a path.
+     */
+    int GET(const char *path);
+    
+    /**
+     Pointer to the block of data that was received in the last GET transaction.
+     
+     \return NULL if an error occured
+     */
+    void *file_data() { return pFile; }
+    
+    /**
+     Size of last data transfer.
+     
+     \return -1 if an error occured, -2 if no data was received yet, or the 
+            number of bytes received
+     */
+    int file_size() { return pFileSize; }
+
+    /**
+     This function is called if a chunk of bytes is received.
+     
+     This method can be overridden by the user as an alternative to setting a callback.
+     
+     At this point, the file is not complete. The data received so far is in
+     pFile and pFileSize, the chunk is at pChunk and pChunkSize.
+     
+     \return 0 if the callback should be called, 1 (default) if not.
+     */
+    virtual char on_chunk_received();
+    
+    /**
+     This function is called after a complete file is received.
+
+     This method can be overridden by the user as an alternative to setting a callback.
+     
+     The data received is in pFile and pFileSize.
+     
+     \return 0 (default) if the callback should be called, 1 if not.
+     */
+    virtual char on_file_received();
+
+    /**
+     This function is called if the data transfer was interrupted for some reason.
+     
+     This method can be overridden by the user as an alternative to setting a callback.
+     
+     An error message is put into pFile and pFileSize.
+     
+     \return 0 (default) if the callback should be called, 1 if not.
+     */
+    virtual char on_command_aborted();
   };
   
 }

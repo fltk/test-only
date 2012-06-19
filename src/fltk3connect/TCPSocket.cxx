@@ -251,9 +251,13 @@ int fltk3::TCPSocket::available() const
   unsigned long n;
 #ifdef WIN32
   DWORD rcvd;
+  if (sData==-1)
+    return 0;
   int ret = WSAIoctl(sData, FIONREAD, 0, 0, &n, sizeof(n), &rcvd, 0, 0);
   if (ret) ret = -1;
 #else
+  if (fdData==-1)
+    return 0;
   int ret = ioctl(fdData, FIONREAD, &n);
 #endif
   //if (ret==0 && n>0) printf("%d bytes available\n", n);
@@ -324,6 +328,7 @@ void fltk3::TCPSocket::pDataExceptCB(int, void *user_data)
     if (t->callback())
       t->do_callback();
   }
+  t->close();
 }
 
 
