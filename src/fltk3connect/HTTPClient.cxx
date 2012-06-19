@@ -335,8 +335,12 @@ char fltk3::HTTPClient::on_receive()
         break;
       // enough data, but is it an HTTP header?
       if (strncmp(data, "HTTP/1.1 ", 9)!=0) {
-        // FIXME: ERROR: we did expect the header! What do we do now?
-        throw 0L;
+        pState = HTTP_ERROR;
+        add_chunk((void*)"\nUnsupported HTTP reply.\n");
+        do_on_command_aborted();
+        close();
+        pState = HTTP_CLOSED;
+        break;
       }
       // good, so we have an eror code and message next
       int err = atoi(data+9);
