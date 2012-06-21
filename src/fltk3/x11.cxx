@@ -1515,11 +1515,18 @@ int fl_handle(const XEvent& thisevent)
   case ButtonPress:
     fltk3::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
     set_event_xy();
+    fltk3::e_dx = fltk3::e_dy = 0;
     if (xevent.xbutton.button == Button4) {
       fltk3::e_dy = -1; // Up
       event = fltk3::MOUSEWHEEL;
     } else if (xevent.xbutton.button == Button5) {
       fltk3::e_dy = +1; // Down
+      event = fltk3::MOUSEWHEEL;
+    } else if (xevent.xbutton.button == 6) {
+      fltk3::e_dx = -1; // Left
+      event = fltk3::MOUSEWHEEL;
+    } else if (xevent.xbutton.button == 7) {
+      fltk3::e_dx = +1; // Right
       event = fltk3::MOUSEWHEEL;
     } else {
       fltk3::e_state |= (fltk3::BUTTON1 << (xevent.xbutton.button-1));

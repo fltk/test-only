@@ -209,6 +209,11 @@ static fltk3::Window *track_mouse_win=0;	// current TrackMouseEvent() window
 #  define WM_MOUSEWHEEL 0x020a
 #endif
 
+// This is only defined on Vista and upwards...
+#ifndef WM_MOUSEHWHEEL
+#define WM_MOUSEHWHEEL 0x020E
+#endif
+
 #ifndef WHEEL_DELTA
 #  define WHEEL_DELTA 120	// according to MSDN.
 #endif
@@ -1125,12 +1130,23 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_MOUSEWHEEL: {
     static int delta = 0; // running total of all motion
     delta += (SHORT)(HIWORD(wParam));
+    fltk3::e_dx = 0;
     fltk3::e_dy = -delta / WHEEL_DELTA;
     delta += fltk3::e_dy * WHEEL_DELTA;
     if (fltk3::e_dy) fltk3::handle(fltk3::MOUSEWHEEL, window);
     return 0;
   }
 
+  case WM_MOUSEHWHEEL: {
+    static int delta = 0; // running total of all motion
+    delta += (SHORT)(HIWORD(wParam));
+    fltk3::e_dy = 0;
+    fltk3::e_dx = delta / WHEEL_DELTA;
+    delta -= fltk3::e_dx * WHEEL_DELTA;
+    if (fltk3::e_dx) Fl::handle(fltk3::MOUSEWHEEL, window);
+    return 0;
+  }
+      
   case WM_GETMINMAXINFO:
     Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
     break;
