@@ -1143,7 +1143,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     fltk3::e_dy = 0;
     fltk3::e_dx = delta / WHEEL_DELTA;
     delta -= fltk3::e_dx * WHEEL_DELTA;
-    if (fltk3::e_dx) Fl::handle(fltk3::MOUSEWHEEL, window);
+    if (fltk3::e_dx) fltk3::handle(fltk3::MOUSEWHEEL, window);
     return 0;
   }
       
