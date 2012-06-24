@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -31,16 +30,32 @@
 #ifndef fltk_SecretInput_h
 #define fltk_SecretInput_h
 
+#include <fltk3/SecretInput.h>
 #include "Input.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(SecretInput, SecretInput)
+FLTK2_WRAPPER_INTERFACE_WIDGET(SecretInput, SecretInput)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class SecretInput : public Input {
-public:
-  SecretInput(int x,int y,int w,int h,const char *l = 0)
-    : Input(x,y,w,h,l) {type(SECRET);}
-};
-
+  
+  class SecretInput : public Input {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(SecretInput, SecretInput)
+    
+    SecretInput() {}
+    
+    SecretInput(int x,int y,int w,int h, const char *l = 0) {
+      _p = new fltk3::SecretInput_I(x, y, w, h, l);
+      _p->wrapper(this);
+    }
+    
+  };
+  
 }
 
 #endif

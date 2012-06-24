@@ -52,7 +52,7 @@ namespace fltk {
       _p->wrapper(this);
     }
 
-#if 0
+#if 0 // FIXME: 123-2
     enum { // values for type()
       NORMAL	= 0,
       FLOAT_INPUT = 1,
@@ -74,8 +74,19 @@ namespace fltk {
     
     bool text(const char*);
     bool text(const char*, int);
-    bool static_text(const char*);
-    bool static_text(const char*, int);
+#endif
+    
+    // the original function returns a boolean value
+    void static_text(const char* text) {
+      ((fltk3::Input*)_p)->static_value(text);
+    }
+    
+    // the original function returns a boolean value
+    void static_text(const char* text, int n) {
+      ((fltk3::Input*)_p)->static_value(text, n);
+    }
+    
+#if 0 // FIXME: 123-2
     const char* text() const {return text_;}
     char at(int i) const {return text_[i];}
 #ifdef FLTK_1_WIDGET  // back-compatability section:

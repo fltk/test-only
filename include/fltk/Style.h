@@ -218,8 +218,6 @@ namespace fltk3 {
   inline float _3to2_fontsize(int b) { return (float)b; }
   inline Box* _2to3_boxtype(fltk::Box* b) { return (Box*)b; }
   inline fltk::Box* _3to2_boxtype(Box* b) { return (fltk::Box*)b; }
-  inline Color _2to3_color(fltk::Color b) { return b; }
-  inline fltk::Color _3to2_color(Color b) { return b; }
 }
 
 

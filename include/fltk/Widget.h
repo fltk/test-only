@@ -107,7 +107,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->type(t);
     }
 
-#if 0
+#if 0 // FIXME: 123-2
     bool	is_group() const	{ return type_ >= GROUP_TYPE; }
     bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
     
@@ -130,7 +130,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->copy_label(new_label);
     }
     
-#if 0
+#if 0 // FIXME: 123-2
     const Symbol* image() const	{ return image_; }
     void	image(const Symbol* a)	{ image_ = a; }
     void	image(const Symbol& a)	{ image_ = &a; }
@@ -144,7 +144,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->tooltip(t);
     }
     
-#if 0
+#if 0 // FIXME: 123-2
     unsigned shortcut() const	;
     void	shortcut(unsigned key)	;
     bool	add_shortcut(unsigned key);
@@ -169,10 +169,16 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->callback( (fltk3::Callback*)cb );
     }
     
-#if 0    
-    void	callback(Callback0*c)	{ callback_=(Callback*)c; }
-    void	callback(Callback1*c, long p=0) { callback_=(Callback*)c; user_data_=(void*)p; }
+    void callback(Callback0* cb) {
+      ((fltk3::Widget_I*)_p)->callback( (fltk3::Callback0*)cb );
+    }
     
+    void callback(Callback1* cb, long p=0) {
+      ((fltk3::Widget_I*)_p)->callback( (fltk3::Callback1*)cb, p );
+    }
+
+    
+#if 0 // FIXME: 123-2
     void*	user_data() const	{ return user_data_; }
     void	user_data(void* v)	{ user_data_ = v; }
     long	argument() const	{ return (long)user_data_; }
@@ -252,7 +258,7 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->damage( fltk3::_2to3_damage(b) );
     }
     
-#if 0
+#if 0 // FIXME: 123-2
     void	redraw_label()		;
     void	redraw_highlight()	;
     void	redraw(const Rectangle&);
@@ -293,12 +299,18 @@ namespace fltk {
       return fltk3::_3to2_color( ((fltk3::Widget_I*)_p)->color() );
     }
     
-#if 0
+    Color labelcolor() const {
+      return fltk3::_3to2_color( ((fltk3::Widget_I*)_p)->labelcolor() );
+    }
+    
+    Color selection_color() const {
+      return fltk3::_3to2_color( ((fltk3::Widget_I*)_p)->selection_color() );
+    }
+    
+#if 0 // FIXME: 123-2
     Color	textcolor()		const;
-    Color	selection_color()	const;
     Color	selection_textcolor()	const;
     Color	buttoncolor()		const;
-    Color	labelcolor()		const;
     Color	highlight_color()	const;
     Color	highlight_textcolor()	const;
 #endif
@@ -331,12 +343,18 @@ namespace fltk {
       ((fltk3::Widget_I*)_p)->color( fltk3::_2to3_color(bg) );
     }
     
+    void labelcolor(Color bg) {
+      ((fltk3::Widget_I*)_p)->labelcolor( fltk3::_2to3_color(bg) );
+    }
+    
+    void selection_color(Color bg) {
+      ((fltk3::Widget_I*)_p)->selection_color( fltk3::_2to3_color(bg) );
+    }
+    
 #if 0 // FIXME: 123-2
     void textcolor(Color a)	;
-    void selection_color(Color)	;
     void selection_textcolor(Color);
     void buttoncolor(Color)	;
-    void labelcolor(Color)	;
     void highlight_color(Color)	;
     void highlight_textcolor(Color);
 #endif
@@ -365,14 +383,14 @@ namespace fltk {
   };
   
   enum { // Widget::when() values
-    WHEN_NEVER		= 0,
-    WHEN_CHANGED		= 1,
-    WHEN_RELEASE		= 4,
-    WHEN_RELEASE_ALWAYS	= 6,
-    WHEN_ENTER_KEY	= 8,
-    WHEN_ENTER_KEY_ALWAYS	=10,
-    WHEN_ENTER_KEY_CHANGED=11,
-    WHEN_NOT_CHANGED	= 2 // modifier bit to disable changed() test
+    WHEN_NEVER              = 0,
+    WHEN_CHANGED            = 1,
+    WHEN_RELEASE            = 4,
+    WHEN_RELEASE_ALWAYS     = 6,
+    WHEN_ENTER_KEY          = 8,
+    WHEN_ENTER_KEY_ALWAYS   =10,
+    WHEN_ENTER_KEY_CHANGED  =11,
+    WHEN_NOT_CHANGED        = 2 // modifier bit to disable changed() test
   };
   
 }

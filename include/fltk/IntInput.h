@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -27,16 +26,32 @@
 #ifndef fltk_IntInput_h
 #define fltk_IntInput_h
 
+#include <fltk3/IntInput.h>
 #include "FloatInput.h"
 
+
+FLTK2_WRAPPER_INTERFACE_BEGIN(IntInput, IntInput)
+FLTK2_WRAPPER_INTERFACE_WIDGET(IntInput, IntInput)
+FLTK2_WRAPPER_INTERFACE_END()
+
+
 namespace fltk {
-
-class FL_API IntInput : public FloatInput {
-public:
-  IntInput(int x,int y,int w,int h,const char *l = 0)
-    : FloatInput(x,y,w,h,l) { type(INT); }
-};
-
+  
+  class FL_API IntInput : public FloatInput {
+    
+  public:
+    
+    FLTK2_WIDGET_VCALLS(IntInput, IntInput)
+    
+    IntInput() {}
+    
+    IntInput(int x,int y,int w,int h, const char *l = 0) {
+      _p = new fltk3::IntInput_I(x, y, w, h, l);
+      _p->wrapper(this);
+    }
+    
+  };
+  
 }
 #endif
 

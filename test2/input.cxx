@@ -26,12 +26,6 @@
 //
 
 
-int main(int, char **) {
-  return 0;
-}
-
-#if 0 // FIXME: 123-2
-
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/Input.h>
@@ -39,12 +33,24 @@ int main(int, char **) {
 #include <fltk/IntInput.h>
 #include <fltk/SecretInput.h>
 #include <fltk/WordwrapInput.h>
+#if 0 // FIXME: 123-2
 #include <fltk/TextEditor.h>
+#endif
 #include <fltk/Button.h>
 #include <fltk/ToggleButton.h>
+#if 0 // FIXME: 123-2
 #include <fltk/show_colormap.h>
 #include <stdio.h>
+#endif 
+
 using namespace fltk;
+
+int when = 0;
+Input *input[5];
+
+#if 0 // FIXME: 123-2
+
+TextEditor* editor;
 
 void cb(Widget *ob) {
   printf("Callback for %s '%s'\n",ob->label(),((Input*)ob)->text());
@@ -53,33 +59,37 @@ void cb(Widget *ob) {
 void editor_cb(Widget *ob) {
   printf("Callback for %s '%s'\n",ob->label(),((TextEditor*)ob)->text());
 }
-
-int when = 0;
-Input *input[5];
-TextEditor* editor;
+#endif
 
 void toggle_cb(Widget *o, long v) {
+#if 0 // FIXME: 123-2
   if (((ToggleButton*)o)->value()) when |= v; else when &= ~v;
   for (int i=0; i<5; i++) input[i]->when(when);
   editor->when(when);
+#endif
 }
 
+#if 0 // FIXME: 123-2
 void test(Input *i) {
   if (i->changed()) {
     i->clear_changed();
     printf("%s '%s'\n",i->label(),i->text());
   }
 }
+#endif
 
 void button_cb(Widget *,void *) {
+#if 0 // FIXME: 123-2
   for (int i=0; i<5; i++) test(input[i]);
   if (editor->changed()) {
     editor->clear_changed();
     printf("%s '%s'\n",editor->label(),editor->text());
   }
+#endif
 }
 
 void color_cb(Widget* button, void* v) {
+#if 0 // FIXME: 123-2
   Style& s = *Input::default_style;
   Color c;
   
@@ -98,6 +108,7 @@ void color_cb(Widget* button, void* v) {
   button->color(c);
   button->labelcolor(contrast(BLACK,(Color)c));
   fltk::redraw();
+#endif
 }
 
 int main(int argc, char **argv) {
@@ -119,6 +130,7 @@ int main(int argc, char **argv) {
   input[3]->tooltip("Input field for password");
   input[4] = new WordwrapInput(70,y,300,100,"Wordwrap"); y += 105;
   input[4]->tooltip("Input field for short multi-line text. Use TextEditor for anything more than a few lines!");
+#if 0 // FIXME: 123-2
 
   editor = new TextEditor(70,y,300,100,"TextEditor"); y += 105;
   editor->tooltip("TextEditor, designed for editing email and programs. "
@@ -129,10 +141,13 @@ int main(int argc, char **argv) {
   for (int i = 0; i < 5; i++) {
     input[i]->when(0); input[i]->callback(cb);
   }
+#endif
   int y1 = y;
+#if 0 // FIXME: 123-2
   editor->when(0);
   editor->callback(editor_cb);
-
+#endif
+  
   Button *b;
   b = new ToggleButton(10,y,200,23,"WHEN_&CHANGED");
   b->tooltip("Do callback each time the text changes");
@@ -150,7 +165,7 @@ int main(int argc, char **argv) {
   b = new Button(10,y,200,23,"&print changed()");
   b->callback(button_cb);
   b->tooltip("Print widgets that have changed() flag set");
-
+  
   b = new Button(220,y1,100,23,"color"); y1 += 23;
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
   b->labelcolor(contrast(BLACK,b->color()));
@@ -160,16 +175,17 @@ int main(int argc, char **argv) {
   b->labelcolor(contrast(BLACK,b->color()));
   b->tooltip("Color behind selected text");
   b = new Button(220,y1,100,23,"textcolor"); y1 += 23;
+#if 0 // FIXME: 123-2
   b->color(input[0]->textcolor()); b->callback(color_cb, (void*)2);
   b->labelcolor(contrast(BLACK,b->color()));
+#endif
   b->tooltip("Color of the text");
-
+  
   window->end();
   window->show(argc,argv);
   return run();
 }
 
-#endif
 
 //
 // End of "$Id: input.cxx 8500 2011-03-03 09:20:46Z bgbnbigben $".
