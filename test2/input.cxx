@@ -33,9 +33,7 @@
 #include <fltk/IntInput.h>
 #include <fltk/SecretInput.h>
 #include <fltk/WordwrapInput.h>
-#if 0 // FIXME: 123-2
 #include <fltk/TextEditor.h>
-#endif
 #include <fltk/Button.h>
 #include <fltk/ToggleButton.h>
 #if 0 // FIXME: 123-2
@@ -47,10 +45,9 @@ using namespace fltk;
 
 int when = 0;
 Input *input[5];
+TextEditor* editor;
 
 #if 0 // FIXME: 123-2
-
-TextEditor* editor;
 
 void cb(Widget *ob) {
   printf("Callback for %s '%s'\n",ob->label(),((Input*)ob)->text());
@@ -112,7 +109,7 @@ void color_cb(Widget* button, void* v) {
 }
 
 int main(int argc, char **argv) {
-  Window *window = new Window(400,350+105);
+  fltk::Window *window = new fltk::Window(400,350+105);
   //window->clear_double_buffer();
 
   window->begin();
@@ -130,14 +127,16 @@ int main(int argc, char **argv) {
   input[3]->tooltip("Input field for password");
   input[4] = new WordwrapInput(70,y,300,100,"Wordwrap"); y += 105;
   input[4]->tooltip("Input field for short multi-line text. Use TextEditor for anything more than a few lines!");
-#if 0 // FIXME: 123-2
 
   editor = new TextEditor(70,y,300,100,"TextEditor"); y += 105;
   editor->tooltip("TextEditor, designed for editing email and programs. "
 		  "wrap_mode(true) has been done to this one.");
+#if 0 // FIXME: 123-2
   editor->wrap_mode(true);
+#endif
   window->resizable(editor);
 
+#if 0 // FIXME: 123-2
   for (int i = 0; i < 5; i++) {
     input[i]->when(0); input[i]->callback(cb);
   }
