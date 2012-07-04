@@ -43,6 +43,9 @@ fltk3::Style::Style() :
   textfont_(fltk3::HELVETICA),
   textsize_(fltk3::NORMAL_SIZE),
   textcolor_(fltk3::FOREGROUND_COLOR),
+  color_(fltk3::GRAY),
+  color2_(fltk3::GRAY),
+  box_(fltk3::NO_BOX),
   private_(0),
   labelfont_set_(1),
   labelsize_set_(1),
@@ -51,13 +54,16 @@ fltk3::Style::Style() :
   align_set_(1),
   textfont_set_(1),
   textsize_set_(1),
-  textcolor_set_(1)
+  textcolor_set_(1),
+  color_set_(1),
+  color2_set_(1),
+  box_set_(1)
 {
 }
 
 
 fltk3::Style::Style(Style *parent) :
-  version_(current_),
+  version_(parent->update()),
   parent_(parent),
   labelfont_(parent->labelfont_),
   labelsize_(parent->labelsize_),
@@ -67,6 +73,9 @@ fltk3::Style::Style(Style *parent) :
   textfont_(parent->textfont_),
   textsize_(parent->textsize_),
   textcolor_(parent->textcolor_),
+  color_(parent->color_),
+  color2_(parent->color2_),
+  box_(parent->box_),
   private_(0),
   labelfont_set_(0),
   labelsize_set_(0),
@@ -75,7 +84,10 @@ fltk3::Style::Style(Style *parent) :
   align_set_(0),
   textfont_set_(0),
   textsize_set_(0),
-  textcolor_set_(0)
+  textcolor_set_(0),
+  color_set_(0),
+  color2_set_(0),
+  box_set_(0)
 {
 }
 
@@ -112,10 +124,10 @@ fltk3::Style *fltk3::Style::make_private()
 }
 
 
-void fltk3::Style::update()
+unsigned int fltk3::Style::update()
 {
   if (version_==current_ || parent_==0L)
-    return;
+    return current_;
   parent_->refresh();
   
   if (!labelfont_set_)
@@ -134,8 +146,15 @@ void fltk3::Style::update()
     textsize_ = parent_->textsize_;
   if (!textcolor_set_)
     textcolor_ = parent_->textcolor_;
+  if (!color_set_)
+    color_ = parent_->color_;
+  if (!color2_set_)
+    color2_ = parent_->color2_;
+  if (!box_set_)
+    box_ = parent_->box_;
   
   version_ = current_;
+  return current_;
 }
 
 

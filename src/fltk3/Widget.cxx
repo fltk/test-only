@@ -165,9 +165,6 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L)
   type_		 = 0;
   flags_	 = VISIBLE_FOCUS;
   damage_	 = 0;
-  box_		 = fltk3::NO_BOX;
-  color_	 = fltk3::GRAY;
-  color2_	 = fltk3::GRAY;
   when_		 = fltk3::WHEN_RELEASE;
   
   parent_ = 0;
@@ -183,13 +180,11 @@ fltk3::Widget::Widget(fltk3::Box* b, int X, int Y, int W, int H, const char* L)
   type_		 = 0;
   flags_	 = VISIBLE_FOCUS;
   damage_	 = 0;
-  box_		 = b;
-  color_	 = fltk3::GRAY;
-  color2_	 = fltk3::GRAY;
   when_		 = fltk3::WHEN_RELEASE;
-  
   parent_ = 0;
   if (fltk3::Group::current()) fltk3::Group::current()->add(this);
+  
+  box(b);
 }
 
 void fltk3::Widget::resize(int X, int Y, int W, int H) {

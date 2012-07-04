@@ -54,6 +54,10 @@ namespace fltk3 {
     Font textfont_;
     Fontsize textsize_;
     Color textcolor_;
+    
+    Color color_;
+    Color color2_;
+    Box* box_;
 
     unsigned int private_:1;
     unsigned int labelfont_set_:1;
@@ -64,8 +68,11 @@ namespace fltk3 {
     unsigned int textfont_set_:1;
     unsigned int textsize_set_:1;
     unsigned int textcolor_set_:1;
+    unsigned int color_set_:1;
+    unsigned int color2_set_:1;
+    unsigned int box_set_:1;
     
-    void update();
+    unsigned int update();
     void refresh() const { if (version_ != current_) ((Style*)this)->update(); }
     void invalidate() { if (!private_) current_++; }
     
@@ -106,6 +113,19 @@ namespace fltk3 {
     Color textcolor() const { refresh(); return textcolor_;}
     void textcolor(Color s) { textcolor_=s; textcolor_set_ = 1; invalidate(); }
     void clear_textcolor() { textcolor_set_=0; invalidate(); }
+    
+    Color color() const { refresh(); return color_;}
+    void color(Color s) { color_=s; color_set_ = 1; invalidate(); }
+    void clear_color() { color_set_=0; invalidate(); }
+    
+    Color color2() const { refresh(); return color2_;}
+    void color2(Color s) { color2_=s; color2_set_ = 1; invalidate(); }
+    void clear_color2() { color2_set_=0; invalidate(); }
+    
+    Box* box() const { refresh(); return box_;}
+    void box(Box* b) { box_=b; box_set_ = 1; invalidate(); }
+    void clear_box() { box_set_=0; invalidate(); }
+    
     
     /**
      Use an existing style for a new label.

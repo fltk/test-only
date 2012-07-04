@@ -221,6 +221,64 @@ namespace fltk3 {
      */
     void align(Align alignment) { private_style()->align(alignment); }
     
+    /** Gets the box type of the widget.
+     \return the current box type
+     \see box(fltk3::Boxtype), fltk3::Boxtype
+     */
+    Box* box() const {return style()->box();}
+    
+    /** Sets the box type for the widget. 
+     This identifies a routine that draws the background of the widget.
+     See fltk3::Boxtype for the available types. The default depends on the 
+     widget, but is usually fltk3::NO_BOX or fltk3::UP_BOX.
+     \param[in] new_box the new box type
+     \see box(), fltk3::Boxtype
+     */
+    void box(Box* new_box) {private_style()->box(new_box);}
+    
+    /** Gets the background color of the widget.
+     \return current background color
+     \see color(fltk3::Color), color(fltk3::Color, fltk3::Color)
+     */
+    Color color() const {return style()->color();}
+    
+    /** Sets the background color of the widget. 
+     The color is passed to the box routine. The color is either an index into 
+     an internal table of RGB colors or an RGB color value generated using 
+     fltk3::rgb_color().
+     
+     The default for most widgets is fltk3::BACKGROUND_COLOR. Use fltk3::set_color()
+     to redefine colors in the color map.
+     \param[in] bg background color
+     \see color(), color(fltk3::Color, fltk3::Color), selection_color(fltk3::Color)
+     */
+    void color(Color bg) {private_style()->color(bg);}
+    
+    /** Gets the selection color.
+     \return the current selection color
+     \see selection_color(fltk3::Color), color(fltk3::Color, fltk3::Color)
+     */
+    fltk3::Color selection_color() const {return style()->color2();}
+    
+    /** Sets the selection color.
+     The selection color is defined for Forms compatibility and is usually 
+     used to color the widget when it is selected, although some widgets 
+     use this color for other purposes. You can set both colors at once 
+     with color(fltk3::Color bg, fltk3::Color sel).
+     \param[in] a the new selection color
+     \see selection_color(), color(fltk3::Color, fltk3::Color)
+     */
+    void selection_color(fltk3::Color a) {private_style()->color2(a);}
+    
+    /** Sets the background and selection color of the widget. 
+     
+     The two color form sets both the background and selection colors. 
+     \param[in] bg background color
+     \param[in] sel selection color
+     \see color(unsigned), selection_color(unsigned)
+     */
+    void color(fltk3::Color bg, fltk3::Color sel) {private_style()->color(bg); private_style()->color2(sel);}
+    
     /** Gets the widget flags mask */
     unsigned int flags() const {return flags_;}
     
@@ -334,9 +392,6 @@ namespace fltk3 {
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
     void* user_data_;
-    Color color_;  // FIXME: should be in Style
-    Color color2_;  // FIXME: should be in Style
-    Box* box_;  // FIXME: should be in Style
     uchar type_;
     uchar damage_;
     uchar when_;    
@@ -520,64 +575,6 @@ namespace fltk3 {
      \see position(int,int), resize(int,int,int,int)
      */
     void size(int W,int H) {resize(x_,y_,W,H);}
-    
-    /** Gets the box type of the widget.
-     \return the current box type
-     \see box(fltk3::Boxtype), fltk3::Boxtype
-     */
-    Box* box() const {return box_;}
-    
-    /** Sets the box type for the widget. 
-     This identifies a routine that draws the background of the widget.
-     See fltk3::Boxtype for the available types. The default depends on the 
-     widget, but is usually fltk3::NO_BOX or fltk3::UP_BOX.
-     \param[in] new_box the new box type
-     \see box(), fltk3::Boxtype
-     */
-    void box(Box* new_box) {box_ = new_box;}
-    
-    /** Gets the background color of the widget.
-     \return current background color
-     \see color(fltk3::Color), color(fltk3::Color, fltk3::Color)
-     */
-    Color color() const {return color_;}
-    
-    /** Sets the background color of the widget. 
-     The color is passed to the box routine. The color is either an index into 
-     an internal table of RGB colors or an RGB color value generated using 
-     fltk3::rgb_color().
-     
-     The default for most widgets is fltk3::BACKGROUND_COLOR. Use fltk3::set_color()
-     to redefine colors in the color map.
-     \param[in] bg background color
-     \see color(), color(fltk3::Color, fltk3::Color), selection_color(fltk3::Color)
-     */
-    void color(Color bg) {color_ = bg;}
-    
-    /** Gets the selection color.
-     \return the current selection color
-     \see selection_color(fltk3::Color), color(fltk3::Color, fltk3::Color)
-     */
-    fltk3::Color selection_color() const {return color2_;}
-    
-    /** Sets the selection color.
-     The selection color is defined for Forms compatibility and is usually 
-     used to color the widget when it is selected, although some widgets 
-     use this color for other purposes. You can set both colors at once 
-     with color(fltk3::Color bg, fltk3::Color sel).
-     \param[in] a the new selection color
-     \see selection_color(), color(fltk3::Color, fltk3::Color)
-     */
-    void selection_color(fltk3::Color a) {color2_ = a;}
-    
-    /** Sets the background and selection color of the widget. 
-     
-     The two color form sets both the background and selection colors. 
-     \param[in] bg background color
-     \param[in] sel selection color
-     \see color(unsigned), selection_color(unsigned)
-     */
-    void color(fltk3::Color bg, fltk3::Color sel) {color_=bg; color2_=sel;}
     
     /** Gets the current tooltip text.
      \return a pointer to the tooltip text or NULL
@@ -1026,16 +1023,6 @@ namespace fltk3 {
      \see fltk3::Widget::as_group(), fltk3::Widget::as_window()
      */
     virtual class fltk3::GLWindow* as_gl_window() {return 0;}
-    
-    /** For back compatibility only.
-     \deprecated Use selection_color() instead.
-     */
-    fltk3::Color color2() const {return (fltk3::Color)color2_;}
-    
-    /** For back compatibility only.
-     \deprecated Use selection_color(unsigned) instead.
-     */
-    void color2(unsigned a) {color2_ = a;}    
     
 };
   

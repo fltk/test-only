@@ -604,11 +604,11 @@ public:
   }
   
   Fl_Color color2() const {
-    return fltk3::_3to1_color(((fltk3::Widget_I*)_p)->color2());
+    return fltk3::_3to1_color(((fltk3::Widget_I*)_p)->selection_color());
   }
   
   void color2(unsigned a) {
-    ((fltk3::Widget_I*)_p)->color2( fltk3::_1to3_color(a) );
+    ((fltk3::Widget_I*)_p)->selection_color( fltk3::_1to3_color(a) );
   }
 };
 
