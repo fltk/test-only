@@ -201,7 +201,7 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &lib_target_pixmap, &workspace_pixmap, &dependency_pixmap, &option_pixmap};                         /* 57..60 */
 
 extern int show_comments;
-extern Fl_Panel *the_file_panel;
+extern Fl_Panel *the_workspace_panel;
 extern char *get_temporary_return_buffer(int size);
 
 ////////////////////////////////////////////////////////////////
@@ -839,10 +839,10 @@ void delete_all(int selected_only) {
     } else f = f->next;
   }
   if(!selected_only) {
-		include_H_from_C=1;
-		use_FL_COMMAND=0;
-	}
-
+    include_H_from_C=1;
+    use_FL_COMMAND=0;
+  }
+  
   selection_changed(0);
 }
 
@@ -1300,9 +1300,9 @@ Fl_Type *Fl_Workspace_Type::make() {
 }
 
 void Fl_Workspace_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 
@@ -1332,9 +1332,9 @@ Fl_Type *Fl_Option_Type::make() {
 }
 
 void Fl_Option_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 void Fl_Option_Type::value(const char *v) {
@@ -1400,9 +1400,9 @@ Fl_Type *Fl_Target_Dependency_Type::make() {
 }
 
 void Fl_Target_Dependency_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 
@@ -1549,9 +1549,9 @@ Fl_Type *Fl_App_Target_Type::make() {
 }
 
 void Fl_App_Target_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 // ------------ Library Target -------------------------------------------------
@@ -1577,9 +1577,9 @@ Fl_Type *Fl_Lib_Target_Type::make() {
 }
 
 void Fl_Lib_Target_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 // ------------ Generic File ---------------------------------------------------
@@ -1788,9 +1788,9 @@ const char *Fl_File_Type::filename_relative(const char *fnbase, const char *tgtb
 }
 
 void Fl_File_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 // ------------ Folder ---------------------------------------------------------
@@ -1816,16 +1816,16 @@ Fl_Type *Fl_Folder_Type::make() {
 }
 
 void Fl_Folder_Type::open() {
-  if (!the_file_panel) the_file_panel = make_file_panel();
-  the_file_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_file_panel->show();
+  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
+  the_workspace_panel->load(&Fl_Type::is_tool);
+  if (Fl_Panel::numselected) the_workspace_panel->show();
 }
 
 // ------------ Panel Base Class -----------------------------------------------
 
 void *const Fl_Panel::LOAD = (void *)"LOAD"; // "magic" pointer to indicate that we need to load values into the dialog
 int Fl_Panel::numselected = 0;
-Fl_Type *Fl_Panel::current = 0L;
+Fl_Type *Fl_Panel::pSelectedType = 0L;
 
 Fl_Panel::Fl_Panel(int x, int y, int w, int h, const char *name) 
 : fltk3::DoubleWindow(w, h, name) {
@@ -1852,14 +1852,14 @@ void Fl_Panel::load(RTTI_Query type_query) {
   
   // find all the fltk3::Widget subclasses currently selected:
   numselected = 0;
-  current = 0;
+  select_type(0);
   if (Fl_Type::current) {
     if ((Fl_Type::current->*type_query)())
-      current = Fl_Type::current;
+      select_type(Fl_Type::current);
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if ((o->*type_query)() && o->selected) {
 	numselected++;
-	if (!current) current = o;
+	if (!selected_type()) select_type(o);
       }
     }
   }

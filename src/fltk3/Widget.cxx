@@ -116,7 +116,7 @@ fltk3::Label::Label(int X, int Y, int W, int H, const char* L)
 
 fltk3::Label::Label(const fltk3::Label &s) 
 : fltk3::Rectangle(s),
-  style_(s.style_), // FIXME: do not just link to private styles
+  style_(s.style_->as_public()),
   labeltext_(0L),
   flags_(s.flags_),
   image_(s.image_),
@@ -143,6 +143,8 @@ fltk3::Label::Label()
 fltk3::Label::~Label() {
   if (flags() & COPIED_LABEL) 
     free((void *)(labeltext_));
+  //if (style_ && style_->is_private())
+  //  delete style_;
 }
 
 ////////////////////////////////////////////////////////////////

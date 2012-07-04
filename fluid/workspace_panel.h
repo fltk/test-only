@@ -56,7 +56,7 @@ public:
   void value(unsigned int v);
   unsigned int value();
 };
-void file_panel_set_cb(fltk3::Widget*, void *v);
+void workspace_panel_set_cb(fltk3::Widget*, void *v);
 #include <fltk3/ScrollGroup.h>
 extern fltk3::ScrollGroup *pScrollGroup;
 #include <fltk3/PackedGroup.h>
@@ -66,7 +66,7 @@ extern fltk3::Group *wSpacer;
 extern fltk3::Group *pCloseGroup;
 #include <fltk3/Box.h>
 #include <fltk3/Button.h>
-Fl_Panel* make_file_panel();
+Fl_Panel* make_workspace_panel();
 extern fltk3::MenuItem menu_Unknown[];
 extern fltk3::MenuItem menu_Relative[];
 extern fltk3::MenuItem menu_Option[];

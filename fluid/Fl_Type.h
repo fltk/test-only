@@ -1206,6 +1206,7 @@ public:
  * Currently, this is the widget panel (the_panel) and the file panel
  */
 class Fl_Panel : public fltk3::DoubleWindow {
+  static Fl_Type *pSelectedType;
 public:
   Fl_Panel(int x, int y, int w, int h, const char *name=0L);
   ~Fl_Panel();
@@ -1213,10 +1214,21 @@ public:
   
   static void *const LOAD;
   static int numselected;
-  static Fl_Type *current;
-  static Fl_Widget_Type *current_widget() { return current->is_widget()?(Fl_Widget_Type*)current:0L; }
-  static Fl_File_Type *current_file() { return current->is_file()?(Fl_File_Type*)current:0L; }
-  static Fl_Tool_Type *current_tool() { return current->is_tool()?(Fl_File_Type*)current:0L; }
+  static void select_type(Fl_Type *t) { 
+    pSelectedType = t; 
+  }
+  static Fl_Type *selected_type() {
+    return pSelectedType;
+  }
+  static Fl_Widget_Type *selected_widget() { 
+    return (pSelectedType && pSelectedType->is_widget())?(Fl_Widget_Type*)pSelectedType:0L; 
+  }
+  static Fl_File_Type *selected_file() { 
+    return (pSelectedType && pSelectedType->is_file())?(Fl_File_Type*)pSelectedType:0L; 
+  }
+  static Fl_Tool_Type *selected_tool() { 
+    return (pSelectedType && pSelectedType->is_tool())?(Fl_File_Type*)pSelectedType:0L; 
+  }
   static void propagate_load(fltk3::Group* g, void* v=LOAD);
 };
 

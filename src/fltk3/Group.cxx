@@ -345,7 +345,6 @@ fltk3::Group::Group(int X,int Y,int W,int H,const char *l)
 {
   align(fltk3::ALIGN_TOP);
   resizable_ = this;
-  //set_flag(GROUP_RELATIVE); // not yet implemented - don't set
   // Subclasses may want to construct child objects as part of their
   // constructor, so make sure they are add()'d to this object.
   // But you must end() the object!

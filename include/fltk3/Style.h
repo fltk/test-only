@@ -107,7 +107,17 @@ namespace fltk3 {
     void textcolor(Color s) { textcolor_=s; textcolor_set_ = 1; invalidate(); }
     void clear_textcolor() { textcolor_set_=0; invalidate(); }
     
+    /**
+     Use an existing style for a new label.
+     If the style is public, the same style is returned. However, if the style 
+     is private, it will be duplicated, referencing the first available publi 
+     style.
+     \return a style that is guaranteed to be public.
+     */
+    Style *as_public();
+    
     Style *make_private();
+    bool is_private() { return private_; }
   };
 
   extern Style default_style;

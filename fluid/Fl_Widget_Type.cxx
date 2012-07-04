@@ -119,11 +119,11 @@ Fl_Type *Fl_Widget_Type::make() {
   int B = p->o->w()/2; if (p->o->h()/2 < B) B = p->o->h()/2; if (B>25) B = 25;
 
   int ULX,ULY; // parent's origin in window
-  if (!p->is_window()) { // if it is a group, add corner
-    ULX = p->o->x(); ULY = p->o->y();
-  } else {
+  //if (!p->is_window()) { // if it is a group, add corner
+  //  ULX = p->o->x(); ULY = p->o->y();
+  //} else {
     ULX = ULY = 0;
-  }
+  //}
 
   // Figure out a position and size for the widget
   int X,Y,W,H;
@@ -297,7 +297,7 @@ Fl_Type *sort(Fl_Type *parent) {
 // FIXME: move to Fl_Panel
 Fl_Panel *the_panel;
 // FIXME: move to Fl_Panel
-Fl_Panel *the_file_panel;
+Fl_Panel *the_workspace_panel;
 
 // All the callbacks use the argument to indicate whether to load or store.
 // This avoids the need for pointers to all the widgets, and keeps the
@@ -316,27 +316,27 @@ void name_cb(fltk3::Input* o, void *v) {
       snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", Fl_Panel::numselected);
       o->hide();
     } else {
-      o->static_value(Fl_Panel::current_widget()->name());
+      o->static_value(Fl_Panel::selected_widget()->name());
       o->show();
-      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_widget()->title());
+      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::selected_widget()->title());
     }
 
     the_panel->label(buf);
   } else {
     if (Fl_Panel::numselected == 1) {
-      Fl_Panel::current_widget()->name(o->value());
+      Fl_Panel::selected_widget()->name(o->value());
       // I don't update window title, as it probably is being closed
       // and wm2 (a window manager) barfs if you retitle and then
       // hide a window:
-      // ((fltk3::Window*)(o->parent()->parent()->parent()))->label(Fl_Panel::current_widget()->title());
+      // ((fltk3::Window*)(o->parent()->parent()->parent()))->label(Fl_Panel::selected_widget()->title());
     }
   }
 }
 
 void name_public_member_cb(fltk3::Choice* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    i->value(Fl_Panel::current_widget()->public_);
-    if (Fl_Panel::current_widget()->is_in_class()) i->show(); else i->hide();
+    i->value(Fl_Panel::selected_widget()->public_);
+    if (Fl_Panel::selected_widget()->is_in_class()) i->show(); else i->hide();
   } else {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -360,8 +360,8 @@ void name_public_member_cb(fltk3::Choice* i, void* v) {
 
 void name_public_cb(fltk3::Choice* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    i->value(Fl_Panel::current_widget()->public_>0);
-    if (Fl_Panel::current_widget()->is_in_class()) i->hide(); else i->show();
+    i->value(Fl_Panel::selected_widget()->public_>0);
+    if (Fl_Panel::selected_widget()->is_in_class()) i->hide(); else i->show();
   } else {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -382,7 +382,7 @@ static unsigned oldlabellen;
 
 void label_cb(fltk3::Input* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    i->static_value(Fl_Panel::current_widget()->label());
+    i->static_value(Fl_Panel::selected_widget()->label());
     if (strlen(i->value()) >= oldlabellen) {
       oldlabellen = strlen(i->value())+128;
       oldlabel = (char*)realloc(oldlabel,oldlabellen);
@@ -405,9 +405,9 @@ static fltk3::Input *image_input;
 void image_cb(fltk3::Input* i, void *v) {
   if (v == Fl_Panel::LOAD) {
     image_input = i;
-    if (Fl_Panel::current->is_widget() && !Fl_Panel::current->is_window()) {
+    if (Fl_Panel::selected_type()->is_widget() && !Fl_Panel::selected_type()->is_window()) {
       i->activate();
-      i->static_value(((Fl_Widget_Type*)Fl_Panel::current_widget())->image_name());
+      i->static_value(((Fl_Widget_Type*)Fl_Panel::selected_widget())->image_name());
     } else i->deactivate();
   } else {
     int mod = 0;
@@ -423,7 +423,7 @@ void image_cb(fltk3::Input* i, void *v) {
 
 void image_browse_cb(fltk3::Button* b, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_widget() && !Fl_Panel::current->is_window())
+    if (Fl_Panel::selected_type()->is_widget() && !Fl_Panel::selected_type()->is_window())
       b->activate();
     else 
       b->deactivate();
@@ -447,9 +447,9 @@ static fltk3::Input *inactive_input;
 void inactive_cb(fltk3::Input* i, void *v) {
   if (v == Fl_Panel::LOAD) {
     inactive_input = i;
-    if (Fl_Panel::current->is_widget() && !Fl_Panel::current->is_window()) {
+    if (Fl_Panel::selected_type()->is_widget() && !Fl_Panel::selected_type()->is_window()) {
       i->activate();
-      i->static_value(((Fl_Widget_Type*)Fl_Panel::current_widget())->inactive_name());
+      i->static_value(((Fl_Widget_Type*)Fl_Panel::selected_widget())->inactive_name());
     } else i->deactivate();
   } else {
     int mod = 0;
@@ -465,7 +465,7 @@ void inactive_cb(fltk3::Input* i, void *v) {
 
 void inactive_browse_cb(fltk3::Button* b, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_widget() && !Fl_Panel::current->is_window()) 
+    if (Fl_Panel::selected_type()->is_widget() && !Fl_Panel::selected_type()->is_window()) 
       b->activate();
     else 
       b->deactivate();
@@ -486,9 +486,9 @@ void inactive_browse_cb(fltk3::Button* b, void *v) {
 
 void tooltip_cb(fltk3::Input* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_widget()) {
+    if (Fl_Panel::selected_type()->is_widget()) {
       i->activate();
-      i->static_value(((Fl_Widget_Type*)Fl_Panel::current_widget())->tooltip());
+      i->static_value(((Fl_Widget_Type*)Fl_Panel::selected_widget())->tooltip());
     } else i->deactivate();
   } else {
     int mod = 0;
@@ -507,8 +507,8 @@ fltk3::ValueInput *x_input, *y_input, *w_input, *h_input;
 void x_cb(fltk3::ValueInput *i, void *v) {
   if (v == Fl_Panel::LOAD) {
     x_input = i;
-    if (Fl_Panel::current->is_widget()) {
-      i->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->x());
+    if (Fl_Panel::selected_type()->is_widget()) {
+      i->value(((Fl_Widget_Type *)Fl_Panel::selected_widget())->o->x());
       x_input->activate();
     } else x_input->deactivate();
   } else {
@@ -532,8 +532,8 @@ void x_cb(fltk3::ValueInput *i, void *v) {
 void y_cb(fltk3::ValueInput *i, void *v) {
   if (v == Fl_Panel::LOAD) {
     y_input = i;
-    if (Fl_Panel::current->is_widget()) {
-      i->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->y());
+    if (Fl_Panel::selected_type()->is_widget()) {
+      i->value(((Fl_Widget_Type *)Fl_Panel::selected_widget())->o->y());
       y_input->activate();
     } else y_input->deactivate();
   } else {
@@ -557,8 +557,8 @@ void y_cb(fltk3::ValueInput *i, void *v) {
 void w_cb(fltk3::ValueInput *i, void *v) {
   if (v == Fl_Panel::LOAD) {
     w_input = i;
-    if (Fl_Panel::current->is_widget()) {
-      i->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->w());
+    if (Fl_Panel::selected_type()->is_widget()) {
+      i->value(((Fl_Widget_Type *)Fl_Panel::selected_widget())->o->w());
       w_input->activate();
     } else w_input->deactivate();
   } else {
@@ -582,8 +582,8 @@ void w_cb(fltk3::ValueInput *i, void *v) {
 void h_cb(fltk3::ValueInput *i, void *v) {
   if (v == Fl_Panel::LOAD) {
     h_input = i;
-    if (Fl_Panel::current->is_widget()) {
-      i->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->h());
+    if (Fl_Panel::selected_type()->is_widget()) {
+      i->value(((Fl_Widget_Type *)Fl_Panel::selected_widget())->o->h());
       h_input->activate();
     } else h_input->deactivate();
   } else {
@@ -606,16 +606,16 @@ void h_cb(fltk3::ValueInput *i, void *v) {
 
 void wc_relative_cb(fltk3::LightButton *i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (!strcmp(Fl_Panel::current_widget()->type_name(), "widget_class")) {
+    if (!strcmp(Fl_Panel::selected_widget()->type_name(), "widget_class")) {
       i->show();
-      i->value(((Fl_Widget_Class_Type *)Fl_Panel::current_widget())->wc_relative);
+      i->value(((Fl_Widget_Class_Type *)Fl_Panel::selected_widget())->wc_relative);
     } else {
       i->hide();
     }
   } else {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-      if (o->selected && !strcmp(Fl_Panel::current_widget()->type_name(), "widget_class")) {
+      if (o->selected && !strcmp(Fl_Panel::selected_widget()->type_name(), "widget_class")) {
         Fl_Widget_Class_Type *t = (Fl_Widget_Class_Type *)o;
         t->wc_relative = i->value();
 	mod = 1;
@@ -730,8 +730,8 @@ fltk3::Box* boxptr(const char *i) {
 
 void box_cb(fltk3::Choice* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    fltk3::Box* n = Fl_Panel::current_widget()->o->box(); if (!n) n = ZERO_BOX;
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    fltk3::Box* n = Fl_Panel::selected_widget()->o->box(); if (!n) n = ZERO_BOX;
     for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
       if (boxmenu[j].user_data() == n) {i->value(j); break;}
   } else {
@@ -755,12 +755,12 @@ void box_cb(fltk3::Choice* i, void *v) {
 void down_box_cb(fltk3::Choice* i, void *v) {
   if (v == Fl_Panel::LOAD) {
     fltk3::Box* n;
-    if (Fl_Panel::current->is_button() && !Fl_Panel::current->is_menu_item())
-      n = ((fltk3::Button*)(Fl_Panel::current_widget()->o))->down_box();
-    else if (!strcmp(Fl_Panel::current_widget()->type_name(), "fltk3::InputChoice"))
-      n = ((fltk3::InputChoice*)(Fl_Panel::current_widget()->o))->down_box();
-    else if (Fl_Panel::current->is_menu_button())
-      n = ((fltk3::Menu_*)(Fl_Panel::current_widget()->o))->down_box();
+    if (Fl_Panel::selected_type()->is_button() && !Fl_Panel::selected_type()->is_menu_item())
+      n = ((fltk3::Button*)(Fl_Panel::selected_widget()->o))->down_box();
+    else if (!strcmp(Fl_Panel::selected_widget()->type_name(), "fltk3::InputChoice"))
+      n = ((fltk3::InputChoice*)(Fl_Panel::selected_widget()->o))->down_box();
+    else if (Fl_Panel::selected_type()->is_menu_button())
+      n = ((fltk3::Menu_*)(Fl_Panel::selected_widget()->o))->down_box();
     else {
       i->deactivate(); return;
     }
@@ -817,8 +817,8 @@ static fltk3::MenuItem whensymbolmenu[] = {
 
 void when_cb(fltk3::Choice* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    int n = Fl_Panel::current_widget()->o->when() & (~fltk3::WHEN_NOT_CHANGED);
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    int n = Fl_Panel::selected_widget()->o->when() & (~fltk3::WHEN_NOT_CHANGED);
     if (!n) n = ZERO_ENTRY;
     for (int j = 0; j < int(sizeof(whenmenu)/sizeof(*whenmenu)); j++)
       if (whenmenu[j].argument() == n) {i->value(j); break;}
@@ -841,8 +841,8 @@ void when_cb(fltk3::Choice* i, void *v) {
 
 void when_button_cb(fltk3::LightButton* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current_widget()->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    i->value(Fl_Panel::current_widget()->o->when()&fltk3::WHEN_NOT_CHANGED);
+    if (Fl_Panel::selected_widget()->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    i->value(Fl_Panel::selected_widget()->o->when()&fltk3::WHEN_NOT_CHANGED);
   } else {
     int mod = 0;
     int n = i->value() ? fltk3::WHEN_NOT_CHANGED : 0;
@@ -885,12 +885,12 @@ void Fl_Widget_Type::resizable(uchar v) {
 
 void resizable_cb(fltk3::LightButton* i,void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;}
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;}
     if (Fl_Panel::numselected > 1) {i->deactivate(); return;}
     i->activate();
-    i->value(Fl_Panel::current_widget()->resizable());
+    i->value(Fl_Panel::selected_widget()->resizable());
   } else {
-    Fl_Panel::current_widget()->resizable(i->value());
+    Fl_Panel::selected_widget()->resizable(i->value());
     set_modflag(1);
   }
 }
@@ -898,19 +898,19 @@ void resizable_cb(fltk3::LightButton* i,void* v) {
 void hotspot_cb(fltk3::LightButton* i,void* v) {
   if (v == Fl_Panel::LOAD) {
     if (Fl_Panel::numselected > 1) {i->deactivate(); return;}
-    if (Fl_Panel::current_widget()->is_menu_item()) i->label("divider");
+    if (Fl_Panel::selected_widget()->is_menu_item()) i->label("divider");
     else i->label("hotspot");
     i->activate();
-    i->value(Fl_Panel::current_widget()->hotspot());
+    i->value(Fl_Panel::selected_widget()->hotspot());
   } else {
-    Fl_Panel::current_widget()->hotspot(i->value());
-    if (Fl_Panel::current->is_menu_item()) {Fl_Panel::current_widget()->redraw(); return;}
+    Fl_Panel::selected_widget()->hotspot(i->value());
+    if (Fl_Panel::selected_type()->is_menu_item()) {Fl_Panel::selected_widget()->redraw(); return;}
     if (i->value()) {
-      Fl_Type *p = Fl_Panel::current_widget()->parent;
+      Fl_Type *p = Fl_Panel::selected_widget()->parent;
       if (!p || !p->is_widget()) return;
       while (!p->is_window()) p = p->parent;
       for (Fl_Type *o = p->next; o && o->level > p->level; o = o->next) {
-	if (o->is_widget() && o != Fl_Panel::current_widget())
+	if (o->is_widget() && o != Fl_Panel::selected_widget())
 	  ((Fl_Widget_Type*)o)->hotspot(0);
       }
     }
@@ -920,8 +920,8 @@ void hotspot_cb(fltk3::LightButton* i,void* v) {
 
 void visible_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    i->value(Fl_Panel::current_widget()->o->visible());
-    if (Fl_Panel::current->is_window()) i->deactivate();
+    i->value(Fl_Panel::selected_widget()->o->visible());
+    if (Fl_Panel::selected_type()->is_window()) i->deactivate();
     else i->activate();
   } else {
     int mod = 0;
@@ -947,8 +947,8 @@ void visible_cb(fltk3::LightButton* i, void* v) {
 
 void active_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    i->value(Fl_Panel::current_widget()->o->active());
-    if (Fl_Panel::current->is_window()) i->deactivate();
+    i->value(Fl_Panel::selected_widget()->o->active());
+    if (Fl_Panel::selected_type()->is_window()) i->deactivate();
     else i->activate();
   } else {
     int mod = 0;
@@ -988,7 +988,7 @@ fltk3::MenuItem fontmenu[] = {
 
 void labelfont_cb(fltk3::Choice* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    int n = Fl_Panel::current_widget()->o->labelfont();
+    int n = Fl_Panel::selected_widget()->o->labelfont();
     if (n > 15) n = 0;
     i->value(n);
   } else {
@@ -1009,7 +1009,7 @@ void labelfont_cb(fltk3::Choice* i, void *v) {
 void labelsize_cb(fltk3::ValueInput* i, void *v) {
   int n;
   if (v == Fl_Panel::LOAD) {
-    n = Fl_Panel::current_widget()->o->labelsize();
+    n = Fl_Panel::selected_widget()->o->labelsize();
   } else {
     int mod = 0;
     n = int(i->value());
@@ -1040,7 +1040,7 @@ fltk3::MenuItem labeltypemenu[] = {
 void labeltype_cb(fltk3::Choice* i, void *v) {
   if (v == Fl_Panel::LOAD) {
     int n;
-    n = Fl_Panel::current_widget()->o->labeltype();
+    n = Fl_Panel::selected_widget()->o->labeltype();
     i->when(fltk3::WHEN_RELEASE);
     for (int j = 0; j < int(sizeof(labeltypemenu)/sizeof(*labeltypemenu)); j++)
       if (labeltypemenu[j].argument() == n) {i->value(j); break;}
@@ -1064,9 +1064,9 @@ void labeltype_cb(fltk3::Choice* i, void *v) {
 ////////////////////////////////////////////////////////////////
 
 void color_cb(fltk3::Button* i, void *v) {
-  fltk3::Color c = Fl_Panel::current_widget()->o->color();
+  fltk3::Color c = Fl_Panel::selected_widget()->o->color();
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
   } else {
     int mod = 0;
     fltk3::Color d = fltk3::show_colormap(c);
@@ -1088,9 +1088,9 @@ void color_cb(fltk3::Button* i, void *v) {
 }
 
 void color2_cb(fltk3::Button* i, void *v) {
-  fltk3::Color c = Fl_Panel::current_widget()->o->selection_color();
+  fltk3::Color c = Fl_Panel::selected_widget()->o->selection_color();
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
   } else {
     int mod = 0;
     fltk3::Color d = fltk3::show_colormap(c);
@@ -1109,7 +1109,7 @@ void color2_cb(fltk3::Button* i, void *v) {
 }
 
 void labelcolor_cb(fltk3::Button* i, void *v) {
-  fltk3::Color c = Fl_Panel::current_widget()->o->labelcolor();
+  fltk3::Color c = Fl_Panel::selected_widget()->o->labelcolor();
   if (v != Fl_Panel::LOAD) {
     int mod = 0;
     fltk3::Color d = fltk3::show_colormap(c);
@@ -1155,8 +1155,8 @@ static fltk3::MenuItem alignmenu[] = {
 void align_cb(fltk3::Button* i, void *v) {
   fltk3::Align b = fltk3::Align(fl_uintptr_t(i->user_data()));
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    i->value(Fl_Panel::current_widget()->o->align() & b);
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    i->value(Fl_Panel::selected_widget()->o->align() & b);
   } else {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -1192,9 +1192,9 @@ void align_cb(fltk3::Button* i, void *v) {
 
 void align_position_cb(fltk3::Choice *i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
     fltk3::MenuItem *mi = (fltk3::MenuItem*)i->menu();
-    fltk3::Align b = Fl_Panel::current_widget()->o->align() & fltk3::ALIGN_POSITION_MASK;
+    fltk3::Align b = Fl_Panel::selected_widget()->o->align() & fltk3::ALIGN_POSITION_MASK;
     for (;mi->text;mi++) {
       if ((fltk3::Align)(mi->argument())==b)
         i->value(mi);
@@ -1221,9 +1221,9 @@ void align_position_cb(fltk3::Choice *i, void *v) {
 
 void align_text_image_cb(fltk3::Choice *i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
     fltk3::MenuItem *mi = (fltk3::MenuItem*)i->menu();
-    fltk3::Align b = Fl_Panel::current_widget()->o->align() & fltk3::ALIGN_IMAGE_MASK;
+    fltk3::Align b = Fl_Panel::selected_widget()->o->align() & fltk3::ALIGN_IMAGE_MASK;
     for (;mi->text;mi++) {
       if ((fltk3::Align)(mi->argument())==b)
         i->value(mi);
@@ -1252,7 +1252,7 @@ void align_text_image_cb(fltk3::Choice *i, void *v) {
 
 void callback_cb(CodeEditor* i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    const char *cbtext = Fl_Panel::current_widget()->callback();
+    const char *cbtext = Fl_Panel::selected_widget()->callback();
     i->buffer()->text( cbtext ? cbtext : "" );
   } else {
     int mod = 0;
@@ -1276,7 +1276,7 @@ void callback_cb(CodeEditor* i, void *v) {
 
 void user_data_cb(fltk3::Input *i, void *v) {
   if (v == Fl_Panel::LOAD) {
-    i->static_value(Fl_Panel::current_widget()->user_data());
+    i->static_value(Fl_Panel::selected_widget()->user_data());
   } else {
     int mod = 0;
     const char *c = i->value();
@@ -1295,7 +1295,7 @@ void user_data_cb(fltk3::Input *i, void *v) {
 void user_data_type_cb(fltk3::Input *i, void *v) {
   static const char *dflt = "void*";
   if (v == Fl_Panel::LOAD) {
-    const char *c = Fl_Panel::current_widget()->user_data_type();
+    const char *c = Fl_Panel::selected_widget()->user_data_type();
     if (!c) c = dflt;
     i->static_value(c);
   } else {
@@ -1324,7 +1324,7 @@ void user_data_type_cb(fltk3::Input *i, void *v) {
 void v_input_cb(fltk3::Input* i, void* v) {
   int n = fl_intptr_t(i->user_data());
   if (v == Fl_Panel::LOAD) {
-    i->static_value(Fl_Panel::current_widget()->extra_code(n));
+    i->static_value(Fl_Panel::selected_widget()->extra_code(n));
   } else {
     int mod = 0;
     const char *c = i->value();
@@ -1343,8 +1343,8 @@ void v_input_cb(fltk3::Input* i, void* v) {
 
 void subclass_cb(fltk3::Input* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    i->static_value(Fl_Panel::current_widget()->subclass());
+    if (Fl_Panel::selected_type()->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    i->static_value(Fl_Panel::selected_widget()->subclass());
   } else {
     int mod = 0;
     const char *c = i->value();
@@ -1369,7 +1369,7 @@ int Fl_Widget_Type::textstuff(int, fltk3::Font&, int&, fltk3::Color&) {return 0;
 void textfont_cb(fltk3::Choice* i, void* v) {
   fltk3::Font n; int s; fltk3::Color c;
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current_widget()->textstuff(0,n,s,c)) {i->deactivate(); return;}
+    if (!Fl_Panel::selected_widget()->textstuff(0,n,s,c)) {i->deactivate(); return;}
     i->activate();
     if (n > 15) n = fltk3::HELVETICA;
     i->value(n);
@@ -1391,7 +1391,7 @@ void textfont_cb(fltk3::Choice* i, void* v) {
 void textsize_cb(fltk3::ValueInput* i, void* v) {
   fltk3::Font n; int s; fltk3::Color c;
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current_widget()->textstuff(0,n,s,c)) {i->deactivate(); return;}
+    if (!Fl_Panel::selected_widget()->textstuff(0,n,s,c)) {i->deactivate(); return;}
     i->activate();
   } else {
     int mod = 0;
@@ -1413,7 +1413,7 @@ void textsize_cb(fltk3::ValueInput* i, void* v) {
 void textcolor_cb(fltk3::Button* i, void* v) {
   fltk3::Font n; int s; fltk3::Color c;
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current_widget()->textstuff(0,n,s,c)) {i->deactivate(); return;}
+    if (!Fl_Panel::selected_widget()->textstuff(0,n,s,c)) {i->deactivate(); return;}
     i->activate();
   } else {
     int mod = 0;
@@ -1438,15 +1438,15 @@ void textcolor_cb(fltk3::Button* i, void* v) {
 
 void min_w_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current->is_window()) {i->parent()->hide(); return;}
+    if (!Fl_Panel::selected_type()->is_window()) {i->parent()->hide(); return;}
     i->parent()->show();
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMinW);
+    i->value(((Fl_Window_Type*)Fl_Panel::selected_widget())->pMinW);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMinW = n;
+        ((Fl_Window_Type*)Fl_Panel::selected_widget())->pMinW = n;
         mod = 1;
       }
     }
@@ -1456,14 +1456,14 @@ void min_w_cb(fltk3::ValueInput* i, void* v) {
 
 void min_h_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current->is_window()) return;
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMinH);
+    if (!Fl_Panel::selected_type()->is_window()) return;
+    i->value(((Fl_Window_Type*)Fl_Panel::selected_widget())->pMinH);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMinH = n;
+        ((Fl_Window_Type*)Fl_Panel::selected_widget())->pMinH = n;
         mod = 1;
       }
     }
@@ -1473,14 +1473,14 @@ void min_h_cb(fltk3::ValueInput* i, void* v) {
 
 void max_w_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current->is_window()) return;
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxW);
+    if (!Fl_Panel::selected_type()->is_window()) return;
+    i->value(((Fl_Window_Type*)Fl_Panel::selected_widget())->pMaxW);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxW = n;
+        ((Fl_Window_Type*)Fl_Panel::selected_widget())->pMaxW = n;
         mod = 1;
       }
     }
@@ -1490,14 +1490,14 @@ void max_w_cb(fltk3::ValueInput* i, void* v) {
 
 void max_h_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!Fl_Panel::current->is_window()) return;
-    i->value(((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxH);
+    if (!Fl_Panel::selected_type()->is_window()) return;
+    i->value(((Fl_Window_Type*)Fl_Panel::selected_widget())->pMaxH);
   } else {
     int mod = 0;
     int n = (int)i->value();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        ((Fl_Window_Type*)Fl_Panel::current_widget())->pMaxH = n;
+        ((Fl_Window_Type*)Fl_Panel::selected_widget())->pMaxH = n;
         mod = 1;
       }
     }
@@ -1511,7 +1511,7 @@ void set_min_size_cb(fltk3::Button*, void* v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        Fl_Window_Type *win = (Fl_Window_Type*)Fl_Panel::current_widget();
+        Fl_Window_Type *win = (Fl_Window_Type*)Fl_Panel::selected_widget();
         win->pMinW = win->o->w();
         win->pMinH = win->o->h();
         mod = 1;
@@ -1528,7 +1528,7 @@ void set_max_size_cb(fltk3::Button*, void* v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_window()) {
-        Fl_Window_Type *win = (Fl_Window_Type*)Fl_Panel::current_widget();
+        Fl_Window_Type *win = (Fl_Window_Type*)Fl_Panel::selected_widget();
         win->pMaxW = win->o->w();
         win->pMaxH = win->o->h();
         mod = 1;
@@ -1541,13 +1541,13 @@ void set_max_size_cb(fltk3::Button*, void* v) {
 
 void slider_size_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_window()) 
+    if (Fl_Panel::selected_type()->is_window()) 
       i->parent()->hide(); 
     else
       i->parent()->show();
-    if (Fl_Panel::current->is_valuator()<2) {i->deactivate(); return;}
+    if (Fl_Panel::selected_type()->is_valuator()<2) {i->deactivate(); return;}
     i->activate();
-    i->value(((fltk3::Slider*)(Fl_Panel::current_widget()->o))->slider_size());
+    i->value(((fltk3::Slider*)(Fl_Panel::selected_widget()->o))->slider_size());
   } else {
     int mod = 0;
     double n = i->value();
@@ -1567,12 +1567,12 @@ void slider_size_cb(fltk3::ValueInput* i, void* v) {
 
 void min_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current_widget()->is_valuator()) {
+    if (Fl_Panel::selected_widget()->is_valuator()) {
       i->activate();
-      i->value(((fltk3::Valuator*)(Fl_Panel::current_widget()->o))->minimum());
-    } else if (Fl_Panel::current->is_spinner()) {
+      i->value(((fltk3::Valuator*)(Fl_Panel::selected_widget()->o))->minimum());
+    } else if (Fl_Panel::selected_type()->is_spinner()) {
       i->activate();
-      i->value(((fltk3::Spinner*)(Fl_Panel::current_widget()->o))->minimum());
+      i->value(((fltk3::Spinner*)(Fl_Panel::selected_widget()->o))->minimum());
     } else {
       i->deactivate();
       return;
@@ -1600,12 +1600,12 @@ void min_cb(fltk3::ValueInput* i, void* v) {
 
 void max_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_valuator()) {
+    if (Fl_Panel::selected_type()->is_valuator()) {
       i->activate();
-      i->value(((fltk3::Valuator*)(Fl_Panel::current_widget()->o))->maximum());
-    } else if (Fl_Panel::current->is_spinner()) {
+      i->value(((fltk3::Valuator*)(Fl_Panel::selected_widget()->o))->maximum());
+    } else if (Fl_Panel::selected_type()->is_spinner()) {
       i->activate();
-      i->value(((fltk3::Spinner*)(Fl_Panel::current_widget()->o))->maximum());
+      i->value(((fltk3::Spinner*)(Fl_Panel::selected_widget()->o))->maximum());
     } else {
       i->deactivate();
       return;
@@ -1633,12 +1633,12 @@ void max_cb(fltk3::ValueInput* i, void* v) {
 
 void step_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_valuator()) {
+    if (Fl_Panel::selected_type()->is_valuator()) {
       i->activate();
-      i->value(((fltk3::Valuator*)(Fl_Panel::current_widget()->o))->step());
-    } else if (Fl_Panel::current->is_spinner()) {
+      i->value(((fltk3::Valuator*)(Fl_Panel::selected_widget()->o))->step());
+    } else if (Fl_Panel::selected_type()->is_spinner()) {
       i->activate();
-      i->value(((fltk3::Spinner*)(Fl_Panel::current_widget()->o))->step());
+      i->value(((fltk3::Spinner*)(Fl_Panel::selected_widget()->o))->step());
     } else {
       i->deactivate();
       return;
@@ -1666,15 +1666,15 @@ void step_cb(fltk3::ValueInput* i, void* v) {
 
 void value_cb(fltk3::ValueInput* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_valuator()) {
+    if (Fl_Panel::selected_type()->is_valuator()) {
       i->activate();
-      i->value(((fltk3::Valuator*)(Fl_Panel::current_widget()->o))->value());
-    } else if (Fl_Panel::current->is_button()) {
+      i->value(((fltk3::Valuator*)(Fl_Panel::selected_widget()->o))->value());
+    } else if (Fl_Panel::selected_type()->is_button()) {
       i->activate();
-      i->value(((fltk3::Button*)(Fl_Panel::current_widget()->o))->value());
-    } else if (Fl_Panel::current->is_spinner()) {
+      i->value(((fltk3::Button*)(Fl_Panel::selected_widget()->o))->value());
+    } else if (Fl_Panel::selected_type()->is_spinner()) {
       i->activate();
-      i->value(((fltk3::Spinner*)(Fl_Panel::current_widget()->o))->value());
+      i->value(((fltk3::Spinner*)(Fl_Panel::selected_widget()->o))->value());
     } else 
       i->deactivate();
   } else {
@@ -1708,16 +1708,16 @@ fltk3::MenuItem *Fl_Widget_Type::subtypes() {return 0;}
 
 void subtype_cb(fltk3::Choice* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    fltk3::MenuItem* m = Fl_Panel::current_widget()->subtypes();
+    fltk3::MenuItem* m = Fl_Panel::selected_widget()->subtypes();
     if (!m) {i->deactivate(); return;}
     i->menu(m);
     int j;
     for (j = 0;; j++) {
       if (!m[j].text) {j = 0; break;}
-      if (Fl_Panel::current->is_spinner()) {
-        if (m[j].argument() == ((fltk3::Spinner*)Fl_Panel::current_widget()->o)->type()) break;
+      if (Fl_Panel::selected_type()->is_spinner()) {
+        if (m[j].argument() == ((fltk3::Spinner*)Fl_Panel::selected_widget()->o)->type()) break;
       } else {
-        if (m[j].argument() == Fl_Panel::current_widget()->o->type()) break;
+        if (m[j].argument() == Fl_Panel::selected_widget()->o->type()) break;
       }
     }
     i->value(j);
@@ -1726,7 +1726,7 @@ void subtype_cb(fltk3::Choice* i, void* v) {
   } else {
     int mod = 0;
     int n = int(i->mvalue()->argument());
-    fltk3::MenuItem* m = Fl_Panel::current_widget()->subtypes();
+    fltk3::MenuItem* m = Fl_Panel::selected_widget()->subtypes();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
         Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -1768,7 +1768,7 @@ void ok_cb(fltk3::ReturnButton* o, void* v) {
 void revert_cb(fltk3::Button*, void*) {
   // We have to revert all dynamically changing fields:
   // but for now only the first label works...
-  if (Fl_Panel::numselected == 1) Fl_Panel::current_widget()->label(oldlabel);
+  if (Fl_Panel::numselected == 1) Fl_Panel::selected_widget()->label(oldlabel);
   Fl_Panel::propagate_load(the_panel);
 }
 
@@ -1798,9 +1798,9 @@ void live_mode_cb(fltk3::Button*o,void *) {
   if (o->value()) {
     if (Fl_Panel::numselected == 1) {
       fltk3::Group::current(0L);
-      live_widget = Fl_Panel::current_widget()->enter_live_mode(1);
+      live_widget = Fl_Panel::selected_widget()->enter_live_mode(1);
       if (live_widget) {
-        live_type = Fl_Panel::current_widget();
+        live_type = Fl_Panel::selected_widget();
         fltk3::Group::current(0);
         int w = live_widget->w();
         int h = live_widget->h();
@@ -1821,8 +1821,8 @@ void live_mode_cb(fltk3::Button*o,void *) {
         live_window->resizable(live_widget);
         live_window->set_modal(); // block all other UI
         live_window->callback(leave_live_mode_cb);
-        if (Fl_Panel::current->is_window()) {
-          Fl_Window_Type *w = (Fl_Window_Type*)Fl_Panel::current_widget();
+        if (Fl_Panel::selected_type()->is_window()) {
+          Fl_Window_Type *w = (Fl_Window_Type*)Fl_Panel::selected_widget();
           int mw = w->pMinW; if (mw>0) mw += 20;
           int mh = w->pMinH; if (mh>0) mh += 55;
           int MW = w->pMaxW; if (MW>0) MW += 20; 
@@ -1853,13 +1853,13 @@ void Fl_Widget_Type::open() {
   if (Fl_Panel::numselected) the_panel->show();
 }
 
-Fl_Type *Fl_Type::current;
+Fl_Type *Fl_Type::current = 0L;
 
 extern void redraw_overlays();
 extern void check_redraw_corresponding_parent(Fl_Type*);
 extern void redraw_browser();
 extern void update_sourceview_position();
-extern void file_panel_set_cb(fltk3::Widget*, void*);
+extern void workspace_panel_set_cb(fltk3::Widget*, void*);
 
 // Called when ui changes what objects are selected:
 // p is selected object, null for all deletions (we must throw away
@@ -1881,8 +1881,8 @@ void selection_changed(Fl_Type *p) {
       return;
     }
   }
-  if (p && the_file_panel && the_file_panel->visible()) {
-    file_panel_set_cb(0,0);
+  if (p && the_workspace_panel && the_workspace_panel->visible()) {
+    workspace_panel_set_cb(0,0);
     // FIXME: haderror
   }
   // update the selected flags to new set:
@@ -1898,13 +1898,13 @@ void selection_changed(Fl_Type *p) {
   // load the panel with the new settings:
   if (p && p->is_widget() && the_panel && the_panel->visible()) {
     the_panel->load(&Fl_Type::is_widget);
-    if (the_file_panel) the_file_panel->hide();
-  } else if (p && p->is_tool() && the_file_panel && the_file_panel->visible()) {
-    the_file_panel->load(&Fl_Type::is_tool);
+    if (the_workspace_panel) the_workspace_panel->hide();
+  } else if (p && p->is_tool() && the_workspace_panel && the_workspace_panel->visible()) {
+    the_workspace_panel->load(&Fl_Type::is_tool);
     if (the_panel) the_panel->hide();
   } else {
     if (the_panel) the_panel->hide();
-    if (the_file_panel) the_file_panel->hide();
+    if (the_workspace_panel) the_workspace_panel->hide();
   }
   // update the source viewer to show the code for the selected object
   update_sourceview_position();

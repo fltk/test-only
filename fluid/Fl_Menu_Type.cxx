@@ -621,14 +621,14 @@ int Shortcut_Button::handle(int e) {
   
 void shortcut_in_cb(Shortcut_Button* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::current->is_button())
-      i->svalue = ((fltk3::Button*)(Fl_Panel::current_widget()->o))->shortcut();
-    else if (Fl_Panel::current->is_input())
-      i->svalue = ((fltk3::Input_*)(Fl_Panel::current_widget()->o))->shortcut();
-    else if (Fl_Panel::current->is_value_input())
-      i->svalue = ((fltk3::ValueInput*)(Fl_Panel::current_widget()->o))->shortcut();
-    else if (Fl_Panel::current->is_text_display())
-      i->svalue = ((fltk3::TextDisplay*)(Fl_Panel::current_widget()->o))->shortcut();
+    if (Fl_Panel::selected_type()->is_button())
+      i->svalue = ((fltk3::Button*)(Fl_Panel::selected_widget()->o))->shortcut();
+    else if (Fl_Panel::selected_type()->is_input())
+      i->svalue = ((fltk3::Input_*)(Fl_Panel::selected_widget()->o))->shortcut();
+    else if (Fl_Panel::selected_type()->is_value_input())
+      i->svalue = ((fltk3::ValueInput*)(Fl_Panel::selected_widget()->o))->shortcut();
+    else if (Fl_Panel::selected_type()->is_text_display())
+      i->svalue = ((fltk3::TextDisplay*)(Fl_Panel::selected_widget()->o))->shortcut();
     else {
       i->hide();
       return;

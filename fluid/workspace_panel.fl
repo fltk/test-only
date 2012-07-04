@@ -218,15 +218,15 @@ update_all();} {}
   }
 } 
 
-decl {extern Fl_Panel *the_file_panel;} {private global
+decl {extern Fl_Panel *the_workspace_panel;} {private global
 } 
 
-Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
+Function {workspace_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
 } {
   code {if (v == Fl_Panel::LOAD) {
   } else {
-    fltk3::Widget*const* a = the_file_panel->array();
-    for (int i=the_file_panel->children(); i--;) {
+    fltk3::Widget*const* a = the_workspace_panel->array();
+    for (int i=the_workspace_panel->children(); i--;) {
       fltk3::Widget* o = *a++;
       if (o->changed()) {
         o->do_callback();
@@ -237,7 +237,7 @@ Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
   }} {}
 } 
 
-Function {make_file_panel()} {open
+Function {make_workspace_panel()} {open
 } {
   {fltk3::Window} {} {
     label {File Properties} open
@@ -268,8 +268,8 @@ Function {make_file_panel()} {open
   if (Fl_Panel::numselected != 1)
     sprintf(buf, "Workspace Properties (%d items)", Fl_Panel::numselected);
   else
-    sprintf(buf, "%s Properties", Fl_Panel::current->name());
-  the_file_panel->label(buf);
+    sprintf(buf, "%s Properties", Fl_Panel::selected_type->name());
+  the_workspace_panel->label(buf);
 }} open selected
         xywh {0 0 400 400} resizable
       } {
@@ -289,16 +289,16 @@ Function {make_file_panel()} {open
           {fltk3::Input} {} {
             label {Name }
             callback {if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::numselected != 1 || Fl_Panel::current==0) {
+    if (Fl_Panel::numselected != 1 || Fl_Panel::selected_type==0) {
       o->static_value("<Multiple Values>");
       o->deactivate();
     } else {
-      o->static_value(Fl_Panel::current->name());
+      o->static_value(Fl_Panel::selected_type->name());
       o->activate();
     }
   } else {
     if (Fl_Panel::numselected == 1) {
-      Fl_Panel::current->name(o->value());
+      Fl_Panel::selected_type->name(o->value());
       if (o->changed()) set_modflag(1);
     }
   }}
@@ -353,16 +353,16 @@ Function {make_file_panel()} {open
           {fltk3::Input} {} {
             label {File Name }
             callback {if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::numselected != 1 || Fl_Panel::current_file()==0L) {
+    if (Fl_Panel::numselected != 1 || Fl_Panel:selected_file()==0L) {
       o->static_value("<Multiple Values>");
       o->deactivate();
     } else {
-      o->static_value(Fl_Panel::current_file()->filename());
+      o->static_value(Fl_Panel::selected_file()->filename());
       o->activate();
     }
   } else {
     if (Fl_Panel::numselected == 1) {
-      Fl_Panel::current_file()->filename(o->value());
+      Fl_Panel::selected_file()->filename(o->value());
       if (o->changed()) set_modflag(1);
     }
   }}
@@ -409,7 +409,7 @@ Function {make_file_panel()} {open
   }
   
   char buf[64];
-  Fl_File_Type *ff = Fl_Panel::current_file();
+  Fl_File_Type *ff = Fl_Panel::selected_file();
   if (ff) {
     unsigned int ft = ff->filetype();
     if (ft&FL_FILE_EXPLICIT) {
@@ -538,7 +538,7 @@ Function {make_file_panel()} {open
   }
 
   // FIXME: we should show <multiple values> if required
-  Fl_File_Type *ff = Fl_Panel::current_file();
+  Fl_File_Type *ff = Fl_Panel::selected_file();
   if (ff) {
     unsigned int fl =ff->location();
     for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
@@ -590,7 +590,7 @@ Function {make_file_panel()} {open
           {fltk3::MenuButton} {} {
             label {Build in }
             callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_tool()->build_env());
+    o->value(Fl_Panel::selected_tool()->build_env());
   } else {
     int mod = 0;
     unsigned int e = o->value();
@@ -624,7 +624,7 @@ Function {make_file_panel()} {open
           {fltk3::MenuButton} {} {
             label {List in }
             callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_tool()->list_env());
+    o->value(Fl_Panel::selected_tool()->list_env());
   } else {
     int mod = 0;
     unsigned int e = o->value();
@@ -818,8 +818,8 @@ Function {make_file_panel()} {open
         label Close
         callback {if (v == Fl_Panel::LOAD) {
   } else {
-    file_panel_set_cb(0, 0);
-    the_file_panel->hide();
+    workspace_panel_set_cb(0, 0);
+    the_workspace_panel->hide();
   }}
         xywh {290 0 110 25}
       }

@@ -750,6 +750,10 @@ static void delete_children(Fl_Type *p) {
   for (; f != p; ) {
     Fl_Type *g = f->prev;
     delete f;
+    if (Fl_Type::current==f) 
+      Fl_Type::current = 0L;
+    if (Fl_Panel::selected_type()==f) 
+      Fl_Type::selected_type(0L);
     f = g;
   }
 }
@@ -760,14 +764,17 @@ void delete_all(int selected_only) {
       delete_children(f);
       Fl_Type *g = f->next;
       delete f;
+      if (Fl_Type::current==f) 
+        Fl_Type::current = 0L;
+      if (Fl_Panel::selected_type()==f) 
+        Fl_Type::selected_type(0L);
       f = g;
     } else f = f->next;
   }
   if(!selected_only) {
-		include_H_from_C=1;
-		use_FL_COMMAND=0;
-	}
-
+    include_H_from_C=1;
+    use_FL_COMMAND=0;
+  }
   selection_changed(0);
 }
 

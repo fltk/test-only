@@ -85,11 +85,26 @@ fltk3::Style::~Style()
 }
 
 
+fltk3::Style *fltk3::Style::as_public() 
+{
+  if (!private_)
+    return this;
+  else {
+    refresh();
+    Style *s = new Style(this);
+    s->private_ = 0;
+    while (parent_ && parent_->private_ && parent_->parent_)
+      parent_ = parent_->parent_;
+    return this;
+  }
+}
+
 fltk3::Style *fltk3::Style::make_private() 
 {
   if (private_)
     return this;
   else {
+    refresh();
     Style *s = new Style(this);
     s->private_ = 1;
     return s;
