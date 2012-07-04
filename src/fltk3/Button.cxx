@@ -32,6 +32,7 @@
 
 
 fltk3::WidgetTracker *fltk3::Button::key_release_tracker = 0;
+fltk3::Style* fltk3::Button::default_button_style_ = 0L;
 
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
@@ -228,7 +229,11 @@ void fltk3::Button::key_release_timeout(void *d)
 fltk3::Button::Button(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X,Y,W,H,L) 
 {
-  box(fltk3::UP_BOX);
+  if (!default_button_style_) {
+    default_button_style_ = new Style(fltk3::default_style);
+    default_button_style_->box(fltk3::UP_BOX);
+  }
+  style(default_button_style_);
   down_box(fltk3::NO_BOX);
   value_ = oldval = 0;
   shortcut_ = 0;

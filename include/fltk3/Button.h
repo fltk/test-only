@@ -84,6 +84,8 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Button : public Widget {
     
+    static Style* default_button_style_;
+    
     unsigned int shortcut_;
     char value_;
     char oldval;
