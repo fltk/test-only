@@ -112,7 +112,7 @@ static unsigned short cp1252[32] = {
     (adding \e len to \e p will point at the next character).
 
     If \p p points at an illegal UTF-8 encoding, including one that
-    would go past \e end, or where a code is uses more bytes than
+    would go past \e end, or where a code uses more bytes than
     necessary, then *(unsigned char*)p is translated as though it is
     in the Microsoft CP1252 character set and \e len is set to 1.
     Treating errors this way allows this to decode almost any

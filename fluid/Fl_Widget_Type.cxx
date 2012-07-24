@@ -26,6 +26,7 @@
 //
 
 #include <fltk3/run.h>
+#include <fltk3/utf8.h>
 #include <fltk3/Group.h>
 #include <fltk3/Table.h>
 #include <fltk3/Input.h>
@@ -271,18 +272,32 @@ void Fl_Widget_Type::redraw() {
 
 // the recursive part sorts all children, returns pointer to next:
 Fl_Type *sort(Fl_Type *parent) {
-  Fl_Type *f,*n=0;
+  Fl_Type *f, *n=0;
   for (f = parent ? parent->next : Fl_Type::first; ; f = n) {
     if (!f || (parent && f->level <= parent->level)) return f;
     n = sort(f);
-    if (!f->selected || (!f->is_widget() || f->is_menu_item())) continue;
-    fltk3::Widget* fw = ((Fl_Widget_Type*)f)->o;
+    if (!f->selected) continue;
     Fl_Type *g; // we will insert before this
-    for (g = parent->next; g != f; g = g->next) {
-      if (!g->selected || g->level > f->level) continue;
-      fltk3::Widget* gw = ((Fl_Widget_Type*)g)->o;
-      if (gw->y() > fw->y()) break;
-      if (gw->y() == fw->y() && gw->x() > fw->x()) break;
+    // sort widgets by position, so we get a decent Tab navigation
+    if (f->is_widget() && !f->is_menu_item()) {
+      fltk3::Widget* fw = ((Fl_Widget_Type*)f)->o;
+      for (g = parent->next; g != f; g = g->next) {
+        if (!g->selected || g->level > f->level) continue;
+        fltk3::Widget* gw = ((Fl_Widget_Type*)g)->o;
+        if (gw->y() > fw->y()) break;
+        if (gw->y() == fw->y() && gw->x() > fw->x()) break;
+      }
+    } else if (f->is_tool()) {
+      // sort tools by name
+      Fl_Tool_Type* ft = ((Fl_Tool_Type*)f);
+      for (g = parent->next; g != f; g = g->next) {
+        if (!g->selected || g->level > f->level) continue;
+        if (fltk3::event_alt()) {
+          if (fltk3::strcasecmp(g->name(), ft->name())>0) break;
+        } else {
+          if (fltk3::strcmp(g->name(), ft->name())>0) break;
+        }
+      }
     }
     if (g != f) f->move_before(g);
   }

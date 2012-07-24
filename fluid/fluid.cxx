@@ -1053,7 +1053,7 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
   if (completion_button->value()) {
     fltk3::message("Wrote all slected build environemtes.");
   }
-  // FIXME: allow for compiel-only. See below.
+  // FIXME: allow for compile-only. See below.
   /*
   if (compile_only) {
     if (!x) {fprintf(stderr,"%s : %s\n",cname,strerror(errno)); exit(1);}
@@ -1430,9 +1430,9 @@ void update_history(const char *flname) {
 
   for (i = 0; i < max_files; i ++)
 #if defined(WIN32) || defined(__APPLE__)
-    if (!strcasecmp(absolute, absolute_history[i])) break;
+    if (!fltk3::strcasecmp(absolute, absolute_history[i])) break;
 #else
-    if (!strcmp(absolute, absolute_history[i])) break;
+    if (!fltk3::strcmp(absolute, absolute_history[i])) break;
 #endif // WIN32 || __APPLE__
 
   if (i == 0) return;

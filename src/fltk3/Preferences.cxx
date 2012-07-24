@@ -1465,7 +1465,7 @@ char fltk3::Preferences::Node::deleteEntry( const char *name ) {
 // - if the node was not found, 'find' will create the required branch
 fltk3::Preferences::Node *fltk3::Preferences::Node::find( const char *path ) {
   int len = (int)strlen( path_ );
-  if ( strncmp( path, path_, len ) == 0 ) {
+  if ( ::strncmp( path, path_, len ) == 0 ) {
     if ( path[ len ] == 0 )
       return this;
     if ( path[ len ] == '/' ) {

@@ -187,10 +187,16 @@ namespace fltk3 {
    */
   
   /* OD: UTF8 aware strncasecmp - converts to lower case Unicode and tests */
-  FLTK3_EXPORT int utf_strncasecmp(const char *s1, const char *s2, int n);
+  FLTK3_EXPORT int strncasecmp(const char *s1, const char *s2, int n);
   
   /* OD: UTF8 aware strcasecmp - converts to Unicode and tests */
-  FLTK3_EXPORT int utf_strcasecmp(const char *s1, const char *s2);
+  FLTK3_EXPORT int strcasecmp(const char *s1, const char *s2);
+  
+  /* OD: UTF8 aware strncmp */
+  FLTK3_EXPORT int strncmp(const char *s1, const char *s2, int n);
+  
+  /* OD: UTF8 aware strcmp */
+  FLTK3_EXPORT int strcmp(const char *s1, const char *s2);
   
   /* OD: return the Unicode lower case value of ucs */
   FLTK3_EXPORT int tolower(unsigned int ucs);
@@ -199,10 +205,10 @@ namespace fltk3 {
   FLTK3_EXPORT int toupper(unsigned int ucs);
   
   /* OD: converts the UTF8 string to the lower case equivalent */
-  FLTK3_EXPORT int utf_tolower(const unsigned char *str, int len, char *buf);
+  FLTK3_EXPORT int tolower(const unsigned char *str, int len, char *buf);
   
   /* OD: converts the UTF8 string to the upper case equivalent */
-  FLTK3_EXPORT int utf_toupper(const unsigned char *str, int len, char *buf);
+  FLTK3_EXPORT int toupper(const unsigned char *str, int len, char *buf);
   
   /* OD: Portable UTF8 aware chmod wrapper */
   FLTK3_EXPORT int chmod(const char* f, int mode);

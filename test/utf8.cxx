@@ -643,13 +643,13 @@ int main(int argc, char** argv)
   
   char *utf8l = (char*) malloc(strlen(utf8) * 3 + 1);
   fltk3::Input i2(5, 35, 190, 25);
-  l = fltk3::utf_tolower((const unsigned char*)utf8, l, utf8l);
+  l = fltk3::tolower((const unsigned char*)utf8, l, utf8l);
   utf8l[l] = '\0';
   i2.value(utf8l);
   
   char *utf8u = (char*) malloc(strlen(utf8l) * 3 + 1);
   fltk3::Input i3(5, 65, 190, 25);
-  l = fltk3::utf_toupper((const unsigned char*)utf8l, l, utf8u);
+  l = fltk3::toupper((const unsigned char*)utf8l, l, utf8u);
   utf8u[l] = '\0';
   i3.value(utf8u);
   

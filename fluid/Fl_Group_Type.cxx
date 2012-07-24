@@ -105,7 +105,15 @@ void fix_group_size(Fl_Type *tt) {
 }
 
 extern int force_parent;
+extern int gridx;
 
+
+/*
+ User must select one or more widgets.
+ A group is created. The group is large enough to contain all widgets. If ALT
+ is held down while grouping, the group is expanded by a single grid spacing.
+ All widgets are moved into the group. All coordinates are updated.
+ */
 void group_cb(fltk3::Widget *, void *) {
   // Find the current widget:
   Fl_Type *qq = Fl_Type::current;
@@ -117,18 +125,36 @@ void group_cb(fltk3::Widget *, void *) {
   Fl_Widget_Type* q = (Fl_Widget_Type*)qq;
   force_parent = 1;
   Fl_Group_Type *n = (Fl_Group_Type*)(Fl_Group_type.make());
+  Fl_Type *t;
   n->move_before(q);
-  n->o->resize(q->o->x(),q->o->y(),q->o->w(),q->o->h());
-  for (Fl_Type *t = Fl_Type::first; t;) {
+  fltk3::Rectangle bounds(*q->o);
+  for (t = Fl_Type::first; t;) {
+    if (t->level == n->level && t != n && t->selected && t->is_widget())
+      bounds.merge(*((Fl_Widget_Type*)t)->o);
+    t = t->next;
+  }
+  if (fltk3::event_alt()) bounds.inset(-gridx);
+  n->o->resize(bounds.x(), bounds.y(), bounds.w(), bounds.h());
+  for (t = Fl_Type::first; t;) {
     if (t->level != n->level || t == n || !t->selected) {
       t = t->next; continue;}
     Fl_Type *nxt = t->remove();
     t->add(n);
+    if (t->is_widget()) {
+      Fl_Widget_Type *w = (Fl_Widget_Type*)t;
+      w->o->move(-bounds.x(), -bounds.y());
+    }
     t = nxt;
   }
   fix_group_size(n);
 }
 
+
+/*
+ User must select all items in a group.
+ All items are moved outside of the group. The coordinates are fixed so that the
+ widgets stay in the same place. At last, the group itself is removed.
+ */
 void ungroup_cb(fltk3::Widget *, void *) {
   // Find the group:
   Fl_Type *q = Fl_Type::current;
@@ -148,6 +174,11 @@ void ungroup_cb(fltk3::Widget *, void *) {
   for (n = q->next; n && n->level > q->level;) {
     Fl_Type *nxt = n->remove();
     n->insert(q);
+    if (n->is_widget()) {
+      Fl_Widget_Type *w = (Fl_Widget_Type*)n;
+      Fl_Widget_Type *p = (Fl_Widget_Type*)q;
+      w->o->move(p->o->x(), p->o->y());
+    }
     n = nxt;
   }
   delete q;

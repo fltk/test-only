@@ -126,11 +126,11 @@ inline unsigned fl_utf8from_mb(char *dst, unsigned dstlen, const char *src, unsi
 }
 
 inline int fl_utf_strncasecmp(const char *s1, const char *s2, int n) {
-  return fltk3::utf_strncasecmp(s1, s2, n);
+  return fltk3::strncasecmp(s1, s2, n);
 }
 
 inline int fl_utf_strcasecmp(const char *s1, const char *s2) {
-  return fltk3::utf_strcasecmp(s1, s2);
+  return fltk3::strcasecmp(s1, s2);
 }
 
 inline int fl_tolower(unsigned int ucs) {
@@ -142,11 +142,11 @@ inline int fl_toupper(unsigned int ucs) {
 }
 
 inline int fl_utf_tolower(const unsigned char *str, int len, char *buf) {
-  return fltk3::utf_tolower(str, len, buf);
+  return fltk3::tolower(str, len, buf);
 }
 
 inline int fl_utf_toupper(const unsigned char *str, int len, char *buf) {
-  return fltk3::utf_toupper(str, len, buf);
+  return fltk3::toupper(str, len, buf);
 }
 
 inline int fl_chmod(const char* f, int mode) {
