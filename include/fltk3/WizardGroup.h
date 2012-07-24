@@ -46,7 +46,7 @@ namespace fltk3 {
    program control. Its primary purpose is to support "wizards" that
    step a user through configuration or troubleshooting tasks.
    
-   <P>As with fltk3::TabGroup, wizard panes are composed of child (usually
+   As with fltk3::TabGroup, wizard panes are composed of child (usually
    fltk3::Group) widgets. Navigation buttons must be added separately.
    */
   class FLTK3_EXPORT WizardGroup : public fltk3::Group {
@@ -62,9 +62,13 @@ namespace fltk3 {
     WizardGroup(int, int, int, int, const char * = 0);
     
     void		next();
+    
     void		prev();
+    
     fltk3::Widget	*value();
+    
     void		value(fltk3::Widget *);
+    
   };
   
 }

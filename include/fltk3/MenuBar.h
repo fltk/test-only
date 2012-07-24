@@ -84,8 +84,8 @@ namespace fltk3 {
      <P>The destructor removes the fltk3::MenuBar widget and all of its
      menu items.
      */
-    MenuBar(int X, int Y, int W, int H,const char *l=0)
-    : fltk3::Menu_(X,Y,W,H,l) {}
+    MenuBar(int X, int Y, int W, int H,const char *l=0);
+    
   };
   
 }

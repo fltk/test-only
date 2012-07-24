@@ -82,6 +82,7 @@ FLTK3_CPPFILES = \
 	fltk3/SharedImage.cxx \
 	fltk3/SingleWindow.cxx \
 	fltk3/Slider.cxx \
+	fltk3/Spinner.cxx \
 	fltk3/Style.cxx \
 	fltk3/Symbol.cxx \
 	fltk3/Table.cxx \

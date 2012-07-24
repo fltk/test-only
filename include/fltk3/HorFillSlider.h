@@ -37,8 +37,7 @@ namespace fltk3 {
   
   class FLTK3_EXPORT HorFillSlider : public fltk3::Slider {
   public:
-    HorFillSlider(int x,int y,int w,int h,const char *l=0)
-    : fltk3::Slider(x,y,w,h,l) {type(fltk3::HOR_FILL_SLIDER);}
+    HorFillSlider(int x,int y,int w,int h,const char *l=0);
   };
   
 }

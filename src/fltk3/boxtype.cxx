@@ -438,10 +438,10 @@ void fltk3::set_boxtype(fltk3::BoxPtr& to, fltk3::Box* from) {
   \param[in] x, y, w, h position and size
   \param[in] c color
 */
-void fltk3::draw_box(fltk3::Box* t, int x, int y, int w, int h, fltk3::Color c) {
+void fltk3::draw_box(fltk3::Box* t, int x, int y, int w, int h, fltk3::Color c, fltk3::Box::Flags flags) {
   if (t) {
     fltk3::color(c);
-    t->draw(fltk3::Rectangle(x, y, w, h));
+    t->draw(fltk3::Rectangle(x, y, w, h), flags);
   }
 }
 
@@ -483,7 +483,7 @@ void fltk3::Widget::draw_box(fltk3::Box* t, int X, int Y, int W, int H, fltk3::C
   if (t) {
     draw_it_active = active_r();
     fltk3::color(c);
-    t->draw(fltk3::Rectangle(X, Y, W, H));
+    t->draw(fltk3::Rectangle(X, Y, W, H), (fltk3::Box::Flags)0);
     draw_it_active = 1;
   }
 }

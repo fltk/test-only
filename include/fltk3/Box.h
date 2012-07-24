@@ -49,14 +49,25 @@ namespace fltk3 {
   
   class FLTK3_EXPORT BoxWidget : public Widget {
   public:
-    BoxWidget(fltk3::Box* b, int x, int y, int w, int h, const char *l=0) 
-    : Widget(b, x, y, w, h, l) { }
-    BoxWidget(int x, int y, int w, int h, const char *l=0) 
-    : Widget(x, y, w, h, l) { }
+    BoxWidget(fltk3::Box* b, int x, int y, int w, int h, const char *l=0);
+    BoxWidget(int x, int y, int w, int h, const char *l=0);
   };
   
   class FLTK3_EXPORT Box : public Symbol {
   public:
+    
+    typedef unsigned int Flags;
+    static const Flags PRESSED    = 0x0001;
+    static const Flags HOVERING    = 0x0002;
+    static const Flags FOCUSED     = 0x0004;
+    static const Flags ACTIVE      = 0x0008;
+    static const Flags TIE_LEFT    = 0x0100;
+    static const Flags TIE_RIGHT   = 0x0200;
+    static const Flags TIE_TOP     = 0x0400;
+    static const Flags TIE_BOTTOM  = 0x0800;
+    static const Flags TIE_MASK    = 0x0f00;
+    static const Flags TIE_HIDDEN  = 0x1000;
+    
     Box(const char *name=0L) 
     : Symbol(name) { }
     
@@ -79,6 +90,8 @@ namespace fltk3 {
      Return the corresponding filled box type (box with background).
      */
     virtual Box* box() { return this; }
+    
+    virtual void draw(const Rectangle& r, Flags flags) const {_draw(r);}
   };
   
   class FLTK3_EXPORT NoBox : public Box {
@@ -99,13 +112,20 @@ namespace fltk3 {
   class FLTK3_EXPORT UpBox : public FlatBox {
   public:
     Box* down() { return DOWN_BOX; }
+    Box* frame() { return UP_FRAME; }
     void _draw(const Rectangle&) const;
+    void _draw(const Rectangle&, Flags flags) const;
+    void draw(const Rectangle& r, Flags flags) const {_draw(r, flags);}
     UpBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
   };
   
   class FLTK3_EXPORT DownBox : public FlatBox {
   public:
+    Box* up() { return UP_BOX; }
+    Box* frame() { return DOWN_FRAME; }
     void _draw(const Rectangle&) const;
+    void _draw(const Rectangle&, Flags flags) const;
+    void draw(const Rectangle& r, Flags flags) const {_draw(r, flags);}
     DownBox(const char* name) : fltk3::FlatBox(name) { set_inset(2, 2, -4, -4); }
   };
   

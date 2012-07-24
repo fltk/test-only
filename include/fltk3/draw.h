@@ -37,6 +37,7 @@
 #include <fltk3/enumerations.h>  // for the color names
 #include <fltk3/Window.h>     // for fltk3::set_spot()
 #include <fltk3/Device.h>     // for fltk3::graphics_driver
+#include <fltk3/Box.h>     // for fltk3::Box::Flags
 
 // Image class...
 
@@ -636,7 +637,7 @@ namespace fltk3 {
   // boxtypes:
   FLTK3_EXPORT void frame(const char* s, int x, int y, int w, int h);
   FLTK3_EXPORT void frame2(const char* s, int x, int y, int w, int h);
-  FLTK3_EXPORT void draw_box(fltk3::Box*, int x, int y, int w, int h, fltk3::Color);
+  FLTK3_EXPORT void draw_box(fltk3::Box*, int x, int y, int w, int h, fltk3::Color, fltk3::Box::Flags =(fltk3::Box::Flags)0);
   
   // images:
   

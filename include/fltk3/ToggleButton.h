@@ -51,8 +51,7 @@ namespace fltk3 {
      position, size, and label string.
      <P>The inherited destructor deletes the toggle button.
      */
-    ToggleButton(int X,int Y,int W,int H,const char *l=0)
-    : Button(X,Y,W,H,l) {type(TOGGLE_BUTTON);}
+    ToggleButton(int X,int Y,int W,int H,const char *l=0);
   };
   
 }

@@ -50,7 +50,7 @@ fltk3::SystemPrinter::~SystemPrinter(void) {
 
 int fltk3::SystemPrinter::start_job (int pagecount, int *frompage, int *topage)
 //printing using a Quartz graphics context
-//returns 0 iff OK
+//returns 0 if OK
 {
   OSStatus status = 0;
   fl_open_display();

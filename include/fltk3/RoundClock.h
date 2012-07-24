@@ -39,8 +39,7 @@ namespace fltk3 {
   class FLTK3_EXPORT RoundClock : public Clock {
   public:
     /** Creates the clock widget, setting his type and box. */
-    RoundClock(int x,int y,int w,int h, const char *l = 0)
-    : Clock(x,y,w,h,l) {type(fltk3::ROUND_CLOCK); box(fltk3::NO_BOX);}
+    RoundClock(int x,int y,int w,int h, const char *l = 0);
   };
   
 }

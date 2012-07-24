@@ -51,12 +51,7 @@ namespace fltk3 {
      
      Inherited destructor destroys the widget and any value associated with it.
      */
-#if defined(FL_DLL)	// implementation in src/Fl_Input.cxx
     SecretInput(int X,int Y,int W,int H,const char *l = 0);
-#else
-    SecretInput(int X,int Y,int W,int H,const char *l = 0)
-    : fltk3::Input(X,Y,W,H,l) {type(fltk3::SECRET_INPUT);}
-#endif
   };
   
 }

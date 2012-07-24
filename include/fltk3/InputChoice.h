@@ -142,20 +142,7 @@ namespace fltk3 {
      and label string.
      <P> Inherited destructor Destroys the widget and any value associated with it.
      */
-    InputChoice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
-      Group::box(fltk3::DOWN_BOX);
-      align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
-      inp_ = new fltk3::Input(inp_x(), inp_y(),
-                              inp_w(), inp_h());
-      inp_->callback(inp_cb, (void*)this);
-      inp_->box(fltk3::FLAT_BOX);		// cosmetic
-      inp_->when(fltk3::WHEN_CHANGED|fltk3::WHEN_NOT_CHANGED);
-      menu_ = new InputMenuButton(menu_x(), menu_y(),
-                                  menu_w(), menu_h());
-      menu_->callback(menu_cb, (void*)this);
-      menu_->box(fltk3::FLAT_BOX);				// cosmetic
-      end();
-    }
+    InputChoice (int x,int y,int w,int h,const char*l=0);
     
     /** Adds an item to the menu.*/
     void add(const char *s) { menu_->add(s);  }

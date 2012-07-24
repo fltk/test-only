@@ -40,14 +40,12 @@
 #include <fltk3/ask.h>
 #include "flstring.h"
 
-#if defined(FL_DLL)	// really needed for c'tors for MS VC++ only
 #include <fltk3/FloatInput.H>
 #include <fltk3/IntInput.H>
 #include <fltk3/MultilineInput.H>
 #include <fltk3/Output.H>
 #include <fltk3/MultilineOutput.H>
 #include <fltk3/SecretInput.H>
-#endif
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -56,15 +54,19 @@
 
 void fltk3::Input::draw() 
 {
+  draw(box(), 0, 0, w(), h(), color(), 0);
+}
+
+void fltk3::Input::draw(Box* b, int x, int y, int w, int h, Color c, Box::Flags f)
+{
   if (input_type() == fltk3::HIDDEN_INPUT) {
     return;
   }
-  fltk3::Box* b = box();
   if (damage() & fltk3::DAMAGE_ALL) {
-    draw_box(b, color());
+    fltk3::draw_box(b, x, y, w, h, c, f);
   }
-  Input_::drawtext(fltk3::box_dx(b), fltk3::box_dy(b),
-                   w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
+  Input_::drawtext(x+fltk3::box_dx(b), y+fltk3::box_dy(b),
+                   w-fltk3::box_dw(b), h-fltk3::box_dh(b));
 }
 
 
@@ -784,55 +786,48 @@ fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
 : fltk3::Input_(X, Y, W, H, l) {
 }
 
-/*
- The following constructors must not be in the header file(s) if we
- build a shared object (DLL). Instead they are defined here to force
- the constructor (and default destructor as well) to be defined in
- the DLL and exported (STR #2632).
- 
- Note: if you change any of them, do the same changes in the specific
- header file as well.  This redundant definition was chosen to enable
- inline constructors in the header files (for static linking) as well
- as those here for dynamic linking (Windows DLL).
- */
-#if defined(FL_DLL)
 
 fltk3::NumericInput::NumericInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::FLOAT_INPUT);
 }
 
+
 fltk3::FloatInput::FloatInput(int X,int Y,int W,int H,const char *l)
 : fltk3::NumericInput(X,Y,W,H,l) {
   type(fltk3::FLOAT_INPUT);
 }
+
 
 fltk3::IntInput::IntInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::INT_INPUT);
 }
 
+
 fltk3::MultilineInput::MultilineInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::MULTILINE_INPUT);
 }
+
 
 fltk3::Output::Output(int X,int Y,int W,int H, const char *l)
 : fltk3::Input(X, Y, W, H, l) {
   type(fltk3::NORMAL_OUTPUT);
 }
 
+
 fltk3::MultilineOutput::MultilineOutput(int X,int Y,int W,int H,const char *l)
 : fltk3::Output(X,Y,W,H,l) {
   type(fltk3::MULTILINE_OUTPUT);
 }
+
 
 fltk3::SecretInput::SecretInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::SECRET_INPUT);
 }
 
-#endif // FL_DLL
 
 //
 // End of "$Id$".

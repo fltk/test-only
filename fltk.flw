@@ -2,7 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx}
-workspace FLTK {open selected
+workspace FLTK {open
   uuid_Xcode4_Root {2204C862-3EAB-44CD-B0A8-6DF16FFDC8F4}
   uuid_Xcode4_ProductsGroup {A3B55F76-F5F9-4F9E-8A45-2778583213A1}
   uuid_Xcode4_Group {341D2CD3-06FB-47E4-B35C-D1F9B51C7293}
@@ -315,7 +315,7 @@ workspace FLTK {open selected
   folder Libraries {open
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
-    lib_target fltk3 {
+    lib_target fltk3 {open
       uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
       uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
       uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
@@ -333,7 +333,7 @@ workspace FLTK {open selected
       target_path lib
       makefile_path src
     } {
-      folder Headers {open
+      folder Headers {
         uuid_Xcode4_Group {C2F00625-E401-4002-85F6-FA183D17629D}
       } {
         file_ref {all.h} {
@@ -1802,6 +1802,12 @@ workspace FLTK {open selected
           uuid_Xcode4_FileRef {085FAF82-6F59-4F42-AB4C-349D927A8BAA}
           uuid_Xcode4_BuildFileInSources {052ACB65-EF8A-454B-AFDB-BD3FDFA7B7C1}
           filename_and_path {src/fltk3/Slider.cxx}
+        }
+        file_ref {Spinner.cxx} {selected
+          uuid_Xcode4_BuildFile {158DC3FB-4833-4C3A-B3F9-B9B85F526B07}
+          uuid_Xcode4_FileRef {1A9DA140-C970-4C3F-9AF2-1F1F1D163055}
+          uuid_Xcode4_BuildFileInSources {51398145-30C1-4C7C-A34C-B8F991B74125}
+          filename_and_path {src/fltk3/Spinner.cxx}
         }
         file_ref {Style.cxx} {
           uuid_Xcode4_BuildFile {DD895EB1-D352-4D09-99D7-D9DE1758D9F9}

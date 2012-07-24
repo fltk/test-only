@@ -55,14 +55,12 @@ void fltk3::ValueSlider::draw()
     syy += 25; bhh = 25; shh -= 25;
   }
   if (damage()&fltk3::DAMAGE_ALL) 
-    //draw_box(Boxtype(box()|(horizontal()?TIE_LEFT:TIE_TOP)),sxx,syy,sww,shh,color());
-    draw_box(box(),sxx,syy,sww,shh,color());
+    fltk3::draw_box(box(),sxx,syy,sww,shh,color(),horizontal()?Box::TIE_LEFT:Box::TIE_TOP);
   Slider::draw(sxx+fltk3::box_dx(box()),
                syy+fltk3::box_dy(box()),
                sww-fltk3::box_dw(box()),
                shh-fltk3::box_dh(box()));
-  //draw_box(Boxtype(box()|(horizontal()?TIE_RIGHT:TIE_BOTTOM)),bxx,byy,bww,bhh,color());
-  draw_box(box(),bxx,byy,bww,bhh,color());
+  fltk3::draw_box(box(),bxx,byy,bww,bhh,color(),horizontal()?Box::TIE_RIGHT:Box::TIE_BOTTOM);
   char buf[128];
   format(buf);
   fltk3::font(textfont(), textsize());

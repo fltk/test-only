@@ -53,12 +53,7 @@ namespace fltk3 {
      The constructor specializes fltk3::Browser() by setting the type to fltk3::HOLD_BROWSER.
      The destructor destroys the widget and frees all memory that has been allocated.
      */
-#if defined(FL_DLL)	// implementation in src/Fl_Browser.cxx
     HoldBrowser(int X,int Y,int W,int H,const char *L=0);
-#else
-    HoldBrowser(int X,int Y,int W,int H,const char *l=0)
-    : fltk3::Browser(X,Y,W,H,l) {type(fltk3::HOLD_BROWSER);}
-#endif
   };
   
 }

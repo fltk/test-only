@@ -32,6 +32,7 @@
 #define Fltk3_Input_H
 
 #include "Input_.h"
+#include "Box.h"
 
 class Fl_Input;
 
@@ -272,6 +273,7 @@ namespace fltk3 {
     
   protected:
     void draw();
+    void draw(Box*, int, int, int, int, Color, Box::Flags);
   public:
     int handle(int);
     Input(int,int,int,int,const char * = 0);

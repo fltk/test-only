@@ -104,6 +104,7 @@
 		7CB9D27B0F1CE28C828F280B /* SharedImage.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8580401C9D38395ECAD127AC /* SharedImage.cxx */; };
 		550F71EE23A3D8E00A890F88 /* SingleWindow.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 17A03BA54D8D67397D8BDCEE /* SingleWindow.cxx */; };
 		052ACB65AAC112E4DFA7B7C1 /* Slider.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 085FAF82201B9FD1927A8BAA /* Slider.cxx */; };
+		513981457CBD1BB591B74125 /* Spinner.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1A9DA140854F85ED1D163055 /* Spinner.cxx */; };
 		195134865585E031DF857E7B /* Style.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CAA3AD964456E0912791C783 /* Style.cxx */; };
 		E40F07C5B08B33AD9EF93F20 /* Symbol.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C1CF3831817779114C1ADF24 /* Symbol.cxx */; };
 		E0D6CAE34DC85454B5C61EBA /* Table.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 025842431942A90D06F5BCFA /* Table.cxx */; };
@@ -8702,6 +8703,7 @@
 		8580401C9D38395ECAD127AC /* SharedImage.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SharedImage.cxx; path = ../../src/fltk3/SharedImage.cxx; sourceTree = SOURCE_ROOT; };
 		17A03BA54D8D67397D8BDCEE /* SingleWindow.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleWindow.cxx; path = ../../src/fltk3/SingleWindow.cxx; sourceTree = SOURCE_ROOT; };
 		085FAF82201B9FD1927A8BAA /* Slider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Slider.cxx; path = ../../src/fltk3/Slider.cxx; sourceTree = SOURCE_ROOT; };
+		1A9DA140854F85ED1D163055 /* Spinner.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spinner.cxx; path = ../../src/fltk3/Spinner.cxx; sourceTree = SOURCE_ROOT; };
 		CAA3AD964456E0912791C783 /* Style.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Style.cxx; path = ../../src/fltk3/Style.cxx; sourceTree = SOURCE_ROOT; };
 		C1CF3831817779114C1ADF24 /* Symbol.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Symbol.cxx; path = ../../src/fltk3/Symbol.cxx; sourceTree = SOURCE_ROOT; };
 		025842431942A90D06F5BCFA /* Table.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Table.cxx; path = ../../src/fltk3/Table.cxx; sourceTree = SOURCE_ROOT; };
@@ -11964,6 +11966,7 @@
 				8580401C9D38395ECAD127AC /* SharedImage.cxx */,
 				17A03BA54D8D67397D8BDCEE /* SingleWindow.cxx */,
 				085FAF82201B9FD1927A8BAA /* Slider.cxx */,
+				1A9DA140854F85ED1D163055 /* Spinner.cxx */,
 				CAA3AD964456E0912791C783 /* Style.cxx */,
 				C1CF3831817779114C1ADF24 /* Symbol.cxx */,
 				025842431942A90D06F5BCFA /* Table.cxx */,
@@ -20980,6 +20983,7 @@
 				7CB9D27B0F1CE28C828F280B /* SharedImage.cxx in Sources */,
 				550F71EE23A3D8E00A890F88 /* SingleWindow.cxx in Sources */,
 				052ACB65AAC112E4DFA7B7C1 /* Slider.cxx in Sources */,
+				513981457CBD1BB591B74125 /* Spinner.cxx in Sources */,
 				195134865585E031DF857E7B /* Style.cxx in Sources */,
 				E40F07C5B08B33AD9EF93F20 /* Symbol.cxx in Sources */,
 				E0D6CAE34DC85454B5C61EBA /* Table.cxx in Sources */,

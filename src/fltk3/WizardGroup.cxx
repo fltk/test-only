@@ -24,51 +24,35 @@
 //
 //     http://www.fltk.org/str.php
 //
-// Contents:
-
-//
-//   fltk3::WizardGroup::WizardGroup() - Create an fltk3::WizardGroup widget.
-//   fltk3::WizardGroup::draw()      - Draw the wizard border and visible child.
-//   fltk3::WizardGroup::next()      - Show the next child.
-//   fltk3::WizardGroup::prev()      - Show the previous child.
-//   fltk3::WizardGroup::value()     - Return the current visible child.
-//   fltk3::WizardGroup::value()     - Set the visible child.
-//
-
-//
-// Include necessary header files...
-//
 
 #include <fltk3/WizardGroup.h>
 #include <fltk3/Window.h>
 #include <fltk3/draw.h>
 
 
-//
-// 'fltk3::WizardGroup::WizardGroup()' - Create an fltk3::WizardGroup widget.
-//
-
 /**
-  The constructor creates the fltk3::WizardGroup widget at the specified
-  position and size.
-  <P>The inherited destructor destroys the widget and its children.
-*/
-fltk3::WizardGroup::WizardGroup(int        xx,	// I - Lefthand position
-                     int        yy,	// I - Upper position
-		     int        ww,	// I - Width
-		     int        hh,	// I - Height
-		     const char *l) :	// I - Label
-    fltk3::Group(xx, yy, ww, hh, l)
+ The constructor creates the fltk3::WizardGroup widget at the specified
+ position and size.
+ \param xx, yy, ww, hh position and size
+ \param l label text
+ */
+fltk3::WizardGroup::WizardGroup(int xx,
+                                int yy,
+                                int ww,
+                                int hh,
+                                const char *l) 
+: fltk3::Group(xx, yy, ww, hh, l)
 {
   box(fltk3::THIN_UP_BOX);
-
   value_ = (fltk3::Widget *)0;
 }
 
 
-//
-/** Draws the wizard border and visible child. */
-void fltk3::WizardGroup::draw() {
+/** 
+ Draws the wizard border and visible child. 
+ */
+void fltk3::WizardGroup::draw() 
+{
   fltk3::Widget	*kid;	// Visible child
   kid = value();
   if (damage() & fltk3::DAMAGE_ALL)
@@ -88,54 +72,61 @@ void fltk3::WizardGroup::draw() {
 
 
 /**
-  This method shows the next child of the wizard. If the last child
-  is already visible, this function does nothing.
-*/
-void fltk3::WizardGroup::next() {
+ This method shows the next child of the wizard. If the last child
+ is already visible, this function does nothing.
+ */
+void fltk3::WizardGroup::next() 
+{
   int			num_kids;
   fltk3::Widget	* const *kids;
-
-
+  
+  
   if ((num_kids = children()) == 0)
     return;
-
+  
   for (kids = array(); num_kids > 0; kids ++, num_kids --)
     if ((*kids)->visible())
       break;
-
+  
   if (num_kids > 1)
     value(kids[1]);
 }
 
-/** Shows the previous child.*/
+
+/** 
+ Shows the previous child.
+ */
 void fltk3::WizardGroup::prev()
 {
   int			num_kids;
   fltk3::Widget	* const *kids;
-
-
+  
+  
   if ((num_kids = children()) == 0)
     return;
-
+  
   for (kids = array(); num_kids > 0; kids ++, num_kids --)
     if ((*kids)->visible())
       break;
-
+  
   if (num_kids > 0 && num_kids < children())
     value(kids[-1]);
 }
 
-/**  Gets the current visible child widget. */
+
+/**  
+ Gets the current visible child widget. 
+ */
 fltk3::Widget* fltk3::WizardGroup::value()
 {
   int			num_kids;
   fltk3::Widget	* const *kids;
   fltk3::Widget		*kid;
-
-
+  
+  
   if ((num_kids = children()) == 0)
     return ((fltk3::Widget *)0);
-
+  
   for (kids = array(), kid = (fltk3::Widget *)0; num_kids > 0; kids ++, num_kids --)
   {
     if ((*kids)->visible())
@@ -146,27 +137,30 @@ fltk3::Widget* fltk3::WizardGroup::value()
         kid = *kids;
     }
   }
-
+  
   if (!kid)
   {
     kids --;
     kid = *kids;
     kid->show();
   }
-
+  
   return (kid);
 }
 
-/**  Sets the child widget that is visible.*/
+
+/**  
+ Sets the child widget that is visible.
+ */
 void fltk3::WizardGroup::value(fltk3::Widget *kid)
 {
   int			num_kids;
   fltk3::Widget	* const *kids;
-
-
+  
+  
   if ((num_kids = children()) == 0)
     return;
-
+  
   for (kids = array(); num_kids > 0; kids ++, num_kids --)
   {
     if (*kids == kid)
@@ -177,7 +171,7 @@ void fltk3::WizardGroup::value(fltk3::Widget *kid)
     else
       (*kids)->hide();
   }
-
+  
   // This will restore the mouse pointer to the window's default cursor
   // whenever the wizard pane is changed.  Otherwise text widgets that
   // show the next pane may leave the cursor set to the I beam, etc...

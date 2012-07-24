@@ -31,8 +31,12 @@
 #include <math.h>
 #include "flstring.h"
 
+#include <fltk3/FillSlider.h>
+#include <fltk3/HorFillSlider.h>
+#include <fltk3/HorNiceSlider.h>
 #include <fltk3/HorSlider.h>
 #include <fltk3/HorValueSlider.h>
+#include <fltk3/NiceSlider.h>
 
 
 void fltk3::Slider::_Slider() {
@@ -387,6 +391,28 @@ int fltk3::Slider::handle(int event) {
 }
 
 
+fltk3::FillSlider::FillSlider(int x,int y,int w,int h,const char *l)
+: fltk3::Slider(x,y,w,h,l) 
+{
+  type(fltk3::VERT_FILL_SLIDER);
+}
+
+
+fltk3::HorFillSlider::HorFillSlider(int x,int y,int w,int h,const char *l)
+: fltk3::Slider(x,y,w,h,l) 
+{
+  type(fltk3::HOR_FILL_SLIDER);
+}
+
+
+fltk3::HorNiceSlider::HorNiceSlider(int x,int y,int w,int h,const char *l)
+: fltk3::Slider(x,y,w,h,l)
+{
+  type(fltk3::HOR_NICE_SLIDER); 
+  box(fltk3::FLAT_BOX);
+}
+
+
 fltk3::HorSlider::HorSlider(int X,int Y,int W,int H,const char *l)
 : fltk3::Slider(X,Y,W,H,l) 
 {
@@ -395,8 +421,17 @@ fltk3::HorSlider::HorSlider(int X,int Y,int W,int H,const char *l)
 
 
 fltk3::HorValueSlider::HorValueSlider(int X,int Y,int W,int H,const char *l)
-: fltk3::ValueSlider(X,Y,W,H,l) {
+: fltk3::ValueSlider(X,Y,W,H,l) 
+{
   type(fltk3::HOR_SLIDER);
+}
+
+
+fltk3::NiceSlider::NiceSlider(int x,int y,int w,int h,const char *l)
+: fltk3::Slider(x,y,w,h,l) 
+{
+  type(fltk3::VERT_NICE_SLIDER); 
+  box(fltk3::FLAT_BOX);
 }
 
 

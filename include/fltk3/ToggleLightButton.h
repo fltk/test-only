@@ -33,11 +33,8 @@
 namespace fltk3 {
   
   class FLTK3_EXPORT ToggleLightButton : public LightButton {
-  protected:
-    virtual void draw();
   public:
-    ToggleLightButton(int x,int y,int w,int h,const char *l = 0)
-    : LightButton(x, y, w, h, l) {}
+    ToggleLightButton(int x,int y,int w,int h,const char *l = 0);
   };
 
 }

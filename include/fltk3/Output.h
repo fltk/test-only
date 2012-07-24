@@ -64,12 +64,7 @@ namespace fltk3 {
      
      Inherited destrucor destroys the widget and any value associated with it.
      */
-#if defined(FL_DLL)	// implementation in src/Fl_Input.cxx
     Output(int X,int Y,int W,int H, const char *l = 0);
-#else
-    Output(int X,int Y,int W,int H, const char *l = 0)
-    : fltk3::Input(X, Y, W, H, l) {type(fltk3::NORMAL_OUTPUT);}
-#endif
   };
   
 }

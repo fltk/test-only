@@ -39,7 +39,6 @@
 static const int tie_gap = 5;
 static const float tie_dk = 0.3f;
 static const float tie_lt = 0.45f;
-static const int use_tie_lt = 1;
 // a high number creates a very intense shadow and steep ramp,
 // a low number brightens the shadow and flattens the ramp
 static const float tie_dk_ramp = 0.20;
@@ -65,15 +64,14 @@ fltk3::color(ol);
 */
 
 
-static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt, fltk3::Color dk, fltk3::Box* t) {
+static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt, fltk3::Color dk, fltk3::Box* t, fltk3::Box::Flags flags=(fltk3::Box::Flags)0) {
   float f = (dk==fltk3::WHITE) ? tie_dk_ramp : tie_lt_ramp;
   fltk3::Color ol = gtk_get_color(fltk3::color_average(fltk3::BLACK, c, 0.7f));
   fltk3::Color hi = gtk_get_color(fltk3::color_average(lt, c, f));
-  /* FIXME:
-  if (t & 0xff000000) {
+  if (flags & fltk3::Box::TIE_MASK) {
     int r = x+w-1, b = y+h-1, xr = x+w/2, yb = y+h/2;
     fltk3::color(ol);
-    switch (t & (fltk3::TIE_LEFT|fltk3::TIE_TOP)) {
+    switch (flags & (fltk3::Box::TIE_LEFT|fltk3::Box::TIE_TOP)) {
       case 0:
         fltk3::color(hi);
         fltk3::yxline(x+1, y+2, yb);
@@ -86,19 +84,19 @@ static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color 
         fltk3::vertex(xr, y);
         fltk3::end_line();
         break;
-      case fltk3::TIE_LEFT:
+      case fltk3::Box::TIE_LEFT:
         fltk3::color(hi);
         fltk3::xyline(x, y+1, xr);
         fltk3::color(ol);
         fltk3::xyline(x, y, xr);
         break;
-      case fltk3::TIE_TOP:
+      case fltk3::Box::TIE_TOP:
         fltk3::color(hi);
         fltk3::yxline(x+1, y, yb);
         fltk3::color(ol);
         fltk3::yxline(x, yb, y);
     }
-    switch (t & (fltk3::TIE_RIGHT|fltk3::TIE_TOP)) {
+    switch (flags & (fltk3::Box::TIE_RIGHT|fltk3::Box::TIE_TOP)) {
       case 0:
         fltk3::color(hi);
         fltk3::xyline(xr, y+1, r-2);
@@ -110,16 +108,16 @@ static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color 
         fltk3::vertex(r, yb);
         fltk3::end_line();
         break;
-      case fltk3::TIE_RIGHT:
+      case fltk3::Box::TIE_RIGHT:
         fltk3::color(hi);
         fltk3::xyline(xr, y+1, r);
         fltk3::color(ol);
         fltk3::xyline(xr, y, r);
         break;
-      case fltk3::TIE_TOP:
+      case fltk3::Box::TIE_TOP:
         fltk3::yxline(r, y, yb);
     }
-    switch (t & (fltk3::TIE_RIGHT|fltk3::TIE_BOTTOM)) {
+    switch (flags & (fltk3::Box::TIE_RIGHT|fltk3::Box::TIE_BOTTOM)) {
       case 0:
         fltk3::begin_line();
         fltk3::vertex(r, yb);
@@ -128,13 +126,13 @@ static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color 
         fltk3::vertex(xr, b);
         fltk3::end_line();
         break;
-      case fltk3::TIE_RIGHT:
+      case fltk3::Box::TIE_RIGHT:
         fltk3::xyline(xr, b, r);
         break;
-      case fltk3::TIE_BOTTOM:
+      case fltk3::Box::TIE_BOTTOM:
         fltk3::yxline(r, yb, b);
     }
-    switch (t & (fltk3::TIE_LEFT|fltk3::TIE_BOTTOM)) {
+    switch (flags & (fltk3::Box::TIE_LEFT|fltk3::Box::TIE_BOTTOM)) {
       case 0:
         fltk3::color(hi);
         fltk3::yxline(x+1, yb, b-2);
@@ -146,17 +144,16 @@ static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color 
         fltk3::vertex(x, yb);
         fltk3::end_line();
         break;
-      case fltk3::TIE_LEFT:
+      case fltk3::Box::TIE_LEFT:
         fltk3::xyline(x, b, xr);
         break;
-      case fltk3::TIE_BOTTOM:
+      case fltk3::Box::TIE_BOTTOM:
         fltk3::color(hi);
         fltk3::yxline(x+1, yb, b);
         fltk3::color(ol);
         fltk3::yxline(x, yb, b);
     }
   } else {
-   */
     fltk3::color(hi);
     fltk3::xyline(x + 2, y + 1, x + w - 3);
     fltk3::yxline(x + 1, y + 2, y + h - 3);
@@ -172,12 +169,11 @@ static void draw_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Color 
     fltk3::vertex(x + 2, y + h - 1);
     fltk3::vertex(x, y + h - 3);
     fltk3::end_loop();
-  /*
   }
-   */
 }
 
-static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt, fltk3::Color dk, fltk3::Box* t) {
+
+static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt, fltk3::Color dk, fltk3::Box* t, fltk3::Box::Flags flags=(fltk3::Box::Flags)0) {
   float f = (dk==fltk3::WHITE) ? tie_dk_ramp : tie_lt_ramp;
   fltk3::Color tc1 = gtk_get_color(fltk3::color_average(lt, c, f*0.8f));
   fltk3::Color tc2 = gtk_get_color(fltk3::color_average(lt, c, f*0.4f));
@@ -185,17 +181,16 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
   fltk3::Color bc1 = gtk_get_color(fltk3::color_average(dk, c, f*0.6f));
   fltk3::Color bc2 = gtk_get_color(fltk3::color_average(dk, c, f*0.3f));
   fltk3::Color bc3 = gtk_get_color(fltk3::color_average(dk, c, f*0.1f));
-  draw_frame(x, y, w, h, c, lt, dk, t);
-  /*
-  if (t & 0xff000000) {
+  draw_frame(x, y, w, h, c, lt, dk, t, flags);
+  if (flags & fltk3::Box::TIE_MASK) {
     int r = x+w-1, b = y+h-1;
     int x2 = x+2, r2 = r-2;
     int y2 = y+2, b2 = b-2;
-    if (t & fltk3::TIE_LEFT)  x2 = x;
-    if (t & fltk3::TIE_RIGHT) r2 = r;
-    if (t & fltk3::TIE_TOP) {
+    if (flags & fltk3::Box::TIE_LEFT)  x2 = x;
+    if (flags & fltk3::Box::TIE_RIGHT) r2 = r;
+    if (flags & fltk3::Box::TIE_TOP) {
       y2 = y;
-      if (use_tie_lt) {
+      if (!(flags & fltk3::Box::TIE_HIDDEN)) {
         gtk_color(fltk3::color_average(fltk3::WHITE, c, tie_lt));
         fltk3::xyline(x+tie_gap, y, r-tie_gap);
         fltk3::color(c);
@@ -216,7 +211,7 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
     }
     gtk_color(c);
     fltk3::rectf(x2, y + 5, r2-x2+1, h - 7);
-    if (t & fltk3::TIE_BOTTOM) {
+    if (flags & fltk3::Box::TIE_BOTTOM) {
       b2 = b;
       gtk_color(fltk3::color_average(fltk3::BLACK, c, tie_dk));
       fltk3::xyline(x+tie_gap, b, r-tie_gap);
@@ -232,8 +227,8 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
       gtk_color(bc1);
       fltk3::xyline(x2, b-1, r2);
     }
-    if (t & fltk3::TIE_LEFT) {
-      if (use_tie_lt) {
+    if (flags & fltk3::Box::TIE_LEFT) {
+      if (!(flags & fltk3::Box::TIE_HIDDEN)) {
         gtk_color(fltk3::color_average(fltk3::WHITE, c, tie_lt));
         fltk3::yxline(x, y+tie_gap, b-tie_gap);
         //gtk_color(c);
@@ -241,15 +236,16 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
         //fltk3::yxline(x, b-tie_gap+1, b2);
       }
     }
-    if (t & fltk3::TIE_RIGHT) {
-      gtk_color(fltk3::color_average(fltk3::BLACK, c, tie_dk));
-      fltk3::yxline(r, y+tie_gap, b-tie_gap);
+    if (flags & fltk3::Box::TIE_RIGHT) {
+      if (!(flags & fltk3::Box::TIE_HIDDEN)) {
+        gtk_color(fltk3::color_average(fltk3::BLACK, c, tie_dk));
+        fltk3::yxline(r, y+tie_gap, b-tie_gap);
+      }
     } else {
       gtk_color(fltk3::color_average(dk, c, 0.1f));
       fltk3::yxline(r-1, y2, b2);
     }
   } else {
-   */
     gtk_color(tc1);
     fltk3::xyline(x + 2, y + 2, x + w - 3);
     gtk_color(tc2);
@@ -265,9 +261,7 @@ static void draw_box(int x, int y, int w, int h, fltk3::Color c, fltk3::Color lt
     gtk_color(bc1);
     fltk3::xyline(x + 2, y + h - 2, x + w - 3);
     fltk3::yxline(x + w - 2, y + 2, y + h - 3);
-  /*
   }
-   */
 }
 
 void fl_gtk_up_frame(int x, int y, int w, int h, fltk3::Color c, fltk3::Box* t) {
@@ -493,6 +487,11 @@ void fltk3::UpBox::_draw(const Rectangle &r) const
   ::draw_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), fltk3::WHITE, fltk3::BLACK, (fltk3::Box*)0);  
 }
 
+void fltk3::UpBox::_draw(const Rectangle &r, Flags f) const
+{
+  ::draw_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), fltk3::WHITE, fltk3::BLACK, (fltk3::Box*)0, f);  
+}
+
 static fltk3::UpBox upBox("upBox");
 
 /*!
@@ -505,6 +504,11 @@ fltk3::Box* fltk3::UP_BOX = &upBox;
 void fltk3::DownBox::_draw(const Rectangle &r) const
 {
   ::draw_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), fltk3::BLACK, fltk3::WHITE, (fltk3::Box*)0);  
+}
+
+void fltk3::DownBox::_draw(const Rectangle &r, Flags f) const
+{
+  ::draw_box(r.x(), r.y(), r.w(), r.h(), fltk3::color(), fltk3::BLACK, fltk3::WHITE, (fltk3::Box*)0, f);  
 }
 
 static fltk3::DownBox downBox("downBox");

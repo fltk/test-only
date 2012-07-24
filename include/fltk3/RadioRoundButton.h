@@ -37,8 +37,7 @@ namespace fltk3 {
   
   class FLTK3_EXPORT RadioRoundButton : public fltk3::RoundButton {
   public:
-    RadioRoundButton(int x,int y,int w,int h,const char *l=0)
-    : fltk3::RoundButton(x,y,w,h,l) {type(fltk3::RADIO_BUTTON);}
+    RadioRoundButton(int x,int y,int w,int h,const char *l=0);
   };
   
 }

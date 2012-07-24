@@ -35,6 +35,25 @@
 #include <fltk3/draw.h>
 #include <fltk3/x.h>
 
+
+fltk3::OverlayWindow::OverlayWindow(int W, int H, const char *l)
+: fltk3::DoubleWindow(W,H,l) 
+{
+  overlay_ = 0; 
+  force_doublebuffering_=1; 
+  image(0); 
+}
+
+
+fltk3::OverlayWindow::OverlayWindow(int X, int Y, int W, int H, const char *l)
+: fltk3::DoubleWindow(X,Y,W,H,l) 
+{
+  overlay_ = 0;
+  force_doublebuffering_=1;
+  image(0); 
+}
+
+
 void fltk3::OverlayWindow::show() {
   DoubleWindow::show();
   if (overlay_ && overlay_ != this) overlay_->show();

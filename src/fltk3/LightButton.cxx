@@ -37,6 +37,8 @@
 #include <fltk3/draw.h>
 #include "flstring.h"
 
+#include <fltk3/RadioLightButton.h>
+
 
 void fltk3::LightButton::draw() 
 {
@@ -179,6 +181,13 @@ fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
   type(fltk3::TOGGLE_BUTTON);
   selection_color(fltk3::YELLOW);
   align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE);
+}
+
+
+fltk3::RadioLightButton::RadioLightButton(int X,int Y,int W,int H,const char *l)
+: fltk3::LightButton(X,Y,W,H,l) 
+{
+  type(fltk3::RADIO_BUTTON);
 }
 
 

@@ -105,6 +105,20 @@ fltk3::MenuWindow::~MenuWindow() {
   hide();
 }
 
+fltk3::MenuWindow::MenuWindow(int W, int H, const char *l)
+: fltk3::SingleWindow(W,H,l) 
+{ 
+  image(0); 
+}
+
+
+fltk3::MenuWindow::MenuWindow(int X, int Y, int W, int H, const char *l)
+: fltk3::SingleWindow(X,Y,W,H,l) 
+{ 
+  image(0); 
+}
+
+
 //
 // End of "$Id$".
 //

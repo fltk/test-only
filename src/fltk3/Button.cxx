@@ -29,6 +29,12 @@
 #include <fltk3/Button.h>
 #include <fltk3/Group.h>
 #include <fltk3/Window.h>
+#include <fltk3/draw.h>
+
+#include <fltk3/RadioButton.h>
+#include <fltk3/ToggleButton.h>
+#include <fltk3/ToggleLightButton.h>
+#include <fltk3/ToggleRoundButton.h>
 
 
 fltk3::WidgetTracker *fltk3::Button::key_release_tracker = 0;
@@ -80,17 +86,23 @@ void fltk3::Button::setonly()
 
 void fltk3::Button::draw() 
 {
+  Box *b = value() ? ( down_box() ? down_box() : fltk3::down(box()) ) : box();
+  draw(b, 0, 0, w(), h(), color(), 0);
+}
+
+void fltk3::Button::draw(Box* b, int x, int y, int w, int h, Color c, Box::Flags f)
+{
   if (type() == fltk3::HIDDEN_BUTTON) return;
   fltk3::Color col;
   if (value()) {
     if (selection_color()==fltk3::GRAY) 
-      col = fltk3::color_average(fltk3::BLACK, color(), 0.2f);
+      col = fltk3::color_average(fltk3::BLACK, c, 0.2f);
     else
       col = selection_color();
   } else {
-    col = color();
+    col = c;
   }
-  draw_box(value() ? ( down_box()? down_box():fltk3::down(box()) ) : box(), col);
+  fltk3::draw_box(b, x, y, w, h, col, f);
   draw_backdrop();
   if (labeltype() == fltk3::NORMAL_LABEL && value()) {
     fltk3::Color c = labelcolor();
@@ -239,6 +251,33 @@ fltk3::Button::Button(int X, int Y, int W, int H, const char *L)
   shortcut_ = 0;
   set_flag(SHORTCUT_LABEL);
 }
+
+
+fltk3::RadioButton::RadioButton(int x,int y,int w,int h,const char *l)
+: fltk3::Button(x,y,w,h,l) 
+{
+  type(fltk3::RADIO_BUTTON);
+}
+
+
+fltk3::ToggleButton::ToggleButton(int X,int Y,int W,int H,const char *l)
+: Button(X,Y,W,H,l) 
+{
+  type(TOGGLE_BUTTON);
+}
+
+
+fltk3::ToggleLightButton::ToggleLightButton(int x,int y,int w,int h,const char *l)
+: LightButton(x, y, w, h, l) 
+{
+}
+
+
+fltk3::ToggleRoundButton::ToggleRoundButton(int x,int y,int w,int h,const char *l)
+: RoundButton(x, y, w, h, l) 
+{
+}
+
 
 //
 // End of "$Id$".

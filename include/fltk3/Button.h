@@ -32,6 +32,7 @@
 #define FLTK3_BUTTON_H
 
 #include "Widget.h"
+#include "Box.h"
 #include <fltk3/Wrapper.h>
 
 
@@ -96,6 +97,8 @@ namespace fltk3 {
     static fltk3::WidgetTracker *key_release_tracker;
     static void key_release_timeout(void*);
     void simulate_key_action();
+    
+    void draw(Box*, int, int, int, int, Color, Box::Flags);
     
     virtual void draw();
     

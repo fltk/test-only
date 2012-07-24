@@ -33,8 +33,24 @@
 
 #include <fltk3/SingleWindow.h>
 
-void fltk3::SingleWindow::show() {Window::show();}
-void fltk3::SingleWindow::flush() {Window::flush();}
+
+void fltk3::SingleWindow::show() 
+{
+  Window::show();
+}
+
+
+void fltk3::SingleWindow::flush() 
+{
+  Window::flush();
+}
+
+
+fltk3::SingleWindow::SingleWindow(int X, int Y, int W, int H, const char *l)
+: fltk3::Window(X,Y,W,H,l) 
+{
+}
+
 
 //
 // End of "$Id$".

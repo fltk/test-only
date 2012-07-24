@@ -32,6 +32,10 @@
 #include <fltk3/math.h>
 #include <fltk3/Wrapper.h>
 
+#include <fltk3/FillDial.h>
+#include <fltk3/LineDial.h>
+
+
 // All angles are measured with 0 to the right and counter-clockwise
 /**
   Draws dial at given position and size.
@@ -161,6 +165,21 @@ fltk3::Dial::Dial(int X, int Y, int W, int H, const char* l)
   a1 = 45;
   a2 = 315;
 }
+
+
+fltk3::FillDial::FillDial(int x,int y,int w,int h, const char *l)
+: fltk3::Dial(x,y,w,h,l) 
+{
+  type(fltk3::FILL_DIAL);
+}
+
+
+fltk3::LineDial::LineDial(int x,int y,int w,int h, const char *l)
+: fltk3::Dial(x,y,w,h,l) 
+{
+  type(fltk3::LINE_DIAL);
+}
+
 
 //
 // End of "$Id$".

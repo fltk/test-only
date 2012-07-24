@@ -37,6 +37,10 @@
 #include <fltk3/draw.h>
 #include <stdlib.h>
 
+#include <fltk3/InputChoice.h>
+#include <fltk3/Spinner.h>
+
+
 fltk3::Group* fltk3::Group::current_;
 
 // Hack: A single child is stored in the pointer to the array, while
@@ -854,6 +858,58 @@ void fltk3::Group::forms_end() {
   //}
   end();
 }
+
+
+fltk3::InputChoice::InputChoice (int x,int y,int w,int h,const char*l)
+: fltk3::Group(x,y,w,h,l) 
+{
+  Group::box(fltk3::DOWN_BOX);
+  align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
+  inp_ = new fltk3::Input(inp_x(), inp_y(),
+                          inp_w(), inp_h());
+  inp_->callback(inp_cb, (void*)this);
+  inp_->box(fltk3::FLAT_BOX);		// cosmetic
+  inp_->when(fltk3::WHEN_CHANGED|fltk3::WHEN_NOT_CHANGED);
+  menu_ = new InputMenuButton(menu_x(), menu_y(),
+                              menu_w(), menu_h());
+  menu_->callback(menu_cb, (void*)this);
+  menu_->box(fltk3::FLAT_BOX);				// cosmetic
+  end();
+}
+
+
+fltk3::Spinner::Spinner(int X, int Y, int W, int H, const char *L)
+: fltk3::Group(X, Y, W, H, L),
+  input_(0, 0, W - H / 2 - 2, H),
+  up_button_(W - H / 2 - 2, 0, H / 2 + 2, H / 2, "@-42<"),
+  down_button_(W - H / 2 - 2, H - H / 2, H / 2 + 2, H / 2, "@-42>") 
+{
+  end();
+  
+  value_   = 1.0;
+  minimum_ = 1.0;
+  maximum_ = 100.0;
+  step_    = 1.0;
+  format_  = "%g";
+  
+  align(fltk3::ALIGN_LEFT);
+  
+  input_.value("1");
+  input_.type(fltk3::INT_INPUT);
+  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
+  input_.callback((fltk3::Callback *)sb_cb, this);
+  //input_.box(Boxtype(input_.box()|TIE_RIGHT));
+  input_.box(input_.box());
+  
+  up_button_.callback((fltk3::Callback *)sb_cb, this);
+  //up_button_.box(Boxtype(up_button_.box()|TIE_LEFT|TIE_BOTTOM));
+  up_button_.box(up_button_.box());
+  
+  down_button_.callback((fltk3::Callback *)sb_cb, this);
+  //down_button_.box(Boxtype(down_button_.box()|TIE_LEFT|TIE_TOP));
+  down_button_.box(down_button_.box());
+}
+
 
 //
 // End of "$Id$".

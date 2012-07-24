@@ -32,11 +32,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-#if defined(FL_DLL)	// really needed for c'tors for MS VC++ only
 #include <fltk3/HoldBrowser.h>
 #include <fltk3/MultiBrowser.h>
 #include <fltk3/SelectBrowser.h>
-#endif
+
 
 // I modified this from the original Forms data to use a linked list
 // so that the number of items in the browser and size of those items
@@ -950,29 +949,27 @@ void fltk3::Browser::remove_icon(int line) {
   icon(line,0);
 }
 
-/*
- The following constructors must not be in the header file(s) if we
- build a shared object (DLL). Instead they are defined here to force
- the constructor (and default destructor as well) to be defined in
- the DLL and exported (STR #2632, #2645).
- 
- Note: if you change any of them, do the same changes in the specific
- header file as well.  This redundant definition was chosen to enable
- inline constructors in the header files (for static linking) as well
- as those here for dynamic linking (Windows DLL).
- */
-#if defined(FL_DLL)
 
 fltk3::HoldBrowser::HoldBrowser(int X,int Y,int W,int H,const char *L)
-: fltk3::Browser(X,Y,W,H,L) {type(fltk3::HOLD_BROWSER);}
+: fltk3::Browser(X,Y,W,H,L) 
+{
+  type(fltk3::HOLD_BROWSER);
+}
+
 
 fltk3::MultiBrowser::MultiBrowser(int X,int Y,int W,int H,const char *L)
-: fltk3::Browser(X,Y,W,H,L) {type(fltk3::MULTI_BROWSER);}
+: fltk3::Browser(X,Y,W,H,L) 
+{
+  type(fltk3::MULTI_BROWSER);
+}
+
 
 fltk3::SelectBrowser::SelectBrowser(int X,int Y,int W,int H,const char *L)
-: fltk3::Browser(X,Y,W,H,L) {type(fltk3::SELECT_BROWSER);}
+: fltk3::Browser(X,Y,W,H,L) 
+{
+  type(fltk3::SELECT_BROWSER);
+}
 
-#endif // FL_DLL
 
 //
 // End of "$Id$".

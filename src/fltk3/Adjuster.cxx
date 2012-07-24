@@ -57,13 +57,13 @@ void fltk3::Adjuster::draw()
     dx = 0; W = w();
     dy = H = h()/3;
   }
+  fltk3::Color col = color();
+  fltk3::Color sel = fltk3::color_average(fltk3::BLACK, col, 0.2f);
+
   fltk3::Box* up = box(), *dn = fltk3::down(box());
-  //draw_box(Boxtype((drag==1?dn:up)|(hor?TIE_RIGHT:TIE_TOP)), 0, 2*dy, W, H, color());
-  draw_box((drag==1?dn:up), 0, 2*dy, W, H, color());
-  //draw_box(Boxtype((drag==2?dn:up)|(hor?TIE_LEFT|TIE_RIGHT:TIE_TOP|TIE_BOTTOM)), dx, dy, W, H, color());
-  draw_box((drag==2?dn:up), dx, dy, W, H, color());
-  //draw_box(Boxtype((drag==3?dn:up)|(hor?TIE_LEFT:TIE_BOTTOM)), 2*dx, 0, W, H, color());
-  draw_box((drag==3?dn:up), 2*dx, 0, W, H, color());
+  fltk3::draw_box((drag==1?dn:up), 0, 2*dy, W, H, (drag==1?sel:col), hor?Box::TIE_RIGHT:Box::TIE_TOP);
+  fltk3::draw_box((drag==2?dn:up), dx, dy, W, H,  (drag==2?sel:col), hor?Box::TIE_LEFT|Box::TIE_RIGHT:Box::TIE_TOP|Box::TIE_BOTTOM);
+  fltk3::draw_box((drag==3?dn:up), 2*dx, 0, W, H, (drag==3?sel:col), hor?Box::TIE_LEFT:Box::TIE_BOTTOM);
   if (active_r())
     fltk3::color(selection_color());
   else
@@ -173,6 +173,7 @@ int fltk3::Adjuster::handle(int event)
   return 0;
 }
 
+
 fltk3::Adjuster::Adjuster(int X, int Y, int W, int H, const char* l)
 : fltk3::Valuator(X, Y, W, H, l) 
 {
@@ -182,6 +183,7 @@ fltk3::Adjuster::Adjuster(int X, int Y, int W, int H, const char* l)
   drag = 0;
   soft_ = 1;
 }
+
 
 //
 // End of "$Id$".

@@ -39,8 +39,7 @@ namespace fltk3 {
   class FLTK3_EXPORT FillDial : public fltk3::Dial {
   public:
     /** Creates a filled dial, also setting its type to fltk3::FILL_DIAL. */
-    FillDial(int x,int y,int w,int h, const char *l = 0)
-    : fltk3::Dial(x,y,w,h,l) {type(fltk3::FILL_DIAL);}
+    FillDial(int x,int y,int w,int h, const char *l = 0);
   };
   
 }

@@ -57,8 +57,7 @@ namespace fltk3 {
      Creates a new fltk3::SingleWindow widget using the given
      position, size, and label (title) string.
      */
-    SingleWindow(int X, int Y, int W, int H, const char *l=0)
-    : fltk3::Window(X,Y,W,H,l) {}
+    SingleWindow(int X, int Y, int W, int H, const char *l=0);
     int make_current();
   };
   

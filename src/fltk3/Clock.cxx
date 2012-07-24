@@ -34,6 +34,8 @@
 # include <sys/time.h>
 #endif /* !WIN32 */
 
+#include <fltk3/RoundClock.h>
+
 
 // Original clock display written by Paul Haeberli at SGI.
 // Modifications by Mark Overmars for Forms
@@ -240,6 +242,14 @@ int fltk3::Clock::handle(int event)
 fltk3::Clock::~Clock() 
 {
   fltk3::remove_timeout(tick, this);
+}
+
+
+fltk3::RoundClock::RoundClock(int x,int y,int w,int h, const char *l)
+: Clock(x,y,w,h,l) 
+{
+  type(fltk3::ROUND_CLOCK); 
+  box(fltk3::NO_BOX);
 }
 
 

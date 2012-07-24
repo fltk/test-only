@@ -57,12 +57,7 @@ namespace fltk3 {
      
      Inherited destructor destroys the widget and any value associated with it.
      */
-#if defined(FL_DLL)	// implementation in src/Fl_Input.cxx
     MultilineOutput(int X,int Y,int W,int H,const char *l = 0);
-#else
-    MultilineOutput(int X,int Y,int W,int H,const char *l = 0)
-    : fltk3::Output(X,Y,W,H,l) {type(fltk3::MULTILINE_OUTPUT);}
-#endif
   };
   
 }

@@ -31,7 +31,9 @@
 #include <fltk3/Adjuster.h>
 #include <fltk3/Box.h>
 
+
 using namespace fltk3;
+
 
 void adjcb(Widget *o, void *v) {
   Adjuster *a = (Adjuster*)o;
@@ -39,6 +41,7 @@ void adjcb(Widget *o, void *v) {
   a->format((char *)(b->label()));
   b->redraw();
 }
+
 
 int main(int argc, char ** argv) {
    DoubleWindow window(320,100,argv[0]);
@@ -62,6 +65,7 @@ int main(int argc, char ** argv) {
    window.show(argc, argv);
    return run();
 }
+
 
 //
 // End of "$Id$".

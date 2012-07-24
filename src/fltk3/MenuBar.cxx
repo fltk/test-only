@@ -73,6 +73,13 @@ int fltk3::MenuBar::handle(int event) {
   return 0;
 }
 
+
+fltk3::MenuBar::MenuBar(int X, int Y, int W, int H,const char *l)
+: fltk3::Menu_(X,Y,W,H,l) 
+{
+}
+
+
 //
 // End of "$Id$".
 //

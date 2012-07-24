@@ -31,6 +31,8 @@
 
 #include <fltk3/run.h>
 #include <fltk3/RoundButton.h>
+#include <fltk3/RadioRoundButton.h>
+
 
 /**
   Creates a new fltk3::RoundButton widget using the given
@@ -42,6 +44,14 @@ fltk3::RoundButton::RoundButton(int X,int Y,int W,int H, const char *l)
   down_box(fltk3::ROUND_DOWN_BOX);
   selection_color(fltk3::FOREGROUND_COLOR);
 }
+
+ 
+fltk3::RadioRoundButton::RadioRoundButton(int x,int y,int w,int h,const char *l)
+: fltk3::RoundButton(x,y,w,h,l) 
+{
+  type(fltk3::RADIO_BUTTON);
+}
+
 
 //
 // End of "$Id$".

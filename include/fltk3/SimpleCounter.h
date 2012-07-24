@@ -42,8 +42,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT SimpleCounter : public fltk3::Counter {
   public:
-    SimpleCounter(int x,int y,int w,int h, const char *l = 0)
-    : fltk3::Counter(x,y,w,h,l) {type(fltk3::SIMPLE_COUNTER);}
+    SimpleCounter(int x,int y,int w,int h, const char *l = 0);
   };
   
 }

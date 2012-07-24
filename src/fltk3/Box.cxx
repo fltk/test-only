@@ -30,6 +30,18 @@
 #include <fltk3/Box.h>
 
 
+fltk3::BoxWidget::BoxWidget(fltk3::Box* b, int x, int y, int w, int h, const char *l) 
+: Widget(b, x, y, w, h, l) 
+{ 
+}
+
+
+fltk3::BoxWidget::BoxWidget(int x, int y, int w, int h, const char *l) 
+: Widget(x, y, w, h, l) 
+{ 
+}
+
+
 fltk3::Box* fltk3::up(fltk3::Box* b) {
   if (b) {
     return b->up();

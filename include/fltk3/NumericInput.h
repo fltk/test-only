@@ -54,8 +54,7 @@ namespace fltk3 {
      Inherited destructor destroys the widget and any value associated with it
      FIXME: this is not yet implemented! Please copy code from FLTK2!
      */
-    NumericInput(int X,int Y,int W,int H,const char *l = 0)
-    : fltk3::Input(X,Y,W,H,l) {type(fltk3::FLOAT_INPUT);}
+    NumericInput(int X,int Y,int W,int H,const char *l = 0);
   };
   
 }
