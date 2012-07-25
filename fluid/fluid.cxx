@@ -1389,6 +1389,44 @@ void make_main_window() {
   }
 }
 
+
+// Create an easily readable path from the absolute path
+void createRelativeFromAbsolutePath(int i)
+{
+  const int NSEG = 16; // limit string to 16+7+16 characters
+  int j;
+  
+  // Make a relative version of the filename for the menu...
+  fltk3::filename_relative(relative_history[i], sizeof(relative_history[i]),
+                           absolute_history[i]);
+  // if the relative path starts with too many parents, use the absolute path instead
+  if (strncmp(relative_history[i], "../../", 6)==0) {
+    strcpy(relative_history[i], absolute_history[i]);
+    // if the path starts with the HOME path, abbreviate it
+    const char *home = getenv("HOME");
+    int n = strlen(home);
+    if (strncmp(relative_history[i], home, n)==0 && relative_history[i][n]=='/') {
+      relative_history[i][0] = '~';
+      memmove(relative_history[i]+1, relative_history[i]+n, sizeof(relative_history[i])-n);
+    }
+  }
+  // if the path has too many characters, abbreviate it
+  const char *d = relative_history[i];
+  for (j=0; j<NSEG; j++) {
+    if (*d==0) return;
+    d = fltk3::utf8fwd(d+1, 0L, 0L);
+  }
+  int ll = fltk3::utf_nb_char((const unsigned char*)d, strlen(d));
+  if (ll<NSEG+8) return;
+  char *dst = (char*)d;
+  for (j=0; j<ll-NSEG; j++) {
+    d = (char*)fltk3::utf8fwd(d+1, 0L, 0L);
+  }
+  strcpy(dst, " (...) ");
+  memmove(dst+7, d, strlen(d)+1);
+}
+
+
 // Load file history from preferences...
 void load_history() {
   int	i;		// Looping var
@@ -1401,10 +1439,7 @@ void load_history() {
   for (i = 0; i < max_files; i ++) {
     fluid_prefs.get( fltk3::Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
     if (absolute_history[i][0]) {
-      // Make a relative version of the filename for the menu...
-      fltk3::filename_relative(relative_history[i], sizeof(relative_history[i]),
-                           absolute_history[i]);
-
+      createRelativeFromAbsolutePath(i);
       if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
       else history_item[i].flags = 0;
     } else break;
@@ -1415,6 +1450,7 @@ void load_history() {
     history_item[i].hide();
   }
 }
+
 
 // Update file history from preferences...
 void update_history(const char *flname) {
@@ -1447,9 +1483,7 @@ void update_history(const char *flname) {
 
   // Put the new file at the top...
   strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
-
-  fltk3::filename_relative(relative_history[0], sizeof(relative_history[0]),
-                       absolute_history[0]);
+  createRelativeFromAbsolutePath(0);
 
   // Update the menu items as needed...
   for (i = 0; i < max_files; i ++) {
