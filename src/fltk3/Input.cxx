@@ -40,12 +40,12 @@
 #include <fltk3/ask.h>
 #include "flstring.h"
 
-#include <fltk3/FloatInput.H>
-#include <fltk3/IntInput.H>
-#include <fltk3/MultilineInput.H>
-#include <fltk3/Output.H>
-#include <fltk3/MultilineOutput.H>
-#include <fltk3/SecretInput.H>
+#include <fltk3/FloatInput.h>
+#include <fltk3/IntInput.h>
+#include <fltk3/MultilineInput.h>
+#include <fltk3/Output.h>
+#include <fltk3/MultilineOutput.h>
+#include <fltk3/SecretInput.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
