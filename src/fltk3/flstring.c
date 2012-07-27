@@ -27,6 +27,16 @@
 
 #include "flstring.h"
 
+#if defined(WIN32) && !defined(__CYGWIN__)
+#ifdef __cplusplus
+extern "C" {
+#endif
+int strcasecmp(const char *s, const char *t) { return _stricmp(s, t); }
+int strncasecmp(const char *s, const char *t, int n) { return _strnicmp(s, t, n); }
+#ifdef __cplusplus
+}
+#endif
+#endif
 
 /*
  * 'fl_strlcat()' - Safely concatenate two strings.

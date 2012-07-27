@@ -49,8 +49,14 @@
 #  endif /* index */
 
 #  if defined(WIN32) && !defined(__CYGWIN__)
-#    define strcasecmp(s,t)	_stricmp((s), (t))
-#    define strncasecmp(s,t,n)	_strnicmp((s), (t), (n))
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern int strcasecmp(const char *s, const char *t);
+extern int strncasecmp(const char *s, const char *t, int n);
+#ifdef __cplusplus
+}
+#endif
 /* Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
  * on Windows, which is supposed to be POSIX compliant...  Some of these
  * functions are also defined in ISO C99...

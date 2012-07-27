@@ -50,8 +50,8 @@
 /* Windows has equivalent functions, but being Microsoft they added
    gratuitoius changes to the names to stop code from being portable: */
 #if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
-inline int strcasecmp(const char *s, const char *t) { return _stricmp(s, t); }
-inline int strncasecmp(const char *s, const char *t, int n) { return _strnicmp(s, t, n); }
+extern int strcasecmp(const char *s, const char *t);
+extern int strncasecmp(const char *s, const char *t, int n);
 # define vsnprintf		_vsnprintf
 # define snprintf		_snprintf
 #endif
