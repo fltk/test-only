@@ -48,7 +48,7 @@
 #    undef index
 #  endif /* index */
 
-#  if defined(WIN32) && !defined(__CYGWIN__)
+#  if defined(WIN32) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 #ifdef __cplusplus
 extern "C" {
 #endif
