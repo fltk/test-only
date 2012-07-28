@@ -690,6 +690,10 @@ correctly.  You may then fine-tune the sorting with
 "Earlier" and "Later".  This does not affect
 the positions of windows or functions.
 
+When editing a projects, the selected items will be sorted in
+case-sensitive alphabetic order. Holding the Alt key when selecting
+<i>Sort</i> will sort in case-insensitive order.
+
 \par Edit/Earlier (F2)
 
 \par
@@ -710,7 +714,10 @@ the children of their parent (if possible).
 
 \par
 Creates a new Fl_Group and make all the currently
-selected widgets children of it.
+selected widgets children of it. Holding the Alt key when selecting
+this menu item will create a group that is one grid space bigger 
+than the bounding box of all selected widgets.
+
 
 \par Edit/Ungroup (F8)
 

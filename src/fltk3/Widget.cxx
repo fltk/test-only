@@ -509,6 +509,12 @@ void fltk3::Rectangle::intersect(const fltk3::Rectangle& R) {
   if (R.b() < b()) set_b(R.b());
 }
 
+bool fltk3::Rectangle::intersects(const fltk3::Rectangle& R) {
+  if (R.x()>r() || R.r()<x()) return false;
+  if (R.y()>b() || R.b()<y()) return false;
+  return true;
+}
+
 
 // Call to->handle(), but first replace the mouse x/y with the correct
 // values to account for nested windows. 'window' is the outermost

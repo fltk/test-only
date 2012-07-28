@@ -119,6 +119,99 @@ fltk3::MenuWindow::MenuWindow(int X, int Y, int W, int H, const char *l)
 }
 
 
+//------------------------------------------------------------------------------
+
+
+fltk3::PopupWindow::PopupWindow(int x, int y, int w, int h, const char *title)
+: fltk3::MenuWindow(x, y, w, h, title),
+  pUserPosition(true)
+{
+  set_modal();
+  clear_border();
+  set_menu_window();
+}
+
+
+fltk3::PopupWindow::PopupWindow(int w, int h, const char *title)
+: fltk3::MenuWindow(w, h, title),
+  pUserPosition(false)
+{
+  set_modal();
+  clear_border();
+  set_menu_window();
+}
+
+
+fltk3::PopupWindow::~PopupWindow()
+{
+  hide();
+}
+
+
+void fltk3::PopupWindow::hide_i(fltk3::Widget* w, void *d)
+{
+  fltk3::PopupWindow* p = ((fltk3::PopupWindow*)d);
+  p->pTrigger = w;
+  p->hide();
+}
+
+
+int fltk3::PopupWindow::handle(int e) {
+  fltk3::Widget* wi;
+  switch (e) {
+    case fltk3::KEYBOARD:
+      switch (fltk3::event_key()) {
+        case fltk3::EscapeKey:
+          pTrigger = 0L;
+          hide();
+          return 1;
+      }
+      for (wi = fltk3::focus(); wi; wi = wi->parent()) {
+        if (wi==this) break;
+        if (wi->send(fltk3::KEYBOARD)) return 1;
+      }
+      return 0;
+    case fltk3::SHORTCUT: 
+      switch (fltk3::event_key()) {
+        case fltk3::EscapeKey:
+          pTrigger = 0L;
+          hide();
+          return 1;
+      }
+      break;
+    case fltk3::PUSH: {
+      int mx = fltk3::event_x_root();
+      int my = fltk3::event_y_root();
+      if (!Rectangle::contains(mx, my)) {
+        pTrigger = 0L;
+        hide();
+        return 1;
+      }
+      break;
+    }
+  }
+  return MenuWindow::handle(e);
+}
+
+
+fltk3::Widget* fltk3::PopupWindow::popup()
+{
+  pTrigger = 0L;
+  if (!pUserPosition)
+    position(fltk3::event_x_root(), fltk3::event_y_root());
+  show();
+  fltk3::grab(this);
+  for (;;) {
+    fltk3::wait();
+    if (!visible_r()) 
+      break;
+  }
+  hide();
+  fltk3::grab(0);
+  return pTrigger;
+}
+
+
 //
 // End of "$Id$".
 //

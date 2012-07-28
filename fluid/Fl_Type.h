@@ -1211,6 +1211,7 @@ public:
   Fl_Panel(int x, int y, int w, int h, const char *name=0L);
   ~Fl_Panel();
   void load(RTTI_Query query);
+  void show(); // override the widget show()
   
   static void *const LOAD;
   static int numselected;

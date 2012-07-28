@@ -1874,7 +1874,16 @@ static void load_panel() {
 void Fl_Widget_Type::open() {
   if (!the_panel) the_panel = make_widget_panel();
   load_panel();
-  if (numselected) the_panel->show();
+  if (numselected) {
+    if (the_panel->visible_r()) {
+      // just pop it to the front
+      the_panel->show();
+    } else {
+      // show the panel and make sure it is not under the widget bin
+      the_panel->show();
+      if (the_panel->con
+    }
+  }
 }
 
 Fl_Type *Fl_Type::current;

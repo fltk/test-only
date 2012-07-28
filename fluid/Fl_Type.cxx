@@ -40,6 +40,7 @@
 #include <fltk3/run.h>
 #include <fltk3/ask.h>
 #include <fltk3/Browser_.h>
+#include <fltk3/MenuWindow.h>
 #include <fltk3/draw.h>
 #include <fltk3/filename.h>
 #include <stdlib.h>
@@ -209,6 +210,10 @@ extern char *get_temporary_return_buffer(int size);
 class Widget_Browser : public fltk3::Browser_ {
   friend class Fl_Type;
 
+  static void handle_second_single_click_i(void*);
+  
+  Fl_Type* last_clicked;
+  
   // required routines for fltk3::Browser_ subclass:
   void *item_first() const ;
   void *item_next(void *) const ;
@@ -222,6 +227,7 @@ class Widget_Browser : public fltk3::Browser_ {
 
 public:	
 
+  void handle_second_single_click();
   int handle(int);
   void callback();
   Widget_Browser(int,int,int,int,const char * =0);
@@ -257,7 +263,7 @@ Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
 : fltk3::Browser_(X,Y,W,H,l) {
   type(fltk3::MULTI_BROWSER);
   Widget::callback(Widget_Browser_callback);
-  when(fltk3::WHEN_RELEASE);
+  when(fltk3::WHEN_RELEASE|fltk3::WHEN_NOT_CHANGED);
 }
 
 void *Widget_Browser::item_first() const {return Fl_Type::first;}
@@ -415,6 +421,7 @@ int Widget_Browser::item_width(void *v) const {
       W += int(fltk3::width(buf));
     }
   } else {
+    // FIXME: utf8!
     const char* c = l->title();
     char buf[60]; char* p = buf;
     for (int i = 55; i--;) {
@@ -434,14 +441,132 @@ void redraw_browser() {
   widget_browser->redraw();
 }
 
-void Widget_Browser::callback() {
-  selection_changed((Fl_Type*)selection());
+
+extern Fl_Panel* the_panel;
+
+/*
+ This method allow editing simple text inline.
+ 
+ When clicking an already selected editable item, this method will pop up a 
+ small window that allow for quick editing of the item value or label.
+ 
+ Making sure that a second click is not confused with a double click takes
+ some effort in the callback code, causing a timeout, which in turn is canceled
+ by a double click.
+ */
+void Widget_Browser::handle_second_single_click()
+{
+  if (!last_clicked) 
+    return;
+  // find the text that we will edit first
+  const char* text = 0L;
+  if (last_clicked->name()) {
+    text = last_clicked->name();
+  } else if (last_clicked->label()) {
+    text = last_clicked->label();
+  } else {
+    return;
+  }
+  // count the lines in the text
+  int nlines = 1;
+  const char *s = text;
+  while (*s) { if (*s=='\n') nlines++; s++; }
+  if (nlines>10) nlines = 10; 
+  // find the y position of the clicked item (the mouse event is no longer reliable)
+  int yp = -position();
+  Fl_Type *t = (Fl_Type*)item_first();
+  while (t && t!=last_clicked) {
+    yp += item_height(t);
+    t = (Fl_Type*)item_next(t);
+  }
+  if (!t) 
+    return;
+  // if the item has a comment, skip that
+  if (t->comment())
+    yp += textsize()-1;
+  // find the x position and width of the name
+  fltk3::font(textfont(), textsize());
+  int xp = x() + fltk3::box_dx(box()) + 3 + 18 + 8 + t->level * 12;
+  if (t->is_widget() || t->is_class()) {
+    const char* c = subclassname(t);
+    if (!strncmp(c,"fltk3::",7)) c += 7;
+    xp += int(fltk3::width(c)+fltk3::width('n'));
+  }
+  // use the widget width minus the x position, but use some minimum width 
+  int wp = w()-xp-fltk3::box_dx(box());
+  if (scrollbar.visible()) wp-=scrollbar_width();
+  if (nlines>1) {
+    if (wp<320) wp = 320;
+  } else {
+    if (wp<200) wp = 200;
+  }
+  int hp = nlines*fltk3::height()+fltk3::DOWN_BOX->dh(); // FIXME: wrap and resize if needed
+  // adjust coordinates to global and use a menu window
+  xp += dx_window() + window()->x();
+  yp += dy_window() + window()->y();
+  // open a modal dialog with an input widget
+  fltk3::PopupWindow* w = new fltk3::PopupWindow(xp, yp, wp, hp);
+  fltk3::Input *input = new fltk3::Input(0, 0, wp, hp);
+  if (nlines) input->type(fltk3::MULTILINE_INPUT);
+  input->box(fltk3::DOWN_BOX);
+  input->textfont(textfont());
+  input->textsize(textsize());
+  input->value(text);
+  input->position(0, strlen(input->value()));
+  input->callback(w->hide_i, w);
+  input->when(fltk3::WHEN_ENTER_KEY_ALWAYS);
+  if (w->popup()==input) {
+    int mod = 0;
+    if (strcmp(input->value(), text)) {
+      // FIXME: there are certain illegal characters that must be avoided!
+      if (t->name()) {
+        t->name(input->value());
+      } else if (t->label()) {
+        t->label(input->value());
+      }
+      mod = 1;
+    }
+    redraw_browser();
+    if (mod) {
+      if (the_panel) 
+        Fl_Panel::propagate_load(the_panel);
+      set_modflag(1);
+    }
+  }
+  delete w;
 }
+
+
+void Widget_Browser::handle_second_single_click_i(void* d)
+{
+  ((Widget_Browser*)d)->handle_second_single_click();
+}
+
+
+void Widget_Browser::callback() {
+  if (changed()) {
+    // update evrything around the new selection
+    selection_changed((Fl_Type*)selection());
+  } else {
+    // on a single click, we may be able to edit some value directly
+    if ( fltk3::event()==fltk3::RELEASE ) {
+      last_clicked = (Fl_Type*)find_item(fltk3::event_y());
+      if (last_clicked && last_clicked->selected) {
+        // add a timeout to make sure that we have a single click, not a double click
+        fltk3::add_timeout(0.5, handle_second_single_click_i, this);      
+      }
+    }
+  }
+}
+
 
 int Widget_Browser::handle(int e) {
   static Fl_Type *title;
   Fl_Type *l;
   int X,Y,W,H; bbox(X,Y,W,H);
+  if (e!=fltk3::MOVE) {
+    fltk3::remove_timeout(handle_second_single_click_i, this);
+  }
   switch (e) {
     case fltk3::PUSH:
       if (!fltk3::event_inside(X,Y,W,H)) break;
@@ -472,8 +597,9 @@ int Widget_Browser::handle(int e) {
     case fltk3::RELEASE:
       if (!title) {
         l = (Fl_Type*)find_item(fltk3::event_y());
-        if (l && l->new_selected && (fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL)))
-          l->open();
+        if (l && l->new_selected && (fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
+            l->open();
+        }
         break;
       }
       l = pushedtitle;
@@ -1867,6 +1993,30 @@ void Fl_Panel::load(RTTI_Query type_query) {
     propagate_load(this);
   else
     hide();
+}
+
+extern fltk3::Window* widgetbin_panel;
+
+/**
+ Override show() to make sure that widgets don;t overlap.
+ Specifically, the widget bin and widget panel tend open in the same position. 
+ One panel needs to be moved which interrupts workflow. This function moves
+ the WIdget Panel away from the Widget Bin.
+ */
+void Fl_Panel::show()
+{
+  if (shown()) {
+    // just raise th window, nothing else
+    fltk3::DoubleWindow::show();
+  } else {
+    // show the window, then avoid overlap
+    fltk3::DoubleWindow::show();
+    if (widgetbin_panel && widgetbin_panel->shown()) {
+      if (this->intersects(*widgetbin_panel)) {
+        position(x(), widgetbin_panel->b()+40);
+      }
+    }
+  }
 }
 
 

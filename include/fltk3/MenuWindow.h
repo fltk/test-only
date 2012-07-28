@@ -73,7 +73,23 @@ namespace fltk3 {
     
   };
   
+  
+  
+  class PopupWindow : public fltk3::MenuWindow {
+    bool pUserPosition;
+    fltk3::Widget* pTrigger;
+  public:
+    static void hide_i(fltk3::Widget*, void*);
+    int handle(int);
+    PopupWindow(int X, int Y, int W, int H, const char *label = 0);
+    PopupWindow(int W, int H, const char *label = 0);
+    ~PopupWindow();
+    Widget* popup();
+  };
+  
+  
 }
+
 
 #endif
 
