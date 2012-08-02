@@ -1,14 +1,9 @@
 //
-// "$Id: file.cxx 8870 2011-07-26 21:19:35Z matt $"
+// "$Id$"
 //
-// Fluid file routines for the Fast Light Tool Kit (FLTK).
+// Fluid Makefile output for the Fast Light Tool Kit (FLTK).
 //
-// You may find the basic read_* and write_* routines to
-// be useful for other programs.  I have used them many times.
-// They are somewhat similar to tcl, using matching { and }
-// to quote strings.
-//
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 2010-2012 by Matthias Melcher and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,6 +30,7 @@
 #include <stdarg.h>
 #include <ctype.h>
 #include "Fl_Type.h"
+#include "WorkspaceType.h"
 #include <fltk3/filename.h>
 
 // ------------ file conversion ------------------------------------------------
@@ -2590,5 +2586,5 @@ int write_fltk_makefiles() {
 
 
 //
-// End of "$Id: file.cxx 8870 2011-07-26 21:19:35Z matt $".
+// End of "$Id$".
 //

@@ -38,7 +38,7 @@ extern fltk3::Choice *f_public_member_choice;
 extern fltk3::Choice *f_public_choice;
 #include <fltk3/LightButton.h>
 extern fltk3::LightButton *f_c_button;
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Input.h>
 extern fltk3::Input *f_name_input;
 extern fltk3::Input *f_return_type_input;
@@ -113,6 +113,12 @@ extern fltk3::MenuButton *comment_predefined;
 extern fltk3::Button *comment_load;
 fltk3::DoubleWindow* make_comment_panel();
 void type_make_cb(fltk3::Widget*,void*d);
+
+class DragButton : public fltk3::Button {
+public:
+  DragButton(int x, int y, int w, int h, const char *l=0L) ;
+  int handle(int e);
+};
 #include <fltk3/Window.h>
 extern fltk3::Window *widgetbin_panel;
 fltk3::Window* make_widgetbin();

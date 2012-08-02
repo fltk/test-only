@@ -25,29 +25,44 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Preferences.h>
-#include <fltk3/FileChooser.h>
-#include "Fl_Type.h"
+#include "Fl_Function_Type.h"
+#include "Fl_Window_Type.h"
+#include "fluid.h"
+#include "code.h"
+#include "file.h"
+#include "WidgetBrowser.h"
+#include "function_panel.h"
+#include "comments.h"
+#include "widget_panel_actions.h"
+
 #include <fltk3/ask.h>
 #include <fltk3/FileChooser.h>
-#include "../src/fltk3/flstring.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-extern int i18n_type;
-extern const char* i18n_include;
-extern const char* i18n_function;
-extern const char* i18n_file;
-extern const char* i18n_set;
-extern char i18n_program[];
 
-extern int compile_only;
+Fl_Function_Type Fl_Function_type;
+Fl_Code_Type Fl_Code_type;
+Fl_CodeBlock_Type Fl_CodeBlock_type;
+Fl_Decl_Type Fl_Decl_type;
+Fl_Data_Type Fl_Data_type;
+Fl_DeclBlock_Type Fl_DeclBlock_type;
+Fl_Comment_Type Fl_Comment_type;
+Fl_Class_Type Fl_Class_type;
+Fl_Class_Type *current_class;
 
-extern void redraw_browser();
-extern void goto_source_dir();
-extern void leave_source_dir();
-extern char project_is_workspace();
+
+static void load_comments_preset(fltk3::Preferences &menu) {
+  static const char * const predefined_comment[] = {
+    "GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
+    "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
+    "FLTK/Header", "FLTK/Footer" };
+  int i;
+  menu.set("n", 6);
+  fltk3::Preferences db(fltk3::Preferences::USER, "fltk.org", "fluid_comments");
+  for (i=0; i<6; i++) {
+    menu.set(fltk3::Preferences::Name(i), predefined_comment[i]);
+    db.set(predefined_comment[i], comment_text[i]);
+  }
+}
 
 ////////////////////////////////////////////////////////////////
 // quick check of any C code for legality, returns an error message
@@ -125,7 +140,12 @@ const char *c_check(const char *c, int type) {
 
 ////////////////////////////////////////////////////////////////
 
-int Fl_Function_Type::is_public() const {return public_;}
+
+int Fl_Function_Type::is_public() const 
+{
+  return public_;
+}
+
 
 Fl_Type *Fl_Function_Type::make() {
   Fl_Type *p = Fl_Type::current;
@@ -173,8 +193,6 @@ char Fl_Function_Type::read_property(const char *c) {
   return 1;
 }
 
-#include "function_panel.h"
-#include <fltk3/ask.h>
 
 void Fl_Function_Type::open() {
   if (!function_panel) make_function_panel();
@@ -248,9 +266,6 @@ BREAK2:
   function_panel->hide();
 }
 
-Fl_Function_Type Fl_Function_type;
-
-extern const char* subclassname(Fl_Type*);
 
 void Fl_Function_Type::write_code1() {
   constructor=0;
@@ -435,6 +450,12 @@ int Fl_Function_Type::has_signature(const char *rtype, const char *sig) const {
 
 ////////////////////////////////////////////////////////////////
 
+int Fl_Code_Type::is_public()const
+{ 
+  return -1; 
+}
+
+
 Fl_Type *Fl_Code_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_code_block()) p = p->parent;
@@ -473,7 +494,6 @@ BREAK2:
   code_panel->hide();
 }
 
-Fl_Code_Type Fl_Code_type;
 
 void Fl_Code_Type::write_code1() {
   const char* c = name();
@@ -489,9 +509,18 @@ void Fl_Code_Type::write_code1() {
   write_c("%s%s\n", ind, c);
 }
 
-void Fl_Code_Type::write_code2() {}
+
+void Fl_Code_Type::write_code2() 
+{
+}
 
 ////////////////////////////////////////////////////////////////
+
+int Fl_CodeBlock_Type::is_public()const 
+{ 
+  return -1; 
+}
+
 
 Fl_Type *Fl_CodeBlock_Type::make() {
   Fl_Type *p = Fl_Type::current;
@@ -551,7 +580,6 @@ BREAK2:
   codeblock_panel->hide();
 }
 
-Fl_CodeBlock_Type Fl_CodeBlock_type;
 
 void Fl_CodeBlock_Type::write_code1() {
   const char* c = name();
@@ -684,7 +712,6 @@ BREAK2:
   decl_panel->hide();
 }
 
-Fl_Decl_Type Fl_Decl_type;
 
 void Fl_Decl_Type::write_code1() {
   const char* c = name();
@@ -749,7 +776,9 @@ void Fl_Decl_Type::write_code1() {
   }
 }
 
-void Fl_Decl_Type::write_code2() {}
+void Fl_Decl_Type::write_code2() 
+{
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -888,7 +917,6 @@ BREAK2:
   data_panel->hide();
 }
 
-Fl_Data_Type Fl_Data_type;
 
 void Fl_Data_Type::write_code1() {
   const char *message = 0;
@@ -959,11 +987,16 @@ void Fl_Data_Type::write_code1() {
   if (data) free(data);
 }
 
-void Fl_Data_Type::write_code2() {}
+void Fl_Data_Type::write_code2() 
+{
+}
 
 ////////////////////////////////////////////////////////////////
 
-int Fl_DeclBlock_Type::is_public() const {return public_;}
+int Fl_DeclBlock_Type::is_public() const 
+{
+  return public_;
+}
 
 Fl_Type *Fl_DeclBlock_Type::make() {
   Fl_Type *p = Fl_Type::current;
@@ -1041,7 +1074,6 @@ BREAK2:
   declblock_panel->hide();
 }
 
-Fl_DeclBlock_Type Fl_DeclBlock_type;
 
 void Fl_DeclBlock_Type::write_code1() {
   const char* c = name();
@@ -1099,21 +1131,6 @@ char Fl_Comment_Type::read_property(const char *c) {
   return 1;
 }
 
-#include "comments.h"
-
-static void load_comments_preset(fltk3::Preferences &menu) {
-  static const char * const predefined_comment[] = {
-    "GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
-    "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
-    "FLTK/Header", "FLTK/Footer" };
-  int i;
-  menu.set("n", 6);
-  fltk3::Preferences db(fltk3::Preferences::USER, "fltk.org", "fluid_comments");
-  for (i=0; i<6; i++) {
-    menu.set(fltk3::Preferences::Name(i), predefined_comment[i]);
-    db.set(predefined_comment[i], comment_text[i]);
-  }
-}
 
 void Fl_Comment_Type::open() {
   if (!comment_panel) make_comment_panel();
@@ -1255,7 +1272,6 @@ const char *Fl_Comment_Type::title() {
   return title_buf;
 }
 
-Fl_Comment_Type Fl_Comment_type;
 
 void Fl_Comment_Type::write_code1() {
   const char* c = name();
@@ -1296,47 +1312,16 @@ void Fl_Comment_Type::write_code1() {
   }
 }
 
-void Fl_Comment_Type::write_code2() {}
+void Fl_Comment_Type::write_code2() 
+{
+}
 
 ////////////////////////////////////////////////////////////////
 
-const char* Fl_Type::class_name(const int need_nest) const {
-  Fl_Type* p = parent;
-  while (p) {
-    if (p->is_class()) {
-      // see if we are nested in another class, we must fully-qualify name:
-      // this is lame but works...
-      const char* q = 0;
-      if(need_nest) q=p->class_name(need_nest);
-      if (q) {
-	static char s[256];
-	if (q != s) strlcpy(s, q, sizeof(s));
-	strlcat(s, "::", sizeof(s));
-	strlcat(s, p->name(), sizeof(s));
-	return s;
-      }
-      return p->name();
-    }
-    p = p->parent;
-  }
-  return 0;
+int Fl_Class_Type::is_public() const 
+{
+  return public_;
 }
-
-/**
- * If this Type resides inside a class, this function returns the class type, or null.
- */
-const Fl_Class_Type *Fl_Type::is_in_class() const {
-  Fl_Type* p = parent;
-  while (p) {
-    if (p->is_class()) {
-      return (Fl_Class_Type*)p;
-    }
-    p = p->parent;
-  }
-  return 0;
-}
-
-int Fl_Class_Type::is_public() const {return public_;}
 
 void Fl_Class_Type::prefix(const char*p) {
   free((void*) class_prefix);
@@ -1456,22 +1441,6 @@ BREAK2:
   class_panel->hide();
 }
 
-Fl_Class_Type Fl_Class_type;
-
-Fl_Class_Type *current_class;
-extern Fl_Widget_Class_Type *current_widget_class;
-void write_public(int state) {
-  if (!current_class && !current_widget_class) return;
-  if (current_class && current_class->write_public_state == state) return;
-  if (current_widget_class && current_widget_class->write_public_state == state) return;
-  if (current_class) current_class->write_public_state = state;
-  if (current_widget_class) current_widget_class->write_public_state = state;
-  switch (state) {
-    case 0: write_h("private:\n"); break;
-    case 1: write_h("public:\n"); break;
-    case 2: write_h("protected:\n"); break;
-  }
-}
 
 void Fl_Class_Type::write_code1() {
   parent_class = current_class;

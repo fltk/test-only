@@ -25,9 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "undo.h"
+#include "fluid.h"
+#include "file.h"
+
 #include <fltk3/run.h>
 #include "Fl_Type.h"
-#include "undo.h"
 #include <fltk3/Preferences.h>
 #include <fltk3/filename.h>
 #include "../src/fltk3/flstring.h"

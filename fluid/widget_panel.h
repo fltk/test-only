@@ -33,7 +33,8 @@
 /**
    Needed for Fl_Panel base class
 */
-#include "Fl_Type.h"
+#include "Fl_Widget_Type.h"
+#include "panel.h"
 #include <fltk3/TabGroup.h>
 #include <fltk3/Group.h>
 #include <fltk3/Input.h>
@@ -49,7 +50,7 @@ extern void inactive_browse_cb(fltk3::Button*, void*);
 extern void align_cb(fltk3::Button*, void*);
 extern void align_text_image_cb(fltk3::Choice*, void*);
 extern void align_position_cb(fltk3::Choice*, void*);
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 #include <fltk3/ValueInput.h>
 extern void x_cb(fltk3::ValueInput*, void*);
 extern fltk3::ValueInput *widget_x_input;

@@ -81,7 +81,6 @@ fltk3::DoubleWindow* make_project_window() {
     { fltk3::TabGroup* o = new fltk3::TabGroup(10, 10, 378, 220);
       o->selection_color((fltk3::Color)12);
       { fltk3::Group* o = new fltk3::Group(0, 26, 378, 194, "Output");
-        o->hide();
         { fltk3::Widget* o = new fltk3::Widget(90, 13, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
           o->align(fltk3::Align(fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE));
         } // fltk3::Widget* o
@@ -120,6 +119,7 @@ fltk3::DoubleWindow* make_project_window() {
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(0, 26, 378, 194, "Internationalization");
+        o->hide();
         { i18n_type_chooser = new fltk3::Choice(90, 12, 136, 25, "Use:");
           i18n_type_chooser->tooltip("Type of internationalization to use.");
           i18n_type_chooser->box(fltk3::THIN_UP_BOX);

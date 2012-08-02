@@ -1,21 +1,7 @@
 //
 // "$Id$"
 //
-// Widget type code for the Fast Light Tool Kit (FLTK).
-//
-// Each object described by Fluid is one of these objects.  They
-// are all stored in a double-linked list.
-//
-// They "type" of the object is covered by the virtual functions.
-// There will probably be a lot of these virtual functions.
-//
-// The type browser is also a list of these objects, but they
-// are "factory" instances, not "real" ones.  These objects exist
-// only so the "make" method can be called on them.  They are
-// not in the linked list and are not written to files or
-// copied or otherwise examined.
-//
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,6 +23,32 @@
 //     http://www.fltk.org/str.php
 //
 
+// Widget type code for the Fast Light Tool Kit (FLTK).
+//
+// Each object described by Fluid is one of these objects.  They
+// are all stored in a double-linked list.
+//
+// They "type" of the object is covered by the virtual functions.
+// There will probably be a lot of these virtual functions.
+//
+// The type browser is also a list of these objects, but they
+// are "factory" instances, not "real" ones.  These objects exist
+// only so the "make" method can be called on them.  They are
+// not in the linked list and are not written to files or
+// copied or otherwise examined.
+
+#include "fluid.h"
+
+#include "Fl_Type.h"
+#include "Fl_Function_Type.h"
+#include "Fl_Widget_Type.h"
+#include "WidgetBrowser.h"
+#include "WorkspaceType.h"
+#include "workspace_panel.h"
+#include "undo.h"
+#include "code.h"
+#include "file.h"
+
 #include <fltk3/run.h>
 #include <fltk3/ask.h>
 #include <fltk3/Browser_.h>
@@ -47,602 +59,210 @@
 #include "../src/fltk3/flstring.h"
 #include <stdio.h>
 
-#include "Fl_Type.h"
-#include "workspace_panel.h"
-#include "undo.h"
-
-#include <fltk3/Pixmap.h>
-#include "pixmaps/lock.xpm"
-#include "pixmaps/protected.xpm"
-//#include "pixmaps/unlock.xpm"
-
-static fltk3::Pixmap	lock_pixmap(lock_xpm);
-static fltk3::Pixmap	protected_pixmap(protected_xpm);
-//static fltk3::Pixmap	unlock_pixmap(unlock_xpm);
-
-#include "pixmaps/flWindow.xpm"
-#include "pixmaps/flButton.xpm"
-#include "pixmaps/flCheckButton.xpm"
-#include "pixmaps/flRoundButton.xpm"
-#include "pixmaps/flBox.xpm"
-#include "pixmaps/flGroup.xpm"
-#include "pixmaps/flFunction.xpm"
-#include "pixmaps/flCode.xpm"
-#include "pixmaps/flCodeBlock.xpm"
-#include "pixmaps/flComment.xpm"
-#include "pixmaps/flData.xpm"
-#include "pixmaps/flDeclaration.xpm"
-#include "pixmaps/flDeclarationBlock.xpm"
-#include "pixmaps/flClass.xpm"
-#include "pixmaps/flTabs.xpm"
-#include "pixmaps/flInput.xpm"
-#include "pixmaps/flChoice.xpm"
-#include "pixmaps/flMenuitem.xpm"
-#include "pixmaps/flMenubar.xpm"
-#include "pixmaps/flSubmenu.xpm"
-#include "pixmaps/flScroll.xpm"
-#include "pixmaps/flTile.xpm"
-#include "pixmaps/flWizard.xpm"
-#include "pixmaps/flPack.xpm"
-#include "pixmaps/flReturnButton.xpm"
-#include "pixmaps/flLightButton.xpm"
-#include "pixmaps/flRepeatButton.xpm"
-#include "pixmaps/flMenuButton.xpm"
-#include "pixmaps/flOutput.xpm"
-#include "pixmaps/flTextDisplay.xpm"
-#include "pixmaps/flTextEdit.xpm"
-#include "pixmaps/flFileInput.xpm"
-#include "pixmaps/flBrowser.xpm"
-#include "pixmaps/flCheckBrowser.xpm"
-#include "pixmaps/flFileBrowser.xpm"
-#include "pixmaps/flClock.xpm"
-#include "pixmaps/flHelp.xpm"
-#include "pixmaps/flProgress.xpm"
-#include "pixmaps/flSlider.xpm"
-#include "pixmaps/flScrollBar.xpm"
-#include "pixmaps/flValueSlider.xpm"
-#include "pixmaps/flAdjuster.xpm"
-#include "pixmaps/flCounter.xpm"
-#include "pixmaps/flDial.xpm"
-#include "pixmaps/flRoller.xpm"
-#include "pixmaps/flValueInput.xpm"
-#include "pixmaps/flValueOutput.xpm"
-#include "pixmaps/flSpinner.xpm"
-#include "pixmaps/flWidgetClass.xpm"
-#include "pixmaps/flTree.xpm"
-#include "pixmaps/flTable.xpm"
-#include "pixmaps/flAppTarget.xpm"
-#include "pixmaps/flLibTarget.xpm"
-#include "pixmaps/flFile.xpm"
-#include "pixmaps/flFolder.xpm"
-#include "pixmaps/flFluidFile.xpm"
-#include "pixmaps/flCodeFile.xpm"
-#include "pixmaps/flMenuNone.xpm"
-#include "pixmaps/flMenuMulti.xpm"
-#include "pixmaps/flMenuAll.xpm"
-#include "pixmaps/flWorkspace.xpm"
-#include "pixmaps/flDependency.xpm"
-#include "pixmaps/flOption.xpm"
-
-static fltk3::Pixmap	window_pixmap(flWindow_xpm);
-static fltk3::Pixmap	button_pixmap(flButton_xpm);
-static fltk3::Pixmap	checkbutton_pixmap(flCheckButton_xpm);
-static fltk3::Pixmap	roundbutton_pixmap(flRoundButton_xpm);
-static fltk3::Pixmap	box_pixmap(flBox_xpm);
-static fltk3::Pixmap	group_pixmap(flGroup_xpm);
-static fltk3::Pixmap	function_pixmap(flFunction_xpm);
-static fltk3::Pixmap	code_pixmap(flCode_xpm);
-static fltk3::Pixmap	codeblock_pixmap(flCodeBlock_xpm);
-static fltk3::Pixmap	comment_pixmap(flComment_xpm);
-static fltk3::Pixmap	declaration_pixmap(flDeclaration_xpm);
-static fltk3::Pixmap	declarationblock_pixmap(flDeclarationBlock_xpm);
-static fltk3::Pixmap	class_pixmap(flClass_xpm);
-static fltk3::Pixmap	tabs_pixmap(flTabs_xpm);
-static fltk3::Pixmap	input_pixmap(flInput_xpm);
-static fltk3::Pixmap	choice_pixmap(flChoice_xpm);
-static fltk3::Pixmap	menuitem_pixmap(flMenuitem_xpm);
-static fltk3::Pixmap	menubar_pixmap(flMenubar_xpm);
-static fltk3::Pixmap	submenu_pixmap(flSubmenu_xpm);
-static fltk3::Pixmap	scroll_pixmap(flScroll_xpm);
-static fltk3::Pixmap	tile_pixmap(flTile_xpm);
-static fltk3::Pixmap	wizard_pixmap(flWizard_xpm);
-static fltk3::Pixmap	pack_pixmap(flPack_xpm);
-static fltk3::Pixmap	returnbutton_pixmap(flReturnButton_xpm);
-static fltk3::Pixmap	lightbutton_pixmap(flLightButton_xpm);
-static fltk3::Pixmap	repeatbutton_pixmap(flRepeatButton_xpm);
-static fltk3::Pixmap	menubutton_pixmap(flMenuButton_xpm);
-static fltk3::Pixmap	output_pixmap(flOutput_xpm);
-static fltk3::Pixmap	textdisplay_pixmap(flTextDisplay_xpm);
-static fltk3::Pixmap	textedit_pixmap(flTextEdit_xpm);
-static fltk3::Pixmap	fileinput_pixmap(flFileInput_xpm);
-static fltk3::Pixmap	browser_pixmap(flBrowser_xpm);
-static fltk3::Pixmap	checkbrowser_pixmap(flCheckBrowser_xpm);
-static fltk3::Pixmap	filebrowser_pixmap(flFileBrowser_xpm);
-static fltk3::Pixmap	clock_pixmap(flClock_xpm);
-static fltk3::Pixmap	help_pixmap(flHelp_xpm);
-static fltk3::Pixmap	progress_pixmap(flProgress_xpm);
-static fltk3::Pixmap	slider_pixmap(flSlider_xpm);
-static fltk3::Pixmap	scrollbar_pixmap(flScrollBar_xpm);
-static fltk3::Pixmap	valueslider_pixmap(flValueSlider_xpm);
-static fltk3::Pixmap	adjuster_pixmap(flAdjuster_xpm);
-static fltk3::Pixmap	counter_pixmap(flCounter_xpm);
-static fltk3::Pixmap	dial_pixmap(flDial_xpm);
-static fltk3::Pixmap	roller_pixmap(flRoller_xpm);
-static fltk3::Pixmap	valueinput_pixmap(flValueInput_xpm);
-static fltk3::Pixmap	valueoutput_pixmap(flValueOutput_xpm);
-static fltk3::Pixmap	spinner_pixmap(flSpinner_xpm);
-static fltk3::Pixmap	widgetclass_pixmap(flWidgetClass_xpm);
-static fltk3::Pixmap	data_pixmap(flData_xpm);
-static fltk3::Pixmap	tree_pixmap(flTree_xpm);
-static fltk3::Pixmap	table_pixmap(flTable_xpm);
-static fltk3::Pixmap	app_target_pixmap(flAppTarget_xpm);
-static fltk3::Pixmap	lib_target_pixmap(flLibTarget_xpm);
-static fltk3::Pixmap	file_pixmap(flFile_xpm);
-static fltk3::Pixmap	folder_pixmap(flFolder_xpm);
-static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
-static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
-static fltk3::Pixmap	workspace_pixmap(flWorkspace_xpm);
-static fltk3::Pixmap	dependency_pixmap(flDependency_xpm);
-static fltk3::Pixmap	option_pixmap(flOption_xpm);
-fltk3::Pixmap	menu_none_pixmap(flMenuNone_xpm);
-fltk3::Pixmap	menu_multi_pixmap(flMenuMulti_xpm);
-fltk3::Pixmap	menu_all_pixmap(flMenuAll_xpm);
-
-fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixmap, &roundbutton_pixmap, /* 0..4 */
- &box_pixmap, &group_pixmap, &function_pixmap, &code_pixmap, &codeblock_pixmap, &declaration_pixmap, /* 5..10 */ 
- &declarationblock_pixmap, &class_pixmap, &tabs_pixmap, &input_pixmap, &choice_pixmap,               /* 11..15 */
- &menuitem_pixmap, &menubar_pixmap, &submenu_pixmap, &scroll_pixmap, &tile_pixmap, &wizard_pixmap,   /* 16..21 */
- &pack_pixmap, &returnbutton_pixmap, &lightbutton_pixmap, &repeatbutton_pixmap, &menubutton_pixmap,  /* 22..26 */
- &output_pixmap, &textdisplay_pixmap, &textedit_pixmap, &fileinput_pixmap, &browser_pixmap,          /* 27..32 */
- &checkbrowser_pixmap, &filebrowser_pixmap, &clock_pixmap, &help_pixmap, &progress_pixmap,	     /* 33..36 */
- &slider_pixmap, &scrollbar_pixmap, &valueslider_pixmap, &adjuster_pixmap, &counter_pixmap,          /* 37..41 */
- &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap,             /* 42..46 */
- &spinner_pixmap, &widgetclass_pixmap, &data_pixmap, &tree_pixmap, &table_pixmap,                    /* 47..51 */
- &app_target_pixmap, &file_pixmap, &folder_pixmap, &fluid_file_pixmap, &code_file_pixmap,            /* 52..56 */
- &lib_target_pixmap, &workspace_pixmap, &dependency_pixmap, &option_pixmap};                         /* 57..60 */
-
-extern int show_comments;
-extern Fl_Panel *the_workspace_panel;
-extern char *get_temporary_return_buffer(int size);
-
-////////////////////////////////////////////////////////////////
-
-class Widget_Browser : public fltk3::Browser_ {
-  friend class Fl_Type;
-
-  static void handle_second_single_click_i(void*);
-  
-  Fl_Type* last_clicked;
-  
-  // required routines for fltk3::Browser_ subclass:
-  void *item_first() const ;
-  void *item_next(void *) const ;
-  void *item_prev(void *) const ;
-  int item_selected(void *) const ;
-  void item_select(void *,int);
-  int item_width(void *) const ;
-  int item_height(void *) const ;
-  void item_draw(void *,int,int,int,int) const ;
-  int incr_height() const ;
-
-public:	
-
-  void handle_second_single_click();
-  int handle(int);
-  void callback();
-  Widget_Browser(int,int,int,int,const char * =0);
-};
-
-static Widget_Browser *widget_browser;
-fltk3::Widget *make_widget_browser(int x,int y,int w,int h) {
-  return (widget_browser = new Widget_Browser(x,y,w,h));
-}
-
-void select(Fl_Type *o, int v) {
-  widget_browser->select(o,v,1);
-  //  Fl_Type::current = o;
-}
-
-void select_only(Fl_Type *o) {
-  widget_browser->select_only(o,1);
-}
-
-void deselect() {
-  widget_browser->deselect();
-  //Fl_Type::current = 0; // this breaks the paste & merge functions
-}
 
 Fl_Type *Fl_Type::first;
 Fl_Type *Fl_Type::last;
+Fl_Type *in_this_only; // set if menu popped-up in window
 
-static void Widget_Browser_callback(fltk3::Widget *o,void *) {
-  ((Widget_Browser *)o)->callback();
-}
 
-Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
-: fltk3::Browser_(X,Y,W,H,l) {
-  type(fltk3::MULTI_BROWSER);
-  Widget::callback(Widget_Browser_callback);
-  when(fltk3::WHEN_RELEASE|fltk3::WHEN_NOT_CHANGED);
-}
-
-void *Widget_Browser::item_first() const {return Fl_Type::first;}
-
-void *Widget_Browser::item_next(void *l) const {return ((Fl_Type*)l)->next;}
-
-void *Widget_Browser::item_prev(void *l) const {return ((Fl_Type*)l)->prev;}
-
-int Widget_Browser::item_selected(void *l) const {return ((Fl_Type*)l)->new_selected;}
-
-void Widget_Browser::item_select(void *l,int v) {((Fl_Type*)l)->new_selected = v;}
-
-int Widget_Browser::item_height(void *l) const {
-  Fl_Type *t = (Fl_Type*)l;
-  if (t->visible) {
-    if (show_comments && t->comment())
-      return textsize()*2+1;
-    else
-      return textsize()+2;
-  } else {
-    return 0;
+static void fixvisible(Fl_Type *p) {
+  Fl_Type *t = p;
+  for (;;) {
+    if (t->parent) t->visible = t->parent->visible && t->parent->open_;
+    else t->visible = 1;
+    t = t->next;
+    if (!t || t->level <= p->level) break;
   }
-  return ((Fl_Type *)l)->visible ? textsize()+2 : 0;
 }
 
-int Widget_Browser::incr_height() const {return textsize()+2;}
 
-static Fl_Type* pushedtitle;
-
-// Generate a descriptive text for this item, to put in browser & window titles
-const char* Fl_Type::title() {
-  const char* c = name(); 
-  if (c) 
-    return c;
-  return type_name();
-}
-
-extern const char* subclassname(Fl_Type*);
-
-void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
-  Fl_Type *l = (Fl_Type *)v;
-  X += 3 + 18 + l->level * 12;
-  int comment_incr = 0;
-  if (show_comments && l->comment()) {
-    char buf[82], *d = buf;
-    const char *s = l->comment();
-    for (int i=0; i<80; i++) {
-      char c = *s++;
-      if (c==0 || c=='\n') break;
-      *d++ = c;
-    }
-    *d = 0;
-    comment_incr = textsize()-1;
-    if (l->new_selected) fltk3::color(fltk3::contrast(fltk3::DARK_GREEN,fltk3::SELECTION_COLOR));
-    else fltk3::color(fltk3::contrast(fltk3::DARK_GREEN,color()));
-    fltk3::font(textfont()+fltk3::ITALIC, textsize()-2);
-    fltk3::draw(buf, X+12, Y+12);
-    Y += comment_incr/2;
-    comment_incr -= comment_incr/2;
+void select_all_cb(fltk3::Widget *,void *) {
+  Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
+  if (in_this_only) {
+    Fl_Type *t = p;
+    for (; t && t != in_this_only; t = t->parent);
+    if (t != in_this_only) p = in_this_only;
   }
-  if (l->new_selected) fltk3::color(fltk3::contrast(fltk3::FOREGROUND_COLOR,fltk3::SELECTION_COLOR));
-  else fltk3::color(fltk3::FOREGROUND_COLOR);
-  fltk3::Pixmap *pm = pixmap[l->pixmapID()];
-  if (pm) pm->draw(X-18+11, Y);
-  switch (l->is_public()) {
-    case 0: lock_pixmap.draw(X-17+11, Y); break;
-    case 2: protected_pixmap.draw(X-17+11, Y); break;
-  }
-  X -= 18;
-  if (l->is_parent()) {
-    if (!l->next || l->next->level <= l->level) {
-      if (l->open_!=(l==pushedtitle)) {
-        fltk3::loop(X,Y+7,X+5,Y+12,X+10,Y+7);
-      } else {
-        fltk3::loop(X+2,Y+2,X+7,Y+7,X+2,Y+12);
+  for (;;) {
+    if (p) {
+      int foundany = 0;
+      for (Fl_Type *t = p->next; t && t->level>p->level; t = t->next) {
+	if (!t->new_selected) {widget_browser->select(t,1,0); foundany = 1;}
       }
+      if (foundany) break;
+      p = p->parent;
     } else {
-      if (l->open_!=(l==pushedtitle)) {
-        fltk3::polygon(X,Y+7,X+5,Y+12,X+10,Y+7);
-      } else {
-        fltk3::polygon(X+2,Y+2,X+7,Y+7,X+2,Y+12);
-      }
+      for (Fl_Type *t = Fl_Type::first; t; t = t->next)
+	widget_browser->select(t,1,0);
+      break;
     }
   }
-  X += 10;
-  X += 18;
-  Y += comment_incr;
-  if (l->is_widget() || l->is_class()) {
-    const char* c = subclassname(l);
-    if (!strncmp(c,"fltk3::",7)) c += 7;
-    fltk3::font(textfont(), textsize());
-    fltk3::draw(c, X, Y+13);
-    X += int(fltk3::width(c)+fltk3::width('n'));
-    c = l->name();
-    if (c) {
-      fltk3::font(textfont()|fltk3::BOLD, textsize());
-      fltk3::draw(c, X, Y+13);
-    } else if ((c=l->label())) {
-      char buf[50]; char* p = buf;
-      *p++ = '"';
-      int b,l=strlen(c);           // size in bytes
-      for (int i = 20; i>0;i--) {  // maximum 20 characters
-        if (*c==0) break;          // end of string
-        fltk3::utf8decode(c, c+l, &b); // b=size of char in bytes
-        if (b==-1) break;          // some error - leave
-        l-=b;                      // l = bytes left in string
-        while (b--)*p++ = *c++;    // copy that character into the buffer
+  selection_changed(p);
+}
+
+
+void select_none_cb(fltk3::Widget *,void *) {
+  Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
+  if (in_this_only) {
+    Fl_Type *t = p;
+    for (; t && t != in_this_only; t = t->parent);
+    if (t != in_this_only) p = in_this_only;
+  }
+  for (;;) {
+    if (p) {
+      int foundany = 0;
+      for (Fl_Type *t = p->next; t && t->level>p->level; t = t->next) {
+	if (t->new_selected) {widget_browser->select(t,0,0); foundany = 1;}
       }
-      if (*c) {strcpy(p,"..."); p+=3;}
-      *p++ = '"';
-      *p = 0;
-      fltk3::draw(buf, X, Y+13);
+      if (foundany) break;
+      p = p->parent;
+    } else {
+      for (Fl_Type *t = Fl_Type::first; t; t = t->next)
+	widget_browser->select(t,0,0);
+      break;
     }
+  }
+  selection_changed(p);
+}
+
+
+static void delete_children(Fl_Type *p) {
+  Fl_Type *f;
+  for (f = p; f && f->next && f->next->level > p->level; f = f->next);
+  for (; f != p; ) {
+    Fl_Type *g = f->prev;
+    delete f;
+    f = g;
+  }
+}
+
+
+void delete_all(int selected_only) {
+  for (Fl_Type *f = Fl_Type::first; f;) {
+    if (f->selected || !selected_only) {
+      delete_children(f);
+      Fl_Type *g = f->next;
+      delete f;
+      f = g;
+    } else f = f->next;
+  }
+  if(!selected_only) {
+    include_H_from_C=1;
+    use_FL_COMMAND=0;
+  }
+  
+  selection_changed(0);
+}
+
+
+// move selected widgets in their parent's list:
+void earlier_cb(fltk3::Widget*,void*) {
+  Fl_Type *f;
+  int mod = 0;
+  for (f = Fl_Type::first; f; ) {
+    Fl_Type* nxt = f->next;
+    if (f->selected) {
+      Fl_Type* g;
+      for (g = f->prev; g && g->level > f->level; g = g->prev);
+      if (g && g->level == f->level && !g->selected) {
+        f->move_before(g);
+        mod = 1;
+      }
+    }
+    f = nxt;
+  }
+  if (mod) set_modflag(1);
+}
+
+
+void later_cb(fltk3::Widget*,void*) {
+  Fl_Type *f;
+  int mod = 0;
+  for (f = Fl_Type::last; f; ) {
+    Fl_Type* prv = f->prev;
+    if (f->selected) {
+      Fl_Type* g;
+      for (g = f->next; g && g->level > f->level; g = g->next);
+      if (g && g->level == f->level && !g->selected) {
+        g->move_before(f);
+        mod = 1;
+      }
+    }
+    f = prv;
+  }
+  if (mod) set_modflag(1);
+}
+
+
+// update a string member:
+int storestring(const char *n, const char * & p, int nostrip) {
+  if (n == p) return 0;
+  undo_checkpoint();
+  int length = 0;
+  if (n) { // see if blank, strip leading & trailing blanks
+    if (!nostrip) while (isspace(*n)) n++;
+    const char *e = n + strlen(n);
+    if (!nostrip) while (e > n && isspace(*(e-1))) e--;
+    length = e-n;
+    if (!length) n = 0;
+  }    
+  if (n == p) return 0;
+  if (n && p && !strncmp(n,p,length) && !p[length]) return 0;
+  if (p) free((void *)p);
+  if (!n || !*n) {
+    p = 0;
   } else {
-    const char* c = l->title();
-    char buf[60]; char* p = buf;
-    for (int i = 55; i--;) {
-      if (! (*c & -32)) break;
-      *p++ = *c++;
-    }
-    if (*c) {strcpy(p,"..."); p+=3;}
-    *p = 0;
-    fltk3::font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:fltk3::BOLD), textsize());
-    fltk3::draw(buf, X, Y+13);
+    char *q = (char *)malloc(length+1);
+    strlcpy(q,n,length+1);
+    p = q;
   }
+  set_modflag(1);
+  return 1;
 }
 
-int Widget_Browser::item_width(void *v) const {
-  Fl_Type *l = (Fl_Type *)v;
 
-  if (!l->visible) return 0;
-
-  int W = 3 + 16 + 18 + l->level*10;
-  if (l->is_parent()) W += 10;
-
-  if (l->is_widget() || l->is_class()) {
-    const char* c = l->type_name();
-    if (!strncmp(c,"fltk3::",7)) c += 7;
-    fltk3::font(textfont(), textsize());
-    W += int(fltk3::width(c) + fltk3::width('n'));
-    c = l->name();
-    if (c) {
-      fltk3::font(textfont()|fltk3::BOLD, textsize());
-      W += int(fltk3::width(c));
-    } else if ((c=l->label())) {
-      char buf[50]; char* p = buf;
-      *p++ = '"';
-      for (int i = 20; i--;) {
-	if (! (*c & -32)) break;
-	*p++ = *c++;
-      }
-      if (*c) {strcpy(p,"..."); p+=3;}
-      *p++ = '"';
-      *p = 0;
-      W += int(fltk3::width(buf));
+/**
+ * Make sure that the given item is visible in the browser by opening
+ * all parent groups and moving the item into the visible space.
+ */
+void reveal_in_browser(Fl_Type *t) {
+  Fl_Type *p = t->parent;
+  if (p) {
+    for (;;) {
+      if (!p->open_)
+        p->open_ = 1;
+      if (!p->parent) break;
+      p = p->parent;
     }
-  } else {
-    // FIXME: utf8!
-    const char* c = l->title();
-    char buf[60]; char* p = buf;
-    for (int i = 55; i--;) {
-      if (! (*c & -32)) break;
-      *p++ = *c++;
-    }
-    if (*c) {strcpy(p,"..."); p+=3;}
-    *p = 0;
-    fltk3::font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:fltk3::BOLD), textsize());
-    W += int(fltk3::width(buf));
+    fixvisible(p);
   }
-
-  return W;
-}
-
-void redraw_browser() {
-  widget_browser->redraw();
+  widget_browser->display(t);
+  redraw_browser();
 }
 
 
-extern Fl_Panel* the_panel;
+/**
+ * Return 1 if the list contains a function with the given signature at the top level
+ */
+int has_toplevel_function(const char *rtype, const char *sig) {
+  Fl_Type *child;
+  for (child = Fl_Type::first; child; child = child->next) {
+    if (!child->is_in_class() && strcmp(child->type_name(), "Function")==0) {
+      const Fl_Function_Type *fn = (const Fl_Function_Type*)child;
+      if (fn->has_signature(rtype, sig))
+        return 1;
+    }
+  }
+  return 0;
+}
+
+
 
 /*
- This method allow editing simple text inline.
- 
- When clicking an already selected editable item, this method will pop up a 
- small window that allow for quick editing of the item value or label.
- 
- Making sure that a second click is not confused with a double click takes
- some effort in the callback code, causing a timeout, which in turn is canceled
- by a double click.
+ Implementation of class Fl_Type
+ ===============================================================================
  */
-void Widget_Browser::handle_second_single_click()
-{
-  if (!last_clicked) 
-    return;
-  // find the text that we will edit first
-  const char* text = 0L;
-  if (last_clicked->name()) {
-    text = last_clicked->name();
-  } else if (last_clicked->label()) {
-    text = last_clicked->label();
-  } else {
-    return;
-  }
-  // count the lines in the text
-  int nlines = 1;
-  const char *s = text;
-  while (*s) { if (*s=='\n') nlines++; s++; }
-  if (nlines>10) nlines = 10; 
-  // find the y position of the clicked item (the mouse event is no longer reliable)
-  int yp = -position();
-  Fl_Type *t = (Fl_Type*)item_first();
-  while (t && t!=last_clicked) {
-    yp += item_height(t);
-    t = (Fl_Type*)item_next(t);
-  }
-  if (!t) 
-    return;
-  // if the item has a comment, skip that
-  if (t->comment())
-    yp += textsize()-1;
-  // find the x position and width of the name
-  fltk3::font(textfont(), textsize());
-  int xp = x() + fltk3::box_dx(box()) + 3 + 18 + 8 + t->level * 12;
-  if (t->is_widget() || t->is_class()) {
-    const char* c = subclassname(t);
-    if (!strncmp(c,"fltk3::",7)) c += 7;
-    xp += int(fltk3::width(c)+fltk3::width('n'));
-  }
-  // use the widget width minus the x position, but use some minimum width 
-  int wp = w()-xp-fltk3::box_dx(box());
-  if (scrollbar.visible()) wp-=scrollbar_width();
-  if (nlines>1) {
-    if (wp<320) wp = 320;
-  } else {
-    if (wp<200) wp = 200;
-  }
-  int hp = nlines*fltk3::height()+fltk3::DOWN_BOX->dh(); // FIXME: wrap and resize if needed
-  // adjust coordinates to global and use a menu window
-  xp += dx_window() + window()->x();
-  yp += dy_window() + window()->y();
-  // open a modal dialog with an input widget
-  fltk3::PopupWindow* w = new fltk3::PopupWindow(xp, yp, wp, hp);
-  fltk3::Input *input = new fltk3::Input(0, 0, wp, hp);
-  if (nlines) input->type(fltk3::MULTILINE_INPUT);
-  input->box(fltk3::DOWN_BOX);
-  input->textfont(textfont());
-  input->textsize(textsize());
-  input->value(text);
-  input->position(0, strlen(input->value()));
-  input->callback(w->hide_i, w);
-  input->when(fltk3::WHEN_ENTER_KEY_ALWAYS);
-  if (w->popup()==input) {
-    int mod = 0;
-    if (strcmp(input->value(), text)) {
-      // FIXME: there are certain illegal characters that must be avoided!
-      if (t->name()) {
-        t->name(input->value());
-      } else if (t->label()) {
-        t->label(input->value());
-      }
-      mod = 1;
-    }
-    redraw_browser();
-    if (mod) {
-      if (the_panel) 
-        Fl_Panel::propagate_load(the_panel);
-      set_modflag(1);
-    }
-  }
-  delete w;
-}
 
-
-void Widget_Browser::handle_second_single_click_i(void* d)
-{
-  ((Widget_Browser*)d)->handle_second_single_click();
-}
-
-
-void Widget_Browser::callback() {
-  if (changed()) {
-    // update evrything around the new selection
-    selection_changed((Fl_Type*)selection());
-  } else {
-    // on a single click, we may be able to edit some value directly
-    if ( fltk3::event()==fltk3::RELEASE ) {
-      last_clicked = (Fl_Type*)find_item(fltk3::event_y());
-      if (last_clicked && last_clicked->selected) {
-        // add a timeout to make sure that we have a single click, not a double click
-        fltk3::add_timeout(0.5, handle_second_single_click_i, this);      
-      }
-    }
-  }
-}
-
-
-int Widget_Browser::handle(int e) {
-  static Fl_Type *title;
-  Fl_Type *l;
-  int X,Y,W,H; bbox(X,Y,W,H);
-  if (e!=fltk3::MOVE) {
-    fltk3::remove_timeout(handle_second_single_click_i, this);
-  }
-  switch (e) {
-    case fltk3::PUSH:
-      if (!fltk3::event_inside(X,Y,W,H)) break;
-      l = (Fl_Type*)find_item(fltk3::event_y());
-      if (l) {
-        X += 12*l->level + 18 - hposition();
-        if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) {
-          title = pushedtitle = l;
-          redraw_line(l);
-          return 1;
-        }
-      }
-      break;
-    case fltk3::DRAG:
-      if (!title) break;
-      l = (Fl_Type*)find_item(fltk3::event_y());
-      if (l) {
-        X += 12*l->level + 18 - hposition();
-        if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) ;
-        else l = 0;
-      }
-      if (l != pushedtitle) {
-        if (pushedtitle) redraw_line(pushedtitle);
-        if (l) redraw_line(l);
-        pushedtitle = l;
-      }
-      return 1;
-    case fltk3::RELEASE:
-      if (!title) {
-        l = (Fl_Type*)find_item(fltk3::event_y());
-        if (l && l->new_selected && (fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
-            l->open();
-        }
-        break;
-      }
-      l = pushedtitle;
-      title = pushedtitle = 0;
-      if (l) {
-        if (l->open_) {
-          l->open_ = 0;
-          for (Fl_Type*k = l->next; k&&k->level>l->level; k = k->next)
-            k->visible = 0;
-        } else {
-          l->open_ = 1;
-          for (Fl_Type*k=l->next; k&&k->level>l->level;) {
-            k->visible = 1;
-            if (k->is_parent() && !k->open_) {
-              Fl_Type *j;
-              for (j = k->next; j && j->level>k->level; j = j->next);
-              k = j;
-            } else
-              k = k->next;
-          }
-        }
-        redraw();
-      }
-      return 1;
-    case fltk3::DND_ENTER:
-    case fltk3::DND_DRAG:
-    case fltk3::DND_RELEASE:
-      if (!fltk3::event_inside(X,Y,W,H)) break;
-      l = (Fl_Type*)find_item(fltk3::event_y());
-      if (l && l->dnd_available()) {
-        title = l;
-        return 1;
-      } else {
-        title = 0;
-        return 0;
-      }
-    case fltk3::PASTE:
-      if (title && title->dnd_available())
-        title->dnd_paste();
-      return 1;
-  }
-  return Browser_::handle(e);
-}
 
 Fl_Type::Fl_Type() {
   factory = 0;
@@ -662,14 +282,13 @@ Fl_Type::Fl_Type() {
   code_position_end = header_position_end = -1;
 }
 
-static void fixvisible(Fl_Type *p) {
-  Fl_Type *t = p;
-  for (;;) {
-    if (t->parent) t->visible = t->parent->visible && t->parent->open_;
-    else t->visible = 1;
-    t = t->next;
-    if (!t || t->level <= p->level) break;
-  }
+
+// Generate a descriptive text for this item, to put in browser & window titles
+const char* Fl_Type::title() {
+  const char* c = name(); 
+  if (c) 
+    return c;
+  return type_name();
 }
 
 
@@ -693,10 +312,26 @@ Fl_Type *Fl_Type::next_brother() {
 
 
 // turn a click at x,y on this into the actual picked object:
-Fl_Type* Fl_Type::click_test(int,int) {return 0;}
-void Fl_Type::add_child(Fl_Type*, Fl_Type*) {}
-void Fl_Type::move_child(Fl_Type*, Fl_Type*) {}
-void Fl_Type::remove_child(Fl_Type*) {}
+Fl_Type* Fl_Type::click_test(int,int) 
+{
+  return 0;
+}
+
+
+void Fl_Type::add_child(Fl_Type*, Fl_Type*) 
+{
+}
+
+
+void Fl_Type::move_child(Fl_Type*, Fl_Type*) 
+{
+}
+
+
+void Fl_Type::remove_child(Fl_Type*) 
+{
+}
+
 
 // add a list of widgets as a new child of p:
 void Fl_Type::add(Fl_Type *p) {
@@ -738,6 +373,7 @@ void Fl_Type::add(Fl_Type *p) {
   widget_browser->redraw();
 }
 
+
 // add to a parent before another widget:
 void Fl_Type::insert(Fl_Type *g) {
   Fl_Type *end = this;
@@ -756,9 +392,9 @@ void Fl_Type::insert(Fl_Type *g) {
   widget_browser->redraw();
 }
 
+
 // Return message number for I18N...
-int
-Fl_Type::msgnum() {
+int Fl_Type::msgnum() {
   int		count;
   Fl_Type	*p;
 
@@ -794,31 +430,6 @@ Fl_Type *Fl_Type::remove() {
   return r;
 }
 
-// update a string member:
-int storestring(const char *n, const char * & p, int nostrip) {
-  if (n == p) return 0;
-  undo_checkpoint();
-  int length = 0;
-  if (n) { // see if blank, strip leading & trailing blanks
-    if (!nostrip) while (isspace(*n)) n++;
-    const char *e = n + strlen(n);
-    if (!nostrip) while (e > n && isspace(*(e-1))) e--;
-    length = e-n;
-    if (!length) n = 0;
-  }    
-  if (n == p) return 0;
-  if (n && p && !strncmp(n,p,length) && !p[length]) return 0;
-  if (p) free((void *)p);
-  if (!n || !*n) {
-    p = 0;
-  } else {
-    char *q = (char *)malloc(length+1);
-    strlcpy(q,n,length+1);
-    p = q;
-  }
-  set_modflag(1);
-  return 1;
-}
 
 void Fl_Type::name(const char *n) {
   int nostrip = is_comment();
@@ -827,6 +438,7 @@ void Fl_Type::name(const char *n) {
   }
 }
 
+
 void Fl_Type::label(const char *n) {
   if (storestring(n,label_,1)) {
     setlabel(label_);
@@ -834,27 +446,36 @@ void Fl_Type::label(const char *n) {
   }
 }
 
+
 void Fl_Type::callback(const char *n) {
   storestring(n,callback_);
 }
+
 
 void Fl_Type::user_data(const char *n) {
   storestring(n,user_data_);
 }
 
+
 void Fl_Type::user_data_type(const char *n) {
   storestring(n,user_data_type_);
 }
+
 
 void Fl_Type::comment(const char *n) {
   storestring(n, comment_, 1);
 }
 
+
 void Fl_Type::open() {
   printf("Open of '%s' is not yet implemented\n",type_name());
 }
 
-void Fl_Type::setlabel(const char *) {}
+
+void Fl_Type::setlabel(const char *) 
+{
+}
+
 
 Fl_Type::~Fl_Type() {
   // warning: destructor only works for widgets that have been add()ed.
@@ -869,7 +490,11 @@ Fl_Type::~Fl_Type() {
   if (user_data_) free((void*)user_data_);
   if (user_data_type_) free((void*)user_data_type_);
   if (comment_) free((void*)comment_);
+  if (Fl_Panel::selected_type()==this) {
+    Fl_Panel::select_type(0);
+  }
 }
+
 
 int Fl_Type::is_parent() const {return 0;}
 int Fl_Type::is_widget() const {return 0;}
@@ -889,88 +514,6 @@ int Fl_Type::is_comment() const {return 0;}
 int Fl_Type::is_class() const {return 0;}
 int Fl_Type::is_public() const {return 1;}
 
-int Fl_Code_Type::is_public()const { return -1; }
-int Fl_CodeBlock_Type::is_public()const { return -1; }
-
-
-////////////////////////////////////////////////////////////////
-
-Fl_Type *in_this_only; // set if menu popped-up in window
-
-void select_all_cb(fltk3::Widget *,void *) {
-  Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
-  if (in_this_only) {
-    Fl_Type *t = p;
-    for (; t && t != in_this_only; t = t->parent);
-    if (t != in_this_only) p = in_this_only;
-  }
-  for (;;) {
-    if (p) {
-      int foundany = 0;
-      for (Fl_Type *t = p->next; t && t->level>p->level; t = t->next) {
-	if (!t->new_selected) {widget_browser->select(t,1,0); foundany = 1;}
-      }
-      if (foundany) break;
-      p = p->parent;
-    } else {
-      for (Fl_Type *t = Fl_Type::first; t; t = t->next)
-	widget_browser->select(t,1,0);
-      break;
-    }
-  }
-  selection_changed(p);
-}
-
-void select_none_cb(fltk3::Widget *,void *) {
-  Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
-  if (in_this_only) {
-    Fl_Type *t = p;
-    for (; t && t != in_this_only; t = t->parent);
-    if (t != in_this_only) p = in_this_only;
-  }
-  for (;;) {
-    if (p) {
-      int foundany = 0;
-      for (Fl_Type *t = p->next; t && t->level>p->level; t = t->next) {
-	if (t->new_selected) {widget_browser->select(t,0,0); foundany = 1;}
-      }
-      if (foundany) break;
-      p = p->parent;
-    } else {
-      for (Fl_Type *t = Fl_Type::first; t; t = t->next)
-	widget_browser->select(t,0,0);
-      break;
-    }
-  }
-  selection_changed(p);
-}
-
-static void delete_children(Fl_Type *p) {
-  Fl_Type *f;
-  for (f = p; f && f->next && f->next->level > p->level; f = f->next);
-  for (; f != p; ) {
-    Fl_Type *g = f->prev;
-    delete f;
-    f = g;
-  }
-}
-
-void delete_all(int selected_only) {
-  for (Fl_Type *f = Fl_Type::first; f;) {
-    if (f->selected || !selected_only) {
-      delete_children(f);
-      Fl_Type *g = f->next;
-      delete f;
-      f = g;
-    } else f = f->next;
-  }
-  if(!selected_only) {
-    include_H_from_C=1;
-    use_FL_COMMAND=0;
-  }
-  
-  selection_changed(0);
-}
 
 // move f (and it's children) into list before g:
 // returns pointer to whatever is after f & children
@@ -993,44 +536,6 @@ void Fl_Type::move_before(Fl_Type* g) {
   widget_browser->redraw();
 }
 
-// move selected widgets in their parent's list:
-void earlier_cb(fltk3::Widget*,void*) {
-  Fl_Type *f;
-  int mod = 0;
-  for (f = Fl_Type::first; f; ) {
-    Fl_Type* nxt = f->next;
-    if (f->selected) {
-      Fl_Type* g;
-      for (g = f->prev; g && g->level > f->level; g = g->prev);
-      if (g && g->level == f->level && !g->selected) {
-        f->move_before(g);
-        mod = 1;
-      }
-    }
-    f = nxt;
-  }
-  if (mod) set_modflag(1);
-}
-
-void later_cb(fltk3::Widget*,void*) {
-  Fl_Type *f;
-  int mod = 0;
-  for (f = Fl_Type::last; f; ) {
-    Fl_Type* prv = f->prev;
-    if (f->selected) {
-      Fl_Type* g;
-      for (g = f->next; g && g->level > f->level; g = g->next);
-      if (g && g->level == f->level && !g->selected) {
-        g->move_before(f);
-        mod = 1;
-      }
-    }
-    f = prv;
-  }
-  if (mod) set_modflag(1);
-}
-
-////////////////////////////////////////////////////////////////
 
 // write a widget and all it's children:
 void Fl_Type::write() {
@@ -1055,6 +560,7 @@ void Fl_Type::write() {
 	if (child->level == level+1) child->write();
     write_close(level);
 }
+
 
 void Fl_Type::write_properties() {
   // repeat this for each attribute:
@@ -1086,6 +592,7 @@ void Fl_Type::write_properties() {
   if (selected) write_word("selected");
 }
 
+
 char Fl_Type::read_property(const char *c) {
   if (!strcmp(c,"label"))
     label(read_word());
@@ -1108,20 +615,6 @@ char Fl_Type::read_property(const char *c) {
   return 1;
 }
 
-/**
- * Return 1 if the list contains a function with the given signature at the top level
- */
-int has_toplevel_function(const char *rtype, const char *sig) {
-  Fl_Type *child;
-  for (child = Fl_Type::first; child; child = child->next) {
-    if (!child->is_in_class() && strcmp(child->type_name(), "Function")==0) {
-      const Fl_Function_Type *fn = (const Fl_Function_Type*)child;
-      if (fn->has_signature(rtype, sig))
-        return 1;
-    }
-  }
-  return 0;
-}
 
 /**
  * Write a comment into the header file.
@@ -1138,7 +631,7 @@ void Fl_Type::write_comment_h(const char *pre)
           write_h("\n%s   ", pre);
         }
       } else {
-        write_h("%c", *s); // FIXME this is much too slow!
+        write_h("%c", *s);
       }
       s++;
     }
@@ -1146,8 +639,9 @@ void Fl_Type::write_comment_h(const char *pre)
   }
 }
 
+
 /**
- * Write a comment inot the header file.
+ * Write a comment into the source file.
  */
 void Fl_Type::write_comment_c(const char *pre)
 {
@@ -1161,7 +655,7 @@ void Fl_Type::write_comment_c(const char *pre)
           write_c("\n%s   ", pre);
         }
       } else {
-        write_c("%c", *s); // FIXME this is much too slow!
+        write_c("%c", *s);
       }
       s++;
     }
@@ -1169,24 +663,6 @@ void Fl_Type::write_comment_c(const char *pre)
   }
 }
 
-/**
- * Make sure that the given item is visible in the browser by opening
- * all parent groups and moving the item into the visible space.
- */
-void reveal_in_browser(Fl_Type *t) {
-  Fl_Type *p = t->parent;
-  if (p) {
-    for (;;) {
-      if (!p->open_)
-        p->open_ = 1;
-      if (!p->parent) break;
-      p = p->parent;
-    }
-    fixvisible(p);
-  }
-  widget_browser->display(t);
-  redraw_browser();
-}
 
 /**
  * Build widgets and dataset needed in live mode.
@@ -1197,6 +673,7 @@ fltk3::Widget *Fl_Type::enter_live_mode(int) {
   return 0L;
 }
 
+
 /**
  * Release all resources created when enetring live mode.
  * \see enter_live_mode()
@@ -1204,11 +681,13 @@ fltk3::Widget *Fl_Type::enter_live_mode(int) {
 void Fl_Type::leave_live_mode() {
 }
 
+
 /**
  * Copy all needed properties for this tye into the live object.
  */
 void Fl_Type::copy_properties() {
 }
+
 
 /**
  * Check whether callback name is declared anywhere else by the user
@@ -1228,795 +707,56 @@ int Fl_Type::user_defined(const char* cbname) const {
 }
 
 
-extern const char *filename;
-extern void set_filename(const char*);
-extern char project_is_workspace();
-
-// ------------ Tool -----------------------------------------------------------
-
-Fl_Tool_Type::Fl_Tool_Type()
-: Fl_Type(),
-  pBuildEnv(FL_ENV_ALL),
-  pListEnv(FL_ENV_ALL),
-  pNUUID(0), pnUUID(0), 
-  pUUIDName(0L), pUUID(0),
-  pFlags(0)
+void Fl_Type::write_static() 
 {
 }
 
-Fl_Tool_Type::~Fl_Tool_Type() {
-  int i;
-  for (i=0; i<pnUUID; i++) {
-    free(pUUIDName[i]);
-    free(pUUID[i]);
-  }
-  if (pNUUID) {
-    free(pUUIDName);
-    free(pUUID);
-  }
+
+void Fl_Type::write_code1() 
+{
+  write_h("// Header for %s\n", title());
+  write_c("// Code for %s\n", title());
 }
 
-int Fl_Tool_Type::find_UUID(const char *name) {
-  int i;
-  for (i=0; i<pnUUID; i++) {
-    if (strcmp(pUUIDName[i], name)==0)
-      return i;
-  }
-  return -1;
+
+void Fl_Type::write_code2() 
+{
 }
 
-void Fl_Tool_Type::set_UUID(int i, const char *uuid) {
-  if (pUUID[i]) 
-    free(pUUID[i]);
-  pUUID[i] = 0;
-  pUUID[i] = strdup(verify_UUID(uuid));
-}
-
-void Fl_Tool_Type::set_UUID(const char *name, const char *uuid) {
-  int i = find_UUID(name);
-  if (i==-1) {
-    if (pNUUID==pnUUID) {
-      pNUUID += 4;
-      pUUIDName = (char**)realloc(pUUIDName, pNUUID*sizeof(char*));
-      pUUID = (char**)realloc(pUUID, pNUUID*sizeof(char*));
-    }
-    pUUIDName[pnUUID] = strdup(name);
-    pUUID[pnUUID] = strdup(verify_UUID(uuid));
-    pnUUID++;
-  } else {
-    set_UUID(i, uuid);
-  }
-}
-
-/*
- Verify that a Uniqe ID is truly unique.
- */
-const char *Fl_Tool_Type::verify_UUID(const char *uuid) {
-  Fl_Type *t;
-  for (t = first; t; t = t->next) {
-    if (t->is_tool()) {
-      Fl_Tool_Type *wt = (Fl_Tool_Type*)t;
-      int j, n = wt->pnUUID;
-      for (j=0; j<n; j++) {
-        if (wt->pUUID[j] && strcmp(wt->pUUID[j], uuid)==0) {
-          printf("Replacing duplicate UUIDin %s!\n", wt->name());
-          return fltk3::Preferences::newUUID();
-        }
+const char* Fl_Type::class_name(const int need_nest) const {
+  Fl_Type* p = parent;
+  while (p) {
+    if (p->is_class()) {
+      // see if we are nested in another class, we must fully-qualify name:
+      // this is lame but works...
+      const char* q = 0;
+      if(need_nest) q=p->class_name(need_nest);
+      if (q) {
+	static char s[256];
+	if (q != s) strlcpy(s, q, sizeof(s));
+	strlcat(s, "::", sizeof(s));
+	strlcat(s, p->name(), sizeof(s));
+	return s;
       }
+      return p->name();
     }
-  }
-  return uuid;
-}
-
-const char *Fl_Tool_Type::get_UUID(const char *name) {
-  int i = find_UUID(name);
-  if (i==-1) {
-    i = pnUUID;
-    const char *uuid = fltk3::Preferences::newUUID();
-    set_UUID(name, uuid);
-  }
-  return pUUID[i];
-}
-
-const char *Fl_Tool_Type::get_UUID_Xcode(const char *name) {
-  char *buf = get_temporary_return_buffer(25);
-  const char *uuid = get_UUID(name);
-  // 937C4900-51AA-4C11-8DD3-7AB5 9944F03E
-  unsigned int a, b, c, d, e, f;
-  sscanf(uuid, "%08X-%04X-%04X-%04X-%04X%08X", &a, &b, &c, &d, &e, &f);
-  sprintf(buf, "%08X%04X%04X%08X", a, b^c, d^e, f);
-  return buf;
-}
-
-void Fl_Tool_Type::write_properties() {
-  Fl_Type::write_properties();
-  int i;
-  for (i=0; i<pnUUID; i++) {
-    char buf[80];
-    strcpy(buf, "uuid_");
-    strcat(buf, pUUIDName[i]); 
-    write_indent(level+1);
-    write_word(buf);
-    write_word(pUUID[i]);
-  }
-  if (build_env()!=FL_ENV_ALL) {
-    write_indent(level+1);
-    write_string("build_env %d", build_env());
-  }
-  if (list_env()!=FL_ENV_ALL) {
-    write_indent(level+1);
-    write_string("list_env %d", list_env());
-  }
-}
-
-char Fl_Tool_Type::read_property(const char *name) {
-  if (strncmp(name, "uuid_", 5)==0) {
-    char buf[80];
-    strcpy(buf, name+5);
-    set_UUID(buf, read_word());
-  } else if (!strcmp(name,"environments")) { // FIXME: delete this
-    int v = atoi(read_word());
-    build_env(v); list_env(v);
-  } else if (!strcmp(name,"build_env")) {
-    build_env(atoi(read_word()));
-  } else if (!strcmp(name,"list_env")) {
-    list_env(atoi(read_word()));
-  } else {
-    return Fl_Type::read_property(name);
-  }
-  return 1;
-}
-
-int Fl_Tool_Type::dnd_available() {
-  // FIXME: we should maybe test if the objects dropped are actually valid file names
-  if (filename && *filename && (is_target() || is_folder()))
-    return 1;
-  return 0;
-}
-
-int Fl_Tool_Type::dnd_paste() {
-  if (filename && *filename && (is_target() || is_folder())) {
-    if (fltk3::event_text() && *fltk3::event_text()) {
-      char *basedir = strdup(filename); // global name of workspace file!
-      char *fn = (char*)fltk3::filename_name(basedir);
-      if (fn) *fn = 0;
-      char *files = strdup(fltk3::event_text()), *s = files, *e = s;
-      char done = 0;
-      for (;!done;) {
-        // find the end of the line
-        for (;;) {
-          if (*e==0) { done = 1; break; }
-          if (*e=='\n') { *e++ = 0; break; }
-          e++;
-        }
-        // add the file 's' to this item
-        if (e!=s) {
-          char buf[FLTK3_PATH_MAX];
-          fltk3::filename_relative(buf, FLTK3_PATH_MAX, s, basedir);
-          Fl_File_Type *o = new Fl_File_Type();
-          o->filename(buf);
-          o->add(this);
-          o->factory = this;
-        }
-        s = e;
-      }
-      free(files);
-      free(basedir);
-    }
-  }
-  return 1;
-}
-
-// ------------ Workspace ------------------------------------------------------
-
-Fl_Workspace_Type Fl_Workspace_type;
-
-Fl_Type *Fl_Workspace_Type::make() {
-  // A workspace must be the first entry
-  if (Fl_Type::first) {
-    fltk3::message("A Workspace can only be added to an empty project.");
-    return 0;
-  }
-  // add the workspace to the file
-  Fl_Workspace_Type *o = new Fl_Workspace_Type();
-  o->name("myWorkspace");
-  o->add(0L);
-  o->factory = this;
-  return o;
-}
-
-void Fl_Workspace_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-
-// ------------ Workspace Option -----------------------------------------------
-
-Fl_Option_Type Fl_Option_type;
-
-Fl_Type *Fl_Option_Type::make() {
-  // A workspace must be the first entry
-  if (!project_is_workspace()) {
-    fltk3::message("This element can only be added into a workspace.");
-    return 0;
-  }
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_folder() && !p->is_target() && !p->is_workspace())
-    p = p->parent;  
-  if (!p) {
-    fltk3::message("This element can only be added to a Target, Folder, or Workspace!");
-    return 0;
-  }
-  // add the workspace to the file
-  Fl_Option_Type *o = new Fl_Option_Type();
-  o->name("myOption");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-void Fl_Option_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-void Fl_Option_Type::value(const char *v) {
-  if (pValue) {
-    free(pValue);
-    pValue = 0L;
-  }
-  if (v) {
-    pValue = strdup(v);
-  } else {
-    pValue = strdup("");
-  }
-}
-
-char Fl_Option_Type::read_property(const char *c) {
-  if (!strcmp(c,"value")) {
-    value(read_word());
-  } else if (!strcmp(c,"valuetype")) {
-    value_type(atoi(read_word()));
-  } else {
-    return Fl_Tool_Type::read_property(c);
-  }
-  return 1;
-}
-
-void Fl_Option_Type::write_properties() {
-  Fl_Tool_Type::write_properties();
-  if (value() && *value()) {
-    write_indent(level+1);
-    write_string("value");
-    write_word(value());
-  }
-  if (value_type()!=FL_OPTION_OTHER) {
-    write_indent(level+1);
-    write_string("valuetype %d", value_type());
-  }
-}
-
-
-// ------------ Target Dependency ----------------------------------------------
-
-Fl_Target_Dependency_Type Fl_Target_Dependency_type;
-
-Fl_Type *Fl_Target_Dependency_Type::make() {
-  // A workspace must be the first entry
-  if (!project_is_workspace()) {
-    fltk3::message("A Target Dependency can only be added to another Target in a Workspace.");
-    return 0;
-  }
-  // add the dependency to the target
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_folder() && !p->is_target())
-    p = p->parent;  
-  if (!p) {
-    fltk3::message("A Target Dependency reference can only be added to a Target or Folder!");
-    return 0;
-  }
-  Fl_Target_Dependency_Type *o = new Fl_Target_Dependency_Type();
-  o->name("otherTarget");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-void Fl_Target_Dependency_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-
-// ------------ Target ---------------------------------------------------------
-
-Fl_Target_Type Fl_Target_type;
-
-Fl_Type *Fl_Target_Type::make() {
-  // no generic targets!
-  return 0L;
-}
-
-// Note: we do not deal with UTF8 chracters here!
-const char *Fl_Target_Type::caps_name() {
-  const char *s = name();
-  char *buf = get_temporary_return_buffer(strlen(s)+1);
-  char *d = buf;
-  while (*s) {
-    *d++ = toupper(*s++);
-  }
-  *d++ = 0;
-  return buf;
-}
-
-// Note: we do not deal with UTF8 chracters here!
-const char *Fl_Target_Type::lowercase_name() {
-  const char *s = name();
-  char *buf = get_temporary_return_buffer(strlen(s)+1);
-  char *d = buf;
-  while (*s) {
-    *d++ = tolower(*s++);
-  }
-  *d++ = 0;
-  return buf;
-}
-
-Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
-  // find a partial string, if 'end' is set to a character
-  char buf[FLTK3_PATH_MAX];
-  strcpy(buf, name);
-  if (end) {
-    char *sep = strchr(buf, end);
-    if (sep) *sep = 0;
-  }
-  // now find the target by name (stored in 'buf')
-  Fl_Type *tgt = first;
-  while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), buf)==0)
-      return (Fl_Target_Type*)tgt;
-    tgt = tgt->next;
-  }
-  return 0;
-}
-
-Fl_Target_Type *Fl_Target_Type::first_target(Fl_Type *base) {
-  Fl_Type *src = base->next;
-  while (src && src->level>base->level) {
-    if (src->is_target()) 
-      return (Fl_Target_Type*)src;
-    src = src->next;
-  }
-  return 0;
-}
-
-Fl_Target_Type *Fl_Target_Type::next_target(Fl_Type *base) {
-  Fl_Type *src = this->next;
-  while (src && src->level>base->level) {
-    if (src->is_target()) 
-      return (Fl_Target_Type*)src;
-    src = src->next;
-  }
-  return 0;
-}
-
-void Fl_Target_Type::target_path(const char *path) {
-  if (pTargetPath) {
-    free(pTargetPath);
-    pTargetPath = 0L;
-  }
-  if (path) {
-    pTargetPath = strdup(path);
-  } else {
-    pTargetPath = strdup("");
-  }
-}
-
-void Fl_Target_Type::makefile_path(const char *path) {
-  if (pMakefilePath) {
-    free(pMakefilePath);
-    pMakefilePath = 0L;
-  }
-  if (path) {
-    pMakefilePath = strdup(path);
-  } else {
-    pMakefilePath = strdup("");
-  }
-}
-
-char Fl_Target_Type::read_property(const char *c) {
-  if (!strcmp(c,"target_path")) {
-    target_path(read_word());
-  } else if (!strcmp(c,"makefile_path")) {
-    makefile_path(read_word());
-  } else {
-    return Fl_Tool_Type::read_property(c);
-  }
-  return 1;
-}
-
-void Fl_Target_Type::write_properties() {
-  Fl_Tool_Type::write_properties();
-  if (target_path() && *target_path()) {
-    write_indent(level+1);
-    write_string("target_path");
-    write_word(target_path());
-  }
-  if (makefile_path() && *makefile_path()) {
-    write_indent(level+1);
-    write_string("makefile_path");
-    write_word(makefile_path());
-  }
-}
-
-
-// ------------ Application Target ---------------------------------------------
-
-Fl_App_Target_Type Fl_App_Target_type;
-
-Fl_Type *Fl_App_Target_Type::make() {
-  // a target can only go into a workspace file
-  if (!project_is_workspace()) {
-    fltk3::message("A Target can only be added to a Workspace.");
-    return 0;
-  }
-  // find out where we can add this target
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_category() && !p->is_workspace())
-    p = p->parent;  
-  Fl_App_Target_Type *o = new Fl_App_Target_Type();
-  o->name("myProgram");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-void Fl_App_Target_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-// ------------ Library Target -------------------------------------------------
-
-Fl_Lib_Target_Type Fl_Lib_Target_type;
-
-Fl_Type *Fl_Lib_Target_Type::make() {
-  // a target con only go into a workspace file
-  // TODO: we can offer to create a workspace if this is currently a GUI file
-  if (!project_is_workspace()) {
-    fltk3::message("A Target can only be added to a Workspace.");
-    return 0;
-  }
-  // find out where we can add this target
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_category() && !p->is_workspace())
-    p = p->parent;  
-  Fl_Lib_Target_Type *o = new Fl_Lib_Target_Type();
-  o->name("myLibrary");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-void Fl_Lib_Target_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-// ------------ Generic File ---------------------------------------------------
-
-Fl_File_Type Fl_File_type;
-
-Fl_Type *Fl_File_Type::make() {
-  // make sure that this is a workspace file
-  if (Fl_Type::first && !project_is_workspace()) {
-    fltk3::message("File references can only be used in Workspace files.");
-    return 0;
-  }
-  // files can be children of folders and children of targets
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_target() && !p->is_folder()) 
     p = p->parent;
-  if (!p) {
-    fltk3::message("A File reference can only be added to a Target or Folder!");
-    return 0;
-  }
-  Fl_File_Type *o = new Fl_File_Type();
-  o->name("readme.txt");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-void Fl_File_Type::set_default_type() {
-  const char *fn = filename();
-  if (fn) {
-    const char *ext = fltk3::filename_ext(fn);
-    filetype(FL_FILE_TEXT);
-    if (ext) {
-      if (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0) {
-        filetype(FL_FILE_CPP_SOURCE);
-      } else if (strcmp(ext, ".c")==0) {
-        filetype(FL_FILE_C_SOURCE);
-      } else if (strcmp(ext, ".H")==0) {
-        filetype(FL_FILE_CPP_HEADER);
-      } else if (strcmp(ext, ".h")==0) {
-        filetype(FL_FILE_C_HEADER);
-      } else if (strcmp(ext, ".mm")==0) {
-        filetype(FL_FILE_OBJC_SOURCE);
-      } else if (strcmp(ext, ".framework")==0) {
-        filetype(FL_FILE_FRAMEWORK);
-      } else if (strcmp(ext, ".fl")==0) {
-        filetype(FL_FILE_FLUID_UI);
-      } else if (strcmp(ext, ".lib")==0) {
-        filetype(FL_FILE_LIBRARY);
-      }
-    }
-  }
-}
-
-void Fl_File_Type::filename(const char *fn) {
-  if (pFilename) {
-    free(pFilename);
-    pFilename = 0;
-    name(0);
-  }
-  if (fn) {
-    pFilename = strdup(fn);
-    name(fltk3::filename_name(fn));
-    set_default_type();
-  }
-}
-
-char Fl_File_Type::read_property(const char *c) {
-  if (!strcmp(c,"filename_and_path")) {
-    filename(read_word());
-  } else if (!strcmp(c,"filetype")) {
-    filetype(atoi(read_word()));
-  } else if (!strcmp(c,"location")) {
-    location(atoi(read_word()));
-  } else {
-    return Fl_Tool_Type::read_property(c);
-  }
-  return 1;
-}
-
-void Fl_File_Type::write_properties() {
-  Fl_Tool_Type::write_properties();
-  if (filename() && *filename()) {
-    write_indent(level+1);
-    write_string("filename_and_path");
-    write_word(filename());
-  }
-  if (filetype()&FL_FILE_EXPLICIT) {
-    write_indent(level+1);
-    write_string("filetype %d", filetype());
-  }
-  if (location()!=FL_LOCATION_WORKSPACE) {
-    write_indent(level+1);
-    write_string("location %d", location());
-  }
-}
-
-Fl_File_Type *Fl_File_Type::first_file(Fl_Type *base) {
-  Fl_Type *src = base->next;
-  while (src && src->level>base->level) {
-    if (src->is_file()) 
-      return (Fl_File_Type*)src;
-    src = src->next;
   }
   return 0;
 }
-
-Fl_File_Type *Fl_File_Type::next_file(Fl_Type *base) {
-  Fl_Type *src = this->next;
-  while (src && src->level>base->level) {
-    if (src->is_file()) 
-      return (Fl_File_Type*)src;
-    src = src->next;
-  }
-  return 0;
-}
-
-Fl_Target_Dependency_Type *Fl_Target_Dependency_Type::first_dependency(Fl_Type *base) {
-  Fl_Type *src = base->next;
-  while (src && src->level>base->level) {
-    if (src->is_target_dependency()) 
-      return (Fl_Target_Dependency_Type*)src;
-    src = src->next;
-  }
-  return 0;
-}
-
-Fl_Target_Dependency_Type *Fl_Target_Dependency_Type::next_dependency(Fl_Type *base) {
-  Fl_Type *src = this->next;
-  while (src && src->level>base->level) {
-    if (src->is_target_dependency()) 
-      return (Fl_Target_Dependency_Type*)src;
-    src = src->next;
-  }
-  return 0;
-}
-
-char Fl_File_Type::file_is_cplusplus_code() {
-  return (pFileType==FL_FILE_CPP_SOURCE);
-}
-
-char Fl_File_Type::file_is_cplusplus_header() {
-  return (pFileType==FL_FILE_CPP_HEADER);
-}
-
-char Fl_File_Type::file_is_c_code() {
-  return (pFileType==FL_FILE_C_SOURCE);
-}
-
-char Fl_File_Type::file_is_c_header() {
-  return (pFileType==FL_FILE_C_HEADER);
-}
-
-char Fl_File_Type::file_is_objc_code() {
-  return (pFileType==FL_FILE_OBJC_SOURCE);
-}
-
-char Fl_File_Type::file_is_objc_header() {
-  return (pFileType==FL_FILE_OBJC_HEADER);
-}
-
-char Fl_File_Type::file_is_framework() {
-  return (pFileType==FL_FILE_FRAMEWORK);
-}
-
-char Fl_File_Type::file_is_library() {
-  return (pFileType==FL_FILE_LIBRARY);
-}
-
-char Fl_File_Type::file_is_fluid_ui() {
-  return (pFileType==FL_FILE_FLUID_UI);
-}
-
-char Fl_File_Type::file_is_other() {
-  return (pFileType==FL_FILE_TEXT);
-}
-
-char Fl_File_Type::file_is_code() {
-  return (pFileType==FL_FILE_CPP_SOURCE)||(pFileType==FL_FILE_C_SOURCE)||(pFileType==FL_FILE_OBJC_SOURCE);
-}
-
-char Fl_File_Type::file_is_header() {
-  return (pFileType==FL_FILE_CPP_HEADER)||(pFileType==FL_FILE_C_HEADER)||(pFileType==FL_FILE_OBJC_HEADER);
-}
-
-const char *Fl_File_Type::filename_name() {
-  const char *fn = filename();
-  if (fn) {
-    return fltk3::filename_name(fn);
-  }
-  return 0;
-}
-
-const char *Fl_File_Type::filename_relative(const char *fnbase, const char *tgtbase) {
-  char src_name[FLTK3_PATH_MAX];
-  char *result = get_temporary_return_buffer(FLTK3_PATH_MAX);
-  const char *fn = filename();
-  if (fn) {
-    strcpy(src_name, fnbase);
-    strcat(src_name, fn);
-    fltk3::filename_relative(result, FLTK3_PATH_MAX, src_name, tgtbase);
-    return result;
-  } else {
-    return 0;
-  }
-}
-
-void Fl_File_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-// ------------ Folder ---------------------------------------------------------
-
-Fl_Folder_Type Fl_Folder_type;
-
-Fl_Type *Fl_Folder_Type::make() {
-  // make sure that this is a workspace file
-  if (Fl_Type::first && !project_is_workspace()) {
-    fltk3::message("Folders can only be used in Workspace files.");
-    return 0;
-  }
-  // Folders can be inside folders of inside targets
-  // Categories can be at the top level or inside categories
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_category() && !p->is_folder() && !p->is_target() && !p->is_workspace()) 
-    p = p->parent;
-  Fl_Folder_Type *o = new Fl_Folder_Type();
-  o->name("Group");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-void Fl_Folder_Type::open() {
-  if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
-  the_workspace_panel->load(&Fl_Type::is_tool);
-  if (Fl_Panel::numselected) the_workspace_panel->show();
-}
-
-// ------------ Panel Base Class -----------------------------------------------
-
-void *const Fl_Panel::LOAD = (void *)"LOAD"; // "magic" pointer to indicate that we need to load values into the dialog
-int Fl_Panel::numselected = 0;
-Fl_Type *Fl_Panel::pSelectedType = 0L;
-
-Fl_Panel::Fl_Panel(int x, int y, int w, int h, const char *name) 
-: fltk3::DoubleWindow(w, h, name) {
-}
-
-Fl_Panel::~Fl_Panel() {
-}
-
-void Fl_Panel::propagate_load(fltk3::Group* g, void* v) {
-  if (v == Fl_Panel::LOAD) {
-    fltk3::Widget*const* a = g->array();
-    for (int i=g->children(); i--;) {
-      fltk3::Widget* o = *a++;
-      o->do_callback(o,Fl_Panel::LOAD);
-    }
-  }
-}
-
-
-// FIXME: make this a method of Fl_Panel
-// update the panel according to current widget set:
-void Fl_Panel::load(RTTI_Query type_query) {
-  if (!this) return;
-  
-  // find all the fltk3::Widget subclasses currently selected:
-  numselected = 0;
-  select_type(0);
-  if (Fl_Type::current) {
-    if ((Fl_Type::current->*type_query)())
-      select_type(Fl_Type::current);
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-      if ((o->*type_query)() && o->selected) {
-	numselected++;
-	if (!selected_type()) select_type(o);
-      }
-    }
-  }
-  if (numselected)
-    propagate_load(this);
-  else
-    hide();
-}
-
-extern fltk3::Window* widgetbin_panel;
 
 /**
- Override show() to make sure that widgets don;t overlap.
- Specifically, the widget bin and widget panel tend open in the same position. 
- One panel needs to be moved which interrupts workflow. This function moves
- the WIdget Panel away from the Widget Bin.
+ * If this Type resides inside a class, this function returns the class type, or null.
  */
-void Fl_Panel::show()
-{
-  if (shown()) {
-    // just raise th window, nothing else
-    fltk3::DoubleWindow::show();
-  } else {
-    // show the window, then avoid overlap
-    fltk3::DoubleWindow::show();
-    if (widgetbin_panel && widgetbin_panel->shown()) {
-      if (this->intersects(*widgetbin_panel)) {
-        position(x(), widgetbin_panel->b()+40);
-      }
+const Fl_Class_Type *Fl_Type::is_in_class() const {
+  Fl_Type* p = parent;
+  while (p) {
+    if (p->is_class()) {
+      return (Fl_Class_Type*)p;
     }
+    p = p->parent;
   }
+  return 0;
 }
 
 

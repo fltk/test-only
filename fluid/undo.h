@@ -28,6 +28,10 @@
 #ifndef undo_h
 #  define undo_h
 
+namespace fltk3 {
+  class Widget;
+};
+
 extern int undo_current;		// Current undo level in buffer
 extern int undo_last;			// Last undo level in buffer
 extern int undo_save;			// Last undo level that was saved

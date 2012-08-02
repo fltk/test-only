@@ -41,12 +41,22 @@ static fltk3::Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarro
 static fltk3::Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 
-// changing the value does not change the appearance:
+#include <fltk3/Style.h>
+
+
+/*
+ Override the default behaviour: changing the value does not change 
+ the appearance.
+ */
 void fltk3::Adjuster::value_damage() 
 {
 }
 
 
+/*
+ Draw the entire widget. Even though the widget looks like three individual
+ buttons, we draw and handle the entire widget without calling Button code,
+ */
 void fltk3::Adjuster::draw() 
 {
   int dx, dy, W, H, hor = (w()>=h());
@@ -61,9 +71,9 @@ void fltk3::Adjuster::draw()
   fltk3::Color sel = fltk3::color_average(fltk3::BLACK, col, 0.2f);
 
   fltk3::Box* up = box(), *dn = fltk3::down(box());
-  fltk3::draw_box((drag==1?dn:up), 0, 2*dy, W, H, (drag==1?sel:col), hor?Box::TIE_RIGHT:Box::TIE_TOP);
-  fltk3::draw_box((drag==2?dn:up), dx, dy, W, H,  (drag==2?sel:col), hor?Box::TIE_LEFT|Box::TIE_RIGHT:Box::TIE_TOP|Box::TIE_BOTTOM);
-  fltk3::draw_box((drag==3?dn:up), 2*dx, 0, W, H, (drag==3?sel:col), hor?Box::TIE_LEFT:Box::TIE_BOTTOM);
+  fltk3::draw_box((pDragButton==1?dn:up), 0, 2*dy, W, H, (pDragButton==1?sel:col), hor?Box::TIE_RIGHT:Box::TIE_TOP);
+  fltk3::draw_box((pDragButton==2?dn:up), dx, dy, W, H,  (pDragButton==2?sel:col), hor?Box::TIE_LEFT|Box::TIE_RIGHT:Box::TIE_TOP|Box::TIE_BOTTOM);
+  fltk3::draw_box((pDragButton==3?dn:up), 2*dx, 0, W, H, (pDragButton==3?sel:col), hor?Box::TIE_LEFT:Box::TIE_BOTTOM);
   if (active_r())
     fltk3::color(selection_color());
   else
@@ -75,6 +85,10 @@ void fltk3::Adjuster::draw()
 }
 
 
+/*
+ Handle the entire widget. Even though the widget looks like three individual
+ buttons, we draw and handle the entire widget without calling Button code,
+ */
 int fltk3::Adjuster::handle(int event) 
 {
   double v;
@@ -84,11 +98,10 @@ int fltk3::Adjuster::handle(int event)
   switch (event) {
     case fltk3::PUSH:
       if (fltk3::visible_focus()) fltk3::focus(this);
-      ix = mx;
       if (w()>=h())
-	drag = (3*mx)/w() + 1;
+	pDragButton = (3*mx)/w() + 1;
       else
-	drag = 3-3*(fltk3::event_y()-1)/h();
+	pDragButton = 3-3*(fltk3::event_y()-1)/h();
     { fltk3::WidgetTracker wp(this);
       handle_push();
       if (wp.deleted()) return 1;
@@ -97,7 +110,7 @@ int fltk3::Adjuster::handle(int event)
       return 1;
     case fltk3::DRAG:
       if (w() >= h()) {
-	delta = (drag-1)*w()/3;	// left edge of button
+	delta = (pDragButton-1)*w()/3;	// left edge of button
 	if (mx < delta)
 	  delta = mx-delta;
 	else if (mx > (delta+w()/3)) // right edge of button
@@ -112,7 +125,7 @@ int fltk3::Adjuster::handle(int event)
 	else
 	  delta = 0;
       }
-      switch (drag) {
+      switch (pDragButton) {
 	case 3: v = increment(previous_value(), delta); break;
 	case 2: v = increment(previous_value(), delta*10); break;
 	default:v = increment(previous_value(), delta*100); break;
@@ -123,7 +136,7 @@ int fltk3::Adjuster::handle(int event)
       if (fltk3::event_is_click()) { // detect click but no drag
 	if (fltk3::event_state()&0xF0000) delta = -10;
 	else delta = 10;
-	switch (drag) {
+	switch (pDragButton) {
 	  case 3: v = increment(previous_value(), delta); break;
 	  case 2: v = increment(previous_value(), delta*10); break;
 	  default:v = increment(previous_value(), delta*100); break;
@@ -132,7 +145,7 @@ int fltk3::Adjuster::handle(int event)
 	handle_drag(soft() ? softclamp(v) : clamp(v));
 	if (wp.deleted()) return 1;
       }
-      drag = 0;
+      pDragButton = 0;
       redraw();
       handle_release();
       return 1;
@@ -174,14 +187,15 @@ int fltk3::Adjuster::handle(int event)
 }
 
 
+/* Documented in header file */
 fltk3::Adjuster::Adjuster(int X, int Y, int W, int H, const char* l)
-: fltk3::Valuator(X, Y, W, H, l) 
+: fltk3::Valuator(X, Y, W, H, l),
+  pDragButton(0),
+  pSoftBoundaries(false)
 {
   box(fltk3::UP_BOX);
   step(1, 10000);
   selection_color(fltk3::SELECTION_COLOR);
-  drag = 0;
-  soft_ = 1;
 }
 
 

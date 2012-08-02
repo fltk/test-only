@@ -27,10 +27,9 @@
 
 // FLTK 123 complete
 
-/* \file
- fltk3::Adjuster widget . */
-
-// 3-button "slider", made for Nuke
+/** \file
+ fltk3::Adjuster widget 
+ */
 
 #ifndef FLTK3_Adjuster_H
 #define FLTK3_Adjuster_H
@@ -41,54 +40,69 @@
 namespace fltk3 {
   
   /**
-   The fltk3::Adjuster widget was stolen from Prisms, and has proven
-   to be very useful for values that need a large dynamic range.
+   \brief The Adjuster widget allows for quick numeric manipulation.
+   
+   The Adjuster widget was inspired by Prisms, and has proven to be very useful
+   for values that need a large dynamic range.
+   
    \image html adjuster1.png 
    \image latex adjuster1.png "fltk3::Adjuster" width=4cm
-   <P>When you  press a button and drag to the right the value increases.
-   When you drag  to the left it decreases.  The largest button adjusts by
-   100 *  step(), the next by 10 * step() and that
-   smallest button  by step().  Clicking on the buttons
-   increments by 10 times the  amount dragging by a pixel does. Shift +
-   click decrements by 10 times  the amount.
+   
+   When you  press a button and drag to the right the value increases. When you 
+   drag to the left it decreases.  The largest button adjusts by <i>100 * 
+   step()</i>, the next by <i>10 * step()</i> and that smallest button by 
+   <i>step()</i>.  
+   
+   Clicking on the buttons increments by 10 times the amount dragging by a 
+   pixel does. Shift + click decrements by 10 times the amount.
    */
   class FLTK3_EXPORT Adjuster : public Valuator {
     
   private:
-    int drag;
-    int ix;
-    int soft_;
+    int pDragButton; ///< 1..3, indicating the clicked range
+    bool pSoftBoundaries; ///< set if soft boundaries are switched on
     
   protected:
     void draw();
     int handle(int);
-    void value_damage();
+    virtual void value_damage();
     
   public:
     
     /**
-     Creates a new fltk3::Adjuster widget using the given position,
-     size, and label string. It looks best if one of the dimensions is 3
-     times the other.
-     <P> Inherited destructor destroys the Valuator.
+     \brief Create the Adjuster widget.
+     
+     Creates a new fltk3::Adjuster widget using the given position, size, and 
+     label string. It looks best if one of the dimensions is 3 times the other.
+     
+     Inherited destructor destroys the Valuator.
+     
+     \param X, Y, W, H position and size
+     \param l label text
      */
     Adjuster(int X,int Y,int W,int H,const char *l=0);
     
     /**
+     \brief Set soft boundaries.
+     
      If "soft" is turned on, the user is allowed to drag the value outside
      the range.  If they drag the value to one of the ends, let go, then
      grab again and continue to drag, they can get to any value.  Default is
      one.
+     
+     \param s false to turn off, true to turn on
+     \see fltk3::Valuator::range(doube min, double max)
      */
-    void soft(int s) {soft_ = s;}
+    void soft(bool onOff) { pSoftBoundaries = onOff; }
     
     /**
-     If "soft" is turned on, the user is allowed to drag the value outside
-     the range.  If they drag the value to one of the ends, let go, then
-     grab again and continue to drag, they can get to any value.  Default is
-     one.
+     \brief Return 1 if soft boundaries are switched on.
+     
+     \return status of soft boundaries
+     \see fltk3::Valuator::range(doube min, double max)
+     \see fltk3::Adjuster(int s)
      */
-    int soft() const {return soft_;}
+    int soft() const { return pSoftBoundaries; }
   };
   
 } // namespace

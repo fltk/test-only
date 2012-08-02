@@ -878,39 +878,6 @@ fltk3::InputChoice::InputChoice (int x,int y,int w,int h,const char*l)
 }
 
 
-fltk3::Spinner::Spinner(int X, int Y, int W, int H, const char *L)
-: fltk3::Group(X, Y, W, H, L),
-  input_(0, 0, W - H / 2 - 2, H),
-  up_button_(W - H / 2 - 2, 0, H / 2 + 2, H / 2, "@-42<"),
-  down_button_(W - H / 2 - 2, H - H / 2, H / 2 + 2, H / 2, "@-42>") 
-{
-  end();
-  
-  value_   = 1.0;
-  minimum_ = 1.0;
-  maximum_ = 100.0;
-  step_    = 1.0;
-  format_  = "%g";
-  
-  align(fltk3::ALIGN_LEFT);
-  
-  input_.value("1");
-  input_.type(fltk3::INT_INPUT);
-  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
-  input_.callback((fltk3::Callback *)sb_cb, this);
-  //input_.box(Boxtype(input_.box()|TIE_RIGHT));
-  input_.box(input_.box());
-  
-  up_button_.callback((fltk3::Callback *)sb_cb, this);
-  //up_button_.box(Boxtype(up_button_.box()|TIE_LEFT|TIE_BOTTOM));
-  up_button_.box(up_button_.box());
-  
-  down_button_.callback((fltk3::Callback *)sb_cb, this);
-  //down_button_.box(Boxtype(down_button_.box()|TIE_LEFT|TIE_TOP));
-  down_button_.box(down_button_.box());
-}
-
-
 //
 // End of "$Id$".
 //

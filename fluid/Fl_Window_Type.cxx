@@ -29,6 +29,11 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "Fl_Window_Type.h"
+#include "fluid.h"
+#include "code.h"
+#include "file.h"
+
 #include <fltk3/run.h>
 #include <fltk3/OverlayWindow.h>
 #include <fltk3/message.h>
@@ -37,7 +42,6 @@
 #include <fltk3/MenuItem.h>
 #include <fltk3/RoundButton.h>
 #include <fltk3/Wrapper.h>
-#include "Fl_Widget_Type.h"
 #include "undo.h"
 #include <math.h>
 #include <stdlib.h>
@@ -354,9 +358,12 @@ uchar *Overlay_Window::read_image(int &ww, int &hh) {
   return pixels;
 }
 
+
 void Overlay_Window::draw_overlay() {
   window->draw_overlay();
 }
+
+
 int Overlay_Window::handle(int e) {
   int ret =  window->handle(e);
   if (ret==0) {
@@ -368,6 +375,7 @@ int Overlay_Window::handle(int e) {
   }
   return ret;
 }
+
 
 Fl_Type *Fl_Window_Type::make() {
   Fl_Type *p = Fl_Type::current;
@@ -407,9 +415,11 @@ void Fl_Window_Type::add_child(Fl_Type* cc, Fl_Type* before) {
 }
 
 void Fl_Window_Type::remove_child(Fl_Type* cc) {
-  Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  ((fltk3::Window*)o)->remove(c->o);
-  o->redraw();
+  if (cc->is_widget() && o) {
+    Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
+    ((fltk3::Window*)o)->remove(c->o);
+    o->redraw();
+  }
 }
 
 void Fl_Window_Type::move_child(Fl_Type* cc, Fl_Type* before) {
@@ -818,7 +828,6 @@ void Fl_Window_Type::draw_overlay() {
     int mybx_bak = mybx, myby_bak = myby, mybr_bak = mybr, mybt_bak = mybt;
     Fl_Widget_Type *mysel = (Fl_Widget_Type *)selection;
 
-
     ideal_spacing(xsp, ysp);
 
     if (pDragMode) {
@@ -906,7 +915,8 @@ void Fl_Window_Type::draw_overlay() {
       }
     }
 
-    // Check spacing and alignment between individual widgets
+    // FIXME: Check spacing and alignment between individual widgets
+#if 0
     if (pDragMode && selection->is_widget()) {
       for (Fl_Type *q=next; q && q->level>level; q = q->next)
 	if (q != selection && q->is_widget()) {
@@ -1095,6 +1105,7 @@ void Fl_Window_Type::draw_overlay() {
     }
     mysx += mybx-mybx_bak; mysr += mybr-mybr_bak;
     mysy += myby-myby_bak; myst += mybt-mybt_bak;
+#endif
   }
   // Draw selection box + resize handles...
   // draw box including all labels
@@ -1212,6 +1223,31 @@ void Fl_Window_Type::move_all_children()
 }
 
 
+Fl_Widget_Type *Fl_Window_Type::find_innermost_for_event()
+{
+  Fl_Widget_Type *selection = this;
+  for (Fl_Type* i=next; i && i->level>level; i=i->next) {
+    if (i->is_widget() && !i->is_menu_item()) {
+      Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
+      for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent()) {
+        if (!o1->visible()) 
+          goto CONTINUE2;
+      }
+      if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) {
+        selection = myo;
+        if (fltk3::event_clicks()==1)
+          reveal_in_browser(myo);
+      }
+    CONTINUE2:;
+    }
+  }
+  return selection;
+}
+
+
+extern Fl_Type *Fl_Type_make(const char *tn);
+
+  
 /*
  * Handle all events to the preview window.
  */
@@ -1243,22 +1279,7 @@ int Fl_Window_Type::handle(int event) {
       }
       
       // -- find the innermost item clicked on:
-      selection = this;
-      for (Fl_Type* i=next; i && i->level>level; i=i->next) {
-        if (i->is_widget() && !i->is_menu_item()) {
-          Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
-          for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent()) {
-            if (!o1->visible()) 
-              goto CONTINUE2;
-          }
-          if (fltk3::event_inside(myo->o->dx_window(), myo->o->dy_window(), myo->o->w(), myo->o->h())) {
-            selection = myo;
-            if (fltk3::event_clicks()==1)
-              reveal_in_browser(myo);
-          }
-        CONTINUE2:;
-        }
-      }
+      selection = find_innermost_for_event();
       
       // -- see if user grabs edges of selected region:
       if (   pNumSelected 
@@ -1420,6 +1441,50 @@ int Fl_Window_Type::handle(int event) {
       in_this_only = 0;
       return (m != 0);}
       
+    case fltk3::DND_ENTER:
+    case fltk3::DND_DRAG:
+      fltk3::belowmouse(o);
+    case fltk3::DND_RELEASE:
+      // FIXME: check if this is a valid type
+      // FIXME: is it a valid drop location?
+      // TODO: show an outline of the widget to indicate where it will go and how big it will be
+      // TODO: we can not drag and rop menu items yet
+      // TODO: does it make sense to be able to DnD into the Tree View?
+      return 1;
+      
+    case fltk3::PASTE: {
+      selection = find_innermost_for_event();
+      if (!selection) return 0;
+      if (!selection->is_group()) {
+        selection = selection->parent;
+        if (!selection) return 0;
+        if (!selection->is_group()) return 0;
+      }
+      select_only(selection);
+      undo_checkpoint();
+      Fl_Type *t = Fl_Type_make(fltk3::event_text());
+      if (t) {
+        if (t->is_widget()) {
+          Fl_Widget_Type *w = (Fl_Widget_Type*)selection;
+          Fl_Widget_Type *wt = (Fl_Widget_Type*)t;
+          int px = fltk3::event_x() - wt->o->w()/2;
+          int py = fltk3::event_y() - wt->o->h()/2;
+          if (selection!=this) {
+            px -= w->o->dx_window();
+            py -= w->o->dy_window();
+          }
+          wt->o->position(px, py);
+          // TODO: we can add code to make sure that the widget fits inside the group...
+        }
+        select_only(t);
+        set_modflag(1);
+        t->open();
+        // FIXME: set the position to the drop location
+      } else {
+        undo_current --;
+        undo_last --;
+      }
+      return 1; }      
     default:
       return 0;
   }

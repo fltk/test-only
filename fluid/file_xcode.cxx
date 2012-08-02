@@ -1,14 +1,9 @@
 //
 // "$Id: file_xcode.cxx 8870 2011-07-26 21:19:35Z matt $"
 //
-// Fluid file routines for the Fast Light Tool Kit (FLTK).
+// Fluid Xcode 4 output for the Fast Light Tool Kit (FLTK).
 //
-// You may find the basic read_* and write_* routines to
-// be useful for other programs.  I have used them many times.
-// They are somewhat similar to tcl, using matching { and }
-// to quote strings.
-//
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 2010-2012 by Matthias Melcher and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,6 +29,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "Fl_Type.h"
+#include "WorkspaceType.h"
 #include <fltk3/filename.h>
 
 
@@ -1095,22 +1091,22 @@ static int writeConfigurationListSection(FILE *out) {
 /*
  Write all Xcode IDE files.
  
- This module write all the files needed to create the Xcode. It generates
- an fltk.dsw file and all dsp files depending on it. All parameters are taken from
- the Fl_..Type hierarchy in Fluid. 
+ This module write all the files needed to create the Xcode project. It 
+ generates project.pbxproj file and a plist for every target. All parameters 
+ are taken from the Fl_..Type hierarchy in Fluid. 
  
- \todo !!! Currently, this function is limited to writing the FLTK build system itself. !!!
- This module was tested with fltk.flw. Eventually, we will be writing universal
- new IDE setups as a convinience to FLTK/ FLUID users.
+ \todo !!! Currently, this function is limited to writing the FLTK build system
+ itself. This module was tested with fltk.flw. Eventually, we will be writing 
+ universal new IDE setups as a convinience to FLTK/FLUID users.
  
- \todo this module writes the outdated Xcode 3.0 version with a lot of "modernization"
- hints from Xcode 4. We will have Xcode do teh modernization for us and then check
- the changes with "diff" and implement those here. The format should then be marked 3.2.
+ \todo this module writes the outdated Xcode 3.0 version with some 
+ "modernization" hints from Xcode 4. We will have Xcode do teh modernization 
+ for us and then check the changes with "diff" and implement those here. The 
+ format is already marked 3.2.
  
- \todo linking to OS X frameworks has a very inflexible path. And even though this
- setups seems to work, currentl, I would like to use a different path that removes
- the need for the user to type the full SDK path.
- 
+ \todo linking to OS X frameworks has a very inflexible path. And even though
+ this setup seems to work, currently, I would like to use a different path that
+ removes the need for the user to type the full SDK path.
  */
 int write_fltk_ide_xcode4() {
   

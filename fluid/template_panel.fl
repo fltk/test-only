@@ -127,10 +127,10 @@ img = fltk3::SharedImage::get(pngfile);
 if (img) {
   template_preview->image(img);
   template_preview->redraw();
-}} selected
+}}
       xywh {10 28 180 250} type Hold labelfont 1 align 5 when 3
     }
-    {fltk3::Box} template_preview {
+    {fltk3::Widget} template_preview {
       xywh {200 28 250 250} box THIN_DOWN_BOX align 85 resizable
     }
     {fltk3::Input} template_name {
@@ -151,10 +151,10 @@ if (img) {
       {fltk3::Button} template_delete {
         label {Delete Template}
         callback template_delete_cb
-        xywh {10 323 133 25}
+        xywh {0 0 133 25}
       }
-      {fltk3::Box} {} {
-        xywh {153 323 126 25} resizable
+      {fltk3::Widget} {} {
+        xywh {143 0 126 25} resizable
       }
       {fltk3::Button} {} {
         label Cancel
@@ -166,7 +166,7 @@ template_browser->deselect();
 template_name->value("");
 template_instance->value("");
 template_panel->hide();}
-        xywh {289 323 72 25}
+        xywh {279 0 72 25}
       }
       {fltk3::ReturnButton} template_submit {
         label Save
@@ -175,7 +175,7 @@ if (img) img->release();
 template_preview->image(0);
 
 template_panel->hide();}
-        xywh {371 323 79 25}
+        xywh {361 0 79 25}
       }
     }
   }

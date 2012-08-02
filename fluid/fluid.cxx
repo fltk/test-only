@@ -25,6 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "fluid.h"
+#include "code.h"
+#include "file.h"
+
 #include <fltk3/run.h>
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/Box.h>
@@ -53,6 +57,10 @@
 #include "function_panel.h"
 #include "template_panel.h"
 #include "workspace_panel.h"
+#include "plugins.h"
+#include "WorkspaceType.h"
+#include "Fl_Window_Type.h"
+#include "WidgetBrowser.h"
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <direct.h>
@@ -101,6 +109,7 @@ int snap = 1;
 int show_guides = 1;
 int show_comments = 1;
 int show_coredevmenus = 1;
+int force_parent;
 
 // File history info...
 char	absolute_history[10][FLTK3_PATH_MAX];
@@ -124,7 +133,6 @@ fltk3::MenuItem *sourceview_item = 0L;
 // as an argument for another function call, for example:
 //  printf("%s %s %s\n", file->name(), file->DOS_name(), file->caps_name())'
 
-const int MAX_RET_BUF = 10;
 char *tmp_ret_buf[MAX_RET_BUF];
 int tmp_ret_sze[MAX_RET_BUF];
 int curr_ret_buf = 0;
@@ -179,7 +187,7 @@ char project_is_workspace() {
   return 0;
 }
 
-char position_window(fltk3::Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
+char position_window(fltk3::Window *w, const char *prefsName, int Visible, int X, int Y, int W, int H ) {
   fltk3::Preferences pos(fluid_prefs, prefsName);
   if (prevpos_button->value()) {
     pos.get("x", X, X);
@@ -246,8 +254,8 @@ void save_cb(fltk3::Widget *, void *v) {
         basename = c;
 
       if (fltk3::choice("The file \"%s\" already exists.\n"
-                    "Do you want to replace it?", "Cancel",
-		    "Replace", NULL, basename) == 0) return;
+                        "Do you want to replace it?", 
+                        "Cancel", "Replace", NULL, basename) == 0) return;
     }
 
     if (v != (void *)2) set_filename(c);
@@ -324,8 +332,8 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   if (!access(filename, 0)) {
     if (fltk3::choice("The template \"%s\" already exists.\n"
-                  "Do you want to replace it?", "Cancel",
-		  "Replace", NULL, c) == 0) return;
+                      "Do you want to replace it?", 
+                      "Cancel", "Replace", NULL, c) == 0) return;
   }
 
   if (!write_file(filename)) {
@@ -397,7 +405,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 void revert_cb(fltk3::Widget *,void *) {
   if (modflag) {
     if (!fltk3::choice("This user interface has been changed. Really revert?",
-                   "Cancel", "Revert", NULL)) return;
+                       "Cancel", "Revert", NULL)) return;
   }
   undo_suspend();
   if (!read_file(filename, 0)) {
@@ -413,8 +421,8 @@ void revert_cb(fltk3::Widget *,void *) {
 void exit_cb(fltk3::Widget *,void *) {
   if (modflag)
     switch (fltk3::choice("Do you want to save changes to this user\n"
-                      "interface before exiting?", "Cancel",
-                      "Save", "Don't Save"))
+                          "interface before exiting?", 
+                          "Cancel", "Save", "Don't Save"))
     {
       case 0 : /* Cancel */
           return;
@@ -454,8 +462,8 @@ void
 apple_open_cb(const char *c) {
   if (modflag) {
     switch (fltk3::choice("Do you want to save changes to this user\n"
-                      "interface before opening another one?", "Don't Save",
-                      "Save", "Cancel"))
+                          "interface before opening another one?", 
+                          "Cancel", "Save", "Don't Save"))
     {
       case 0 : /* Cancel */
           return;
@@ -489,8 +497,8 @@ apple_open_cb(const char *c) {
 void open_cb(fltk3::Widget *, void *v) {
   if (!v && modflag) {
     switch (fltk3::choice("Do you want to save changes to this user\n"
-                      "interface before opening another one?", "Cancel",
-                      "Save", "Don't Save"))
+                          "interface before opening another one?", 
+                          "Cancel", "Save", "Don't Save"))
     {
       case 0 : /* Cancel */
           return;
@@ -535,8 +543,8 @@ void open_cb(fltk3::Widget *, void *v) {
 void open_history_cb(fltk3::Widget *, void *v) {
   if (modflag) {
     switch (fltk3::choice("Do you want to save changes to this user\n"
-                      "interface before opening another one?", "Cancel",
-                      "Save", "Don't Save"))
+                          "interface before opening another one?", 
+                          "Cancel", "Save", "Don't Save"))
     {
       case 0 : /* Cancel */
           return;
@@ -569,8 +577,8 @@ void new_cb(fltk3::Widget *, void *v) {
   if (!v && modflag) {
     // Yes, ask the user what to do...
     switch (fltk3::choice("Do you want to save changes to this user\n"
-                      "interface before creating a new one?", "Cancel",
-                      "Save", "Don't Save"))
+                          "interface before creating a new one?", 
+                          "Cancel", "Save", "Don't Save"))
     {
       case 0 : /* Cancel */
           return;
@@ -820,7 +828,6 @@ void delete_cb(fltk3::Widget *, void *) {
   if (p) select_only(p);
 }
 
-extern int force_parent;
 
 void paste_cb(fltk3::Widget*, void*) {
   //if (ipasteoffset) force_parent = 1;
@@ -1031,7 +1038,7 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
     if (v==0) return;
   }
   if (workspace->builds_in(FL_ENV_CMAKE) && write_fltk_cmake()) {
-    int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
+    int v = fltk3::choice("Error writing CMake build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
   if (workspace->builds_in(FL_ENV_XC4) && write_fltk_ide_xcode4()) {
@@ -1170,8 +1177,6 @@ extern fltk3::MenuItem New_Menu[];
 
 void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
-void convert_1_to_3_cb(fltk3::Widget *, void *);
-void convert_2_to_3_cb(fltk3::Widget *, void *);
 void write_makefiles_cb(fltk3::Widget *, void *);
 
 fltk3::MenuItem Main_Menu[] = {
@@ -1273,11 +1278,6 @@ fltk3::MenuItem Main_Menu[] = {
   {0},
 {0}};
 
-#define BROWSERWIDTH 300
-#define BROWSERHEIGHT 500
-#define WINWIDTH 300
-#define MENUHEIGHT 25
-#define WINHEIGHT (BROWSERHEIGHT+MENUHEIGHT)
 
 extern void fill_in_New_Menu();
 
@@ -1393,7 +1393,7 @@ void make_main_window() {
 // Create an easily readable path from the absolute path
 void createRelativeFromAbsolutePath(int i)
 {
-  const int NSEG = 16; // limit string to 16+7+16 characters
+  const int NSEG = 20; // limit string to 20+5+20 characters
   int j;
   
   // Make a relative version of the filename for the menu...
@@ -1422,8 +1422,8 @@ void createRelativeFromAbsolutePath(int i)
   for (j=0; j<ll-NSEG; j++) {
     d = (char*)fltk3::utf8fwd(d+1, 0L, 0L);
   }
-  strcpy(dst, " (...) ");
-  memmove(dst+7, d, strlen(d)+1);
+  strcpy(dst, " ... ");
+  memmove(dst+5, d, strlen(d)+1);
 }
 
 
@@ -1863,7 +1863,7 @@ void set_modflag(int mf) {
   // if the UI was modified in any way, update the Source View panel
   if (sourceview_panel && sourceview_panel->visible() && sv_autorefresh->value())
   {
-    // we will only update ealiest 0.5 seconds after the last change, and only
+    // we will only update earliest 0.5 seconds after the last change, and only
     // if no other change was made, so dragging a widget will not generate any
     // CPU load
     fltk3::remove_timeout(update_sourceview_timer, 0);
@@ -1896,7 +1896,7 @@ static int arg(int argc, char** argv, int& i) {
   fltk3::PluginManager pm("commandline");
   int j, n = pm.plugins();
   for (j=0; j<n; j++) {
-    Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(j);
+    fluid3::CommandlinePlugin *pi = (fluid3::CommandlinePlugin*)pm.plugin(j);
     int r = pi->arg(argc, argv, i);
     if (r) return r;
   }
@@ -1940,13 +1940,13 @@ int main(int argc,char **argv) {
     fltk3::PluginManager pm("commandline");
     int i, n = pm.plugins();
     for (i=0; i<n; i++) {
-      Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(i);
+      fluid3::CommandlinePlugin *pi = (fluid3::CommandlinePlugin*)pm.plugin(i);
       if (pi) len += strlen(pi->help());
     }
     char *buf = (char*)malloc(len+1);
     sprintf(buf, msg, argv[0]);
     for (i=0; i<n; i++) {
-      Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(i);
+      fluid3::CommandlinePlugin *pi = (fluid3::CommandlinePlugin*)pm.plugin(i);
       if (pi) strcat(buf, pi->help());
     }
     strcat(buf, fltk3::help);

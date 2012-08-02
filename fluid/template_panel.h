@@ -34,7 +34,7 @@
 extern fltk3::DoubleWindow *template_panel;
 #include <fltk3/Browser.h>
 extern fltk3::Browser *template_browser;
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 extern fltk3::Widget *template_preview;
 #include <fltk3/Input.h>
 extern fltk3::Input *template_name;

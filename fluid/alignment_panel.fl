@@ -84,97 +84,97 @@ Function {make_project_window()} {} {
     } {
       {fltk3::Group} {} {
         label Output open
-        xywh {10 36 378 194} hide
+        xywh {0 26 378 194}
       } {
-        {fltk3::Box} {} {
+        {fltk3::Widget} {} {
           label {Use "name.ext" to set a file name or just ".ext" to set extension.}
-          xywh {100 49 236 49} align 144
+          xywh {90 13 236 49} align 144
         }
         {fltk3::Input} header_file_input {
           label {Header File:}
           user_data 1 user_data_type {void*}
           callback header_input_cb
-          tooltip {The name of the generated header file.} xywh {99 103 272 20} box THIN_DOWN_BOX labelfont 1 when 1 textfont 4
+          tooltip {The name of the generated header file.} xywh {89 67 272 20} box THIN_DOWN_BOX labelfont 1 when 1 textfont 4
         }
         {fltk3::Input} code_file_input {
           label {Code File:}
           user_data 1 user_data_type {void*}
           callback code_input_cb
-          tooltip {The name of the generated code file.} xywh {100 128 272 20} box THIN_DOWN_BOX labelfont 1 when 1 textfont 4
+          tooltip {The name of the generated code file.} xywh {90 92 272 20} box THIN_DOWN_BOX labelfont 1 when 1 textfont 4
         }
         {fltk3::CheckButton} include_H_from_C_button {
           label {Include Header from Code}
           callback include_H_from_C_button_cb
-          tooltip {Include the header file from the code file.} xywh {100 177 272 20} down_box DOWN_BOX
+          tooltip {Include the header file from the code file.} xywh {90 141 272 20} down_box DOWN_BOX
         }
         {fltk3::CheckButton} use_FL_COMMAND_button {
           label {Menu shortcuts use FL_COMMAND}
           callback use_FL_COMMAND_button_cb
-          tooltip {Replace FL_CTRL with FL_COMMAND when generating menu shortcut code.} xywh {100 200 272 20} down_box DOWN_BOX
+          tooltip {Replace FL_CTRL with FL_COMMAND when generating menu shortcut code.} xywh {90 164 272 20} down_box DOWN_BOX
         }
         {fltk3::Choice} proj_version_choice {
           label {Version:}
           callback proj_version_cb open
-          xywh {100 152 145 20} down_box BORDER_BOX labelfont 1
+          xywh {90 116 145 20} down_box BORDER_BOX labelfont 1
         } {
           MenuItem {} {
             label {FLTK 1.3.0}
             user_data 10300 user_data_type long
-            xywh {0 0 100 20}
+            xywh {-100 -152 100 20}
           }
           MenuItem {} {
             label {FLTK 2.1.0}
             user_data 20100 user_data_type long
-            xywh {0 0 100 20} deactivate
+            xywh {-100 -152 100 20} deactivate
           }
           MenuItem {} {
             label {FLTK 3.0.0}
             user_data 30000 user_data_type long
-            xywh {0 0 100 20}
+            xywh {-100 -152 100 20}
           }
         }
       }
       {fltk3::Group} {} {
         label Internationalization open
-        xywh {10 36 378 194}
+        xywh {0 26 378 194} hide
       } {
         {fltk3::Choice} i18n_type_chooser {
           label {Use:}
           callback i18n_type_cb open
-          tooltip {Type of internationalization to use.} xywh {100 48 136 25} box THIN_UP_BOX down_box BORDER_BOX labelfont 1
+          tooltip {Type of internationalization to use.} xywh {90 12 136 25} box THIN_UP_BOX down_box BORDER_BOX labelfont 1
         } {
           MenuItem {} {
             label None
-            xywh {0 0 100 20}
+            xywh {-100 -48 100 20}
           }
           MenuItem {} {
             label {GNU gettext}
-            xywh {0 0 100 20}
+            xywh {-100 -48 100 20}
           }
           MenuItem {} {
             label {POSIX catgets}
-            xywh {0 0 100 20}
+            xywh {-100 -48 100 20}
           }
         }
         {fltk3::Input} i18n_include_input {
           label {\#include:}
           callback i18n_text_cb
-          tooltip {The include file for internationalization.} xywh {100 78 272 20} box THIN_DOWN_BOX labelfont 1 textfont 4
+          tooltip {The include file for internationalization.} xywh {90 42 272 20} box THIN_DOWN_BOX labelfont 1 textfont 4
         }
         {fltk3::Input} i18n_file_input {
           label {File:}
           callback i18n_text_cb
-          tooltip {The name of the message catalog.} xywh {100 104 272 20} box THIN_DOWN_BOX labelfont 1 textfont 4
+          tooltip {The name of the message catalog.} xywh {90 68 272 20} box THIN_DOWN_BOX labelfont 1 textfont 4
         }
         {fltk3::Input} i18n_set_input {
           label {Set:}
           callback i18n_int_cb
-          tooltip {The message set number.} xywh {100 128 272 20} type Int box THIN_DOWN_BOX labelfont 1 textfont 4
+          tooltip {The message set number.} xywh {90 92 272 20} type Int box THIN_DOWN_BOX labelfont 1 textfont 4
         }
         {fltk3::Input} i18n_function_input {
           label {Function:}
           callback i18n_text_cb
-          tooltip {The function to call to internationalize the labels and tooltips.} xywh {100 103 272 20} box THIN_DOWN_BOX labelfont 1 textfont 4
+          tooltip {The function to call to internationalize the labels and tooltips.} xywh {90 67 272 20} box THIN_DOWN_BOX labelfont 1 textfont 4
         }
       }
     }
@@ -203,33 +203,33 @@ Function {make_settings_window()} {} {
     } {
       MenuItem {} {
         label Default
-        xywh {0 0 35 25}
+        xywh {-116 -10 35 25}
       }
       MenuItem {} {
         label None
-        xywh {0 0 35 25}
+        xywh {-116 -10 35 25}
       }
       MenuItem {} {
         label Plastic
-        xywh {0 0 35 25}
+        xywh {-116 -10 35 25}
       }
       MenuItem {} {
         label {GTK+}
-        xywh {10 10 35 25}
+        xywh {-106 0 35 25}
       }
     }
     {fltk3::Group} {} {open
       xywh {116 43 220 126} labelfont 1 align 0
     } {
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label {Options: }
-        xywh {116 43 1 25} labelfont 1 align 4
+        xywh {0 0 1 25} labelfont 1 align 4
       }
       {fltk3::CheckButton} tooltips_button {
         label {Show Tooltips}
         callback {fltk3::Tooltip::enable(tooltips_button->value());
 fluid_prefs.set("show_tooltips", tooltips_button->value());}
-        xywh {116 43 113 25} down_box DOWN_BOX
+        xywh {0 0 113 25} down_box DOWN_BOX
         code0 {int b;}
         code1 {fluid_prefs.get("show_tooltips", b, 1);}
         code2 {tooltips_button->value(b);}
@@ -238,7 +238,7 @@ fluid_prefs.set("show_tooltips", tooltips_button->value());}
       {fltk3::CheckButton} completion_button {
         label {Show Completion Dialogs}
         callback {fluid_prefs.set("show_completion_dialogs", completion_button->value());}
-        xywh {116 68 186 25} down_box DOWN_BOX
+        xywh {0 25 186 25} down_box DOWN_BOX
         code0 {int b;}
         code1 {fluid_prefs.get("show_completion_dialogs", b, 1);}
         code2 {completion_button->value(b);}
@@ -246,7 +246,7 @@ fluid_prefs.set("show_tooltips", tooltips_button->value());}
       {fltk3::CheckButton} openlast_button {
         label {Open Previous File on Startup}
         callback {fluid_prefs.set("open_previous_file", openlast_button->value());}
-        xywh {116 93 214 25} down_box DOWN_BOX
+        xywh {0 50 214 25} down_box DOWN_BOX
         code0 {int b;}
         code1 {fluid_prefs.get("open_previous_file", b, 0);}
         code2 {openlast_button->value(b);}
@@ -254,7 +254,7 @@ fluid_prefs.set("show_tooltips", tooltips_button->value());}
       {fltk3::CheckButton} prevpos_button {
         label {Remember Window Positions}
         callback {fluid_prefs.set("prev_window_pos", prevpos_button->value());}
-        xywh {116 118 209 25} down_box DOWN_BOX
+        xywh {0 75 209 25} down_box DOWN_BOX
         code0 {int b;}
         code1 {fluid_prefs.get("prev_window_pos", b, 1);}
         code2 {prevpos_button->value(b);}
@@ -264,7 +264,7 @@ fluid_prefs.set("show_tooltips", tooltips_button->value());}
         callback {show_comments = show_comments_button->value();
 fluid_prefs.set("show_comments", show_comments);
 redraw_browser();}
-        xywh {116 143 209 25} down_box DOWN_BOX
+        xywh {0 100 209 25} down_box DOWN_BOX
         code1 {fluid_prefs.get("show_comments", show_comments, 1);}
         code2 {show_comments_button->value(show_comments);}
       }
@@ -389,11 +389,11 @@ Function {make_layout_window()} {} {
       callback {grid_window->hide();}
       tooltip {Close this dialog.} xywh {215 210 60 25}
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {Grid:}
       xywh {26 10 70 25} labelfont 1 align 24
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {Widget Size:}
       xywh {-1 115 97 25} labelfont 1 align 24
     }
@@ -403,56 +403,56 @@ Function {make_layout_window()} {} {
       {fltk3::RoundButton} {def_widget_size[0]} {
         user_data 8 user_data_type long
         callback default_widget_size_cb
-        xywh {105 115 70 25} type Radio down_box ROUND_DOWN_BOX
+        xywh {0 0 70 25} type Radio down_box ROUND_DOWN_BOX
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label tiny
-        xywh {120 115 50 25} labelsize 8 align 20
+        xywh {15 0 50 25} labelsize 8 align 20
       }
       {fltk3::RoundButton} {def_widget_size[1]} {
         user_data 11 user_data_type long
         callback default_widget_size_cb
-        xywh {180 115 70 25} type Radio down_box ROUND_DOWN_BOX
+        xywh {75 0 70 25} type Radio down_box ROUND_DOWN_BOX
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label small
-        xywh {195 115 50 25} labelsize 11 align 20
+        xywh {90 0 50 25} labelsize 11 align 20
       }
       {fltk3::RoundButton} {def_widget_size[2]} {
         user_data 14 user_data_type long
         callback default_widget_size_cb
-        xywh {105 140 70 25} type Radio down_box ROUND_DOWN_BOX
+        xywh {0 25 70 25} type Radio down_box ROUND_DOWN_BOX
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label normal
-        xywh {120 140 50 25} align 20
+        xywh {15 25 50 25} align 20
       }
       {fltk3::RoundButton} {def_widget_size[3]} {
         user_data 18 user_data_type long
         callback default_widget_size_cb
-        xywh {180 140 90 25} type Radio down_box ROUND_DOWN_BOX
+        xywh {75 25 90 25} type Radio down_box ROUND_DOWN_BOX
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label medium
-        xywh {195 140 68 25} labelsize 18 align 20
+        xywh {90 25 68 25} labelsize 18 align 20
       }
       {fltk3::RoundButton} {def_widget_size[4]} {
         user_data 24 user_data_type long
         callback default_widget_size_cb
-        xywh {105 165 75 25} type Radio down_box ROUND_DOWN_BOX
+        xywh {0 50 75 25} type Radio down_box ROUND_DOWN_BOX
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label large
-        xywh {120 165 64 25} labelsize 24 align 20
+        xywh {15 50 64 25} labelsize 24 align 20
       }
       {fltk3::RoundButton} {def_widget_size[5]} {
         user_data 32 user_data_type long
         callback default_widget_size_cb
-        xywh {180 165 95 25} type Radio down_box ROUND_DOWN_BOX
+        xywh {75 50 95 25} type Radio down_box ROUND_DOWN_BOX
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         label huge
-        xywh {195 165 76 25} labelsize 32 align 20
+        xywh {90 50 76 25} labelsize 32 align 20
       }
     }
   }
@@ -473,7 +473,7 @@ wDNDText->value(opt[fltk3::OPTION_DND_TEXT][mode]);} {}
 } 
 
 Function {readPrefs()} {
-  comment {read all preferences and refresh the GUI} open private return_type void
+  comment {read all preferences and refresh the GUI} private return_type void
 } {
   code {// read all preferences and refresh the GUI
 {
@@ -492,8 +492,7 @@ Function {readPrefs()} {
   opt_prefs.get("DNDText", opt[fltk3::OPTION_DND_TEXT][0], 2);
   opt_prefs.get("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][0], 2);
 }
-refreshUI();} {selected
-  }
+refreshUI();} {}
 } 
 
 Function {writePrefs()} {
@@ -526,7 +525,7 @@ Function {writePrefs()} {
 }} {}
 } 
 
-Function {show_global_settings_window()} {return_type void
+Function {show_global_settings_window()} {selected return_type void
 } {
   code {if (!global_settings_window)
   make_global_settings_window();
@@ -559,22 +558,22 @@ opt[fltk3::OPTION_VISIBLE_FOCUS][mode] = wVisibleFocus->value();} open
 
 If visible focus is switched on, FLTK will draw a dotted rectangle inside the widget that will receive the next keystroke. If switched off, no such indicator will be drawn and keyboard navigation is disabled.
 
-Default is on.} xywh {245 40 100 25} down_box BORDER_BOX
+Default is on.} xywh {235 30 100 25} down_box BORDER_BOX
       } {
         MenuItem {} {
           label off
           user_data 0 user_data_type long
-          xywh {10 10 31 20}
+          xywh {-235 -30 31 20}
         }
         MenuItem {} {
           label on
           user_data 1 user_data_type long
-          xywh {10 10 31 20} divider
+          xywh {-235 -30 31 20} divider
         }
         MenuItem {} {
           label default
           user_data 2 user_data_type long
-          xywh {10 10 31 20}
+          xywh {-235 -30 31 20}
         }
       }
       {fltk3::Choice} wArrowFocus {
@@ -585,22 +584,22 @@ opt[fltk3::OPTION_ARROW_FOCUS][mode] = wArrowFocus->value();} open
 
 When switched on, moving the text cursor beyond the start or end of the text in a text widget will change focus to the next widget. When switched off, the cursor will stop at the end of the text. Pressing Tab or Ctrl-Tab will advance the keyboard focus. Switch this on, if you want the old behavior of FLTK 1.1.
 
-Default is off.} xywh {245 75 100 25} down_box BORDER_BOX
+Default is off.} xywh {235 65 100 25} down_box BORDER_BOX
       } {
         MenuItem {} {
           label off
           user_data 0 user_data_type long
-          xywh {0 0 31 20}
+          xywh {-245 -75 31 20}
         }
         MenuItem {} {
           label on
           user_data 1 user_data_type long
-          xywh {0 0 31 20} divider
+          xywh {-245 -75 31 20} divider
         }
         MenuItem {} {
           label default
           user_data 2 user_data_type long
-          xywh {0 0 31 20}
+          xywh {-245 -75 31 20}
         }
       }
     }
@@ -616,22 +615,22 @@ opt[fltk3::OPTION_SHOW_TOOLTIPS][mode] = wShowTooltips->value();} open
 
 If tooltips are enabled, hovering the mouse over a widget with a tooltip text will open a little tooltip window until the mouse leaves the widget. If disabled, no tooltip is shown.
 
-Default is on.} xywh {245 150 100 25} down_box BORDER_BOX
+Default is on.} xywh {235 30 100 25} down_box BORDER_BOX
       } {
         MenuItem {} {
           label off
           user_data 0 user_data_type long
-          xywh {10 10 31 20}
+          xywh {-235 -140 31 20}
         }
         MenuItem {} {
           label on
           user_data 1 user_data_type long
-          xywh {10 10 31 20} divider
+          xywh {-235 -140 31 20} divider
         }
         MenuItem {} {
           label default
           user_data 2 user_data_type long
-          xywh {10 10 31 20}
+          xywh {-235 -140 31 20}
         }
       }
     }
@@ -647,22 +646,22 @@ opt[fltk3::OPTION_DND_TEXT][mode] = wDNDText->value();} open
 
 If text drag-and-drop is enabled, the user can select and drag text from any text widget. If disabled, no dragging is possible, however dropping text from other applications still works.
 
-Default is on.} xywh {245 225 100 25} down_box BORDER_BOX
+Default is on.} xywh {235 31 100 25} down_box BORDER_BOX
       } {
         MenuItem {} {
           label off
           user_data 0 user_data_type long
-          xywh {30 30 31 20}
+          xywh {-215 -195 31 20}
         }
         MenuItem {} {
           label on
           user_data 1 user_data_type long
-          xywh {30 30 31 20} divider
+          xywh {-215 -195 31 20} divider
         }
         MenuItem {} {
           label default
           user_data 2 user_data_type long
-          xywh {30 30 31 20}
+          xywh {-215 -195 31 20}
         }
       }
     }
@@ -673,12 +672,12 @@ Default is on.} xywh {245 225 100 25} down_box BORDER_BOX
       MenuItem {} {
         label {User Settings}
         user_data 0 user_data_type long
-        xywh {0 0 31 20}
+        xywh {-14 -275 31 20}
       }
       MenuItem {} {
         label {System Settings}
         user_data 1 user_data_type long
-        xywh {0 0 31 20}
+        xywh {-14 -275 31 20}
       }
     }
     {fltk3::Button} {} {

@@ -37,6 +37,9 @@ decl {\#include <fltk3/Pixmap.h>} {private local
 decl {\#include "Fl_Type.h"} {private local
 } 
 
+decl {\#include "fluid.h"} {selected private local
+} 
+
 decl {\#include "undo.h"} {private local
 } 
 
@@ -100,7 +103,7 @@ Function {make_function_panel()} {} {
         label {C declaration}
         tooltip {Declare with a C interface instead of C++.} xywh {85 0 80 20} labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {225 0 45 20} resizable
       }
     }
@@ -123,7 +126,7 @@ Function {make_function_panel()} {} {
         label Cancel
         tooltip {Cancel the changes.} xywh {270 0 50 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 205 20} resizable
       }
     }
@@ -158,7 +161,7 @@ Function {make_code_panel()} {} {
         label Cancel
         xywh {460 0 60 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 380 20} labelsize 11 resizable
       }
     }
@@ -190,7 +193,7 @@ Function {make_codeblock_panel()} {} {
         label Cancel
         xywh {220 0 60 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 140 20} resizable
       }
     }
@@ -224,7 +227,7 @@ Function {make_declblock_panel()} {} {
         label public
         tooltip {Make the declaration publicly accessible.} xywh {0 0 60 20} labelsize 11 when 0 hide
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {145 0 135 20} resizable
       }
     }
@@ -246,7 +249,7 @@ Function {make_declblock_panel()} {} {
         label Cancel
         xywh {220 0 60 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 140 20} resizable
       }
     }
@@ -261,7 +264,7 @@ Function {make_decl_panel()} {} {
     {fltk3::Group} {} {open
       xywh {10 10 270 20}
     } {
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {190 0 80 20} resizable
       }
       {fltk3::Choice} decl_choice {open
@@ -316,7 +319,7 @@ Function {make_decl_panel()} {} {
         label Cancel
         xywh {260 0 60 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 185 20} resizable
       }
     }
@@ -336,7 +339,7 @@ Function {make_data_panel()} {} {
     {fltk3::Group} {} {open
       xywh {10 10 270 20}
     } {
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {190 0 80 20} resizable
       }
       {fltk3::Choice} data_choice {open
@@ -399,7 +402,7 @@ Function {make_data_panel()} {} {
         label Cancel
         xywh {260 0 60 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 185 20} resizable
       }
     }
@@ -423,7 +426,7 @@ Function {make_class_panel()} {} {
         label public
         tooltip {Make the class publicly accessible.} xywh {0 0 60 20} labelsize 11 when 0 hide
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {70 0 210 20} resizable
       }
     }
@@ -451,7 +454,7 @@ Function {make_class_panel()} {} {
         label Cancel
         xywh {260 0 60 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 185 20} resizable
       }
     }
@@ -480,7 +483,7 @@ Function {make_comment_panel()} {} {
         label Cancel
         xywh {350 0 80 20} shortcut 0xff1b labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 250 20} labelsize 11 resizable
       }
     }
@@ -503,7 +506,7 @@ Function {make_comment_panel()} {} {
         label {Import...}
         xywh {0 90 90 20} labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 122 90 121} labelsize 11 resizable
       }
     }
@@ -524,6 +527,25 @@ Function {type_make_cb(fltk3::Widget*,void*d)} {return_type void
   }} {}
 } 
 
+class DragButton {open : {public fltk3::Button}
+} {
+  Function {DragButton(int x, int y, int w, int h, const char *l=0L) : fltk3::Button(x, y, w, h, l)} {open
+  } {
+    code {;} {}
+  }
+  Function {handle(int e)} {open return_type int
+  } {
+    code {if (e==fltk3::DRAG && !fltk3::event_is_click()) {
+    fltk3::copy((char*)user_data(), strlen((char*)user_data()));
+    value(0);
+    fltk3::dnd();
+    return 1;
+  } else {
+    return Button::handle(e);
+  }} {}
+  }
+} 
+
 Function {make_widgetbin()} {open
 } {
   {fltk3::Window} widgetbin_panel {
@@ -531,10 +553,10 @@ Function {make_widgetbin()} {open
     callback {if (fltk3::event()==fltk3::SHORTCUT && fltk3::event_key()==fltk3::EscapeKey)
   exit_cb((fltk3::Widget*)o, v);
 else  
-  toggle_widgetbin_cb((fltk3::Widget*)o, v);} open selected
-    xywh {1086 210 574 85} type Single align 80 non_modal visible
+  toggle_widgetbin_cb((fltk3::Widget*)o, v);} open
+    xywh {1055 202 574 85} type Single align 80 non_modal visible
   } {
-    {fltk3::Group} {} {open
+    {fltk3::Group} {} {
       xywh {3 3 79 79}
     } {
       {fltk3::Button} {} {
@@ -592,7 +614,7 @@ else
         code0 {o->image(pixmap[49]);}
       }
     }
-    {fltk3::Group} {} {
+    {fltk3::Group} {} {open
       xywh {87 3 79 79}
     } {
       {fltk3::Button} {} {
@@ -606,45 +628,52 @@ else
         callback type_make_cb
         tooltip Group xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[6]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::PackedGroup"}
         callback type_make_cb
         tooltip Pack xywh {52 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[22]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::TabGroup"}
         callback type_make_cb
         tooltip Tabs xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[13]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::ScrollGroup"}
         callback type_make_cb
         tooltip Scroll xywh {27 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[19]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Table"}
         callback type_make_cb
         tooltip Table xywh {52 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[51]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::TiledGroup"}
         callback type_make_cb
         tooltip Tile xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[20]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::WizardGroup"}
         callback type_make_cb
         tooltip Wizard xywh {27 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[21]);}
+        class DragButton
       }
     }
-    {fltk3::Group} {} {
+    {fltk3::Group} {} {open
       xywh {171 3 54 79}
     } {
       {fltk3::Button} {} {
@@ -652,36 +681,42 @@ else
         callback type_make_cb
         tooltip Button xywh {2 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[2]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::ReturnButton"}
         callback type_make_cb
         tooltip {Return Button} xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[23]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::LightButton"}
         callback type_make_cb
         tooltip {Light Button} xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[24]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::RepeatButton"}
         callback type_make_cb
         tooltip {Repeat Button} xywh {27 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[25]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::CheckButton"}
         callback type_make_cb
         tooltip {Check Button} xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[3]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::RoundButton"}
         callback type_make_cb
         tooltip {Round Button} xywh {27 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[4]);}
+        class DragButton
       }
     }
     {fltk3::Group} {} {
@@ -692,60 +727,70 @@ else
         callback type_make_cb
         tooltip Slider xywh {2 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[37]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Scrollbar"}
         callback type_make_cb
         tooltip {Scroll Bar} xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[38]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::ValueSlider"}
         callback type_make_cb
         tooltip {Value Slider} xywh {52 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[39]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::ValueOutput"}
         callback type_make_cb
         tooltip {Value Output} xywh {77 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[45]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Adjuster"}
         callback type_make_cb
         tooltip Adjuster xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[40]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Counter"}
         callback type_make_cb
         tooltip Counter xywh {27 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[41]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Dial"}
         callback type_make_cb
         tooltip Dial xywh {52 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[42]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Roller"}
         callback type_make_cb
         tooltip Roller xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[43]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Spinner"}
         callback type_make_cb
         tooltip Spinner xywh {27 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[47]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::ValueInput"}
         callback type_make_cb
         tooltip {Value Input} xywh {52 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[44]);}
+        class DragButton
       }
     }
     {fltk3::Group} {} {
@@ -756,30 +801,35 @@ else
         callback type_make_cb
         tooltip Input xywh {2 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[14]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Output"}
         callback type_make_cb
         tooltip Output xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[27]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::TextEditor"}
         callback type_make_cb
         tooltip {Text Edit} xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[29]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::TextDisplay"}
         callback type_make_cb
         tooltip {Text Display} xywh {27 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[28]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::FileInput"}
         callback type_make_cb
         tooltip {File Input} xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[30]);}
+        class DragButton
       }
     }
     {fltk3::Group} {} {
@@ -790,18 +840,21 @@ else
         callback type_make_cb
         tooltip {Menu Bar} xywh {2 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[17]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::InputChoice"}
         callback type_make_cb
         tooltip {Input Choice} xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[15]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::MenuButton"}
         callback type_make_cb
         tooltip {Menu Button} xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[26]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"menuitem"}
@@ -814,6 +867,7 @@ else
         callback type_make_cb
         tooltip Choice xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[15]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"submenu"}
@@ -830,24 +884,28 @@ else
         callback type_make_cb
         tooltip Browser xywh {2 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[31]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Tree"}
         callback type_make_cb
         tooltip Tree xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[50]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::CheckBrowser"}
         callback type_make_cb
         tooltip {Check Browser} xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[32]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::FileBrowser"}
         callback type_make_cb
         tooltip {File Browser} xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[33]);}
+        class DragButton
       }
     }
     {fltk3::Group} {} {
@@ -858,24 +916,28 @@ else
         callback type_make_cb
         tooltip Box xywh {2 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[5]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Clock"}
         callback type_make_cb
         tooltip Clock xywh {27 2 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[34]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::HelpView"}
         callback type_make_cb
         tooltip {Help Browser} xywh {2 27 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[35]);}
+        class DragButton
       }
       {fltk3::Button} {} {
         user_data {"fltk3::Progress"}
         callback type_make_cb
         tooltip Progress xywh {2 52 24 24} box THIN_UP_BOX
         code0 {o->image(pixmap[36]);}
+        class DragButton
       }
     }
   }
@@ -934,7 +996,7 @@ Function {make_sourceview()} {} {
         callback toggle_sourceview_b_cb
         xywh {450 0 50 20} labelsize 11
       }
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {255 0 190 20} resizable
       }
     }

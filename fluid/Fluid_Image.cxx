@@ -28,6 +28,8 @@
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
 #include "Fl_Type.h"
+#include "code.h"
+#include "file.h"
 #include "Fluid_Image.h"
 #include "../src/fltk3/flstring.h"
 #include <stdio.h>

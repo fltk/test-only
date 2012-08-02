@@ -684,7 +684,7 @@ int fltk3::Input::handle(int event) {
       if (fltk3::dnd_text_ops()) {
         if (drag_start >= 0) {
           if (fltk3::event_is_click()) return 1; // debounce the mouse
-                                              // save the position because sometimes we don't get DND_ENTER:
+          // save the position because sometimes we don't get DND_ENTER:
           dnd_save_position = position();
           dnd_save_mark = mark();
           // drag the data:

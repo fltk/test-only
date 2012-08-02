@@ -25,6 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "code.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "../src/fltk3/flstring.h"
@@ -32,6 +34,7 @@
 
 #include <fltk3/run.h>
 #include "Fl_Type.h"
+#include "Fl_Window_Type.h"
 #include "alignment_panel.h"
 
 static FILE *code_file;
@@ -585,15 +588,6 @@ int write_strings(const char *sfile) {
 
   return fclose(fp);
 }
-
-////////////////////////////////////////////////////////////////
-
-void Fl_Type::write_static() {}
-void Fl_Type::write_code1() {
-  write_h("// Header for %s\n", title());
-  write_c("// Code for %s\n", title());
-}
-void Fl_Type::write_code2() {}
 
 //
 // End of "$Id$".

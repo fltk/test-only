@@ -25,9 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "fluid.h"
+
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include "Fl_Widget_Type.h"
+#include "Fl_Group_Type.h"
 #include "undo.h"
 
 /**

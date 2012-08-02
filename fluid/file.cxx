@@ -30,6 +30,8 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "file.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 // FIXME: either make the interface public or remove this include statement!
@@ -37,7 +39,15 @@
 #include <stdarg.h>
 #include "alignment_panel.h"
 #include "workspace_panel.h"
+#include "Fl_Function_Type.h"
+#include "Fl_Window_Type.h"
+#include "code.h"
 #include <fltk3/FileChooser.h>
+
+
+extern void deselect();
+extern void fixup_coordinates();
+
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -65,7 +75,6 @@ int close_write() {
 }
 
 static int needspace;
-int is_id(char); // in code.C
 
 // write a string, quoting characters if necessary:
 void write_word(const char *w) {
@@ -129,6 +138,19 @@ void write_close(int n) {
   if (needspace) write_indent(n);
   fputc('}',fout);
   needspace = 1;
+}
+
+void write_public(int state) {
+  if (!current_class && !current_widget_class) return;
+  if (current_class && current_class->write_public_state == state) return;
+  if (current_widget_class && current_widget_class->write_public_state == state) return;
+  if (current_class) current_class->write_public_state = state;
+  if (current_widget_class) current_widget_class->write_public_state = state;
+  switch (state) {
+    case 0: write_h("private:\n"); break;
+    case 1: write_h("public:\n"); break;
+    case 2: write_h("protected:\n"); break;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -495,8 +517,6 @@ static void read_children(Fl_Type *p, int paste) {
   }
 }
 
-extern void deselect();
-extern void fixup_coordinates();
 
 int read_file(const char *filename, int merge) {
   Fl_Type *o;
@@ -517,35 +537,6 @@ int read_file(const char *filename, int merge) {
   return close_read();
 }
 
-// ------------ file conversion ------------------------------------------------
-
-void convert_file(const char *, int ) {
-/*
-  char dst_name[2048];
-  char line[2048];
-  strcpy(dst_name, src_name);
-  strcat(dst_name, ".3");
-  FILE *f_in = fopen(src_name, "rb");
-  FILE *f_out = fopen(dst_name, "wb");
-  for (;;) {
-    fgets(line, 2047, f_in);
-    // replace words according to database
-    fputs(line, f_out);
-  }
-  fclose(f_out);
-  fclose(f_in);
-*/
-}
-
-void convert_1_to_3_cb(fltk3::Widget *, void *) {
-  const char *base = fltk3::file_chooser("Convert a file or directory from FLTK 1 to 3", "*", 0L);
-  if (!base) 
-    return;
-  convert_file(base, 1);
-}
-
-void convert_2_to_3_cb(fltk3::Widget *, void *) {
-}
 
 //
 // End of "$Id$".

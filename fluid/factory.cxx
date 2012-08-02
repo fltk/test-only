@@ -33,6 +33,8 @@
 //     http://www.fltk.org/str.php
 //
 
+#include "fluid.h"
+
 #include <fltk3/run.h>
 #include <fltk3/Group.h>
 #include <fltk3/MenuItem.h>
@@ -43,6 +45,7 @@
 #include "undo.h"
 
 #include "Fl_Widget_Type.h"
+#include "WorkspaceType.h"
 
 extern fltk3::Pixmap *pixmap[];
 
@@ -990,7 +993,7 @@ static void cb(fltk3::Widget *, void *v) {
       int w = 0, h = 0;
       wt->ideal_size(w, h);
 
-      if (!strcmp(wt->type_name(), "Fl_Menu_Bar")) {
+      if (!strcmp(wt->type_name(), "MenuBar")) {
         // Move and resize the menubar across the top of the window...
         wt->o->resize(0, 0, w, h);
       } else {

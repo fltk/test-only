@@ -91,7 +91,55 @@ LINK32=link.exe
 # Name "Fluid - Win32 Debug"
 # Begin Source File
 
+SOURCE=..\..\fluid\about_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\align_widget.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\alignment_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\code.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\CodeEditor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\factory.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_cmake.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_make.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_visualc_2008.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_visualc_2010.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_visualc_6.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_xcode.cxx
 # End Source File
 # Begin Source File
 
@@ -119,63 +167,31 @@ SOURCE=..\..\fluid\Fl_Window_Type.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\fluid\Fluid_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\about_panel.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\align_widget.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\alignment_panel.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\code.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\factory.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file_cmake.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file_make.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file_visualc_6.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file_visualc_2008.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file_visualc_2010.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\file_xcode.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\fluid\fluid.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\Fluid_Image.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\function_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\pixmaps.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\plugins.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\Shortcut_Button.cxx
 # End Source File
 # Begin Source File
 
@@ -191,7 +207,19 @@ SOURCE=..\..\fluid\widget_panel.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\widget_panel_actions.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WidgetBrowser.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\workspace_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WorkspaceType.cxx
 # End Source File
 # End Target
 # End Project

@@ -32,63 +32,63 @@ unsigned int fltk3::Style::current_ = 0;
 fltk3::Style fltk3::default_style;
 
 
-fltk3::Style::Style() :
-  version_(current_),
-  parent_(0),
-  labelfont_(fltk3::HELVETICA),
-  labelsize_(fltk3::NORMAL_SIZE),
-  labeltype_(fltk3::NORMAL_LABEL),
-  labelcolor_(fltk3::FOREGROUND_COLOR),
-  align_(fltk3::ALIGN_CENTER),
-  textfont_(fltk3::HELVETICA),
-  textsize_(fltk3::NORMAL_SIZE),
-  textcolor_(fltk3::FOREGROUND_COLOR),
-  color_(fltk3::GRAY),
-  color2_(fltk3::GRAY),
-  box_(fltk3::NO_BOX),
-  private_(0),
-  labelfont_set_(1),
-  labelsize_set_(1),
-  labeltype_set_(1),
-  labelcolor_set_(1),
-  align_set_(1),
-  textfont_set_(1),
-  textsize_set_(1),
-  textcolor_set_(1),
-  color_set_(1),
-  color2_set_(1),
-  box_set_(1)
+fltk3::Style::Style()
 {
+  version_ = current_;
+  parent_ = 0;
+  labelfont_ = fltk3::HELVETICA;
+  labelsize_ = fltk3::NORMAL_SIZE;
+  labeltype_ = fltk3::NORMAL_LABEL;
+  labelcolor_ = fltk3::FOREGROUND_COLOR;
+  align_ = fltk3::ALIGN_CENTER;
+  textfont_ = fltk3::HELVETICA;
+  textsize_ = fltk3::NORMAL_SIZE;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
+  color_ = fltk3::GRAY;
+  color2_ = fltk3::GRAY;
+  box_ = fltk3::NO_BOX;
+  private_ = 0;
+  labelfont_set_ = 1;
+  labelsize_set_ = 1;
+  labeltype_set_ = 1;
+  labelcolor_set_ = 1;
+  align_set_ = 1;
+  textfont_set_ = 1;
+  textsize_set_ = 1;
+  textcolor_set_ = 1;
+  color_set_ = 1;
+  color2_set_ = 1;
+  box_set_ = 1;
 }
 
 
-fltk3::Style::Style(Style *parent) :
-  version_(parent->update()),
-  parent_(parent),
-  labelfont_(parent->labelfont_),
-  labelsize_(parent->labelsize_),
-  labeltype_(parent->labeltype_),
-  labelcolor_(parent->labelcolor_),
-  align_(parent->align_),
-  textfont_(parent->textfont_),
-  textsize_(parent->textsize_),
-  textcolor_(parent->textcolor_),
-  color_(parent->color_),
-  color2_(parent->color2_),
-  box_(parent->box_),
-  private_(0),
-  labelfont_set_(0),
-  labelsize_set_(0),
-  labeltype_set_(0),
-  labelcolor_set_(0),
-  align_set_(0),
-  textfont_set_(0),
-  textsize_set_(0),
-  textcolor_set_(0),
-  color_set_(0),
-  color2_set_(0),
-  box_set_(0)
+fltk3::Style::Style(Style *parent)
 {
+  version_ = parent->update();
+  parent_ = parent;
+  labelfont_ = parent->labelfont_;
+  labelsize_ = parent->labelsize_;
+  labeltype_ = parent->labeltype_;
+  labelcolor_ = parent->labelcolor_;
+  align_ = parent->align_;
+  textfont_ = parent->textfont_;
+  textsize_ = parent->textsize_;
+  textcolor_ = parent->textcolor_;
+  color_ = parent->color_;
+  color2_ = parent->color2_;
+  box_ = parent->box_;
+  private_ = 0;
+  labelfont_set_ = 0;
+  labelsize_set_ = 0;
+  labeltype_set_ = 0;
+  labelcolor_set_ = 0;
+  align_set_ = 0;
+  textfont_set_ = 0;
+  textsize_set_ = 0;
+  textcolor_set_ = 0;
+  color_set_ = 0;
+  color2_set_ = 0;
+  box_set_ = 0;
 }
 
 

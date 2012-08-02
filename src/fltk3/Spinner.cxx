@@ -33,6 +33,39 @@
 #  include <stdlib.h>
 
 
+fltk3::Spinner::Spinner(int X, int Y, int W, int H, const char *L)
+: fltk3::Group(X, Y, W, H, L),
+  input_(0, 0, W - H / 2 - 2, H),
+  up_button_(W - H / 2 - 2, 0, H / 2 + 2, H / 2, ""),
+  down_button_(W - H / 2 - 2, H - H / 2, H / 2 + 2, H / 2, "") 
+{
+  end();
+  
+  value_   = 1.0;
+  minimum_ = 1.0;
+  maximum_ = 100.0;
+  step_    = 1.0;
+  format_  = "%g";
+  
+  align(fltk3::ALIGN_LEFT);
+  
+  input_.value("1");
+  input_.type(fltk3::INT_INPUT);
+  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
+  input_.callback((fltk3::Callback *)sb_cb, this);
+  //input_.box(Boxtype(input_.box()|TIE_RIGHT));
+  input_.box(input_.box());
+  
+  up_button_.callback((fltk3::Callback *)sb_cb, this);
+  //up_button_.box(Boxtype(up_button_.box()|TIE_LEFT|TIE_BOTTOM));
+  up_button_.box(up_button_.box());
+  
+  down_button_.callback((fltk3::Callback *)sb_cb, this);
+  //down_button_.box(Boxtype(down_button_.box()|TIE_LEFT|TIE_TOP));
+  down_button_.box(down_button_.box());
+}
+
+
 fltk3::Spinner::UpButton::UpButton(int x, int y, int w, int h, const char *l)
 : fltk3::RepeatButton(x, y, w, h, l)
 {
@@ -43,7 +76,12 @@ fltk3::Spinner::UpButton::UpButton(int x, int y, int w, int h, const char *l)
 void fltk3::Spinner::UpButton::draw()
 {
   Box *b = value() ? ( down_box() ? down_box() : fltk3::down(box()) ) : box();
-  fltk3::Button::draw(b, 0, 0, w(), h(), color(), fltk3::Box::TIE_LEFT|fltk3::Box::TIE_BOTTOM);
+  Color c = value() ? selection_color() : color();
+  fltk3::Button::draw(b, 0, 0, w(), h(), c, 
+                      fltk3::Box::TIE_LEFT|fltk3::Box::TIE_BOTTOM);
+  fltk3::font(labelfont(), labelsize()/2);
+  fltk3::color(fltk3::color_average(color(), fltk3::BLACK, 0.5));
+  fltk3::draw("@8>", 0, 1, w(), h()-1, fltk3::ALIGN_INSIDE);
 }
 
 
@@ -57,7 +95,12 @@ fltk3::Spinner::DownButton::DownButton(int x, int y, int w, int h, const char *l
 void fltk3::Spinner::DownButton::draw()
 {
   Box *b = value() ? ( down_box() ? down_box() : fltk3::down(box()) ) : box();
-  fltk3::Button::draw(b, 0, 0, w(), h(), color(), fltk3::Box::TIE_LEFT|fltk3::Box::TIE_TOP);
+  Color c = value() ? selection_color() : color();
+  fltk3::Button::draw(b, 0, 0, w(), h(), c, 
+                      fltk3::Box::TIE_LEFT|fltk3::Box::TIE_TOP);
+  fltk3::font(labelfont(), labelsize()/2);
+  fltk3::color(fltk3::color_average(color(), fltk3::BLACK, 0.5));
+  fltk3::draw("@2>", 0, 0, w(), h()-2, fltk3::ALIGN_INSIDE);
 }
 
 
@@ -69,7 +112,8 @@ fltk3::Spinner::SpInput::SpInput(int x, int y, int w, int h, const char *l)
 
 void fltk3::Spinner::SpInput::draw()
 {
-  fltk3::Input::draw(box(), 0, 0, w(), h(), color(), fltk3::Box::TIE_RIGHT|fltk3::Box::TIE_HIDDEN);
+  fltk3::Input::draw(box(), 0, 0, w(), h(), color(), 
+                     fltk3::Box::TIE_RIGHT|fltk3::Box::TIE_HIDDEN);
 }
 
 

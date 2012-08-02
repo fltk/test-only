@@ -46,13 +46,17 @@ namespace fltk3 {
   class XlibGraphicsDriver;
 
   /**
+   \brief STore and draw single color images.
+   
    The fltk3::Bitmap class supports caching and drawing of mono-color
    (bitmap) images. Images are drawn using the current color.
    */
-  class FLTK3_EXPORT Bitmap : public Image {
+  class FLTK3_EXPORT Bitmap : public Image 
+  {
     friend class QuartzGraphicsDriver;
     friend class GDIGraphicsDriver;
     friend class XlibGraphicsDriver;
+    
   public:
     
     /** pointer to raw bitmap data */
@@ -73,19 +77,27 @@ namespace fltk3 {
   public:
     
     /** The constructors create a new bitmap from the specified bitmap data */
-    Bitmap(const uchar *bits, int W, int H) :
-    Image(W,H,0), array(bits), alloc_array(0), id_(0) {data((const char **)&array, 1);}
+    Bitmap(const uchar *bits, int W, int H);
+
     /** The constructors create a new bitmap from the specified bitmap data */
-    Bitmap(const char *bits, int W, int H) :
-    Image(W,H,0), array((const uchar *)bits), alloc_array(0), id_(0) {data((const char **)&array, 1);}
+    Bitmap(const char *bits, int W, int H);
+
     virtual ~Bitmap();
+    
     virtual Image *copy(int W, int H);
+    
     Image *copy() { return copy(w(), h()); }
+    
     virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+    
     void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
+    
     virtual void label(Widget*w);
+    
     virtual void label(MenuItem*m);
+    
     virtual void uncache();
+    
   };
   
 } // namespace

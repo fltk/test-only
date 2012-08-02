@@ -31,18 +31,21 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include "Fl_Widget_Type.h"
-#include "alignment_panel.h"
-#include <fltk3/message.h>
-#include <fltk3/Menu_.h>
+#include "Fl_Menu_Type.h"
+#include "fluid.h"
+#include "code.h"
+#include "file.h"
+#include "widget_panel_actions.h"
+
+#include <fltk3/MenuButton.h>
+#include <fltk3/ask.h>
 #include <fltk3/Button.h>
-#include <fltk3/ValueInput.h>
-#include <fltk3/TextDisplay.h>
-#include <fltk3/Wrapper.h>
-#include "../src/fltk3/flstring.h"
-#include <stdio.h>
-#include <stdlib.h>
+
+
+extern int reading_file; // factory.cxx
+
+
+static char submenuflag;
 
 fltk3::MenuItem menu_item_type_menu[] = {
   {"Normal",0,0,(void*)0},
@@ -50,15 +53,6 @@ fltk3::MenuItem menu_item_type_menu[] = {
   {"Radio",0,0,(void*)fltk3::MENU_RADIO},
   {0}};
 
-extern int reading_file;
-extern int force_parent;
-extern int i18n_type;
-extern const char* i18n_include;
-extern const char* i18n_function;
-extern const char* i18n_file;
-extern const char* i18n_set;
-
-static char submenuflag;
 
 void Fl_Input_Choice_Type::build_menu() {
   fltk3::InputChoice* w = (fltk3::InputChoice*)o;
@@ -143,13 +137,6 @@ Fl_Type *Fl_Submenu_Type::make() {
 Fl_Menu_Item_Type Fl_Menu_Item_type;
 Fl_Submenu_Type Fl_Submenu_type;
 
-////////////////////////////////////////////////////////////////
-// Writing the C code:
-
-// test functions in Fl_Widget_Type.C:
-int is_name(const char *c);
-const char *array_name(Fl_Widget_Type *o);
-int isdeclare(const char *c);
 
 // Search backwards to find the parent menu button and return it's name.
 // Also put in i the index into the button's menu item array belonging
@@ -168,7 +155,6 @@ const char* Fl_Menu_Item_Type::menu_name(int& i) {
   return unique_id(t, "menu", t->name(), t->label());
 }
 
-#include "Fluid_Image.h"
 
 void Fl_Menu_Item_Type::write_static() {
   if (callback() && is_name(callback()) && !user_defined(callback()))
@@ -516,7 +502,6 @@ void Fl_Menu_Type::copy_properties() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk3/MenuButton.h>
 fltk3::MenuItem button_type_menu[] = {
   {"normal",0,0,(void*)0},
   {"popup1",0,0,(void*)fltk3::MenuButton::POPUP1},
@@ -570,95 +555,6 @@ Fl_Type* Fl_Input_Choice_Type::click_test(int, int) {
 
 Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
-////////////////////////////////////////////////////////////////
-// Shortcut entry item in panel:
-
-#include <fltk3/Output.h>
-#include "Shortcut_Button.h"
-#include <fltk3/draw.h>
-
-void Shortcut_Button::draw() {
-  if (value()) draw_box(fltk3::DOWN_BOX, (fltk3::Color)9);
-  else draw_box(fltk3::UP_BOX, fltk3::WHITE);
-  fltk3::font(fltk3::HELVETICA,14); fltk3::color(fltk3::FOREGROUND_COLOR);
-	if (use_FL_COMMAND && (svalue & (fltk3::CTRL|fltk3::META))) {
-		char buf[1024];
-		fl_snprintf(buf, 1023, "Command+%s", fltk3::shortcut_label(svalue&~(fltk3::CTRL|fltk3::META)));
-		fltk3::draw(buf,x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
-	} else {
-		fltk3::draw(fltk3::shortcut_label(svalue),x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
-	}
-}
-
-int Shortcut_Button::handle(int e) {
-  when(0); type(fltk3::TOGGLE_BUTTON);
-  if (e == fltk3::KEYBOARD) {
-    if (!value()) return 0;
-    unsigned v = fltk3::event_text()[0];
-    if ( (v > 32 && v < 0x7f) || (v > 0xa0 && v <= 0xff) ) {
-      if (isupper(v)) {
-        v = tolower(v);
-        v |= fltk3::SHIFT;
-      }
-      v = v | (fltk3::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL));
-    } else {
-      v = (fltk3::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL|fltk3::SHIFT)) | fltk3::event_key();
-      if (v == fltk3::BackSpaceKey && svalue) v = 0;
-    }
-    if (v != svalue) {svalue = v; set_changed(); redraw(); do_callback(); }
-    return 1;
-  } else if (e == fltk3::UNFOCUS) {
-    int c = changed(); value(0); if (c) set_changed();
-    return 1;
-  } else if (e == fltk3::FOCUS) {
-    return value();
-  } else {
-    int r = Button::handle(e);
-    if (e == fltk3::RELEASE && value() && fltk3::focus() != this) take_focus();
-    return r;
-  }
-}
-  
-void shortcut_in_cb(Shortcut_Button* i, void* v) {
-  if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::selected_type()->is_button())
-      i->svalue = ((fltk3::Button*)(Fl_Panel::selected_widget()->o))->shortcut();
-    else if (Fl_Panel::selected_type()->is_input())
-      i->svalue = ((fltk3::Input_*)(Fl_Panel::selected_widget()->o))->shortcut();
-    else if (Fl_Panel::selected_type()->is_value_input())
-      i->svalue = ((fltk3::ValueInput*)(Fl_Panel::selected_widget()->o))->shortcut();
-    else if (Fl_Panel::selected_type()->is_text_display())
-      i->svalue = ((fltk3::TextDisplay*)(Fl_Panel::selected_widget()->o))->shortcut();
-    else {
-      i->hide();
-      return;
-    }
-    i->show();
-    i->redraw();
-  } else {
-    int mod = 0;
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_button()) {
-	fltk3::Button* b = (fltk3::Button*)(((Fl_Widget_Type*)o)->o);
-        if (b->shortcut()!=i->svalue) mod = 1;
-	b->shortcut(i->svalue);
-	if (o->is_menu_item()) ((Fl_Widget_Type*)o)->redraw();
-      } else if (o->selected && o->is_input()) {
-	fltk3::Input_* b = (fltk3::Input_*)(((Fl_Widget_Type*)o)->o);
-        if (b->shortcut()!=i->svalue) mod = 1;
-	b->shortcut(i->svalue);
-      } else if (o->selected && o->is_value_input()) {
-	fltk3::ValueInput* b = (fltk3::ValueInput*)(((Fl_Widget_Type*)o)->o);
-        if (b->shortcut()!=i->svalue) mod = 1;
-	b->shortcut(i->svalue);
-      } else if (o->selected && o->is_text_display()) {
-	fltk3::TextDisplay* b = (fltk3::TextDisplay*)(((Fl_Widget_Type*)o)->o);
-        if (b->shortcut()!=i->svalue) mod = 1;
-	b->shortcut(i->svalue);
-      }
-    if (mod) set_modflag(1);
-  }
-}
 
 //
 // End of "$Id$".

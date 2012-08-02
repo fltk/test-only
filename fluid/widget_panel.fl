@@ -31,8 +31,11 @@ comment {//
 } {in_source in_header
 } 
 
-decl {\#include "Fl_Type.h"} {
+decl {\#include "Fl_Widget_Type.h"} {
   comment {Needed for Fl_Panel base class} public global
+} 
+
+decl {\#include "panel.h"} {selected public global
 } 
 
 Function {make_widget_panel()} {open
@@ -49,545 +52,545 @@ Function {make_widget_panel()} {open
       {fltk3::Group} {} {
         label GUI
         callback {Fl_Panel::propagate_load} open
-        xywh {10 30 400 290} labelsize 11 when 0 resizable
+        xywh {0 20 400 290} labelsize 11 when 0 resizable
       } {
         {fltk3::Group} {} {
           label {Label:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 40 309 20} labelfont 1 labelsize 11 align 4
+          xywh {85 10 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             callback label_cb
             tooltip {The label text for the widget.
-Use Ctrl-J for newlines.} xywh {95 40 190 20} labelfont 1 labelsize 11 when 1 textsize 11 resizable
+Use Ctrl-J for newlines.} xywh {0 0 190 20} labelfont 1 labelsize 11 when 1 textsize 11 resizable
           }
           {fltk3::Choice} {} {
-            callback labeltype_cb open selected
-            tooltip {The label style for the widget.} xywh {284 40 120 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11
+            callback labeltype_cb open
+            tooltip {The label style for the widget.} xywh {189 0 120 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11
             code0 {extern fltk3::MenuItem labeltypemenu[];}
             code1 {o->menu(labeltypemenu);}
           } {}
         }
         {fltk3::Group} {} {
           label {Image:}
-          callback {Fl_Panel::propagate_load} open
-          xywh {95 65 309 20} labelfont 1 labelsize 11 align 4
+          callback {Fl_Panel::propagate_load}
+          xywh {85 35 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             callback image_cb
-            tooltip {The active image for the widget.} xywh {95 65 240 20} labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The active image for the widget.} xywh {0 0 240 20} labelfont 1 labelsize 11 textsize 11 resizable
           }
           {fltk3::Button} {} {
             label {Browse...}
             callback image_browse_cb
-            tooltip {Click to choose the active image.} xywh {334 65 70 20} labelsize 11
+            tooltip {Click to choose the active image.} xywh {239 0 70 20} labelsize 11
           }
         }
         {fltk3::Group} {} {
           label {Inactive:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 90 309 20} labelfont 1 labelsize 11 align 4
+          xywh {85 60 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             callback inactive_cb
-            tooltip {The inactive image for the widget.} xywh {95 90 240 20} labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The inactive image for the widget.} xywh {0 0 240 20} labelfont 1 labelsize 11 textsize 11 resizable
           }
           {fltk3::Button} {} {
             label {Browse...}
             callback inactive_browse_cb
-            tooltip {Click to choose the inactive image.} xywh {334 90 70 20} labelsize 11
+            tooltip {Click to choose the inactive image.} xywh {239 0 70 20} labelsize 11
           }
         }
         {fltk3::Group} {} {
           label {Alignment:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 115 300 20} labelfont 1 labelsize 11 align 4
+          xywh {85 85 300 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Button} {} {
             label Clip
             user_data {fltk3::ALIGN_CLIP}
             callback align_cb
-            tooltip {Clip the label to the inside of the widget.} xywh {95 115 30 20} type Toggle selection_color 8 labelsize 11 align 16
+            tooltip {Clip the label to the inside of the widget.} xywh {0 0 30 20} type Toggle selection_color 8 labelsize 11 align 16
           }
           {fltk3::Button} {} {
             label Wrap
             user_data {fltk3::ALIGN_WRAP}
             callback align_cb
-            tooltip {Wrap the label text.} xywh {130 115 30 20} type Toggle selection_color 8 labelsize 11
+            tooltip {Wrap the label text.} xywh {35 0 30 20} type Toggle selection_color 8 labelsize 11
           }
           {fltk3::Button} {} {
             label {@-1<-}
             user_data {fltk3::ALIGN_LEFT}
             callback align_cb
-            tooltip {Left-align the label.} xywh {270 115 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
+            tooltip {Left-align the label.} xywh {175 0 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
           }
           {fltk3::Button} {} {
             label {@-1->}
             user_data {fltk3::ALIGN_RIGHT}
             callback align_cb
-            tooltip {Right-align the label.} xywh {295 115 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
+            tooltip {Right-align the label.} xywh {200 0 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
           }
           {fltk3::Button} {} {
             label {@-18}
             user_data {fltk3::ALIGN_TOP}
             callback align_cb
-            tooltip {Top-align the label.} xywh {320 115 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
+            tooltip {Top-align the label.} xywh {225 0 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
           }
           {fltk3::Button} {} {
             label {@-12}
             user_data {fltk3::ALIGN_BOTTOM}
             callback align_cb
-            tooltip {Bottom-align the label.} xywh {345 115 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
+            tooltip {Bottom-align the label.} xywh {250 0 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8 hide
           }
           {fltk3::Choice} {} {
             callback align_text_image_cb open
-            xywh {165 115 110 20} down_box BORDER_BOX labelsize 11 textsize 11
+            xywh {70 0 110 20} down_box BORDER_BOX labelsize 11 textsize 11
           } {
             MenuItem {} {
               label {   Image Alignment   }
               user_data 0xFFFFFFFF
-              xywh {145 145 100 20} labelfont 2 labelsize 11 deactivate
+              xywh {-20 30 100 20} labelfont 2 labelsize 11 deactivate
             }
             MenuItem {} {
               label {image over text}
               user_data {fltk3::ALIGN_IMAGE_OVER_TEXT}
-              xywh {25 25 100 20} labelsize 11
+              xywh {-140 -90 100 20} labelsize 11
             }
             MenuItem {} {
               label {text over image}
               user_data {fltk3::ALIGN_TEXT_OVER_IMAGE}
-              xywh {15 15 100 20} labelsize 11
+              xywh {-150 -100 100 20} labelsize 11
             }
             MenuItem {} {
               label {text next to image}
               user_data {fltk3::ALIGN_TEXT_NEXT_TO_IMAGE}
-              xywh {35 35 100 20} labelsize 11
+              xywh {-130 -80 100 20} labelsize 11
             }
             MenuItem {} {
               label {image next to text}
               user_data {fltk3::ALIGN_IMAGE_NEXT_TO_TEXT}
-              xywh {45 45 100 20} labelsize 11
+              xywh {-120 -70 100 20} labelsize 11
             }
             MenuItem {} {
               label {image is backdrop}
               user_data {fltk3::ALIGN_IMAGE_BACKDROP}
-              xywh {55 55 100 20} labelsize 11
+              xywh {-110 -60 100 20} labelsize 11
             }
           }
           {fltk3::Choice} {} {
             callback align_position_cb open
-            xywh {280 115 85 20} down_box BORDER_BOX labelsize 11 textsize 11
+            xywh {185 0 85 20} down_box BORDER_BOX labelsize 11 textsize 11
           } {
             MenuItem {} {
               label {   Inside && Outside   }
               user_data 0xFFFFFFFF
-              xywh {135 135 100 20} labelfont 2 labelsize 11 deactivate
+              xywh {-145 20 100 20} labelfont 2 labelsize 11 deactivate
             }
             MenuItem {} {
               label {top left}
               user_data {fltk3::ALIGN_TOP_LEFT}
-              xywh {45 45 100 20} labelsize 11
+              xywh {-235 -70 100 20} labelsize 11
             }
             MenuItem {} {
               label top
               user_data {fltk3::ALIGN_TOP}
-              xywh {55 55 100 20} labelsize 11
+              xywh {-225 -60 100 20} labelsize 11
             }
             MenuItem {} {
               label {top right}
               user_data {fltk3::ALIGN_TOP_RIGHT}
-              xywh {65 65 100 20} labelsize 11
+              xywh {-215 -50 100 20} labelsize 11
             }
             MenuItem {} {
               label left
               user_data {fltk3::ALIGN_LEFT}
-              xywh {75 75 100 20} labelsize 11
+              xywh {-205 -40 100 20} labelsize 11
             }
             MenuItem {} {
               label center
               user_data {fltk3::ALIGN_CENTER}
-              xywh {35 35 100 20} labelsize 11
+              xywh {-245 -80 100 20} labelsize 11
             }
             MenuItem {} {
               label right
               user_data {fltk3::ALIGN_RIGHT}
-              xywh {85 85 100 20} labelsize 11
+              xywh {-195 -30 100 20} labelsize 11
             }
             MenuItem {} {
               label {bottom left}
               user_data {fltk3::ALIGN_BOTTOM_LEFT}
-              xywh {95 95 100 20} labelsize 11
+              xywh {-185 -20 100 20} labelsize 11
             }
             MenuItem {} {
               label bottom
               user_data {fltk3::ALIGN_BOTTOM}
-              xywh {105 105 100 20} labelsize 11
+              xywh {-175 -10 100 20} labelsize 11
             }
             MenuItem {} {
               label {bottom right}
               user_data {fltk3::ALIGN_BOTTOM_RIGHT}
-              xywh {115 115 100 20} labelsize 11 divider
+              xywh {-165 0 100 20} labelsize 11 divider
             }
             MenuItem {} {
               label {   Outside Alignment   }
               user_data 0xFFFFFFFF
-              xywh {125 125 100 20} labelfont 2 labelsize 11 deactivate
+              xywh {-155 10 100 20} labelfont 2 labelsize 11 deactivate
             }
             MenuItem {} {
               label {left top}
               user_data {fltk3::ALIGN_LEFT_TOP}
-              xywh {135 135 100 20} labelsize 11
+              xywh {-145 20 100 20} labelsize 11
             }
             MenuItem {} {
               label {right top}
               user_data {fltk3::ALIGN_RIGHT_TOP}
-              xywh {145 145 100 20} labelsize 11
+              xywh {-135 30 100 20} labelsize 11
             }
             MenuItem {} {
               label {left bottom}
               user_data {fltk3::ALIGN_LEFT_BOTTOM}
-              xywh {155 155 100 20} labelsize 11
+              xywh {-125 40 100 20} labelsize 11
             }
             MenuItem {} {
               label {right bottom}
               user_data {fltk3::ALIGN_RIGHT_BOTTOM}
-              xywh {45 45 100 20} labelsize 11
+              xywh {-235 -70 100 20} labelsize 11
             }
           }
           {fltk3::Button} {} {
             label {@-3square}
             user_data {fltk3::ALIGN_INSIDE}
             callback align_cb
-            tooltip {Show the label inside the widget.} xywh {370 115 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8
+            tooltip {Show the label inside the widget.} xywh {275 0 20 20} type Toggle selection_color 8 labelsize 11 labelcolor 8
           }
-          {fltk3::Box} {} {
-            xywh {395 115 0 20} labelsize 11 resizable
+          {fltk3::Widget} {} {
+            xywh {300 0 0 20} labelsize 11 resizable
           }
         }
         {fltk3::Group} {} {
           label {Position:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 150 300 20} labelfont 1 labelsize 11 align 4
+          xywh {85 120 300 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::ValueInput} widget_x_input {
             label {X:}
             callback x_cb
-            tooltip {The X position of the widget.} xywh {95 150 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The X position of the widget.} xywh {0 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::ValueInput} widget_y_input {
             label {Y:}
             callback y_cb
-            tooltip {The Y position of the widget.} xywh {155 150 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The Y position of the widget.} xywh {60 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::ValueInput} widget_w_input {
             label {Width:}
             callback w_cb
-            tooltip {The width of the widget.} xywh {215 150 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The width of the widget.} xywh {120 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::ValueInput} widget_h_input {
             label {Height:}
             callback h_cb
-            tooltip {The height of the widget.} xywh {275 150 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The height of the widget.} xywh {180 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::LightButton} {} {
             label Relative
             callback wc_relative_cb
-            tooltip {If set, widgets inside a widget class of type fltk3::Group are repositioned relative to the origin at construction time} xywh {335 150 55 20} labelsize 11
+            tooltip {If set, widgets inside a widget class of type fltk3::Group are repositioned relative to the origin at construction time} xywh {240 0 55 20} labelsize 11
           }
-          {fltk3::Box} {} {
-            xywh {394 150 1 20} resizable
+          {fltk3::Widget} {} {
+            xywh {299 0 1 20} resizable
           }
         }
         {fltk3::Group} {} {
           label {Values:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 185 300 20} labelfont 1 labelsize 11 align 4
+          xywh {85 155 300 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::ValueInput} {} {
             label {Size:}
             callback slider_size_cb
-            tooltip {The size of the slider.} xywh {95 185 55 20} labelsize 11 align 5 step 0.010101 textsize 11
+            tooltip {The size of the slider.} xywh {0 0 55 20} labelsize 11 align 5 step 0.010101 textsize 11
           }
           {fltk3::ValueInput} {} {
             label {Minimum:}
             callback min_cb
-            tooltip {The minimum value of the widget.} xywh {155 185 55 20} labelsize 11 align 5 textsize 11
+            tooltip {The minimum value of the widget.} xywh {60 0 55 20} labelsize 11 align 5 textsize 11
           }
           {fltk3::ValueInput} {} {
             label {Maximum:}
             callback max_cb
-            tooltip {The maximum value of the widget.} xywh {215 185 55 20} labelsize 11 align 5 value 1 textsize 11
+            tooltip {The maximum value of the widget.} xywh {120 0 55 20} labelsize 11 align 5 value 1 textsize 11
           }
           {fltk3::ValueInput} {} {
             label {Step:}
             callback step_cb
-            tooltip {The resolution of the widget value.} xywh {275 185 55 20} labelsize 11 align 5 textsize 11
+            tooltip {The resolution of the widget value.} xywh {180 0 55 20} labelsize 11 align 5 textsize 11
           }
           {fltk3::ValueInput} {} {
             label {Value:}
             callback value_cb
-            tooltip {The current widget value.} xywh {335 185 55 20} labelsize 11 align 5 textsize 11
+            tooltip {The current widget value.} xywh {240 0 55 20} labelsize 11 align 5 textsize 11
           }
-          {fltk3::Box} {} {
-            xywh {395 185 0 20} resizable
+          {fltk3::Widget} {} {
+            xywh {300 0 0 20} resizable
           }
         }
         {fltk3::Group} {} {
           label {Size Range:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 185 300 20} labelfont 1 labelsize 11 align 4 hide
+          xywh {85 155 300 20} labelfont 1 labelsize 11 align 4 hide
         } {
           {fltk3::ValueInput} {} {
             label {Minimum Size:}
             callback min_w_cb
-            tooltip {The size of the slider.} xywh {95 185 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The size of the slider.} xywh {0 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::ValueInput} {} {
             callback min_h_cb
-            tooltip {The minimum value of the widget.} xywh {155 185 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The minimum value of the widget.} xywh {60 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::Button} {} {
             label set
             callback set_min_size_cb
-            xywh {215 185 25 20} labelsize 11
+            xywh {120 0 25 20} labelsize 11
           }
           {fltk3::ValueInput} {} {
             label {Maximum Size:}
             callback max_w_cb
-            tooltip {The maximum value of the widget.} xywh {245 185 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The maximum value of the widget.} xywh {150 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::ValueInput} {} {
             callback max_h_cb
-            tooltip {The resolution of the widget value.} xywh {305 185 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
+            tooltip {The resolution of the widget value.} xywh {210 0 55 20} labelsize 11 align 5 maximum 2048 step 1 textsize 11
           }
           {fltk3::Button} {} {
             label set
             callback set_max_size_cb
-            xywh {365 185 25 20} labelsize 11
+            xywh {270 0 25 20} labelsize 11
           }
-          {fltk3::Box} {} {
-            xywh {395 185 0 20} resizable
+          {fltk3::Widget} {} {
+            xywh {300 0 0 20} resizable
           }
         }
         {fltk3::Button} {} {
           label {Shortcut:}
           callback shortcut_in_cb
-          tooltip {The shortcut key for the widget.} xywh {95 210 310 20} box DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 11 align 4
+          tooltip {The shortcut key for the widget.} xywh {85 180 310 20} box DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 11 align 4
           code0 {\#include "Shortcut_Button.h"}
           class Shortcut_Button
         }
         {fltk3::Group} {} {
           label {X Class:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 235 300 20} labelfont 1 labelsize 11 align 4
+          xywh {85 205 300 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             label {:}
             callback xclass_cb
-            tooltip {The X resource class.} xywh {95 235 95 20} labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The X resource class.} xywh {0 0 95 20} labelfont 1 labelsize 11 textsize 11 resizable
           }
           {fltk3::LightButton} {} {
             label Border
             callback border_cb
-            tooltip {Add a border around the window.} xywh {195 235 60 20} selection_color 1 labelsize 11
+            tooltip {Add a border around the window.} xywh {100 0 60 20} selection_color 1 labelsize 11
           }
           {fltk3::LightButton} {} {
             label Modal
             callback modal_cb
-            tooltip {Make the window modal.} xywh {260 235 55 20} selection_color 1 labelsize 11
+            tooltip {Make the window modal.} xywh {165 0 55 20} selection_color 1 labelsize 11
           }
           {fltk3::LightButton} {} {
             label Nonmodal
             callback non_modal_cb
-            tooltip {Make the window non-modal.} xywh {320 235 75 20} selection_color 1 labelsize 11 align 148
+            tooltip {Make the window non-modal.} xywh {225 0 75 20} selection_color 1 labelsize 11 align 148
           }
         }
         {fltk3::Group} {} {
           label {Attributes:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 260 305 20} labelfont 1 labelsize 11 align 4
+          xywh {85 230 305 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::LightButton} {} {
             label Visible
             callback visible_cb
-            tooltip {Show the widget.} xywh {95 260 60 20} selection_color 1 labelsize 11
+            tooltip {Show the widget.} xywh {0 0 60 20} selection_color 1 labelsize 11
           }
           {fltk3::LightButton} {} {
             label Active
             callback active_cb
-            tooltip {Activate the widget.} xywh {160 260 60 20} selection_color 1 labelsize 11
+            tooltip {Activate the widget.} xywh {65 0 60 20} selection_color 1 labelsize 11
           }
           {fltk3::LightButton} {} {
             label Resizable
             callback resizable_cb
-            tooltip {Make the widget resizable.} xywh {225 260 75 20} selection_color 1 labelsize 11 when 1
+            tooltip {Make the widget resizable.} xywh {130 0 75 20} selection_color 1 labelsize 11 when 1
           }
           {fltk3::LightButton} {} {
             label Hotspot
             callback hotspot_cb
-            tooltip {Center the window under this widget.} xywh {305 260 70 20} selection_color 1 labelsize 11 when 1
+            tooltip {Center the window under this widget.} xywh {210 0 70 20} selection_color 1 labelsize 11 when 1
           }
-          {fltk3::Box} {} {
-            xywh {395 260 0 20} labelsize 11 resizable
+          {fltk3::Widget} {} {
+            xywh {300 0 0 20} labelsize 11 resizable
           }
         }
         {fltk3::Input} {} {
           label {Tooltip:}
           callback tooltip_cb
           tooltip {The tooltip text for the widget.
-Use Ctrl-J for newlines.} xywh {95 285 310 20} labelfont 1 labelsize 11 textsize 11
+Use Ctrl-J for newlines.} xywh {85 255 310 20} labelfont 1 labelsize 11 textsize 11
         }
-        {fltk3::Box} {} {
-          xywh {95 305 300 5} labelsize 11 resizable
+        {fltk3::Widget} {} {
+          xywh {85 275 300 5} labelsize 11 resizable
         }
       }
       {fltk3::Group} {} {
         label Style
         callback {Fl_Panel::propagate_load} open
-        xywh {10 30 400 290} labelsize 11 when 0 hide
+        xywh {0 20 400 290} labelsize 11 when 0 hide
       } {
         {fltk3::Group} {} {
           label {Label Font:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 40 309 20} labelfont 1 labelsize 11 align 4
+          xywh {85 10 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Choice} {} {
             callback labelfont_cb open
-            tooltip {The style of the label text.} xywh {95 40 170 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The style of the label text.} xywh {0 0 170 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
             code0 {extern fltk3::MenuItem fontmenu[];}
             code1 {o->menu(fontmenu);}
           } {}
           {fltk3::ValueInput} {} {
             callback labelsize_cb
-            tooltip {The size of the label text.} xywh {264 40 50 20} labelsize 11 maximum 100 step 1 value 14 textsize 11
+            tooltip {The size of the label text.} xywh {169 0 50 20} labelsize 11 maximum 100 step 1 value 14 textsize 11
           }
           {fltk3::Button} {} {
             label {Label Color}
             callback labelcolor_cb
-            tooltip {The color of the label text.} xywh {314 40 90 20} labelsize 11
+            tooltip {The color of the label text.} xywh {219 0 90 20} labelsize 11
           }
         }
         {fltk3::Group} {} {
           label {Box:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 65 309 20} labelfont 1 labelsize 11 align 4
+          xywh {85 35 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Choice} {} {
             callback box_cb open
-            tooltip {The "up" box of the widget.} xywh {95 65 219 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The "up" box of the widget.} xywh {0 0 219 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
             code0 {extern fltk3::MenuItem boxmenu[];}
             code1 {o->menu(boxmenu);}
           } {}
           {fltk3::Button} {} {
             label Color
             callback color_cb
-            tooltip {The background color of the widget.} xywh {314 65 90 20} labelsize 11
+            tooltip {The background color of the widget.} xywh {219 0 90 20} labelsize 11
           }
         }
         {fltk3::Group} {} {
           label {Down Box:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 90 309 20} labelfont 1 labelsize 11 align 4
+          xywh {85 60 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Choice} {} {
             callback down_box_cb open
-            tooltip {The "down" box of the widget.} xywh {95 90 219 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The "down" box of the widget.} xywh {0 0 219 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
             code0 {extern fltk3::MenuItem boxmenu[];}
             code1 {o->menu(boxmenu);}
           } {}
           {fltk3::Button} {} {
             label {Select Color}
             callback color2_cb
-            tooltip {The selection color of the widget.} xywh {314 90 90 20} labelsize 11
+            tooltip {The selection color of the widget.} xywh {219 0 90 20} labelsize 11
           }
         }
         {fltk3::Group} {} {
           label {Text Font:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 115 309 20} labelfont 1 labelsize 11 align 4
+          xywh {85 85 309 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Choice} {} {
             callback textfont_cb open
-            tooltip {The value text style.} xywh {95 115 170 20} box DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The value text style.} xywh {0 0 170 20} box DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 11 textsize 11 resizable
             code0 {extern fltk3::MenuItem fontmenu[];}
             code1 {o->menu(fontmenu);}
           } {}
           {fltk3::ValueInput} {} {
             callback textsize_cb
-            tooltip {The value text size.} xywh {264 115 50 20} labelsize 11 maximum 100 step 1 value 14 textsize 11
+            tooltip {The value text size.} xywh {169 0 50 20} labelsize 11 maximum 100 step 1 value 14 textsize 11
           }
           {fltk3::Button} {} {
             label {Text Color}
             callback textcolor_cb
-            tooltip {The value text color.} xywh {314 115 90 20} labelsize 11
+            tooltip {The value text color.} xywh {219 0 90 20} labelsize 11
           }
         }
-        {fltk3::Box} {} {
-          xywh {95 140 300 40} labelsize 11 resizable
+        {fltk3::Widget} {} {
+          xywh {85 110 300 40} labelsize 11 resizable
         }
       }
       {fltk3::Group} {} {
         label {C++}
         callback {Fl_Panel::propagate_load} open
-        xywh {10 30 400 290} labelsize 11 when 0 hide
+        xywh {0 20 400 290} labelsize 11 when 0 hide
       } {
         {fltk3::Group} {} {
           label {Class:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 40 310 20} labelfont 1 labelsize 11 align 4
+          xywh {85 10 310 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             user_data 4
             callback subclass_cb
-            tooltip {The widget subclass.} xywh {95 40 172 20} labelfont 1 labelsize 11 textfont 4 textsize 11 resizable
+            tooltip {The widget subclass.} xywh {0 0 172 20} labelfont 1 labelsize 11 textfont 4 textsize 11 resizable
           }
           {fltk3::Choice} {} {
             callback subtype_cb open
-            tooltip {The widget subtype.} xywh {265 40 140 20} box THIN_UP_BOX down_box BORDER_BOX labelsize 11 textsize 11
+            tooltip {The widget subtype.} xywh {170 0 140 20} box THIN_UP_BOX down_box BORDER_BOX labelsize 11 textsize 11
           } {}
         }
         {fltk3::Group} {} {
           label {Name:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 65 310 20} labelfont 1 labelsize 11 align 4
+          xywh {85 35 310 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             callback name_cb
-            tooltip {The name of the widget.} xywh {95 65 235 20} labelfont 1 labelsize 11 textsize 11 resizable
+            tooltip {The name of the widget.} xywh {0 0 235 20} labelfont 1 labelsize 11 textsize 11 resizable
           }
           {fltk3::Choice} {} {
             callback name_public_member_cb open
-            tooltip {Change member access attribute.} xywh {330 65 75 20} down_box BORDER_BOX labelsize 11 when 1 textsize 11
+            tooltip {Change member access attribute.} xywh {235 0 75 20} down_box BORDER_BOX labelsize 11 when 1 textsize 11
           } {
             MenuItem {} {
               label private
               user_data 0 user_data_type long
-              xywh {0 0 100 20} labelsize 11
+              xywh {-330 -65 100 20} labelsize 11
             }
             MenuItem {} {
               label public
               user_data 1 user_data_type long
-              xywh {0 0 100 20} labelsize 11
+              xywh {-330 -65 100 20} labelsize 11
             }
             MenuItem {} {
               label protected
               user_data 2 user_data_type long
-              xywh {0 0 100 20} labelsize 11
+              xywh {-330 -65 100 20} labelsize 11
             }
           }
           {fltk3::Choice} {} {
             callback name_public_cb open
-            tooltip {Change widget accessibility.} xywh {330 65 75 20} down_box BORDER_BOX labelsize 11 when 1 textsize 11
+            tooltip {Change widget accessibility.} xywh {235 0 75 20} down_box BORDER_BOX labelsize 11 when 1 textsize 11
           } {
             MenuItem {} {
               label local
               user_data 0 user_data_type long
-              xywh {10 10 100 20} labelsize 11
+              xywh {-320 -55 100 20} labelsize 11
             }
             MenuItem {} {
               label global
               user_data 1 user_data_type long
-              xywh {10 10 100 20} labelsize 11
+              xywh {-320 -55 100 20} labelsize 11
             }
           }
         }
@@ -595,43 +598,43 @@ Use Ctrl-J for newlines.} xywh {95 285 310 20} labelfont 1 labelsize 11 textsize
           label {Extra Code:}
           user_data 0
           callback v_input_cb
-          tooltip {Extra initialization code for the widget.} xywh {95 90 310 20} labelfont 1 labelsize 11 textfont 4 textsize 11
+          tooltip {Extra initialization code for the widget.} xywh {85 60 310 20} labelfont 1 labelsize 11 textfont 4 textsize 11
         }
         {fltk3::Input} {v_input[1]} {
           user_data 1
           callback v_input_cb
-          tooltip {Extra initialization code for the widget.} xywh {95 110 310 20} labelsize 11 textfont 4 textsize 11
+          tooltip {Extra initialization code for the widget.} xywh {85 80 310 20} labelsize 11 textfont 4 textsize 11
         }
         {fltk3::Input} {v_input[2]} {
           user_data 2
           callback v_input_cb
-          tooltip {Extra initialization code for the widget.} xywh {95 130 310 20} labelsize 11 textfont 4 textsize 11
+          tooltip {Extra initialization code for the widget.} xywh {85 100 310 20} labelsize 11 textfont 4 textsize 11
         }
         {fltk3::Input} {v_input[3]} {
           user_data 3
           callback v_input_cb
-          tooltip {Extra initialization code for the widget.} xywh {95 150 310 20} labelsize 11 textfont 4 textsize 11
+          tooltip {Extra initialization code for the widget.} xywh {85 120 310 20} labelsize 11 textfont 4 textsize 11
         }
         {fltk3::TextEditor} {} {
           label {Callback:}
           callback callback_cb
-          tooltip {The callback function or code for the widget. Use the variable name 'o' to access the Widget pointer and 'v' to access the user value.} xywh {95 175 310 90} box DOWN_BOX labelfont 1 labelsize 11 align 4 textfont 4 textsize 11 resizable
+          tooltip {The callback function or code for the widget. Use the variable name 'o' to access the Widget pointer and 'v' to access the user value.} xywh {85 145 310 90} box DOWN_BOX labelfont 1 labelsize 11 align 4 textfont 4 textsize 11 resizable
           code0 {\#include "CodeEditor.h"}
           class CodeEditor
         }
         {fltk3::Group} {} {
           label {User Data:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 270 310 20} labelfont 1 labelsize 11 align 4
+          xywh {85 240 310 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             callback user_data_cb
-            tooltip {The user data to pass into the callback code.} xywh {95 270 158 20} labelfont 1 labelsize 11 textfont 4 textsize 11 resizable
+            tooltip {The user data to pass into the callback code.} xywh {0 0 158 20} labelfont 1 labelsize 11 textfont 4 textsize 11 resizable
           }
           {fltk3::Choice} {} {
             label {When:}
             callback when_cb open
-            tooltip {When to call the callback function.} xywh {300 270 105 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 when 1 textsize 11
+            tooltip {When to call the callback function.} xywh {205 0 105 20} box THIN_UP_BOX down_box BORDER_BOX labelfont 1 labelsize 11 when 1 textsize 11
             code0 {extern fltk3::MenuItem whenmenu[];}
             code1 {o->menu(whenmenu);}
           } {}
@@ -639,16 +642,16 @@ Use Ctrl-J for newlines.} xywh {95 285 310 20} labelfont 1 labelsize 11 textsize
         {fltk3::Group} {} {
           label {Type:}
           callback {Fl_Panel::propagate_load} open
-          xywh {95 295 310 20} labelfont 1 labelsize 11 align 4
+          xywh {85 265 310 20} labelfont 1 labelsize 11 align 4
         } {
           {fltk3::Input} {} {
             callback user_data_type_cb
-            tooltip {The type of the user data.} xywh {95 295 158 20} labelfont 1 labelsize 11 textfont 4 textsize 11 resizable
+            tooltip {The type of the user data.} xywh {0 0 158 20} labelfont 1 labelsize 11 textfont 4 textsize 11 resizable
           }
           {fltk3::LightButton} {} {
             label {No Change}
             callback when_button_cb
-            tooltip {Call the callback even if the value has not changed.} xywh {300 295 105 20} selection_color 1 labelsize 11
+            tooltip {Call the callback even if the value has not changed.} xywh {205 0 105 20} selection_color 1 labelsize 11
           }
         }
       }
@@ -656,33 +659,33 @@ Use Ctrl-J for newlines.} xywh {95 285 310 20} labelfont 1 labelsize 11 textsize
     {fltk3::Group} {} {open
       xywh {9 330 400 20} labelsize 11
     } {
-      {fltk3::Box} {} {
-        xywh {9 330 20 20} labelsize 11 resizable
+      {fltk3::Widget} {} {
+        xywh {0 0 20 20} labelsize 11 resizable
       }
       {fltk3::Button} {} {
         label {Hide &Overlays}
         callback overlay_cb
-        tooltip {Hide the widget overlay box.} xywh {240 330 99 20} labelsize 11 labelcolor 1
+        tooltip {Hide the widget overlay box.} xywh {231 0 99 20} labelsize 11 labelcolor 1
       }
       {fltk3::Button} {} {
         label Revert
         callback revert_cb
-        xywh {66 330 80 20} labelsize 11 hide
+        xywh {57 0 80 20} labelsize 11 hide
       }
       {fltk3::ReturnButton} {} {
         label Close
         callback ok_cb
-        xywh {344 330 64 20} labelsize 11
+        xywh {335 0 64 20} labelsize 11
       }
       {fltk3::Button} {} {
         label Cancel
         callback cancel_cb
-        xywh {339 330 70 20} labelsize 11 hide
+        xywh {330 0 70 20} labelsize 11 hide
       }
       {fltk3::Button} wLiveMode {
         label {Live &Mode}
         callback live_mode_cb
-        tooltip {Create a live duplicate of the selected widgets to test resizing and menu behavior.} xywh {151 330 84 20} type Toggle labelsize 11
+        tooltip {Create a live duplicate of the selected widgets to test resizing and menu behavior.} xywh {142 0 84 20} type Toggle labelsize 11
       }
     }
   }

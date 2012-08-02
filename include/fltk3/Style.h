@@ -36,41 +36,40 @@
 
 
 namespace fltk3 {
-    
+  
   class Style {
     
-  protected:
+  public:
     
     static unsigned int current_;
     
-    unsigned int version_;
     Style *parent_;
     
+    unsigned int version_;
+    Box* box_;
+    Align align_;
     Font labelfont_;
     Fontsize labelsize_;
-    Labeltype labeltype_;
     Color labelcolor_;
-    Align align_;
     Font textfont_;
     Fontsize textsize_;
-    Color textcolor_;
-    
+    Color textcolor_;      
+    Labeltype labeltype_; // FIXME: does this belong here?
     Color color_;
     Color color2_;
-    Box* box_;
-
+    
     unsigned int private_:1;
+    unsigned int box_set_:1;
+    unsigned int align_set_:1;
     unsigned int labelfont_set_:1;
     unsigned int labelsize_set_:1;
-    unsigned int labeltype_set_:1;
     unsigned int labelcolor_set_:1;
-    unsigned int align_set_:1;
     unsigned int textfont_set_:1;
     unsigned int textsize_set_:1;
     unsigned int textcolor_set_:1;
+    unsigned int labeltype_set_:1;
     unsigned int color_set_:1;
     unsigned int color2_set_:1;
-    unsigned int box_set_:1;
     
     unsigned int update();
     void refresh() const { if (version_ != current_) ((Style*)this)->update(); }

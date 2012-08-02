@@ -47,7 +47,7 @@ extern fltk3::DoubleWindow *project_window;
 #include <fltk3/Button.h>
 #include <fltk3/TabGroup.h>
 #include <fltk3/Group.h>
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Input.h>
 extern void header_input_cb(fltk3::Input*, void*);
 extern fltk3::Input *header_file_input;

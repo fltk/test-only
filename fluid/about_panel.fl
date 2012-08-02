@@ -40,16 +40,16 @@ Function {make_about_panel()} {open
     label {About FLUID} open
     xywh {419 216 345 180} type Double color 50 selection_color 47 hotspot non_modal visible
   } {
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       image {icons/fluid-96.xpm} xywh {10 10 115 120}
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {FLTK User
 Interface Designer
 Version 3.0.0}
       xywh {135 10 200 70} color 12 selection_color 47 labelfont 1 labelsize 18 align 21
     }
-    {fltk3::Box} {} {
+    {fltk3::Widget} {} {
       label {Copyright 1998-2012 by
 Bill Spitzak and others}
       xywh {135 90 200 45} align 148

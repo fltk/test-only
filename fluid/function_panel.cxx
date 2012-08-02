@@ -30,6 +30,7 @@
 #include "function_panel.h"
 #include <fltk3/Pixmap.h>
 #include "Fl_Type.h"
+#include "fluid.h"
 #include "undo.h"
 extern class fltk3::Pixmap *pixmap[];
 extern class Fl_Type *Fl_Type_make(const char*);
@@ -701,6 +702,21 @@ void type_make_cb(fltk3::Widget*,void*d) {
     }
 }
 
+DragButton::DragButton(int x, int y, int w, int h, const char *l) : fltk3::Button(x, y, w, h, l) {
+  ;
+}
+
+int DragButton::handle(int e) {
+  if (e==fltk3::DRAG && !fltk3::event_is_click()) {
+      fltk3::copy((char*)user_data(), strlen((char*)user_data()));
+      value(0);
+      fltk3::dnd();
+      return 1;
+    } else {
+      return Button::handle(e);
+    }
+}
+
 fltk3::Window *widgetbin_panel=(fltk3::Window *)0;
 
 static void cb_widgetbin_panel(fltk3::Window* o, void* v) {
@@ -778,216 +794,472 @@ fltk3::Window* make_widgetbin() {
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Window"));
         o->image(pixmap[1]);
       } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Group");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Group"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[6]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(52, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(52, 2, 24, 24);
         o->tooltip("Pack");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::PackedGroup"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[22]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Tabs");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TabGroup"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[13]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 27, 24, 24);
         o->tooltip("Scroll");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ScrollGroup"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[19]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(52, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(52, 27, 24, 24);
         o->tooltip("Table");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Table"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[51]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("Tile");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TiledGroup"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[20]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 52, 24, 24);
         o->tooltip("Wizard");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::WizardGroup"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[21]);
-      } // fltk3::Button* o
+      } // DragButton* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(171, 3, 54, 79);
-      { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
+      { DragButton* o = new DragButton(2, 2, 24, 24);
         o->tooltip("Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Button"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[2]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Return Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ReturnButton"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[23]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Light Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::LightButton"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[24]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 27, 24, 24);
         o->tooltip("Repeat Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::RepeatButton"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[25]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("Check Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::CheckButton"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[3]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 52, 24, 24);
         o->tooltip("Round Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::RoundButton"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[4]);
-      } // fltk3::Button* o
+      } // DragButton* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(230, 3, 104, 79);
-      { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
+      { DragButton* o = new DragButton(2, 2, 24, 24);
         o->tooltip("Slider");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Slider"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[37]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Scroll Bar");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Scrollbar"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[38]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(52, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(52, 2, 24, 24);
         o->tooltip("Value Slider");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ValueSlider"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[39]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(77, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(77, 2, 24, 24);
         o->tooltip("Value Output");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ValueOutput"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[45]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Adjuster");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Adjuster"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[40]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 27, 24, 24);
         o->tooltip("Counter");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Counter"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[41]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(52, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(52, 27, 24, 24);
         o->tooltip("Dial");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Dial"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[42]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("Roller");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Roller"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[43]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 52, 24, 24);
         o->tooltip("Spinner");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Spinner"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[47]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(52, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(52, 52, 24, 24);
         o->tooltip("Value Input");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ValueInput"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[44]);
-      } // fltk3::Button* o
+      } // DragButton* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(339, 3, 54, 79);
-      { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
+      { DragButton* o = new DragButton(2, 2, 24, 24);
         o->tooltip("Input");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Input"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[14]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Output");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Output"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[27]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Text Edit");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TextEditor"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[29]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 27, 24, 24);
         o->tooltip("Text Display");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TextDisplay"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[28]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("File Input");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::FileInput"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[30]);
-      } // fltk3::Button* o
+      } // DragButton* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(398, 3, 54, 79);
-      { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
+      { DragButton* o = new DragButton(2, 2, 24, 24);
         o->tooltip("Menu Bar");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::MenuBar"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[17]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Input Choice");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::InputChoice"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[15]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Menu Button");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::MenuButton"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[26]);
-      } // fltk3::Button* o
+      } // DragButton* o
       { fltk3::Button* o = new fltk3::Button(27, 27, 24, 24);
         o->tooltip("Menu Item");
         o->box(fltk3::THIN_UP_BOX);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("menuitem"));
         o->image(pixmap[16]);
       } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("Choice");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Choice"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[15]);
-      } // fltk3::Button* o
+      } // DragButton* o
       { fltk3::Button* o = new fltk3::Button(27, 52, 24, 24);
         o->tooltip("Sub Menu");
         o->box(fltk3::THIN_UP_BOX);
@@ -997,57 +1269,121 @@ fltk3::Window* make_widgetbin() {
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(457, 3, 54, 79);
-      { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
+      { DragButton* o = new DragButton(2, 2, 24, 24);
         o->tooltip("Browser");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Browser"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[31]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Tree");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Tree"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[50]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Check Browser");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::CheckBrowser"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[32]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("File Browser");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::FileBrowser"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[33]);
-      } // fltk3::Button* o
+      } // DragButton* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(515, 3, 55, 79);
-      { fltk3::Button* o = new fltk3::Button(2, 2, 24, 24);
-        o->tooltip("Widget");
+      { DragButton* o = new DragButton(2, 2, 24, 24);
+        o->tooltip("Box");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Widget"));
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Box"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[5]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(27, 2, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(27, 2, 24, 24);
         o->tooltip("Clock");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Clock"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[34]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 27, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 27, 24, 24);
         o->tooltip("Help Browser");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::HelpView"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[35]);
-      } // fltk3::Button* o
-      { fltk3::Button* o = new fltk3::Button(2, 52, 24, 24);
+      } // DragButton* o
+      { DragButton* o = new DragButton(2, 52, 24, 24);
         o->tooltip("Progress");
         o->box(fltk3::THIN_UP_BOX);
+        o->color(fltk3::BACKGROUND_COLOR);
+        o->selection_color(fltk3::BACKGROUND_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
         o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Progress"));
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE);
         o->image(pixmap[36]);
-      } // fltk3::Button* o
+      } // DragButton* o
       o->end();
     } // fltk3::Group* o
     widgetbin_panel->set_non_modal();

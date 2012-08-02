@@ -28,7 +28,8 @@
 #ifndef workspace_panel_h
 #define workspace_panel_h
 #include <fltk3/run.h>
-#include "Fl_Type.h"
+#include "WorkspaceType.h"
+#include "panel.h"
 #include <fltk3/Pixmap.h>
 #include <fltk3/MultiLabel.h>
 extern fltk3::Pixmap menu_none_pixmap;
@@ -61,11 +62,13 @@ void workspace_panel_set_cb(fltk3::Widget*, void *v);
 extern fltk3::ScrollGroup *pScrollGroup;
 #include <fltk3/PackedGroup.h>
 #include <fltk3/Input.h>
+extern fltk3::Group *pFileNameGroup;
+extern fltk3::Input *pFileName;
+#include <fltk3/Button.h>
 #include <fltk3/Choice.h>
 extern fltk3::Group *wSpacer;
 extern fltk3::Group *pCloseGroup;
-#include <fltk3/Box.h>
-#include <fltk3/Button.h>
+#include <fltk3/Widget.h>
 Fl_Panel* make_workspace_panel();
 extern fltk3::MenuItem menu_Unknown[];
 extern fltk3::MenuItem menu_Relative[];

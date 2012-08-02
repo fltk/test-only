@@ -3,7 +3,7 @@
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,9 +26,6 @@
 //
 
 // Implementation of fltk3::message, fltk3::ask, fltk3::choice, fltk3::input
-// The three-message fl_show_x functions are for forms compatibility
-// mostly.  In most cases it is easier to get a multi-line message
-// by putting newlines in the message.
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -271,10 +268,24 @@ const char* fltk3::ok = "OK";        ///< string pointer used in common dialogs,
 const char* fltk3::cancel= "Cancel"; ///< string pointer used in common dialogs, you can change it to another language
 const char* fltk3::close= "Close";   ///< string pointer used in common dialogs, you can change it to another language
 
+
 // fltk functions:
+
+
 /**
-   Emits a system beep message.
-   \note \#include <fltk3/ask.h>
+ \brief Emits a system beep message.
+ 
+ In the olden days, sending a Ctrl-G character would ring a brass bell inside
+ the console to call the operators attention. In these newfangled days, the 
+ brass bell has been replaced with a beeper in the keyboard, or even worse,
+ with the sampled sound of a bell, dog, cat squeek or what have you from
+ the electronic numeric calculator.
+ 
+ This function will ring whatever bell is easiest available on your device.
+ 
+ \param[in] type predefined type of sound. such as BEEP_MESSAGE, etc.
+ 
+ \note \#include <fltk3/ask.h>
  */
 void fltk3::beep(int type) {
 #ifdef WIN32
@@ -322,14 +333,25 @@ void fltk3::beep(int type) {
 #endif // WIN32
 }
 
-/** Shows an information message dialog box.
 
-   \note Common dialog boxes are application modal. No more than one common dialog box
-   can be open at any time. Requests for additional dialog boxes are ignored.
-   \note \#include <fltk3/ask.h>
+/** 
+ \brief Shows an information message dialog box.
 
+ \note Common dialog boxes are application modal. No more than one common dialog 
+ box can be open at any time. Requests for additional dialog boxes are ignored.
+ 
+ This particular box features an OK button and a large "i" to indicate its 
+ informational nature. This box is rarely useful and should be avoided, or 
+ should at least feature an option to diable it. Users expect that operations
+ run well, unless presented with an alert or error message, sporting a choice
+ of options to resolve the problem.
 
-   \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ \param[in] fmt can be used as an sprintf-like format and variables for the 
+            message text
+
+ \see fltk3::vmessage
+ 
+ \note \#include <fltk3/ask.h>
  */
 void fltk3::message(const char *fmt, ...) {
   va_list ap;
@@ -338,6 +360,11 @@ void fltk3::message(const char *fmt, ...) {
   va_end(ap);
 }
 
+
+/**
+ \brief Same as fltk3::message, providing a different interface.
+ \see fltk3::message
+ */
 void fltk3::vmessage(const char *fmt, va_list ap) {
   if (avoidRecursion) return;
   //fltk3::beep(fltk3::BEEP_MESSAGE);
@@ -346,13 +373,22 @@ void fltk3::vmessage(const char *fmt, va_list ap) {
   iconlabel = "?";
 }
 
-/** Shows an alert message dialog box
 
-   \note Common dialog boxes are application modal. No more than one common dialog box
-   can be open at any time. Requests for additional dialog boxes are ignored.
-   \note \#include <fltk3/ask.h>
+/** 
+ \brief Shows an alert message dialog box.
 
-   \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ \note Common dialog boxes are application modal. No more than one common dialog box
+ can be open at any time. Requests for additional dialog boxes are ignored.
+ 
+ This particular box features an OK button and a large "!" to indicate its 
+ alerting nature. This box can be used to alert the user of a failed operation.
+ Most users however expect a choice of options to resolve the issue at hand.
+ 
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ 
+ \see fltk3::valert
  */
 void fltk3::alert(const char *fmt, ...) {
   va_list ap;
@@ -361,6 +397,11 @@ void fltk3::alert(const char *fmt, ...) {
   va_end(ap);
 }
 
+
+/**
+ \brief Same as fltk3::alert, providing a different interface.
+ \see fltk3::alert
+ */
 void fltk3::valert(const char *fmt, va_list ap) {
   if (avoidRecursion) return;
   //fltk3::beep(fltk3::BEEP_ERROR);
@@ -369,16 +410,30 @@ void fltk3::valert(const char *fmt, va_list ap) {
   iconlabel = "?";
 }
 
-/** Shows a dialog displaying the \p fmt message,
-    this dialog features 2 yes/no buttons
 
-   \note Common dialog boxes are application modal. No more than one common dialog box
-   can be open at any time. Requests for additional dialog boxes are ignored.
-   \note \#include <fltk3/ask.h>
+/** 
+ Shows a dialog displaying a message as a question.
 
-   \param[in] fmt can be used as an sprintf-like format and variables for the message text
-   \retval 0 if the no button is selected or another dialog box is still open
-   \retval 1 if yes is selected
+ \note Common dialog boxes are application modal. No more than one common dialog box
+ can be open at any time. Requests for additional dialog boxes are ignored.
+ 
+ This particular box features a YES button, a NO button and a large "?" to 
+ indicate a simple choice. This box can be used to have the user answer simple
+ yes/no questions. It is deprecated (and depreciated) because a user interface
+ should present more information on the choice buttons.
+ 
+ A classic example is "Are you sure you want to delete the file?". The answer 
+ "yes", sounding positive, will potentially destrot important data. The
+ recommended way is a dialog that offers more descriptive choices, for example
+ "delet file" instead of "yes", and "cancel operation" instead of "no".
+
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ \retval 0 if the no button is selected or another dialog box is still open
+ \retval 1 if yes is selected
+ 
+ \see fltk3::choice, fltk3::vask
  */
 int fltk3::ask(const char *fmt, ...) {
   va_list ap;
@@ -388,6 +443,11 @@ int fltk3::ask(const char *fmt, ...) {
   return ret;
 }
 
+
+/**
+ \brief Same as fltk3::ask, providing a different interface.
+ \see fltk3::ask
+ */
 int fltk3::vask(const char *fmt, va_list ap) {
   if (avoidRecursion) return 0;
   //fltk3::beep(fltk3::BEEP_QUESTION);
@@ -395,20 +455,27 @@ int fltk3::vask(const char *fmt, va_list ap) {
   return r;
 }
 
-/** Shows a dialog displaying the \p fmt message,
-    this dialog features up to 3 customizable choice buttons
 
-   \note Common dialog boxes are application modal. No more than one common dialog box
-    can be open at any time. Requests for additional dialog boxes are ignored.
-   \note \#include <fltk3/ask.h>
+/** 
+ \brief Shows a dialog displaying the \p fmt message.
+ 
+ This dialog features up to 3 customizable choice buttons.
 
-   \param[in] fmt can be used as an sprintf-like format and variables for the message text
-   \param[in] b0 text label of button 0
-   \param[in] b1 text label of button 1
-   \param[in] b2 text label of button 2
-   \retval 0 if the first button with \p b0 text is selected or another dialog box is still open
-   \retval 1 if the second button with \p b1 text is selected
-   \retval 2 if the third button with \p b2 text is selected
+ \note Common dialog boxes are application modal. No more than one common 
+ dialog box can be open at any time. Requests for additional dialog boxes are 
+ ignored.
+ 
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ \param[in] b0 text label of button 0, the rightmost button, can be NULL
+ \param[in] b1 text label of button 1, the middle button, can be NULL
+ \param[in] b2 text label of button 2, the leftmost button, can be NULL
+ \retval 0 if the first button with \p b0 text is selected, or another dialog box is still open, or ESC was pressed
+ \retval 1 if the second button with \p b1 text is selected, or the Return key is pressed
+ \retval 2 if the third button with \p b2 text is selected
+ 
+ \see fltk3::vchoice
  */
 int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...) {
   va_list ap;
@@ -417,7 +484,12 @@ int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,..
   va_end(ap);
   return ret;
 }
-  
+
+
+/**
+ \brief Same as fltk3::choice, providing a different interface.
+ \see fltk3::choice
+ */
 int fltk3::vchoice(const char*fmt,const char *b0,const char *b1,const char *b2, va_list ap) {
   if (avoidRecursion) return 0;
   //fltk3::beep(fltk3::BEEP_QUESTION);
@@ -425,12 +497,23 @@ int fltk3::vchoice(const char*fmt,const char *b0,const char *b1,const char *b2, 
   return r;
 }
 
-/** Gets the fltk3::Widget icon container of the current default dialog used in
-    many common dialogs like fltk3::message(), fltk3::alert(),
-    fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password()
-    \note \#include <fltk3/ask.h>
+/** 
+ \brief Gets the icon container of the common dialog.
+ 
+ This box is used in many common dialogs like fltk3::message(), fltk3::alert(),
+ fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password(). Many of these 
+ calls override the label to indicate the kind of dialog.
+ 
+ \return pointer to the Widget holding the icon.
+    
+ \note \#include <fltk3/ask.h>
 */
-fltk3::Widget *fltk3::message_icon() {makeform(); return icon;}
+fltk3::Widget *fltk3::message_icon() 
+{
+  makeform(); 
+  return icon;
+}
+
 
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
@@ -447,15 +530,20 @@ static const char* input_innards(const char* fmt, va_list ap,
   return r ? input->value() : 0;
 }
 
-/** Shows an input dialog displaying the \p fmt message
 
-   \note Common dialog boxes are application modal. No more than one common dialog box
-   can be open at any time. Requests for additional dialog boxes are ignored.
-   \note \#include <fltk3/ask.h>
+/** 
+ Shows a dialog with a text message and a text input field.
 
-   \param[in] fmt can be used as an sprintf-like format and variables for the message text
-   \param[in] defstr defines the default returned string if no text is entered
-   \return the user string input if OK was pushed, NULL if Cancel was pushed or another dialog box was still open
+ \note Common dialog boxes are application modal. No more than one common dialog box
+ can be open at any time. Requests for additional dialog boxes are ignored.
+ 
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ \param[in] defstr defines the default returned string if no text is entered
+ \return the user string input if OK was pushed, NULL if Cancel was pushed or another dialog box was still open
+ 
+ \see fltk3::vinput
  */
 const char* fltk3::input(const char *fmt, const char *defstr, ...) {
   va_list ap;
@@ -465,6 +553,11 @@ const char* fltk3::input(const char *fmt, const char *defstr, ...) {
   return ret;
 }
 
+
+/**
+ \brief Same as fltk3::input, providing a different interface.
+ \see fltk3::input
+ */
 const char* fltk3::vinput(const char *fmt, const char *defstr, va_list ap) {
   if (avoidRecursion) return 0;
   //fltk3::beep(fltk3::BEEP_QUESTION);
@@ -472,18 +565,22 @@ const char* fltk3::vinput(const char *fmt, const char *defstr, va_list ap) {
   return r;
 }
 
-/** Shows an input dialog displaying the \p fmt message.
 
-    Like fltk3::input() except the input text is not shown,
-    '*' characters are displayed instead.
+/** 
+ Shows a dialog with a text message and a password input field.
 
-   \note Common dialog boxes are application modal. No more than one common dialog box
-   can be open at any time. Requests for additional dialog boxes are ignored.
-   \note \#include <fltk3/ask.h>
-
-   \param[in] fmt can be used as an sprintf-like format and variables for the message text
-   \param[in] defstr defines the default returned string if no text is entered
-   \return the user string input if OK was pushed, NULL if Cancel was pushed or aother dialog box was still open
+ Like fltk3::input() except the input text is not shown,
+ '*' characters are displayed instead.
+ 
+ \note Common dialog boxes are application modal. No more than one common dialog box
+ can be open at any time. Requests for additional dialog boxes are ignored.
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] fmt can be used as an sprintf-like format and variables for the message text
+ \param[in] defstr defines the default returned string if no text is entered
+ \return the user string input if OK was pushed, NULL if Cancel was pushed or aother dialog box was still open
+ 
+ \see fltk3::vpassword
  */
 const char *fltk3::password(const char *fmt, const char *defstr, ...) {
   va_list ap;
@@ -493,6 +590,11 @@ const char *fltk3::password(const char *fmt, const char *defstr, ...) {
   return ret;
 }
 
+
+/**
+ \brief Same as fltk3::password, providing a different interface.
+ \see fltk3::password
+ */
 const char *fltk3::vpassword(const char *fmt, const char *defstr, va_list ap) {
   if (avoidRecursion) return 0;
   //fltk3::beep(fltk3::BEEP_PASSWORD);
@@ -500,68 +602,79 @@ const char *fltk3::vpassword(const char *fmt, const char *defstr, va_list ap) {
   return r;
 }
 
-/** Sets whether or not to move the common message box used in
-    many common dialogs like fltk3::message(), fltk3::alert(),
-    fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password() to follow
-    the mouse pointer.
 
-    The default is \e enabled, so that the default button is the
-    hotspot and appears at the mouse position.
-    \note \#include <fltk3/ask.h>
-    \param[in]	enable	non-zero enables hotspot behavior,
-			0 disables hotspot
+/** 
+ \brief Sets whether to pop up the common message box under the mouse pointer.
+
+ Sets whether or not to move the common message box used in
+ many common dialogs like fltk3::message(), fltk3::alert(),
+ fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password() to follow
+ the mouse pointer. If not set, the window manager will decide where the 
+ dialog box will pop up.
+ 
+ The default is \e enabled, so that the default button is the hotspot and 
+ appears at the mouse position.
+ 
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] enable non-zero enables hotspot behavior, 0 disables hotspot
+ 
+ \see fltk3::message_hotspot()
  */
 void fltk3::message_hotspot(int enable) {
   enableHotspot = enable ? 1 : 0;
 }
 
-/** Gets whether or not to move the common message box used in
-    many common dialogs like fltk3::message(), fltk3::alert(),
-    fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password() to follow
-    the mouse pointer.
-    \note \#include <fltk3/ask.h>
-    \return	0 if disable, non-zero otherwise
-    \see fltk3::message_hotspot(int)
+
+/** 
+ \brief Gets whether to pop up the common message box under the mouse pointer.
+ \see fltk3::message_hotspot(int)
  */
-int fltk3::message_hotspot(void) {
+int fltk3::message_hotspot() {
   return enableHotspot;
 }
 
-/** Sets the title of the dialog window used in many common dialogs.
 
-    This window \p title will be used in the next call of one of the
-    common dialogs like fltk3::message(), fltk3::alert(), fltk3::ask(), fltk3::choice(),
-    fltk3::input(), fltk3::password().
+/** 
+ \brief Sets the title of the dialog window used in many common dialogs.
 
-    The \p title string is copied internally, so that you can use a
-    local variable or free the string immediately after this call. It
-    applies only to the \b next call of one of the common dialogs and
-    will be reset to an empty title (the default for all dialogs) after
-    that call.
-
-    \note \#include <fltk3/ask.h>
-    \param[in] title	window label, string copied internally
+ This window \p title will be used in the next call of one of the common 
+ dialogs like fltk3::message(), fltk3::alert(), fltk3::ask(), fltk3::choice(),
+ fltk3::input(), fltk3::password().
+ 
+ The \p title string is copied internally, so that you can use a
+ local variable or free the string immediately after this call. It
+ applies only to the \b next call of one of the common dialogs and
+ will be reset to an empty title (the default for all dialogs) after
+ that call.
+ 
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] title window label, string copied internally
 */
 void fltk3::message_title(const char *title) {
   makeform();
   message_form->copy_label(title);
 }
 
-/** Sets the default title of the dialog window used in many common dialogs.
 
-    This window \p title will be used in all subsequent calls of one of the
-    common dialogs like fltk3::message(), fltk3::alert(), fltk3::ask(), fltk3::choice(),
-    fltk3::input(), fltk3::password(), unless a specific title has been set
-    with fltk3::message_title(const char *title).
-    
-    The default is no title. You can override the default title for a
-    single dialog with fltk3::message_title(const char *title).
+/** 
+ \brief Sets the default title of the dialog window used in many common dialogs.
 
-    The \p title string is copied internally, so that you can use a
-    local variable or free the string immediately after this call.
-
-    \note \#include <fltk3/ask.h>
-    \param[in] title	default window label, string copied internally
+ This window \p title will be used in all subsequent calls of one of the
+ common dialogs like fltk3::message(), fltk3::alert(), fltk3::ask(), 
+ fltk3::choice(), fltk3::input(), fltk3::password(), unless a specific title 
+ has been set with fltk3::message_title(const char *title).
+ 
+ The default is no title. You can override the default title for a
+ single dialog with fltk3::message_title(const char *title).
+ 
+ The \p title string is copied internally, so that you can use a
+ local variable or free the string immediately after this call.
+ 
+ \note \#include <fltk3/ask.h>
+ 
+ \param[in] title default window label, string copied internally
 */
 void fltk3::message_title_default(const char *title) {
   if (message_title_default_) {

@@ -29,7 +29,16 @@ comment {//
 } {in_source in_header
 } 
 
-decl {\#include "Fl_Type.h"} {public global
+decl {\#include "WorkspaceType.h"} {public global
+} 
+
+decl {\#include "panel.h"} {public global
+} 
+
+decl {\#include "fluid.h"} {private global
+} 
+
+decl {\#include <fltk3/FileChooser.h>} {private global
 } 
 
 decl {\#include <fltk3/Pixmap.h>} {public global
@@ -268,9 +277,9 @@ Function {make_workspace_panel()} {open
   if (Fl_Panel::numselected != 1)
     sprintf(buf, "Workspace Properties (%d items)", Fl_Panel::numselected);
   else
-    sprintf(buf, "%s Properties", Fl_Panel::selected_type->name());
+    sprintf(buf, "%s Properties", Fl_Panel::selected_type()->name());
   the_workspace_panel->label(buf);
-}} open selected
+}} open
         xywh {0 0 400 400} resizable
       } {
         {fltk3::Group} {} {
@@ -293,12 +302,12 @@ Function {make_workspace_panel()} {open
       o->static_value("<Multiple Values>");
       o->deactivate();
     } else {
-      o->static_value(Fl_Panel::selected_type->name());
+      o->static_value(Fl_Panel::selected_type()->name());
       o->activate();
     }
   } else {
     if (Fl_Panel::numselected == 1) {
-      Fl_Panel::selected_type->name(o->value());
+      Fl_Panel::selected_type()->name(o->value());
       if (o->changed()) set_modflag(1);
     }
   }}
@@ -337,7 +346,7 @@ Function {make_workspace_panel()} {open
             tooltip {name and path of the file} xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
           }
         }
-        {fltk3::Group} {} {
+        {fltk3::Group} pFileNameGroup {
           callback {if (v == Fl_Panel::LOAD) {
   for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
     if (t->selected && t->is_file()) {
@@ -350,15 +359,15 @@ Function {make_workspace_panel()} {open
 }} open
           xywh {0 89 400 30} labelsize 12 align 4
         } {
-          {fltk3::Input} {} {
+          {fltk3::Input} pFileName {
             label {File Name }
             callback {if (v == Fl_Panel::LOAD) {
-    if (Fl_Panel::numselected != 1 || Fl_Panel:selected_file()==0L) {
+    if (Fl_Panel::numselected != 1 || Fl_Panel::selected_file()==0L) {
       o->static_value("<Multiple Values>");
-      o->deactivate();
+      pFileNameGroup->deactivate();
     } else {
       o->static_value(Fl_Panel::selected_file()->filename());
-      o->activate();
+      pFileNameGroup->activate();
     }
   } else {
     if (Fl_Panel::numselected == 1) {
@@ -366,7 +375,21 @@ Function {make_workspace_panel()} {open
       if (o->changed()) set_modflag(1);
     }
   }}
-            tooltip {name and path of the file} xywh {100 5 290 20} labelsize 12 when 1 textsize 12 resizable
+            tooltip {name and path of the file} xywh {100 5 250 20} labelsize 12 when 1 textsize 12 resizable
+          }
+          {fltk3::Button} {} {
+            label {@-3filenew}
+            callback {// FIXME: relative to...
+
+if (v == Fl_Panel::LOAD) {
+  } else {
+    const char *fn = fltk3::file_chooser("Select file:", "*", pFileName->value());
+    if (fn) {
+      pFileName->value(fn);
+      pFileName->do_callback();
+    }
+  }} selected
+            xywh {350 5 40 20} color 52 labelcolor 43 align 16 deactivate
           }
         }
         {fltk3::Group} {} {
@@ -811,7 +834,7 @@ Function {make_workspace_panel()} {open
       callback {Fl_Panel::propagate_load} open
       xywh {10 420 400 25} labelsize 11
     } {
-      {fltk3::Box} {} {
+      {fltk3::Widget} {} {
         xywh {0 0 290 25} labelsize 11 resizable
       }
       {fltk3::Button} {} {

@@ -25,6 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
+#ifndef FLUID3_SHORTCUT_BUTTON
+#define FLUID3_SHORTCUT_BUTTON
+
+
 #include <fltk3/Button.h>
 
 class Shortcut_Button : public fltk3::Button {
@@ -35,6 +39,10 @@ public:
   Shortcut_Button(int X,int Y,int W,int H, const char* l = 0) :
     fltk3::Button(X,Y,W,H,l) {svalue = 0;}
 };
+
+
+#endif
+
 
 //
 // End of "$Id$".

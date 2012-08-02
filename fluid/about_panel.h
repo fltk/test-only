@@ -33,7 +33,7 @@
 extern void show_help(const char *name); 
 #include <fltk3/DoubleWindow.h>
 extern fltk3::DoubleWindow *about_panel;
-#include <fltk3/Box.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Button.h>
 #include <fltk3/ReturnButton.h>
 fltk3::DoubleWindow* make_about_panel();

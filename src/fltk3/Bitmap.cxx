@@ -40,6 +40,30 @@
 #include <fltk3/Printer.h>
 #include "flstring.h"
 
+
+
+/* Documented in header file */
+fltk3::Bitmap::Bitmap(const uchar *bits, int W, int H) :
+  Image(W,H,0), 
+  array(bits), 
+  alloc_array(0), 
+  id_(0) 
+{
+  data((const char **)&array, 1);
+}
+
+
+/* Documented in header file */
+fltk3::Bitmap::Bitmap(const char *bits, int W, int H) :
+  Image(W,H,0), 
+  array((const uchar *)bits), 
+  alloc_array(0), 
+  id_(0) 
+{
+  data((const char **)&array, 1);
+}
+
+
 #if defined(__APPLE_QUARTZ__)
 
 
