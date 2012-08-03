@@ -33,6 +33,7 @@
 
 #include <fltk3/filename.h>
 #include <fltk3/ask.h>
+#include <ctype.h>
 
 
 //extern Fl_Panel *the_workspace_panel;
@@ -352,7 +353,7 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
-// Note: we do not deal with UTF8 chracters here!
+// FIXME: we do not deal with UTF8 chracters here!
 const char *Fl_Target_Type::caps_name() {
   const char *s = name();
   char *buf = get_temporary_return_buffer(strlen(s)+1);
@@ -364,7 +365,7 @@ const char *Fl_Target_Type::caps_name() {
   return buf;
 }
 
-// Note: we do not deal with UTF8 chracters here!
+// FIXME: we do not deal with UTF8 chracters here!
 const char *Fl_Target_Type::lowercase_name() {
   const char *s = name();
   char *buf = get_temporary_return_buffer(strlen(s)+1);
