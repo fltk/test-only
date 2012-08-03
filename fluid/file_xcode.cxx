@@ -853,6 +853,7 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tisa = XCBuildConfiguration;\n");
   fprintf(out, "\t\t\tbuildSettings = {\n");
   fprintf(out, "\t\t\t\tALWAYS_SEARCH_USER_PATHS = NO;\n");
+  fprintf(out, "\t\t\t\tCOMBINE_HIDPI_IMAGES = YES;\n");
   fprintf(out, "\t\t\t\tCOPY_PHASE_STRIP = NO;\n");
   fprintf(out, "\t\t\t\tDEPLOYMENT_LOCATION = NO;\n");
   fprintf(out, "\t\t\t\tDEPLOYMENT_POSTPROCESSING = NO;\n");
@@ -895,6 +896,7 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tisa = XCBuildConfiguration;\n");
   fprintf(out, "\t\t\tbuildSettings = {\n");
   fprintf(out, "\t\t\t\tALWAYS_SEARCH_USER_PATHS = NO;\n");
+  fprintf(out, "\t\t\t\tCOMBINE_HIDPI_IMAGES = YES;\n");
   fprintf(out, "\t\t\t\tCOPY_PHASE_STRIP = YES;\n");
   fprintf(out, "\t\t\t\tDEBUG_INFORMATION_FORMAT = \"dwarf-with-dsym\";\n");
   fprintf(out, "\t\t\t\tDEPLOYMENT_LOCATION = NO;\n");
