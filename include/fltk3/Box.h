@@ -47,26 +47,30 @@
 
 namespace fltk3 {
   
+  
   class FLTK3_EXPORT BoxWidget : public Widget {
   public:
     BoxWidget(fltk3::Box* b, int x, int y, int w, int h, const char *l=0);
     BoxWidget(int x, int y, int w, int h, const char *l=0);
   };
   
+  
   class FLTK3_EXPORT Box : public Symbol {
   public:
     
     typedef unsigned int Flags;
-    static const Flags PRESSED    = 0x0001;
-    static const Flags HOVERING    = 0x0002;
-    static const Flags FOCUSED     = 0x0004;
-    static const Flags ACTIVE      = 0x0008;
-    static const Flags TIE_LEFT    = 0x0100;
-    static const Flags TIE_RIGHT   = 0x0200;
-    static const Flags TIE_TOP     = 0x0400;
-    static const Flags TIE_BOTTOM  = 0x0800;
-    static const Flags TIE_MASK    = 0x0f00;
-    static const Flags TIE_HIDDEN  = 0x1000;
+    enum {
+      PRESSED      = 0x0001,
+      HOVERING     = 0x0002,
+      FOCUSED      = 0x0004,
+      ACTIVE       = 0x0008,
+      TIE_LEFT     = 0x0100,
+      TIE_RIGHT    = 0x0200,
+      TIE_TOP      = 0x0400,
+      TIE_BOTTOM   = 0x0800,
+      TIE_MASK     = 0x0f00,
+      TIE_HIDDEN   = 0x1000
+    };
     
     Box(const char *name=0L) 
     : Symbol(name) { }

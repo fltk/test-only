@@ -28,6 +28,7 @@
 // Wrapper for scandir with const-correct function prototypes.
 
 #include <fltk3/filename.h>
+#include <fltk3/x.h>
 #include <fltk3/utf8.h>
 #include "flstring.h"
 #include <stdlib.h>

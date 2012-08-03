@@ -1432,7 +1432,6 @@ void load_history() {
   int	i;		// Looping var
   int	max_files;
 
-
   fluid_prefs.get("recent_files", max_files, 5);
   if (max_files > 10) max_files = 10;
 

@@ -30,6 +30,7 @@
 #include <fltk3/Bitmap.h>
 #include <fltk3/draw.h>
 #include <fltk3/Wrapper.h>
+#include <fltk3/Box.h>
 
 
 // three bitmaps for the arrow images
@@ -71,9 +72,9 @@ void fltk3::Adjuster::draw()
   fltk3::Color sel = fltk3::color_average(fltk3::BLACK, col, 0.2f);
 
   fltk3::Box* up = box(), *dn = fltk3::down(box());
-  fltk3::draw_box((pDragButton==1?dn:up), 0, 2*dy, W, H, (pDragButton==1?sel:col), hor?Box::TIE_RIGHT:Box::TIE_TOP);
-  fltk3::draw_box((pDragButton==2?dn:up), dx, dy, W, H,  (pDragButton==2?sel:col), hor?Box::TIE_LEFT|Box::TIE_RIGHT:Box::TIE_TOP|Box::TIE_BOTTOM);
-  fltk3::draw_box((pDragButton==3?dn:up), 2*dx, 0, W, H, (pDragButton==3?sel:col), hor?Box::TIE_LEFT:Box::TIE_BOTTOM);
+  fltk3::draw_box((pDragButton==1?dn:up), 0, 2*dy, W, H, (pDragButton==1?sel:col), hor?(Box::TIE_RIGHT):(Box::TIE_TOP));
+  fltk3::draw_box((pDragButton==2?dn:up), dx, dy, W, H,  (pDragButton==2?sel:col), hor?(Box::TIE_LEFT|Box::TIE_RIGHT):(Box::TIE_TOP|Box::TIE_BOTTOM));
+  fltk3::draw_box((pDragButton==3?dn:up), 2*dx, 0, W, H, (pDragButton==3?sel:col), hor?(Box::TIE_LEFT):(Box::TIE_BOTTOM));
   if (active_r())
     fltk3::color(selection_color());
   else
