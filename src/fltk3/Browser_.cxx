@@ -35,30 +35,12 @@
 #include <fltk3/Wrapper.h>
 
 
-// This is the base class for browsers.  To be useful it must be
-// subclassed and several virtual functions defined.  The
-// Forms-compatible browser and the file chooser's browser are
-// subclassed off of this.
-
-// Yes, I know this should be a template...
-
-// This has been designed so that the subclass has complete control
-// over the storage of the data, although because next() and prev()
-// functions are used to index, it works best as a linked list or as a
-// large block of characters in which the line breaks must be searched
-// for.
-
-// A great deal of work has been done so that the "height" of a data
-// object does not need to be determined until it is drawn.  This was
-// done for the file chooser, because the height requires doing stat()
-// to see if the file is a directory, which can be annoyingly slow
-// over the network.
-
 /* redraw bits:
  1 = redraw children (the scrollbar)
  2 = redraw one or two items
  4 = redraw all items
  */
+
 
 static void scrollbar_callback(fltk3::Widget* s, void*) {
   ((fltk3::Browser_*)(s->parent()))->position(int(((fltk3::Scrollbar*)s)->value()));
@@ -68,13 +50,8 @@ static void hscrollbar_callback(fltk3::Widget* s, void*) {
   ((fltk3::Browser_*)(s->parent()))->hposition(int(((fltk3::Scrollbar*)s)->value()));
 }
 
-// return where to draw the actual box:
-/**
- Returns the bounding box for the interior of the list's display window, inside
- the scrollbars.
- \param[out] X,Y,W,H The returned bounding box.\n
- (The original contents of these parameters are overwritten)
- */
+
+// Documented in the header file
 void fltk3::Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   fltk3::Box* b = box() ? box() : fltk3::DOWN_BOX;
@@ -94,24 +71,15 @@ void fltk3::Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   if (H < 0) H = 0;
 }
 
-/**
- This method returns the X position of the left edge of the list area
- after adjusting for the scrollbar and border, if any.
- \returns The X position of the left edge of the list, in pixels.
- \see fltk3::Browser_::bbox()
- */
+
+// Documented in the header file
 int fltk3::Browser_::leftedge() const {
   int X, Y, W, H; bbox(X, Y, W, H);
   return X;
 }
 
-// The scrollbars may be moved again by draw(), since each one's size
-// depends on whether the other is visible or not.  This skips over
-// fltk3::Group::resize since it moves the scrollbars uselessly.
-/**
- Repositions and/or resizes the browser.
- \param[in] X,Y,W,H The new position and size for the browser, in pixels.
- */
+
+// Documented in the header file
 void fltk3::Browser_::resize(int X, int Y, int W, int H) {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   Widget::resize(X, Y, W, H);
@@ -125,20 +93,16 @@ void fltk3::Browser_::resize(int X, int Y, int W, int H) {
                     W, scrollsize);
 }
 
-// Cause minimal update to redraw the given item:
-/**
- This method should be called when the contents of \p item has changed,
- but not its height.
- \param[in] item The item that needs to be redrawn.
- \see redraw_lines(), redraw_line()
- */
+
+// Documented in the header file
 void fltk3::Browser_::redraw_line(void* item) {
   if (!redraw1 || redraw1 == item) {redraw1 = item; damage(fltk3::DAMAGE_EXPOSE);}
   else if (!redraw2 || redraw2 == item) {redraw2 = item; damage(fltk3::DAMAGE_EXPOSE);}
   else damage(fltk3::DAMAGE_SCROLL);
 }
 
-// Figure out top() based on position():
+
+// Documented in the header file
 void fltk3::Browser_::update_top() {
   if (!top_) top_ = item_first();
   if (position_ != real_position_) {
@@ -192,16 +156,8 @@ void fltk3::Browser_::update_top() {
   }
 }
 
-// Change position(), top() will update when update_top() is called
-// (probably by draw() or handle()):
-/**
- Sets the vertical scroll position of the list to pixel position \p pos.
- The position is how many pixels of the list are scrolled off the top edge
- of the screen. Example: A position of '3' scrolls the top three pixels of
- the list off the top edge of the screen.
- \param[in] pos The vertical position (in pixels) to scroll the browser to.
- \see position(), hposition()
- */
+
+// Documented in the header file
 void fltk3::Browser_::position(int pos) {
   if (pos < 0) pos = 0;
   if (pos == position_) return;
@@ -209,14 +165,8 @@ void fltk3::Browser_::position(int pos) {
   if (pos != real_position_) redraw_lines();
 }
 
-/**
- Sets the horizontal scroll position of the list to pixel position \p pos.
- The position is how many pixels of the list are scrolled off the left edge
- of the screen. Example: A position of '18' scrolls the left 18 pixels of the list
- off the left edge of the screen.
- \param[in] pos The horizontal position (in pixels) to scroll the browser to.
- \see position(), hposition()
- */
+
+// Documented in the header file
 void fltk3::Browser_::hposition(int pos) {
   if (pos < 0) pos = 0;
   if (pos == hposition_) return;
@@ -224,16 +174,8 @@ void fltk3::Browser_::hposition(int pos) {
   if (pos != real_hposition_) redraw_lines();
 }
 
-// Tell whether item is currently displayed:
-/**
- Returns non-zero if \p item has been scrolled to a position where it is being displayed.
- Checks to see if the item's vertical position is within the top and bottom
- edges of the display window. This does NOT take into account the hide()/show()
- status of the widget or item.
- \param[in] item The item to check
- \returns 1 if visible, 0 if not visible.
- \see display(), displayed()
- */
+
+// Documented in the header file
 int fltk3::Browser_::displayed(void* item) const {
   int X, Y, W, H; bbox(X, Y, W, H);
   int yy = H+offset_;
@@ -244,13 +186,9 @@ int fltk3::Browser_::displayed(void* item) const {
   return 0;
 }
 
-// Ensure this item is displayed:
+
+// Documented in the header file
 // Messy because we have no idea if it is before top or after bottom:
-/**
- Displays the \p item, scrolling the list as necessary.
- \param[in] item The item to be displayed.
- \see display(), displayed()
- */
 void fltk3::Browser_::display(void* item) {
   
   // First special case - want to display first item in the list?
@@ -331,10 +269,8 @@ void fltk3::Browser_::display(void* item) {
 #endif
 }
 
-// redraw, has side effect of updating top and setting scrollbar:
-/**
- Draws the list within the normal widget bounding box.
- */
+
+// Documented in the header file
 void fltk3::Browser_::draw() {
   int drawsquare = 0;
   update_top();
@@ -487,14 +423,8 @@ J1:
   real_hposition_ = hposition_;
 }
 
-// Quick way to delete and reset everything:
-/**
- This method should be called when the list data is completely replaced
- or cleared. It informs the fltk3::Browser_ widget that any cached
- information it has concerning the items is invalid.
- This method does not clear the list, it just handles the follow up
- bookkeeping after the list has been cleared.
- */
+
+// Documented in the header file
 void fltk3::Browser_::new_list() {
   top_ = 0;
   position_ = real_position_ = 0;
@@ -506,15 +436,7 @@ void fltk3::Browser_::new_list() {
   redraw_lines();
 }
 
-// Tell it that this item is going away, and that this must remove
-// all pointers to it:
-/**
- This method should be used when \p item is being deleted from the list.
- It allows the fltk3::Browser_ to discard any cached data it has on the item.
- This method does not actually delete the item, but handles the follow up
- bookkeeping after the item has just been deleted.
- \param[in] item The item being deleted.
- */
+// Documented in the header file
 void fltk3::Browser_::deleting(void* item) {
   if (displayed(item)) {
     redraw_lines();
@@ -534,15 +456,8 @@ void fltk3::Browser_::deleting(void* item) {
   if (item == max_width_item) {max_width_item = 0; max_width = 0;}
 }
 
-/**
- This method should be used when item \p a is being replaced by item \p b.
- It allows the fltk3::Browser_ to update its cache data as needed,
- schedules a redraw for the item being changed, and tries to maintain the selection.
- This method does not actually replace the item, but handles the follow up
- bookkeeping after the item has just been replaced.
- \param[in] a Item being replaced
- \param[in] b Item to replace 'a'
- */
+
+// Documented in the header file
 void fltk3::Browser_::replacing(void* a, void* b) {
   redraw_line(a);
   if (a == selection_) selection_ = b;
@@ -550,14 +465,8 @@ void fltk3::Browser_::replacing(void* a, void* b) {
   if (a == max_width_item) {max_width_item = 0; max_width = 0;}
 }
 
-/**
- This method should be used when two items \p a and \p b are being swapped.
- It allows the fltk3::Browser_ to update its cache data as needed,
- schedules a redraw for the two items, and tries to maintain the current selection.
- This method does not actually swap items, but handles the follow up
- bookkeeping after items have been swapped.
- \param[in] a,b Items being swapped.
- */
+
+// Documented in the header file
 void fltk3::Browser_::swapping(void* a, void* b) {
   redraw_line(a);
   redraw_line(b);
@@ -567,27 +476,15 @@ void fltk3::Browser_::swapping(void* a, void* b) {
   else if (b == top_) top_ = a;
 }
 
-/**
- This method should be used when an item is in the process of
- being inserted into the list.
- It allows the fltk3::Browser_ to update its cache data as needed,
- scheduling a redraw for the affected lines.
- This method does not actually insert items, but handles the 
- follow up bookkeeping after items have been inserted.
- \param[in] a The starting item position
- \param[in] b The new item being inserted
- */
+
+// Documented in the header file
 void fltk3::Browser_::inserting(void* a, void* b) {
   if (displayed(a)) redraw_lines();
   if (a == top_) top_ = b;
 }
 
-/**
- This method returns the item under mouse y position \p ypos.
- NULL is returned if no item is displayed at that position.
- \param[in] ypos The y position (eg. fltk3::event_y()) to find an item under.
- \returns The item, or NULL if not found
- */
+
+// Documented in the header file
 void* fltk3::Browser_::find_item(int ypos) {
   update_top();
   int X, Y, W, H; bbox(X, Y, W, H);
@@ -600,19 +497,8 @@ void* fltk3::Browser_::find_item(int ypos) {
   return 0;
 }
 
-/**
- Sets the selection state of \p item to \p val,
- and returns 1 if the state changed or 0 if it did not.
- 
- If \p docallbacks is non-zero, select tries to call
- the callback function for the widget.
- 
- \param[in] item The item whose selection state is to be changed
- \param[in] val The new selection state (1=select, 0=de-select)
- \param[in] docallbacks If 1, invokes widget callback if item changed.\n
- If 0, doesn't do callback (default).
- \returns 1 if state was changed, 0 if not.
- */
+
+// Documented in the header file
 int fltk3::Browser_::select(void* item, int val, int docallbacks) {
   if (type() == fltk3::MULTI_BROWSER) {
     if (selection_ != item) {
@@ -645,16 +531,8 @@ int fltk3::Browser_::select(void* item, int val, int docallbacks) {
   return 1;
 }
 
-/**
- Deselects all items in the list and returns 1 if the state changed
- or 0 if it did not.
- 
- If the optional \p docallbacks parameter is non-zero, deselect tries
- to call the callback function for the widget.
- 
- \param[in] docallbacks If 1, invokes widget callback if item changed.\n
- If 0, doesn't do callback (default).
- */
+
+// Documented in the header file
 int fltk3::Browser_::deselect(int docallbacks) {
   if (type() == fltk3::MULTI_BROWSER) {
     int change = 0;
@@ -670,13 +548,8 @@ int fltk3::Browser_::deselect(int docallbacks) {
   }
 }
 
-/**
- Selects \p item and returns 1 if the state changed or 0 if it did not.
- Any other items in the list are deselected.
- \param[in] item The \p item to select.
- \param[in] docallbacks If 1, invokes widget callback if item changed.\n
- If 0, doesn't do callback (default).
- */
+
+// Documented in the header file
 int fltk3::Browser_::select_only(void* item, int docallbacks) {
   if (!item) return deselect(docallbacks);
   int change = 0;
@@ -693,11 +566,8 @@ int fltk3::Browser_::select_only(void* item, int docallbacks) {
   return change;
 }
 
-/**
- Handles the \p event within the normal widget bounding box.
- \param[in] event The event to process.
- \returns 1 if event was processed, 0 if not.
- */
+
+// Documented in the header file
 int fltk3::Browser_::handle(int event) {
   // NOTE:
   // We use fltk3::WidgetTracker to test if the user has deleted
@@ -953,11 +823,8 @@ int fltk3::Browser_::handle(int event) {
   return 0;
 }
 
-/**
- The constructor makes an empty browser.
- \param[in] X,Y,W,H position and size.
- \param[in] L The label string, may be NULL.
- */
+
+// Documented in the header file
 fltk3::Browser_::Browser_(int X, int Y, int W, int H, const char* L)
 : fltk3::Group(X, Y, W, H, L),
   scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
@@ -987,15 +854,8 @@ fltk3::Browser_::Browser_(int X, int Y, int W, int H, const char* L)
   end();
 }
 
-/**
- Sort the items in the browser based on \p flags.
- item_swap(void*, void*) and item_text(void*) must be implemented for this call.
- \param[in] flags fltk3::SORT_ASCENDING -- sort in ascending order\n
- fltk3::SORT_DESCENDING -- sort in descending order\n
- Values other than the above will cause undefined behavior\n
- Other flags may appear in the future.
- \todo Add a flag to ignore case
- */
+
+// Documented in the header file
 void fltk3::Browser_::sort(int flags) {
   //
   // Simple bubble sort - pure lazyness on my side.
@@ -1034,41 +894,25 @@ void fltk3::Browser_::sort(int flags) {
   }
 }
 
+
 // Default versions of some of the virtual functions:
 
-/**
- This method may be provided by the subclass to return the height of the
- \p item, in pixels.  
- Allow for two additional pixels for the list selection box.
- This method differs from item_height in that it is only called for 
- selection and scrolling operations. 
- The default implementation calls item_height.
- \param[in] item The item whose height to return.
- \returns The height, in pixels.
- */
+
+// Documented in the header file
 int fltk3::Browser_::item_quick_height(void* item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_quick_height(item), BrowserItemQuickHeight)
   return item_height(item);
 }
 
-/**
- This method may be provided to return the average height of all items
- to be used for scrolling. 
- The default implementation uses the height of the first item.
- \returns The average height of items, in pixels.
- */
+
+// Documented in the header file
 int fltk3::Browser_::incr_height() const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, incr_height(), BrowserIncrHeight)
   return item_quick_height(item_first());
 }
 
-/**
- This method may be provided by the subclass to indicate the full height
- of the item list, in pixels. 
- The default implementation computes the full height from the item heights. 
- Includes the items that are scrolled off screen.
- \returns The height of the entire list, in pixels.
- */
+
+// Documented in the header file
 int fltk3::Browser_::full_height() const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, full_height(), BrowserFullHeight)
   int t = 0;
@@ -1077,88 +921,94 @@ int fltk3::Browser_::full_height() const {
   return t;
 }
 
-/**
- This method may be provided by the subclass to indicate the full width
- of the item list, in pixels. 
- The default implementation computes the full width from the item widths.
- \returns The maximum width of all the items, in pixels.
- */
+
+// Documented in the header file
 int fltk3::Browser_::full_width() const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, full_width(), BrowserFullWidth)
   return max_width;
 }
 
-/**
- This method must be implemented by the subclass if it supports 
- multiple selections; sets the selection state to \p val for the \p item.
- Sets the selection state for \p item, where optional \p val is 1 (select, the default)
- or 0 (de-select).
- \param[in] item The item to be selected
- \param[in] val The optional selection state; 1=select, 0=de-select.\n
- The default is to select the item (1).
- */
+
+// Documented in the header file
 void fltk3::Browser_::item_select(void *item, int val) {
   FLTK3_WIDGET_VCALLS_WRAPPER(item_select(item, val), BrowserItemSelect)
 }
 
-/**
- This method must be implemented by the subclass if it supports
- multiple selections; returns the selection state for \p item.
- The method should return 1 if \p item is selected, or 0 otherwise.
- \param[in] item The item to test.
- */
-int fltk3::Browser_::item_selected(void* item) const { 
+
+// Documented in the header file
+int fltk3::Browser_::item_selected(void* item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_selected(item), BrowserItemSelected)
   return item==selection_ ? 1 : 0; 
 }
 
+
+// Documented in the header file
 void *fltk3::Browser_::item_first() const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_first(), BrowserItemFirst)
   return 0;
 }
 
+
+// Documented in the header file
 void *fltk3::Browser_::item_next(void *item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_next(item), BrowserItemNext)
   return 0;
 }
 
+
+// Documented in the header file
 void *fltk3::Browser_::item_prev(void *item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_prev(item), BrowserItemPrev)
   return 0;
 }
 
+
+// Documented in the header file
 void *fltk3::Browser_::item_last() const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(void*, item_last(), BrowserItemLast)
   return 0;
 }
 
+
+// Documented in the header file
 int fltk3::Browser_::item_height(void *item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_height(item), BrowserItemHeight)
   return 0;
 }
 
-int fltk3::Browser_::item_width(void *item) const { 
+
+// Documented in the header file
+int fltk3::Browser_::item_width(void *item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(int, item_width(item), BrowserItemWidth)
   return 0;
 }
 
+
+// Documented in the header file
 void fltk3::Browser_::item_draw(void *item,int X,int Y,int W,int H) const {
   FLTK3_WIDGET_VCALLS_WRAPPER(item_draw(item, X, Y, W, H), BrowserItemDraw)
 }
 
+
+// Documented in the header file
 const char *fltk3::Browser_::item_text(void *item) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(const char *, item_text(item), BrowserItemText)
   return 0L;
 }
 
-void fltk3::Browser_::item_swap(void *a,void *b) { 
+
+// Documented in the header file
+void fltk3::Browser_::item_swap(void *a,void *b) {
   FLTK3_WIDGET_VCALLS_WRAPPER(item_swap(a, b), BrowserItemSwap)
 }
 
-void *fltk3::Browser_::item_at(int index) const { 
+
+// Documented in the header file
+void *fltk3::Browser_::item_at(int index) const {
   FLTK3_WIDGET_VCALLS_WRAPPER_RET(void *, item_at(index), BrowserItemAt)
   return 0L; 
 }
+
 
 //
 // End of "$Id$".

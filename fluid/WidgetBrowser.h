@@ -44,7 +44,7 @@ namespace fluid3 {
 
   class WidgetBrowser : public fltk3::Browser_ 
   {
-    friend class Fl_Type;
+    friend class ::Fl_Type;
     
     static void handle_second_single_click_i(void*);
     

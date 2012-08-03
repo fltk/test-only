@@ -25,11 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \fn fltk3::Bitmap::Bitmap(const char *array, int W, int H)
-  The constructors create a new bitmap from the specified bitmap data.*/
-
-/** \fn fltk3::Bitmap::Bitmap(const unsigned char *array, int W, int H)
-  The constructors create a new bitmap from the specified bitmap data.*/
 
 #include <fltk3/run.h>
 #include <fltk3/x.h>
