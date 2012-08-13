@@ -33,11 +33,12 @@
 
 
 #include "enumerations.h"
+#include "Export.h"
 
 
 namespace fltk3 {
   
-  class Style {
+  class FLTK3_EXPORT Style {
     
   public:
     

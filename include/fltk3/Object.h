@@ -32,6 +32,9 @@
 #define FLTK3_OBJECT_H
 
 
+#include "Export.h"
+
+
 namespace fltk3 {
   
   class Wrapper; 
@@ -48,7 +51,7 @@ namespace fltk3 {
    a bit convoluted at first, but the use is straight forward and creates a true
    relationship between this library and any other frontend.
    */
-  class Object {
+  class FLTK3_EXPORT Object {
     
   protected:
     Wrapper *pWrapper;
