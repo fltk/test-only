@@ -157,7 +157,7 @@ static int writeBuildFileReferences(FILE *out, Fl_Target_Type *tgt) {
     if (file->builds_in(FL_ENV_XC4) && file->file_is_header()) {
       char BuildFileInHeaders[32]; strcpy(BuildFileInHeaders, file->get_UUID_Xcode(Xcode4_BuildFileInHeaders));
       char FileRef[32]; strcpy(FileRef, file->get_UUID_Xcode(Xcode4_FileRef));
-      fprintf(out, "\t\t%s /* %s in Headers */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
+      fprintf(out, "\t\t%s /* %s in Headers */ = {isa = PBXBuildFile; fileRef = %s /* %s */; settings = {ATTRIBUTES = (Public, ); }; };\n", 
               BuildFileInHeaders,
               file->filename_name(), 
               FileRef, 

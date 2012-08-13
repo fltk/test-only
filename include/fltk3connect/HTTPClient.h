@@ -50,7 +50,7 @@ namespace fltk3 {
    
    It is possible to create multiple HTTPClient objects that access the same
    server simultaneously, which may or may not accelerate communications. Some
-   leterature recommends four to six clients working in parallel.
+   literature recommends four to six clients working in parallel.
    
    This class implements a minimal subset of the HTTP/1.1 standard.
    

@@ -51,7 +51,6 @@ namespace fltk3 {
    Connections can be managed via callbacks or by overriding the on_...
    methods in this class.
    
-   
    All sockets in the fltk3connect library are implemented as widgets. They can
    be added to a GUI to show connection and transfer state. Invisible sockets
    and sockets that are not added to a GUI still provide full functionality

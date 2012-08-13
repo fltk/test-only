@@ -210,271 +210,143 @@
 		D57FBCFB72B5E577A7F80562 /* visual.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1626800F2D2DF61E9E2468DD /* visual.cxx */; };
 		D90075982F3B0CDB0EF91A73 /* x11.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F285310A7BD8D88F965104C8 /* x11.cxx */; };
 		2A8804F6E00533FEF1B22A54 /* vsnprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 4024031C45193E6173805457 /* vsnprintf.c */; };
-		6EC5A8E1F6171E20505CDA66 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = DDEC0AB0E55CB75CFA5FD9DC /* all.h */; };
-		39576718F4A718E5885D7837 /* fltk3.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B1A08E928290071C92EDD1 /* fltk3.h */; };
-		757ECB76CD9272004B8A4A42 /* Adjuster.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CDC310CF438C4E007EE265B /* Adjuster.h */; };
-		CC311448876EC9C10D5614AF /* ask.h in Headers */ = {isa = PBXBuildFile; fileRef = D31DE8ACD497B8FA62A57910 /* ask.h */; };
-		72A9364B21F8DEDED9A43B9E /* Bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 249A3332647089ACC2702523 /* Bitmap.h */; };
-		35DE2AD5F6204186A6545D86 /* Box.h in Headers */ = {isa = PBXBuildFile; fileRef = 0800D21F849D8F2CDB90C72D /* Box.h */; };
-		42605FAF974760B9A405E61E /* Browser_.h in Headers */ = {isa = PBXBuildFile; fileRef = 32841D65E2F82C3F24A360D2 /* Browser_.h */; };
-		7713D95988E151E950DE9A22 /* Browser.h in Headers */ = {isa = PBXBuildFile; fileRef = B8F30574865BA1A8081AF0E4 /* Browser.h */; };
-		A086301EB8B296E0D822CDA5 /* Button.h in Headers */ = {isa = PBXBuildFile; fileRef = 35C251791AC569E9FA8A37D5 /* Button.h */; };
-		F1922355821B70827EF0794A /* Cairo.h in Headers */ = {isa = PBXBuildFile; fileRef = DE684D7423D61E51884F2083 /* Cairo.h */; };
-		4B4514C2645D1B9F39AC00FD /* CairoWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 54A13D51B4228F871BF7BBDC /* CairoWindow.h */; };
-		D048A520A2AA90D67AEB63AB /* Chart.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFB2DCDB165909F739FA4DC /* Chart.h */; };
-		25AADC4EB3A2D0C57A10E45C /* CheckBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = EACD8665EE485E79D497476B /* CheckBrowser.h */; };
-		AA31B0AE287BC5586A74B681 /* CheckButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 11A6F6A178D6C8DF280EDA66 /* CheckButton.h */; };
-		DC27C811C107B01F0781059C /* Choice.h in Headers */ = {isa = PBXBuildFile; fileRef = 880936EF41290F7FBC549344 /* Choice.h */; };
-		461C93A22303F9DAC35C104C /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A2F22F859605E6DDE62CB04 /* Clock.h */; };
-		ECAF247332B0848CD90709AB /* ColorChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = C66F149FEF28A8993BA7325F /* ColorChooser.h */; };
-		AB0027C44065C7A06F8005A4 /* Counter.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7A35A279467A0C0B6804D3 /* Counter.h */; };
-		94A746DB64AFFAAF8F66C743 /* Device.h in Headers */ = {isa = PBXBuildFile; fileRef = FFD7DD53175A7E510775BBCA /* Device.h */; };
-		8AE207C7DA9AAACC8986E342 /* Dial.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C2CD62467ED0721B8B6192 /* Dial.h */; };
-		0D8E3B84BCC2B1406BDEAD11 /* dirent.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F5CF79479DB9C10024EDAF2 /* dirent.h */; };
-		25D240CF3AC229D047CFB972 /* DoubleWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F826E72E066312526D23BDB /* DoubleWindow.h */; };
-		2D8A06C2ED38111F411621F3 /* draw.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C21DDDAFE0B86794C281E0 /* draw.h */; };
-		FDE3D852851DC2655DB7C755 /* enumerations.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A38E27D30A71CB6AB52C658 /* enumerations.h */; };
-		E26E5B3FDF885169334CD6BD /* Export.h in Headers */ = {isa = PBXBuildFile; fileRef = 90105BC22216B918C986F3A7 /* Export.h */; };
-		5C0C7B7C30AC5FFBE33840F0 /* FileBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DF71C70A795DA43E2EEB04 /* FileBrowser.h */; };
-		3A9C5ECF691EDFFB0CA7A48C /* FileChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C85EE90C634F176CD8D44AC /* FileChooser.h */; };
-		9BF596FEF9C489B1A3F6E734 /* FileIcon.h in Headers */ = {isa = PBXBuildFile; fileRef = A31F2D0E97343ACE65D4F9CE /* FileIcon.h */; };
-		61494E2D4E7FDE66F8C8F159 /* FileInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 16A26636380190775434727C /* FileInput.h */; };
-		8836B634DC4BCE3E1EA78A51 /* filename.h in Headers */ = {isa = PBXBuildFile; fileRef = 39F403723C79DF02442F3818 /* filename.h */; };
-		A2F8F6E1341928382D9478D6 /* FillDial.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CD50CDB7D85007FEA1946C /* FillDial.h */; };
-		B4296EAA0460DCB4D54887F6 /* FillSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB8818FD497E7BDA327CFF2 /* FillSlider.h */; };
-		40EE4457665C6F762AAB502C /* FloatInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 48767088A899F5A151BDFC22 /* FloatInput.h */; };
-		20CBFB6F570A48CAA0751DBF /* FormsBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 11DF5111A6EE377DAAFDB68B /* FormsBitmap.h */; };
-		742D204F4CECC650D53AC070 /* FormsPixmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E62E615D0C146DBB74B477A /* FormsPixmap.h */; };
-		6A197BCC5117B3666D368B25 /* Free.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F5FE43FEC401E52D4CABB7 /* Free.h */; };
-		5E1D236DDF180951F39D88D0 /* Group.h in Headers */ = {isa = PBXBuildFile; fileRef = 91EA037664D5A2D49603F364 /* Group.h */; };
-		E5826346717EA4FA214A9B1B /* HelpView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CD096CD5808EADB1B646DB4 /* HelpView.h */; };
-		0CBBFB5E384976AB8AC9A2E0 /* HoldBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = CFF83CFB9E060DA4F81AE816 /* HoldBrowser.h */; };
-		C731F1AF175523B779E819E5 /* HorFillSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8658CA906CD5A6C35FA96B /* HorFillSlider.h */; };
-		2434070FB36660676C21E521 /* HorNiceSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B6A7CF4DC7BDE6349908474 /* HorNiceSlider.h */; };
-		C334620BF3BD16102D9B6288 /* HorSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E0D21170D44994003579D3 /* HorSlider.h */; };
-		7002C191CD0BBFB7A1E02B97 /* HorValueSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = FD4330AA04C25D49269F17D1 /* HorValueSlider.h */; };
-		18E4DD12C233F4CBC23340D2 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = D78004F7769F85212260B94D /* Image.h */; };
-		7E5C399BB79ECFB2AD8D99C7 /* Input_.h in Headers */ = {isa = PBXBuildFile; fileRef = CB0D1546A3645CE03B8BC1FA /* Input_.h */; };
-		78D8944F6051F6574682C312 /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 28D897DFA27CCC5A3933D952 /* Input.h */; };
-		6291854E45CD36763495507E /* InputChoice.h in Headers */ = {isa = PBXBuildFile; fileRef = 11C999453D2BEBD3A5B32DA4 /* InputChoice.h */; };
-		0F5897939A32668EEBBEA347 /* IntInput.h in Headers */ = {isa = PBXBuildFile; fileRef = B5CA37E08339E6D7820C0973 /* IntInput.h */; };
-		8E35401D5E144E48E1E2E147 /* LightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A390823203566E8B1FB4B81 /* LightButton.h */; };
-		C5C32DAEA102D25D12F86757 /* LineDial.h in Headers */ = {isa = PBXBuildFile; fileRef = D10E3F19DD8CC6A3FAA912AF /* LineDial.h */; };
-		E62C50EAAA4C4B51F3A50640 /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 6523340D0E47A3A4B3852435 /* math.h */; };
-		460DA151C5FCA76AF42C91D0 /* Menu_.h in Headers */ = {isa = PBXBuildFile; fileRef = 491CFF65AE0E3333213C16CC /* Menu_.h */; };
-		52639EA1D620F0444616D3B1 /* Menu.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9E66BDF38770CB90E29F8F /* Menu.h */; };
-		13B94AD3F645EDD4DDF980B9 /* MenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = C96E2C07C729D93F4DC516E2 /* MenuBar.h */; };
-		C6C8DFFEAB30DD8D55CDA057 /* MenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DA4183774502400A738E12C /* MenuButton.h */; };
-		5485A3F5E8CF410DE07B8A66 /* MenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D236C2D13DF519F2CEA15F /* MenuItem.h */; };
-		85734D6ACB0FB857648C33CB /* MenuWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 38AE873D735CEB85BC4204FF /* MenuWindow.h */; };
-		E77DDE3A14E2176C4112A1B3 /* message.h in Headers */ = {isa = PBXBuildFile; fileRef = 030B2B5EED9E491219AACAE9 /* message.h */; };
-		653964516F880A0C26DF582D /* MultiBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EAC08819E76C68821DEA7E0 /* MultiBrowser.h */; };
-		8248E33431DDFE8EC9417904 /* MultiLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC91BD54DF29B259600FAE9 /* MultiLabel.h */; };
-		B96D1B8C81FA2417E682879C /* MultilineInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CC0A6DD7BD572BFAB0DA5 /* MultilineInput.h */; };
-		F07D774ADA338F1943C75A46 /* MultilineOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D7446BACA6B0B81B71F19DDE /* MultilineOutput.h */; };
-		9E23CC9E8C5CC2E5858CDECF /* names.h in Headers */ = {isa = PBXBuildFile; fileRef = 605DF456DBD83672998541BA /* names.h */; };
-		9908F9782DC42E4BC11A5065 /* NativeFileChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A091B39476A38209C61A3E9 /* NativeFileChooser.h */; };
-		E163267BAED660DB4952DE87 /* NiceSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 690A220C1DB15D12DE1D5B5C /* NiceSlider.h */; };
-		568A4A992BEA2F048020F79D /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 23987A09DE62FFE0E2C335F9 /* Object.h */; };
-		C8AC369DDC62391EBFB0413B /* osx.h in Headers */ = {isa = PBXBuildFile; fileRef = 88E7EEAB9836AFE75EF36D0D /* osx.h */; };
-		39B2001925879E7C934CA7C9 /* Output.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FD59657E90872A316961585 /* Output.h */; };
-		E613F74A4A653E95E3293370 /* OverlayWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 31410D1F7ECB75D19821EF60 /* OverlayWindow.h */; };
-		CB8DCA5DBFDECB829BFA7C58 /* PackedGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 328CEB758E18FC1D1DB168BB /* PackedGroup.h */; };
-		38C7D942581B7C5369F2AC03 /* PagedDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = C539C329532BE09B0422A23A /* PagedDevice.h */; };
-		F5061313596F1BC761AC582B /* Pixmap.h in Headers */ = {isa = PBXBuildFile; fileRef = AEF910125AE91654739457BF /* Pixmap.h */; };
-		6AFC8619DFF2FA3604F112C0 /* Plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A5DB3592DA82366555A66B4A /* Plugin.h */; };
-		F702DFA64620B02A76332D90 /* Positioner.h in Headers */ = {isa = PBXBuildFile; fileRef = 813FC8746075A74FEDAE447C /* Positioner.h */; };
-		ACFD331F39EEA65591D0492B /* PostScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A0B5BF3C5ECFAF041951029 /* PostScript.h */; };
-		987CCADF07B02BD64D159D9F /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = A9B88BB6C6654424E37B8082 /* Preferences.h */; };
-		8430686CA971F1B4A9BA5883 /* Printer.h in Headers */ = {isa = PBXBuildFile; fileRef = A71F4289EE7021AAB797001D /* Printer.h */; };
-		574744834FDF23938DE7715A /* Progress.h in Headers */ = {isa = PBXBuildFile; fileRef = 21F9B0671D71E15E436430BD /* Progress.h */; };
-		C4F9F5BBDF152965DCB41239 /* RadioButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A7AFB66314183708E79A75 /* RadioButton.h */; };
-		3D04BFFA94C13305B6909190 /* RadioLightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 6BFBB13211639563DDFF3B58 /* RadioLightButton.h */; };
-		5FFF3E76083D95A644DF6FB5 /* RadioRoundButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 047FB4526C06B1D25D3436AA /* RadioRoundButton.h */; };
-		541F4505BC498FCD2392DC3A /* Rectangle.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A9EE60B3420456BB5F22708 /* Rectangle.h */; };
-		C314F85011E42FDD4B7AE660 /* RepeatButton.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBA3B1D4A991C22075B2B5F /* RepeatButton.h */; };
-		50013BF4B6C6C8CB9DE191B9 /* ReturnButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 41A957AFAB3458B3DD422617 /* ReturnButton.h */; };
-		EDCB645E845A12264E5C33B0 /* RGBImage.h in Headers */ = {isa = PBXBuildFile; fileRef = E66B871C51EB246D7DC4B1E1 /* RGBImage.h */; };
-		3C8B534422CF3FE3B6D66AD2 /* Roller.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C454E6CC666DB0E9502E820 /* Roller.h */; };
-		8403B06AA6E1C4DE5D5C4BF3 /* RoundButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F9BE0E64F271A33C51097CD6 /* RoundButton.h */; };
-		00201E11E82A916889C546F3 /* RoundClock.h in Headers */ = {isa = PBXBuildFile; fileRef = 553BFA555CF8BB8FE14FC48C /* RoundClock.h */; };
-		C7F1563107919ACC449125E2 /* run.h in Headers */ = {isa = PBXBuildFile; fileRef = 9201E5B0DC03C5FB32A707F9 /* run.h */; };
-		9FAD2E2CFCB789CFA133EA8F /* Scalebar.h in Headers */ = {isa = PBXBuildFile; fileRef = 34F51926BA6BB791773B38CE /* Scalebar.h */; };
-		C0F0690F64498F458B042439 /* Scrollbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7189CF78EBB4F599EB528784 /* Scrollbar.h */; };
-		CB5654D1544263DAE472204B /* ScrollGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = D6D609BE6707FE74D2054509 /* ScrollGroup.h */; };
-		17B837F84C37A99C2865F23B /* SecretInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 25EDE9D0A37198B455E225D5 /* SecretInput.h */; };
-		B7B93C84ED063BD769314391 /* SelectBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5B8EA3ADF647CFCE454BEA /* SelectBrowser.h */; };
-		8EAB82FA2A38FCAD90954C67 /* ShapedWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 7031E56D889C6A947E4AFBBB /* ShapedWindow.h */; };
-		034AC216521D14635586EBB3 /* SharedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 455CBD054BE3993A4BDA0037 /* SharedImage.h */; };
-		0EE3255F8047E0221CB9C57B /* show_colormap.h in Headers */ = {isa = PBXBuildFile; fileRef = 4797DF66CF99E5B920778579 /* show_colormap.h */; };
-		243DD608D46C12E35191E9F4 /* showInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D9BA1DD3723ECC4CA7A2733 /* showInput.h */; };
-		03FFBC6398A27A0F6DB7968F /* SimpleCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D7531C09AE4199292BC91C /* SimpleCounter.h */; };
-		6B6E93959C26469571F9DFD1 /* SingleWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 632C7A3607B6D6DF36ACC513 /* SingleWindow.h */; };
-		58F214FCF3D78AEA6EBE814F /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BDF52555005D838492790A2 /* Slider.h */; };
-		32F02A4A0503D782BF4AC7AF /* Spinner.h in Headers */ = {isa = PBXBuildFile; fileRef = CAC6AA7711A18CC39662C445 /* Spinner.h */; };
-		4D7A7651D8484CBB4F5ACD8B /* Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D65E2CE0929E7D80EBE3A6 /* Style.h */; };
-		D1CD7CF834F07DF386F2FC84 /* Symbol.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9F9BA9FDAC93261758DFD7 /* Symbol.h */; };
-		52D66EE74C4F004504F481BE /* SysMenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = A76F03E86AE77A3F2A140721 /* SysMenuBar.h */; };
-		2ABC0F5B9F7C4012195F0A58 /* TabGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 789EF90B6C6E5D44F4E6A32F /* TabGroup.h */; };
-		0F97400005C5CEA32C40A1AB /* Table.h in Headers */ = {isa = PBXBuildFile; fileRef = B367CABCC2161E23D1F55A5C /* Table.h */; };
-		D2129EFDCF8E4311288BCD3C /* TableRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 15927486344E8018B4DE61E2 /* TableRow.h */; };
-		1EC56E3295B87B40B7C1EA04 /* TextBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 893A6B587DF92A75423ECC58 /* TextBuffer.h */; };
-		47412292DEF500A97FB2409D /* TextDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0A56AB0203532B5439CC1B /* TextDisplay.h */; };
-		032C0D1BB6A5B75C05B16008 /* TextEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C09664536915D21C924E3B1 /* TextEditor.h */; };
-		E6D4264523495D9FCD7C2759 /* TiledGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = A536BFE15B889163A057D93E /* TiledGroup.h */; };
-		55FA8DD47BACDEC3B3629750 /* TiledImage.h in Headers */ = {isa = PBXBuildFile; fileRef = BC04523B9A7E81469B13D37E /* TiledImage.h */; };
-		7D435058D01E3BCB0DCF2928 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = DC8676EF561F7D6543F48A65 /* Timer.h */; };
-		5B70C0417BAE753177EE03FD /* ToggleButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A43481E1894F5AFD25030229 /* ToggleButton.h */; };
-		9836A45A081B007B0696720D /* ToggleLightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = EC5C2370879B00A8A92633B7 /* ToggleLightButton.h */; };
-		60B64DAA93558DE5C6D660B2 /* ToggleRoundButton.h in Headers */ = {isa = PBXBuildFile; fileRef = B91DED461BDBB82277FB1B96 /* ToggleRoundButton.h */; };
-		F44ED48770507BB1F80A6B2A /* Tooltip.h in Headers */ = {isa = PBXBuildFile; fileRef = 206ED85C4B599AB863227DED /* Tooltip.h */; };
-		797815C09B27530B6E32B00F /* Tree.h in Headers */ = {isa = PBXBuildFile; fileRef = 17CE00F92B84B240F4090A28 /* Tree.h */; };
-		FA3EFF2F1D0ED63529B91EBC /* TreeItem.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5F5484EE5F86D351BC65F /* TreeItem.h */; };
-		AC33B9D6EC1950771DF3DC2D /* TreeItemArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E3557B6498AE8906003A6BE /* TreeItemArray.h */; };
-		47916CFC923B6EEF52A1DA48 /* TreePrefs.h in Headers */ = {isa = PBXBuildFile; fileRef = EC737FCE532A636CA25D1072 /* TreePrefs.h */; };
-		981A2121CAF0B0994D743735 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = D640E4CFF5B365CD963F4796 /* types.h */; };
-		31CF6B74D445104B55254BAF /* utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 933EE90870C38BC3C73F443A /* utf8.h */; };
-		A5459139D5A102C6D01B4470 /* Valuator.h in Headers */ = {isa = PBXBuildFile; fileRef = B6471A05309D37BA1683F1B1 /* Valuator.h */; };
-		CB50E373BABB5634DC0B7EFD /* ValueInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 41D3C3F8F14302B66B0BD7A8 /* ValueInput.h */; };
-		A62395C6DD23E39A602E899E /* ValueOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF2D24F824FB979F5C4B4FF /* ValueOutput.h */; };
-		AFE07F39B920CC6A63517A4E /* ValueSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 239DD5D7E29DA59C9EDD3282 /* ValueSlider.h */; };
-		94E2F8C4D633FF91806F20EB /* Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEC113FBFBFC32940B07279 /* Widget.h */; };
-		CA399162FFEE7185B2354DD7 /* win32.h in Headers */ = {isa = PBXBuildFile; fileRef = B8038563517CF0E55D936115 /* win32.h */; };
-		E2AA1677D32340E824CFDBE3 /* Window.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C094672C3109A9B4D12F7E /* Window.h */; };
-		92B4EB04CFFC5ECFD3F79630 /* WizardGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4A9C136E457CC92F9ADFE /* WizardGroup.h */; };
-		65AFEF19DE305C21D5DD6CA6 /* Wrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = DF6994452C6FD170E9507C6D /* Wrapper.h */; };
-		39A61403B387ECD58A0E92D3 /* x.h in Headers */ = {isa = PBXBuildFile; fileRef = 059505668BA88697E40E6C32 /* x.h */; };
-		E0943D9D77DD934578EBF9DF /* Xutf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1B408952EFBB79A46CDE69 /* Xutf8.h */; };
-		CBE1938D51C95931483B5C48 /* XBMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F6F453D846A6B7E8679FDAA /* XBMImage.h */; };
-		ACA9550AC903E3D31D80B160 /* XPMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C163988CD45E6AB4710982F /* XPMImage.h */; };
-		94E6ABC4DD57C12D9257E40C /* Adjuster.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F780B03A9E94BB62BBDCFE6 /* Adjuster.h */; };
-		A96C550DCE6938CAF06FF7A0 /* AlignGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 99F3629542D99114DC58E604 /* AlignGroup.h */; };
-		9DB9AE8861CC6E2D4D27C790 /* AnsiWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B56ADF6CB8A9888EC8C9400 /* AnsiWidget.h */; };
-		29F5B7E9FA0EBF4241C09A6B /* ask.h in Headers */ = {isa = PBXBuildFile; fileRef = 64111B0D8A51CE47190B8839 /* ask.h */; };
-		D93CC1AD7DE825F9B06DA1E7 /* BarGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B87FBDB7887AFA94789BD58 /* BarGroup.h */; };
-		F75147F1775D6685B3B96FB3 /* Box.h in Headers */ = {isa = PBXBuildFile; fileRef = 6568A71B468C1109B5904660 /* Box.h */; };
-		24899971695E0C6915B2BB83 /* Browser.h in Headers */ = {isa = PBXBuildFile; fileRef = 34FB964B957C5CBBB2826A1F /* Browser.h */; };
-		AF992B2112322868B4FEF405 /* Button.h in Headers */ = {isa = PBXBuildFile; fileRef = A8D8C030A21BBBB81B7BA5D8 /* Button.h */; };
-		482B31412E27A151CDED3665 /* CheckButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 20209650189B5E19CA176CCC /* CheckButton.h */; };
-		0E85B6D63D9A6960AAB0200A /* Choice.h in Headers */ = {isa = PBXBuildFile; fileRef = D1136A60DD9D4A1010B30BFA /* Choice.h */; };
-		ADD5347F2ADFF381AF2EDA83 /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = A93D3B259925C249D5F4DBB6 /* Clock.h */; };
-		6B94F71A660E73D1D5534FBB /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 7416D2588DB5CB489842A300 /* Color.h */; };
-		53BD8EAEBED396BFA8DA462B /* ColorChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = E7E2179450A46797ECA7D01C /* ColorChooser.h */; };
-		D5AE6AB408B05F6F0AA7FFBA /* ComboBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EF92607D18285548221000DA /* ComboBox.h */; };
-		7651AE7CF1E49E523C70774B /* Cursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DF53F9439CA8A67C8179ED4 /* Cursor.h */; };
-		72ECFF5AB46FA40B896DC0D7 /* CycleButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 446C95F1619E7AF913012B80 /* CycleButton.h */; };
-		1054D8C91D5F26878DEA9025 /* damage.h in Headers */ = {isa = PBXBuildFile; fileRef = E421D96FDB387C773883524D /* damage.h */; };
-		DB332ED02B9C624C6A71A61F /* Dial.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B8233507A685364F4E52EE0 /* Dial.h */; };
-		D5D17A4E7DDDDFF1627C276B /* dirent.h in Headers */ = {isa = PBXBuildFile; fileRef = 735F499132E37AE3F1F9BE32 /* dirent.h */; };
-		85B70DD21115BC01F97A2964 /* Divider.h in Headers */ = {isa = PBXBuildFile; fileRef = D991C2B4CFA3F2E8232FDD54 /* Divider.h */; };
-		103446C4C40739D85063B511 /* DoubleBufferWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 43EB7ED68EAE05A1CE38AD5B /* DoubleBufferWindow.h */; };
-		539E8E0D33EB92A0DAE25C4D /* draw.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D4C9E63038C3C5422179162 /* draw.h */; };
-		869335F4D75BE5307A4B6130 /* error.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DC1DD642EFBF7D930E53EE5 /* error.h */; };
-		F8CEA02E3A3F4F979BAC8580 /* events.h in Headers */ = {isa = PBXBuildFile; fileRef = 9565FD915682FFA7281913B2 /* events.h */; };
-		4D0B36AEA9307C7E5273CA30 /* file_chooser.h in Headers */ = {isa = PBXBuildFile; fileRef = D3E17F069BD51CFAC2DD97D8 /* file_chooser.h */; };
-		AAF2C148629345DD0E4BA343 /* FileBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D67AF5137E2BDB570B8BA /* FileBrowser.h */; };
-		368AE657205AC9CC7E13FB58 /* FileChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F51535A606F08249B7F0B7 /* FileChooser.h */; };
-		F24C89581374BB6405E2AE8C /* FileIcon.h in Headers */ = {isa = PBXBuildFile; fileRef = 98BAE4B55756EE4B1A03996A /* FileIcon.h */; };
-		E25C267DF9D29039C8EE6BAD /* FileInput.h in Headers */ = {isa = PBXBuildFile; fileRef = BEA8DFBF118E2067512D882C /* FileInput.h */; };
-		771E8F080C95A84AAC9C737E /* filename.h in Headers */ = {isa = PBXBuildFile; fileRef = 03C7F2A8800A4DE9ACAB76FE /* filename.h */; };
-		73117A99223733BE1C82A20C /* FillDial.h in Headers */ = {isa = PBXBuildFile; fileRef = 8768179C2EF6A59EFDC1BDEE /* FillDial.h */; };
-		BC7DD89FAD441C2A31915351 /* FillSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 60EE2670F0840907F78F3D45 /* FillSlider.h */; };
-		AA41515B6D35F6899D07AFED /* FL_API.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B9D6AF5157C0E78077D927 /* FL_API.h */; };
-		38652A0BA29FB62C0ADFC18A /* FL_VERSION.h in Headers */ = {isa = PBXBuildFile; fileRef = D786BEECA7B34359A635D38F /* FL_VERSION.h */; };
-		327AFA8CE1EA7AE0D9FCFC59 /* Flags.h in Headers */ = {isa = PBXBuildFile; fileRef = DC72B455E97B2606B1DBCCC6 /* Flags.h */; };
-		D5DFC837A71394A9CB3414FC /* FloatInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BCF2AD279CF924D15FFFB36 /* FloatInput.h */; };
-		1D0D5BEBA55D6292D1E39C6F /* fltk_cairo.h in Headers */ = {isa = PBXBuildFile; fileRef = A503E39FC87B65BB58C2E860 /* fltk_cairo.h */; };
-		269DD0A4F03004F9D896FE1E /* Font.h in Headers */ = {isa = PBXBuildFile; fileRef = EB33C334CD40DD2B5F6AD7AB /* Font.h */; };
-		5A339DC0BCEF8148E92376D8 /* forms.h in Headers */ = {isa = PBXBuildFile; fileRef = 000473226EC2C20CBD468E2A /* forms.h */; };
-		BD88B9E44356284B503B4D8F /* gl.h in Headers */ = {isa = PBXBuildFile; fileRef = F0B3B330902E999B8360926C /* gl.h */; };
-		E1A2AA511454C26BE40D0AD2 /* gl2opengl.h in Headers */ = {isa = PBXBuildFile; fileRef = 0494F8BC7AB14C5EC4689183 /* gl2opengl.h */; };
-		B495AF7B6B0D4852CF208CEE /* glut.h in Headers */ = {isa = PBXBuildFile; fileRef = 989184A2CA115C05FC4CF1C5 /* glut.h */; };
-		47AD791DB0C8DA089F5CBA85 /* GlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DA0DCFEE58E87FDC0F24FC1 /* GlWindow.h */; };
-		74D8544699341B73394AA2BE /* Group.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B1AA7AFCA0B38735E7007BE /* Group.h */; };
-		19941EDF0D00CE1B5BBA20F9 /* HelpDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = D12C8E62EB12265FD5432B81 /* HelpDialog.h */; };
-		67B69FAE6AD4DB18219F2C71 /* HelpView.h in Headers */ = {isa = PBXBuildFile; fileRef = 43583EC7B76499798C49D5A5 /* HelpView.h */; };
-		1154B39C751FEE402C755DA9 /* HighlightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = B6062EAD46926E9416DD439B /* HighlightButton.h */; };
-		C64D7151AAB3D675C0DB730F /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = C6B097AE01BAA9D239D3D9C8 /* Image.h */; };
-		57BAB145B968660DE239DE15 /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = A4CBB8850329F3D3450052F5 /* Input.h */; };
-		ACD46475F29A261F8D109702 /* InputBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = CAB72C754EFD2AC4CAE874BD /* InputBrowser.h */; };
-		D79DA4175C20E35696ED5B78 /* IntInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B4CA03A6EEC900E3664CFBB /* IntInput.h */; };
-		2EA71FEDDF0775320CCFC5C7 /* InvisibleBox.h in Headers */ = {isa = PBXBuildFile; fileRef = B1080D91AED2DC961A4B3A9F /* InvisibleBox.h */; };
-		DE0ED3D922CBA0C47B3B9A3C /* Item.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B829F02161DEF6558334F52 /* Item.h */; };
-		CE410079B7F8B0A57F333983 /* ItemGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E20A48A84E7016163F8E09F /* ItemGroup.h */; };
-		FD8A2DFE953CCBF6E6A63FA9 /* LabelType.h in Headers */ = {isa = PBXBuildFile; fileRef = 13397304723111373F6DD7D4 /* LabelType.h */; };
-		ECD20AA5D12E468D51E8F924 /* layout.h in Headers */ = {isa = PBXBuildFile; fileRef = CFAB01187E1CCBA0382C1A4F /* layout.h */; };
-		2E8575970855E14F21A9DB68 /* LightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = ED7D006636EA62286B9840AE /* LightButton.h */; };
-		0EE7743BDF9D59F61ABB0232 /* LineDial.h in Headers */ = {isa = PBXBuildFile; fileRef = 57C4A9D639F9D78B63DDB43D /* LineDial.h */; };
-		1A2E610BE71F5EB132E8F3D6 /* load_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 11141E752EC5418903B0FCD8 /* load_plugin.h */; };
-		AA9C3F891069C035C5DACA58 /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 007EFEE70DB16643FA77461F /* math.h */; };
-		FF9C7EFA08412C9378005CED /* Menu.h in Headers */ = {isa = PBXBuildFile; fileRef = E049D6E670E6510079B1B924 /* Menu.h */; };
-		44CF45FCD360A13A1032C749 /* MenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FF41CB5CE69B91317EB47C /* MenuBar.h */; };
-		F019D4B2EA40BDFD4F928AF8 /* MenuBuild.h in Headers */ = {isa = PBXBuildFile; fileRef = 34F6B38F8083ACDA88E7390F /* MenuBuild.h */; };
-		9DB644B26EF8CCC5EE764FFA /* MenuWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B9093BE249AA4171520BBA8 /* MenuWindow.h */; };
-		5A55E14D463FF021E1E0D285 /* Monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 39D35610B2EE90046A8A8FB3 /* Monitor.h */; };
-		B883FFCE1F5AC42ACBAE9891 /* MultiBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = E99E52C13CF7B41F83964160 /* MultiBrowser.h */; };
-		8FB3A138C34F92A46BB36521 /* MultiImage.h in Headers */ = {isa = PBXBuildFile; fileRef = A99FF04632D3EED9174919C2 /* MultiImage.h */; };
-		3FB0F5838822B1A94ACCA649 /* MultiLineInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B25ECEBAC84D0CE537F9E64 /* MultiLineInput.h */; };
-		CA0CC7BF95F22A0DED272FB1 /* MultiLineOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EC0B22E33918608B67CE537 /* MultiLineOutput.h */; };
-		F8EE337F8960F02D1BBAB8A8 /* NumericInput.h in Headers */ = {isa = PBXBuildFile; fileRef = C7734144785F7B5ECDF738EA /* NumericInput.h */; };
-		0F1BC9A85DC65D242DBF829B /* osx.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BE8311B658F5904F0D9741 /* osx.h */; };
-		C268474F758285B5E4374A04 /* Output.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E493FA842F03DC47ABA8AAF /* Output.h */; };
-		E6493B2791589FCFE7171694 /* PackedGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 651FF20D39251A0754B19B51 /* PackedGroup.h */; };
-		27DE5B00C7B12CC731B48DF4 /* PixelType.h in Headers */ = {isa = PBXBuildFile; fileRef = 74FFFEA9016CA8FA49FA0801 /* PixelType.h */; };
-		1FC0056B95F3FDF506999B17 /* pnmImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 432D0C91DD05168D4B63EF7E /* pnmImage.h */; };
-		082AC05DB6716697101ED6CA /* PopupMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 617023AE666750204DF27668 /* PopupMenu.h */; };
-		4E80C52159994953A4AD8FCF /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 269110D3092326897A99EE2B /* Preferences.h */; };
-		FDB9AC61C284C55925F7F8C4 /* ProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = FF0AD29885F8ABD25F6939BA /* ProgressBar.h */; };
-		B6609E4BB1F19FF9EB66DA69 /* RadioButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 9EC3D02489C6E3148B75D18B /* RadioButton.h */; };
-		A10F2DE0298D10C83454075B /* RadioItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 47FD6DA275118443674AF65C /* RadioItem.h */; };
-		7CDAC1B25F7B2F400D45C4BD /* RadioLightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = E524D7BA98DF8C8AAB128DAC /* RadioLightButton.h */; };
-		E0AD08ADE22182A4C31AF6F2 /* Rectangle.h in Headers */ = {isa = PBXBuildFile; fileRef = CA19DD8E75D5C82DE7E7ECB6 /* Rectangle.h */; };
-		557F30539C2A0FEC4CC5030B /* RepeatButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F2883DC8ECE6F3D54A9D653D /* RepeatButton.h */; };
-		6EDAAA6275A4B6693C68E57B /* ReturnButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D0B84C773FA6590FCB8FAE /* ReturnButton.h */; };
-		172804382EDF8778F625DE10 /* rgbImage.h in Headers */ = {isa = PBXBuildFile; fileRef = CDA5E0FCA290985D90B3A230 /* rgbImage.h */; };
-		9FE42DDDC1DC601ED6DB292C /* run.h in Headers */ = {isa = PBXBuildFile; fileRef = CE81F552FC5F9DEC1D372E95 /* run.h */; };
-		E23D1653A87BCA82B29216A0 /* Scrollbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 1876C1F66EB18E4BAF996777 /* Scrollbar.h */; };
-		2180279785B8462216348DE3 /* ScrollGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 953FC43B6B658DD2D7B23810 /* ScrollGroup.h */; };
-		4E03D1AF18387CB69458EC0F /* SecretInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 25D4C3048ECC959E337C948A /* SecretInput.h */; };
-		68966F4B277B71B9339F8C5A /* ShapedWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EFC80E63D61923674DFBCEE /* ShapedWindow.h */; };
-		033CD2F8A2F26905F6E98EB5 /* SharedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = C5C79C4C282D8311DE359051 /* SharedImage.h */; };
-		29688AAEA3EB297DC7B47F93 /* show_colormap.h in Headers */ = {isa = PBXBuildFile; fileRef = E1E00EC66E8BA9A47020F002 /* show_colormap.h */; };
-		9F216D256F1AC0557F642917 /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 30A114397E4FE063CE15D42B /* Slider.h */; };
-		A9215601B05227986C5320CF /* StatusBarGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F2D71CD7D6360406BD826EE /* StatusBarGroup.h */; };
-		F5EA06AA2FADF42048912D4F /* flstring.h in Headers */ = {isa = PBXBuildFile; fileRef = 45D8FA73E7CB9D3BA9DE712B /* flstring.h */; };
-		BA668F5AC90CFD003D6823B0 /* StringList.h in Headers */ = {isa = PBXBuildFile; fileRef = FB5D0EAD0BDAF6D273F3BFC3 /* StringList.h */; };
-		DEB79DB845005E420B911D17 /* Style.h in Headers */ = {isa = PBXBuildFile; fileRef = F262223061A642A36DA0F2CE /* Style.h */; };
-		E0C148897BA7219A3747CDAF /* StyleSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A96A83F6E90B629D88D9B9E /* StyleSet.h */; };
-		374317930AB8E475A653CF4E /* Symbol.h in Headers */ = {isa = PBXBuildFile; fileRef = BB3578AD3E273F047213AFF3 /* Symbol.h */; };
-		F4BF7BD5B4D941EAE0E62B6C /* SystemMenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = E841BC2E40D615859BC29C33 /* SystemMenuBar.h */; };
-		470DC905D04C7094F064B3E9 /* TabGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = F4FE8850B883607055CF43A9 /* TabGroup.h */; };
-		5BEED239EAFF7109E768A8F4 /* TextBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AA21F9445A8BBEFB4EAE5A7 /* TextBuffer.h */; };
-		B92EF28766298914099E400F /* TextDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 82E0504874668938EFD87552 /* TextDisplay.h */; };
-		791541381D0B6A2086F7BC22 /* TextEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 578A4B02A040C0E95A7BCA06 /* TextEditor.h */; };
-		DD3B3E4AD948337708F515E5 /* Threads.h in Headers */ = {isa = PBXBuildFile; fileRef = F423DF9AFEA144657875D4C6 /* Threads.h */; };
-		090C715CF0025557B8D16F21 /* ThumbWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = A6F458E280796DB0C95A7FEF /* ThumbWheel.h */; };
-		E26882FCA405CC5A21D2316E /* TiledGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 5909F10088C6EB6B71F1E813 /* TiledGroup.h */; };
-		571C237D41C214DAD6457707 /* TiledImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6BFBFCBC78756E760653CA7D /* TiledImage.h */; };
-		627E5A68D72B039F4298AF58 /* ToggleButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FCA2996F8BC589762DC2BC7 /* ToggleButton.h */; };
-		A2389511FDA236435AB577DD /* ToggleItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 6462A84D93A9DA5C657019B2 /* ToggleItem.h */; };
-		63CB977B56F494EF19772274 /* Tooltip.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A991A678EADE816EE45765D /* Tooltip.h */; };
-		EA75F6D7B85964F11B90F765 /* utf.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B80FDE8FF290631AF9D6DB5 /* utf.h */; };
-		88C46A1F35F4D832B6B7336F /* Valuator.h in Headers */ = {isa = PBXBuildFile; fileRef = C5C53BD7A99149C6AD369FC4 /* Valuator.h */; };
-		EE8B2C9E0D2A75DF5E27DD8A /* ValueInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 2995F8611DB0C259BAA171EB /* ValueInput.h */; };
-		60B03F36886A74B436B67B1C /* ValueOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = E98BE318CFEDF69A7BB97FDA /* ValueOutput.h */; };
-		96910946B718498894E66322 /* ValueSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = E72053D1D653EDFC0159B616 /* ValueSlider.h */; };
-		69F7B372397DD7C68064C696 /* visual.h in Headers */ = {isa = PBXBuildFile; fileRef = D1D482FD97DF8CB5D1D68221 /* visual.h */; };
-		346FB63414F773592B861DEC /* Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = A1644B30F83C6C601AB91E78 /* Widget.h */; };
-		70DEC7F337FE9D7EC6B1846D /* WidgetAssociation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5660D806EBF80D03D2E1E1B0 /* WidgetAssociation.h */; };
-		C499D3950717E6828539EAC6 /* win32.h in Headers */ = {isa = PBXBuildFile; fileRef = C30531D3E27965DA2679DC19 /* win32.h */; };
-		BD6CA21AB1CB48554813D9DA /* Window.h in Headers */ = {isa = PBXBuildFile; fileRef = FD27E2221BC25AF9CA4FED1C /* Window.h */; };
-		742078B1F6212DF2C6A7ED8E /* WizardGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 015CBCA3A5A37D93689C2441 /* WizardGroup.h */; };
-		AAB2A6D7113BF0872F936FB2 /* WordwrapInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 57B2F230E925A905F438CC92 /* WordwrapInput.h */; };
-		1CEC2A16283D99A6BDDB06D5 /* WordwrapOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = BDE3294C3754D25CAF2F6F6B /* WordwrapOutput.h */; };
-		6F77EF5B7FA119ABFDBEC44B /* x.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE3439061C0A947905657AE /* x.h */; };
-		C094CEDB7C1C815F665691E2 /* x11.h in Headers */ = {isa = PBXBuildFile; fileRef = 300416FC1F7A76D61FFB31A2 /* x11.h */; };
-		1B43C4718BD467D746538706 /* xbmImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 111F8FE037E939A92FE932FB /* xbmImage.h */; };
-		1840AF08597C746828164387 /* xpmImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 60E5C54317D8253D9A9A4DFD /* xpmImage.h */; };
+		6EC5A8E1F6171E20505CDA66 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = DDEC0AB0E55CB75CFA5FD9DC /* all.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39576718F4A718E5885D7837 /* fltk3.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B1A08E928290071C92EDD1 /* fltk3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		757ECB76CD9272004B8A4A42 /* Adjuster.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CDC310CF438C4E007EE265B /* Adjuster.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CC311448876EC9C10D5614AF /* ask.h in Headers */ = {isa = PBXBuildFile; fileRef = D31DE8ACD497B8FA62A57910 /* ask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		72A9364B21F8DEDED9A43B9E /* Bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 249A3332647089ACC2702523 /* Bitmap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		35DE2AD5F6204186A6545D86 /* Box.h in Headers */ = {isa = PBXBuildFile; fileRef = 0800D21F849D8F2CDB90C72D /* Box.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42605FAF974760B9A405E61E /* Browser_.h in Headers */ = {isa = PBXBuildFile; fileRef = 32841D65E2F82C3F24A360D2 /* Browser_.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7713D95988E151E950DE9A22 /* Browser.h in Headers */ = {isa = PBXBuildFile; fileRef = B8F30574865BA1A8081AF0E4 /* Browser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A086301EB8B296E0D822CDA5 /* Button.h in Headers */ = {isa = PBXBuildFile; fileRef = 35C251791AC569E9FA8A37D5 /* Button.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F1922355821B70827EF0794A /* Cairo.h in Headers */ = {isa = PBXBuildFile; fileRef = DE684D7423D61E51884F2083 /* Cairo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B4514C2645D1B9F39AC00FD /* CairoWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 54A13D51B4228F871BF7BBDC /* CairoWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D048A520A2AA90D67AEB63AB /* Chart.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFB2DCDB165909F739FA4DC /* Chart.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		25AADC4EB3A2D0C57A10E45C /* CheckBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = EACD8665EE485E79D497476B /* CheckBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA31B0AE287BC5586A74B681 /* CheckButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 11A6F6A178D6C8DF280EDA66 /* CheckButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DC27C811C107B01F0781059C /* Choice.h in Headers */ = {isa = PBXBuildFile; fileRef = 880936EF41290F7FBC549344 /* Choice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		461C93A22303F9DAC35C104C /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A2F22F859605E6DDE62CB04 /* Clock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ECAF247332B0848CD90709AB /* ColorChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = C66F149FEF28A8993BA7325F /* ColorChooser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AB0027C44065C7A06F8005A4 /* Counter.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7A35A279467A0C0B6804D3 /* Counter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		94A746DB64AFFAAF8F66C743 /* Device.h in Headers */ = {isa = PBXBuildFile; fileRef = FFD7DD53175A7E510775BBCA /* Device.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8AE207C7DA9AAACC8986E342 /* Dial.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C2CD62467ED0721B8B6192 /* Dial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D8E3B84BCC2B1406BDEAD11 /* dirent.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F5CF79479DB9C10024EDAF2 /* dirent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		25D240CF3AC229D047CFB972 /* DoubleWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F826E72E066312526D23BDB /* DoubleWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2D8A06C2ED38111F411621F3 /* draw.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C21DDDAFE0B86794C281E0 /* draw.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FDE3D852851DC2655DB7C755 /* enumerations.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A38E27D30A71CB6AB52C658 /* enumerations.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E26E5B3FDF885169334CD6BD /* Export.h in Headers */ = {isa = PBXBuildFile; fileRef = 90105BC22216B918C986F3A7 /* Export.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5C0C7B7C30AC5FFBE33840F0 /* FileBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DF71C70A795DA43E2EEB04 /* FileBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A9C5ECF691EDFFB0CA7A48C /* FileChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C85EE90C634F176CD8D44AC /* FileChooser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9BF596FEF9C489B1A3F6E734 /* FileIcon.h in Headers */ = {isa = PBXBuildFile; fileRef = A31F2D0E97343ACE65D4F9CE /* FileIcon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		61494E2D4E7FDE66F8C8F159 /* FileInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 16A26636380190775434727C /* FileInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8836B634DC4BCE3E1EA78A51 /* filename.h in Headers */ = {isa = PBXBuildFile; fileRef = 39F403723C79DF02442F3818 /* filename.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A2F8F6E1341928382D9478D6 /* FillDial.h in Headers */ = {isa = PBXBuildFile; fileRef = 14CD50CDB7D85007FEA1946C /* FillDial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B4296EAA0460DCB4D54887F6 /* FillSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB8818FD497E7BDA327CFF2 /* FillSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40EE4457665C6F762AAB502C /* FloatInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 48767088A899F5A151BDFC22 /* FloatInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		20CBFB6F570A48CAA0751DBF /* FormsBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 11DF5111A6EE377DAAFDB68B /* FormsBitmap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		742D204F4CECC650D53AC070 /* FormsPixmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E62E615D0C146DBB74B477A /* FormsPixmap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6A197BCC5117B3666D368B25 /* Free.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F5FE43FEC401E52D4CABB7 /* Free.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5E1D236DDF180951F39D88D0 /* Group.h in Headers */ = {isa = PBXBuildFile; fileRef = 91EA037664D5A2D49603F364 /* Group.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E5826346717EA4FA214A9B1B /* HelpView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CD096CD5808EADB1B646DB4 /* HelpView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0CBBFB5E384976AB8AC9A2E0 /* HoldBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = CFF83CFB9E060DA4F81AE816 /* HoldBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C731F1AF175523B779E819E5 /* HorFillSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8658CA906CD5A6C35FA96B /* HorFillSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2434070FB36660676C21E521 /* HorNiceSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B6A7CF4DC7BDE6349908474 /* HorNiceSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C334620BF3BD16102D9B6288 /* HorSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = D2E0D21170D44994003579D3 /* HorSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7002C191CD0BBFB7A1E02B97 /* HorValueSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = FD4330AA04C25D49269F17D1 /* HorValueSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		18E4DD12C233F4CBC23340D2 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = D78004F7769F85212260B94D /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E5C399BB79ECFB2AD8D99C7 /* Input_.h in Headers */ = {isa = PBXBuildFile; fileRef = CB0D1546A3645CE03B8BC1FA /* Input_.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78D8944F6051F6574682C312 /* Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 28D897DFA27CCC5A3933D952 /* Input.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6291854E45CD36763495507E /* InputChoice.h in Headers */ = {isa = PBXBuildFile; fileRef = 11C999453D2BEBD3A5B32DA4 /* InputChoice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0F5897939A32668EEBBEA347 /* IntInput.h in Headers */ = {isa = PBXBuildFile; fileRef = B5CA37E08339E6D7820C0973 /* IntInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8E35401D5E144E48E1E2E147 /* LightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A390823203566E8B1FB4B81 /* LightButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5C32DAEA102D25D12F86757 /* LineDial.h in Headers */ = {isa = PBXBuildFile; fileRef = D10E3F19DD8CC6A3FAA912AF /* LineDial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E62C50EAAA4C4B51F3A50640 /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 6523340D0E47A3A4B3852435 /* math.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		460DA151C5FCA76AF42C91D0 /* Menu_.h in Headers */ = {isa = PBXBuildFile; fileRef = 491CFF65AE0E3333213C16CC /* Menu_.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		52639EA1D620F0444616D3B1 /* Menu.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9E66BDF38770CB90E29F8F /* Menu.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		13B94AD3F645EDD4DDF980B9 /* MenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = C96E2C07C729D93F4DC516E2 /* MenuBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C6C8DFFEAB30DD8D55CDA057 /* MenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DA4183774502400A738E12C /* MenuButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5485A3F5E8CF410DE07B8A66 /* MenuItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D236C2D13DF519F2CEA15F /* MenuItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		85734D6ACB0FB857648C33CB /* MenuWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 38AE873D735CEB85BC4204FF /* MenuWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E77DDE3A14E2176C4112A1B3 /* message.h in Headers */ = {isa = PBXBuildFile; fileRef = 030B2B5EED9E491219AACAE9 /* message.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		653964516F880A0C26DF582D /* MultiBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EAC08819E76C68821DEA7E0 /* MultiBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8248E33431DDFE8EC9417904 /* MultiLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC91BD54DF29B259600FAE9 /* MultiLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B96D1B8C81FA2417E682879C /* MultilineInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CC0A6DD7BD572BFAB0DA5 /* MultilineInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F07D774ADA338F1943C75A46 /* MultilineOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D7446BACA6B0B81B71F19DDE /* MultilineOutput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9E23CC9E8C5CC2E5858CDECF /* names.h in Headers */ = {isa = PBXBuildFile; fileRef = 605DF456DBD83672998541BA /* names.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9908F9782DC42E4BC11A5065 /* NativeFileChooser.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A091B39476A38209C61A3E9 /* NativeFileChooser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E163267BAED660DB4952DE87 /* NiceSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 690A220C1DB15D12DE1D5B5C /* NiceSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		568A4A992BEA2F048020F79D /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 23987A09DE62FFE0E2C335F9 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C8AC369DDC62391EBFB0413B /* osx.h in Headers */ = {isa = PBXBuildFile; fileRef = 88E7EEAB9836AFE75EF36D0D /* osx.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39B2001925879E7C934CA7C9 /* Output.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FD59657E90872A316961585 /* Output.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E613F74A4A653E95E3293370 /* OverlayWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 31410D1F7ECB75D19821EF60 /* OverlayWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB8DCA5DBFDECB829BFA7C58 /* PackedGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 328CEB758E18FC1D1DB168BB /* PackedGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		38C7D942581B7C5369F2AC03 /* PagedDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = C539C329532BE09B0422A23A /* PagedDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5061313596F1BC761AC582B /* Pixmap.h in Headers */ = {isa = PBXBuildFile; fileRef = AEF910125AE91654739457BF /* Pixmap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6AFC8619DFF2FA3604F112C0 /* Plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A5DB3592DA82366555A66B4A /* Plugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F702DFA64620B02A76332D90 /* Positioner.h in Headers */ = {isa = PBXBuildFile; fileRef = 813FC8746075A74FEDAE447C /* Positioner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ACFD331F39EEA65591D0492B /* PostScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A0B5BF3C5ECFAF041951029 /* PostScript.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		987CCADF07B02BD64D159D9F /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = A9B88BB6C6654424E37B8082 /* Preferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8430686CA971F1B4A9BA5883 /* Printer.h in Headers */ = {isa = PBXBuildFile; fileRef = A71F4289EE7021AAB797001D /* Printer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		574744834FDF23938DE7715A /* Progress.h in Headers */ = {isa = PBXBuildFile; fileRef = 21F9B0671D71E15E436430BD /* Progress.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C4F9F5BBDF152965DCB41239 /* RadioButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 39A7AFB66314183708E79A75 /* RadioButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D04BFFA94C13305B6909190 /* RadioLightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 6BFBB13211639563DDFF3B58 /* RadioLightButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5FFF3E76083D95A644DF6FB5 /* RadioRoundButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 047FB4526C06B1D25D3436AA /* RadioRoundButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		541F4505BC498FCD2392DC3A /* Rectangle.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A9EE60B3420456BB5F22708 /* Rectangle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C314F85011E42FDD4B7AE660 /* RepeatButton.h in Headers */ = {isa = PBXBuildFile; fileRef = DEBA3B1D4A991C22075B2B5F /* RepeatButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		50013BF4B6C6C8CB9DE191B9 /* ReturnButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 41A957AFAB3458B3DD422617 /* ReturnButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EDCB645E845A12264E5C33B0 /* RGBImage.h in Headers */ = {isa = PBXBuildFile; fileRef = E66B871C51EB246D7DC4B1E1 /* RGBImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3C8B534422CF3FE3B6D66AD2 /* Roller.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C454E6CC666DB0E9502E820 /* Roller.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8403B06AA6E1C4DE5D5C4BF3 /* RoundButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F9BE0E64F271A33C51097CD6 /* RoundButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00201E11E82A916889C546F3 /* RoundClock.h in Headers */ = {isa = PBXBuildFile; fileRef = 553BFA555CF8BB8FE14FC48C /* RoundClock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C7F1563107919ACC449125E2 /* run.h in Headers */ = {isa = PBXBuildFile; fileRef = 9201E5B0DC03C5FB32A707F9 /* run.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9FAD2E2CFCB789CFA133EA8F /* Scalebar.h in Headers */ = {isa = PBXBuildFile; fileRef = 34F51926BA6BB791773B38CE /* Scalebar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C0F0690F64498F458B042439 /* Scrollbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7189CF78EBB4F599EB528784 /* Scrollbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB5654D1544263DAE472204B /* ScrollGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = D6D609BE6707FE74D2054509 /* ScrollGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		17B837F84C37A99C2865F23B /* SecretInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 25EDE9D0A37198B455E225D5 /* SecretInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7B93C84ED063BD769314391 /* SelectBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5B8EA3ADF647CFCE454BEA /* SelectBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8EAB82FA2A38FCAD90954C67 /* ShapedWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 7031E56D889C6A947E4AFBBB /* ShapedWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		034AC216521D14635586EBB3 /* SharedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 455CBD054BE3993A4BDA0037 /* SharedImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0EE3255F8047E0221CB9C57B /* show_colormap.h in Headers */ = {isa = PBXBuildFile; fileRef = 4797DF66CF99E5B920778579 /* show_colormap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		243DD608D46C12E35191E9F4 /* showInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D9BA1DD3723ECC4CA7A2733 /* showInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03FFBC6398A27A0F6DB7968F /* SimpleCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D7531C09AE4199292BC91C /* SimpleCounter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6B6E93959C26469571F9DFD1 /* SingleWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 632C7A3607B6D6DF36ACC513 /* SingleWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		58F214FCF3D78AEA6EBE814F /* Slider.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BDF52555005D838492790A2 /* Slider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		32F02A4A0503D782BF4AC7AF /* Spinner.h in Headers */ = {isa = PBXBuildFile; fileRef = CAC6AA7711A18CC39662C445 /* Spinner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4D7A7651D8484CBB4F5ACD8B /* Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 14D65E2CE0929E7D80EBE3A6 /* Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D1CD7CF834F07DF386F2FC84 /* Symbol.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9F9BA9FDAC93261758DFD7 /* Symbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		52D66EE74C4F004504F481BE /* SysMenuBar.h in Headers */ = {isa = PBXBuildFile; fileRef = A76F03E86AE77A3F2A140721 /* SysMenuBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2ABC0F5B9F7C4012195F0A58 /* TabGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 789EF90B6C6E5D44F4E6A32F /* TabGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0F97400005C5CEA32C40A1AB /* Table.h in Headers */ = {isa = PBXBuildFile; fileRef = B367CABCC2161E23D1F55A5C /* Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D2129EFDCF8E4311288BCD3C /* TableRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 15927486344E8018B4DE61E2 /* TableRow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1EC56E3295B87B40B7C1EA04 /* TextBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 893A6B587DF92A75423ECC58 /* TextBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		47412292DEF500A97FB2409D /* TextDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0A56AB0203532B5439CC1B /* TextDisplay.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		032C0D1BB6A5B75C05B16008 /* TextEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C09664536915D21C924E3B1 /* TextEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E6D4264523495D9FCD7C2759 /* TiledGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = A536BFE15B889163A057D93E /* TiledGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		55FA8DD47BACDEC3B3629750 /* TiledImage.h in Headers */ = {isa = PBXBuildFile; fileRef = BC04523B9A7E81469B13D37E /* TiledImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7D435058D01E3BCB0DCF2928 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = DC8676EF561F7D6543F48A65 /* Timer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B70C0417BAE753177EE03FD /* ToggleButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A43481E1894F5AFD25030229 /* ToggleButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9836A45A081B007B0696720D /* ToggleLightButton.h in Headers */ = {isa = PBXBuildFile; fileRef = EC5C2370879B00A8A92633B7 /* ToggleLightButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		60B64DAA93558DE5C6D660B2 /* ToggleRoundButton.h in Headers */ = {isa = PBXBuildFile; fileRef = B91DED461BDBB82277FB1B96 /* ToggleRoundButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F44ED48770507BB1F80A6B2A /* Tooltip.h in Headers */ = {isa = PBXBuildFile; fileRef = 206ED85C4B599AB863227DED /* Tooltip.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		797815C09B27530B6E32B00F /* Tree.h in Headers */ = {isa = PBXBuildFile; fileRef = 17CE00F92B84B240F4090A28 /* Tree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA3EFF2F1D0ED63529B91EBC /* TreeItem.h in Headers */ = {isa = PBXBuildFile; fileRef = F8C5F5484EE5F86D351BC65F /* TreeItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AC33B9D6EC1950771DF3DC2D /* TreeItemArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E3557B6498AE8906003A6BE /* TreeItemArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		47916CFC923B6EEF52A1DA48 /* TreePrefs.h in Headers */ = {isa = PBXBuildFile; fileRef = EC737FCE532A636CA25D1072 /* TreePrefs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		981A2121CAF0B0994D743735 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = D640E4CFF5B365CD963F4796 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		31CF6B74D445104B55254BAF /* utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 933EE90870C38BC3C73F443A /* utf8.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A5459139D5A102C6D01B4470 /* Valuator.h in Headers */ = {isa = PBXBuildFile; fileRef = B6471A05309D37BA1683F1B1 /* Valuator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB50E373BABB5634DC0B7EFD /* ValueInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 41D3C3F8F14302B66B0BD7A8 /* ValueInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A62395C6DD23E39A602E899E /* ValueOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = FFF2D24F824FB979F5C4B4FF /* ValueOutput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFE07F39B920CC6A63517A4E /* ValueSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 239DD5D7E29DA59C9EDD3282 /* ValueSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		94E2F8C4D633FF91806F20EB /* Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEC113FBFBFC32940B07279 /* Widget.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CA399162FFEE7185B2354DD7 /* win32.h in Headers */ = {isa = PBXBuildFile; fileRef = B8038563517CF0E55D936115 /* win32.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E2AA1677D32340E824CFDBE3 /* Window.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C094672C3109A9B4D12F7E /* Window.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		92B4EB04CFFC5ECFD3F79630 /* WizardGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4A9C136E457CC92F9ADFE /* WizardGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		65AFEF19DE305C21D5DD6CA6 /* Wrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = DF6994452C6FD170E9507C6D /* Wrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39A61403B387ECD58A0E92D3 /* x.h in Headers */ = {isa = PBXBuildFile; fileRef = 059505668BA88697E40E6C32 /* x.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E0943D9D77DD934578EBF9DF /* Xutf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1B408952EFBB79A46CDE69 /* Xutf8.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CBE1938D51C95931483B5C48 /* XBMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F6F453D846A6B7E8679FDAA /* XBMImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ACA9550AC903E3D31D80B160 /* XPMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C163988CD45E6AB4710982F /* XPMImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF5FA17E9AD84BE1BB907031 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F66311E977D66CE29024C3 /* Cocoa.framework */; };
 		E1C77AA3B54E8E48277C3538 /* GLChoice.cxx in Sources */ = {isa = PBXBuildFile; fileRef = DE5C107D549D9A4AFBEF3B60 /* GLChoice.cxx */; };
 		E8D5789A3FCFB823CBE99BDE /* GLDevicePlugin.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 391E3B0B723D3B5BEC865531 /* GLDevicePlugin.cxx */; };
@@ -488,13 +360,13 @@
 		DED2BAE994607138073A5321 /* gl_start.cxx in Sources */ = {isa = PBXBuildFile; fileRef = EC3E5EA34B66D57E36F8BDA2 /* gl_start.cxx */; };
 		4432E2FF464147568FACEC8A /* glut_compatability.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7458D589FF4368F8F83EDDDE /* glut_compatability.cxx */; };
 		52743D1F8ECF932A110D8886 /* glut_font.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8A51D2BA28A5B8309F60F380 /* glut_font.cxx */; };
-		B7A25ADB27ADCE0C4BC87FF4 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = CED790200D16A60047341619 /* all.h */; };
-		EBA510477FE0A3ED2E3A2A19 /* fltk3gl.h in Headers */ = {isa = PBXBuildFile; fileRef = 53A9932F3639B774F7BAEE86 /* fltk3gl.h */; };
-		53065D004FF8B488CFA68C55 /* gl.h in Headers */ = {isa = PBXBuildFile; fileRef = AA155A8649051FED3B16258B /* gl.h */; };
-		48257DCA29CAA7C8AA38665E /* glDraw.h in Headers */ = {isa = PBXBuildFile; fileRef = B10175537ACF3F6627DF6DB1 /* glDraw.h */; };
-		4DB7B8EB28DA172D8049A0C9 /* glu.h in Headers */ = {isa = PBXBuildFile; fileRef = 853E4A1DF4DE711A3C103971 /* glu.h */; };
-		665EED203FE4C3E866EA7551 /* glut.h in Headers */ = {isa = PBXBuildFile; fileRef = D910C663A8F3170318F324D9 /* glut.h */; };
-		7A5AD5C30E7CB63E2E02E9F8 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F9673F325010BCD774A4A13D /* GLWindow.h */; };
+		B7A25ADB27ADCE0C4BC87FF4 /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = CED790200D16A60047341619 /* all.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EBA510477FE0A3ED2E3A2A19 /* fltk3gl.h in Headers */ = {isa = PBXBuildFile; fileRef = 53A9932F3639B774F7BAEE86 /* fltk3gl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		53065D004FF8B488CFA68C55 /* gl.h in Headers */ = {isa = PBXBuildFile; fileRef = AA155A8649051FED3B16258B /* gl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		48257DCA29CAA7C8AA38665E /* glDraw.h in Headers */ = {isa = PBXBuildFile; fileRef = B10175537ACF3F6627DF6DB1 /* glDraw.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4DB7B8EB28DA172D8049A0C9 /* glu.h in Headers */ = {isa = PBXBuildFile; fileRef = 853E4A1DF4DE711A3C103971 /* glu.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		665EED203FE4C3E866EA7551 /* glut.h in Headers */ = {isa = PBXBuildFile; fileRef = D910C663A8F3170318F324D9 /* glut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7A5AD5C30E7CB63E2E02E9F8 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F9673F325010BCD774A4A13D /* GLWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A4C556C6862A8E1DEBEFB3EF /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F784E3D3F229DB4B54D18DC /* AGL.framework */; };
 		EC9763DB2EFC72ACBE6F557D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F320856CA55C5B27D76923 /* OpenGL.framework */; };
 		374185370DF817EF401AD7FB /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39E229DEF1CA3739A0890F43 /* ApplicationServices.framework */; };
@@ -508,14 +380,14 @@
 		633E5465D656A9961EB5A771 /* JPEGImage.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 771C095FF2AE4FFCACA213AB /* JPEGImage.cxx */; };
 		6C9573986A4FFE9EE9ADFFDD /* PNGImage.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E1BECD1D14488DF25469A00E /* PNGImage.cxx */; };
 		E8B17358A691471C1B2BD4D5 /* PNMImage.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 948DEE29F3A36A2E578DD9C0 /* PNMImage.cxx */; };
-		8EFCC7E97421DED44B2C58AC /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = 1010B13DA886270EE16E3514 /* all.h */; };
-		F0C926FCF8BA5C38AB2B38A6 /* fltk3images.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C2435D9DCE9D126983C81F3 /* fltk3images.h */; };
-		26C1F556C987C742D37CCAA4 /* BMPImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B9A35BBCCC105E2F86DBDA1 /* BMPImage.h */; };
-		8845649A10159ECED0C93211 /* GIFImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 605121E099731EF9977E11C8 /* GIFImage.h */; };
-		F7A66B0ADC3A359551BB84FB /* HelpDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 0925F19306CD3458397661F3 /* HelpDialog.h */; };
-		30029E6A64808C5EFEBA9CF8 /* JPEGImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 60A217E0DC847E1DD7B44D49 /* JPEGImage.h */; };
-		E3127242302580ED01B769A4 /* PNGImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 25BEA28581A1A97EEA1014E2 /* PNGImage.h */; };
-		CBE8880ED23DF42D5298EAAE /* PNMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EC95850E022AFDFC59E4EBC2 /* PNMImage.h */; };
+		8EFCC7E97421DED44B2C58AC /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = 1010B13DA886270EE16E3514 /* all.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F0C926FCF8BA5C38AB2B38A6 /* fltk3images.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C2435D9DCE9D126983C81F3 /* fltk3images.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		26C1F556C987C742D37CCAA4 /* BMPImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B9A35BBCCC105E2F86DBDA1 /* BMPImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8845649A10159ECED0C93211 /* GIFImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 605121E099731EF9977E11C8 /* GIFImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F7A66B0ADC3A359551BB84FB /* HelpDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 0925F19306CD3458397661F3 /* HelpDialog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		30029E6A64808C5EFEBA9CF8 /* JPEGImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 60A217E0DC847E1DD7B44D49 /* JPEGImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E3127242302580ED01B769A4 /* PNGImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 25BEA28581A1A97EEA1014E2 /* PNGImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CBE8880ED23DF42D5298EAAE /* PNMImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EC95850E022AFDFC59E4EBC2 /* PNMImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A255408062F7A3777F2346E /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		5F01A68D9FECE518EF71F730 /* fltk3png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A7B68E2100DB960872987D /* fltk3png.framework */; };
 		788FE6BCB3796A6FF4069E08 /* fltk3jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C03975F619684D3461888340 /* fltk3jpeg.framework */; };
@@ -612,14 +484,14 @@
 		91D90EA7B228E6B6A3D51FC0 /* FTPClient.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6653881E54407BE8B3475553 /* FTPClient.cxx */; };
 		BB62323B5751DEA0B2B54FD1 /* HTTPClient.cxx in Sources */ = {isa = PBXBuildFile; fileRef = ADEDA03B1A3DC4594498CFE4 /* HTTPClient.cxx */; };
 		B72F597DC3420089D7E601DD /* USBConnection.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 6394FC3E38D2A15BAC8782E5 /* USBConnection.cxx */; };
-		44F55CDB9FA65C71F10222AB /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E62B899DE54CC6C9DE8E49 /* all.h */; };
-		1295F498263C3E4254217217 /* fltk3connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D57DCA6AC907DBFB3EF012 /* fltk3connect.h */; };
-		E2448FDB8226F5DCEB00893F /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = BD6E3BFCED5FAF6386435304 /* Socket.h */; };
-		D7A1DAAC4FACA639AE414B00 /* SerialConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ED9DE6E5988668CF125B504 /* SerialConnection.h */; };
-		AFBB497E7C7A7AB9C1FB9F40 /* TCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 087FAF86423CD4458B04C53C /* TCPSocket.h */; };
-		0B43B53BD6BAD148D4707528 /* FTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C4777FCDD92C90D60875C4 /* FTPClient.h */; };
-		0C4ECB313AD1610044814336 /* HTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E00EC8578C211F13A87F8F79 /* HTTPClient.h */; };
-		C86B46DD83B2C07E1FD7B18C /* USBConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F6313A22BE464D0F077B0CD2 /* USBConnection.h */; };
+		44F55CDB9FA65C71F10222AB /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E62B899DE54CC6C9DE8E49 /* all.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1295F498263C3E4254217217 /* fltk3connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D57DCA6AC907DBFB3EF012 /* fltk3connect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E2448FDB8226F5DCEB00893F /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = BD6E3BFCED5FAF6386435304 /* Socket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D7A1DAAC4FACA639AE414B00 /* SerialConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ED9DE6E5988668CF125B504 /* SerialConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFBB497E7C7A7AB9C1FB9F40 /* TCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 087FAF86423CD4458B04C53C /* TCPSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0B43B53BD6BAD148D4707528 /* FTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C4777FCDD92C90D60875C4 /* FTPClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0C4ECB313AD1610044814336 /* HTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E00EC8578C211F13A87F8F79 /* HTTPClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C86B46DD83B2C07E1FD7B18C /* USBConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F6313A22BE464D0F077B0CD2 /* USBConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABC8E0EAD3A212F02C33DFB /* fltk3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		C94ED007CFB092A97E1B5B98 /* fltk3.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 86C380FE76A739F296A44961 /* fltk3.framework */; };
 		E48EB231B4700836B1C8792B /* demo.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F7D33A211C18D89A010BD86F /* demo.cxx */; };
@@ -14600,134 +14472,6 @@
 				E0943D9D77DD934578EBF9DF /* Xutf8.h in Headers */,
 				CBE1938D51C95931483B5C48 /* XBMImage.h in Headers */,
 				ACA9550AC903E3D31D80B160 /* XPMImage.h in Headers */,
-				94E6ABC4DD57C12D9257E40C /* Adjuster.h in FLTK2CompatibilityHeaders */,
-				A96C550DCE6938CAF06FF7A0 /* AlignGroup.h in FLTK2CompatibilityHeaders */,
-				9DB9AE8861CC6E2D4D27C790 /* AnsiWidget.h in FLTK2CompatibilityHeaders */,
-				29F5B7E9FA0EBF4241C09A6B /* ask.h in FLTK2CompatibilityHeaders */,
-				D93CC1AD7DE825F9B06DA1E7 /* BarGroup.h in FLTK2CompatibilityHeaders */,
-				F75147F1775D6685B3B96FB3 /* Box.h in FLTK2CompatibilityHeaders */,
-				24899971695E0C6915B2BB83 /* Browser.h in FLTK2CompatibilityHeaders */,
-				AF992B2112322868B4FEF405 /* Button.h in FLTK2CompatibilityHeaders */,
-				482B31412E27A151CDED3665 /* CheckButton.h in FLTK2CompatibilityHeaders */,
-				0E85B6D63D9A6960AAB0200A /* Choice.h in FLTK2CompatibilityHeaders */,
-				ADD5347F2ADFF381AF2EDA83 /* Clock.h in FLTK2CompatibilityHeaders */,
-				6B94F71A660E73D1D5534FBB /* Color.h in FLTK2CompatibilityHeaders */,
-				53BD8EAEBED396BFA8DA462B /* ColorChooser.h in FLTK2CompatibilityHeaders */,
-				D5AE6AB408B05F6F0AA7FFBA /* ComboBox.h in FLTK2CompatibilityHeaders */,
-				7651AE7CF1E49E523C70774B /* Cursor.h in FLTK2CompatibilityHeaders */,
-				72ECFF5AB46FA40B896DC0D7 /* CycleButton.h in FLTK2CompatibilityHeaders */,
-				1054D8C91D5F26878DEA9025 /* damage.h in FLTK2CompatibilityHeaders */,
-				DB332ED02B9C624C6A71A61F /* Dial.h in FLTK2CompatibilityHeaders */,
-				D5D17A4E7DDDDFF1627C276B /* dirent.h in FLTK2CompatibilityHeaders */,
-				85B70DD21115BC01F97A2964 /* Divider.h in FLTK2CompatibilityHeaders */,
-				103446C4C40739D85063B511 /* DoubleBufferWindow.h in FLTK2CompatibilityHeaders */,
-				539E8E0D33EB92A0DAE25C4D /* draw.h in FLTK2CompatibilityHeaders */,
-				869335F4D75BE5307A4B6130 /* error.h in FLTK2CompatibilityHeaders */,
-				F8CEA02E3A3F4F979BAC8580 /* events.h in FLTK2CompatibilityHeaders */,
-				4D0B36AEA9307C7E5273CA30 /* file_chooser.h in FLTK2CompatibilityHeaders */,
-				AAF2C148629345DD0E4BA343 /* FileBrowser.h in FLTK2CompatibilityHeaders */,
-				368AE657205AC9CC7E13FB58 /* FileChooser.h in FLTK2CompatibilityHeaders */,
-				F24C89581374BB6405E2AE8C /* FileIcon.h in FLTK2CompatibilityHeaders */,
-				E25C267DF9D29039C8EE6BAD /* FileInput.h in FLTK2CompatibilityHeaders */,
-				771E8F080C95A84AAC9C737E /* filename.h in FLTK2CompatibilityHeaders */,
-				73117A99223733BE1C82A20C /* FillDial.h in FLTK2CompatibilityHeaders */,
-				BC7DD89FAD441C2A31915351 /* FillSlider.h in FLTK2CompatibilityHeaders */,
-				AA41515B6D35F6899D07AFED /* FL_API.h in FLTK2CompatibilityHeaders */,
-				38652A0BA29FB62C0ADFC18A /* FL_VERSION.h in FLTK2CompatibilityHeaders */,
-				327AFA8CE1EA7AE0D9FCFC59 /* Flags.h in FLTK2CompatibilityHeaders */,
-				D5DFC837A71394A9CB3414FC /* FloatInput.h in FLTK2CompatibilityHeaders */,
-				1D0D5BEBA55D6292D1E39C6F /* fltk_cairo.h in FLTK2CompatibilityHeaders */,
-				269DD0A4F03004F9D896FE1E /* Font.h in FLTK2CompatibilityHeaders */,
-				5A339DC0BCEF8148E92376D8 /* forms.h in FLTK2CompatibilityHeaders */,
-				BD88B9E44356284B503B4D8F /* gl.h in FLTK2CompatibilityHeaders */,
-				E1A2AA511454C26BE40D0AD2 /* gl2opengl.h in FLTK2CompatibilityHeaders */,
-				B495AF7B6B0D4852CF208CEE /* glut.h in FLTK2CompatibilityHeaders */,
-				47AD791DB0C8DA089F5CBA85 /* GlWindow.h in FLTK2CompatibilityHeaders */,
-				74D8544699341B73394AA2BE /* Group.h in FLTK2CompatibilityHeaders */,
-				19941EDF0D00CE1B5BBA20F9 /* HelpDialog.h in FLTK2CompatibilityHeaders */,
-				67B69FAE6AD4DB18219F2C71 /* HelpView.h in FLTK2CompatibilityHeaders */,
-				1154B39C751FEE402C755DA9 /* HighlightButton.h in FLTK2CompatibilityHeaders */,
-				C64D7151AAB3D675C0DB730F /* Image.h in FLTK2CompatibilityHeaders */,
-				57BAB145B968660DE239DE15 /* Input.h in FLTK2CompatibilityHeaders */,
-				ACD46475F29A261F8D109702 /* InputBrowser.h in FLTK2CompatibilityHeaders */,
-				D79DA4175C20E35696ED5B78 /* IntInput.h in FLTK2CompatibilityHeaders */,
-				2EA71FEDDF0775320CCFC5C7 /* InvisibleBox.h in FLTK2CompatibilityHeaders */,
-				DE0ED3D922CBA0C47B3B9A3C /* Item.h in FLTK2CompatibilityHeaders */,
-				CE410079B7F8B0A57F333983 /* ItemGroup.h in FLTK2CompatibilityHeaders */,
-				FD8A2DFE953CCBF6E6A63FA9 /* LabelType.h in FLTK2CompatibilityHeaders */,
-				ECD20AA5D12E468D51E8F924 /* layout.h in FLTK2CompatibilityHeaders */,
-				2E8575970855E14F21A9DB68 /* LightButton.h in FLTK2CompatibilityHeaders */,
-				0EE7743BDF9D59F61ABB0232 /* LineDial.h in FLTK2CompatibilityHeaders */,
-				1A2E610BE71F5EB132E8F3D6 /* load_plugin.h in FLTK2CompatibilityHeaders */,
-				AA9C3F891069C035C5DACA58 /* math.h in FLTK2CompatibilityHeaders */,
-				FF9C7EFA08412C9378005CED /* Menu.h in FLTK2CompatibilityHeaders */,
-				44CF45FCD360A13A1032C749 /* MenuBar.h in FLTK2CompatibilityHeaders */,
-				F019D4B2EA40BDFD4F928AF8 /* MenuBuild.h in FLTK2CompatibilityHeaders */,
-				9DB644B26EF8CCC5EE764FFA /* MenuWindow.h in FLTK2CompatibilityHeaders */,
-				5A55E14D463FF021E1E0D285 /* Monitor.h in FLTK2CompatibilityHeaders */,
-				B883FFCE1F5AC42ACBAE9891 /* MultiBrowser.h in FLTK2CompatibilityHeaders */,
-				8FB3A138C34F92A46BB36521 /* MultiImage.h in FLTK2CompatibilityHeaders */,
-				3FB0F5838822B1A94ACCA649 /* MultiLineInput.h in FLTK2CompatibilityHeaders */,
-				CA0CC7BF95F22A0DED272FB1 /* MultiLineOutput.h in FLTK2CompatibilityHeaders */,
-				F8EE337F8960F02D1BBAB8A8 /* NumericInput.h in FLTK2CompatibilityHeaders */,
-				0F1BC9A85DC65D242DBF829B /* osx.h in FLTK2CompatibilityHeaders */,
-				C268474F758285B5E4374A04 /* Output.h in FLTK2CompatibilityHeaders */,
-				E6493B2791589FCFE7171694 /* PackedGroup.h in FLTK2CompatibilityHeaders */,
-				27DE5B00C7B12CC731B48DF4 /* PixelType.h in FLTK2CompatibilityHeaders */,
-				1FC0056B95F3FDF506999B17 /* pnmImage.h in FLTK2CompatibilityHeaders */,
-				082AC05DB6716697101ED6CA /* PopupMenu.h in FLTK2CompatibilityHeaders */,
-				4E80C52159994953A4AD8FCF /* Preferences.h in FLTK2CompatibilityHeaders */,
-				FDB9AC61C284C55925F7F8C4 /* ProgressBar.h in FLTK2CompatibilityHeaders */,
-				B6609E4BB1F19FF9EB66DA69 /* RadioButton.h in FLTK2CompatibilityHeaders */,
-				A10F2DE0298D10C83454075B /* RadioItem.h in FLTK2CompatibilityHeaders */,
-				7CDAC1B25F7B2F400D45C4BD /* RadioLightButton.h in FLTK2CompatibilityHeaders */,
-				E0AD08ADE22182A4C31AF6F2 /* Rectangle.h in FLTK2CompatibilityHeaders */,
-				557F30539C2A0FEC4CC5030B /* RepeatButton.h in FLTK2CompatibilityHeaders */,
-				6EDAAA6275A4B6693C68E57B /* ReturnButton.h in FLTK2CompatibilityHeaders */,
-				172804382EDF8778F625DE10 /* rgbImage.h in FLTK2CompatibilityHeaders */,
-				9FE42DDDC1DC601ED6DB292C /* run.h in FLTK2CompatibilityHeaders */,
-				E23D1653A87BCA82B29216A0 /* Scrollbar.h in FLTK2CompatibilityHeaders */,
-				2180279785B8462216348DE3 /* ScrollGroup.h in FLTK2CompatibilityHeaders */,
-				4E03D1AF18387CB69458EC0F /* SecretInput.h in FLTK2CompatibilityHeaders */,
-				68966F4B277B71B9339F8C5A /* ShapedWindow.h in FLTK2CompatibilityHeaders */,
-				033CD2F8A2F26905F6E98EB5 /* SharedImage.h in FLTK2CompatibilityHeaders */,
-				29688AAEA3EB297DC7B47F93 /* show_colormap.h in FLTK2CompatibilityHeaders */,
-				9F216D256F1AC0557F642917 /* Slider.h in FLTK2CompatibilityHeaders */,
-				A9215601B05227986C5320CF /* StatusBarGroup.h in FLTK2CompatibilityHeaders */,
-				F5EA06AA2FADF42048912D4F /* flstring.h in FLTK2CompatibilityHeaders */,
-				BA668F5AC90CFD003D6823B0 /* StringList.h in FLTK2CompatibilityHeaders */,
-				DEB79DB845005E420B911D17 /* Style.h in FLTK2CompatibilityHeaders */,
-				E0C148897BA7219A3747CDAF /* StyleSet.h in FLTK2CompatibilityHeaders */,
-				374317930AB8E475A653CF4E /* Symbol.h in FLTK2CompatibilityHeaders */,
-				F4BF7BD5B4D941EAE0E62B6C /* SystemMenuBar.h in FLTK2CompatibilityHeaders */,
-				470DC905D04C7094F064B3E9 /* TabGroup.h in FLTK2CompatibilityHeaders */,
-				5BEED239EAFF7109E768A8F4 /* TextBuffer.h in FLTK2CompatibilityHeaders */,
-				B92EF28766298914099E400F /* TextDisplay.h in FLTK2CompatibilityHeaders */,
-				791541381D0B6A2086F7BC22 /* TextEditor.h in FLTK2CompatibilityHeaders */,
-				DD3B3E4AD948337708F515E5 /* Threads.h in FLTK2CompatibilityHeaders */,
-				090C715CF0025557B8D16F21 /* ThumbWheel.h in FLTK2CompatibilityHeaders */,
-				E26882FCA405CC5A21D2316E /* TiledGroup.h in FLTK2CompatibilityHeaders */,
-				571C237D41C214DAD6457707 /* TiledImage.h in FLTK2CompatibilityHeaders */,
-				627E5A68D72B039F4298AF58 /* ToggleButton.h in FLTK2CompatibilityHeaders */,
-				A2389511FDA236435AB577DD /* ToggleItem.h in FLTK2CompatibilityHeaders */,
-				63CB977B56F494EF19772274 /* Tooltip.h in FLTK2CompatibilityHeaders */,
-				EA75F6D7B85964F11B90F765 /* utf.h in FLTK2CompatibilityHeaders */,
-				88C46A1F35F4D832B6B7336F /* Valuator.h in FLTK2CompatibilityHeaders */,
-				EE8B2C9E0D2A75DF5E27DD8A /* ValueInput.h in FLTK2CompatibilityHeaders */,
-				60B03F36886A74B436B67B1C /* ValueOutput.h in FLTK2CompatibilityHeaders */,
-				96910946B718498894E66322 /* ValueSlider.h in FLTK2CompatibilityHeaders */,
-				69F7B372397DD7C68064C696 /* visual.h in FLTK2CompatibilityHeaders */,
-				346FB63414F773592B861DEC /* Widget.h in FLTK2CompatibilityHeaders */,
-				70DEC7F337FE9D7EC6B1846D /* WidgetAssociation.h in FLTK2CompatibilityHeaders */,
-				C499D3950717E6828539EAC6 /* win32.h in FLTK2CompatibilityHeaders */,
-				BD6CA21AB1CB48554813D9DA /* Window.h in FLTK2CompatibilityHeaders */,
-				742078B1F6212DF2C6A7ED8E /* WizardGroup.h in FLTK2CompatibilityHeaders */,
-				AAB2A6D7113BF0872F936FB2 /* WordwrapInput.h in FLTK2CompatibilityHeaders */,
-				1CEC2A16283D99A6BDDB06D5 /* WordwrapOutput.h in FLTK2CompatibilityHeaders */,
-				6F77EF5B7FA119ABFDBEC44B /* x.h in FLTK2CompatibilityHeaders */,
-				C094CEDB7C1C815F665691E2 /* x11.h in FLTK2CompatibilityHeaders */,
-				1B43C4718BD467D746538706 /* xbmImage.h in FLTK2CompatibilityHeaders */,
-				1840AF08597C746828164387 /* xpmImage.h in FLTK2CompatibilityHeaders */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
