@@ -665,6 +665,7 @@ static void draw_h_arrow(int x1, int y, int x2) {
   fltk3::line(x2-dx*5, y+2, x2-dx, y);
 }
 
+/*
 static void draw_top_brace(const fltk3::Widget *w) {
   fltk3::yxline(w->x(), w->y()-2, w->y()+6);
   fltk3::yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
@@ -690,6 +691,7 @@ static void draw_bottom_brace(const fltk3::Widget *w) {
   fltk3::yxline(w->x()+w->w()-1, yy-6, yy+2);
   fltk3::xyline(w->x()-2, yy, w->x()+w->w()+1);
 }
+*/
 
 static void draw_height(int x, int y, int b, fltk3::Align a) {
   char buf[16];
@@ -825,7 +827,7 @@ void Fl_Window_Type::draw_overlay() {
     //    * FLTK suggests 10 pixels from the edge
     int d;
     int xsp, ysp;
-    int mybx_bak = mybx, myby_bak = myby, mybr_bak = mybr, mybt_bak = mybt;
+    //int mybx_bak = mybx, myby_bak = myby, mybr_bak = mybr, mybt_bak = mybt;
     Fl_Widget_Type *mysel = (Fl_Widget_Type *)selection;
 
     ideal_spacing(xsp, ysp);
