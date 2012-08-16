@@ -1741,6 +1741,11 @@ static fltk3::Widget	**dwidgets = 0;
 void fltk3::delete_widget(fltk3::Widget *wi) {
   if (!wi) return;
 
+  // don;t add the same widget twice
+  for (int i = 0; i < num_dwidgets; i++) {
+    if (dwidgets[i]==wi) return;
+  }
+
   if (num_dwidgets >= alloc_dwidgets) {
     fltk3::Widget	**temp;
 
