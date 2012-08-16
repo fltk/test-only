@@ -36,10 +36,10 @@ static fltk3::MenuButton	*pressed_menu_button_ = 0;
 void fltk3::MenuButton::draw() {
   if (!box() || type()) return;
   int H = (labelsize()-3)&-2;
-  int X = w()-H*2;
+  int X = w()-H-fltk3::box_dx(box())-fltk3::box_dw(box())-1;
   int Y = (h()-H)/2;
   draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
-  draw_label(fltk3::box_dx(box()), 0, X-fltk3::box_dw(box()), h());
+  draw_label(fltk3::box_dx(box()), 0, X, h());
   if (fltk3::focus() == this) draw_focus();
   // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   fltk3::color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));
@@ -47,6 +47,7 @@ void fltk3::MenuButton::draw() {
   fltk3::color(active_r() ? fltk3::LIGHT3 : fltk3::inactive(fltk3::LIGHT3));
   fltk3::line(X+H, Y, X+H/2, Y+H);
 }
+
 
 /**
   Act exactly as though the user clicked the button or typed the
