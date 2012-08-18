@@ -25,8 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3connect/SerialPort.h>
-
 #ifdef _MSC_VER
 #pragma warning(disable : 4996)
 #endif
@@ -34,7 +32,7 @@
 //#define DEBUG_SEND
 //#define DEBUG_RECV
 
-#include "SerialPort.h"
+#include <fltk3connect/SerialPort.h>
 
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
