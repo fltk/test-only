@@ -60,7 +60,7 @@ fltk3::GraphicsDriver::GraphicsDriver() {
   n = 0;
   o.x = o.y = 0;
   optr = 0;
-};
+}
 
 void fltk3::GraphicsDriver::text_extents(const char*t, int n, int& dx, int& dy, int& w, int& h)
 {
@@ -82,7 +82,7 @@ fltk3::DisplayDevice::DisplayDevice(fltk3::GraphicsDriver *graphics_driver) : fl
 #endif
   this->set_current();
   _display = this;
-};
+}
 
 //
 // End of "$Id$".

@@ -48,7 +48,7 @@
 
 namespace fltk3 {
   const unsigned int DAMAGE_BAR = 0x10;
-};
+}
 
 
 /**

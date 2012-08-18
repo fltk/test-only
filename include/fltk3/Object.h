@@ -77,7 +77,7 @@ namespace fltk3 {
     void wrapper(Wrapper *w) { pWrapper = w; }
   };
   
-}; // namespace fltk3
+} // namespace fltk3
 
 
 #endif

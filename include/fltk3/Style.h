@@ -141,7 +141,7 @@ namespace fltk3 {
   };
 
   extern Style default_style;
-};
+}
 
 #endif
 

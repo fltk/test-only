@@ -366,7 +366,7 @@ void fltk3::SerialPort::reader_thread()
     ResetEvent(event_);
     if (nc) {
       rxActive_ = 1;
-      Fl::awake(on_read_cb, this);
+      fltk3::awake(on_read_cb, this);
     }
   }
 }

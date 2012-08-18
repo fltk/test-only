@@ -292,7 +292,7 @@ namespace fltk3 {
     enum {
       INACTIVE        = 1<<0,   ///< the widget can't receive focus, and is disabled but potentially visible
       SHORTCUT_LABEL  = 1<<6,   ///< the label contains a shortcut we need to draw
-      COPIED_LABEL    = 1<<10,  ///< the widget label is internally copied, its destruction is handled by the widget
+      COPIED_LABEL    = 1<<10   ///< the widget label is internally copied, its destruction is handled by the widget
     };
     
     /** Schedules the drawing of the label.
