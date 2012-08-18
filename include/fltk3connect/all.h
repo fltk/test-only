@@ -29,7 +29,7 @@
 #define FLTK3CONNECT_ALL_H
 
 #include "Socket.h"
-#include "SerialConnection.h"
+#include "SerialPort.h"
 #include "TCPSocket.h"
 #include "FTPClient.h"
 #include "HTTPClient.h"

@@ -95,7 +95,7 @@ SOURCE=..\..\src\fltk3connect\Socket.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fltk3connect\SerialConnection.cxx
+SOURCE=..\..\src\fltk3connect\SerialPort.cxx
 # End Source File
 # Begin Source File
 

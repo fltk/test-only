@@ -203,7 +203,7 @@ FLTK3IMAGES_CPPFILES = \
 
 FLTK3CONNECT_CPPFILES = \
 	fltk3connect/Socket.cxx \
-	fltk3connect/SerialConnection.cxx \
+	fltk3connect/SerialPort.cxx \
 	fltk3connect/TCPSocket.cxx \
 	fltk3connect/FTPClient.cxx \
 	fltk3connect/HTTPClient.cxx \

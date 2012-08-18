@@ -1160,6 +1160,180 @@ int write_fltk_ide_xcode4() {
 }
 
 
+// ------------ install libraries for this environment -------------------------
+
+#ifdef __APPLE__
+
+#include <unistd.h>
+#include <copyfile.h>
+
+int filesize(const char *filename)
+{
+  struct stat st;
+  int ret = stat(filename, &st);
+  if (ret==-1) return -1;
+  return st.st_size;
+}
+
+void filename_minimize(char *filename) {
+  if (!filename) return;
+  char *key = strstr(filename, "/../");
+  if (!key) return;
+  *key = 0;
+  char *sep = strrchr(filename, '/');
+  if (!sep) { *key='/'; return; }
+  int n = strlen(key+1);
+  memmove(sep, key+3, n-1);
+  return filename_minimize(filename);
+}
+
+int copyfiles(const char *srcpath, const char *src, const char *dstpath)
+{
+  printf("Copying %s%s to %s\n", srcpath, src, dstpath);
+
+#if 0
+  /* Initialize a state variable */
+  copyfile_state_t s;
+  s = copyfile_state_alloc();
+  /* Copy the data and extended attributes of one file to another */
+  copyfile("/tmp/f1", "/tmp/f2", s, COPYFILE_DATA | COPYFILE_XATTR);
+  /* Convert a file to an AppleDouble file for serialization */
+  copyfile("/tmp/f2", "/tmp/tmpfile", NULL, COPYFILE_ALL | COPYFILE_PACK);
+  /* Release the state variable */
+  copyfile_state_free(s);
+  /* A more complex way to call copyfile() */
+  s = copyfile_state_alloc();
+  copyfile_state_set(s, COPYFILE_STATE_SRC_FILENAME, "/tmp/foo");
+  /* One of src or dst must be set... rest can come from the state */
+  copyfile(NULL, "/tmp/bar", s, COPYFILE_ALL);
+  /* Now copy the same source file to another destination file */
+  copyfile(NULL, "/tmp/car", s, COPYFILE_ALL);
+  copyfile_state_free(s);
+  /* Remove extended attributes from a file */
+  copyfile("/dev/null", "/tmp/bar", NULL, COPYFILE_XATTR);
+#endif
+  
+  return 0;
+}
+
+void install_library_cb(fltk3::Widget *, void *)
+{
+  char *source_path = 0L;
+  
+  printf("This is the platform installer for Xcode/OSX\n");
+  printf("The Fluid Source Code is here: <%s>\n", __FILE__);
+  char buf[2048], buf2[2048], buf3[2048];
+  strcpy(buf2, __FILE__);
+  
+  fltk3::filename_absolute(buf, buf2);
+  filename_minimize(buf);
+  
+  char *fe = strrchr(buf, '/');
+  if (fe) { *fe = 0; fe = strrchr(buf, '/'); }
+  if (!fe) {
+    printf("Unexpected path name\n");
+    return;
+  }
+  fe[1] = 0;
+  printf("FLTK base directory is <%s>\n", buf);
+  strcpy(buf3, buf);
+  strcat(buf3, "ide/Xcode4/FLTK.xcodeproj");
+  strcat(buf, "ide/Xcode4/FLTK.xcodeproj/project.xcworkspace/xcuserdata/%s.xcuserdatad/WorkspaceSettings.xcsettings");
+  sprintf(buf2, buf, getlogin());
+  printf("Workspace settings are in <%s>\n", buf2);
+  // ./ide/Xcode4/FLTK.xcodeproj/project.xcworkspace/xcuserdata/matt.xcuserdatad/WorkspaceSettings.xcsettings
+  FILE *f = fopen(buf2, "rb");
+  if (f) {
+    printf("File exists. Check for entry (later)\n");
+    fclose(f);
+  }
+  // xcuserdata/.xcuserdatad
+  // This file is just a plist so easily readable. Our first step is to check the IDEWorkspaceUserSettings_DerivedDataLocationStyle value. If this is 1 we have a full path, if it is 2 we have a project relative path. Next we look at the IDEWorkspaceUserSettings_DerivedDataLocationStyle value to find the path. Simple enough.
+  
+  // Or: /Users/matt/Library/Developer/Xcode/DerivedData/FLTK-frqnkuxqefqgpnekypbtugmsyjpv/Build/Products/Debug/fltk.framework/
+  // Walk the directories and find info.plist, WorkspacePath should be the above path
+  sprintf(buf, "/Users/%s/Library/Developer/Xcode/DerivedData/", getlogin());
+  printf("Walk this directory: <%s>\n", buf);
+  
+  struct dirent **dir;
+  int i, nDir = fltk3::filename_list(buf, &dir);
+  
+  for (i=0; i<nDir; i++) {
+    printf("Dir %3d: %s\n", i, dir[i]->d_name);
+    if (strncmp(dir[i]->d_name, "FLTK-", 5)==0) { // FIXME: should that be "FLTK3-" ?
+      // verify that the path is correct in info.plist
+      sprintf(buf2, "%s%sinfo.plist", buf, dir[i]->d_name);
+      int sze = filesize(buf2);
+      if (sze>0) {
+        FILE *f = fopen(buf2, "rb");
+        if (f) {
+          printf("Checking info at %s\n", buf2);
+          char *blob = (char*)malloc(sze+1);
+          fread(blob, 1, sze, f);
+          blob[sze] = 0;
+          fclose(f);
+          const char *wsp = strstr(blob, "<key>WorkspacePath</key>");
+          // <key>WorkspacePath</key>
+          // <string>/Users/matt/dev/fltk-1.3.0/ide/Xcode4/FLTK.xcodeproj</string>
+          if (wsp) {
+            char *p1 = strstr(wsp, "<string>");
+            char *p2 = strstr(wsp, "</string>");
+            if (p1 && p2) {
+              p1 += 8;
+              *p2 = 0;
+              printf("Workspace is at <%s>\n", p1);
+              if (strcmp(p1, buf3)==0) {
+                printf("HOORRAY, found it\n");
+                source_path = strdup(buf2);
+              }
+            }
+          }
+          free(blob);
+        }
+      }
+    }
+    if (source_path) break;
+  }
+  
+  fltk3::filename_free_list(&dir, nDir);
+  
+  // Destination is:
+  // /Library/Frameworks/ or  ~/Library/Frameworks
+  
+  // Do we have a path? Check if there are any compiled libraries
+  strcpy(buf, source_path);
+  char *pp = (char*)fltk3::filename_name(buf);
+  strcpy(pp, "Build/Products/Debug/");
+  printf("Freshly built workspaces should be in <%s>\n", buf);
+  
+  // Great! No check if the workspaces are here and copy them over (Fluid as well? Where should it go?)
+  // OS X has a function copyfile() that recursively copies everything for us, including attribtes and resource fork. Thanks, Apple!
+  // on other platforms, copyfile() may or may not exists. Then again, we only need to copy files and not directory structures.
+  
+  // FIXME: check if the source is there and has a plausible date.
+  // FIXME: check for overwrite of old libraries
+  
+  sprintf(buf2, "/Users/%s/Library/Frameworks/", getlogin());
+  copyfiles(buf, "fltk3.workspace", buf2);
+  copyfiles(buf, "fltk3gl.workspace", buf2);
+  copyfiles(buf, "fltk3images.workspace", buf2);
+  copyfiles(buf, "fltk3png.workspace", buf2);
+  copyfiles(buf, "fltk3jpeg.workspace", buf2);
+  copyfiles(buf, "fltk3zlib.workspace", buf2);
+  copyfiles(buf, "fltk3connect.workspace", buf2);
+  
+  if (source_path) free(source_path);
+}
+
+#else
+
+void install_library_cb(fltk3::Widget *, void *)
+{
+}
+
+#endif
+
+
 //
 // End of "$Id: file_xcode.cxx 8870 2011-07-26 21:19:35Z matt $".
 //

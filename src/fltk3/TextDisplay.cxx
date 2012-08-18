@@ -2260,7 +2260,7 @@ int fltk3::TextDisplay::xy_to_position( int X, int Y, int posType ) const {
  means translate the position to the nearest character cell.
  
  \param X, Y pixel coordinates
- \param[out] row, column neares row and column
+ \param[out] row, column nearest row and column
  \param posType CURSOR_POS or CHARACTER_POS
  */
 void fltk3::TextDisplay::xy_to_rowcol( int X, int Y, int *row,

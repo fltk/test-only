@@ -4903,7 +4903,7 @@ workspace FLTK {open
       folder Headers {open
         uuid_Xcode4_Group {42734D78-E7BE-416D-8413-29EF99C76424}
       } {
-        file_ref {all.h} {selected
+        file_ref {all.h} {
           uuid_Xcode4_BuildFile {E444F00A-8DE7-4418-BB2A-705BE4A1F662}
           uuid_Xcode4_FileRef {D9E62B89-D8E5-4500-AC4A-E08CC9DE8E49}
           uuid_Xcode4_BuildFileInHeaders {44F55CDB-DF20-4086-8F58-D329F10222AB}
@@ -4927,13 +4927,13 @@ workspace FLTK {open
           list_env 124
           filename_and_path {include/fltk3connect/Socket.h}
         }
-        file_ref {SerialConnection.h} {
+        file_ref {SerialPort.h} {
           uuid_Xcode4_BuildFile {0CB96BDB-28E0-440F-A82E-23146EF30D58}
           uuid_Xcode4_FileRef {0ED9DE6E-11F5-487D-B980-DF0CF125B504}
           uuid_Xcode4_BuildFileInHeaders {D7A1DAAC-03DC-4C70-88C8-2EF1AE414B00}
           build_env 96
           list_env 124
-          filename_and_path {include/fltk3connect/SerialConnection.h}
+          filename_and_path {include/fltk3connect/SerialPort.h}
         }
         file_ref {TCPSocket.h} {
           uuid_Xcode4_BuildFile {5DFD6BFF-1E2C-454B-B5B1-8B73B0986C0B}
@@ -4976,10 +4976,10 @@ workspace FLTK {open
           uuid_Xcode4_FileRef {B6DC8E80-EB2E-4B92-BDB7-3AF5EB50D6C9}
           filename_and_path {src/fltk3connect/Socket.cxx}
         }
-        file_ref {SerialConnection.cxx} {
+        file_ref {SerialPort.cxx} {selected
           uuid_Xcode4_BuildFileInSources {9944741C-E39A-4372-8847-BCEE4EFCAE9F}
           uuid_Xcode4_FileRef {CE848D00-9304-4454-A495-FC3CAF98D759}
-          filename_and_path {src/fltk3connect/SerialConnection.cxx}
+          filename_and_path {src/fltk3connect/SerialPort.cxx}
         }
         file_ref {TCPSocket.cxx} {
           uuid_Xcode4_BuildFileInSources {2E2339CB-5ACF-4314-BAD6-ED1B41D12738}

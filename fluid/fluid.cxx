@@ -1178,6 +1178,7 @@ extern fltk3::MenuItem New_Menu[];
 void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
 void write_makefiles_cb(fltk3::Widget *, void *);
+void install_library_cb(fltk3::Widget *, void *);
 
 fltk3::MenuItem Main_Menu[] = {
 {"&File",0,0,0,fltk3::SUBMENU},
@@ -1265,7 +1266,8 @@ fltk3::MenuItem Main_Menu[] = {
   {"Execute &Command...",fltk3::ALT+'x',(fltk3::Callback *)show_shell_window},
   {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command,0,fltk3::MENU_DIVIDER},
   {"Build Application",fltk3::COMMAND+'b',(fltk3::Callback *)0L},
-  {"Run Application",fltk3::COMMAND+'r',(fltk3::Callback *)0L},
+  {"Run Application",fltk3::COMMAND+'r',(fltk3::Callback *)0L,0,fltk3::MENU_DIVIDER},
+  {"Install Library",0,(fltk3::Callback *)install_library_cb},
   //{"Convert", 0, 0, 0, fltk3::SUBMENU},
   //  {"FLTK 1 to 3", 0, convert_1_to_3_cb},
   //  {"FLTK 2 to 3", 0, convert_2_to_3_cb},
