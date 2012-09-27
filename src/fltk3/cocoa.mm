@@ -86,6 +86,7 @@ static void convert_crlf(char * string, size_t len);
 static void createAppleMenu(void);
 static fltk3::Region MacRegionMinusRect(fltk3::Region r, int x,int y,int w,int h);
 static void cocoaMouseHandler(NSEvent *theEvent);
+static int calc_mac_os_version();
 
 static fltk3::QuartzGraphicsDriver fl_quartz_driver;
 static fltk3::DisplayDevice fl_quartz_display(&fl_quartz_driver);
@@ -98,7 +99,7 @@ bool fl_show_iconic;                    // true if called from iconize() - shows
 //int fl_disable_transient_for;           // secret method of removing TRANSIENT_FOR
 Window fl_window;
 fltk3::Window *fltk3::Window::current_;
-int fl_mac_os_version = 0;		// the version number of the running Mac OS X (e.g., 100604 for 10.6.4)
+int fl_mac_os_version = calc_mac_os_version();	// the version number of the running Mac OS X (e.g., 100604 for 10.6.4)
 
 // forward declarations of variables in this file
 static int got_events = 0;
@@ -1307,21 +1308,13 @@ void fl_open_display() {
     if ( !GetCurrentProcess( &cur_psn ) && !GetFrontProcess( &front_psn ) &&
          !SameProcess( &front_psn, &cur_psn, &same_psn ) && !same_psn ) {
       // only transform the application type for unbundled apps
-      CFBundleRef bundle = CFBundleGetMainBundle();
-      if ( bundle ) {
-      	FSRef execFs;
-      	CFURLRef execUrl = CFBundleCopyExecutableURL( bundle );
-      	CFURLGetFSRef( execUrl, &execFs );
-        
-      	FSRef bundleFs;
-      	GetProcessBundleLocation( &cur_psn, &bundleFs );
-        
-      	if ( !FSCompareFSRefs( &execFs, &bundleFs ) )
-          bundle = NULL;
-        
-        CFRelease(execUrl);
+      NSBundle *bundle = [NSBundle mainBundle];
+      if (bundle) {
+	NSString *exe = [bundle executablePath];
+	NSString *bpath = [bundle bundlePath];
+	if ([bpath isEqualToString:exe]) bundle = nil;
       }
-            
+      
       if ( !bundle )
       {
         // Earlier versions of this code tried to use weak linking, however it
@@ -3225,6 +3218,16 @@ void *Fl_X::get_carbon_function(const char *function_name) {
   return f;
 }
   
+/* Returns the version of the running Mac OS as an int such as 100802 for 10.8.2
+ */
+static int calc_mac_os_version() {
+  int M, m, b = 0;
+  NSDictionary * sv = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
+  const char *s = [[sv objectForKey:@"ProductVersion"] UTF8String];
+  sscanf(s, "%d.%d.%d", &M, &m, &b);
+  return M*10000 + m*100 + b;
+}
+
 #endif // __APPLE__
 
 //

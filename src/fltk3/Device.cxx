@@ -71,15 +71,6 @@ void fltk3::GraphicsDriver::text_extents(const char*t, int n, int& dx, int& dy, 
 }
 
 fltk3::DisplayDevice::DisplayDevice(fltk3::GraphicsDriver *graphics_driver) : fltk3::SurfaceDevice( graphics_driver) {
-#ifdef __APPLE__
-  SInt32 versionMajor = 0;
-  SInt32 versionMinor = 0;
-  SInt32 versionBugFix = 0;
-  Gestalt( gestaltSystemVersionMajor, &versionMajor );
-  Gestalt( gestaltSystemVersionMinor, &versionMinor );
-  Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
-  fl_mac_os_version = versionMajor * 10000 + versionMinor * 100 + versionBugFix;
-#endif
   this->set_current();
   _display = this;
 }
