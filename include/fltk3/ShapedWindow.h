@@ -29,6 +29,7 @@
 #define fltk3_ShapedWindow_H
 
 #include "Window.h"
+#include "fltk3/x.h"
 
 namespace fltk3 {
 
@@ -40,6 +41,8 @@ class Image;
 
   The layout and widgets inside are unaware of the mask shape, and most will act as though the bounding box is available 
   to them. It is up to you to make sure they adhere to the bounds of their masking shape!
+ 
+  On the Mac platform, OS version 10.4 or above is required.
 
   The window borders and caption created by the window system are turned off by default for a ShapedWindow object.  They 
   can be re-enabled by calling void Window::border(bool set).
@@ -55,12 +58,17 @@ class Image;
 
 
 class FLTK3_EXPORT ShapedWindow : public Window {
-  public:
+private:
+#if defined(__APPLE__)
+  CGImageRef mask;
+#endif
+public:
     ShapedWindow(int w, int h, const char* l = 0);
     ShapedWindow(int x, int y, int w, int h, const char* l = 0);
     ~ShapedWindow();
     void shape(Image* b);
     inline void shape(Image& b) { shape(&b); }
+    ShapedWindow* as_shaped_window() { return this; }
 
   protected:
     virtual void draw();

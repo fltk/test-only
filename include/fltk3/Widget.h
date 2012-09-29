@@ -55,6 +55,7 @@ namespace fltk3 {
   class Widget; 
   class Group;
   class Window;
+  class ShapedWindow;
   class Image;
   class GLWindow;
   class Style;
@@ -1022,9 +1023,20 @@ namespace fltk3 {
      \note This method is provided to avoid dynamic_cast.
      \see fltk3::Widget::as_group(), fltk3::Widget::as_window()
      */
-    virtual class fltk3::GLWindow* as_gl_window() {return 0;}
+    virtual fltk3::GLWindow* as_gl_window() {return 0;}
     
-};
+    /** Returns an fltk3::ShapedWindow pointer if this widget is an fltk3::ShapedWindow.
+     
+     Use this method if you have a widget (pointer) and need to
+     know whether this widget is derived from fltk3::ShapedWindow. If it returns
+     non-NULL, then the widget in question is derived from fltk3::ShapedWindow.
+     
+     \retval NULL if this widget is not derived from fltk3::ShapedWindow.
+     \note This method is provided to avoid dynamic_cast.
+     \see fltk3::Widget::as_group(), fltk3::Widget::as_window()
+     */
+    virtual fltk3::ShapedWindow* as_shaped_window() {return 0;}
+  };
   
   
   /**

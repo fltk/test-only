@@ -37,15 +37,27 @@
 fltk3::ShapedWindow::ShapedWindow(int w, int h, const char* l)
 	: Window(w, h, l), shape_(0), lw(0), lh(0), changed(false) {
 	  border(false);
-  }
+#if defined(__APPLE__)
+	  mask = NULL;
+#endif
+	}
 
 fltk3::ShapedWindow::ShapedWindow(int x, int y, int w, int h, const char* l)
 	: Window(x, y, w, h, l), shape_(0), lw(0), lh(0), changed(false) {
 	  border(false);
-  }
+#if defined(__APPLE__)
+	  mask = NULL;
+#endif
+	}
 
 fltk3::ShapedWindow::~ShapedWindow() {
   //delete shape_;
+#if defined(__APPLE__)
+  if (mask) {
+    CGDataProviderRelease(CGImageGetDataProvider(mask));
+    CGImageRelease(mask);
+  }
+#endif
 }
 
 void fltk3::ShapedWindow::shape(fltk3::Image* b) {
@@ -139,7 +151,6 @@ namespace {
 
 }
 #elif defined(__APPLE__)
-//# error I have no idea what to do here. Perhaps one of the more mac-knowing dev.s does?
 #endif
 
 namespace {
@@ -152,13 +163,29 @@ namespace {
 
 }
 
+#if defined(__APPLE__)
+// bitwise inversion of all 4-bit quantities
+static const unsigned char swapped[16] = {0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15};
+
+// bitwise inversion of a byte
+static inline uchar swap_byte(const uchar b) {
+  return (swapped[b & 0xF] << 4) | swapped[b >> 4];
+}
+
+static void MyProviderReleaseData (void *info, const void *data, size_t size) {
+  delete (fltk3::Image*)info;
+}
+#endif
+
 void fltk3::ShapedWindow::draw() {
   if ((lw != w() || lh != h() || changed) && shape_) {
-    // size of window has change since last time
+    // size of window has changed since last time
     lw = w();
     lh = h();
     fltk3::Image* temp = resize_bitmap(shape_, lw, lh);
+#if !defined(__APPLE__)
     fltk3::RGBImage* bitmap = new RGBImage((const uchar*)temp->data()[0], lw, lh, 4);
+#endif
 #if USE_X11
     Pixmap pbitmap = XCreateBitmapFromData(fl_display, fl_xid(this), 
     					(const char*)bitmap->array,
@@ -166,22 +193,41 @@ void fltk3::ShapedWindow::draw() {
     XShapeCombineMask(fl_display, fl_xid(this), ShapeBounding, 0, 0,
                       pbitmap, ShapeSet);
     if (pbitmap != None) XFreePixmap(fl_display, pbitmap);
+    delete bitmap;
+    delete temp;
 #elif defined(_WIN32)
     HRGN region = bitmap2region(bitmap);
     SetWindowRgn(fl_xid(this), region, TRUE);
+    delete bitmap;
+    delete temp;
 #elif defined(__APPLE__)
-    // not yet implemented for Apple
-    // see earlier #error
-//#error Not implemented!
+    if (mask) {
+      CGDataProviderRelease(CGImageGetDataProvider(mask));
+      CGImageRelease(mask);
+      }
+    // reverse mask bits and also perform bitwise inversion of all bytes
+    char *p = (char*)temp->data()[0];
+    char *q = p + (lw*lh)/8;
+    while (p < q) {
+      *p = swap_byte(~*p);
+      p++;
+      }
+    CGDataProviderRef provider = CGDataProviderCreateWithData(temp, temp->data()[0], (lw*lh)/8, MyProviderReleaseData);
+    mask = CGImageMaskCreate(lw, lh, 1, 1, lw/8, provider, NULL, false);
 #else 
     // any other window managers that FLTK3 supports will be added here
 #endif
     changed = 0;
-    delete bitmap;
-    delete temp;
   }
+#if defined(__APPLE__)
+  if (mask) CGContextClipToMask(fl_gc, CGRectMake(0,0,lw,lh), mask); // requires Mac OS 10.4
+  CGContextSaveGState(fl_gc);
+#endif
   // I get the feeling something inside Window::draw() is what's causing the artefacting......
   Window::draw();
+#if defined(__APPLE__)
+  CGContextRestoreGState(fl_gc);
+#endif
 }
 
 //

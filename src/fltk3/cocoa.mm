@@ -2163,7 +2163,11 @@ void Fl_X::make(fltk3::Window* w)
     FLView *myview = [[FLView alloc] init];
     [cw setContentView:myview];
     [cw setLevel:winlevel];
-    
+    if ( w->as_shaped_window() ) {
+      [cw setOpaque:NO];
+      [cw setBackgroundColor:[NSColor colorWithDeviceWhite:0 alpha:0]];
+      }
+
     q_set_window_title(cw, w->label(), w->iconlabel());
     if (!w->force_position()) {
       if (w->modal()) {
