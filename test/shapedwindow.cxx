@@ -209,8 +209,7 @@ const char x_bits[] = {
 }; 
 
 void cb(fltk3::Widget *w, void *) {
-  fltk3::delete_widget(w->window());
-  fltk3::wait(0);
+  w->window()->hide();
 }
 
 class mybox : public fltk3::BoxWidget {
@@ -245,5 +244,7 @@ int main() {
   win1->end();
   win1->resizable(win1);
   win1->show();
-  return fltk3::run();
+  fltk3::run();
+  delete win1;
+  return 0;
 }
