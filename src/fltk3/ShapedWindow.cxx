@@ -207,13 +207,14 @@ void fltk3::ShapedWindow::draw() {
       }
     // reverse mask bits and also perform bitwise inversion of all bytes
     char *p = (char*)temp->data()[0];
-    char *q = p + (lw*lh)/8;
+    int bytes_per_row = (lw + 7)/8;
+    char *q = p + bytes_per_row * lh;
     while (p < q) {
       *p = swap_byte(~*p);
       p++;
       }
-    CGDataProviderRef provider = CGDataProviderCreateWithData(temp, temp->data()[0], (lw*lh)/8, MyProviderReleaseData);
-    mask = CGImageMaskCreate(lw, lh, 1, 1, lw/8, provider, NULL, false);
+    CGDataProviderRef provider = CGDataProviderCreateWithData(temp, temp->data()[0], bytes_per_row * lh, MyProviderReleaseData);
+    mask = CGImageMaskCreate(lw, lh, 1, 1, bytes_per_row, provider, NULL, false);
 #else 
     // any other window managers that FLTK3 supports will be added here
 #endif
