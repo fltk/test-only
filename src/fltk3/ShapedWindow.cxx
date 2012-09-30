@@ -120,7 +120,7 @@ namespace {
     SetRect(&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
     const int bytesPerLine = (image->w() + 7)/8;
-    BYTE* p, *data = (BYTE*)image->data();
+    BYTE* p, *data = (BYTE*)image->data()[0];
     for (int y = 0; y < image->h(); y++) {
       // each row, left to right
       for (int x = 0; x < image->w(); x++) {
