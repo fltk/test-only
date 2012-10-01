@@ -64,6 +64,8 @@ namespace fltk3 {
    Times (and their bold, oblique, italic variants).
    */
   class FLTK3_EXPORT PostScriptGraphicsDriver : public fltk3::GraphicsDriver {
+  private:
+    static const unsigned char swapped[16];
   public: 
     PostScriptGraphicsDriver();
 #ifndef FLTK3_DOXYGEN
@@ -207,6 +209,8 @@ namespace fltk3 {
     void draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
     void draw(fltk3::Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy);
     void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
+    /** Bitwise inversion of a byte */
+    static inline uchar swap_byte(const uchar b) { return (swapped[b & 0xF] << 4) | swapped[b >> 4]; };
     ~PostScriptGraphicsDriver();
   };
   

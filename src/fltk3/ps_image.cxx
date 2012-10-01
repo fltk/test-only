@@ -183,14 +183,9 @@ int fltk3::PostScriptGraphicsDriver::alpha_mask(const uchar * data, int w, int h
   return 0;
 }
 
+// Utility data used by fltk3::PostScriptGraphicsDriver::swap_byte():
 // bitwise inversion of all 4-bit quantities
-static const unsigned char swapped[16] = {0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15};
-
-// bitwise inversion of a byte
-static inline uchar swap_byte(const uchar b) {
-  return (swapped[b & 0xF] << 4) | swapped[b >> 4];
-}
-
+const unsigned char fltk3::PostScriptGraphicsDriver::swapped[16] = {0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15};
 
 extern uchar **fl_mask_bitmap;
 

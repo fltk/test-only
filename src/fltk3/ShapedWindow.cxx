@@ -33,6 +33,7 @@
 #include <fltk3/ShapedWindow.h>
 #include <fltk3/Image.h>
 #include <fltk3/RGBImage.h>
+#include <fltk3/PostScript.h> // for fltk3::PostScriptGraphicsDriver::swap_byte()
 
 fltk3::ShapedWindow::ShapedWindow(int w, int h, const char* l)
 	: Window(w, h, l), shape_(0), lw(0), lh(0), changed(false) {
@@ -61,14 +62,6 @@ fltk3::ShapedWindow::~ShapedWindow() {
 }
 
 #if defined(__APPLE__)
-// bitwise inversion of all 4-bit quantities
-static const unsigned char swapped[16] = {0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15};
-
-// bitwise inversion of a byte
-static inline uchar swap_byte(const uchar b) {
-  return (swapped[b & 0xF] << 4) | swapped[b >> 4];
-}
-
 static void MyProviderReleaseData (void *info, const void *data, size_t size) {
   delete[] (char*)data;
 }
@@ -91,7 +84,7 @@ void fltk3::ShapedWindow::shape(fltk3::Image* b) {
     char *q = new char[bytes_per_row * shape_->h()];
     const char *from = q;
     while (p < last) {
-      *q++ = swap_byte(~*p++);
+      *q++ = fltk3::PostScriptGraphicsDriver::swap_byte(~*p++);
     }
     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, from, bytes_per_row * shape_->h(), MyProviderReleaseData);
     mask = CGImageMaskCreate(shape_->w(), shape_->h(), 1, 1, bytes_per_row, provider, NULL, false);
@@ -207,7 +200,7 @@ void fltk3::ShapedWindow::draw() {
     fltk3::RGBImage* bitmap = new RGBImage((const uchar*)temp->data()[0], lw, lh, 4);
 #endif
 #if USE_X11
-    Pixmap pbitmap = XCreateBitmapFromData(fl_display, fl_xid(this), 
+    ::Pixmap pbitmap = XCreateBitmapFromData(fl_display, fl_xid(this), 
     					(const char*)bitmap->array,
 					bitmap->w(), bitmap->h());
     XShapeCombineMask(fl_display, fl_xid(this), ShapeBounding, 0, 0,
@@ -226,13 +219,13 @@ void fltk3::ShapedWindow::draw() {
 #endif
     changed = 0;
   }
-#if defined(__APPLE__)
-  if (mask) CGContextClipToMask(fl_gc, CGRectMake(0,0,w(),h()), mask); // requires Mac OS 10.4
+#if defined(__APPLE__) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+  if (mask && (CGContextClipToMask != NULL)) CGContextClipToMask(fl_gc, CGRectMake(0,0,w(),h()), mask); // requires Mac OS 10.4
   CGContextSaveGState(fl_gc);
 #endif
   // I get the feeling something inside Window::draw() is what's causing the artefacting......
   Window::draw();
-#if defined(__APPLE__)
+#if defined(__APPLE__) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
   CGContextRestoreGState(fl_gc);
 #endif
 }
