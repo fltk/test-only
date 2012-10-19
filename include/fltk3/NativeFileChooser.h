@@ -93,6 +93,11 @@ namespace fltk3 {
    }
    \endcode
    
+   The fltk3::NativeFileChooser widget transmits UTF-8 encoded filenames to its user. It is
+   recommended to open files that may have non-ASCII names with the fltk3::fopen() utility 
+   function that handles these names in a cross-platform way (whereas the standard 
+   fopen function fails on the MSWindows platform to open files with a non-ASCII name).
+   
    <B>Platform Specific Caveats</B>
    
    - Under X windows, it's best if you call fltk3::FileIcon::load_system_icons()

@@ -597,6 +597,14 @@ int fltk3::vopen(const char* f, int oflags, va_list ap) {
 #endif
 }
 
+/** Cross-platform function to open files with a UTF-8 encoded name.
+ 
+ This function is especially useful under the MSWindows platform where the 
+ standard fopen function fails with UTF-8 encoded non-ASCII filenames.
+ \param f  the UTF-8 encoded filename
+ \param mode  same as the second argument of the standard fopen function
+ \return  a FILE pointer upon successful completion, or NULL in case of error.
+ */
 FILE *fltk3::fopen(const char* f, const char *mode)
 {
 #if  defined (WIN32) && !defined(__CYGWIN__)
