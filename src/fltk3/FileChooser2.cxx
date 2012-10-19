@@ -37,9 +37,9 @@
   \image latex  fltk3::FileChooser.jpg "fltk3::FileChooser" width=12cm
 
  The fltk3::FileChooser widget transmits UTF-8 encoded filenames to its user. It is
- recommended to open files that may have non-ASCII names with the fltk3::fopen() utility 
- function that handles these names in a cross-platform way (whereas the standard 
- fopen function fails on the MSWindows platform to open files with a non-ASCII name).
+ recommended to open files that may have non-ASCII names with the fltk3::fopen() or fltk3::open()
+ utility functions that handle these names in a cross-platform way (whereas the standard 
+ fopen/open functions fail on the MSWindows platform to open files with a non-ASCII name).
  
   The fltk3::FileChooser class also exports several static values
   that may be used to localize or customize the appearance of all file chooser

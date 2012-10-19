@@ -569,6 +569,15 @@ char *fltk3::getenv(const char* v)
 #endif
 }
 
+/** Cross-platform function to open files with a UTF-8 encoded name.
+ 
+ This function is especially useful under the MSWindows platform where the 
+ standard open() function fails with UTF-8 encoded non-ASCII filenames.
+ \param f  the UTF-8 encoded filename
+ \param oflags  other arguments are as in the standard open() function
+ \return  a file descriptor upon successful completion, or -1 in case of error.
+ \sa fltk3::fopen().
+ */
 int fltk3::open(const char* f, int oflags, ...)
 {
   va_list ap;
@@ -604,6 +613,7 @@ int fltk3::vopen(const char* f, int oflags, va_list ap) {
  \param f  the UTF-8 encoded filename
  \param mode  same as the second argument of the standard fopen function
  \return  a FILE pointer upon successful completion, or NULL in case of error.
+ \sa fltk3::open().
  */
 FILE *fltk3::fopen(const char* f, const char *mode)
 {
