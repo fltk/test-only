@@ -139,7 +139,7 @@ void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffe
   {
     png_destroy_read_struct(&pp, &info, NULL);
     if (!from_memory) fclose(fp);
-    fltk3::warning("PNG file or data \"%s\" contains errors!\n", name_png);
+    fltk3::warning("PNG file or data \"%s\" is too large or contains errors!\n", name_png);
     return;
   }
 
@@ -187,6 +187,7 @@ void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffe
     png_set_tRNS_to_alpha(pp);
 #  endif // HAVE_PNG_GET_VALID && HAVE_PNG_SET_TRNS_TO_ALPHA
 
+  if (((size_t)w()) * h() * d() > max_size() ) longjmp(png_jmpbuf(pp), 1);
   array = new uchar[w() * h() * d()];
   alloc_array = 1;
 

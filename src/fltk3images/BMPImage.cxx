@@ -36,6 +36,7 @@
 
 #include <fltk3images/BMPImage.h>
 #include <fltk3/utf8.h>
+#include <fltk3/run.h>
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -196,6 +197,11 @@ fltk3::BMPImage::BMPImage(const char *bmp) // I - File to read
   d(bDepth);
   if (offbits) fseek(fp, offbits, SEEK_SET);
 
+  if (((size_t)w()) * h() * d() > max_size() ) {
+    fltk3::warning("BMP file \"%s\" is too large!\n", bmp);
+    fclose(fp);
+    return;
+  }
   array = new uchar[w() * h() * d()];
   alloc_array = 1;
 

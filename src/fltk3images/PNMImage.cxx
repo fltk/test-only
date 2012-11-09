@@ -128,6 +128,11 @@ fltk3::PNMImage::PNMImage(const char *name)	// I - File to read
 
 //  printf("%s = %dx%dx%d\n", name, w(), h(), d());
 
+  if (((size_t)w()) * h() * d() > max_size() ) {
+    fltk3::warning("PNM file \"%s\" is too large!\n", name);
+    fclose(fp);
+    return;
+  }
   array       = new uchar[w() * h() * d()];
   alloc_array = 1;
 

@@ -176,6 +176,8 @@ fltk3::Image::measure(const fltk3::Label *lo,		// I - Label
 //
 // RGB image class...
 //
+size_t fltk3::RGBImage::max_size_ = ~((size_t)0);
+
 /**  The destructor free all memory and server resources that are used by  the image. */
 fltk3::RGBImage::~RGBImage() {
   uncache();

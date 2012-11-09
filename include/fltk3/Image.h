@@ -33,6 +33,7 @@
 
 #include "Object.h"
 #include "enumerations.h"
+#include <stdlib.h>
 
 
 class Fl_Image;
@@ -190,6 +191,7 @@ namespace fltk3 {
     friend class QuartzGraphicsDriver;
     friend class GDIGraphicsDriver;
     friend class XlibGraphicsDriver;
+    static size_t max_size_;
   public:
     
     const uchar *array;
@@ -220,6 +222,21 @@ namespace fltk3 {
     virtual void label(fltk3::Widget*w);
     virtual void label(fltk3::MenuItem*m);
     virtual void uncache();
+    /** Sets the maximum allowed image size in bytes when creating an RGBImage object.
+     
+     The image size in bytes of an RGBImage object is the value of the product w() * h() * d().
+     If this product exceeds size, the created object of a derived class of RGBImage 
+     won't be loaded with the image data.
+     This does not apply to direct RGB image creation with 
+     RGBImage::RGBImage(const uchar *bits, int W, int H, int D, int LD).
+     The default max_size() value is essentially infinite. 
+     */
+    static void max_size(size_t size) { max_size_ = size;}
+    /** Returns the maximum allowed image size in bytes when creating an RGBImage object.
+     
+     \sa  void RGBImage::max_size(size_t)
+     */
+    static size_t max_size() {return max_size_;}
   };
   
 } // namespace
