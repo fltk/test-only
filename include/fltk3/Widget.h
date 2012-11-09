@@ -392,7 +392,10 @@ namespace fltk3 {
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
-    void* user_data_;
+    union {
+      void* user_data_;
+      long long_value_;
+    };
     uchar type_;
     uchar damage_;
     uchar when_;    
@@ -616,7 +619,7 @@ namespace fltk3 {
      \param[in] cb new callback
      \param[in] p user data
      */
-    void callback(fltk3::Callback1*cb, long p=0) {callback_=(fltk3::Callback*)cb; user_data_=(void*)p;}
+    void callback(fltk3::Callback1*cb, long p=0) {callback_=(fltk3::Callback*)cb; long_value_=p;}
     
     /** Gets the user data for this widget.
      Gets the current user data (void *) argument that is passed to the callback function.
@@ -632,13 +635,11 @@ namespace fltk3 {
     
     /** Gets the current user data (long) argument that is passed to the callback function.
      */
-    long argument() const {return (long)(fl_intptr_t)user_data_;}
+    long argument() const {return long_value_;}
     
     /** Sets the current user data (long) argument that is passed to the callback function.
-     \todo The user data value must be implemented using \em intptr_t or similar
-     to avoid 64-bit machine incompatibilities.
      */
-    void argument(long v) {user_data_ = (void*)v;}
+    void argument(long v) {long_value_ = v;}
     
     /** Returns the conditions under which the callback is called.
      
@@ -870,13 +871,9 @@ namespace fltk3 {
      */
     void do_callback() {do_callback(this,user_data_);}
     
-    /** Calls the widget callback.
-     Causes a widget to invoke its callback function with arbitrary arguments.
-     \param[in] o call the callback with \p o as the widget argument
-     \param[in] arg call the callback with \p arg as the user data argument
-     \see callback()
-     */
-    void do_callback(fltk3::Widget* o,long arg) {do_callback(o,(void*)arg);}
+     //Causes a widget to invoke its callback function with arbitrary arguments.
+     // Documentation and implementation in fltk3::Widget.cxx
+    void do_callback(fltk3::Widget* o,long arg);
     
     // Causes a widget to invoke its callback function with arbitrary arguments.
     // Documentation and implementation in fltk3::Widget.cxx

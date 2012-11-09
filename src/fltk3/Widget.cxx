@@ -397,6 +397,23 @@ fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
     clear_changed();
 }
 
+/** Calls the widget callback.
+ Causes a widget to invoke its callback function with arbitrary arguments.
+ \param[in] o call the callback with \p o as the widget argument
+ \param[in] arg call the callback with \p arg as the user data (long) argument
+ \see callback()
+ */
+void 
+fltk3::Widget::do_callback(fltk3::Widget* o, long arg) {
+  union { 
+    void *v; 
+    long l; 
+  } u;
+  u.l = arg;
+  do_callback(o, u.v);
+}
+
+
 /** Draw a box.
  */
 void fltk3::Widget::draw() {
