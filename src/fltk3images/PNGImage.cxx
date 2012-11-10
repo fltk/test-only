@@ -3,7 +3,7 @@
 //
 // fltk3::PNGImage routines.
 //
-// Copyright 1997-2011 by Easy Software Products.
+// Copyright 1997-2012 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
 //
 // This library is free software; you can redistribute it and/or
@@ -123,7 +123,7 @@ void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffe
   if (!from_memory) {
     if ((fp = fltk3::fopen(name_png, "rb")) == NULL) return;
   }
-  else name_png = "In-memory PNG data";
+  const char *display_name = (name_png ? name_png : "In-memory PNG data");
 
   // Setup the PNG data structures...
   pp = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -131,7 +131,7 @@ void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffe
   if (!pp || !info) {
     if (pp) png_destroy_read_struct(&pp, NULL, NULL);
     if (!from_memory) fclose(fp);
-    fltk3::warning("Cannot allocate memory to read PNG file or data \"%s\".\n", name_png);
+    fltk3::warning("Cannot allocate memory to read PNG file or data \"%s\".\n", display_name);
     return;
   }
   
@@ -139,7 +139,7 @@ void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffe
   {
     png_destroy_read_struct(&pp, &info, NULL);
     if (!from_memory) fclose(fp);
-    fltk3::warning("PNG file or data \"%s\" is too large or contains errors!\n", name_png);
+    fltk3::warning("PNG file or data \"%s\" is too large or contains errors!\n", display_name);
     return;
   }
 
