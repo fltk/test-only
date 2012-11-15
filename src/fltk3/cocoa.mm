@@ -3103,7 +3103,12 @@ static NSBitmapImageRep* rect_to_NSBitmapImageRep(fltk3::Window *win, int x, int
 }
 
 unsigned char *Fl_X::bitmap_from_window_rect(fltk3::Window *win, int x, int y, int w, int h, int *bytesPerPixel)
-// delete[] the returned pointer after use
+/* Returns a capture of part of a mapped window as a pre-multiplied RGBA array of bytes.
+ At present, alpha values are always 1 (or 0 for the angles of a window title bar)
+ because only opaque colors are used to draw, so pre-multiplication can be ignored. 
+ *bytesPerPixel is always set to the value 4 upon return.
+ delete[] the returned pointer after use
+ */
 {
   NSBitmapImageRep *bitmap = rect_to_NSBitmapImageRep(win, x, y, w, h);
   *bytesPerPixel = [bitmap bitsPerPixel]/8;
@@ -3148,7 +3153,7 @@ CGImageRef Fl_X::CGImage_from_window_rect(fltk3::Window *win, int x, int y, int 
     CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, bitmap, w*h*bpp, imgProviderReleaseData);
     img = CGImageCreate(w, h, 8, 8*bpp, w*bpp, lut,
-			bpp == 3 ? kCGImageAlphaNone : kCGImageAlphaLast,
+			bpp == 3 ? kCGImageAlphaNone : kCGImageAlphaPremultipliedLast,
 			provider, NULL, false, kCGRenderingIntentDefault);
     CGColorSpaceRelease(lut);
     CGDataProviderRelease(provider);
@@ -3202,14 +3207,14 @@ void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_of
   fltk3::check();
   win->make_current();
   this->set_current(); // back to the fltk3::PagedDevice
-  int bpp;
-  // capture the window title bar as an RGBA image
-  unsigned char *top_image = Fl_X::bitmap_from_window_rect(win, 0, -bt, win->w(), bt, &bpp);
-  fltk3::RGBImage* rgba = new fltk3::RGBImage(top_image, win->w(), bt, bpp);
+  // capture the window title bar
+  CGImageRef img = Fl_X::CGImage_from_window_rect(win, 0, -bt, win->w(), bt);
   // and print it
-  rgba->draw(x_offset, y_offset);
-  delete rgba;
-  delete[] top_image;
+  CGRect rect = { { x_offset, y_offset }, { win->w(), bt } };
+  Fl_X::q_begin_image(rect, 0, 0, win->w(), bt);
+  CGContextDrawImage(fl_gc, rect, img);
+  Fl_X::q_end_image();
+  CFRelease(img);
   this->print_widget(win, x_offset, y_offset + bt); // print the window inner part
 }
 
