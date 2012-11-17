@@ -3103,9 +3103,9 @@ static NSBitmapImageRep* rect_to_NSBitmapImageRep(fltk3::Window *win, int x, int
 }
 
 unsigned char *Fl_X::bitmap_from_window_rect(fltk3::Window *win, int x, int y, int w, int h, int *bytesPerPixel)
-/* Returns a capture of part of a mapped window as a pre-multiplied RGBA array of bytes.
- At present, alpha values are always 1 (or 0 for the angles of a window title bar)
- because only opaque colors are used to draw, so pre-multiplication can be ignored. 
+/* Returns a capture of a rectangle of a mapped window as a pre-multiplied RGBA array of bytes.
+ Alpha values are always 1 (except for the angles of a window title bar)
+ so pre-multiplication can be ignored. 
  *bytesPerPixel is always set to the value 4 upon return.
  delete[] the returned pointer after use
  */
