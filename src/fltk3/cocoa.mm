@@ -1321,9 +1321,10 @@ void fl_open_display() {
       // only transform the application type for unbundled apps
       NSBundle *bundle = [NSBundle mainBundle];
       if (bundle) {
-	NSString *exe = [bundle executablePath];
+	NSString *exe = [[bundle executablePath] stringByStandardizingPath];
 	NSString *bpath = [bundle bundlePath];
-	if ([bpath isEqualToString:exe]) bundle = nil;
+	NSString *exe_dir = [exe stringByDeletingLastPathComponent];
+	if ([bpath isEqualToString:exe] || [bpath isEqualToString:exe_dir]) bundle = nil;
       }
       
       if ( !bundle )
