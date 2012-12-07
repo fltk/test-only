@@ -3,7 +3,7 @@
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@ int fltk3::MenuItem::size() const {
   }
 }
 
-// Advance a pointer to next visible or invisible item of a menu array, 
+// Advance a pointer to next visible or invisible item of a menu array,
 // skipping the contents of submenus.
 static const fltk3::MenuItem* next_visible_or_not(const fltk3::MenuItem* m) {
   int nest = 0;
@@ -131,9 +131,9 @@ public:
 
 extern char fltk3::draw_shortcut;
 
-/** 
-  Measures width of label, including effect of & characters. 
-  Optionally, can get height if hp is not NULL. 
+/**
+  Measures width of label, including effect of & characters.
+  Optionally, can get height if hp is not NULL.
 */
 int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   fltk3::Label l;
@@ -203,7 +203,6 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
 	    fltk3::pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fltk3::arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
 	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
 	  } else fltk3::color(labelcolor_);
 	} else fltk3::color(labelcolor_);
@@ -278,7 +277,7 @@ menutitle::menutitle(int X, int Y, int W, int H, const fltk3::MenuItem* L) :
 }
 
 menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
-		       const fltk3::MenuItem* picked, const fltk3::MenuItem* t, 
+		       const fltk3::MenuItem* picked, const fltk3::MenuItem* t,
 		       int menubar, int menubar_title, int right_edge)
   : fltk3::MenuWindow(X, Y, Wp, Hp, 0)
 {
@@ -329,7 +328,7 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
   if (t) Wtitle = t->measure(&Htitle, button) + 12;
   int W = 0;
   if (m) for (; m->text; m = m->next()) {
-    int hh; 
+    int hh;
     int w1 = m->measure(&hh, button);
     if (hh+LEADING>itemheight) itemheight = hh+LEADING;
     if (m->flags&(fltk3::SUBMENU|fltk3::SUBMENU_POINTER))
@@ -498,7 +497,7 @@ void menuwindow::draw() {
       drawentry(menu->next(drawn_selected), drawn_selected, 1);
       drawentry(menu->next(selected), selected, 1);
     }
-  }	    
+  }
   drawn_selected = selected;
 }
 
@@ -611,7 +610,7 @@ static void setitem(int m, int n) {
 static int forward(int menu) { // go to next item in menu menu if possible
   menustate &pp = *p;
   // fltk3::MenuButton can generate menu=-1. This line fixes it and selectes the first item.
-  if (menu==-1) 
+  if (menu==-1)
     menu = 0;
   menuwindow &m = *(pp.p[menu]);
   int item = (menu == pp.menu_number) ? pp.item_number : m.selected;
@@ -654,7 +653,7 @@ int menuwindow::handle(int e) {
       menuwindow *mw = pp.p[--i];
       if (mw) {
         mw->hide();
-        if (mw->title) 
+        if (mw->title)
           mw->title->hide();
       }
     }
@@ -714,7 +713,7 @@ int menuwindow::early_hide_handle(int e) {
       return 1;
     }
     break;
-  case fltk3::SHORTCUT: 
+  case fltk3::SHORTCUT:
     {
       for (int mymenu = pp.nummenus; mymenu--;) {
 	menuwindow &mw = *(pp.p[mymenu]);
@@ -750,7 +749,7 @@ int menuwindow::early_hide_handle(int e) {
       }
       for (mymenu = pp.nummenus-1; ; mymenu--) {
 	item = pp.p[mymenu]->find_selected(mx, my);
-	if (item >= 0) 
+	if (item >= 0)
 	  break;
 	if (mymenu <= 0) {
 	  // buttons in menubars must be deselected if we move outside of them!
@@ -783,8 +782,8 @@ int menuwindow::early_hide_handle(int e) {
   case fltk3::RELEASE:
     // Mouse must either be held down/dragged some, or this must be
     // the second click (not the one that popped up the menu):
-    if (   !fltk3::event_is_click() 
-        || pp.state == PUSH_STATE 
+    if (   !fltk3::event_is_click()
+        || pp.state == PUSH_STATE
         || (pp.menubar && pp.current_item && !pp.current_item->submenu()) // button
 	) {
 #if 0 // makes the check/radio items leave the menu up
@@ -943,7 +942,7 @@ const fltk3::MenuItem* fltk3::MenuItem::pulldown(
 	// delete all the old menus and create new one:
 	while (pp.nummenus > pp.menu_number+1) delete pp.p[--pp.nummenus];
 	pp.p[pp.nummenus++]= new menuwindow(menutable, nX, nY,
-					  title?1:0, 0, 0, title, 0, menubar, 
+					  title?1:0, 0, 0, title, 0, menubar,
 					    (title ? 0 : cw.x()) );
       }
     } else { // !m->submenu():
@@ -974,13 +973,13 @@ const fltk3::MenuItem* fltk3::MenuItem::pulldown(
   do the callbacks or change the state of check or radio items.</I>
 
   X,Y is the position of the mouse cursor, relative to the
-  window that got the most recent event (usually you can pass 
+  window that got the most recent event (usually you can pass
   fltk3::event_x() and fltk3::event_y() unchanged here).
 
   \p title is a character string title for the menu.  If
   non-zero a small box appears above the menu with the title in it.
 
-  The menu is positioned so the cursor is centered over the item 
+  The menu is positioned so the cursor is centered over the item
   picked.  This will work even if \p picked is in a submenu.
   If \p picked is zero or not in the menu item table the menu is
   positioned with the cursor in the top-left corner.
@@ -1000,10 +999,10 @@ const fltk3::MenuItem* fltk3::MenuItem::popup(
 }
 
 /**
-  Search only the top level menu for a shortcut.  
+  Search only the top level menu for a shortcut.
   Either &x in the label or the shortcut fields are used.
 
-  This tests the current event, which must be an fltk3::KEYBOARD or 
+  This tests the current event, which must be an fltk3::KEYBOARD or
   fltk3::SHORTCUT, against a shortcut value.
 
   \param ip returns the index of the item, if \p ip is not NULL.

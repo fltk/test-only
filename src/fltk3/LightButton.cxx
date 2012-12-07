@@ -3,7 +3,7 @@
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -40,7 +40,7 @@
 #include <fltk3/RadioLightButton.h>
 
 
-void fltk3::LightButton::draw() 
+void fltk3::LightButton::draw()
 {
   fltk3::Color col;
   if (this==fltk3::pushed()) {
@@ -53,12 +53,12 @@ void fltk3::LightButton::draw()
                    fltk3::inactive(selection_color())) : color();
   int W;
   int dx, dy;
-  
+
   W  = labelsize();
   dx = fltk3::box_dx(box()) + 2;
   dy = (h() - W) / 2;
   // if (dy < 0) dy = 0;         // neg. offset o.k. for vertical centering
-  
+
   if (down_box()!=fltk3::NO_BOX) {
     // draw other down_box() styles:
     fltk3::Box* db = down_box();
@@ -94,43 +94,42 @@ void fltk3::LightButton::draw()
         if ((W - tW) & 1) tW++; // Make sure difference is even to center
         int tdx = dx + (W - tW) / 2;
         int tdy = dy + (W - tW) / 2;
-        
+
         if (!fltk3::scheme()) {
           fltk3::color(fltk3::SELECTION_COLOR);
           tW --;
           fltk3::pie(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-          fltk3::arc(tdx - 1, tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
           fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
         } else {
           fltk3::color(col);
         }
-        
+
         switch (tW) {
             // Larger circles draw fine...
           default :
             fltk3::pie(tdx, tdy, tW, tW, 0.0, 360.0);
             break;
-            
+
             // Small circles don't draw well on many systems...
           case 6 :
             fltk3::rectf(tdx + 2, tdy, tW - 4, tW);
             fltk3::rectf(tdx + 1, tdy + 1, tW - 2, tW - 2);
             fltk3::rectf(tdx, tdy + 2, tW, tW - 4);
             break;
-            
+
           case 5 :
           case 4 :
           case 3 :
             fltk3::rectf(tdx + 1, tdy, tW - 2, tW);
             fltk3::rectf(tdx, tdy + 1, tW, tW - 2);
             break;
-            
+
           case 2 :
           case 1 :
             fltk3::rectf(tdx, tdy, tW, tW);
             break;
         }
-        
+
         if (!fltk3::scheme()) {
           fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
           fltk3::arc(tdx, tdy, tW + 1, tW + 1, 60.0, 180.0);
@@ -159,7 +158,7 @@ void fltk3::LightButton::draw()
 }
 
 
-int fltk3::LightButton::handle(int event) 
+int fltk3::LightButton::handle(int event)
 {
   switch (event) {
     case fltk3::RELEASE:
@@ -176,7 +175,7 @@ int fltk3::LightButton::handle(int event)
  <P>The destructor deletes the check button.
  */
 fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
-: fltk3::Button(X, Y, W, H, l) 
+: fltk3::Button(X, Y, W, H, l)
 {
   type(fltk3::TOGGLE_BUTTON);
   selection_color(fltk3::YELLOW);
@@ -185,7 +184,7 @@ fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
 
 
 fltk3::RadioLightButton::RadioLightButton(int X,int Y,int W,int H,const char *l)
-: fltk3::LightButton(X,Y,W,H,l) 
+: fltk3::LightButton(X,Y,W,H,l)
 {
   type(fltk3::RADIO_BUTTON);
 }
