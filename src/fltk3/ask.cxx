@@ -25,6 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
+/**
+ \file ask.cxx
+ \brief Utility functions for common dialogs.
+ */
+
 // Implementation of fltk3::message, fltk3::ask, fltk3::choice, fltk3::input
 
 #include <stdio.h>
@@ -283,7 +288,7 @@ const char* fltk3::close= "Close";   ///< string pointer used in common dialogs,
  
  This function will ring whatever bell is easiest available on your device.
  
- \param[in] type predefined type of sound. such as BEEP_MESSAGE, etc.
+ \param[in] type predefined type of sound. such as BEEP_MESSAGE, from the \ref fltk3::Beep enumeration.
  
  \note \#include <fltk3/ask.h>
  */

@@ -27,6 +27,11 @@
 
 // FLTK 123 complete
 
+/** \file ask.H
+ API for common dialogs.
+ */
+
+
 #ifndef fltk3_ask_H
 #define fltk3_ask_H
 
@@ -44,14 +49,15 @@ namespace fltk3 {
   
   class Widget;
   
-  /** Different system beeps available. \relatesalso fltk3::beep(int) */
-  enum {
-    BEEP_DEFAULT = 0,
-    BEEP_MESSAGE,
-    BEEP_ERROR,
-    BEEP_QUESTION,
-    BEEP_PASSWORD,
-    BEEP_NOTIFICATION
+  /** Different system beeps available. 
+   \sa fltk3::beep(int) */
+  enum Beep {
+    BEEP_DEFAULT = 0,  ///< Default beep.
+    BEEP_MESSAGE,  ///< Message beep.
+    BEEP_ERROR,  ///< Error beep.
+    BEEP_QUESTION,  ///< Question beep.
+    BEEP_PASSWORD,  ///< Password beep.
+    BEEP_NOTIFICATION  ///< Notification beep.
   };
   
   FLTK3_EXPORT void beep(int type = BEEP_DEFAULT);
