@@ -3,7 +3,7 @@
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2012 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -72,7 +72,7 @@ void fltk3::Window::fullscreen() {
   no_fullscreen_y = y();
   no_fullscreen_w = w();
   no_fullscreen_h = h();
-  if (shown() && !(flags() & fltk3::Widget::FULLSCREEN)) {
+  if (shown() && !fullscreen_active()) {
     fullscreen_x();
   } else {
     set_flag(FULLSCREEN);
@@ -80,7 +80,7 @@ void fltk3::Window::fullscreen() {
 }
 
 void fltk3::Window::fullscreen_off(int X,int Y,int W,int H) {
-  if (shown() && (flags() & fltk3::Widget::FULLSCREEN)) {
+  if (shown() && fullscreen_active()) {
     fullscreen_off_x(X, Y, W, H);
   } else {
     clear_flag(FULLSCREEN);
