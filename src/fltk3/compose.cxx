@@ -58,9 +58,10 @@ int fltk3::compose(int& del) {
   // character composition is now handled by the OS
   del = 0;
 #if defined(__APPLE__)
-  // this stuff is to be treated as a function key
-  if(fltk3::e_length == 0 || fltk3::e_keysym == fltk3::EnterKey || fltk3::e_keysym == fltk3::KPEnterKey || 
-     fltk3::e_keysym == fltk3::TabKey || fltk3::e_keysym == fltk3::EscapeKey || fltk3::e_state&(fltk3::META | fltk3::CTRL) ) {
+  int has_text_key = fltk3::compose_state || fltk3::e_keysym <= '~' || fltk3::e_keysym == fltk3::IsoKey ||
+  (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey && fltk3::e_keysym != fltk3::KPEnterKey);
+  if ( fltk3::e_state&(fltk3::META | fltk3::CTRL) || !has_text_key  ) {
+    // this stuff is to be treated as a function key
     return 0;
   }
 #elif defined(WIN32)
@@ -72,8 +73,8 @@ int fltk3::compose(int& del) {
 #endif
   if(fltk3::compose_state) {
     del = fltk3::compose_state;
-    fltk3::compose_state = 0;
 #ifndef __APPLE__
+    fltk3::compose_state = 0;
   } else {
     // Only insert non-control characters:
     if (! (ascii & ~31 && ascii!=127)) { return 0; }

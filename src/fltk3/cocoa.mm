@@ -875,6 +875,7 @@ static void cocoaMouseHandler(NSEvent *theEvent)
 // this subclass is needed under OS X <= 10.5 but not under >= 10.6 where the base class is enough
 - (void)insertText:(id)aString;
 - (void)doCommandBySelector:(SEL)aSelector;
+- (void)interpretKeyEvents:(NSArray *)eventArray;
 @end
 @implementation FLTextView
 - (void)insertText:(id)aString
@@ -884,6 +885,24 @@ static void cocoaMouseHandler(NSEvent *theEvent)
 - (void)doCommandBySelector:(SEL)aSelector
 {
   [[[NSApp keyWindow] contentView] doCommandBySelector:aSelector];
+}
+- (void)interpretKeyEvents:(NSArray *)eventArray
+{
+  if (fltk3::e_keysym == fltk3::BackSpaceKey || fltk3::e_keysym == fltk3::KPEnterKey ||
+      fltk3::e_keysym == fltk3::EnterKey || fltk3::e_keysym == fltk3::EscapeKey || fltk3::e_keysym == fltk3::TabKey ) {
+    NSEvent *theEvent = (NSEvent*)[eventArray objectAtIndex:0];
+    // interpretKeyEvents doesn't output anything for these 5 keys under 10.5 or below
+    NSString *s = [theEvent characters];
+    if ([s length] >= 1) {
+      static char utf[2] = {0, 0};
+      utf[0] = [s UTF8String][0];
+      fltk3::e_text = utf;
+      fltk3::e_length = 1;
+    }
+    fltk3::Window *window = [(FLWindow*)[theEvent window] getFl_Window];
+    fltk3::handle(fltk3::KEYBOARD, window);
+  }
+  else [super interpretKeyEvents:eventArray];
 }
 @end
 
@@ -905,10 +924,6 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   UInt32 keyCode = 0, maskedKeyCode = 0;
   unsigned short sym = 0;
   keyCode = [theEvent keyCode];
-  NSString *s = [theEvent characters];  
-  if ( (mods & NSShiftKeyMask) && (mods & NSCommandKeyMask) ) {
-    s = [s uppercaseString]; // US keyboards return lowercase letter in s if cmd-shift-key is hit
-  }
   // extended keyboards can also send sequences on key-up to generate Kanji etc. codes.
   // Some observed prefixes are 0x81 to 0x83, followed by an 8 bit keycode.
   // In this mode, there seem to be no key-down codes
@@ -1610,8 +1625,8 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 @interface FLView : NSView <NSTextInput> 
 {
   @private
-  int next_compose_length;
-  bool in_key_event;
+  BOOL in_key_event;
+  NSInteger identifier;
 }
 + (void)prepareEtext:(NSString*)aString;
 - (id)init;
@@ -1630,7 +1645,6 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 - (void)rightMouseDragged:(NSEvent *)theEvent;
 - (void)otherMouseDragged:(NSEvent *)theEvent;
 - (void)scrollWheel:(NSEvent *)theEvent;
-- (BOOL)handleKeyDown:(NSEvent *)theEvent;
 - (void)keyDown:(NSEvent *)theEvent;
 - (void)keyUp:(NSEvent *)theEvent;
 - (void)flagsChanged:(NSEvent *)theEvent;
@@ -1644,10 +1658,11 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 @implementation FLView
 - (id)init
 {
+  static NSInteger counter = 0;
   self = [super init];
   if (self) {
-    next_compose_length = -1;
-    in_key_event = false;
+    identifier = ++counter;
+    in_key_event = NO;
     }
   return self;
 }
@@ -1667,7 +1682,18 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 - (BOOL)performKeyEquivalent:(NSEvent*)theEvent
 {   
   //NSLog(@"performKeyEquivalent:");
-  return [self handleKeyDown:theEvent];
+  fl_lock_function();
+  cocoaKeyboardHandler(theEvent);
+  fltk3::Window *window = [(FLWindow*)[theEvent window] getFl_Window];
+  NSString *s = [theEvent characters];
+  NSUInteger mods = [theEvent modifierFlags];
+  if ( (mods & NSShiftKeyMask) && (mods & NSCommandKeyMask) ) {
+    s = [s uppercaseString]; // US keyboards return lowercase letter in s if cmd-shift-key is hit
+  }
+  if ([s length] >= 1) [FLView prepareEtext:s];
+  int handled = fltk3::handle(fltk3::KEYBOARD, window);
+  fl_unlock_function();
+  return (handled ? YES : NO);
 }
 - (BOOL)acceptsFirstMouse:(NSEvent*)theEvent
 {   
@@ -1708,54 +1734,21 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 - (void)scrollWheel:(NSEvent *)theEvent {
   cocoaMouseWheelHandler(theEvent);
 }
-- (BOOL)handleKeyDown:(NSEvent *)theEvent {
-  //NSLog(@"handleKeyDown");
+- (void)keyDown:(NSEvent *)theEvent {
+  //NSLog(@"keyDown");
   fl_lock_function();
 
-  fltk3::Window *window = (fltk3::Window*)[(FLWindow*)[theEvent window] getFl_Window];
+  fltk3::Window *window = [(FLWindow*)[theEvent window] getFl_Window];
   fltk3::first_window(window);
 
-  next_compose_length = -1;
   // First let's process the raw key press
   cocoaKeyboardHandler(theEvent);
 
-  unsigned int no_text_key = false;
-  static const unsigned int notext[] = { // keys that don't emit text
-    fltk3::BackSpaceKey, fltk3::PrintKey, fltk3::ScrollLockKey, fltk3::PauseKey,
-    fltk3::InsertKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::EndKey, fltk3::PageDownKey,
-    fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey, fltk3::DownKey, 
-    fltk3::MenuKey, fltk3::NumLockKey, fltk3::HelpKey 
-  };
-  static const int count = sizeof(notext)/sizeof(int);
-  if (fltk3::e_keysym > fltk3::FKey && fltk3::e_keysym <= fltk3::FLastKey) no_text_key = true;
-  else for (int i=0; i < count; i++) {
-    if (notext[i] == fltk3::e_keysym) {
-      no_text_key = true;
-      break;
-    }
-  }
-  if (!no_text_key && !(fltk3::e_state & fltk3::META) ) {
-    // Don't send cmd-<key> to interpretKeyEvents because it beeps.
-    // Then we can let the OS have a stab at it and see if it thinks it
-    // should result in some text
-    NSText *edit = [[theEvent window]  fieldEditor:YES forObject:nil];
-    in_key_event = true;
-    [edit interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-    in_key_event = false;
-  }
-  //NSLog(@"to text=%@ l=%d", [NSString stringWithUTF8String:fltk3::e_text], fltk3::e_length);
-  int handled = fltk3::handle(fltk3::KEYDOWN, window);
-  // We have to update this after fltk3::handle as it says what to do on the
-  // _next_ input
-  if (next_compose_length != -1)
-    fltk3::compose_state = next_compose_length;
-
+  NSText *edit = [[theEvent window]  fieldEditor:YES forObject:nil];
+  in_key_event = YES;
+  [edit interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+  in_key_event = NO;
   fl_unlock_function();
-  return (handled ? YES : NO);
-}
-- (void)keyDown:(NSEvent *)theEvent {
-  //NSLog(@"keyDown: ");
-  [self handleKeyDown:theEvent];
 }
 - (void)keyUp:(NSEvent *)theEvent {
   //NSLog(@"keyUp: ");
@@ -1903,9 +1896,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 // These functions implement text input.
-// Only two-stroke character composition works at this point.
-// Needs much elaboration to fully support CJK text input,
-// but this is the way to go.
+// On the way to fully support CJK text input, this is the way to go.
 - (void)doCommandBySelector:(SEL)aSelector {
 }
 
@@ -1916,39 +1907,38 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   } else {
     received = (NSString*)aString;
   }
-  //NSLog(@"insertText: received=%@",received);
+  //NSLog(@"insertText: received=%@ fltk3::compose_state＝%d",received, fltk3::compose_state);
 
-  if (!in_key_event) fl_lock_function();
+  fl_lock_function();
   [FLView prepareEtext:received];
-  // We can get called outside of key events (e.g. from the character
-  // palette). Transform such actions to fltk3::PASTE events.
-  if (!in_key_event) {
-    fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
-    fltk3::handle(fltk3::PASTE, target);
-    // for some reason, the window does not redraw until the next mouse move or button push
-    // sending a 'redraw()' or 'awake()' does not solve the issue!
-    fltk3::flush();
-  }
-  if (!in_key_event) fl_unlock_function();
+  // We can get called outside of key events (e.g., from the character palette, from CJK text input). 
+  // Transform character palette actions to FL_PASTE events.
+  fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
+  fltk3::handle( (in_key_event || fltk3::compose_state) ? fltk3::KEYBOARD : fltk3::PASTE, target);
+  fltk3::compose_state = 0;
+  // for some reason, with the palette, the window does not redraw until the next mouse move or button push
+  // sending a 'redraw()' or 'awake()' does not solve the issue!
+  fltk3::flush();
+  fl_unlock_function();
 }
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)newSelection  {
   NSString *received;
-  if (newSelection.location == 0) {
-    [self unmarkText];
-    return;
-  }
   if ([aString isKindOfClass:[NSAttributedString class]]) {
     received = [(NSAttributedString*)aString string];
   } else {
     received = (NSString*)aString;
   }
-  //NSLog(@"setMarkedText: %@ %d %d",received,newSelection.location,newSelection.length);
+  fl_lock_function();
   // This code creates the OS X behaviour of seeing dead keys as things
   // are being composed.
-  next_compose_length = newSelection.location;
   [FLView prepareEtext:received];
-  //NSLog(@"fltk3::e_text=%@ fltk3::e_length=%d next_compose_length=%d", received, fltk3::e_length, next_compose_length);
+  /*NSLog(@"setMarkedText:%@ %d %d fltk3::e_length=%d fltk3::compose_state=%d ［received length]=%d", 
+   received, newSelection.location, newSelection.length, fltk3::e_length, fltk3::compose_state, [received length]);*/
+  fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
+  fltk3::handle(fltk3::KEYBOARD, target);
+  fltk3::compose_state = [received length];
+  fl_unlock_function();
 }
 
 - (void)unmarkText {
@@ -1963,8 +1953,8 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 - (NSRange)markedRange {
-  //NSLog(@"markedRange ?");
-  return NSMakeRange(NSNotFound, fltk3::compose_state);
+  //NSLog(@"markedRange=%d %d", fltk3::compose_state > 0?0:NSNotFound, fltk3::compose_state);
+  return NSMakeRange(fltk3::compose_state > 0?0:NSNotFound, fltk3::compose_state);
 }
 
 - (BOOL)hasMarkedText {
@@ -1982,11 +1972,12 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange {
+  //NSLog(@"firstRectForCharacterRange %d %d",aRange.location, aRange.length);
   NSRect glyphRect;
   fl_lock_function();
   fltk3::Widget *focus = fltk3::focus();
-  fltk3::Window *wfocus = focus->window();
-  while (wfocus->window()) wfocus = wfocus->window();
+  fltk3::Window *wfocus = [(FLWindow*)[self window] getFl_Window];
+  if (!focus) focus = wfocus;
   glyphRect.size.width = 0;
   
   if (dynamic_cast<fltk3::TextDisplay*>(focus) != NULL) {
@@ -2013,7 +2004,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 - (NSInteger)conversationIdentifier {
-  return (NSInteger)self;
+  return identifier;
 }
 
 @end
