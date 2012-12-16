@@ -59,8 +59,10 @@ int fltk3::compose(int& del) {
   del = 0;
 #if defined(__APPLE__)
   int has_text_key = fltk3::compose_state || fltk3::e_keysym <= '~' || fltk3::e_keysym == fltk3::IsoKey ||
-  (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey && fltk3::e_keysym != fltk3::KPEnterKey);
-  if ( fltk3::e_state&(fltk3::META | fltk3::CTRL) || !has_text_key  ) {
+    (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey && fltk3::e_keysym != fltk3::KPEnterKey);
+  if ( fltk3::e_state&(fltk3::META | fltk3::CTRL) ||
+      (fltk3::e_keysym >= fltk3::ShiftLKey && fltk3::e_keysym <= fltk3::AltRKey) || // called from flagsChanged
+      !has_text_key  ) {
     // this stuff is to be treated as a function key
     return 0;
   }

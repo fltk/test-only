@@ -1653,6 +1653,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 - (void)draggingExited:(id < NSDraggingInfo >)sender;
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal;
+- (void)FLselectMarkedText;
 @end
 
 @implementation FLView
@@ -1916,6 +1917,8 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
   fltk3::handle( (in_key_event || fltk3::compose_state) ? fltk3::KEYBOARD : fltk3::PASTE, target);
   fltk3::compose_state = 0;
+  [self FLselectMarkedText];
+
   // for some reason, with the palette, the window does not redraw until the next mouse move or button push
   // sending a 'redraw()' or 'awake()' does not solve the issue!
   fltk3::flush();
@@ -1933,17 +1936,35 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   // This code creates the OS X behaviour of seeing dead keys as things
   // are being composed.
   [FLView prepareEtext:received];
-  /*NSLog(@"setMarkedText:%@ %d %d fltk3::e_length=%d fltk3::compose_state=%d ［received length]=%d", 
-   received, newSelection.location, newSelection.length, fltk3::e_length, fltk3::compose_state, [received length]);*/
+  /*NSLog(@"setMarkedText:%@ %d %d fltk3::compose_state=%d fltk3::e_length=%d", 
+   received, newSelection.location, newSelection.length, fltk3::compose_state, fltk3::e_length);*/
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
   fltk3::handle(fltk3::KEYBOARD, target);
-  fltk3::compose_state = [received length];
+  fltk3::compose_state = fltk3::e_length;
+  [self FLselectMarkedText];
   fl_unlock_function();
+}
+
+- (void)FLselectMarkedText
+{ // set/clear marked text as selected in text widgets
+  fltk3::Widget *widget = fltk3::focus();
+  if (!widget) return;
+  if (dynamic_cast<fltk3::Input_*>(widget) != NULL) {
+    fltk3::Input_* input = (fltk3::Input_*)widget;
+    input->mark( input->position() - fltk3::compose_state );
+  }
+  else if (dynamic_cast<fltk3::TextDisplay*>(widget) != NULL) {
+    fltk3::TextDisplay* input = (fltk3::TextDisplay*)widget;
+    fltk3::TextSelection* sel = (fltk3::TextSelection*)input->buffer()->highlight_selection();
+    int pos = input->insert_position();
+    sel->set(pos - fltk3::compose_state, pos);
+  }
 }
 
 - (void)unmarkText {
   fl_lock_function();
   fltk3::compose_state = 0;
+  [self FLselectMarkedText];
   fl_unlock_function();
   //NSLog(@"unmarkText");
 }
