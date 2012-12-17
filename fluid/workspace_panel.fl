@@ -383,10 +383,15 @@ Function {make_workspace_panel()} {open
 
 if (v == Fl_Panel::LOAD) {
   } else {
-    const char *fn = fltk3::file_chooser("Select file:", "*", pFileName->value());
+    const char *fn = fltk3::file_chooser(
+      "Select file:", 
+      "*", 
+      Fl_Panel::selected_file()->filename()
+    );
     if (fn) {
       pFileName->value(fn);
       pFileName->do_callback();
+      // FIXME: the callback will not fix the absolute path!
     }
   }} selected
             xywh {350 5 40 20} color 52 labelcolor 43 align 16 deactivate

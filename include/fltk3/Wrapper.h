@@ -673,7 +673,7 @@ namespace fltk3 {
     FLTK3_WRAPPER_VCALLS_IMAGE(Image, uncache(), uncache(), Uncache);
   };
   
-}; // namespace fltk3
+} // namespace fltk3
 
 
 #endif

@@ -233,9 +233,10 @@ public:
   virtual int is_file() const { return 1; }
   virtual int pixmapID() { return 53; } // FIXME: draw icon
   void filename(const char *new_name);
-  const char *filename() { return pFilename; }
+  const char *filename() { return pFilename; } // FIXME: fix absolue filenames!
   const char *filename_name();
   const char *filename_relative(const char *fnbase, const char *tgtbase);
+  const char *filename_absolute();
   virtual void open();
   virtual void write_properties();
   virtual char read_property(const char *);

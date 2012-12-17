@@ -725,6 +725,44 @@ const char *Fl_File_Type::filename_relative(const char *fnbase, const char *tgtb
   }
 }
 
+const char *Fl_File_Type::filename_absolute() {
+  char *p;
+  char *result = get_temporary_return_buffer(FLTK3_PATH_MAX);
+  const char *fn = filename();
+  if (fn) {
+    result[0] = 0;
+    switch (location()) {
+      case FL_LOCATION_ABSOLUTE:
+        strcpy(result, fn);
+        break;
+      case FL_LOCATION_IDE:
+        strcpy(result, ::filename);
+        p = (char*)fltk3::filename_name(result);
+        // FIXME: The paths below should depend on the build_env setting!
+#ifdef __APPLE__
+        strcpy(p, "ide/Xcode4/");
+#elif defined WIN32
+        strcpy(p, "ide/VisualC2010/");
+#else
+        strcpy(p, "");
+#endif
+        strcat(p, fn);
+        break;
+      case FL_LOCATION_SDK:
+        // FIXME: SDK
+        break;
+      case FL_LOCATION_WORKSPACE:
+        strcpy(result, ::filename);
+        p = (char*)fltk3::filename_name(result);
+        strcpy(p, fn);
+        break;
+    }
+    return result;
+  } else {
+    return 0;
+  }
+}
+
 void Fl_File_Type::open() {
   if (!the_workspace_panel) the_workspace_panel = make_workspace_panel();
   the_workspace_panel->load(&Fl_Type::is_tool);

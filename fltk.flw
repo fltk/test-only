@@ -13,10 +13,10 @@ workspace FLTK {open
   uuid_VC2008_Workspace {D21EA206-7BBC-4F5B-8518-A798E56EE0FC}
   uuid_VC2010_Workspace {8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}
 } {
-  folder Applications {
+  folder Applications {open
     uuid_Xcode4_Group {137F861A-5702-45AC-821B-A2C51A17F780}
   } {
-    app_target Fluid {
+    app_target Fluid {open selected
       uuid_Xcode4_ProductReference {FD9750B2-CA9C-4856-A516-E56BD9B2E805}
       uuid_Xcode4_ProductFileReference {4616D958-4FAE-4BE9-921B-A868F80B6CC7}
       uuid_Xcode4_FluidBuildRule {30FE3F00-9876-4AE4-9F6E-35B6B4CAA24E}
@@ -34,7 +34,7 @@ workspace FLTK {open
       target_path fluid
       makefile_path fluid
     } {
-      folder Headers {open
+      folder Headers {
         uuid_Xcode4_Group {DA2A6DF9-A5C3-436C-85B3-0A416E71C3D2}
       } {
         file_ref {about_panel.h} {
@@ -194,7 +194,7 @@ workspace FLTK {open
           filename_and_path {fluid/WorkspaceType.h}
         }
       }
-      folder Sources {open
+      folder Sources {
         uuid_Xcode4_Group {A7473707-DAEF-403D-A178-64742001185E}
       } {
         file_ref {about_panel.cxx} {
@@ -396,7 +396,7 @@ workspace FLTK {open
           filename_and_path {fluid/WorkspaceType.cxx}
         }
       }
-      folder Dependencies {open
+      folder Dependencies {
         uuid_Xcode4_Group {A6C2C5AC-C608-489D-8C74-B63CCDEB081B}
       } {
         target_dependency fltk3 {
@@ -432,7 +432,7 @@ workspace FLTK {open
       }
     }
   }
-  folder Libraries {open
+  folder Libraries {
     uuid_Xcode4_Group {AFD010B3-DA64-4C5E-9682-891530BD3B73}
   } {
     lib_target fltk3 {open
@@ -4976,7 +4976,7 @@ workspace FLTK {open
           uuid_Xcode4_FileRef {B6DC8E80-EB2E-4B92-BDB7-3AF5EB50D6C9}
           filename_and_path {src/fltk3connect/Socket.cxx}
         }
-        file_ref {SerialPort.cxx} {selected
+        file_ref {SerialPort.cxx} {
           uuid_Xcode4_BuildFileInSources {9944741C-E39A-4372-8847-BCEE4EFCAE9F}
           uuid_Xcode4_FileRef {CE848D00-9304-4454-A495-FC3CAF98D759}
           filename_and_path {src/fltk3connect/SerialPort.cxx}

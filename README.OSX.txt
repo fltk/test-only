@@ -58,6 +58,22 @@ After downloading and installing, you need to launch the Terminal. Terminal.app
 is located in the "Utilities" folder inside the "Applications" folder. I like to
 keep the Terminal in the Dock.
 
+ 
+ 2.1.1 Xcode 4.x and command line tools
+----------------------------------------
+
+Xcode 4 does not automatically install the command line tools anymore.
+
+ - go to the App Store, install Xcode
+ - run Xcode (it's now in /Applications instead of /Developers)
+ - in the Xcode menu bar, choose Xcode->Preferences->Downloads
+ - select "Command Line Tools" and click "Install"
+
+Now you are still missing "autoconf". There are several ways to install
+autonconf, either from scratch or via "brew" or similar. Please refer to
+one of the many web pages out there that describe the process in 
+every detail. 
+
 
  2.2  Downloading and Unpacking
 --------------------------------

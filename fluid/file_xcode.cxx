@@ -1166,6 +1166,7 @@ int write_fltk_ide_xcode4() {
 
 #include <unistd.h>
 #include <copyfile.h>
+#include <errno.h>
 
 int filesize(const char *filename)
 {
@@ -1189,7 +1190,23 @@ void filename_minimize(char *filename) {
 
 int copyfiles(const char *srcpath, const char *src, const char *dstpath)
 {
-  printf("Copying %s%s to %s\n", srcpath, src, dstpath);
+  char sbuf[2048];
+  strcpy(sbuf, srcpath);
+  strcat(sbuf, src);
+  //strcat(sbuf, "/");
+
+  char dbuf[2048];
+  strcpy(dbuf, dstpath);
+  //strcat(dbuf, src);
+  
+  copyfile_state_t s;
+  s = copyfile_state_alloc();
+  
+  printf("Copying <%s> to <%s>\n", sbuf, dbuf);
+  int ret = copyfile(sbuf, dbuf, s,
+                     COPYFILE_ALL|COPYFILE_RECURSIVE|COPYFILE_NOFOLLOW);
+  
+  copyfile_state_free(s);
 
 #if 0
   /* Initialize a state variable */
@@ -1213,7 +1230,8 @@ int copyfiles(const char *srcpath, const char *src, const char *dstpath)
   copyfile("/dev/null", "/tmp/bar", NULL, COPYFILE_XATTR);
 #endif
   
-  return 0;
+  if (ret!=0) printf("ERROR %d: %s\n", errno, strerror(errno));
+  return ret;
 }
 
 void install_library_cb(fltk3::Widget *, void *)
@@ -1313,14 +1331,22 @@ void install_library_cb(fltk3::Widget *, void *)
   // FIXME: check if the source is there and has a plausible date.
   // FIXME: check for overwrite of old libraries
   
-  sprintf(buf2, "/Users/%s/Library/Frameworks/", getlogin());
-  copyfiles(buf, "fltk3.workspace", buf2);
-  copyfiles(buf, "fltk3gl.workspace", buf2);
-  copyfiles(buf, "fltk3images.workspace", buf2);
-  copyfiles(buf, "fltk3png.workspace", buf2);
-  copyfiles(buf, "fltk3jpeg.workspace", buf2);
-  copyfiles(buf, "fltk3zlib.workspace", buf2);
-  copyfiles(buf, "fltk3connect.workspace", buf2);
+  //sprintf(buf2, "/Users/%s/Library/Frameworks/", getlogin());
+  strcpy(buf2, "/Library/Frameworks/");
+  copyfiles(buf, "fltk3.framework", buf2);
+  /*
+  copyfiles(buf, "fltk3gl.framework", buf2);
+  copyfiles(buf, "fltk3images.framework", buf2);
+  copyfiles(buf, "fltk3png.framework", buf2);
+  copyfiles(buf, "fltk3jpeg.framework", buf2);
+  copyfiles(buf, "fltk3zlib.framework", buf2);
+  copyfiles(buf, "fltk3connect.framework", buf2);
+   */
+
+  copyfiles(buf, "fltk3.framework", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/");
+
+  // Xcode3 stores its own libraries here: /Developer/SDKs/MacOSXversion.sdk/System/Library/Framew
+  // Xcode4 stores its own libraries here: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/
   
   if (source_path) free(source_path);
 }
@@ -1332,6 +1358,37 @@ void install_library_cb(fltk3::Widget *, void *)
 }
 
 #endif
+
+
+/*
+ 
+ Rapid Application Development:
+ 
+ Goal: as quickly as possible from nothing to the first running application
+ 
+ Base: Fluid explains and organizes installation and project creation
+ 
+ Initial help: (assuming that Fluid was downloaded as a binary, if we decide to allow that)
+ 
+ A check if Fluid is run for the first time ever and say Hi!
+ - check if FLTK is installed and if it is the current version (once a week)
+ - if not
+ -   check if Fluid was created on this machine
+ -     if not, check which developer environments are installed
+ -       if none, give user a choice and a short tour on how to install those on the given OS
+ -     offer to download the curent FLTK library and documentation as binaries or source 
+ -     if user chooses binary, continue at B else continue below
+ -   if Fluid was created on this machine
+ -     find the root of the FLTK source code archive, if not, let the user choose
+ -     check if there is a newer version available
+ -     check if all the libraries/frameworks were build, offer to build them
+ -     check for documentation, build or download
+ B newer libraries and documentation exist on the local machines than the ones installed
+ -   offer to install/overwrite binaries, libs and docs
+ -     inside Xcode (explain why), /Libraries/Framework, ~/Lib/FW, etc.
+ -   offer to create test project 
+ 
+ */
 
 
 //

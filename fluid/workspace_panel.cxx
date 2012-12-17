@@ -310,10 +310,15 @@ static void cb_3filenew(fltk3::Button*, void* v) {
 
 if (v == Fl_Panel::LOAD) {
   } else {
-    const char *fn = fltk3::file_chooser("Select file:", "*", pFileName->value());
+    const char *fn = fltk3::file_chooser(
+      "Select file:", 
+      "*", 
+      Fl_Panel::selected_file()->filename()
+    );
     if (fn) {
       pFileName->value(fn);
       pFileName->do_callback();
+      // FIXME: the callback will not fix the absolute path!
     }
   };
 }
