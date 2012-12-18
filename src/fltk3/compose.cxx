@@ -55,33 +55,28 @@ extern XIC fl_xim_ic;
  other user-interface things to allow characters to be selected.
  */
 int fltk3::compose(int& del) {
-  // character composition is now handled by the OS
-  del = 0;
+  int condition;
 #if defined(__APPLE__)
   int has_text_key = fltk3::compose_state || fltk3::e_keysym <= '~' || fltk3::e_keysym == fltk3::IsoKey ||
-    (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey && fltk3::e_keysym != fltk3::KPEnterKey);
-  if ( fltk3::e_state&(fltk3::META | fltk3::CTRL) ||
-      (fltk3::e_keysym >= fltk3::ShiftLKey && fltk3::e_keysym <= fltk3::AltRKey) || // called from flagsChanged
-      !has_text_key  ) {
-    // this stuff is to be treated as a function key
-    return 0;
-  }
-#elif defined(WIN32)
-  unsigned char ascii = (unsigned)e_text[0];
-  if ((e_state & (fltk3::ALT | fltk3::META)) && !(ascii & 128)) return 0;
+  (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey && fltk3::e_keysym != fltk3::KPEnterKey);
+  condition = fltk3::e_state&(fltk3::META | fltk3::CTRL) || 
+  (fltk3::e_keysym >= fltk3::ShiftLKey && fltk3::e_keysym <= fltk3::AltRKey) || // called from flagsChanged
+  !has_text_key ;
 #else
-  unsigned char ascii = (unsigned)e_text[0];
-  if ((e_state & (fltk3::ALT | fltk3::META | fltk3::CTRL)) && !(ascii & 128)) return 0;
+  unsigned char ascii = (unsigned char)e_text[0];
+#if defined(WIN32)
+  condition = (e_state & (fltk3::ALT | fltk3::META)) && !(ascii & 128) ;
+#else
+  condition = (e_state & (fltk3::ALT | fltk3::META | fltk3::CTRL)) && !(ascii & 128) ;
 #endif
-  if(fltk3::compose_state) {
-    del = fltk3::compose_state;
+#endif
+  if (condition) { del = 0; return 0;} // this stuff is to be treated as a function key
+  del = fltk3::compose_state;
 #ifndef __APPLE__
-    fltk3::compose_state = 0;
-  } else {
-    // Only insert non-control characters:
-    if (! (ascii & ~31 && ascii!=127)) { return 0; }
+  fltk3::compose_state = 0;
+  // Only insert non-control characters:
+  if ( (!fltk3::compose_state) && ! (ascii & ~31 && ascii!=127)) { return 0; }
 #endif
-  }
   return 1;
 }
 
@@ -93,9 +88,13 @@ int fltk3::compose(int& del) {
  */
 void fltk3::compose_reset()
 {
+#ifdef __APPLE__
+  Fl_X::compose_state(0);
+#else
   fltk3::compose_state = 0;
-#if !defined(WIN32) && !defined(__APPLE__)
+#if !defined(WIN32)
   if (fl_xim_ic) XmbResetIC(fl_xim_ic);
+#endif
 #endif
 }
 
