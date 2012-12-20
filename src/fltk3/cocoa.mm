@@ -1982,17 +1982,23 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   if (!focus) focus = wfocus;
   glyphRect.size.width = 0;
   
-  if (dynamic_cast<fltk3::TextDisplay*>(focus) != NULL) {
+  fltk3::TextDisplay *current = dynamic_cast<fltk3::TextDisplay*>(focus);
+  if (current) {
     int x, y;
-    fltk3::TextDisplay *current = (fltk3::TextDisplay*)focus;
     current->position_to_xy( current->insert_position(), &x, &y );
     glyphRect.origin.x = (CGFloat)x;
     glyphRect.origin.y = (CGFloat)y + current->textsize();
     glyphRect.size.height = current->textsize();
   } else {
-    glyphRect.origin.x = focus->x();
-    glyphRect.origin.y = focus->y() + focus->h();
+    glyphRect.origin.x = 0;
+    glyphRect.origin.y = focus->h();
     glyphRect.size.height = 12;
+  }
+  fltk3::Widget *w = focus;
+  while (w->parent()) {
+    glyphRect.origin.x += w->x();
+    glyphRect.origin.y += w->y();
+    w = w->parent();
   }
   // Convert the rect to screen coordinates
   glyphRect.origin.y = wfocus->h() - glyphRect.origin.y;
