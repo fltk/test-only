@@ -594,12 +594,19 @@ void make_image() {
   }
 }
 
+#ifndef NO_PDF
+#include "pdf_or_ps.h"
+#endif
 
 void print(Fl_Widget *, void *w) {
     Fl_Widget * g = (Fl_Widget *)w;
- 
+#ifdef NO_PDF
   Fl_Printer * p = new Fl_Printer();
   if (!p->start_job(1)) {
+#else
+  Fl_PDF_File_Device* p = new Fl_PDF_File_Device();
+  if (!p->begin_document("/Users/mgouy/Desktop/test.pdf")) {
+#endif
     p->start_page();
     p->print_window(g->window());
     p->end_page();

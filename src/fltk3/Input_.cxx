@@ -351,8 +351,8 @@ void fltk3::Input_::drawtext(int X, int Y, int W, int H) {
       int offset2;
       if (pp <= e) x2 = xpos + (float)expandpos(p, pp, buf, &offset2);
       else offset2 = (int)strlen(buf);
-#ifdef __APPLE__ // Mac OS: underline marked ( = selected + Fl::compose_state != 0) text 
-      if (fltk3::compose_state) {
+#ifdef __APPLE__ // Mac OS: underline marked ( = selected + fltk3::marked_text_length() != 0) text 
+      if (fltk3::marked_text_length()) {
         fltk3::color(textcolor());
       }
       else 
@@ -363,8 +363,8 @@ void fltk3::Input_::drawtext(int X, int Y, int W, int H) {
       fltk3::color(fltk3::contrast(textcolor(), selection_color()));
       }
       fltk3::draw(buf+offset1, offset2-offset1, x1, (float)(Y+ypos+desc));
-#ifdef __APPLE__ // Mac OS: underline marked ( = selected + Fl::compose_state != 0) text
-      if (fltk3::compose_state) {
+#ifdef __APPLE__ // Mac OS: underline marked ( = selected + fltk3::marked_text_length() != 0) text
+      if (fltk3::marked_text_length()) {
         fltk3::color( fltk3::color_average(textcolor(), color(), 0.6) );
         float width = fltk3::width(buf+offset1, offset2-offset1);
         fltk3::line(x1, Y+ypos+height-1, x1+width, Y+ypos+height-1);
@@ -384,7 +384,11 @@ void fltk3::Input_::drawtext(int X, int Y, int W, int H) {
 
   CONTINUE2:
     // draw the cursor:
-    if (fltk3::focus() == this && (fltk3::compose_state || selstart == selend) &&
+    if (fltk3::focus() == this && (
+#ifdef __APPLE__
+				fltk3::marked_text_length() || 
+#endif
+				selstart == selend) &&
 	position() >= p-value() && position() <= e-value()) {
       fltk3::color(cursor_color());
       // cursor position may need to be recomputed (see STR #2486)

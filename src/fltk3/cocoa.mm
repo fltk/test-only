@@ -1682,6 +1682,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 - (BOOL)performKeyEquivalent:(NSEvent*)theEvent
 {   
+  int handled = 1;
   //NSLog(@"performKeyEquivalent:");
   fl_lock_function();
   cocoaKeyboardHandler(theEvent);
@@ -1692,7 +1693,15 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
     s = [s uppercaseString]; // US keyboards return lowercase letter in s if cmd-shift-key is hit
   }
   if ([s length] >= 1) [FLView prepareEtext:s];
-  int handled = fltk3::handle(fltk3::KEYBOARD, window);
+  if ( (mods & NSControlKeyMask) || (mods & NSCommandKeyMask) ) {
+    handled = fltk3::handle(fltk3::KEYBOARD, window);
+  }
+  else {
+    in_key_event = YES;
+    NSText *edit = [[theEvent window]  fieldEditor:YES forObject:nil];
+    [edit interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+    in_key_event = NO;
+  }
   fl_unlock_function();
   return (handled ? YES : NO);
 }
@@ -1908,15 +1917,15 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   } else {
     received = (NSString*)aString;
   }
-  //NSLog(@"insertText: received=%@ fltk3::compose_state＝%d",received, fltk3::compose_state);
+  //NSLog(@"insertText: received=%@ fltk3::marked_text_length()＝%d",received, fltk3::marked_text_length());
 
   fl_lock_function();
   [FLView prepareEtext:received];
   // We can get called outside of key events (e.g., from the character palette, from CJK text input). 
   // Transform character palette actions to FL_PASTE events.
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
-  fltk3::handle( (in_key_event || fltk3::compose_state) ? fltk3::KEYBOARD : fltk3::PASTE, target);
-  Fl_X::compose_state(0);
+  Fl_X::next_marked_length = 0;
+  fltk3::handle( (in_key_event || fltk3::marked_text_length()) ? fltk3::KEYBOARD : fltk3::PASTE, target);
 
   // for some reason, with the palette, the window does not redraw until the next mouse move or button push
   // sending a 'redraw()' or 'awake()' does not solve the issue!
@@ -1935,17 +1944,17 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   // This code creates the OS X behaviour of seeing dead keys as things
   // are being composed.
   [FLView prepareEtext:received];
-  /*NSLog(@"setMarkedText:%@ %d %d fltk3::compose_state=%d fltk3::e_length=%d", 
-   received, newSelection.location, newSelection.length, fltk3::compose_state, fltk3::e_length);*/
+  /*NSLog(@"setMarkedText:%@ %d %d fltk3::marked_text_length()=%d fltk3::e_length=%d", 
+   received, newSelection.location, newSelection.length, fltk3::marked_text_length(), fltk3::e_length);*/
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
+  Fl_X::next_marked_length = fltk3::e_length;
   fltk3::handle(fltk3::KEYBOARD, target);
-  Fl_X::compose_state(fltk3::e_length);
   fl_unlock_function();
 }
 
 - (void)unmarkText {
   fl_lock_function();
-  Fl_X::compose_state(0);
+  fltk3::reset_marked_text();
   fl_unlock_function();
   //NSLog(@"unmarkText");
 }
@@ -1955,13 +1964,13 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 - (NSRange)markedRange {
-  //NSLog(@"markedRange=%d %d", fltk3::compose_state > 0?0:NSNotFound, fltk3::compose_state);
-  return NSMakeRange(fltk3::compose_state > 0?0:NSNotFound, fltk3::compose_state);
+  //NSLog(@"markedRange=%d %d", fltk3::marked_text_length() > 0?0:NSNotFound, fltk3::marked_text_length());
+  return NSMakeRange(fltk3::marked_text_length() > 0?0:NSNotFound, fltk3::marked_text_length());
 }
 
 - (BOOL)hasMarkedText {
-  //NSLog(@"hasMarkedText %s", fltk3::compose_state > 0?"YES":"NO");
-  return (fltk3::compose_state > 0);
+  //NSLog(@"hasMarkedText %s", fltk3::marked_text_length() > 0?"YES":"NO");
+  return (fltk3::marked_text_length() > 0);
 }
 
 - (NSAttributedString *)attributedSubstringFromRange:(NSRange)aRange {
@@ -1982,23 +1991,20 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   if (!focus) focus = wfocus;
   glyphRect.size.width = 0;
   
-  fltk3::TextDisplay *current = dynamic_cast<fltk3::TextDisplay*>(focus);
-  if (current) {
-    int x, y;
-    current->position_to_xy( current->insert_position(), &x, &y );
+  int x, y;
+  if (Fl_X::insertion_point_location(&x, &y)) {
     glyphRect.origin.x = (CGFloat)x;
-    glyphRect.origin.y = (CGFloat)y + current->textsize();
-    glyphRect.size.height = current->textsize();
+    glyphRect.origin.y = (CGFloat)y;
   } else {
     glyphRect.origin.x = 0;
     glyphRect.origin.y = focus->h();
-    glyphRect.size.height = 12;
   }
-  fltk3::Widget *w = focus;
-  while (w->parent()) {
-    glyphRect.origin.x += w->x();
-    glyphRect.origin.y += w->y();
-    w = w->parent();
+  glyphRect.size.height = 12;
+  fltk3::Widget *win = focus;
+  while (win != NULL && win != wfocus) {
+    glyphRect.origin.x += win->x();
+    glyphRect.origin.y += win->y();
+    win = win->parent();
   }
   // Convert the rect to screen coordinates
   glyphRect.origin.y = wfocus->h() - glyphRect.origin.y;
@@ -2016,25 +2022,6 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 }
 
 @end
-
-void Fl_X::compose_state(int new_val)
-{ // select marked text in text widgets
-  if (fltk3::compose_state == 0 && new_val == 0) return;
-  fltk3::compose_state = new_val;
-  fltk3::Widget *widget = fltk3::focus();
-  if (!widget) return;
-  
-  fltk3::Input_* input = dynamic_cast<fltk3::Input_*>(widget);
-  fltk3::TextDisplay* text;
-  if (input) {
-    if ( ! dynamic_cast<fltk3::SecretInput*>(input) ) 
-      input->mark( input->position() - fltk3::compose_state );
-  }
-  else if ( (text = dynamic_cast<fltk3::TextDisplay*>(widget)) ) {
-    int pos = text->insert_position();
-    text->buffer()->select(pos - fltk3::compose_state, pos);
-  }
-}
 
 void fltk3::Window::fullscreen_x() {
   _set_fullscreen();

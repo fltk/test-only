@@ -145,7 +145,8 @@ public:
   static void *get_carbon_function(const char *name);
   static void screen_work_area(int &X, int &Y, int &W, int &H, int n); // compute work area of a given screen
   static unsigned short *compute_macKeyLookUp();
-  static void compose_state(int);
+  static int next_marked_length; // next length of marked text after current marked text will have been replaced
+  static int insertion_point_location(int *px, int *py); // computes window coordinates of insertion point
 private:
   static void relink(fltk3::Window*, fltk3::Window*);
   bool subwindow;

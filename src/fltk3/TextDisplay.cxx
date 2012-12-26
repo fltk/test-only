@@ -1952,7 +1952,7 @@ void fltk3::TextDisplay::draw_string(int style,
     if (style & PRIMARY_MASK) {
       if (fltk3::focus() == (fltk3::Widget*)this) {
 #ifdef __APPLE__
-	if (fltk3::compose_state) background = color();// Mac OS: underline marked text
+	if (fltk3::marked_text_length()) background = color();// Mac OS: underline marked text
 	else 
 #endif
 	  background = selection_color();
@@ -1988,8 +1988,8 @@ void fltk3::TextDisplay::draw_string(int style,
     fltk3::push_clip(X, Y, toX - X, mMaxsize);
 #endif
     fltk3::draw( string, nChars, X, Y + mMaxsize - fltk3::descent());
-#ifdef __APPLE__ // Mac OS: underline marked (= selected + Fl::compose_state != 0) text
-    if (fltk3::compose_state && (style & PRIMARY_MASK)) {
+#ifdef __APPLE__ // Mac OS: underline marked (= selected + fltk3::marked_text_length() != 0) text
+    if (fltk3::marked_text_length() && (style & PRIMARY_MASK)) {
       fltk3::color( fltk3::color_average(foreground, background, 0.6) );
       fltk3::line(X, Y + mMaxsize - 1, X + fltk3::width(string, nChars), Y + mMaxsize - 1);
     }
@@ -3479,7 +3479,11 @@ void fltk3::TextDisplay::draw(void) {
   
   // draw the text cursor
   if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)
-      && (fltk3::compose_state || !buffer()->primary_selection()->selected()) &&
+      && (
+#ifdef __APPLE__
+	  fltk3::marked_text_length() ||
+#endif
+	  !buffer()->primary_selection()->selected()) &&
       mCursorOn && fltk3::focus() == (fltk3::Widget*)this ) {
     fltk3::push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,

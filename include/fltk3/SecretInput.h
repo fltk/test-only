@@ -52,6 +52,7 @@ namespace fltk3 {
      Inherited destructor destroys the widget and any value associated with it.
      */
     SecretInput(int X,int Y,int W,int H,const char *l = 0);
+    int handle(int);
   };
   
 }

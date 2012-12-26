@@ -377,6 +377,11 @@ int fltk3::Input::handle_key() {
       else replace(position(), del ? position()-del : mark(),
 	           fltk3::event_text(), fltk3::event_length());
     }
+#ifdef __APPLE__
+    if (fltk3::marked_text_length()) {
+      this->mark( this->position() - fltk3::marked_text_length() );
+    }
+#endif
     return 1;
   }
   
@@ -604,6 +609,14 @@ int fltk3::Input::handle(int event) {
   static int dnd_save_position, dnd_save_mark, drag_start = -1, newpos;
   static fltk3::Widget *dnd_save_focus;
   switch (event) {
+#ifdef __APPLE__
+    case fltk3::UNFOCUS:
+      if (fltk3::marked_text_length()) {
+	this->mark( this->position() );
+	fltk3::reset_marked_text();
+      }
+      break;
+#endif
     case fltk3::FOCUS:
       switch (fltk3::event_key()) {
         case fltk3::RightKey:
@@ -636,7 +649,8 @@ int fltk3::Input::handle(int event) {
           && !fltk3::event_state(fltk3::SHIFT)			// no shift?
           && !tab_nav()					// with tab navigation disabled?
 	  && input_type() == fltk3::MULTILINE_INPUT		// with a multiline input?
-          && (mark()==0 && position()==size())) {	// while entire field selected?
+	  && size() > 0                                 // non-empty field?
+          && ((mark()==0 && position()==size()) || (position()==0 && mark()==size()))) {// while entire field selected?
         // Set cursor to the end of the selection...
         if (mark() > position())
           position(mark());
@@ -826,6 +840,16 @@ fltk3::MultilineOutput::MultilineOutput(int X,int Y,int W,int H,const char *l)
 fltk3::SecretInput::SecretInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::SECRET_INPUT);
+}
+
+int fltk3::SecretInput::handle(int event) {
+  int retval = fltk3::Input::handle(event);
+#ifdef __APPLE__
+  if (event == fltk3::KEYBOARD && fltk3::marked_text_length()) {
+    this->mark( this->position() ); // don't underline marked text
+  }
+#endif
+  return retval;
 }
 
 

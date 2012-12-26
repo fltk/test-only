@@ -152,6 +152,11 @@ namespace fltk3 {
   extern fltk3::Window* grab_;
   extern int compose_state;
   void call_screen_init(); // recompute screen number and dimensions
+#ifdef __APPLE__
+  int marked_text_length(); // returns length of marked text
+  void reset_marked_text(); // resets marked text
+  void insertion_point_location(int x, int y); // sets window coordinates of insertion point
+#endif
 #endif
   /**
    If true then flush() will do something.
