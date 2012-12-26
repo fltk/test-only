@@ -173,6 +173,15 @@ enum {
   kVK_ISO_Section               = 0x0A
 };
 
+/* JIS keyboards only*/
+enum {
+  kVK_JIS_Yen                   = 0x5D,
+  kVK_JIS_Underscore            = 0x5E,
+  kVK_JIS_KeypadComma           = 0x5F,
+  kVK_JIS_Eisu                  = 0x66,
+  kVK_JIS_Kana                  = 0x68
+};
+
 #endif
 
 // convert an FLTK (X) keysym to a MacOS symbol:
@@ -191,11 +200,14 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { kVK_ANSI_Y, 'Y' }, {  kVK_ANSI_Z, 'Z'  }, 
   { kVK_ANSI_LeftBracket, '[' }, { kVK_ANSI_Backslash, '\\' },{ kVK_ANSI_RightBracket, ']' }, { kVK_ANSI_Grave, '`' }, 
   { kVK_Delete, fltk3::BackSpaceKey }, { kVK_Tab, fltk3::TabKey }, { kVK_ISO_Section, fltk3::IsoKey }, { kVK_Return, fltk3::EnterKey }, /*{ 0x7F, fltk3::PauseKey },
-  { 0x7F, fltk3::ScrollLockKey },*/ { kVK_Escape, fltk3::EscapeKey }, { kVK_Home, fltk3::HomeKey }, { kVK_LeftArrow, fltk3::LeftKey },
+  { 0x7F, fltk3::ScrollLockKey },*/ { kVK_Escape, fltk3::EscapeKey },
+  { kVK_JIS_Kana, fltk3::KanaKey}, { kVK_JIS_Eisu, fltk3::EisuKey}, { kVK_JIS_Yen, fltk3::YenKey}, { kVK_JIS_Underscore, fltk3::JISUnderscoreKey},
+  { kVK_Home, fltk3::HomeKey }, { kVK_LeftArrow, fltk3::LeftKey },
   { kVK_UpArrow, fltk3::UpKey }, { kVK_RightArrow, fltk3::RightKey }, { kVK_DownArrow, fltk3::DownKey }, { kVK_PageUp, fltk3::PageUpKey },
   { kVK_PageDown, fltk3::PageDownKey },  { kVK_End, fltk3::EndKey }, /*{ 0x7F, fltk3::PrintKey }, { 0x7F, fltk3::InsertKey },*/
   { 0x6e, fltk3::MenuKey }, { kVK_Help, fltk3::HelpKey }, { kVK_ANSI_KeypadClear, fltk3::NumLockKey },
   { kVK_ANSI_KeypadEnter, fltk3::KPEnterKey }, { kVK_ANSI_KeypadMultiply, fltk3::KPKey+'*' }, { kVK_ANSI_KeypadPlus, fltk3::KPKey+'+'}, 
+  { kVK_JIS_KeypadComma, fltk3::KPKey+',' },
   { kVK_ANSI_KeypadMinus, fltk3::KPKey+'-' }, { kVK_ANSI_KeypadDecimal, fltk3::KPKey+'.' }, { kVK_ANSI_KeypadDivide, fltk3::KPKey+'/' }, 
   { kVK_ANSI_Keypad0, fltk3::KPKey+'0' }, { kVK_ANSI_Keypad1, fltk3::KPKey+'1' }, { kVK_ANSI_Keypad2, fltk3::KPKey+'2' }, { kVK_ANSI_Keypad3, fltk3::KPKey+'3' }, 
   { kVK_ANSI_Keypad4, fltk3::KPKey+'4' }, { kVK_ANSI_Keypad5, fltk3::KPKey+'5' }, { kVK_ANSI_Keypad6, fltk3::KPKey+'6' }, { kVK_ANSI_Keypad7, fltk3::KPKey+'7' }, 
