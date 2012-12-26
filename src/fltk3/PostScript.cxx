@@ -1584,7 +1584,7 @@ int fltk3::PostScriptPrinter::start_job(int pages, int *firstpage, int *lastpage
     if (to < from) to = from;
     if (firstpage) *firstpage = from;
     if (lastpage) *lastpage = to;
-    pages = to - from + 1;
+    if (pages > 0) pages = to - from + 1;
   }
   
   if (print_output_mode[0]->value()) layout = fltk3::PagedDevice::PORTRAIT;
