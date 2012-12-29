@@ -3478,12 +3478,14 @@ void fltk3::TextDisplay::draw(void) {
   }
   
   // draw the text cursor
+  int start, end;
+  int has_selection = buffer()->selection_position(&start, &end);
   if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)
       && (
 #ifdef __APPLE__
 	  fltk3::marked_text_length() ||
 #endif
-	  !buffer()->primary_selection()->selected()) &&
+	  !has_selection || mCursorPos < start || mCursorPos > end) &&
       mCursorOn && fltk3::focus() == (fltk3::Widget*)this ) {
     fltk3::push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
