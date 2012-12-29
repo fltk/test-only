@@ -90,6 +90,8 @@ namespace fltk3 {
     fltk3::Image* image_;
     /** optional image for a deactivated label */
     fltk3::Image* deimage_;
+    /** optional image when dragging */
+    fltk3::Image* dragimage_;
     
   public:
     
@@ -368,6 +370,17 @@ namespace fltk3 {
      \param[in] img the new image for the deactivated widget
      */
     void deimage(fltk3::Image& img) {deimage_=&img;}
+    
+    /** Sets the image to use when dragging from the widget. 
+     This image is used on the Mac OS platform as a cursor when dragging from
+     the widget. If no (or a NULL) dragging image is assigned to a widget, the text
+     data in the selection buffer is used to build an image.
+     \param[in] img the image used when dragging from the widget
+     */
+    void dragimage(fltk3::Image* img) {dragimage_=img;}
+    /** Gets the image that is used when dragging from the widget.  
+     */
+    fltk3::Image* dragimage() {return dragimage_;}
     
   };
   

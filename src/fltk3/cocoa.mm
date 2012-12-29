@@ -3027,21 +3027,16 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
   return image;
 }
 
-static NSImage *defaultDragImage(int *pwidth, int *pheight)
+static NSImage *defaultDragImage(int *pwidth, int *pheight, fltk3::Image* img)
 {
-  const int width = 16, height = 16;
-  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(width, height);
+  *pwidth = img->w();
+  *pheight = img->h();
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(*pwidth, *pheight);
   fl_begin_offscreen(off);
-  CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fltk3::rectf(0,0,width,height);
-  CGContextSetRGBStrokeColor( (CGContextRef)off, 0,0,0,0.6);
-  fltk3::rect(0,0,width,height);
-  fltk3::rect(2,2,width-4,height-4);
+  img->draw(0,0);
   fl_end_offscreen();
   NSImage* image = CGBitmapContextToNSImage( (CGContextRef)off );
   fl_delete_offscreen( off );
-  *pwidth = width;
-  *pheight = height;
   return image;
 }
 
@@ -3064,19 +3059,18 @@ int fltk3::dnd(void)
   }
   NSView *myview = [Fl_X::i(win)->xid contentView];
   NSEvent *theEvent = [NSApp currentEvent];
-  
+ 
   int width, height;
   NSImage *image;
-  if ( dynamic_cast<fltk3::Input_*>(w) != NULL ||  dynamic_cast<fltk3::TextDisplay*>(w) != NULL) {
+  if ( !w->dragimage() ) {
     fl_selection_buffer[0][ fl_selection_length[0] ] = 0;
     image = imageFromText(fl_selection_buffer[0], &width, &height);
   } else {
-    image = defaultDragImage(&width, &height);
+    image = defaultDragImage(&width, &height, w->dragimage());
   }
   
   static NSSize offset={0,0};
   NSPoint pt = [theEvent locationInWindow];
-  pt.x -= width/2;
   pt.y -= height/2;
   [myview dragImage:image  at:pt  offset:offset 
               event:theEvent  pasteboard:mypasteboard  

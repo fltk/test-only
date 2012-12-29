@@ -110,7 +110,8 @@ fltk3::Label::Label(int X, int Y, int W, int H, const char* L)
   labeltext_(L),
   flags_(0),
   image_(0),
-  deimage_(0)
+  deimage_(0),
+  dragimage_(0)
 {
 }
 
