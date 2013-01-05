@@ -3027,7 +3027,7 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
   return image;
 }
 
-static NSImage *defaultDragImage(int *pwidth, int *pheight, fltk3::Image* img)
+static NSImage *makeDragImage(int *pwidth, int *pheight, fltk3::Image* img)
 {
   *pwidth = img->w();
   *pheight = img->h();
@@ -3035,12 +3035,12 @@ static NSImage *defaultDragImage(int *pwidth, int *pheight, fltk3::Image* img)
   fl_begin_offscreen(off);
   img->draw(0,0);
   fl_end_offscreen();
-  NSImage* image = CGBitmapContextToNSImage( (CGContextRef)off );
-  fl_delete_offscreen( off );
+  NSImage* image = CGBitmapContextToNSImage(off);
+  fl_delete_offscreen(off);
   return image;
 }
 
-int fltk3::dnd(void)
+int fltk3::dnd(fltk3::Image* dragimage)
 {
   CFDataRef text = CFDataCreate(kCFAllocatorDefault, (UInt8*)fl_selection_buffer[0], fl_selection_length[0]);
   if (text==NULL) return false;
@@ -3062,11 +3062,11 @@ int fltk3::dnd(void)
  
   int width, height;
   NSImage *image;
-  if ( !w->dragimage() ) {
+  if ( !dragimage ) {
     fl_selection_buffer[0][ fl_selection_length[0] ] = 0;
     image = imageFromText(fl_selection_buffer[0], &width, &height);
   } else {
-    image = defaultDragImage(&width, &height, w->dragimage());
+    image = makeDragImage(&width, &height, dragimage);
   }
   
   static NSSize offset={0,0};

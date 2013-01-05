@@ -770,8 +770,17 @@ namespace fltk3 {
    
    Create a selection first using:
    fltk3::copy(const char *stuff, int len, 0)
+   
+   On the Mac OS platform, the \p dragimage optional argument 
+   sets the image to use as a cursor when dragging. 
+   If no (or a NULL) dragging image is used, the text
+   data in the selection buffer is used to build the cursor.
    */
-  int dnd(); // platform dependent
+  int dnd(
+#if defined(__APPLE__) || defined(FL_DOXYGEN)
+	  fltk3::Image* dragimage = NULL
+#endif
+	  ); // platform dependent
   
   // These are for back-compatibility only:
   /**  back-compatibility only: Gets the widget owning the current selection  
