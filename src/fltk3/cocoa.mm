@@ -2072,6 +2072,7 @@ void Fl_X::make(fltk3::Window* w)
     x->subRegion = 0;
     x->cursor = fl_default_cursor;
     x->gc = 0;			// stay 0 for Quickdraw; fill with CGContext for Quartz
+    w->set_visible();
     fltk3::Window *win = w->window();
     Fl_X *xo = Fl_X::i(win);
     if (xo) {
