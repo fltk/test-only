@@ -810,12 +810,14 @@ fltk3::NumericInput::NumericInput(int X,int Y,int W,int H,const char *l)
 fltk3::FloatInput::FloatInput(int X,int Y,int W,int H,const char *l)
 : fltk3::NumericInput(X,Y,W,H,l) {
   type(fltk3::FLOAT_INPUT);
+  clear_flag(MAC_USE_ACCENTS_MENU);
 }
 
 
 fltk3::IntInput::IntInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::INT_INPUT);
+  clear_flag(MAC_USE_ACCENTS_MENU);
 }
 
 
@@ -840,6 +842,7 @@ fltk3::MultilineOutput::MultilineOutput(int X,int Y,int W,int H,const char *l)
 fltk3::SecretInput::SecretInput(int X,int Y,int W,int H,const char *l)
 : fltk3::Input(X,Y,W,H,l) {
   type(fltk3::SECRET_INPUT);
+  clear_flag(MAC_USE_ACCENTS_MENU);
 }
 
 int fltk3::SecretInput::handle(int event) {

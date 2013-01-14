@@ -429,6 +429,7 @@ namespace fltk3 {
       NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (fltk3::MenuWindow)
       COPIED_TOOLTIP  = 1<<17,  ///< the widget tooltip is internally copied, its destruction is handled by the widget
       FULLSCREEN      = 1<<18,  ///< a fullscreen window (Fl_Window)
+      MAC_USE_ACCENTS_MENU = 1<<19, ///< On the Mac OS platform, pressing and holding a key on the keyboard opens an accented-character menu window (Fl_Input_, Fl_Text_Editor)
                                 // (space for more flags)
       USERFLAG3       = 1<<29,  ///< reserved for 3rd party extensions
       USERFLAG2       = 1<<30,  ///< reserved for 3rd party extensions
@@ -1035,6 +1036,11 @@ namespace fltk3 {
      \see fltk3::Widget::as_group(), fltk3::Widget::as_window()
      */
     virtual fltk3::ShapedWindow* as_shaped_window() {return 0;}
+    
+    /** Returns non zero if MAC_USE_ACCENTS_MENU flag is set, 0 otherwise. 
+     */
+    int use_accents_menu() { return flags() & MAC_USE_ACCENTS_MENU; }
+    
   };
   
   

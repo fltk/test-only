@@ -155,7 +155,7 @@ namespace fltk3 {
 #ifdef __APPLE__
   int marked_text_length(); // returns length of marked text
   void reset_marked_text(); // resets marked text
-  void insertion_point_location(int x, int y); // sets window coordinates of insertion point
+  void insertion_point_location(int x, int y, int height); // sets window coordinates & height of insertion point
 #endif
 #endif
   /**
