@@ -1592,20 +1592,21 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
  
  Keyboard input sends keyDown: and performKeyEquivalent: messages to myview. The latter occurs for keys such as
  ForwardDelete, arrows and F1, and when the Ctrl or Cmd modifiers are used. Other key presses send keyDown: messages.
- Both keyDown: and performKeyEquivalent: methods call [[myview inputContext] handleEvent:theEvent] that triggers system 
- processing of keyboard events. Three sorts of messages are then sent back by the system to myview: doCommandBySelector:, 
- setMarkedText: and insertText:. All 3 messages eventually produce Fl::handle(FL_KEYBOARD, focus-window) calls.
- The handleEvent: method, however, does not send any message back to myview when both the Alt and Cmd modifiers 
- are pressed. In this situation, the performKeyEquivalent: method directly sends the doCommandBySelector: message to myview. 
- The doCommandBySelector: message allows to process events such as new-line, forward and backward delete, arrows, escape, 
- tab, F1 and when the Ctrl or Cmd modifiers are used. The message setMarkedText:
- is sent when marked text, that is, temporary text that gets replaced later by some other text, is inserted. This happens
- when a dead key is pressed, and also when entering complex scripts (e.g., Chinese). Fl_X::next_marked_length gives the byte
- length of marked text before the FL_KEYBOARD event is processed. Fl::compose_state gives this length after this processing.
- Message insertText: is sent to enter text in the focused widget. If there's marked text, Fl::compose_state is > 0, and this
+ The keyDown: method calls [[myview inputContext] handleEvent:theEvent] that triggers system 
+ processing of keyboard events. The performKeyEquivalent: method directly calls fltk3::handle(fltk3::KEYBOARD, focus-window) 
+ when the Ctrl or Cmd modifiers are used. If not, it also calls [[myview inputContext] handleEvent:theEvent].
+ The performKeyEquivalent: method returns YES when the keystroke has been handled and NO otherwise, which allows 
+ shortcuts of the system menu to be processed. Three sorts of messages are then sent back by the system to myview: 
+ doCommandBySelector:, setMarkedText: and insertText:. All 3 messages eventually produce fltk3::handle(fltk3::KEYBOARD, win)
+ calls. The doCommandBySelector: message allows to process events such as new-line, forward and backward delete, arrows, 
+ escape, tab, F1. The message setMarkedText: is sent when marked text, that is, temporary text that gets replaced later 
+ by some other text, is inserted. This happen when a dead key is pressed, and also 
+ when entering complex scripts (e.g., Chinese). Fl_X::next_marked_length gives the byte
+ length of marked text before the fltk3::KEYBOARD event is processed. fltk3::compose_state gives this length after this processing.
+ Message insertText: is sent to enter text in the focused widget. If there's marked text, fltk3::compose_state is > 0, and this
  marked text gets replaced by the inserted text. If there's no marked text, the new text is inserted at the insertion point. 
  When the character palette is used to enter text, the system sends an insertText: message to myview. The code processes it 
- as an FL_PASTE event. The in_key_event field of the FLView class allows to differentiate keyboard from palette inputs.
+ as an fltk3::PASTE event. The in_key_event field of the FLView class allows to differentiate keyboard from palette inputs.
  
  OS >= 10.7 contains a feature where pressing and holding certain keys opens a menu window that shows a list 
  of possible accented variants of this key. The selectedRange field of the FLView class and the selectedRange, insertText:
@@ -1772,12 +1773,21 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   //NSLog(@"performKeyEquivalent:");
   fl_lock_function();
   cocoaKeyboardHandler(theEvent);
-  in_key_event = YES;
+  BOOL handled;
   NSUInteger mods = [theEvent modifierFlags];
-  BOOL handled = YES;
-  if ( (mods & NSAlternateKeyMask) && (mods & NSCommandKeyMask) ) [self doCommandBySelector:@selector(noop:)];
-  else handled = [[self performSelector:inputContextSEL] handleEvent:theEvent];
-  in_key_event = NO;
+  if ( (mods & NSControlKeyMask) || (mods & NSCommandKeyMask) ) {
+    NSString *s = [theEvent characters];
+    if ( (mods & NSShiftKeyMask) && (mods & NSCommandKeyMask) ) {
+      s = [s uppercaseString]; // US keyboards return lowercase letter in s if cmd-shift-key is hit
+    }
+    [FLView prepareEtext:s];
+    handled = fltk3::handle(fltk3::KEYBOARD, [(FLWindow*)[theEvent window] getFl_Window]);
+  }
+  else {
+    in_key_event = YES;
+    handled = [[self performSelector:inputContextSEL] handleEvent:theEvent];
+    in_key_event = NO;
+  }
   fl_unlock_function();
   return handled;
 }
@@ -1987,12 +1997,7 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
 
 - (void)doCommandBySelector:(SEL)aSelector {
   //NSLog(@"doCommandBySelector:%s",sel_getName(aSelector));
-  NSString *s = [[NSApp currentEvent] characters];
-  NSUInteger mods = [[NSApp currentEvent] modifierFlags];
-  if ( (mods & NSShiftKeyMask) && (mods & NSCommandKeyMask) ) {
-    s = [s uppercaseString]; // US keyboards return lowercase letter in s if cmd-shift-key is hit
-  }
-  [FLView prepareEtext:s];
+  [FLView prepareEtext:[[NSApp currentEvent] characters]];
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
   fltk3::handle(fltk3::KEYBOARD, target);
 }
@@ -3030,7 +3035,7 @@ static void createAppleMenu(void)
   static BOOL donethat = NO;
   if (donethat) return;
   donethat = YES;
-  NSMenu *mainmenu, *services, *appleMenu;
+  NSMenu *mainmenu, *services = nil, *appleMenu;
   NSMenuItem *menuItem;
   NSString *title;
 
@@ -3055,35 +3060,37 @@ static void createAppleMenu(void)
     [menuItem setEnabled:YES];
     [appleMenu addItem:[NSMenuItem separatorItem]];
     }
-  // Services Menu
-  services = [[NSMenu alloc] init];
-  menuItem = [appleMenu 
-	      addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::services] 
-	      action:nil 
-	      keyEquivalent:@""];
-  [appleMenu setSubmenu:services forItem:menuItem];
-  [appleMenu addItem:[NSMenuItem separatorItem]];
-  // Hide AppName
-  title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::hide] stringByAppendingString:nsappname];
-  [appleMenu addItemWithTitle:title 
-		       action:@selector(hide:) 
+  if (fl_mac_os_version >= 100400) { // services+hide+quit already in menu in OS 10.3
+    // Services Menu
+    services = [[NSMenu alloc] init];
+    menuItem = [appleMenu 
+		addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::services] 
+		action:nil 
+		keyEquivalent:@""];
+    [appleMenu setSubmenu:services forItem:menuItem];
+    [appleMenu addItem:[NSMenuItem separatorItem]];
+    // Hide AppName
+    title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::hide] stringByAppendingString:nsappname];
+    [appleMenu addItemWithTitle:title 
+			 action:@selector(hide:) 
+		  keyEquivalent:@"h"];
+    // Hide Others
+    menuItem = [appleMenu 
+		addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::hide_others] 
+		action:@selector(hideOtherApplications:) 
 		keyEquivalent:@"h"];
-  // Hide Others
-  menuItem = [appleMenu 
-	      addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::hide_others] 
-	      action:@selector(hideOtherApplications:) 
-	      keyEquivalent:@"h"];
-  [menuItem setKeyEquivalentModifierMask:(NSAlternateKeyMask|NSCommandKeyMask)];
-  // Show All
-  [appleMenu addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::show] 
-		       action:@selector(unhideAllApplications:) keyEquivalent:@""];
-  [appleMenu addItem:[NSMenuItem separatorItem]];
-  // Quit AppName
-  title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::quit] 
-	   stringByAppendingString:nsappname];
-  [appleMenu addItemWithTitle:title 
-		       action:@selector(terminate:) 
-		keyEquivalent:@"q"];
+    [menuItem setKeyEquivalentModifierMask:(NSAlternateKeyMask|NSCommandKeyMask)];
+    // Show All
+    [appleMenu addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::show] 
+			 action:@selector(unhideAllApplications:) keyEquivalent:@""];
+    [appleMenu addItem:[NSMenuItem separatorItem]];
+    // Quit AppName
+    title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::quit] 
+	     stringByAppendingString:nsappname];
+    [appleMenu addItemWithTitle:title 
+			 action:@selector(terminate:) 
+		  keyEquivalent:@"q"];
+    }
   /* Put menu into the menubar */
   menuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
   [menuItem setSubmenu:appleMenu];
@@ -3094,9 +3101,11 @@ static void createAppleMenu(void)
     //	to avoid compiler warning raised by use of undocumented setAppleMenu	:
     [NSApp performSelector:@selector(setAppleMenu:) withObject:appleMenu];
   }
-  [NSApp setServicesMenu:services];
   [NSApp setMainMenu:mainmenu];
-  [services release];
+  if (services) {
+    [NSApp setServicesMenu:services];
+    [services release];
+    }
   [mainmenu release];
   [appleMenu release];
   [menuItem release];
@@ -3213,7 +3222,7 @@ int fltk3::dnd(fltk3::Image* dragimage)
 }
 
 static NSBitmapImageRep* rect_to_NSBitmapImageRep(fltk3::Window *win, int x, int y, int w, int h)
-// release the returned value after use
+// the returned value is autoreleased
 {
   while (win->window()) {
     x += win->x();
@@ -3226,7 +3235,7 @@ static NSBitmapImageRep* rect_to_NSBitmapImageRep(fltk3::Window *win, int x, int
   // left pixel column are not read, and bitmap is read shifted by one pixel in both directions. 
   // Under 10.5, we want no offset.
   NSRect rect = NSMakeRect(x - epsilon, y - epsilon, w, h);
-  return [[NSBitmapImageRep alloc] initWithFocusedViewRect:rect];
+  return [[[NSBitmapImageRep alloc] initWithFocusedViewRect:rect] autorelease];
 }
 
 unsigned char *Fl_X::bitmap_from_window_rect(fltk3::Window *win, int x, int y, int w, int h, int *bytesPerPixel)
@@ -3255,7 +3264,6 @@ unsigned char *Fl_X::bitmap_from_window_rect(fltk3::Window *win, int x, int y, i
       q += w * *bytesPerPixel;
     }
   }
-  [bitmap release];
   return data;
 }
 
@@ -3272,7 +3280,6 @@ CGImageRef Fl_X::CGImage_from_window_rect(fltk3::Window *win, int x, int y, int 
     NSBitmapImageRep *bitmap = rect_to_NSBitmapImageRep(win, x, y, w, h);
     img = (CGImageRef)[bitmap performSelector:@selector(CGImage)]; // requires Mac OS 10.5
     CGImageRetain(img);
-    [bitmap release];
   }
   else {
     int bpp;
