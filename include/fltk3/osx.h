@@ -200,6 +200,7 @@ extern void fl_open_display();
 
 /** \defgroup group_macosx Mac OS X-specific symbols
  Mac OS X-specific symbols declared in <fltk3/x.h> or <fltk3/gl.h>
+ \sa \ref osissues_macos
  @{ */
 
 /** @brief Register a function called for each file dropped onto an application icon.

@@ -1608,6 +1608,13 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
  When the character palette is used to enter text, the system sends an insertText: message to myview. The code processes it 
  as an fltk3::PASTE event. The in_key_event field of the FLView class allows to differentiate keyboard from palette inputs.
  
+ During processing of the handleEvent message, inserted and marked strings are concatenated in a single string
+ inserted in a single fltk3::KEYBOARD event after return from handleEvent. The need_handle member variable of FLView allows 
+ to determine when setMarkedText or insertText strings have been sent during handleEvent processing, and therefore 
+ an fltk3::KEYBOARD event is needed. Concatenating two insertText operations or an insertText followed by a setMarkedText is possible. 
+ In contrast, setMarkedText followed by insertText or by another setMarkedText isn't correct if concatenated in a single 
+ string. Thus, in such case, the setMarkedText and the next operation produce each an fltk3::KEYBOARD event.  
+ 
  OS >= 10.7 contains a feature where pressing and holding certain keys opens a menu window that shows a list 
  of possible accented variants of this key. The selectedRange field of the FLView class and the selectedRange, insertText:
  and setMarkedText: methods of the NSTextInputClient protocol are used to support this feature.
@@ -1705,11 +1712,13 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
 #endif
 > {
   @private
-  BOOL in_key_event;
+  BOOL in_key_event; // YES means keypress is being processed by handleEvent
+  BOOL need_handle; // YES means fltk3::handle(fltk3::KEYBOARD,) is needed after handleEvent processing
   NSInteger identifier;
   NSRange selectedRange;
 }
 + (void)prepareEtext:(NSString*)aString;
++ (void)concatEtext:(NSString*)aString;
 - (id)init;
 - (void)drawRect:(NSRect)rect;
 - (BOOL)acceptsFirstResponder;
@@ -1785,7 +1794,9 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   }
   else {
     in_key_event = YES;
+    need_handle = NO;
     handled = [[self performSelector:inputContextSEL] handleEvent:theEvent];
+    if (need_handle) handled = fltk3::handle(fltk3::KEYBOARD, [(FLWindow*)[theEvent window] getFl_Window]);
     in_key_event = NO;
   }
   fl_unlock_function();
@@ -1837,7 +1848,9 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   fltk3::first_window(window);
   cocoaKeyboardHandler(theEvent);
   in_key_event = YES;
+  need_handle = NO;
   [[self performSelector:inputContextSEL] handleEvent:theEvent];
+  if (need_handle) fltk3::handle(fltk3::KEYBOARD, window);
   in_key_event = NO;
   fl_unlock_function();
 }
@@ -1995,6 +2008,12 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   fltk3::e_length = l;
 }
 
++ (void)concatEtext:(NSString*)aString {
+  // extends fltk3::e_text with aString
+  NSString *newstring = [[NSString stringWithUTF8String:fltk3::e_text] stringByAppendingString:aString];
+  [FLView prepareEtext:newstring];
+}
+
 - (void)doCommandBySelector:(SEL)aSelector {
   //NSLog(@"doCommandBySelector:%s",sel_getName(aSelector));
   [FLView prepareEtext:[[NSApp currentEvent] characters]];
@@ -2023,12 +2042,19 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
     fltk3::handle(fltk3::KEYBOARD, target);
     fltk3::e_keysym = saved_keysym;
   }
-  [FLView prepareEtext:received];
+  if (in_key_event && Fl_X::next_marked_length && fltk3::e_length) {
+    // if setMarkedText + insertText is sent during handleEvent, text cannot be concatenated in single fltk3::KEYBOARD event
+    fltk3::handle(fltk3::KEYBOARD, target);
+    fltk3::e_length = 0;
+  }
+  if (in_key_event && fltk3::e_length) [FLView concatEtext:received];
+  else [FLView prepareEtext:received];
   // We can get called outside of key events (e.g., from the character palette, from CJK text input). 
   // Transform character palette actions to fltk3::PASTE events.
   Fl_X::next_marked_length = 0;
   int flevent = (in_key_event || fltk3::marked_text_length()) ? fltk3::KEYBOARD : fltk3::PASTE;
-  fltk3::handle( flevent, target);
+  if (!in_key_event) fltk3::handle( flevent, target);
+  else need_handle = YES;
   selectedRange = NSMakeRange(100, 0); // 100 is an arbitrary value
   // for some reason, with the palette, the window does not redraw until the next mouse move or button push
   // sending a 'redraw()' or 'awake()' does not solve the issue!
@@ -2060,9 +2086,16 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
     fltk3::handle(fltk3::KEYBOARD, target);
     fltk3::e_keysym = 'a'; // pretend a letter key was hit
   }
-  [FLView prepareEtext:received];
-  Fl_X::next_marked_length = fltk3::e_length;
-  fltk3::handle(fltk3::KEYBOARD, target);
+  if (in_key_event && Fl_X::next_marked_length && fltk3::e_length) {
+    // if setMarkedText + setMarkedText is sent during handleEvent, text cannot be concatenated in single fltk3::KEYBOARD event
+    fltk3::handle(fltk3::KEYBOARD, target);
+    fltk3::e_length = 0;
+  }
+  if (in_key_event && fltk3::e_length) [FLView concatEtext:received];
+  else [FLView prepareEtext:received];
+  Fl_X::next_marked_length = strlen([received UTF8String]);
+  if (!in_key_event) fltk3::handle( fltk3::KEYBOARD, target);
+  else need_handle = YES;
   selectedRange = NSMakeRange(100, newSelection.length);
   fl_unlock_function();
 }
@@ -3039,20 +3072,22 @@ static void createAppleMenu(void)
   NSMenuItem *menuItem;
   NSString *title;
 
-  NSString *nsappname = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+  SEL infodictSEL = (fl_mac_os_version >= 100200 ? @selector(localizedInfoDictionary) : @selector(infoDictionary));
+  NSString *nsappname = [[[NSBundle mainBundle] performSelector:infodictSEL] objectForKey:@"CFBundleName"];  
   if (nsappname == nil)
     nsappname = [[NSProcessInfo processInfo] processName];
   appleMenu = [[NSMenu alloc] initWithTitle:@""];
   /* Add menu items */
-  title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::about] stringByAppendingString:nsappname];
+  title = [NSString stringWithFormat:NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::about],nil), nsappname];
   menuItem = [appleMenu addItemWithTitle:title action:@selector(showPanel) keyEquivalent:@""];
   FLaboutItemTarget *about = [[FLaboutItemTarget alloc] init];
   [menuItem setTarget:about];
   [appleMenu addItem:[NSMenuItem separatorItem]];
   // Print front window
-  if (strlen(Fl_Mac_App_Menu::print) > 0) {
+  title = NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::print], nil);
+  if ([title length] > 0) {
     menuItem = [appleMenu 
-		addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::print] 
+		addItemWithTitle:title 
 		action:@selector(printPanel) 
 		keyEquivalent:@""];
     [menuItem setTarget:about];
@@ -3064,29 +3099,29 @@ static void createAppleMenu(void)
     // Services Menu
     services = [[NSMenu alloc] init];
     menuItem = [appleMenu 
-		addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::services] 
+		addItemWithTitle:NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::services], nil)
 		action:nil 
 		keyEquivalent:@""];
     [appleMenu setSubmenu:services forItem:menuItem];
     [appleMenu addItem:[NSMenuItem separatorItem]];
     // Hide AppName
-    title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::hide] stringByAppendingString:nsappname];
+    title = [NSString stringWithFormat:NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::hide],nil), nsappname];
     [appleMenu addItemWithTitle:title 
 			 action:@selector(hide:) 
 		  keyEquivalent:@"h"];
     // Hide Others
     menuItem = [appleMenu 
-		addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::hide_others] 
+		addItemWithTitle:NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::hide_others] , nil)
 		action:@selector(hideOtherApplications:) 
 		keyEquivalent:@"h"];
     [menuItem setKeyEquivalentModifierMask:(NSAlternateKeyMask|NSCommandKeyMask)];
     // Show All
-    [appleMenu addItemWithTitle:[NSString stringWithUTF8String:Fl_Mac_App_Menu::show] 
+    [appleMenu addItemWithTitle:NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::show] , nil)
 			 action:@selector(unhideAllApplications:) keyEquivalent:@""];
     [appleMenu addItem:[NSMenuItem separatorItem]];
     // Quit AppName
-    title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::quit] 
-	     stringByAppendingString:nsappname];
+    title = [NSString stringWithFormat:NSLocalizedString([NSString stringWithUTF8String:Fl_Mac_App_Menu::quit] , nil),
+	     nsappname];
     [appleMenu addItemWithTitle:title 
 			 action:@selector(terminate:) 
 		  keyEquivalent:@"q"];
