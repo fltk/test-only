@@ -538,9 +538,9 @@ int fltk3::TextEditor::handle_key() {
       else overstrike(fltk3::event_text());
     }
 #ifdef __APPLE__
-    if (fltk3::marked_text_length()) {
+    if (fltk3::compose_state) {
       int pos = this->insert_position();
-      this->buffer()->select(pos - fltk3::marked_text_length(), pos);
+      this->buffer()->select(pos - fltk3::compose_state, pos);
     }
 #endif
     show_insert_position();
@@ -581,7 +581,7 @@ int fltk3::TextEditor::handle(int event) {
     case fltk3::UNFOCUS:
       show_cursor(mCursorOn); // redraws the cursor
 #ifdef __APPLE__
-      if (buffer()->selected() && fltk3::marked_text_length()) {
+      if (buffer()->selected() && fltk3::compose_state) {
 	int pos = insert_position();
 	buffer()->select(pos, pos);
 	fltk3::reset_marked_text();

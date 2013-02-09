@@ -2015,8 +2015,10 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
 }
 
 - (void)doCommandBySelector:(SEL)aSelector {
-  //NSLog(@"doCommandBySelector:%s",sel_getName(aSelector));
-  [FLView prepareEtext:[[NSApp currentEvent] characters]];
+  NSString *s = [[NSApp currentEvent] characters];
+  //NSLog(@"doCommandBySelector:%s text='%@'",sel_getName(aSelector), s);
+  s = [s substringFromIndex:[s length] - 1];
+  [FLView prepareEtext:s]; // use the last character of the event; necessary for deadkey + Tab
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
   fltk3::handle(fltk3::KEYBOARD, target);
 }
@@ -2032,8 +2034,8 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   } else {
     received = (NSString*)aString;
   }
-  /*NSLog(@"insertText=%@ l=%d Fl::marked_text_length()=%d range=%d,%d",
-   received,strlen([received UTF8String]),Fl::marked_text_length(),replacementRange.location,replacementRange.length);*/
+  /*NSLog(@"insertText=%@ l=%d Fl::compose_state=%d range=%d,%d",
+   received,strlen([received UTF8String]),Fl::compose_state,replacementRange.location,replacementRange.length);*/
   fl_lock_function();
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
   while (replacementRange.length--) { // delete replacementRange.length characters before insertion point
@@ -2052,8 +2054,16 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   // We can get called outside of key events (e.g., from the character palette, from CJK text input). 
   // Transform character palette actions to fltk3::PASTE events.
   Fl_X::next_marked_length = 0;
-  int flevent = (in_key_event || fltk3::marked_text_length()) ? fltk3::KEYBOARD : fltk3::PASTE;
-  if (!in_key_event) fltk3::handle( flevent, target);
+  int flevent = (in_key_event || fltk3::compose_state) ? fltk3::KEYBOARD : fltk3::PASTE;
+  // YES if key has text attached
+  BOOL has_text_key = fltk3::e_keysym <= '~' || fltk3::e_keysym == fltk3::IsoKey ||
+  (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey && fltk3::e_keysym != fltk3::KPEnterKey);
+  // insertText sent during handleEvent of a key without text cannot be processed in a single FL_KEYBOARD event.
+  // Occurs with deadkey followed by non-text key
+  if (!in_key_event || !has_text_key) {
+    fltk3::handle(flevent, target);
+    fltk3::e_length = 0;
+  }
   else need_handle = YES;
   selectedRange = NSMakeRange(100, 0); // 100 is an arbitrary value
   // for some reason, with the palette, the window does not redraw until the next mouse move or button push
@@ -2075,8 +2085,8 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
     received = (NSString*)aString;
   }
   fl_lock_function();
-  /*NSLog(@"setMarkedText:%@ l=%d newSelection=%d,%d Fl::marked_text_length()=%d replacement=%d,%d", 
-   received, strlen([received UTF8String]), newSelection.location, newSelection.length, Fl::marked_text_length(),
+  /*NSLog(@"setMarkedText:%@ l=%d newSelection=%d,%d fltk3::compose_state=%d replacement=%d,%d", 
+   received, strlen([received UTF8String]), newSelection.location, newSelection.length, fltk3::compose_state,
    replacementRange.location, replacementRange.length);*/
   fltk3::Window *target = [(FLWindow*)[self window] getFl_Window];
   while (replacementRange.length--) { // delete replacementRange.length characters before insertion point
@@ -2114,13 +2124,13 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
 }
 
 - (NSRange)markedRange {
-  //NSLog(@"markedRange=%d %d", fltk3::marked_text_length() > 0?0:NSNotFound, fltk3::marked_text_length());
-  return NSMakeRange(fltk3::marked_text_length() > 0?0:NSNotFound, fltk3::marked_text_length());
+  //NSLog(@"markedRange=%d %d", fltk3::compose_state > 0?0:NSNotFound, fltk3::compose_state);
+  return NSMakeRange(fltk3::compose_state > 0?0:NSNotFound, fltk3::compose_state);
 }
 
 - (BOOL)hasMarkedText {
-  //NSLog(@"hasMarkedText %s", fltk3::marked_text_length() > 0?"YES":"NO");
-  return (fltk3::marked_text_length() > 0);
+  //NSLog(@"hasMarkedText %s", fltk3::compose_state > 0?"YES":"NO");
+  return (fltk3::compose_state > 0);
 }
 
 - (NSAttributedString *)attributedSubstringFromRange:(NSRange)aRange {

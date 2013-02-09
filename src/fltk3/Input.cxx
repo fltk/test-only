@@ -378,8 +378,8 @@ int fltk3::Input::handle_key() {
 	           fltk3::event_text(), fltk3::event_length());
     }
 #ifdef __APPLE__
-    if (fltk3::marked_text_length()) {
-      this->mark( this->position() - fltk3::marked_text_length() );
+    if (fltk3::compose_state) {
+      this->mark( this->position() - fltk3::compose_state );
     }
 #endif
     return 1;
@@ -611,7 +611,7 @@ int fltk3::Input::handle(int event) {
   switch (event) {
 #ifdef __APPLE__
     case fltk3::UNFOCUS:
-      if (fltk3::marked_text_length()) {
+      if (fltk3::compose_state) {
 	this->mark( this->position() );
 	fltk3::reset_marked_text();
       }
@@ -848,7 +848,7 @@ fltk3::SecretInput::SecretInput(int X,int Y,int W,int H,const char *l)
 int fltk3::SecretInput::handle(int event) {
   int retval = fltk3::Input::handle(event);
 #ifdef __APPLE__
-  if (event == fltk3::KEYBOARD && fltk3::marked_text_length()) {
+  if (event == fltk3::KEYBOARD && fltk3::compose_state) {
     this->mark( this->position() ); // don't underline marked text
   }
 #endif
