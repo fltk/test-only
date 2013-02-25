@@ -132,6 +132,7 @@ int fltk3::NativeFileChooser::type() const {
   NEW_FOLDER        Shows the 'New Folder' button.                    Ignored   Used      Used
   PREVIEW           Enables the 'Preview' mode by default.            Ignored   Ignored   Used
   SAVEAS_CONFIRM    Confirm dialog if BROWSE_SAVE_FILE file exists.   Used      Used      Used
+  USE_FILTER_EXT    Chooser filter pilots the output file extension.  Ignored   Used      Ignored
   \endcode
 */
 void fltk3::NativeFileChooser::options(int val) {

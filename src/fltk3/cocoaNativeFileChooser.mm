@@ -631,9 +631,11 @@ int fltk3::NativeFileChooser::post() {
       char *t = prepareMacFilter(_filt_total, _filter, _filt_patt);
       popup = createPopupAccessory((NSSavePanel*)_panel, t, [[(NSSavePanel*)_panel nameFieldLabel] UTF8String], _filt_value);
       delete[] t;
-      [popup setAction:@selector(changedPopup:)];
-      [popup setTarget:saveDelegate];
-      [saveDelegate panel:(NSSavePanel*)_panel];
+      if (_options & USE_FILTER_EXT) {
+	[popup setAction:@selector(changedPopup:)];
+	[popup setTarget:saveDelegate];
+	[saveDelegate panel:(NSSavePanel*)_panel];
+      }
       [(NSSavePanel*)_panel setCanSelectHiddenExtension:YES];
     }
   }
