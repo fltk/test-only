@@ -89,8 +89,7 @@ static fltk3::Region MacRegionMinusRect(fltk3::Region r, int x,int y,int w,int h
 static void cocoaMouseHandler(NSEvent *theEvent);
 static int calc_mac_os_version();
 
-static fltk3::QuartzGraphicsDriver fl_quartz_driver;
-static fltk3::DisplayDevice fl_quartz_display(&fl_quartz_driver);
+static fltk3::DisplayDevice fl_quartz_display(new fltk3::QuartzGraphicsDriver);
 
 // public variables
 CGContextRef fl_gc = 0;
@@ -901,20 +900,6 @@ static void cocoaMouseHandler(NSEvent *theEvent)
 }
 @end
 
-/*
- * Open callback function to call...
- */
-
-static void	(*open_cb)(const char *) = 0;
-
-/*
- * Install an open documents event handler...
- */
-void fl_open_callback(void (*cb)(const char *)) {
-  fl_open_display();
-  open_cb = cb;
-}
-
 
 @interface FLWindowDelegate : NSObject 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
@@ -1068,6 +1053,7 @@ void fl_open_callback(void (*cb)(const char *)) {
 #endif
 {
   BOOL seen_open_file;
+  void (*open_cb)(const char*);
 }
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)sender;
 - (void)applicationDidBecomeActive:(NSNotification *)notify;
@@ -1077,6 +1063,7 @@ void fl_open_callback(void (*cb)(const char *)) {
 - (void)applicationWillUnhide:(NSNotification *)notify;
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
+- (void)open_cb:(void (*)(const char*))cb;
 @end
 @implementation FLAppDelegate
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)sender
@@ -1227,7 +1214,19 @@ void fl_open_callback(void (*cb)(const char *)) {
   // under Mac OS 10.8 when a file is dragged on the application icon
   if (fl_mac_os_version >= 100800 && seen_open_file) [[NSApp mainWindow] orderFront:self];
 }
+- (void)open_cb:(void (*)(const char*))cb
+{
+  open_cb = cb;
+}
 @end
+
+/*
+ * Install an open documents event handler...
+ */
+void fl_open_callback(void (*cb)(const char *)) {
+  fl_open_display();
+  [[NSApp delegate] open_cb:cb];
+}
 
 @implementation FLApplication
 + (void)sendEvent:(NSEvent *)theEvent
