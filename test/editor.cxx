@@ -798,16 +798,22 @@ fltk3::Window* new_view() {
   return w;
 }
 
+void cb(const char *fname) {
+  load_file(fname, -1);
+}
+
 int main(int argc, char **argv) {
   textbuf = new fltk3::TextBuffer;
   //textbuf->transcoding_warning_action = NULL;
   style_init();
-  
+  fl_open_callback(cb);
+
   fltk3::Window* window = new_view();
   
   window->show(1, argv);
-  
+#ifndef __APPLE__
   if (argc > 1) load_file(argv[1], -1);
+#endif
   
   return fltk3::run();
 }
