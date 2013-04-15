@@ -1668,9 +1668,6 @@ static void cocoaKeyboardHandler(NSEvent *theEvent)
   // In this mode, there seem to be no key-down codes
   // printf("%08x %08x %08x\n", keyCode, mods, key);
   maskedKeyCode = keyCode & 0x7f;
-  if ([theEvent type] == NSKeyUp) {
-    fltk3::e_state &= 0xbfffffff; // clear the deadkey flag
-  }
   mods_to_e_state( mods ); // process modifier keys
   sym = macKeyLookUp[maskedKeyCode];
   if (sym < 0xff00) { // a "simple" key
