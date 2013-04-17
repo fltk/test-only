@@ -25,31 +25,23 @@
 //     http://www.fltk.org/str.php
 //
 
-/**
+/*
  * This code is a quick hack! It was written as a proof of concept.
  * It has been tested on the "menubar" sample program and provides
  * basic functionality. 
  * 
- * To use the System Menu Bar, simply replace the main fltk3::MenuBar
- * in an application with fltk3::SysMenuBar.
+ * To use the System Menu Bar, simply replace the main Fl_Menu_Bar
+ * in an application with Fl_Sys_Menu_Bar.
  *
  * FLTK features not supported by the Mac System menu
  *
- * - no invisible menu items
  * - no symbolic labels
- * - embossed labels will be underlined instead
+ * - no embossed labels
  * - no font sizes
- * - Shortcut Characters should be English alphanumeric only, no modifiers yet
+ * - Shortcut Characters should be Latin letters only
  * - no disable main menus
- * - changes to menubar in run-time don't update! 
- *     (disable, etc. - toggle and radio button do!)
  *
- * No care was taken to clean up the menu bar after destruction!
- * ::menu(bar) should only be called once!
  * Many other calls of the parent class don't work.
- * Changing the menu items has no effect on the menu bar.
- * Starting with OS X 10.5, FLTK applications must be created as
- * a bundle for the System Menu Bar (and maybe other features) to work!
  */
 
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
@@ -82,7 +74,7 @@ extern void (*fl_unlock_function)();
 @implementation FLMenuItem
 - (const fltk3::MenuItem*) getFlItem
 {
-  return *(const fltk3::MenuItem **)[(NSData*)[self representedObject] bytes];
+  return (const fltk3::MenuItem *)[(NSData*)[self representedObject] bytes];
 }
 - (void) doCallback:(id)unused
 {
@@ -143,7 +135,7 @@ static int addNewItem(NSMenu *menu, const fltk3::MenuItem *mitem, NSString* cfna
   FLMenuItem *item = [[FLMenuItem alloc] initWithTitle:cfname 
 						action:@selector(doCallback:) 
 					 keyEquivalent:@""];
-  NSData *pointer = [NSData dataWithBytes:&mitem length:sizeof(fltk3::MenuItem*)];
+  NSData *pointer = [NSData dataWithBytesNoCopy:(void*)mitem length:sizeof(fltk3::MenuItem) freeWhenDone:NO];
   [item setRepresentedObject:pointer];
   [menu addItem:item];
   [item setTarget:item];
