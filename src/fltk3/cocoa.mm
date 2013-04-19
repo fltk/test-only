@@ -88,6 +88,7 @@ static void createAppleMenu(void);
 static fltk3::Region MacRegionMinusRect(fltk3::Region r, int x,int y,int w,int h);
 static void cocoaMouseHandler(NSEvent *theEvent);
 static int calc_mac_os_version();
+static fltk3::Image *create_default_drag_image();
 
 static fltk3::DisplayDevice fl_quartz_display(new fltk3::QuartzGraphicsDriver);
 
@@ -101,6 +102,7 @@ Window fl_window;
 fltk3::Window *fltk3::Window::current_;
 int fl_mac_os_version = calc_mac_os_version();	// the version number of the running Mac OS X (e.g., 100604 for 10.6.4)
 static SEL inputContextSEL = (fl_mac_os_version >= 100600 ? @selector(inputContext) : @selector(FLinputContext));
+fltk3::Image *fltk3::default_drag_image = create_default_drag_image();
 
 // forward declarations of variables in this file
 static int got_events = 0;
@@ -3216,6 +3218,41 @@ static NSImage *makeDragImage(int *pwidth, int *pheight, fltk3::Image* img)
   fl_delete_offscreen(off);
   return image;
 }
+
+static fltk3::Image *create_default_drag_image()
+{
+  const int version_threshold = 100700;
+  int width, height;
+  if (fl_mac_os_version >= version_threshold) {
+    width = 50; height = 40;
+  }
+  else {
+    width = 16; height = 16;
+  }
+  fltk3::Offscreen off = fltk3::QuartzGraphicsDriver::create_offscreen_with_alpha(width, height);
+  fl_begin_offscreen(off);
+  if (fl_mac_os_version >= version_threshold) {
+    fltk3::font(fltk3::HELVETICA, 20);
+    char str[4];
+    int l = fltk3::utf8encode(0x1F69A, str); // the "Delivery truck" Unicode character from "Apple Color Emoji" font
+    fltk3::draw(str, l, 1, 16);
+    fl_end_offscreen();
+    }
+  else {
+    CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
+    fltk3::rectf(0,0,width,height);
+    CGContextSetRGBStrokeColor( (CGContextRef)off, 0,0,0,0.6);
+    fltk3::rect(0,0,width,height);
+    fltk3::rect(2,2,width-4,height-4);
+  }
+  CGContextRef c = (CGContextRef)off;
+  unsigned char *pdata = (unsigned char *)CGBitmapContextGetData(c);
+  fltk3::Image *img = new fltk3::RGBImage(pdata, CGBitmapContextGetWidth(c), CGBitmapContextGetHeight(c), 4);
+  img = img->copy();
+  fl_delete_offscreen(off);
+  return img;
+  }
+
 
 int fltk3::dnd(fltk3::Image* dragimage)
 {
