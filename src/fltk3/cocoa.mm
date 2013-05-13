@@ -3220,6 +3220,8 @@ static NSImage *makeDragImage(int *pwidth, int *pheight, fltk3::Image* img)
 }
 
 static fltk3::Image *create_default_drag_image()
+/* Creates a small image that can be used when dragging from an FLTK widget.
+*/
 {
   const int version_threshold = 100700;
   int width, height;
@@ -3236,21 +3238,22 @@ static fltk3::Image *create_default_drag_image()
     char str[4];
     int l = fltk3::utf8encode(0x1F69A, str); // the "Delivery truck" Unicode character from "Apple Color Emoji" font
     fltk3::draw(str, l, 1, 16);
-    fl_end_offscreen();
     }
   else {
-    CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
+    CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0); // draw two nested squares
     fltk3::rectf(0,0,width,height);
     CGContextSetRGBStrokeColor( (CGContextRef)off, 0,0,0,0.6);
     fltk3::rect(0,0,width,height);
     fltk3::rect(2,2,width-4,height-4);
   }
+  fl_end_offscreen();
   CGContextRef c = (CGContextRef)off;
   unsigned char *pdata = (unsigned char *)CGBitmapContextGetData(c);
   fltk3::Image *img = new fltk3::RGBImage(pdata, CGBitmapContextGetWidth(c), CGBitmapContextGetHeight(c), 4);
-  img = img->copy();
+  fltk3::Image *img2 = img->copy();
+  delete img;
   fl_delete_offscreen(off);
-  return img;
+  return img2;
   }
 
 
