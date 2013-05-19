@@ -43,33 +43,12 @@ static void imgProviderReleaseData (void *info, const void *data, size_t size)
 
 static void print_gl_window(fltk3::GLWindow *glw, int x, int y, int height)
 {
-#ifdef WIN32
-  HDC save_gc = fl_gc;
-  const int bytesperpixel = 3;
-#elif defined(__APPLE__)
-  CGContextRef save_gc = fl_gc;
+#if defined(__APPLE__)
   const int bytesperpixel = 4;
 #else
-  _XGC *save_gc = fl_gc;
   const int bytesperpixel = 3;
 #endif
-  fltk3::SurfaceDevice *save_surface = fltk3::SurfaceDevice::surface();
-  fl_gc = NULL;
-  fltk3::DisplayDevice::display_device()->set_current();
-#ifdef WIN32
-  fltk3::check();
-  fltk3::Window *win = (fltk3::Window*)glw;
-  while( win->window() ) win = win->window();
-  win->redraw();
-  fltk3::check();
   glw->make_current();
-#else
-  glw->make_current();
-  glw->redraw();
-  glFlush();
-  fltk3::check();
-  glFinish();
-#endif
   // Read OpenGL context pixels directly.
   // For extra safety, save & restore OpenGL states that are changed
   glPushClientAttrib(GL_CLIENT_PIXEL_STORE_BIT);
@@ -82,17 +61,13 @@ static void print_gl_window(fltk3::GLWindow *glw, int x, int y, int height)
   mByteWidth = (mByteWidth + 3) & ~3;    // Align to 4 bytes
   uchar *baseAddress = (uchar*)malloc(mByteWidth * glw->h());
   glReadPixels(0, 0, glw->w(), glw->h(), 
-#ifdef WIN32
-	       GL_RGB, GL_UNSIGNED_BYTE,
-#elif defined(__APPLE__)
+#if defined(__APPLE__)
 	       GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-#else // FIXME Linux/Unix
+#else
 	       GL_RGB, GL_UNSIGNED_BYTE,
 #endif
 	       baseAddress);
   glPopClientAttrib();
-  save_surface->set_current();
-  fl_gc = save_gc;
 #if defined(__APPLE__)
 // kCGBitmapByteOrder32Host and CGBitmapInfo are supposed to arrive with 10.4
 // but some 10.4 don't have kCGBitmapByteOrder32Host, so we play a little #define game
