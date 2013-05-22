@@ -49,7 +49,6 @@
 #define HAVE_LONG_LONG 1
 #define FLTK_LLFMT "%lld"
 #define FLTK_LLCAST (long long)
-#define HAVE_STRTOLL 1
 #define HAVE_DLFCN_H 1
 #define HAVE_DLSYM 1
 

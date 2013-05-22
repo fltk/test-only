@@ -799,8 +799,6 @@ static int write_configure_in(FILE *out, Fl_Workspace_Type *workspace, const cha
   fprintf(out, "        AC_DEFINE(HAVE_LONG_LONG)\n");
   fprintf(out, "fi\n");
   fprintf(out, "\n");
-  fprintf(out, "AC_CHECK_FUNC(strtoll, AC_DEFINE(HAVE_STRTOLL))\n");
-  fprintf(out, "\n");
   fprintf(out, "dnl Check for dlopen/dlsym...\n");
   fprintf(out, "AC_SEARCH_LIBS(dlsym, dl, AC_DEFINE(HAVE_DLSYM))\n");
   fprintf(out, "AC_CHECK_HEADER(dlfcn.h, AC_DEFINE(HAVE_DLFCN_H))\n");
