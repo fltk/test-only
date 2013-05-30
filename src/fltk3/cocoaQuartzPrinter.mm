@@ -41,7 +41,7 @@ fltk3::SystemPrinter::SystemPrinter(void)
   y_offset = 0;
   scale_x = scale_y = 1.;
   gc = 0;
-  driver(new QuartzGraphicsDriver);
+  driver(new fltk3::PrinterQuartzGraphicsDriver);
 }
 
 fltk3::SystemPrinter::~SystemPrinter(void) {

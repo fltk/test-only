@@ -68,10 +68,6 @@ void fltk3::QuartzGraphicsDriver::line_style(int style, int width, char* dashes)
   if (width<1) width = 1;
   fl_quartz_line_width_ = (float)width; 
   fl_quartz_line_cap_ = Cap[(style>>8)&3];
-  // when printing kCGLineCapSquare seems better for solid lines
-  if ( fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device() && style == fltk3::SOLID && dashes == NULL ) {
-    fl_quartz_line_cap_ = kCGLineCapSquare;
-    }
   fl_quartz_line_join_ = Join[(style>>12)&3];
   char *d = dashes; 
   static CGFloat pattern[16];
@@ -105,6 +101,14 @@ void fltk3::QuartzGraphicsDriver::line_style(int style, int width, char* dashes)
 		fl_quartz_line_pattern_size = 0;
   }
   fl_quartz_restore_line_style_();
+}
+
+void fltk3::PrinterQuartzGraphicsDriver::line_style(int style, int width, char* dashes) {
+  QuartzGraphicsDriver::line_style(style, width, dashes);
+  if ( style == fltk3::SOLID && dashes == NULL ) {  // when printing kCGLineCapSquare seems better for solid lines
+    fl_quartz_line_cap_ = kCGLineCapSquare;
+    CGContextSetLineCap(fl_gc, fl_quartz_line_cap_);
+  }
 }
 #elif defined(WIN32)
 void fltk3::GDIGraphicsDriver::line_style(int style, int width, char* dashes) {

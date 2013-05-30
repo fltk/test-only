@@ -396,6 +396,20 @@ namespace fltk3 {
   };
 #endif
   
+#ifdef __APPLE__
+  class FLTK3_EXPORT PrinterQuartzGraphicsDriver : public QuartzGraphicsDriver {
+  public:
+    void rect(int x, int y, int w, int h);
+    void xyline(int x, int y, int x1);
+    void xyline(int x, int y, int x1, int y2);
+    void xyline(int x, int y, int x1, int y2, int x3);
+    void yxline(int x, int y, int y1);
+    void yxline(int x, int y, int y1, int x2);
+    void yxline(int x, int y, int y1, int x2, int y3);
+    void line_style(int style, int width, char* dashes);
+  };
+#endif
+  
 #if defined(WIN32) || defined(FLTK3_DOXYGEN)
   /**
    \brief The MSWindows-specific graphics class.
