@@ -481,7 +481,7 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int
     CGDataProviderReleaseDataCallback release_cb = NULL;
     const uchar* img_bytes = img->array;
     int ld = img->ld();
-    if (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) {
+    if (is_printer()) {
       // when printing, duplicate the image data so it can be deleted later, at page end
       release_cb = imgProviderReleaseData;
       fltk3::RGBImage* img2 = (fltk3::RGBImage*)img->copy();

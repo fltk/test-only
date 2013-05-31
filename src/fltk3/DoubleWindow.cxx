@@ -199,7 +199,7 @@ void fltk3::GDIGraphicsDriver::copy_offscreen_with_alpha(int x,int y,int w,int h
   BOOL alpha_ok = 0;
   // first try to alpha blend
   // if to printer, always try alpha_blend
-  if ( (fltk3::SurfaceDevice::surface() != fltk3::DisplayDevice::display_device()) || can_do_alpha_blending() ) {
+  if ( is_printer() || can_do_alpha_blending() ) {
     if (fl_alpha_blend) alpha_ok = fl_alpha_blend(fl_gc, x+origin_x(), y+origin_y(), w, h, new_gc, srcx, srcy, w, h, blendfunc);
   }
   // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1

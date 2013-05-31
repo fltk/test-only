@@ -144,6 +144,10 @@ namespace fltk3 {
     
     /** \brief The constructor. */
     GraphicsDriver();
+#ifndef FLTK3_DOXYGEN
+    /** returns true if the graphics driver draws to a printer */
+    virtual bool is_printer() { return false; }
+#endif
     /** \brief see fltk3::rect(int x, int y, int w, int h). */
     virtual void rect(int x, int y, int w, int h) {}
     /** \brief see fltk3::rectf(int x, int y, int w, int h). */
@@ -399,6 +403,7 @@ namespace fltk3 {
 #ifdef __APPLE__
   class FLTK3_EXPORT PrinterQuartzGraphicsDriver : public QuartzGraphicsDriver {
   public:
+    bool is_printer() { return true; }
     void rect(int x, int y, int w, int h);
     void xyline(int x, int y, int x1);
     void xyline(int x, int y, int x1, int y2);
@@ -479,6 +484,8 @@ namespace fltk3 {
   };
   
   class FLTK3_EXPORT GDIPrinterGraphicsDriver : public fltk3::GDIGraphicsDriver {
+  public:
+    bool is_printer() { return true; }
   private:
     void draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
     void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
