@@ -1406,11 +1406,13 @@ void createRelativeFromAbsolutePath(int i)
     strcpy(relative_history[i], absolute_history[i]);
     // if the path starts with the HOME path, abbreviate it
     const char *home = getenv("HOME");
-    int n = strlen(home);
-    if (strncmp(relative_history[i], home, n)==0 && relative_history[i][n]=='/') {
-      relative_history[i][0] = '~';
-      memmove(relative_history[i]+1, relative_history[i]+n, sizeof(relative_history[i])-n);
-    }
+	if (home) {
+      int n = strlen(home);
+      if (strncmp(relative_history[i], home, n)==0 && relative_history[i][n]=='/') {
+        relative_history[i][0] = '~';
+        memmove(relative_history[i]+1, relative_history[i]+n, sizeof(relative_history[i])-n);
+      }
+	}
   }
   // if the path has too many characters, abbreviate it
   const char *d = relative_history[i];

@@ -28,7 +28,9 @@
 #include "workspace_panel.h"
 #include "fluid.h"
 #include <fltk3/FileChooser.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 
 void Fl_Environment_Choice::cb_pMenuAll_i(fltk3::Menu_*, void* v) {
   // this is what we want to set or clear, pEnv is what we currently have
@@ -338,7 +340,7 @@ if (v == Fl_Panel::LOAD) {
           break;
       }
 
-      ::chdir(base);
+      // FIXME chdir(base);
       const char *fn = fltk3::file_chooser(
         "Select file:", 
         "*", 
@@ -360,7 +362,7 @@ if (v == Fl_Panel::LOAD) {
           pFileName->value(fn);
           break;
       }
-      ::chdir(current);
+      // FIXME: ::chdir(current);
       pFileName->do_callback();
     }
   };
