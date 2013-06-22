@@ -968,7 +968,7 @@ static int writeBuildConfigurations(FILE *out, Fl_Target_Type *tgt) {
     fprintf(plist, "\t\t<key>CFBundleVersion</key>\n");
     fprintf(plist, "\t\t<string>1.0</string>\n");
     fprintf(plist, "\t\t<key>NSHumanReadableCopyright</key>\n");
-    fprintf(plist, "\t\t<string>Copyright 1998-2012 by Bill Spitzak and others.</string>\n");
+    fprintf(plist, "\t\t<string>Copyright 1998-2013 by Bill Spitzak and others.</string>\n");
     fprintf(plist, "\t\t<key>CFBundleGetInfoString</key>\n");
     fprintf(plist, "\t\t<string>Part of the FLTK library. Please visit www.fltk.org.</string>\n");
     fprintf(plist, "\t</dict>\n");
@@ -1324,7 +1324,7 @@ void install_library_cb(fltk3::Widget *, void *)
   strcpy(pp, "Build/Products/Debug/");
   printf("Freshly built workspaces should be in <%s>\n", buf);
   
-  // Great! No check if the workspaces are here and copy them over (Fluid as well? Where should it go?)
+  // Great! Now check if the workspaces are here and copy them over (Fluid as well? Where should it go?)
   // OS X has a function copyfile() that recursively copies everything for us, including attribtes and resource fork. Thanks, Apple!
   // on other platforms, copyfile() may or may not exists. Then again, we only need to copy files and not directory structures.
   

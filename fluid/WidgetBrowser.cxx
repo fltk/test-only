@@ -285,6 +285,8 @@ void fluid3::WidgetBrowser::handle_second_single_click()
   // count the lines in the text
   int nlines = 1;
   const char *s = text;
+  if (!s)
+    return;
   while (*s) { if (*s=='\n') nlines++; s++; }
   if (nlines>10) nlines = 10; 
   // find the y position of the clicked item (the mouse event is no longer reliable)

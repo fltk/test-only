@@ -28,6 +28,7 @@
 #include "workspace_panel.h"
 #include "fluid.h"
 #include <fltk3/FileChooser.h>
+#include <unistd.h>
 
 void Fl_Environment_Choice::cb_pMenuAll_i(fltk3::Menu_*, void* v) {
   // this is what we want to set or clear, pEnv is what we currently have
@@ -308,17 +309,59 @@ static void cb_pFileName(fltk3::Input* o, void* v) {
 static void cb_3filenew(fltk3::Button*, void* v) {
   // FIXME: relative to...
 
+// ff->location() FL_LOCATION_WORKSPACE/ABSOLUTE/IDE/SDK
+
 if (v == Fl_Panel::LOAD) {
   } else {
-    const char *fn = fltk3::file_chooser(
-      "Select file:", 
-      "*", 
-      Fl_Panel::selected_file()->filename()
-    );
-    if (fn) {
-      pFileName->value(fn);
+    if (Fl_Panel::numselected == 1) {
+      int isRelative = 1;
+      char base[FLTK3_PATH_MAX];
+      char buf[FLTK3_PATH_MAX];
+      char current[FLTK3_PATH_MAX];
+      fltk3::getcwd(current, sizeof(current));
+
+      switch (Fl_Panel::selected_file()->location()) {
+        case FL_LOCATION_WORKSPACE: // FIXME:
+          strcpy(base, ::filename); // FIXME:
+          strcpy(buf, Fl_Panel::selected_file()->filename());
+          break;
+        case FL_LOCATION_ABSOLUTE:
+          strcpy(base, current);
+          strcpy(buf, Fl_Panel::selected_file()->filename());
+          isRelative = 0;
+          break;
+        case FL_LOCATION_IDE: // FIXME:
+          strcpy(buf, Fl_Panel::selected_file()->filename());
+          break;
+        case FL_LOCATION_SDK: // FIXME:
+          strcpy(buf, Fl_Panel::selected_file()->filename());
+          break;
+      }
+
+      ::chdir(base);
+      const char *fn = fltk3::file_chooser(
+        "Select file:", 
+        "*", 
+        buf,
+        isRelative
+      );
+      if (!fn) return;
+      
+      switch (Fl_Panel::selected_file()->location()) {
+        case FL_LOCATION_WORKSPACE: // FIXME:
+          break;
+        case FL_LOCATION_ABSOLUTE:
+          pFileName->value(fn);
+          break;
+        case FL_LOCATION_IDE: // FIXME:
+          pFileName->value(fn);
+          break;
+        case FL_LOCATION_SDK: // FIXME:
+          pFileName->value(fn);
+          break;
+      }
+      ::chdir(current);
       pFileName->do_callback();
-      // FIXME: the callback will not fix the absolute path!
     }
   };
 }
@@ -411,12 +454,24 @@ static void cb_4(fltk3::Group* o, void* v) {
 }
 
 static void cb_Relative(fltk3::MenuButton* o, void* v) {
+  int e = -1;
   if (v == Fl_Panel::LOAD) {
-  /*...*/
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (e==-1) {
+          e = ((Fl_File_Type*)t)->location();
+        } else {
+	  if (((Fl_File_Type*)t)->location() != e) {
+	    e = -2;
+	    break;
+	  }
+        }
+      }
+    }
   } else {
     int mod = 0;
     const fltk3::MenuItem *mi = o->mvalue();
-    int e = mi->argument();
+    e = mi->argument();
     for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
       if (t->selected && t->is_file()) {
         if (((Fl_File_Type*)t)->location() != e) {
@@ -428,13 +483,14 @@ static void cb_Relative(fltk3::MenuButton* o, void* v) {
     if (mod) set_modflag(1);
   }
 
-  // FIXME: we should show <multiple values> if required
-  Fl_File_Type *ff = Fl_Panel::selected_file();
-  if (ff) {
-    unsigned int fl =ff->location();
+  if (e==-1) {
+    o->label("<unknown>"); // this should never happen
+  } else if (e==-2) {
+    o->label("<multiple values>");
+  } else {
     for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
       if (!mi->label()) break;
-      if (mi->argument()==(int)fl) {
+      if (mi->argument()==e) {
         o->label(mi->label());
         break;
       }

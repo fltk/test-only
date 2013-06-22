@@ -84,7 +84,7 @@ static int write_header(FILE *out, const char *msg, const char *rem="#") {
   fprintf(out, "%s\n", rem);
   fprintf(out, "%s %s\n", rem, msg);
   fprintf(out, "%s\n", rem);
-  fprintf(out, "%s Copyright 1998-2011 by Bill Spitzak and others.\n", rem);
+  fprintf(out, "%s Copyright 1998-2013 by Bill Spitzak and others.\n", rem);
   fprintf(out, "%s\n", rem);
   fprintf(out, "%s This library is free software; you can redistribute it and/or\n", rem);
   fprintf(out, "%s modify it under the terms of the GNU Library General Public\n", rem);
