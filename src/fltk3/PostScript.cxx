@@ -1272,6 +1272,7 @@ void fltk3::PostScriptGraphicsDriver::arc(double x, double y, double r, double s
 }
 
 void fltk3::PostScriptGraphicsDriver::arc(int x, int y, int w, int h, double a1, double a2) {
+  if (w <= 1 || h <= 1) return;
   fprintf(output, "GS\n");
   begin_line();
   fprintf(output, "%g %g TR\n", x + w/2.0 -0.5 , y + h/2.0 - 0.5);
