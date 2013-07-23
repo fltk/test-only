@@ -191,7 +191,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { kVK_ANSI_0, '0' }, { kVK_ANSI_1, '1'  }, { kVK_ANSI_2, '2'  }, { kVK_ANSI_3, '3'  }, 
   { kVK_ANSI_4, '4' }, { kVK_ANSI_5, '5'  }, { kVK_ANSI_6, '6'  }, { kVK_ANSI_7, '7'  }, 
   { kVK_ANSI_8, '8' }, { kVK_ANSI_9, '9'  }, { kVK_ANSI_Semicolon, ';'  }, { kVK_ANSI_Equal, '='  },
-  {  kVK_ANSI_A, 'A' }, { kVK_ANSI_B, 'B'  }, {  kVK_ANSI_C, 'C'  }, {  kVK_ANSI_D, 'D'  }, 
+  { kVK_ANSI_A, 'A' }, { kVK_ANSI_B, 'B'  }, {  kVK_ANSI_C, 'C'  }, {  kVK_ANSI_D, 'D'  }, 
   { kVK_ANSI_E, 'E' }, {  kVK_ANSI_F, 'F'  }, {  kVK_ANSI_G, 'G'  }, {  kVK_ANSI_H, 'H'  }, 
   { kVK_ANSI_I, 'I' }, { kVK_ANSI_J, 'J'  }, { kVK_ANSI_K, 'K'  }, { kVK_ANSI_L, 'L'  }, 
   { kVK_ANSI_M, 'M' }, { kVK_ANSI_N, 'N'  }, { kVK_ANSI_O, 'O'  }, { kVK_ANSI_P, 'P'  }, 
@@ -199,6 +199,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { kVK_ANSI_U, 'U' }, {  kVK_ANSI_V, 'V'  }, { kVK_ANSI_W, 'W'  }, {  kVK_ANSI_X, 'X'  }, 
   { kVK_ANSI_Y, 'Y' }, {  kVK_ANSI_Z, 'Z'  }, 
   { kVK_ANSI_LeftBracket, '[' }, { kVK_ANSI_Backslash, '\\' },{ kVK_ANSI_RightBracket, ']' }, { kVK_ANSI_Grave, '`' }, 
+  { kVK_VolumeDown, fltk3::VolumeDownKey}, { kVK_Mute, fltk3::VolumeMuteKey}, { kVK_VolumeUp, fltk3::VolumeUpKey},
   { kVK_Delete, fltk3::BackSpaceKey }, { kVK_Tab, fltk3::TabKey }, { kVK_ISO_Section, fltk3::IsoKey }, { kVK_Return, fltk3::EnterKey }, /*{ 0x7F, fltk3::PauseKey },
   { 0x7F, fltk3::ScrollLockKey },*/ { kVK_Escape, fltk3::EscapeKey },
   { kVK_JIS_Kana, fltk3::KanaKey}, { kVK_JIS_Eisu, fltk3::EisuKey}, { kVK_JIS_Yen, fltk3::YenKey}, { kVK_JIS_Underscore, fltk3::JISUnderscoreKey},
@@ -216,6 +217,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { kVK_F5, fltk3::FKey+5 }, { kVK_F6, fltk3::FKey+6  }, { kVK_F7, fltk3::FKey+7  }, { kVK_F8, fltk3::FKey+8  }, 
   { kVK_F9, fltk3::FKey+9 }, { kVK_F10, fltk3::FKey+10 }, { kVK_F11, fltk3::FKey+11 }, { kVK_F12, fltk3::FKey+12 }, 
   { kVK_F13, fltk3::FKey+13 }, { kVK_F14, fltk3::FKey+14 }, { kVK_F15, fltk3::FKey+15 }, { kVK_F16, fltk3::FKey+16 }, 
+  { kVK_F17, fltk3::FKey+17 }, { kVK_F18, fltk3::FKey+18 }, { kVK_F19, fltk3::FKey+19 }, { kVK_F20, fltk3::FKey+20 }, 
   { kVK_Shift, fltk3::ShiftLKey }, { kVK_RightShift, fltk3::ShiftRKey }, { kVK_Control, fltk3::ControlLKey }, { kVK_RightControl, fltk3::ControlRKey }, 
   { kVK_CapsLock, fltk3::CapsLockKey }, { kVK_Command, fltk3::MetaLKey }, { 0x36, fltk3::MetaRKey },
   { kVK_Option, fltk3::AltLKey }, { kVK_RightOption, fltk3::AltRKey }, { kVK_ForwardDelete, fltk3::DeleteKey },
@@ -240,7 +242,7 @@ static int fltk2mac(int fltk) {
     if (vktab[c].fltk == fltk) return vktab[c].vk;
     if (vktab[c].fltk < fltk) a = c+1; else b = c;
   }
-  return 127;
+  return vktab[a].vk;
 }
 
 //: returns true, if that key was pressed during the last event
