@@ -616,7 +616,8 @@ EXCLUDE                = ../include/FL \
                          ../include/fltk3zlib \
                          ../src/fltk3jpeg \
                          ../src/fltk3png \
-                         ../src/fltk3zlib
+                         ../src/fltk3zlib \
+                         ../src/fltk3/aimm.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 

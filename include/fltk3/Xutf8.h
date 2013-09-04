@@ -23,7 +23,7 @@
  *     http://www.fltk.org/str.php
  */
 
-#ifndef _FLTK3_Xutf8_h
+#if ! ( defined(_FLTK3_Xutf8_h) || defined(FL_DOXYGEN) )
 #define _FLTK3_Xutf8_h
 
 #  ifdef __cplusplus
