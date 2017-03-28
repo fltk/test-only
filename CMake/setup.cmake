@@ -20,12 +20,7 @@
 #######################################################################
 # basic setup
 #######################################################################
-# The FLTK version
-set(FLTK_VERSION_MAJOR "1")
-set(FLTK_VERSION_MINOR "4")
-set(FLTK_VERSION_PATCH "0")
-set(FLTK_VERSION "${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}")
-set(FLTK_VERSION_FULL "${FLTK_VERSION}.${FLTK_VERSION_PATCH}")
+
 
 set(EXECUTABLE_OUTPUT_PATH ${FLTK_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${FLTK_BINARY_DIR}/lib)
@@ -80,6 +75,10 @@ endif(NOT WIN32)
 # set where config files go
 if(WIN32 AND NOT CYGWIN)
    set(FLTK_CONFIG_PATH CMake)
+   message( "FLTK_CONFIG_PATH = ${FLTK_CONFIG_PATH}")
+   set(FLTK_CONFIG_PATH ${FLTK_LIBDIR}/cmake/fltk-${FLTK_VERSION_FULL})
+   message( "FLTK_CONFIG_PATH = ${FLTK_CONFIG_PATH}")
+   
 elseif(APPLE AND NOT OPTION_APPLE_X11)
    set(FLTK_CONFIG_PATH FLTK/.framework/Resources/CMake)
 else()
