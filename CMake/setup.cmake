@@ -49,7 +49,7 @@ set(FLTK_BINDIR ${CMAKE_INSTALL_BINDIR} CACHE PATH
     "Binary install path relative to CMAKE_INSTALL_PREFIX unless set to an absolute path.")
 set(FLTK_LIBDIR ${CMAKE_INSTALL_LIBDIR} CACHE PATH
     "Library install path relative to CMAKE_INSTALL_PREFIX unless set to an absolute path.")
-set(FLTK_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE PATH
+set(FLTK_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR}/fltk-${FLTK_VERSION_FULL} CACHE PATH
     "Public header install path relative to CMAKE_INSTALL_PREFIX unless set to an absolute path.")
 set(FLTK_DATADIR ${CMAKE_INSTALL_DATADIR} CACHE PATH
     "Non-arch data install path relative to CMAKE_INSTALL_PREFIX unless set to an absolute path.")
