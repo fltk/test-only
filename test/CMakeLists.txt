@@ -17,7 +17,7 @@
 #
 #######################################################################
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/examples)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/examples)
 
 #######################################################################
 # audio libs for test apps
