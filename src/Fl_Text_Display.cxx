@@ -107,29 +107,6 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   display_insert_position_hint = 0;
   shortcut_ = 0;
 
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
-  box(FL_DOWN_FRAME);
-  textsize(FL_NORMAL_SIZE);
-  textcolor(FL_FOREGROUND_COLOR);
-  textfont(FL_HELVETICA);
-  set_flag(SHORTCUT_LABEL);
-
-  text_area.x = 0;
-  text_area.y = 0;
-  text_area.w = 0;
-  text_area.h = 0;
-
-  mVScrollBar = new Fl_Scrollbar(0,0,1,1);
-  mVScrollBar->callback((Fl_Callback*)v_scrollbar_cb, this);
-  mHScrollBar = new Fl_Scrollbar(0,0,1,1);
-  mHScrollBar->callback((Fl_Callback*)h_scrollbar_cb, this);
-  mHScrollBar->type(FL_HORIZONTAL);
-
-  end();
-
-  scrollbar_width(Fl::scrollbar_size());
-  scrollbar_align(FL_ALIGN_BOTTOM_RIGHT);
-
   mCursorOn = 0;
   mCursorPos = 0;
   mCursorOldY = -100;
@@ -150,11 +127,6 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   mStyleBuffer = 0;
   mStyleTable = 0;
   mNStyles = 0;
-  mNVisibleLines = 1;
-  mLineStarts = new int[mNVisibleLines];
-  mLineStarts[0] = 0;
-  for (i=1; i<mNVisibleLines; i++)
-    mLineStarts[i] = -1;
   mSuppressResync = 0;
   mNLinesDeleted = 0;
   mModifyingTabDistance = 0;
@@ -167,12 +139,43 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   mContinuousWrap = 0;
   mWrapMarginPix = 0;
   mSuppressResync = mNLinesDeleted = mModifyingTabDistance = 0;
+
+  text_area.x = 0;
+  text_area.y = 0;
+  text_area.w = 0;
+  text_area.h = 0;
+
   linenumber_font_    = FL_HELVETICA;
   linenumber_size_    = FL_NORMAL_SIZE;
   linenumber_fgcolor_ = FL_INACTIVE_COLOR;
-  linenumber_bgcolor_ = 53;	// ~90% gray
+  linenumber_bgcolor_ = 53; // ~90% gray
   linenumber_align_   = FL_ALIGN_RIGHT;
   linenumber_format_  = strdup("%d");
+
+  mNVisibleLines = 1;
+  mLineStarts = new int[mNVisibleLines];
+  mLineStarts[0] = 0;
+  for (i=1; i<mNVisibleLines; i++)
+    mLineStarts[i] = -1;
+
+  mVScrollBar = new Fl_Scrollbar(0,0,1,1);
+  mVScrollBar->callback((Fl_Callback*)v_scrollbar_cb, this);
+  mHScrollBar = new Fl_Scrollbar(0,0,1,1);
+  mHScrollBar->callback((Fl_Callback*)h_scrollbar_cb, this);
+  mHScrollBar->type(FL_HORIZONTAL);
+
+  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  box(FL_DOWN_FRAME);
+  textfont(FL_HELVETICA);
+  textsize(FL_NORMAL_SIZE);
+  textcolor(FL_FOREGROUND_COLOR);
+  set_flag(SHORTCUT_LABEL);
+
+  end();
+
+  scrollbar_width(Fl::scrollbar_size());
+  scrollbar_align(FL_ALIGN_BOTTOM_RIGHT);
+
 }
 
 
@@ -2745,6 +2748,7 @@ void Fl_Text_Display::update_line_starts(int pos, int charsInserted,
  \param startLine, endLine range of lines to scan as line numbers
  */
 void Fl_Text_Display::calc_line_starts( int startLine, int endLine ) {
+  if (!buffer()) return;
   int startPos, bufLen = mBuffer->length();
   int line, lineEnd, nextLineStart, nVis = mNVisibleLines;
   int *lineStarts = mLineStarts;
