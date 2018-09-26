@@ -2,16 +2,17 @@
 
 ## VERY IMPORTANT TECHNICAL NOTICE
 
-** This FLTK repository is work in progress. Use for testing purposes only. **
+** This FLTK repository is going to be deleted soon. **
+** This FLTK repository is going to be deleted soon. **
+** This FLTK repository is going to be deleted soon. **
 
-  This repository will be replaced by another one in the near future.
+** PLEASE DO NO LONGER USE! **
+** PLEASE DO NO LONGER USE! **
+** PLEASE DO NO LONGER USE! **
 
-  Technically this means:
+Please use fltk/fltk-test instead for TESTING anything.
 
-  * all `Git hashes (SHA1's)` used in this repository will be invalid
-    once this repository got replaced
-  * we don't accept pull requests for this repository
-
+Please use fltk/fltk instead for future development.
 
 ### Technical background
 
@@ -22,7 +23,12 @@
   Until this is done we have established Git mirrors of our Subversion
   repository at these two sites:
 
-  * https://github.com/fltk/test-only
+  * https://github.com/fltk/fltk-test
+  * https://github.com/fltk/fltk-legacy-test
+  
+  The following GitLab mirror is currently outdated and will be updated
+  w/o further notice:
+  
   * https://gitlab.com/fltk/fltk
 
   You may use these Git repositories for testing purposes, but please
