@@ -22,6 +22,7 @@
 #define widget_panel_h
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
+extern Fl_Double_Window *pWnd_Widget;
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Group.H>
 extern void propagate_load(Fl_Group*, void*);
@@ -102,6 +103,7 @@ extern Fl_Menu_Item whenmenu[];
 extern void when_cb(Fl_Choice*, void*);
 extern void user_data_type_cb(Fl_Input*, void*);
 extern void when_button_cb(Fl_Light_Button*, void*);
+extern Fl_Button *pCk_OnTop;
 extern void revert_cb(Fl_Button*, void*);
 extern void live_mode_cb(Fl_Button*, void*);
 extern Fl_Button *wLiveMode;

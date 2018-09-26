@@ -28,7 +28,7 @@ decl {extern void comment_cb(Fl_Text_Editor*, void*);} {private global
 Function {make_widget_panel()} {
   comment {Create a panel that can be used with all known widgets} open
 } {
-  Fl_Window {} {
+  Fl_Window pWnd_Widget {
     comment {Use a Double Window to avoid flickering.} open
     xywh {560 60 420 400} type Double labelsize 11 align 80 hide resizable hotspot
     code0 {o->size_range(o->w(), o->h());} size_range {420 400 0 0}
@@ -668,9 +668,18 @@ wCallback->do_callback(wCallback, v);} open
     Fl_Group {} {open
       xywh {10 370 400 20} labelsize 11
     } {
+      Fl_Button pCk_OnTop {
+        label {On Top}
+        callback {pWnd_Widget->hide();
+pWnd_Widget->set_non_modal();
+pWnd_Widget->show();}
+        tooltip {Click to make the "Properties" window (this window)
+stay on top of the currently active window.} xywh {10 370 65 20} down_box DOWN_BOX labelsize 11
+        code0 {\#include <FL/Fl.H>}
+      }
       Fl_Box {} {
         comment {Hidden resizable box}
-        xywh {10 370 75 20} labelsize 11 hide resizable
+        xywh {80 370 5 20} labelsize 11 hide resizable
       }
       Fl_Button {} {
         label Revert

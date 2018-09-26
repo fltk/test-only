@@ -21,6 +21,8 @@
 #include "widget_panel.h"
 extern void comment_cb(Fl_Text_Editor*, void*);
 
+Fl_Double_Window *pWnd_Widget=(Fl_Double_Window *)0;
+
 static void cb_(Fl_Tabs* o, void* v) {
   propagate_load((Fl_Group *)o,v);
 }
@@ -86,19 +88,25 @@ Fl_Text_Editor *wComment=(Fl_Text_Editor *)0;
 
 CodeEditor *wCallback=(CodeEditor *)0;
 
+Fl_Button *pCk_OnTop=(Fl_Button *)0;
+
+static void cb_pCk_OnTop(Fl_Button*, void*) {
+  pWnd_Widget->hide();
+pWnd_Widget->set_non_modal();
+pWnd_Widget->show();
+}
+
 Fl_Button *wLiveMode=(Fl_Button *)0;
 
 /**
  Create a panel that can be used with all known widgets
 */
 Fl_Double_Window* make_widget_panel() {
-  Fl_Double_Window* w;
   { // Use a Double Window to avoid flickering.
-    Fl_Double_Window* o = new Fl_Double_Window(420, 400);
-    w = o; if (w) {/* empty */}
-    o->labelsize(11);
-    o->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
-    o->hotspot(o);
+    Fl_Double_Window* o = pWnd_Widget = new Fl_Double_Window(420, 400);
+    pWnd_Widget->labelsize(11);
+    pWnd_Widget->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
+    pWnd_Widget->hotspot(pWnd_Widget);
     { Fl_Tabs* o = new Fl_Tabs(10, 10, 400, 350);
       o->selection_color((Fl_Color)12);
       o->labelsize(11);
@@ -825,8 +833,15 @@ access the Widget pointer and \'v\' to access the user value.");
     } // Fl_Tabs* o
     { Fl_Group* o = new Fl_Group(10, 370, 400, 20);
       o->labelsize(11);
+      { pCk_OnTop = new Fl_Button(10, 370, 65, 20, "On Top");
+        pCk_OnTop->tooltip("Click to make the \"Properties\" window (this window)\nstay on top of the cur\
+rently active window.");
+        pCk_OnTop->down_box(FL_DOWN_BOX);
+        pCk_OnTop->labelsize(11);
+        pCk_OnTop->callback((Fl_Callback*)cb_pCk_OnTop);
+      } // Fl_Button* pCk_OnTop
       { // Hidden resizable box
-        Fl_Box* o = new Fl_Box(10, 370, 75, 20);
+        Fl_Box* o = new Fl_Box(80, 370, 5, 20);
         o->labelsize(11);
         o->hide();
         Fl_Group::current()->resizable(o);
@@ -863,10 +878,10 @@ avior.");
       o->end();
     } // Fl_Group* o
     o->size_range(o->w(), o->h());
-    o->size_range(420, 400);
-    o->end();
-  } // Fl_Double_Window* o
-  return w;
+    pWnd_Widget->size_range(420, 400);
+    pWnd_Widget->end();
+  } // Fl_Double_Window* pWnd_Widget
+  return pWnd_Widget;
 }
 
 //
