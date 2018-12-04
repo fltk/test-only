@@ -3,40 +3,33 @@
 ## VERY IMPORTANT TECHNICAL NOTICE
 
 ** This FLTK repository is going to be deleted soon. **
+
 ** This FLTK repository is going to be deleted soon. **
+
 ** This FLTK repository is going to be deleted soon. **
 
 ** PLEASE DO NO LONGER USE! **
-** PLEASE DO NO LONGER USE! **
+
 ** PLEASE DO NO LONGER USE! **
 
-Please use fltk/fltk-test instead for TESTING anything.
+** PLEASE DO NO LONGER USE! **
 
-Please use fltk/fltk instead for future development.
+Please use fltk/fltk instead.
 
 ### Technical background
 
-  Our main source code repository is currently (as of Jun 19, 2018) our
-  subversion repository at http://www.fltk.org/software.php#SVN .
+  Our main (subversion) source code repository has been migrated to GitHub
+  and closed on Dec 01, 2018. This old mirror is no longer necessary.
 
-  We are in the transition to convert the subversion repository to Git.
-  Until this is done we have established Git mirrors of our Subversion
-  repository at these two sites:
+  It has been archived (made read-only) on Dec 04, 2018 and may be deleted any time soon.
 
-  * https://github.com/fltk/fltk-test
-  * https://github.com/fltk/fltk-legacy-test
-  
-  The following GitLab mirror is currently outdated and will be updated
-  w/o further notice:
-  
-  * https://gitlab.com/fltk/fltk
+  Our new official Git repository can now be found at:
 
-  You may use these Git repositories for testing purposes, but please
-  don't rely on their structure (branches) and particularly not on the
-  commit (and file/blob) hashes (SHA1's).
+  * https://github.com/fltk/fltk
 
-  Committing to these Git repositories is not possible since they are
-  mirrors of the original Subversion repository.
+  Old (DO NOT USE!) branches can be found here:
+
+  * https://github.com/fltk/fltk-legacy
 
 
 ## WHAT IS FLTK?
